@@ -1,0 +1,123 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Discord.Commands;
+using Discord.WebSocket;
+using Discord.Addons.Interactive;
+using SocialLinker.Core.Menus.Shop.Main;
+using SocialLinker.Cooldown;
+using SocialLinker.Core.CloudStorageTables;
+using SocialLinker.Core.Menus.InitialUsage.Main;
+
+namespace SocialLinker.Commands
+{
+    public class Shop : InteractiveBase<SocketCommandContext>
+    {
+        [Command("shop", RunMode = RunMode.Async)]
+        public async Task StartShop()
+        {
+            // If there is a cooldown session active for the command type "menu", return the method immediately.
+            if (await UserCooldownMethods.IsCooldownActive(Context.Message, "menu") == true)
+            {
+                return;
+            }
+
+            // Get the account information of the command's user.
+            var command_user_account = UserInfoClasses.GetAccount(Context.User);
+
+            // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
+            if (command_user_account.Account_Activated == "No")
+            {
+                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                return;
+            }
+
+            // End of initial usage and cooldown checks.
+
+            // Check if there is a menu list entry with the current channel ID.
+            var channelSearch = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Channel.Id == Context.Channel.Id); 
+            var userSearch = Global.MenuIdList.SingleOrDefault(x => x.User.Id == Context.User.Id);
+
+            // Also check if there is an item tracker entry for the current user ID. This should not exist without a menu entry, so you don't need to check for its validity.
+            var itemSearch = Global.ItemIdList.SingleOrDefault(x => x.User.Id == Context.User.Id);
+
+            // If the entry exists and the user is not the same, send an error message
+            if (channelSearch != null && channelSearch.User.Id != Context.User.Id) 
+            {
+                // await Context.Channel.SendMessageAsync("Case 1: Search by channel successful, user ID does not match. Create new entry for new user.");
+
+                // Create a new menu in the current channel
+                await ShopMenu.ShopStart((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                return;
+            }
+            // Else if the entry exists and the user is the same, assume they want to reset the menu and delete the previous entry.
+            else if (channelSearch != null && channelSearch.User.Id == Context.User.Id) 
+            {
+                // await Context.Channel.SendMessageAsync("Case 2: Search by channel successful, user ID matches. Resetting menu in same channel.");
+
+                // Attempt deleting the message if it hasn't been deleted by the user yet
+                try
+                {
+                    // Delete the currently active menu
+                    await channelSearch.MenuMessage.DeleteAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                // Stop the timeout timer associated with the menu
+                channelSearch.MenuTimer.Stop();
+
+                // Remove the menu entry from the global list
+                Global.MenuIdList.Remove(channelSearch);
+
+                // Remove the item tracker entry from the global list
+                Global.ItemIdList.Remove(itemSearch);
+
+                // Create a new menu in the current channel
+                await ShopMenu.ShopStart((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                return;
+            }
+            // Else if an entry exists where the user is found but they're in a different channel now, delete previous entry and reset the menu.
+            else if (userSearch != null && userSearch.MenuMessage.Channel.Id != Context.Channel.Id)
+            {
+                // await Context.Channel.SendMessageAsync("Case 3: Search by user successful, channel ID does not match. Resetting menu in new channel.");
+
+                // Attempt deleting the message if it hasn't been deleted by the user yet.
+                try
+                {
+                    // Delete the currently active menu
+                    await userSearch.MenuMessage.DeleteAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                // Stop the timeout timer associated with the menu
+                userSearch.MenuTimer.Stop();
+
+                // Remove the menu entry from the global list
+                Global.MenuIdList.Remove(userSearch);
+
+                // Remove the item tracker entry from the global list
+                Global.ItemIdList.Remove(itemSearch);
+
+                // Create a new menu in the current channel
+                await ShopMenu.ShopStart((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+
+                return;
+            }
+            // For any other condition (if one should exist and not be handled here), create new entry
+            else
+            {
+                // await Context.Channel.SendMessageAsync("Case 4: No previous entry found. Create new entry.");
+
+                // Create a new menu in the current channel
+                await ShopMenu.ShopStart((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                return;
+            }
+        }
+    }
+}

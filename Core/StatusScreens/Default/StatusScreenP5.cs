@@ -1,0 +1,1556 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Drawing;
+using System.IO;
+using System.Threading.Tasks;
+using Discord;
+using Discord.Rest;
+using Discord.Commands;
+using Discord.WebSocket;
+using Discord.Addons.Interactive;
+using SocialLinker.Config;
+using SocialLinker.Core.CloudStorageTables;
+using System.Drawing.Text;
+using System.Net;
+using System.Drawing.Drawing2D;
+
+namespace SocialLinker.Core.StatusScreens
+{
+    internal static class StatusScreenP5
+    {
+        internal static async void RenderImage(SocketUser user, ISocketMessageChannel channel)
+        {
+            // Send a loading message while the status screen gets made
+            RestUserMessage loader = await channel.SendMessageAsync("", false, LoadingMessage().Build());
+
+            // Place the bulk of the function in a try-catch block in case something fails and an error message needs to be sent
+            try
+            {
+                // Grab the user's account information
+                var account = UserInfoClasses.GetAccount(user);
+
+                // Establish variables to write on the template
+                string username = "";
+
+                // If the username is over 16 characters, replace the last parts with an ellipsis
+                if (user.Username.Length > 20)
+                {
+                    username = $"{username.Substring(0, 20)}...";
+                }
+                else
+                {
+                    username = $"{user.Username}";
+                }
+
+                // Establish other variables of the user's data
+                string level = $"{account.Level}";
+                int total_exp = account.Total_Exp;
+                string profile_picture = user.GetAvatarUrl();
+                string pmedals = $"{account.P_Medals}";
+                string proficiency_title = Core.LevelSystem.SocialStats.ProficiencyRankTitle(account.Proficiency_Rank);
+                string diligence_title = Core.LevelSystem.SocialStats.DiligenceRankTitle(account.Diligence_Rank);
+                string expression_title = Core.LevelSystem.SocialStats.ExpressionRankTitle(account.Expression_Rank);
+
+                // Determine the Next Exp value
+                int next_exp = 0;
+                if (account.Level != 99)
+                {
+                    next_exp = Core.LevelSystem.Leveling.CalculateExp(account.Level + 1) - account.Total_Exp;
+                }
+
+                // If the user doesn't have a profile picture, use a default one
+                if (profile_picture == null)
+                {
+                    profile_picture = "https://i.imgur.com/T0AjCLh.png";
+                }
+
+                // Create a base bitmap to render all the elements on
+                Bitmap p5_template = new Bitmap(1920, 1080);
+
+                // Copy the P5 status background to a bitmap
+                Bitmap base_layer = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//layer_1.png");
+
+                // Copy the game textures to a bitmap
+                Bitmap game_textures = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//layer_2.png");
+
+                // Copy the center of the graph to a bitmap
+                Bitmap graph_center = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//layer_3.png");
+
+                // Copy the star shading overlay to a bitmap
+                Bitmap shading_overlay = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//layer_4.png");
+
+                // Copy the plot point overlay to a bitmap
+                Bitmap plot_point_overlay = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//layer_5.png");
+
+                // Create a bitmap for the rendered wanted poster
+                Bitmap wanted_poster = RenderWantedPoster((SocketGuildUser)user, total_exp);
+
+                // Create a random variable and rotate poster a random amount between -12 and 0 degrees
+                Random rnd = new Random();
+                Bitmap rotated_poster = RotateImage(wanted_poster, rnd.Next(-12, 1));
+
+                // Use a graphics object to edit the bitmap
+                using (Graphics graphics = Graphics.FromImage(p5_template))
+                {
+                    // Set text rendering to have antialiasing
+                    graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+
+                    // Color the entire bitmap with a bright red color
+                    graphics.Clear(System.Drawing.Color.FromArgb(213, 27, 4));
+
+                    // Render a star-spangled layer and place it at the bottom right of the template
+                    Bitmap star_spangled = RenderStarSpangledBitmap();
+                    graphics.DrawImage(star_spangled, 1590, 440, star_spangled.Width, star_spangled.Height);
+
+                    // Draw the first bitmap layer to the template
+                    graphics.DrawImage(base_layer, 0, 0, base_layer.Width, base_layer.Height);
+
+                    // Render the user info box that will contain the user's username, level, and Next Level information
+                    graphics.DrawImage(RenderUserInfoBox(), -69, -2, 1920, 1080);
+
+                    // Render the vector that contains the word "Stats" to the template
+                    graphics.DrawImage(RenderStatsVector(), 0, 0, 1920, 1080);
+
+                    // Render the vector that contains the user's P-Medal value to the template
+                    graphics.DrawImage(RenderPMedalVector(), 0, 0, 1920, 1080);
+
+                    // Render textures taken directly from the game such as the Lv, Next Level, P-Medal icon, and Stats text to the template
+                    graphics.DrawImage(game_textures, 0, 0, 1920, 1080);
+
+                    // Create a new bitmap that contains the user's username
+                    Bitmap username_box = RenderUsername(username);
+
+                    // Rotate the username bitmap by 3 degrees and save it to a new bitmap
+                    Bitmap rotated_username_box = RotateImage(username_box, 3);
+
+                    // Draw the rotated bitmap to the template
+                    graphics.DrawImage(rotated_username_box, -10, 23, rotated_username_box.Width, rotated_username_box.Height);
+
+                    // Create a text box to place the user's P-Medal value in
+                    Rectangle pmedal_box = new Rectangle(779, 29, 144, 73);
+
+                    // Create a new bitmap that will contain the user's level
+                    Bitmap level_box = RenderLevel(level);
+
+                    // Draw the level_box bitmap to the template
+                    graphics.DrawImage(level_box, 416, 202, level_box.Width, level_box.Height);
+
+                    // Next, create a new bitmap that contains the user's next EXP value
+                    Bitmap next_exp_box = RenderNextExpBitmap(next_exp.ToString());
+
+                    // Rotate the next EXP bitmap by -3 degrees and save it to a new bitmap
+                    Bitmap rotated_next_exp_box = RotateImage(next_exp_box, -6);
+
+                    // Draw the rotated next EXP bitmap to the template
+                    graphics.DrawImage(rotated_next_exp_box, 594, 166, rotated_next_exp_box.Width, rotated_next_exp_box.Height);
+
+                    // Using a font object, draw the user's P-Medal value to the template
+                    using (Font p5r_stats_font = new Font("P5R Stats", 37))
+                    {
+                        // Format the string so that its placement is on the right side of the text box
+                        StringFormat stringFormat = new StringFormat();
+                        stringFormat.Alignment = StringAlignment.Center;
+                        stringFormat.LineAlignment = StringAlignment.Center;
+
+                        graphics.DrawString(pmedals, p5r_stats_font, System.Drawing.Brushes.Black, pmedal_box, stringFormat);
+                    }
+
+                    // Draw the social stat icons to the template
+                    Bitmap stat_icons = RenderStatIcons(account.Proficiency_Rank, account.Diligence_Rank, account.Expression_Rank);
+                    graphics.DrawImage(stat_icons, 0, 0, 1920, 1080);
+
+                    // Draw the radar chart to the template
+                    Bitmap radar_chart = RenderRadarChart(account.Proficiency_Rank, account.Diligence_Rank, account.Expression_Rank);
+                    graphics.DrawImage(radar_chart, 0, 0, 1920, 1080);
+                    graphics.DrawImage(graph_center, 0, 0, 1920, 1080);
+
+                    // Draw the star shading overlay to the template
+                    Bitmap cropped_shading_overlay = KeepPixelOverlap(radar_chart, shading_overlay);
+                    graphics.DrawImage(cropped_shading_overlay, 0, 0, 1920, 1080);
+
+                    // Draw the plot point overlay to the template
+                    graphics.DrawImage(plot_point_overlay, 0, 0, 1920, 1080);
+
+                    // Draw the wanted poster to the template
+                    graphics.DrawImage(rotated_poster, -103, 204, rotated_poster.Width, rotated_poster.Height);
+
+                    // Create a bitmap where the user's three social rank titles are displayed
+                    Bitmap rank_titles_layer = RenderAllRankTitles(account.Proficiency_Rank, account.Diligence_Rank, account.Expression_Rank);
+
+                    // Draw the rank title bitmap to the template
+                    graphics.DrawImage(rank_titles_layer, 0, 0, rank_titles_layer.Width, rank_titles_layer.Height);
+
+                    // If the user has ever reset their level, render a prestige counter to the template
+                    if (account.Level_Resets > 0)
+                    {
+                        graphics.DrawImage(RenderPrestigeCounter(account.Level_Resets), 0, 0, 1920, 1080);
+                    }
+                }
+
+                // Save the bitmap to a data stream
+                MemoryStream memoryStream = new MemoryStream();
+                p5_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                // Send the image
+                await channel.SendFileAsync(memoryStream, $"status_{user.Id}_{DateTime.UtcNow}.png");
+
+                // Delete the loading message
+                await loader.DeleteAsync();
+            }
+            catch (Exception ex)
+            {
+                //Send an error message to the user
+                await channel.SendMessageAsync($":warning: Oops! It looks like something went wrong here. Please try again.");
+                Console.WriteLine(ex);
+
+                //Delete the loading message
+                await loader.DeleteAsync();
+
+                return;
+            }
+        }
+
+        public static Point ProficiencyGraphPoint(int rank)
+        {
+            Point graph_point = new Point(0, 0);
+
+            //Set chart point for Proficiency rank
+            if (rank == 1)
+            {
+                graph_point = new Point(1307, 443);
+            }
+            else if (rank == 2)
+            {
+                graph_point = new Point(1313, 395);
+            }
+            else if (rank == 3)
+            {
+                graph_point = new Point(1320, 348);
+            }
+            else if (rank == 4)
+            {
+                graph_point = new Point(1324, 303);
+            }
+            else if (rank == 5)
+            {
+                graph_point = new Point(1331, 254);
+            }
+
+            return graph_point;
+        }
+
+        public static Point DiligenceGraphPoint(int rank)
+        {
+            Point graph_point = new Point(0, 0);
+
+            //Set chart point for Diligence rank
+            if (rank == 1)
+            {
+                graph_point = new Point(1213, 633);
+            }
+            else if (rank == 2)
+            {
+                graph_point = new Point(1175, 677);
+            }
+            else if (rank == 3)
+            {
+                graph_point = new Point(1136, 718);
+            }
+            else if (rank == 4)
+            {
+                graph_point = new Point(1098, 764);
+            }
+            else if (rank == 5)
+            {
+                graph_point = new Point(1058, 808);
+            }
+
+            return graph_point;
+        }
+
+        public static Point ExpressionGraphPoint(int rank)
+        {
+            Point graph_point = new Point(0, 0);
+
+            //Set chart point for Expression rank
+            if (rank == 1)
+            {
+                graph_point = new Point(1357, 644);
+            }
+            else if (rank == 2)
+            {
+                graph_point = new Point(1386, 691);
+            }
+            else if (rank == 3)
+            {
+                graph_point = new Point(1414, 736);
+            }
+            else if (rank == 4)
+            {
+                graph_point = new Point(1443, 785);
+            }
+            else if (rank == 5)
+            {
+                graph_point = new Point(1471, 833);
+            }
+
+            return graph_point;
+        }
+
+        public static Point MidsectionGraphPoint(int diligence_rank, int expression_rank)
+        {
+            Point graph_point = new Point(0, 0);
+
+            //Set chart point for midsection point between Diligence and Expression
+            if (diligence_rank == 5 || expression_rank == 5)
+            {
+                graph_point = new Point(1278, 668);
+            }
+            else if (diligence_rank >= 4 || expression_rank >= 4)
+            {
+                graph_point = new Point(1281, 646);
+            }
+            else if (diligence_rank >= 3 || expression_rank >= 3)
+            {
+                graph_point = new Point(1284, 627);
+            }
+            else if (diligence_rank >= 2 || expression_rank >= 2)
+            {
+                graph_point = new Point(1286, 608);
+            }
+            else if (diligence_rank == 1 || expression_rank == 1)
+            {
+                graph_point = new Point(1288, 589);
+            }
+
+            return graph_point;
+        }
+
+        public static Bitmap RenderUserInfoBox()
+        {
+            // Make a new bitmap large enough for a working space.
+            Bitmap new_bitmap = new Bitmap(1920, 1080);
+
+            // Begin editing the new_bitmap with a graphics object.
+            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Create a brush for the color white.
+                SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
+
+                // Create a brush for the color white.
+                SolidBrush whiteBrush = new SolidBrush(System.Drawing.Color.White);
+
+                // Create a new random variable.
+                Random rnd = new Random();
+
+                // Create multiple variables for the potential min and max values of the four points of the black username box.
+                int name_black_point_1_x_min = 105;
+                int name_black_point_1_x_max = 154;
+                int name_black_point_1_y_min = -14;
+                int name_black_point_1_y_max = 20;
+
+                int name_black_point_2_x_min = 701;
+                int name_black_point_2_x_max = 752;
+                int name_black_point_2_y_min = 12;
+                int name_black_point_2_y_max = 76;
+
+                int name_black_point_3_x_min = 721;
+                int name_black_point_3_x_max = 750;
+                int name_black_point_3_y_min = 173;
+                int name_black_point_3_y_max = 191;
+
+                int name_black_point_4_x_min = 141;
+                int name_black_point_4_x_max = 183;
+                int name_black_point_4_y_min = 170;
+                int name_black_point_4_y_max = 217;
+
+                // Randomly set the X and Y values of the four points of the black username box using the min and max values.
+                int name_black_point_1_x = rnd.Next(name_black_point_1_x_min, name_black_point_1_x_max);
+                int name_black_point_1_y = rnd.Next(name_black_point_1_y_min, name_black_point_1_y_max);
+
+                int name_black_point_2_x = rnd.Next(name_black_point_2_x_min, name_black_point_2_x_max);
+                int name_black_point_2_y = rnd.Next(name_black_point_2_y_min, name_black_point_2_y_max);
+
+                int name_black_point_3_x = rnd.Next(name_black_point_3_x_min, name_black_point_3_x_max);
+                int name_black_point_3_y = rnd.Next(name_black_point_3_y_min, name_black_point_3_y_max);
+
+                int name_black_point_4_x = rnd.Next(name_black_point_4_x_min, name_black_point_4_x_max);
+                int name_black_point_4_y = rnd.Next(name_black_point_4_y_min, name_black_point_4_y_max);
+
+                // Randomly set the X and Y values of the four points of the white username box based on the set black username box X & Y values.
+                int name_white_point_1_x = rnd.Next(name_black_point_1_x + 8, name_black_point_1_x + 20);
+                int name_white_point_1_y = rnd.Next(name_black_point_1_y + 8, name_black_point_1_y + 20);
+
+                int name_white_point_2_x = rnd.Next(name_black_point_2_x - 20, name_black_point_2_x - 8);
+                int name_white_point_2_y = rnd.Next(name_black_point_2_y + 8, name_black_point_2_y + 20);
+
+                int name_white_point_3_x = rnd.Next(name_black_point_3_x - 20, name_black_point_3_x - 8);
+                int name_white_point_3_y = rnd.Next(name_black_point_3_y - 20, name_black_point_3_y - 8);
+
+                int name_white_point_4_x = rnd.Next(name_black_point_4_x + 8, name_black_point_4_x + 20);
+                int name_white_point_4_y = rnd.Next(name_black_point_4_y - 20, name_black_point_4_y - 8);
+
+                // Create the four points of the black username box from the randomly chosen values.
+                Point name_black_point_1 = new Point(name_black_point_1_x, name_black_point_1_y);
+                Point name_black_point_2 = new Point(name_black_point_2_x, name_black_point_2_y);
+                Point name_black_point_3 = new Point(name_black_point_3_x, name_black_point_3_y);
+                Point name_black_point_4 = new Point(name_black_point_4_x, name_black_point_4_y);
+
+                // Create the four points of the white username box from the randomly chosen values.
+                Point name_white_point_1 = new Point(name_white_point_1_x, name_white_point_1_y);
+                Point name_white_point_2 = new Point(name_white_point_2_x, name_white_point_2_y);
+                Point name_white_point_3 = new Point(name_white_point_3_x, name_white_point_3_y);
+                Point name_white_point_4 = new Point(name_white_point_4_x, name_white_point_4_y);
+
+                // Add all the points for the black username box into a point array.
+                Point[] name_black_poly_points = { name_black_point_1, name_black_point_2, name_black_point_3, name_black_point_4 };
+
+                // Add all the points for the white username box into a point array.
+                Point[] name_white_poly_points = { name_white_point_1, name_white_point_2, name_white_point_3, name_white_point_4 };
+
+                // Use the name_black_poly_points array to create a polygon and fill it with black color.
+                graphics.FillPolygon(blackBrush, name_black_poly_points);
+
+                // Create points for the outer black box the Level and Next Level information goes into.
+                Point lv_black_point_1 = new Point(251, 169);
+                Point lv_black_point_2 = new Point(934, 154);
+                Point lv_black_point_3 = new Point(944, 222);
+                Point lv_black_point_4 = new Point(279, 332);
+
+                // Create points for the inner white box the Level and Next Level information goes into.
+                Point lv_white_point_1 = new Point(311, 175);
+                Point lv_white_point_2 = new Point(915, 160);
+                Point lv_white_point_3 = new Point(932, 218);
+                Point lv_white_point_4 = new Point(312, 310);
+
+                // Add all the points for the black Level box into a point array.
+                Point[] lv_black_poly_points = { lv_black_point_1, lv_black_point_2, lv_black_point_3, lv_black_point_4 };
+
+                // Add all the points for the white Level box into a point array.
+                Point[] lv_white_poly_points = { lv_white_point_1, lv_white_point_2, lv_white_point_3, lv_white_point_4 };
+
+                // Use the lv_black_poly_points array to create a polygon and fill it with black color.
+                graphics.FillPolygon(blackBrush, lv_black_poly_points);
+
+                // Use the name_white_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(whiteBrush, name_white_poly_points);
+
+                // Use the lv_white_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(whiteBrush, lv_white_poly_points);
+            }
+
+            // Return the new bitmap.
+            return new_bitmap;
+        }
+
+        public static Bitmap RenderUsername(string username)
+        {
+            //Create a new bitmap the same size as the username area of the template
+            Bitmap username_bitmap = new Bitmap(514, 116);
+
+            //Use a graphics object to edit the bitmap
+            using (Graphics graphics = Graphics.FromImage(username_bitmap))
+            {
+                //Set text rendering to have antialiasing
+                graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+
+                //Create text boxes to place the user's username in
+                Rectangle username_box = new Rectangle(0, 0, 514, 116);
+                Rectangle username_shadow_box = new Rectangle(4, 4, 514, 116);
+
+                //Create a new color to place a drop shadow behind the username
+                System.Drawing.Color username_shadow_color = System.Drawing.Color.FromArgb(217, 217, 217);
+
+                //Create a new brushe so that the colors can be used on a font object
+                SolidBrush username_shadow_brush = new SolidBrush(username_shadow_color);
+
+                //Using a font object, draw the user's username value to the template
+                using (Font p5r_font = new Font("Optima nova LT Black", 28))
+                {
+                    //Format the string so that its placement is at the center of the text box
+                    StringFormat stringFormat = new StringFormat();
+                    stringFormat.Alignment = StringAlignment.Center;
+                    stringFormat.LineAlignment = StringAlignment.Center;
+
+                    //Draw the username text and its shadow to the username_bitmap
+                    graphics.DrawString(username, p5r_font, username_shadow_brush, username_shadow_box, stringFormat);
+                    graphics.DrawString(username, p5r_font, System.Drawing.Brushes.Black, username_box, stringFormat);
+                }
+            }
+
+            return username_bitmap;
+        }
+
+        public static Bitmap RenderLevel(string level)
+        {
+            // Create a new bitmap the same size as the username area of the template
+            Bitmap level_bitmap = new Bitmap(210, 100);
+
+            // Use a graphics object to edit the bitmap
+            using (Graphics graphics = Graphics.FromImage(level_bitmap))
+            {
+                // Set text rendering to have antialiasing
+                graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+
+                // Create a text box to place the user's level in
+                Rectangle level_box = new Rectangle(0, 0, 210, 100);
+
+                // Using a font object, draw the user's level value to the template
+                using (Font p5r_stats_font = new Font("P5R Stats", 50))
+                {
+                    // Format the string so that its placement is on the right side of the text box
+                    StringFormat stringFormat = new StringFormat();
+                    stringFormat.Alignment = StringAlignment.Near;
+
+                    // Draw the level text to the level_bitmap
+                    graphics.DrawString(level, p5r_stats_font, System.Drawing.Brushes.Black, level_box, stringFormat);
+                }
+            }
+
+            return level_bitmap;
+        }
+
+        public static Bitmap RenderNextExpBitmap(string next_exp)
+        {
+            // Create a new bitmap the same size as the username area of the template
+            Bitmap next_exp_bitmap = new Bitmap(210, 92);
+
+            // Use a graphics object to edit the bitmap
+            using (Graphics graphics = Graphics.FromImage(next_exp_bitmap))
+            {
+                // Set text rendering to have antialiasing
+                graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+
+                // Create a text box to place the user's level in
+                Rectangle next_exp_box = new Rectangle(0, 0, 210, 92);
+
+                // Using a font object, draw the user's level value to the template
+                using (Font p5r_stats_font = new Font("P5R Stats", 30))
+                {
+                    // Format the string so that its placement is on the right side of the text box
+                    StringFormat stringFormat = new StringFormat();
+                    stringFormat.Alignment = StringAlignment.Near;
+
+                    // Draw the next EXP text to the next_exp_bitmap
+                    graphics.DrawString(next_exp, p5r_stats_font, System.Drawing.Brushes.Black, next_exp_box, stringFormat);
+                }
+            }
+
+            return next_exp_bitmap;
+        }
+
+        public static Bitmap RenderPMedalVector()
+        {
+            // Make a new bitmap large enough for a working space.
+            Bitmap new_bitmap = new Bitmap(1920, 1080);
+
+            // Begin editing the new_bitmap with a graphics object.
+            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Create a brush for the color white.
+                SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
+
+                // Create a brush for the color white.
+                SolidBrush whiteBrush = new SolidBrush(System.Drawing.Color.White);
+
+                // Create a new random variable.
+                Random rnd = new Random();
+
+                // Create multiple variables for the potential min and max values of the four points of the black P-Medal vector box.
+                int black_pmedal_vector_point_1_x_min = 673;
+                int black_pmedal_vector_point_1_x_max = 673 + 6;
+                int black_pmedal_vector_point_1_y_min = 23;
+                int black_pmedal_vector_point_1_y_max = 23 + 6;
+
+                int black_pmedal_vector_point_2_x_min = 948;
+                int black_pmedal_vector_point_2_x_max = 948 + 6;
+                int black_pmedal_vector_point_2_y_min = 16;
+                int black_pmedal_vector_point_2_y_max = 16 + 6;
+
+                int black_pmedal_vector_point_3_x_min = 937;
+                int black_pmedal_vector_point_3_x_max = 937 + 6;
+                int black_pmedal_vector_point_3_y_min = 108;
+                int black_pmedal_vector_point_3_y_max = 108 + 6;
+
+                int black_pmedal_vector_point_4_x_min = 691;
+                int black_pmedal_vector_point_4_x_max = 691 + 6;
+                int black_pmedal_vector_point_4_y_min = 111;
+                int black_pmedal_vector_point_4_y_max = 111 + 6;
+
+                // Randomly set the X and Y values of the four points of the black P-Medal vector box using the min and max values.
+                int black_pmedal_vector_point_1_x = rnd.Next(black_pmedal_vector_point_1_x_min, black_pmedal_vector_point_1_x_max);
+                int black_pmedal_vector_point_1_y = rnd.Next(black_pmedal_vector_point_1_y_min, black_pmedal_vector_point_1_y_max);
+
+                int black_pmedal_vector_point_2_x = rnd.Next(black_pmedal_vector_point_2_x_min, black_pmedal_vector_point_2_x_max);
+                int black_pmedal_vector_point_2_y = rnd.Next(black_pmedal_vector_point_2_y_min, black_pmedal_vector_point_2_y_max);
+
+                int black_pmedal_vector_point_3_x = rnd.Next(black_pmedal_vector_point_3_x_min, black_pmedal_vector_point_3_x_max);
+                int black_pmedals_vector_point_3_y = rnd.Next(black_pmedal_vector_point_3_y_min, black_pmedal_vector_point_3_y_max);
+
+                int black_pmedal_vector_point_4_x = rnd.Next(black_pmedal_vector_point_4_x_min, black_pmedal_vector_point_4_x_max);
+                int black_pmedal_vector_point_4_y = rnd.Next(black_pmedal_vector_point_4_y_min, black_pmedal_vector_point_4_y_max);
+
+                // Create the four points of the black P-Medal vector box from the randomly chosen values.
+                Point black_pmedal_vector_point_1 = new Point(black_pmedal_vector_point_1_x, black_pmedal_vector_point_1_y);
+                Point black_pmedal_vector_point_2 = new Point(black_pmedal_vector_point_2_x, black_pmedal_vector_point_2_y);
+                Point black_pmedal_vector_point_3 = new Point(black_pmedal_vector_point_3_x, black_pmedals_vector_point_3_y);
+                Point black_pmedal_vector_point_4 = new Point(black_pmedal_vector_point_4_x, black_pmedal_vector_point_4_y);
+
+                // Add all the points for the black P-Medal vector box into a point array.
+                Point[] black_pmedal_vector_poly_points = { black_pmedal_vector_point_1, black_pmedal_vector_point_2, black_pmedal_vector_point_3, black_pmedal_vector_point_4 };
+
+                // Next, work on constructing the inner white area of the P-Medal vector box.
+                // Create constant variables for the random shifts on the X and Y values.
+                int min_addon = 6;
+                int max_addon = 10;
+
+                // Randomly set the X and Y values of the four points of the white P-Medal vector box based on the set black P-Medal vector box X & Y values.
+                int white_pmedal_vector_point_1_x = rnd.Next(black_pmedal_vector_point_1_x + min_addon, black_pmedal_vector_point_1_x + max_addon);
+                int white_pmedal_vector_point_1_y = rnd.Next(black_pmedal_vector_point_1_y + min_addon, black_pmedal_vector_point_1_y + max_addon);
+
+                int white_pmedal_vector_point_2_x = rnd.Next(black_pmedal_vector_point_2_x - max_addon, black_pmedal_vector_point_2_x - min_addon);
+                int white_pmedal_vector_point_2_y = rnd.Next(black_pmedal_vector_point_2_y + min_addon, black_pmedal_vector_point_2_y + max_addon);
+
+                int white_pmedal_vector_point_3_x = rnd.Next(black_pmedal_vector_point_3_x - max_addon, black_pmedal_vector_point_3_x - min_addon);
+                int white_pmedal_vector_point_3_y = rnd.Next(black_pmedals_vector_point_3_y - max_addon, black_pmedals_vector_point_3_y - min_addon);
+
+                int white_pmedal_vector_point_4_x = rnd.Next(black_pmedal_vector_point_4_x + min_addon, black_pmedal_vector_point_4_x + max_addon);
+                int white_pmedal_vector_point_4_y = rnd.Next(black_pmedal_vector_point_4_y - max_addon, black_pmedal_vector_point_4_y - min_addon);
+
+                // Create the four points of the white P-Medal vector box from the randomly chosen values.
+                Point white_pmedal_vector_point_1 = new Point(white_pmedal_vector_point_1_x, white_pmedal_vector_point_1_y);
+                Point white_pmedal_vector_point_2 = new Point(white_pmedal_vector_point_2_x, white_pmedal_vector_point_2_y);
+                Point white_pmedal_vector_point_3 = new Point(white_pmedal_vector_point_3_x, white_pmedal_vector_point_3_y);
+                Point white_pmedal_vector_point_4 = new Point(white_pmedal_vector_point_4_x, white_pmedal_vector_point_4_y);
+
+                // Add all the points for the white P-Medal vector box into a point array.
+                Point[] white_pmedal_vector_poly_points = { white_pmedal_vector_point_1, white_pmedal_vector_point_2, white_pmedal_vector_point_3, white_pmedal_vector_point_4 };
+
+                //Finally, let's draw the created polygons to the bitmap.
+                // Use the black_pmedal_vector_poly_points array to create a polygon and fill it with black color.
+                graphics.FillPolygon(blackBrush, black_pmedal_vector_poly_points);
+
+                // Use the white_pmedal_vector_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(whiteBrush, white_pmedal_vector_poly_points);
+            }
+
+            // Return the new bitmap.
+            return new_bitmap;
+        }
+
+        public static Bitmap ImageToGrayscale(Bitmap original_image)
+        {
+            //Create a new bitmap the same size as the input image
+            Bitmap grayscaled_image = new Bitmap(original_image.Width, original_image.Height);
+
+            //Using a graphics image, edit the grayscaled_image bitmap
+            using (Graphics graphics = Graphics.FromImage(grayscaled_image))
+            {
+                //Create a nested for loop to get each pixel of the original input image, grayscale them, then copy them to the grayscaled_image bitmap
+                for (int x = 0; x < grayscaled_image.Width; x++)
+                {
+                    for (int y = 0; y < grayscaled_image.Height; y++)
+                    {
+                        System.Drawing.Color pixelColor = original_image.GetPixel(x, y);
+                        int grayScale = (int)((pixelColor.R * 0.3) + (pixelColor.G * 0.59) + (pixelColor.B * 0.11));
+                        System.Drawing.Color newColor = System.Drawing.Color.FromArgb(pixelColor.A, grayScale, grayScale, grayScale);
+                        grayscaled_image.SetPixel(x, y, newColor);
+                    }
+                }
+            }
+
+            //Return the grayscaled bitmap
+            return grayscaled_image;
+        }
+
+        public static Bitmap RenderPosterLabel(string label)
+        {
+            //Create an empty bitmap to store the final rendered label in
+            Bitmap return_label = new Bitmap(2, 2);
+
+            //If the input string is "leader", render the leader label
+            if (label == "leader")
+            {
+                //Copy the leader label to a bitmap
+                Bitmap leader_label = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//UserLabels//leader.png");
+
+                //Reassign the return_label bitmap to a new bitmap the same size as leader_label, plus 4 pixels on the width and height for the upcoming displaced second layer
+                return_label = new Bitmap(leader_label.Width + 4, leader_label.Height + 4);
+
+                //Use a graphics object to edit the return_label bitmap
+                using (Graphics graphics = Graphics.FromImage(return_label))
+                {
+                    //Draw the first layer to the return_bitmap after coloring it to black. The width and height must be set to specific values for resizing the original bitmap.
+                    graphics.DrawImage(BitmapToColor(leader_label, 0, 0, 0), 4, 4, 250, 104);
+
+                    //Draw the second layer to the return_bitmap after coloring it to beige. The width and height must be set to specific values for resizing the original bitmap.
+                    graphics.DrawImage(BitmapToColor(leader_label, 231, 225, 165), 0, 0, 250, 104);
+                }
+            }
+            else if (label == "navigator")
+            {
+                //Copy the navigator label to a bitmap
+                Bitmap navigator_label = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//UserLabels//navigator.png");
+
+                //Reassign the return_label bitmap to a new bitmap the same size as leader_label, plus 4 pixels on the width and height for the upcoming displaced second layer
+                return_label = new Bitmap(navigator_label.Width + 4, navigator_label.Height + 4);
+
+                //Use a graphics object to edit the return_label bitmap
+                using (Graphics graphics = Graphics.FromImage(return_label))
+                {
+                    //Draw the first layer to the return_bitmap after coloring it to black. The width and height must be set to specific values for resizing the original bitmap.
+                    graphics.DrawImage(BitmapToColor(navigator_label, 0, 0, 0), 4, 4, 326, 104);
+
+                    //Draw the second layer to the return_bitmap after coloring it to beige. The width and height must be set to specific values for resizing the original bitmap.
+                    graphics.DrawImage(BitmapToColor(navigator_label, 231, 225, 165), 0, 0, 326, 104);
+                }
+            }
+            else if (label == "party")
+            {
+                //Copy the leader label to a bitmap
+                Bitmap party_label = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//UserLabels//party.png");
+
+                //Reassign the return_label bitmap to a new bitmap the same size as leader_label, plus 4 pixels on the width and height for the upcoming displaced second layer
+                return_label = new Bitmap(party_label.Width + 4, party_label.Height + 4);
+
+                //Use a graphics object to edit the return_label bitmap
+                using (Graphics graphics = Graphics.FromImage(return_label))
+                {
+                    //Draw the first layer to the return_bitmap after coloring it to black. The width and height must be set to specific values for resizing the original bitmap.
+                    graphics.DrawImage(BitmapToColor(party_label, 0, 0, 0), 4, 4, 237, 104);
+
+                    //Draw the second layer to the return_bitmap after coloring it to beige. The width and height must be set to specific values for resizing the original bitmap.
+                    graphics.DrawImage(BitmapToColor(party_label, 231, 225, 165), 0, 0, 237, 104);
+                }
+            }
+
+            return return_label;
+        }
+
+        public static string TotalExpToString(int total_exp)
+        {
+            // Create a string variable that will be the represented output of the user's total EXP
+            string total_exp_string = "";
+
+            // Determine if the user's total EXP value is less than seven digits
+            if (total_exp.ToString().Length < 7)
+            {
+                // If so, create a variable that contains the amount of digits left to make the value have seven
+                int empty_spaces = 7 - total_exp.ToString().Length;
+
+                // For every needed digit in empty_spaces, add a leading zero to total_exp_string
+                for (int i = 0; i < empty_spaces; i++)
+                {
+                    total_exp_string += "0";
+                }
+            }
+
+            // Concatenate the user's total EXP value to the end of total_exp_string as a string
+            total_exp_string += total_exp.ToString();
+
+            // Return the final result
+            return total_exp_string;
+        }
+
+        public static Bitmap RenderTotalExpBitmap(string total_exp_string, int total_exp_digit_count)
+        {
+            // Create a new bitmap the same size as the username area of the template
+            Bitmap total_exp_bitmap = new Bitmap(378, 108);
+
+            // Create a char array from the input total_exp_string. The array length should always be seven.
+            char[] total_exp_char_array = total_exp_string.ToCharArray();
+
+            // Create an int to determine at what point in the array the actual total EXP value starts
+            int actual_value_start_index = 7 - total_exp_digit_count;
+
+            // Use a graphics object to edit the bitmap
+            using (Graphics graphics = Graphics.FromImage(total_exp_bitmap))
+            {
+                // Create a variable to keep track of the X position of an (X, Y) coordinate pair
+                int x = 0;
+
+                // Iterate through the char array
+                for (int i = 0; i < 7; i++)
+                {
+                    // Copy the needed digit image to a bitmap
+                    Bitmap current_digit = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//TotalExpDigits//{total_exp_char_array[i]}.png");
+
+                    // If the iterator 'i' is less than the start index of the actual value, color the digit dark red
+                    if (i < actual_value_start_index)
+                    {
+                        current_digit = BitmapToColor(current_digit, 56, 0, 0);
+                    }
+                    // Else, if the iterator 'i' is at or more than the start index of the actual value, color the digit bright red
+                    else if (i >= actual_value_start_index)
+                    {
+                        current_digit = BitmapToColor(current_digit, 222, 0, 0);
+                    }
+
+                    // Draw the current digit to the total_exp_bitmap
+                    graphics.DrawImage(current_digit, x, 0, current_digit.Width, current_digit.Height);
+
+                    // Increment the X coordinate by the current digit's width so that the next digit is placed correctly
+                    x += current_digit.Width;
+
+                    if (i == 0 || i == 3)
+                    {
+                        // Copy the dot image to a bitmap
+                        current_digit = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//TotalExpDigits//dot.png");
+
+                        // If the iterator 'i' is less than the start index of the actual value, color the dot dark red
+                        if (i < actual_value_start_index)
+                        {
+                            current_digit = BitmapToColor(current_digit, 56, 0, 0);
+                        }
+                        //Else, if the iterator 'i' is at or more than the start index of the actual value, color the dot bright red
+                        else if (i >= actual_value_start_index)
+                        {
+                            current_digit = BitmapToColor(current_digit, 222, 0, 0);
+                        }
+
+                        // Draw the dot to the total_exp_bitmap
+                        graphics.DrawImage(current_digit, x, 0, current_digit.Width, current_digit.Height);
+
+                        // Increment the X coordinate by the current digit's width so that the next digit is placed correctly
+                        x += current_digit.Width;
+                    }
+                }
+            }
+
+            return total_exp_bitmap;
+        }
+
+        public static Bitmap RenderWantedPoster(SocketGuildUser user, int total_exp)
+        {
+            //Create a variable for the user's profile picture
+            string profile_picture = user.GetAvatarUrl();
+
+            //If the user doesn't have a profile picture, use a default one
+            if (profile_picture == null)
+            {
+                profile_picture = "https://i.imgur.com/T0AjCLh.png";
+            }
+
+            //Copy the wanted poster image to a bitmap
+            var wanted_poster = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//wanted_poster.png");
+
+            //Render the user's total EXP value to the bitmap
+            Bitmap total_exp_bitmap = RenderTotalExpBitmap(TotalExpToString(total_exp), total_exp.ToString().Length);
+            
+            //Use a graphics object to edit the wanted poster
+            using (Graphics graphics = Graphics.FromImage(wanted_poster))
+            {
+                graphics.DrawImage(total_exp_bitmap, 197, 531, total_exp_bitmap.Width, total_exp_bitmap.Height);
+
+                //Use a web client to download the user's profile picture and draw it to the template
+                using (var wc = new WebClient())
+                {
+                    using (var imgStream = new MemoryStream(wc.DownloadData(profile_picture)))
+                    {
+                        using (var objImage = System.Drawing.Image.FromStream(imgStream))
+                        {
+                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                            graphics.DrawImage(ImageToGrayscale((Bitmap)objImage), 128, 118, 350, 350);
+                        }
+                    }
+                }
+
+                //Render the poster label based on the user's permissions in the server
+                //If the user is the server's owner, render the Leader label
+                if (user == user.Guild.Owner)
+                {
+                    Bitmap leader_label = RenderPosterLabel("leader");
+
+                    leader_label = RotateImage(leader_label, 8);
+
+                    graphics.DrawImage(leader_label, 233, 354, leader_label.Width, leader_label.Height);
+                }
+                //Else, if the user has any moderation permissions, render the Navigator label
+                else if (user.GuildPermissions.ManageGuild == true || user.GuildPermissions.ManageMessages == true || user.GuildPermissions.KickMembers == true || user.GuildPermissions.BanMembers == true)
+                {
+                    Bitmap navigator_label = RenderPosterLabel("navigator");
+
+                    navigator_label = RotateImage(navigator_label, 8);
+
+                    graphics.DrawImage(navigator_label, 149, 354, navigator_label.Width, navigator_label.Height);
+                }
+                //For all other users, render the Party tag
+                else
+                {
+                    Bitmap party_label = RenderPosterLabel("party");
+
+                    party_label = RotateImage(party_label, 8);
+
+                    graphics.DrawImage(party_label, 233, 354, party_label.Width, party_label.Height);
+                }
+            }
+
+            return wanted_poster;
+        }
+
+        public static Bitmap RenderStatsVector()
+        {
+            // Make a new bitmap large enough for a working space.
+            Bitmap new_bitmap = new Bitmap(1920, 1080);
+
+            // Begin editing the new_bitmap with a graphics object.
+            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Create a brush for the color white.
+                SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
+
+                // Create a brush for the color white.
+                SolidBrush whiteBrush = new SolidBrush(System.Drawing.Color.White);
+
+                // Create a new random variable.
+                Random rnd = new Random();
+
+                // Create multiple variables for the potential min and max values of the four points of the white stats vector box.
+                int white_stats_vector_point_1_x_min = 1543;
+                int white_stats_vector_point_1_x_max = 1567;
+                int white_stats_vector_point_1_y_min = 66;
+                int white_stats_vector_point_1_y_max = 66;
+
+                int white_stats_vector_point_2_x_min = 1833;
+                int white_stats_vector_point_2_x_max = 1851;
+                int white_stats_vector_point_2_y_min = 46;
+                int white_stats_vector_point_2_y_max = 56;
+
+                int white_stats_vector_point_3_x_min = 1837;
+                int white_stats_vector_point_3_x_max = 1849;
+                int white_stats_vector_point_3_y_min = 179;
+                int white_stats_vector_point_3_y_max = 189;
+
+                int white_stats_vector_point_4_x_min = 1548;
+                int white_stats_vector_point_4_x_max = 1564;
+                int white_stats_vector_point_4_y_min = 172;
+                int white_stats_vector_point_4_y_max = 184;
+
+                // Randomly set the X and Y values of the four points of the white stats vector box using the min and max values.
+                int white_stats_vector_point_1_x = rnd.Next(white_stats_vector_point_1_x_min, white_stats_vector_point_1_x_max);
+                int white_stats_vector_point_1_y = rnd.Next(white_stats_vector_point_1_y_min, white_stats_vector_point_1_y_max);
+
+                int white_stats_vector_point_2_x = rnd.Next(white_stats_vector_point_2_x_min, white_stats_vector_point_2_x_max);
+                int white_stats_vector_point_2_y = rnd.Next(white_stats_vector_point_2_y_min, white_stats_vector_point_2_y_max);
+
+                int white_stats_vector_point_3_x = rnd.Next(white_stats_vector_point_3_x_min, white_stats_vector_point_3_x_max);
+                int white_stats_vector_point_3_y = rnd.Next(white_stats_vector_point_3_y_min, white_stats_vector_point_3_y_max);
+
+                int white_stats_vector_point_4_x = rnd.Next(white_stats_vector_point_4_x_min, white_stats_vector_point_4_x_max);
+                int white_stats_vector_point_4_y = rnd.Next(white_stats_vector_point_4_y_min, white_stats_vector_point_4_y_max);
+
+                // Create the four points of the white stats vector box from the randomly chosen values.
+                Point white_stats_vector_point_1 = new Point(white_stats_vector_point_1_x, white_stats_vector_point_1_y);
+                Point white_stats_vector_point_2 = new Point(white_stats_vector_point_2_x, white_stats_vector_point_2_y);
+                Point white_stats_vector_point_3 = new Point(white_stats_vector_point_3_x, white_stats_vector_point_3_y);
+                Point white_stats_vector_point_4 = new Point(white_stats_vector_point_4_x, white_stats_vector_point_4_y);
+
+                // Add all the points for the white stats vector box into a point array.
+                Point[] white_stats_vector_poly_points = { white_stats_vector_point_1, white_stats_vector_point_2, white_stats_vector_point_3, white_stats_vector_point_4 };
+
+                // Let's save rendering this vector box to the bitmap until the end. Next, work on constructing the white tail of the box.
+                // The tail has set placement values, so create points for its white vector box.
+                Point white_tail_vector_point_1 = new Point(1599, 167);
+                Point white_tail_vector_point_2 = new Point(1697, 167);
+                Point white_tail_vector_point_3 = new Point(1673, 184);
+                Point white_tail_vector_point_4 = new Point(1682, 194);
+                Point white_tail_vector_point_5 = new Point(1565, 246);
+                Point white_tail_vector_point_6 = new Point(1614, 197);
+                Point white_tail_vector_point_7 = new Point(1590, 191);
+
+                // Add all the points for the white tail vector box into a point array.
+                Point[] white_tail_vector_poly_points = { white_tail_vector_point_1, white_tail_vector_point_2, white_tail_vector_point_3, white_tail_vector_point_4, white_tail_vector_point_5, white_tail_vector_point_6, white_tail_vector_point_7 };
+
+                // Save rendering this white tail vector box to the bitmap until the end of the function. Next, work on constructing the inner black area of the stats vector box.
+                // Randomly set the X and Y values of the four points of the black stats vector box based on the set white stats vector box X & Y values.
+                int black_stats_vector_point_1_x = rnd.Next(white_stats_vector_point_1_x + 8, white_stats_vector_point_1_x + 20);
+                int black_stats_vector_point_1_y = rnd.Next(white_stats_vector_point_1_y + 8, white_stats_vector_point_1_y + 20);
+
+                int black_stats_vector_point_2_x = rnd.Next(white_stats_vector_point_2_x - 20, white_stats_vector_point_2_x - 8);
+                int black_stats_vector_point_2_y = rnd.Next(white_stats_vector_point_2_y + 8, white_stats_vector_point_2_y + 20);
+
+                int black_stats_vector_point_3_x = rnd.Next(white_stats_vector_point_3_x - 20, white_stats_vector_point_3_x - 8);
+                int black_stats_vector_point_3_y = rnd.Next(white_stats_vector_point_3_y - 20, white_stats_vector_point_3_y - 8);
+
+                int black_stats_vector_point_4_x = rnd.Next(white_stats_vector_point_4_x + 8, white_stats_vector_point_4_x + 20);
+                int black_stats_vector_point_4_y = rnd.Next(white_stats_vector_point_4_y - 20, white_stats_vector_point_4_y - 8);
+
+                // Create the four points of the black stats vector box from the randomly chosen values.
+                Point black_stats_vector_point_1 = new Point(black_stats_vector_point_1_x, black_stats_vector_point_1_y);
+                Point black_stats_vector_point_2 = new Point(black_stats_vector_point_2_x, black_stats_vector_point_2_y);
+                Point black_stats_vector_point_3 = new Point(black_stats_vector_point_3_x, black_stats_vector_point_3_y);
+                Point black_stats_vector_point_4 = new Point(black_stats_vector_point_4_x, black_stats_vector_point_4_y);
+
+                // Add all the points for the black stats vector box into a point array.
+                Point[] black_stats_vector_poly_points = { black_stats_vector_point_1, black_stats_vector_point_2, black_stats_vector_point_3, black_stats_vector_point_4 };
+
+                // Save rendering this black stats vector box to the bitmap until the end of the function. Lastly, work on constructing the inner black area of the tail vector box.
+                // The tail has set placement values, so create points for its black vector box.
+                Point black_tail_vector_point_1 = new Point(1631, 147);
+                Point black_tail_vector_point_2 = new Point(1745, 147);
+                Point black_tail_vector_point_3 = new Point(1657, 180);
+                Point black_tail_vector_point_4 = new Point(1665, 188);
+                Point black_tail_vector_point_5 = new Point(1610, 210);
+                Point black_tail_vector_point_6 = new Point(1628, 188);
+                Point black_tail_vector_point_7 = new Point(1612, 179);
+
+                // Add all the points for the black stats vector box into a point array.
+                Point[] black_tail_vector_poly_points = { black_tail_vector_point_1, black_tail_vector_point_2, black_tail_vector_point_3, black_tail_vector_point_4, black_tail_vector_point_5, black_tail_vector_point_6, black_tail_vector_point_7 };
+
+                //Finally, let's draw the created polygons to the bitmap.
+                // Use the white_stats_vector_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(whiteBrush, white_stats_vector_poly_points);
+
+                // Use the white_tail_vector_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(whiteBrush, white_tail_vector_poly_points);
+
+                // Use the black_stats_vector_poly_points array to create a polygon and fill it with black color.
+                graphics.FillPolygon(blackBrush, black_stats_vector_poly_points);
+
+                // Use the black_tail_vector_poly_points array to create a polygon and fill it with black color.
+                graphics.FillPolygon(blackBrush, black_tail_vector_poly_points);
+            }
+
+            // Return the new bitmap.
+            return new_bitmap;
+        }
+        
+        public static Bitmap RenderRadarChart(int proficiency_rank, int diligence_rank, int expression_rank)
+        {
+            //Make a new bitmap the same size as input_bitmap
+            Bitmap new_bitmap = new Bitmap(1920, 1080);
+
+            //Use a graphics object to edit the bitmap
+            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                //Create points that define radar chart
+                Point proficiency_point = ProficiencyGraphPoint(proficiency_rank);
+                Point diligence_point = DiligenceGraphPoint(diligence_rank);
+                Point expression_point = ExpressionGraphPoint(expression_rank);
+                Point midsection_point = MidsectionGraphPoint(diligence_rank, expression_rank);
+
+                //Create a color for the radar chart
+                SolidBrush yellowBrush = new SolidBrush(System.Drawing.Color.Orange);
+
+                //Bind radar chart points
+                Point[] curvePoints = { proficiency_point, diligence_point, midsection_point, expression_point };
+
+                //Draw radar chart to screen
+                graphics.FillPolygon(yellowBrush, curvePoints);
+            }
+
+            //Return the new bitmap
+            return new_bitmap;
+        }
+
+        public static Bitmap RenderStatIcons(int proficiency_rank, int diligence_rank, int expression_rank)
+        {
+            //Make a new bitmap to place the icons on
+            Bitmap new_bitmap = new Bitmap(1920, 1080);
+
+            //Copy the icon backgrounds to a bitmap
+            Bitmap proficiency_icon_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//proficiency_bg.png");
+            Bitmap diligence_icon_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//diligence_bg.png");
+            Bitmap expression_icon_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//expression_bg.png");
+
+            //Copy the icon text layers to a bitmap
+            Bitmap proficiency_icon_text = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//proficiency_text.png");
+            Bitmap diligence_icon_text = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//diligence_text.png");
+            Bitmap expression_icon_text = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//expression_text.png");
+
+            //Copy the rank number backgrounds to a bitmap
+            Bitmap proficiency_rank_number_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//{proficiency_rank}_bg.png");
+            Bitmap diligence_rank_number_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//{diligence_rank}_bg.png");
+            Bitmap expression_rank_number_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//{expression_rank}_bg.png");
+
+            //Copy the rank number text to a bitmap
+            Bitmap proficiency_rank_number_text = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//{proficiency_rank}_text.png");
+            Bitmap diligence_rank_number_text = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//{diligence_rank}_text.png");
+            Bitmap expression_rank_number_text = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//ChartStats//{expression_rank}_text.png");
+
+            //Use a graphics object to edit the bitmap
+            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            {
+                //Determine whether to color the background layers dark yellow or bright yellow based on the user's Proficiency rank
+                if (proficiency_rank < 5)
+                {
+                    proficiency_icon_bg = BitmapToColor(proficiency_icon_bg, 255, 180, 0);
+                    proficiency_rank_number_bg = BitmapToColor(proficiency_rank_number_bg, 255, 180, 0);
+                }
+                else
+                {
+                    proficiency_icon_bg = BitmapToColor(proficiency_icon_bg, 255, 255, 32);
+                    proficiency_rank_number_bg = BitmapToColor(proficiency_rank_number_bg, 255, 255, 32);
+                }
+
+                //Determine whether to color the background layers dark yellow or bright yellow based on the user's Diligence rank
+                if (diligence_rank < 5)
+                {
+                    diligence_icon_bg = BitmapToColor(diligence_icon_bg, 255, 180, 0);
+                    diligence_rank_number_bg = BitmapToColor(diligence_rank_number_bg, 255, 180, 0);
+                }
+                else
+                {
+                    diligence_icon_bg = BitmapToColor(diligence_icon_bg, 255, 255, 32);
+                    diligence_rank_number_bg = BitmapToColor(diligence_rank_number_bg, 255, 255, 32);
+                }
+
+                //Determine whether to color the background layers dark yellow or bright yellow based on the user's Expression rank
+                if (expression_rank < 5)
+                {
+                    expression_icon_bg = BitmapToColor(expression_icon_bg, 255, 180, 0);
+                    expression_rank_number_bg = BitmapToColor(expression_rank_number_bg, 255, 180, 0);
+                }
+                else
+                {
+                    expression_icon_bg = BitmapToColor(expression_icon_bg, 255, 255, 32);
+                    expression_rank_number_bg = BitmapToColor(expression_rank_number_bg, 255, 255, 32);
+                }
+
+                //Set a default value for the height of rank number bitmaps on the template
+                int proficiency_rank_number_height = 153;
+                int diligence_rank_number_height = 870;
+                int expression_rank_number_height = 889;
+
+                //If any of the social ranks are at the max value, move the rank number bitmap up by 30 pixels
+                if (proficiency_rank == 5)
+                {
+                    proficiency_rank_number_height -= 30;
+                }
+                if (diligence_rank == 5)
+                {
+                    diligence_rank_number_height -= 30;
+                }
+                if (expression_rank == 5)
+                {
+                    expression_rank_number_height -= 30;
+                }
+
+                //Render the background layers for the Proficiency icon and rank number
+                graphics.DrawImage(proficiency_icon_bg, 1245, 98, 140, 102);
+                graphics.DrawImage(proficiency_rank_number_bg, 1375, proficiency_rank_number_height, proficiency_rank_number_bg.Width, proficiency_rank_number_bg.Height);
+
+                //Render the text layers for the Proficiency icon and rank number
+                graphics.DrawImage(proficiency_icon_text, 1245, 98, 140, 102);
+                graphics.DrawImage(proficiency_rank_number_text, 1375, proficiency_rank_number_height, proficiency_rank_number_text.Width, proficiency_rank_number_text.Height);
+
+                //Render the background layers for the Diligence icon and rank number
+                graphics.DrawImage(diligence_icon_bg, 951, 824, 147, 95);
+                graphics.DrawImage(diligence_rank_number_bg, 1087, diligence_rank_number_height, diligence_rank_number_bg.Width, diligence_rank_number_bg.Height);
+
+                //Render the text layers for the Diligence icon and rank number
+                graphics.DrawImage(diligence_icon_text, 951, 824, 147, 95);
+                graphics.DrawImage(diligence_rank_number_text, 1087, diligence_rank_number_height, diligence_rank_number_text.Width, diligence_rank_number_text.Height);
+
+                //Render the background layers for the Expression icon and rank number
+                graphics.DrawImage(expression_icon_bg, 1417, 847, 171, 103);
+                graphics.DrawImage(expression_rank_number_bg, 1577, expression_rank_number_height, expression_rank_number_text.Width, expression_rank_number_text.Height);
+
+                //Render the text layers for the Expression icon and rank number
+                graphics.DrawImage(expression_icon_text, 1417, 847, 171, 103);
+                graphics.DrawImage(expression_rank_number_text, 1577, expression_rank_number_height, expression_rank_number_text.Width, expression_rank_number_text.Height);
+            }
+
+            //Return the new bitmap
+            return new_bitmap;
+        }
+
+        public static Bitmap RenderAllRankTitles(int proficiency_rank, int diligence_rank, int expression_rank)
+        {
+            // Create a new bitmap to place the title on the template
+            Bitmap title_bitmap = new Bitmap(1920, 1080);
+
+            // Create bitmaps for all three rank titles
+            Bitmap proficiency_title = RenderRankTitleBitmap(Core.LevelSystem.SocialStats.ProficiencyRankTitle(proficiency_rank));
+            Bitmap diligence_title = RenderRankTitleBitmap(Core.LevelSystem.SocialStats.DiligenceRankTitle(diligence_rank));
+            Bitmap expression_title = RenderRankTitleBitmap(Core.LevelSystem.SocialStats.ExpressionRankTitle(expression_rank));
+
+            // Rotate the title bitmaps by -7 degrees
+            proficiency_title = RotateImage(proficiency_title, -7);
+            diligence_title = RotateImage(diligence_title, -7);
+            expression_title = RotateImage(expression_title, -7);
+
+            // Use a graphics object to edit the bitmap
+            using (Graphics graphics = Graphics.FromImage(title_bitmap))
+            {
+                // Draw the title bitmaps onto the template
+                graphics.DrawImage(proficiency_title, 1067, 186, proficiency_title.Width, proficiency_title.Height);
+                graphics.DrawImage(diligence_title, 776, 917, diligence_title.Width, diligence_title.Height);
+                graphics.DrawImage(expression_title, 1250, 935, expression_title.Width, expression_title.Height);
+            }
+
+            // Return the full bitmap
+            return title_bitmap;
+        }
+
+        public static Bitmap RenderRankTitleBitmap(string title)
+        {
+            // Create a new bitmap to place the title on the template
+            Bitmap title_bitmap = new Bitmap(350, 50);
+
+            // Use a graphics object to edit the bitmap
+            using (Graphics graphics = Graphics.FromImage(title_bitmap))
+            {
+                // Set text rendering to have antialiasing
+                graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+
+                // Create a text box to place the rank title in
+                Rectangle title_box = new Rectangle(0, 0, 350, 50);
+
+                // Create a font object to draw the string to the template
+                using (Font p5r_font = new Font("Optima nova LT Black", 22))
+                {
+                    //F ormat the string so that its placement is at the center of the text box
+                    StringFormat stringFormat = new StringFormat();
+                    stringFormat.Alignment = StringAlignment.Center;
+                    stringFormat.LineAlignment = StringAlignment.Center;
+
+                    // Draw the title text to the bitmap
+                    graphics.DrawString(title, p5r_font, System.Drawing.Brushes.White, title_box, stringFormat);
+                }
+            }
+
+            // Return the bitmap
+            return title_bitmap;
+        }
+
+        public static Bitmap RenderPrestigeCounter(int level_resets)
+        {
+            // Copy the prestige counter overlay to a bitmap.
+            Bitmap prestige_overlay = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//prestige_counter.png");
+
+            // Copy the star to mark prestige to a bitmap.
+            Bitmap prestige_star = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//star.png");
+
+            // Create a new bitmap.
+            Bitmap new_bitmap = new Bitmap(1920, 1080);
+
+            // Use a graphics object to edit the bitmap.
+            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            {
+                // Draw the prestige overlay to the template.
+                graphics.DrawImage(prestige_overlay, 0, 0, 1920, 1080);
+
+                // Create a new int variable that shares the same value as level_resets.
+                int star_counter = level_resets;
+
+                // If the value of star_counter is over 3, set it back to 3.
+                if (star_counter > 3)
+                {
+                    star_counter = 3;
+                }
+
+                // Draw as many stars to the prestige overlay as needed.
+                for (int i = 0; i < star_counter; i++)
+                {
+                    graphics.DrawImage(prestige_star, 1697 + (i * 50), 195, 50, 50);
+                }
+            }
+
+            return new_bitmap;
+        }
+
+        public static Bitmap KeepPixelOverlap(Bitmap radar_chart, Bitmap shading_overlay)
+        {
+            //Create variables to store pixel colors from both bitmaps in
+            System.Drawing.Color radar_chart_color;
+            System.Drawing.Color shading_overlay_color;
+            
+            //Make an empty bitmap the same size as the template
+            Bitmap newBitmap = new Bitmap(1920, 1080);
+
+            //Create a nested loop that iterates only on the neccesary areas of both bitmaps where they would overlap
+            for (int i = 1056; i < 1472; i++)
+            {
+                for (int j = 252; j < 834; j++)
+                {
+                    //Get the pixel colors from both bitmaps
+                    radar_chart_color = radar_chart.GetPixel(i, j);
+                    shading_overlay_color = shading_overlay.GetPixel(i, j);
+
+                    //If the opacity of the pixel on both bitmaps is greater than 0, copy the shading overlay's pixel to the new bitmap
+                    if (radar_chart_color.A > 0 && shading_overlay_color.A > 0)
+                    {
+                        newBitmap.SetPixel(i, j, shading_overlay_color);
+                    }
+                }
+            }
+
+            return newBitmap;
+        }
+
+        public static Bitmap RenderStar(double scale_factor, System.Drawing.Color star_color)
+        {
+            // Make a new bitmap large enough for a working space.
+            Bitmap new_bitmap = new Bitmap(900, 900);
+
+            // Use a graphics object to edit the bitmap.
+            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            {
+                // Establish the center point of the star.
+                Point center_point = new Point(450, 450);
+
+                // Create an array of ints that will establish the X and Y values of each angle of the star. Even array indexes are X values, odd indexes are Y values.
+                int[] star_points = new int[] { 0, -18, 6, -6, 18, -4, 9, 5, 11, 18, 0, 12, -11, 18, -9, 5, -18, -4, -6, -6 };
+
+                // Edit each array index by multiplying them by the scaling factor.
+                for (int i = 0; i < star_points.Length; i++)
+                {
+                    star_points[i] = (int)(star_points[i] * scale_factor);
+                }
+
+                // Create points for the star by adding on the star_point indexes to the center_point coordinates.
+                Point point_1 = new Point(center_point.X + star_points[0], center_point.Y + star_points[1]);
+                Point point_2 = new Point(center_point.X + star_points[2], center_point.Y + star_points[3]);
+                Point point_3 = new Point(center_point.X + star_points[4], center_point.Y + star_points[5]);
+                Point point_4 = new Point(center_point.X + star_points[6], center_point.Y + star_points[7]);
+                Point point_5 = new Point(center_point.X + star_points[8], center_point.Y + star_points[9]);
+                Point point_6 = new Point(center_point.X + star_points[10], center_point.Y + star_points[11]);
+                Point point_7 = new Point(center_point.X + star_points[12], center_point.Y + star_points[13]);
+                Point point_8 = new Point(center_point.X + star_points[14], center_point.Y + star_points[15]);
+                Point point_9 = new Point(center_point.X + star_points[16], center_point.Y + star_points[17]);
+                Point point_10 = new Point(center_point.X + star_points[18], center_point.Y + star_points[19]);
+
+                // Create a color for the star to be filled with.
+                SolidBrush colorBrush = new SolidBrush(star_color);
+
+                // Add all the points into a point array.
+                Point[] polyPoints = { point_1, point_2, point_3, point_4, point_5, point_6, point_7, point_8, point_9, point_10 };
+
+                // Use the point array to create a polygon by connecting all the points together and filling it with color.
+                graphics.FillPolygon(colorBrush, polyPoints);
+            }
+
+            // Return the new bitmap.
+            return new_bitmap;
+        }
+
+        public static Bitmap RenderRecursiveStar(System.Drawing.Color star_type)
+        {
+            // Make a new bitmap large enough for a working space.
+            Bitmap new_bitmap = new Bitmap(900, 900);
+
+            // Use a graphics object to edit the bitmap.
+            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            {
+                // Create a new random variable.
+                Random rnd = new Random();
+
+                // Randomly determine the maximum size of the star between two points. 24 must be the lowest point to get eight layers of stars minimum (24 divided by 3).
+                double start_size = rnd.NextDouble(24.0, 29.9);
+
+                // Create another graphics object. This will establish a cropping region in the shape of a star (for the star itself) to give a greater visual effect.
+                using (Graphics region_crop = Graphics.FromImage(new_bitmap))
+                {
+                    // Establish the center point of the star.
+                    Point center_point = new Point(450, 450);
+
+                    // Create an array of ints that will establish the X and Y values of each angle of the star. Even array indexes are X values, odd indexes are Y values.
+                    int[] star_points = new int[] { 0, -18, 6, -6, 18, -4, 9, 5, 11, 18, 0, 12, -11, 18, -9, 5, -18, -4, -6, -6 };
+
+                    // Edit each array index by multiplying them by 24. Again, 24 must be the lowest point to get eight layers of stars minimum since the stars will be made in decrements of three. 24 divided by 3 is eight.
+                    for (int i = 0; i < star_points.Length; i++)
+                    {
+                        star_points[i] = (int)(star_points[i] * 24);
+                    }
+
+                    // Create points for the cropping reigon by adding on the star_point indexes to the center_point coordinates.
+                    Point point_1 = new Point(center_point.X + star_points[0], center_point.Y + star_points[1]);
+                    Point point_2 = new Point(center_point.X + star_points[2], center_point.Y + star_points[3]);
+                    Point point_3 = new Point(center_point.X + star_points[4], center_point.Y + star_points[5]);
+                    Point point_4 = new Point(center_point.X + star_points[6], center_point.Y + star_points[7]);
+                    Point point_5 = new Point(center_point.X + star_points[8], center_point.Y + star_points[9]);
+                    Point point_6 = new Point(center_point.X + star_points[10], center_point.Y + star_points[11]);
+                    Point point_7 = new Point(center_point.X + star_points[12], center_point.Y + star_points[13]);
+                    Point point_8 = new Point(center_point.X + star_points[14], center_point.Y + star_points[15]);
+                    Point point_9 = new Point(center_point.X + star_points[16], center_point.Y + star_points[17]);
+                    Point point_10 = new Point(center_point.X + star_points[18], center_point.Y + star_points[19]);
+
+                    // Add all the points into a point array.
+                    Point[] polyPoints = { point_1, point_2, point_3, point_4, point_5, point_6, point_7, point_8, point_9, point_10 };
+
+                    // Use the point array to create a path and connect the points together
+                    GraphicsPath path = new GraphicsPath();
+                    path.AddPolygon(polyPoints);
+
+                    // Construct a region based on the path
+                    Region region = new Region(path);
+
+                    // Set the clipping region of the Graphics object
+                    region_crop.SetClip(region, CombineMode.Replace);
+
+                    // Now, we start creating the layers of the star itself. 
+                    // Based on the random size determined earlier, create stars of alternating colors while decrementing in size.
+                    for (double i = start_size; i > 0; i = i - 3)
+                    {
+                        // start_point_int casts the current double to an int for rounding purposes.
+                        int start_point_int = (int)i;
+
+                        // If the double is even, color the star either black or gray depinding on the star type specified. If it's odd, color it white.
+                        if (start_point_int % 2 == 0)
+                        {
+                            region_crop.DrawImage(RenderStar(i, star_type), 0, 0, 900, 900);
+                        }
+                        else
+                        {
+                            region_crop.DrawImage(RenderStar(i, System.Drawing.Color.White), 0, 0, 900, 900);
+                        }
+                    }
+                }
+            }
+
+            // Return the new bitmap.
+            return new_bitmap;
+        }
+
+        public static Bitmap RenderStarSpangledBitmap()
+        {
+            // Make a new bitmap large enough for a working space.
+            Bitmap new_bitmap = new Bitmap(330, 640);
+
+            // Create a gray color not available by default.
+            System.Drawing.Color gray_star = System.Drawing.Color.FromArgb(75, 75, 75);
+
+            // Create nine star bitmaps.
+            Bitmap star_1 = RenderRecursiveStar(System.Drawing.Color.Black);
+            Bitmap star_2 = RenderRecursiveStar(System.Drawing.Color.Black);
+            Bitmap star_3 = RenderRecursiveStar(System.Drawing.Color.Black);
+            Bitmap star_4 = RenderRecursiveStar(gray_star);
+            Bitmap star_5 = RenderRecursiveStar(gray_star);
+            Bitmap star_6 = RenderRecursiveStar(System.Drawing.Color.Black);
+            Bitmap star_7 = RenderRecursiveStar(System.Drawing.Color.Black);
+            Bitmap star_8 = RenderRecursiveStar(System.Drawing.Color.Black);
+            Bitmap star_9 = RenderRecursiveStar(gray_star);
+
+            // Begin editing the new_bitmap with a graphics object.
+            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            {
+                // Rotate the nine stars recently created by predetermined amounts for each one.
+                star_1 = RotateImage(star_1, -5);
+                star_2 = RotateImage(star_2, 5);
+                star_3 = RotateImage(star_3, -16);
+                star_4 = RotateImage(star_4, 14);
+                star_5 = RotateImage(star_5, 90);
+                star_6 = RotateImage(star_6, 34);
+                star_7 = RotateImage(star_7, 66);
+                star_8 = RotateImage(star_8, 13);
+                star_9 = RotateImage(star_9, 12);
+
+                // Place each of the nine stars on the new_bitmap.
+                graphics.DrawImage(star_1, -293, -250, 688, 688);
+                graphics.DrawImage(star_2, -288, -18, 688, 688);
+                graphics.DrawImage(star_3, -104, 235, 650, 650);
+                graphics.DrawImage(star_4, -254, 225, 650, 650);
+                graphics.DrawImage(star_5, -431, -114, 730, 730);
+                graphics.DrawImage(star_6, -121, 199, 440, 440);
+                graphics.DrawImage(star_7, -2, 34, 656, 656);
+                graphics.DrawImage(star_8, -164, -253, 900, 900);
+                graphics.DrawImage(star_9, -163, -556, 848, 848);
+            }
+
+            // Return the new bitmap.
+            return new_bitmap;
+        }
+
+        public static Bitmap RotateImage(Bitmap rotateMe, float angle)
+        {
+            //First, re-center the image in a larger image that has a margin/frame
+            //to compensate for the rotated image's increased size
+
+            var bmp = new Bitmap(rotateMe.Width + (rotateMe.Width / 2), rotateMe.Height + (rotateMe.Height / 2));
+
+            using (Graphics g = Graphics.FromImage(bmp))
+                g.DrawImage(rotateMe, (rotateMe.Width / 4), (rotateMe.Height / 4), rotateMe.Width, rotateMe.Height);
+
+            rotateMe = bmp;
+
+            //Now, actually rotate the image
+            Bitmap rotatedImage = new Bitmap(rotateMe.Width, rotateMe.Height);
+
+            using (Graphics g = Graphics.FromImage(rotatedImage))
+            {
+                g.TranslateTransform(rotateMe.Width / 2, rotateMe.Height / 2);   //set the rotation point as the center into the matrix
+                g.RotateTransform(angle);                                        //rotate
+                g.TranslateTransform(-rotateMe.Width / 2, -rotateMe.Height / 2); //restore rotation point into the matrix
+                g.DrawImage(rotateMe, new Point(0, 0));                          //draw the image on the new bitmap
+            }
+
+            return rotatedImage;
+        }
+
+        public static Bitmap BitmapToColor(Bitmap input_bitmap, int r_value, int g_value, int b_value)
+        {
+            //Create a color variable to represent the color of a pixel on the input bitmap
+            System.Drawing.Color actual_color;
+
+            //Create a color variable to represent a new created color
+            System.Drawing.Color new_color;
+
+            //Make a new bitmap the same size as input_bitmap
+            Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            //Create a nested loop that iterates over every pixel of the input bitmap
+            for (int i = 0; i < input_bitmap.Width; i++)
+            {
+                for (int j = 0; j < input_bitmap.Height; j++)
+                {
+                    //Get a pixel from the input_bitmap image
+                    actual_color = input_bitmap.GetPixel(i, j);
+
+                    //Assign the new_color variable to the pixel's transparency value, but change the color itself to the specified input values
+                    new_color = System.Drawing.Color.FromArgb(actual_color.A, r_value, g_value, b_value);
+
+                    //Draw the new colored pixel to the new bitmap
+                    new_bitmap.SetPixel(i, j, new_color);
+                }
+            }
+
+            //Return the new bitmap
+            return new_bitmap;
+        }
+
+        public static EmbedBuilder LoadingMessage()
+        {
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Loading Status...",
+                IconUrl = "https://i.imgur.com/1jk1MZw.png"
+            };
+
+            embed.WithAuthor(author);
+            embed.WithColor(213, 27, 4);
+            embed.WithThumbnailUrl("https://i.imgur.com/PYMB6XG.gif");
+            embed.WithDescription("This may take a few seconds!");
+
+            return embed;
+        }
+    }
+
+    //Class from https://stackoverflow.com/questions/1064901/random-number-between-2-double-numbers
+    public static class RandomExtensions
+    {
+        public static double NextDouble(
+            this Random random,
+            double minValue,
+            double maxValue)
+        {
+            return random.NextDouble() * (maxValue - minValue) + minValue;
+        }
+    }
+}

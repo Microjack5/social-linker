@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0643978A-67E5-4F5A-B15B-A9FB1364072E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SocialLinker</RootNamespace>
+    <AssemblyName>SocialLinker</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Azure.Core, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>packages\Azure.Core.1.8.1\lib\net461\Azure.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Azure.Storage.Blobs, Version=12.8.3.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>packages\Azure.Storage.Blobs.12.8.3\lib\netstandard2.0\Azure.Storage.Blobs.dll</HintPath>
+    </Reference>
+    <Reference Include="Azure.Storage.Common, Version=12.7.2.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>packages\Azure.Storage.Common.12.7.2\lib\netstandard2.0\Azure.Storage.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Addons.Interactive, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Discord.Addons.Interactive.2.0.0\lib\netstandard2.0\Discord.Addons.Interactive.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Commands, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Discord.Net.Commands.2.3.1\lib\net461\Discord.Net.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Core, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Discord.Net.Core.2.3.1\lib\net461\Discord.Net.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Rest, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Discord.Net.Rest.2.3.1\lib\net461\Discord.Net.Rest.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Webhook, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Discord.Net.Webhook.2.3.1\lib\netstandard2.0\Discord.Net.Webhook.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.WebSocket, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Discord.Net.WebSocket.2.3.1\lib\net461\Discord.Net.WebSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=3.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Azure.KeyVault.Core.3.0.5\lib\net461\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=5.0.0.1, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.5.0.1\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.Abstractions.5.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Rest.ClientRuntime.2.3.22\lib\net461\Microsoft.Rest.ClientRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Rest.ClientRuntime.Azure, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Rest.ClientRuntime.Azure.3.3.19\lib\net461\Microsoft.Rest.ClientRuntime.Azure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=9.3.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAzure.Storage.9.3.3\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Collections.Immutable.5.0.0\lib\net461\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Diagnostics.DiagnosticSource.4.6.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common, Version=4.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Drawing.Common.5.0.2\lib\net461\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive.Async, Version=5.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>packages\System.Interactive.Async.5.0.0\lib\net461\System.Interactive.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Linq.Async, Version=5.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>packages\System.Linq.Async.5.0.0\lib\net461\System.Linq.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encodings.Web.4.6.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Json.4.6.0\lib\net461\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommandHandler.cs" />
+    <Compile Include="Commands\Calculator.cs" />
+    <Compile Include="Commands\Help.cs" />
+    <Compile Include="Commands\Hug.cs" />
+    <Compile Include="Commands\Maker.cs" />
+    <Compile Include="Commands\Multiply.cs" />
+    <Compile Include="Commands\Pat.cs" />
+    <Compile Include="Commands\Punch.cs" />
+    <Compile Include="Commands\Settings.cs" />
+    <Compile Include="Commands\Shop.cs" />
+    <Compile Include="Commands\Slap.cs" />
+    <Compile Include="Commands\Status.cs" />
+    <Compile Include="Config\AssetDirectoryConfig.cs" />
+    <Compile Include="Config\AzureConfig.cs" />
+    <Compile Include="Config\BotConfig.cs" />
+    <Compile Include="Config\MenuConfig.cs" />
+    <Compile Include="Config\WeatherAPIConfig.cs" />
+    <Compile Include="Cooldown\UserCooldownFields.cs" />
+    <Compile Include="Cooldown\UserCooldownMethods.cs" />
+    <Compile Include="Core\CloudStorageTables\UserInfoClasses.cs" />
+    <Compile Include="Core\CloudStorageTables\UserInfoFields.cs" />
+    <Compile Include="Core\LevelSystem\Leveling.cs" />
+    <Compile Include="Core\LevelSystem\SocialStats.cs" />
+    <Compile Include="Core\LevelSystem\TimeOut.cs" />
+    <Compile Include="Core\LocalStorageTables\DecorInfoFields.cs" />
+    <Compile Include="Core\LocalStorageTables\DecorInfoMethods.cs" />
+    <Compile Include="Core\LocalStorageTables\OfficialSetData.cs" />
+    <Compile Include="Core\LocalStorageTables\OfficialSetMethods.cs" />
+    <Compile Include="Core\Menus\ContentFilter.cs" />
+    <Compile Include="Core\Menus\EmbedSettings.cs" />
+    <Compile Include="Core\Menus\ErrorHandling.cs" />
+    <Compile Include="Core\Menus\Help\Main\Credits_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\Help_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\Legal_Notices_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Anime_Frames_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Basics_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Cutin_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Dual_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Select_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Spriteless_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\SM_Tutorial_VC_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\Status_Tutorial_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\Credits_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\Help_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\Legal_Notices_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Anime_Frames_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Basics_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Cutin_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Dual_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Select_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Spriteless_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_VC_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\Status_Tutorial_Reactions.cs" />
+    <Compile Include="Core\Menus\InitialUsage\Main\First_Use_Content_Filter_Menu.cs" />
+    <Compile Include="Core\Menus\InitialUsage\Main\SetFirstTheme_Menu.cs" />
+    <Compile Include="Core\Menus\InitialUsage\Reactions\First_Use_Content_Filter_Reactions.cs" />
+    <Compile Include="Core\Menus\InitialUsage\Reactions\SetFirstTheme_Reactions.cs" />
+    <Compile Include="Core\Menus\ItemListIterator.cs" />
+    <Compile Include="Core\Menus\MenuDirectory.cs" />
+    <Compile Include="Core\Menus\MenuIdStructure.cs" />
+    <Compile Include="Core\Menus\ReactionHandling.cs" />
+    <Compile Include="Core\Menus\Settings\Main\General\Content_Filter_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\General\General_Settings_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\General\Level_Up_Notifications_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\General\Rank_Up_Notifications_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\General\Time_Weather_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Profile\Star_Level_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Profile\Status_Decor_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Profile\Profile_Settings_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Profile\Profile_Theme_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\AutoDelete\Auto_Delete_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\Backgrounds\Backgrounds_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P1_PS1_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P1_PSP_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P2EP_PS1_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P2EP_PSP_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P2IS_PS1_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P2IS_PSP_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P3F_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P3P_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P4AU_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P4D_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P4_PS2_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_VC_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\SM_Settings_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\SpriteSheetOrder\Sheet_Order_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_BBTAG_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P1_PS1_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P1_PSP_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P2EP_PS1_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P2EP_PSP_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P2IS_PS1_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P2IS_PSP_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P3F_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P3P_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P4AU_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P4D_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P4G_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P4_PS2_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P5R_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P5S_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P5_PS3_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_VC_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\VersionControl\Version_Control_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Settings_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\General\Content_Filter_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\General\General_Settings_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\General\Level_Up_Notifications_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\General\Rank_Up_Notifications_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\General\Time_Weather_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\Profile\Profile_Settings_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\Profile\Profile_Theme_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\Profile\Star_Level_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\Profile\Status_Decor_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\AutoDelete\Auto_Delete_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\Backgrounds\Backgrounds_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P1_PS1_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P1_PSP_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P2EP_PS1_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P2EP_PSP_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P2IS_PS1_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P2IS_PSP_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P3F_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P3P_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P4AU_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P4D_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P4_PS2_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_VC_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\SM_Settings_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\SpriteSheetOrder\Sheet_Order_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_BBTAG_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P1_PS1_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P1_PSP_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P2EP_PS1_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P2EP_PSP_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P2IS_PS1_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P2IS_PSP_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P3F_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P3P_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P4AU_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P4D_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P4G_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P4_PS2_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P5R_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P5S_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P5_PS3_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_VC_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\VersionControl\Version_Control_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\Settings_Reactions.cs" />
+    <Compile Include="Core\Menus\Shop\Main\ShopMenu.cs" />
+    <Compile Include="Core\Menus\Shop\Reactions\ShopReactions.cs" />
+    <Compile Include="Core\SceneMaker\BustupFrameSheets.cs" />
+    <Compile Include="Core\SceneMaker\Data\Bustup\BustupData.cs" />
+    <Compile Include="Core\SceneMaker\Data\Bustup\BustupDataMethods.cs" />
+    <Compile Include="Core\SceneMaker\ErrorHandling.cs" />
+    <Compile Include="Core\SceneMaker\CommandParser.cs" />
+    <Compile Include="Core\SceneMaker\GlyphParsing\ParsingFields.cs" />
+    <Compile Include="Core\SceneMaker\GlyphParsing\ParsingMethods.cs" />
+    <Compile Include="Core\SceneMaker\MoonPhaseCalculator.cs" />
+    <Compile Include="Core\SceneMaker\OfficialSetLists.cs" />
+    <Compile Include="Core\SceneMaker\OfficialSetSheets.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP1_PS1.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP3F.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP3P.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP4_PS2.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP4G.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5R.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5S.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_Kasumi_1.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_P3P_1.cs" />
+    <Compile Include="Core\StatusScreens\ProgressBar.cs" />
+    <Compile Include="Core\StatusScreens\Default\StatusScreenP3.cs" />
+    <Compile Include="Core\StatusScreens\Default\StatusScreenP4.cs" />
+    <Compile Include="Core\StatusScreens\Default\StatusScreenP5.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\SceneMaker\Data\Assist\" />
+    <Folder Include="Core\SceneMaker\Data\Calendar\" />
+    <Folder Include="Core\SceneMaker\Data\Cutin\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialLinker", "SocialLinker.csproj", "{0643978A-67E5-4F5A-B15B-A9FB1364072E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0643978A-67E5-4F5A-B15B-A9FB1364072E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0643978A-67E5-4F5A-B15B-A9FB1364072E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0643978A-67E5-4F5A-B15B-A9FB1364072E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0643978A-67E5-4F5A-B15B-A9FB1364072E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FC3617BB-3B9C-4165-9968-3A8755467C76}
+	EndGlobalSection
+EndGlobal

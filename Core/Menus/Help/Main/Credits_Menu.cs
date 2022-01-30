@@ -1,0 +1,197 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Timers;
+using System.Threading.Tasks;
+using Discord;
+using Discord.WebSocket;
+using SocialLinker.Config;
+using SocialLinker.Core.CloudStorageTables;
+using Discord.Rest;
+
+namespace SocialLinker.Core.Menus.Help.Main
+{
+    class Credits_Menu
+    {
+        public static async Task Credits_Main(SocketGuildUser user, RestUserMessage message)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            // Find the menu session associated with the current user.
+            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Credits",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            var footer = new EmbedFooterBuilder
+            {
+                Text = "↩️ Return to Help Menu"
+            };
+
+            embed.WithFooter(footer);
+
+            // Determine the color and thumbnail for the embeded message
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
+
+            embed.AddField("Programming & Design", "" +
+                "[Microjack5](https://twitter.com/Microjack5)\n");
+
+            embed.AddField("Quality Assurance Advisors", "" +
+                "[Angel ✨](https://twitter.com/_Amaurot)\n" +
+                "[Arkane](https://twitter.com/ArkaneOnline)\n" +
+                "[Azure](https://twitter.com/Azure_Blazes)\n" +
+                "[Camz](https://twitter.com/Camzcer)\n" +
+                "[Corrin](https://twitter.com/LocalSynth)\n" +
+                "[Kara](https://discordapp.com/users/707398527575130162/)\n" +
+                "[Mel](https://twitter.com/skyseekingdream)\n" +
+                "[Naanos](https://www.youtube.com/channel/UCiUR9b-ptxqSbKw0vIaDklg)\n" +
+                "[無限 | Nate](https://twitter.com/CrestofDog)\n" +
+                "[RomIsALemon](https://twitter.com/phighters_rom)\n" +
+                "[Shadow Kawa](https://discordapp.com/users/210080634498973696/)\n" +
+                "[SlimePupAribaba](https://twitter.com/SlimePupAribaba)\n" +
+                "[Squishy](https://twitter.com/Squishy_Mona)\n" +
+                "[Thena](https://twitter.com/ThenaIsLost)\n" +
+                "[TooBlue!](https://twitter.com/EMOMESSlAH)\n" +
+                "[WaffleBandito](https://twitter.com/WaffIeBandito)\n");
+
+            embed.AddField("Asset Advisors", "" +
+                "[80constant](https://twitter.com/80constant_)\n" +
+                "[Arkane](https://twitter.com/ArkaneOnline)\n" +
+                "[Canasniimehugh](https://www.vg-resource.com/user-17021.html)\n" +
+                "[EsperKnight](https://twitter.com/esperknight)\n" +
+                "[Geo](https://github.com/Geordan9)\n");
+
+            embed.AddField("Status Décor Designers", "" +
+                "[danny !](https://twitter.com/SPACECHANEL5)\n" +
+                "[Microjack5](https://twitter.com/Microjack5)\n" +
+                "[無限 | Nate](https://discordapp.com/users/140846765275348993/)\n" +
+                "[TooBlue!](https://twitter.com/EMOMESSlAH)\n");
+
+            embed.AddField("Gameplay Footage", "" +
+                "[BuffMaister](https://www.youtube.com/channel/UCks_VIIleZT2iDWNipPglUg)\n" +
+                "[Faz](https://www.youtube.com/channel/UCEevYX4rCcfF0ZrxmnnONXA)\n" +
+                "[Ignis](https://www.youtube.com/channel/UCHViTnm0pNN3BwvOwGqlPgQ)\n" +
+                "[JohneAwesome](https://www.youtube.com/user/JohneAwesome)\n" +
+                "[Literally Satan GAMING](https://www.youtube.com/channel/UCfdQp9SVfAMQEtD3jQAoXLg)\n" +
+                "[Noire Blue](https://www.youtube.com/channel/UCUZpzh41JoA4bbgfQL1hx7A)\n" +
+                "[PuppiStation](https://www.youtube.com/channel/UCv3PDRDC9cRw9Yzgb_NzgYg)\n" +
+                "[RandomPl0x](https://www.youtube.com/c/RandomChannelPlox)\n" +
+                "[Shirrako](https://www.youtube.com/channel/UC7eAfUjR9gdIjoaoQaS0W-A)\n");
+
+            embed.AddField("Services", "" +
+                "[Microsoft Azure](https://azure.microsoft.com/)\n" +
+                "[Weather API](https://www.weatherapi.com/)\n");
+
+            embed.AddField("Special Thanks", "" +
+                "[Joseph Navarro](https://github.com/josephnavarro)\n" +
+                "[Meloman19](https://github.com/Meloman19)\n" +
+                "[Petr Sedláček](https://github.com/petrspelos)\n" +
+                "[ShrineFox](https://shrinefox.com/)\n");
+
+            // Attempt editing the message if it hasn't been deleted by the user yet.
+            // If it has, catch the exception, remove the menu entry from the global list, and return.
+            try
+            {
+                // Remove all reactions from the current message.
+                await message.RemoveAllReactionsAsync();
+
+                // Edit the current active message by replacing it with the recently created embed.
+                await message.ModifyAsync(x => {
+                    x.Embed = embed.Build();
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(menuSession);
+
+                return;
+            }
+
+            // Edit the menu session according to the current message.
+            menuSession.CurrentMenu = "Credits_Main";
+            menuSession.MenuTimer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = MenuConfig.menu.timerDuration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the menu timer runs out, activate a function.
+            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+
+            // Create an empty list for reactions.
+            List<IEmote> reaction_list = new List<IEmote> { };
+
+            // Add needed emote reactions for the menu.
+            reaction_list.Add(new Emoji("↩️"));
+
+            // Add the reactions to the message.
+            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+        }
+
+        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure menuSession)
+        {
+            // Assign the menu session's message to another variable.
+            var message = menuSession.MenuMessage;
+
+            // Attempt editing the message if it hasn't been deleted by the user yet.
+            // If it has, catch the exception, remove the menu entry from the global list, and return.
+            try
+            {
+                // Remove all reactions from the current message.
+                await message.RemoveAllReactionsAsync();
+
+                // Edit the current active message by replacing it with the recently created embed.
+                await message.ModifyAsync(x => {
+                    x.Embed = MenuTimedOut(menuSession.User).Build();
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(menuSession);
+
+                return;
+            }
+
+            // Remove the menu entry from the global list.
+            Global.MenuIdList.Remove(menuSession);
+        }
+
+        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
+        {
+            // Get the account information of the command's target
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Inactive Menu",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            // Determine the color and thumbnail for the embeded message
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
+
+            embed.WithDescription($"You can access the help menu at any time with the **`{BotConfig.bot.cmdPrefix}help`** command.");
+            return embed;
+        }
+    }
+}
