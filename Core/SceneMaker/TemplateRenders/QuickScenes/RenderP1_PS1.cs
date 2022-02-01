@@ -26,6 +26,47 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     {
         public static async Task Render_Quick_Scene_P1_PS1(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
         {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = message.Author;
+            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+
+            // Before we pass our character's dialogue in, put their display name in front of it.
+            // This is unique to the P1-PS1 template.
+            command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
+
+            List<string>[] dialogue_lines = Line_Parser(message, bustup_data, command_data.Dialogue);
+
+            int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
+
+            if (number_of_rendered_lines > 3)
+            {
+                List<string>[] dialogue_lines_pt_1 = new List<string>[] { dialogue_lines[0], dialogue_lines[1], dialogue_lines[2] };
+
+                RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(1, 2).Build());
+
+                await Render_Offload(message, account, set_data, bustup_data, command_data, dialogue_lines_pt_1, loader);
+
+                List<string>[] dialogue_lines_pt_2 = new List<string>[] { dialogue_lines[1], dialogue_lines[2], dialogue_lines[3] };
+
+                loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(2, 2).Build());
+
+                await Render_Offload(message, account, set_data, bustup_data, command_data, dialogue_lines_pt_2, loader);
+            }
+            else
+            {
+                RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Loading_Message().Build());
+
+                await Render_Offload(message, account, set_data, bustup_data, command_data, dialogue_lines, loader);
+            }
+        }
+
+        public static async Task Render_Offload(SocketMessage message, UserInfoFields account, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
+        {
             try
             {
                 // Create variables to store the width and height of the template.
@@ -35,14 +76,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Create two variables for the command user and the command channel, derived from the message object taken in.
                 SocketUser user = message.Author;
                 SocketTextChannel channel = (SocketTextChannel)message.Channel;
-
-                // Send a loading message to the channel while the sprite sheet is being made.
-                RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Loading_Message().Build());
-
-                // Get the account information of the command's user.
-                var account = UserInfoClasses.GetAccount(user);
-
-                BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
                 // Create a starting base bitmap to render all graphics on.
                 Bitmap base_template = new Bitmap(template_width, template_height);
@@ -157,14 +190,18 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // Draw the user's background to the base template.
                     graphics.DrawImage(background, 0, 0, template_width, template_height);
 
-                    graphics.DrawImage(bustup, bustup_data.P1_PSX_Center_Coord_X, bustup_data.P1_PSX_Center_Coord_Y, bustup_data.P1_PSX_Scale_Width, bustup_data.P1_PSX_Scale_Height);
+                    Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data);
+
+                    graphics.DrawImage(placed_bustup, 0, 0, placed_bustup.Width, placed_bustup.Height);
 
                     graphics.DrawImage(Generate_Message_Window(account), 0, 0, template_width, template_height);
 
                     graphics.DrawImage(Generate_Moon_HUD(account), 0, 0, template_width, template_height);
 
+                    Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
+
                     // Draw the input dialogue to the template.
-                    graphics.DrawImage(Render_Dialogue(Line_Parser(message, bustup_data, command_data.Dialogue)), 0, 0, template_width, template_height);
+                    graphics.DrawImage(rendered_dialogue, 0, 0, template_width, template_height);
                 }
 
                 // Save the entire base template to a data stream.
@@ -201,6 +238,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create a starting base bitmap to render all graphics on.
             Bitmap base_template = new Bitmap(template_width, template_height);
 
+            // Switch the rendering position of the bustup depending on the user's settings.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 switch (account.P1_PSX_TS_Position)
@@ -353,24 +391,23 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int line_length_remaining = max_line_length;
 
             // The maximum number of lines on the template. 
-            int max_lines = 3;
+            int max_lines = 4;
 
             // Completed word string. Characters will be added to this string one-by-one until a space, line break, or end-of-input is encountered.
             string completed_word = "";
 
-            // Create an array of three string lists and initialize them.
+            // Create an array of string lists and initialize them.
             // These are where our dialogue input will be organized.
-            List<string>[] dialogue_list = new List<string>[3];
+            List<string>[] dialogue_list = new List<string>[max_lines];
 
-            dialogue_list[0] = new List<string>();
-            dialogue_list[1] = new List<string>();
-            dialogue_list[2] = new List<string>();
+            for (int i = 0; i < max_lines; i++)
+            {
+                dialogue_list[i] = new List<string>();
+            }
 
             // Now that we have our string lists created, we need a variable to dynamically change which line we're currently on.
             // For that, create an int variable and initialize it to zero for starting on the first line.
             int current_line = 0;
-
-            dialogue = $"{bustup_data.Default_Name_EN}: {dialogue}";
 
             // Take the input dialogue and convert it into a char array. This is how we'll iterate through the dialogue character-by-character.
             char[] dialogue_array = dialogue.ToCharArray();
@@ -873,6 +910,35 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
+        public static int Get_Number_of_Rendered_Lines(List<string>[] input_list_array)
+        {
+            // Initialize an int variable to hold the number of rendered lines.
+            int number_of_lines = 0;
+
+            // Take each index of the string list array, convert the list to a string, then analyze the string to determine if it's empty or not.
+            // If it IS empty, that line won't be rendered.
+            // Count the number of lines that will actually be rendered to the screen.
+
+            if (String_List_To_String(input_list_array[3]) != "")
+            {
+                number_of_lines = 4;
+            }
+            else if (String_List_To_String(input_list_array[2]) != "")
+            {
+                number_of_lines = 3;
+            }
+            else if (String_List_To_String(input_list_array[1]) != "")
+            {
+                number_of_lines = 2;
+            }
+            else
+            {
+                number_of_lines = 1;
+            }
+
+            return number_of_lines;
+        }
+
         public static string Get_Hemisphere(UserInfoFields account)
         {
             // Create an empty string variable. This is where the API request will be stored.
@@ -983,13 +1049,30 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        // Loading message
+        // Loading messages
         public static EmbedBuilder P1_PS1_Loading_Message()
         {
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Generating Scene...",
+                Name = $"Generating Scene...",
+                IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
+            };
+
+            embed.WithAuthor(author);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
+            embed.WithThumbnailUrl("https://i.imgur.com/Lv794ze.png");
+            embed.WithDescription("This may take a few seconds!");
+
+            return embed;
+        }
+
+        public static EmbedBuilder P1_PS1_Multi_Scene_Loading_Message(int passthrough, int number_of_scenes)
+        {
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = $"Generating Scene... (Part {passthrough} / {number_of_scenes})",
                 IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
             };
 
