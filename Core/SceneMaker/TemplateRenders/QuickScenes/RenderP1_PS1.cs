@@ -19,6 +19,7 @@ using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using SocialLinker.Core.Menus;
+using System.Timers;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -26,46 +27,104 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     {
         public static async Task Render_Quick_Scene_P1_PS1(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
         {
-            // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
-
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
-
-            // Before we pass our character's dialogue in, put their display name in front of it.
-            // This is unique to the P1-PS1 template.
-            command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
-
-            List<string>[] dialogue_lines = Line_Parser(message, bustup_data, command_data.Dialogue);
-
-            int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
-
-            if (number_of_rendered_lines > 3)
+            try
             {
-                List<string>[] dialogue_lines_pt_1 = new List<string>[] { dialogue_lines[0], dialogue_lines[1], dialogue_lines[2] };
+                // Create two variables for the command user and the command channel, derived from the message object taken in.
+                SocketUser user = message.Author;
+                SocketTextChannel channel = (SocketTextChannel)message.Channel;
 
-                RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(1, 2).Build());
+                Console.WriteLine("Here #1");
 
-                await Render_Offload(message, account, set_data, bustup_data, command_data, dialogue_lines_pt_1, loader);
+                // Get the account information of the command's user.
+                var account = UserInfoClasses.GetAccount(user);
 
-                List<string>[] dialogue_lines_pt_2 = new List<string>[] { dialogue_lines[1], dialogue_lines[2], dialogue_lines[3] };
+                BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
-                loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(2, 2).Build());
+                Console.WriteLine("Here #2");
 
-                await Render_Offload(message, account, set_data, bustup_data, command_data, dialogue_lines_pt_2, loader);
+                // Before we pass our character's dialogue in, put their display name in front of it.
+                // This is unique to the P1-PS1 template.
+                ContextSwitchData active_session = ContextSwitchMethods.Get_Active_Session((SocketGuildUser)user, set_data);
+
+                Console.WriteLine("Here #2.1");
+
+                if (active_session.Active_Character == set_data)
+                {
+                    Console.WriteLine("Here #2.2");
+                    if (active_session.New_Session == true)
+                    {
+                        Console.WriteLine("Here #2.3");
+                        command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
+                        active_session.New_Session = false;
+
+                        Console.WriteLine("Here #2.4");
+                    }
+                    else
+                    {
+                        // Nothing
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Here #2.5");
+                    command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
+
+                    switch (active_session.Position)
+                    {
+                        case "Left":
+                            active_session.Position = "Right";
+                            break;
+
+                        case "Right":
+                            active_session.Position = "Center";
+                            break;
+
+                        case "Center":
+                            active_session.Position = "Left";
+                            break;
+                    };
+
+                    active_session.Active_Character = set_data;
+                    Console.WriteLine("Here #2.6");
+                }
+
+                Console.WriteLine("Here #3");
+
+                List<string>[] dialogue_lines = Line_Parser(message, bustup_data, command_data.Dialogue);
+
+                int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
+
+                if (number_of_rendered_lines > 3)
+                {
+                    List<string>[] dialogue_lines_pt_1 = new List<string>[] { dialogue_lines[0], dialogue_lines[1], dialogue_lines[2] };
+
+                    RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(1, 2).Build());
+
+                    await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_1, loader);
+
+                    List<string>[] dialogue_lines_pt_2 = new List<string>[] { dialogue_lines[1], dialogue_lines[2], dialogue_lines[3] };
+
+                    loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(2, 2).Build());
+
+                    await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_2, loader);
+                }
+                else
+                {
+                    RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Loading_Message().Build());
+
+                    await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines, loader);
+                }
+                Console.WriteLine("Here #4");
             }
-            else
+            catch (Exception e)
             {
-                RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Loading_Message().Build());
-
-                await Render_Offload(message, account, set_data, bustup_data, command_data, dialogue_lines, loader);
+                Console.WriteLine(e);
             }
+
+
         }
 
-        public static async Task Render_Offload(SocketMessage message, UserInfoFields account, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
+        public static async Task Render_Offload(SocketMessage message, UserInfoFields account, ContextSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
         {
             try
             {
@@ -190,7 +249,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // Draw the user's background to the base template.
                     graphics.DrawImage(background, 0, 0, template_width, template_height);
 
-                    Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data);
+                    Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session);
 
                     graphics.DrawImage(placed_bustup, 0, 0, placed_bustup.Width, placed_bustup.Height);
 
@@ -229,7 +288,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static Bitmap Set_Bustup_Placement(UserInfoFields account, Bitmap bustup, BustupData bustup_data)
+        public static Bitmap Set_Bustup_Placement(UserInfoFields account, Bitmap bustup, BustupData bustup_data, ContextSwitchData active_session)
         {
             // Create variables to store the width and height of the template.
             int template_width = 320;
@@ -256,6 +315,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         break;
 
                     case "Switch":
+                        switch (active_session.Position)
+                        {
+                            case "Left":
+                                graphics.DrawImage(bustup, bustup_data.P1_PSX_Left_Coord_X, bustup_data.P1_PSX_Left_Coord_Y, bustup_data.P1_PSX_Scale_Width, bustup_data.P1_PSX_Scale_Height);
+                                break;
+
+                            case "Right":
+                                graphics.DrawImage(bustup, bustup_data.P1_PSX_Right_Coord_X, bustup_data.P1_PSX_Right_Coord_Y, bustup_data.P1_PSX_Scale_Width, bustup_data.P1_PSX_Scale_Height);
+                                break;
+
+                            case "Center":
+                                graphics.DrawImage(bustup, bustup_data.P1_PSX_Center_Coord_X, bustup_data.P1_PSX_Center_Coord_Y, bustup_data.P1_PSX_Scale_Width, bustup_data.P1_PSX_Scale_Height);
+                                break;
+                        }
                         break;
                 }
             }
@@ -1083,5 +1156,74 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             return embed;
         }
+    }
+
+    public class ContextSwitchMethods
+    {
+        public static ContextSwitchData Get_Active_Session(SocketGuildUser user, OfficialSetData set_data)
+        {
+            // Find the cooldown session associated with both the current user and command type.
+            var active_session = Global.P1_PS1_Usage_List.SingleOrDefault(x => (x.User.Id == user.Id));
+
+            if (active_session == null)
+            {
+                Create_Active_Session(user, set_data);
+                active_session = Global.P1_PS1_Usage_List.SingleOrDefault(x => (x.User.Id == user.Id));
+            }
+
+            active_session.Active_Timer = new Timer()
+            {
+                Interval = 300000,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            Console.WriteLine("Adding #3");
+            return active_session;
+        }
+
+        public static void Create_Active_Session(SocketGuildUser user, OfficialSetData set_data)
+        {
+            // Create a new session for the command user.
+            var active_session = new ContextSwitchData()
+            {
+                User = user,
+                Active_Character = set_data,
+                Position = "Left",
+                New_Session = true,
+                Active_Timer = new Timer()
+                {
+                    // Create a timer that expires as a "time out" duration for the user's session.
+                    Interval = 300000,
+                    AutoReset = false,
+                    Enabled = true
+                },
+            };
+
+            Console.WriteLine("Adding #1");
+            Global.P1_PS1_Usage_List.Add(active_session);
+            Console.WriteLine("Adding #2");
+
+            // If the cooldown timer runs out, activate a function.
+            active_session.Active_Timer.Elapsed += (sender, e) => Timer_Elapsed(sender, e, user);
+        }
+
+        private static void Timer_Elapsed(object sender, ElapsedEventArgs e, SocketGuildUser user)
+        {
+            // Find the usage session associated with the current user.
+            var active_session = Global.P1_PS1_Usage_List.SingleOrDefault(x => (x.User.Id == user.Id));
+
+            // Remove the usage session from the global list.
+            Global.P1_PS1_Usage_List.Remove(active_session);
+        }
+    }
+
+    public class ContextSwitchData
+    {
+        public SocketGuildUser User { get; set; }
+        public OfficialSetData Active_Character { get; set; }
+        public string Position { get; set; }
+        public bool New_Session { get; set; }
+        public Timer Active_Timer { get; set; }
     }
 }
