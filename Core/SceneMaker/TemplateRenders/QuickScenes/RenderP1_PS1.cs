@@ -48,20 +48,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 Console.WriteLine("Here #2.1");
 
-                if (active_session.Active_Character == set_data)
+                if (active_session.Active_Characters.Contains(set_data))
                 {
-                    Console.WriteLine("Here #2.2");
-                    if (active_session.New_Session == true)
+                    if (active_session.Recently_Used_Index != active_session.Active_Characters.IndexOf(set_data))
                     {
                         Console.WriteLine("Here #2.3");
                         command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
-                        active_session.New_Session = false;
 
                         Console.WriteLine("Here #2.4");
-                    }
-                    else
-                    {
-                        // Nothing
                     }
                 }
                 else
@@ -69,22 +63,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     Console.WriteLine("Here #2.5");
                     command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
 
-                    switch (active_session.Position)
-                    {
-                        case "Left":
-                            active_session.Position = "Right";
-                            break;
-
-                        case "Right":
-                            active_session.Position = "Center";
-                            break;
-
-                        case "Center":
-                            active_session.Position = "Left";
-                            break;
-                    };
-
-                    active_session.Active_Character = set_data;
+                    active_session.Active_Characters.Add(set_data);
                     Console.WriteLine("Here #2.6");
                 }
 
@@ -115,6 +94,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines, loader);
                 }
                 Console.WriteLine("Here #4");
+
+                active_session.Recently_Used_Index = active_session.Active_Characters.IndexOf(set_data);
             }
             catch (Exception e)
             {
@@ -249,7 +230,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // Draw the user's background to the base template.
                     graphics.DrawImage(background, 0, 0, template_width, template_height);
 
-                    Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session);
+                    Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session, set_data);
 
                     graphics.DrawImage(placed_bustup, 0, 0, placed_bustup.Width, placed_bustup.Height);
 
@@ -288,7 +269,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static Bitmap Set_Bustup_Placement(UserInfoFields account, Bitmap bustup, BustupData bustup_data, ContextSwitchData active_session)
+        public static Bitmap Set_Bustup_Placement(UserInfoFields account, Bitmap bustup, BustupData bustup_data, ContextSwitchData active_session, OfficialSetData set_data)
         {
             // Create variables to store the width and height of the template.
             int template_width = 320;
@@ -315,17 +296,17 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         break;
 
                     case "Switch":
-                        switch (active_session.Position)
+                        switch (active_session.Active_Characters.IndexOf(set_data))
                         {
-                            case "Left":
+                            case 0:
                                 graphics.DrawImage(bustup, bustup_data.P1_PSX_Left_Coord_X, bustup_data.P1_PSX_Left_Coord_Y, bustup_data.P1_PSX_Scale_Width, bustup_data.P1_PSX_Scale_Height);
                                 break;
 
-                            case "Right":
+                            case 1:
                                 graphics.DrawImage(bustup, bustup_data.P1_PSX_Right_Coord_X, bustup_data.P1_PSX_Right_Coord_Y, bustup_data.P1_PSX_Scale_Width, bustup_data.P1_PSX_Scale_Height);
                                 break;
 
-                            case "Center":
+                            case 2:
                                 graphics.DrawImage(bustup, bustup_data.P1_PSX_Center_Coord_X, bustup_data.P1_PSX_Center_Coord_Y, bustup_data.P1_PSX_Scale_Width, bustup_data.P1_PSX_Scale_Height);
                                 break;
                         }
@@ -1188,9 +1169,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var active_session = new ContextSwitchData()
             {
                 User = user,
-                Active_Character = set_data,
-                Position = "Left",
-                New_Session = true,
+                Active_Characters = new List<OfficialSetData> { set_data },
+                Recently_Used_Index = 100,
                 Active_Timer = new Timer()
                 {
                     // Create a timer that expires as a "time out" duration for the user's session.
@@ -1221,9 +1201,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     public class ContextSwitchData
     {
         public SocketGuildUser User { get; set; }
-        public OfficialSetData Active_Character { get; set; }
-        public string Position { get; set; }
-        public bool New_Session { get; set; }
+        public List<OfficialSetData> Active_Characters { get; set; }
+        public int Recently_Used_Index { get; set; }
         public Timer Active_Timer { get; set; }
     }
 }
