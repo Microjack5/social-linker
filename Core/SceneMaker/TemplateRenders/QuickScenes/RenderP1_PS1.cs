@@ -33,41 +33,37 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 SocketUser user = message.Author;
                 SocketTextChannel channel = (SocketTextChannel)message.Channel;
 
-                Console.WriteLine("Here #1");
-
                 // Get the account information of the command's user.
                 var account = UserInfoClasses.GetAccount(user);
 
                 BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
-                Console.WriteLine("Here #2");
-
                 // Before we pass our character's dialogue in, put their display name in front of it.
                 // This is unique to the P1-PS1 template.
                 ContextSwitchData active_session = ContextSwitchMethods.Get_Active_Session((SocketGuildUser)user, set_data);
-
-                Console.WriteLine("Here #2.1");
 
                 if (active_session.Active_Characters.Contains(set_data))
                 {
                     if (active_session.Recently_Used_Index != active_session.Active_Characters.IndexOf(set_data))
                     {
-                        Console.WriteLine("Here #2.3");
                         command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
-
-                        Console.WriteLine("Here #2.4");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Here #2.5");
                     command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
 
-                    active_session.Active_Characters.Add(set_data);
-                    Console.WriteLine("Here #2.6");
+                    if (active_session.Active_Characters.Count == 3)
+                    {
+                        active_session.Active_Characters[active_session.Recently_Used_Character_List[0]] = set_data;
+                    }
+                    else
+                    {
+                        active_session.Active_Characters.Add(set_data);
+                    }
                 }
 
-                Console.WriteLine("Here #3");
+                int char_index = active_session.Active_Characters.IndexOf(set_data);
 
                 List<string>[] dialogue_lines = Line_Parser(message, bustup_data, command_data.Dialogue);
 
@@ -93,9 +89,21 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                     await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines, loader);
                 }
-                Console.WriteLine("Here #4");
 
-                active_session.Recently_Used_Index = active_session.Active_Characters.IndexOf(set_data);
+                if (active_session.Recently_Used_Character_List.Contains(char_index))
+                {
+                    // Do nothing
+                    active_session.Recently_Used_Character_List.Remove(char_index);
+                    active_session.Recently_Used_Character_List.Add(char_index);
+                }
+                else
+                {
+                    active_session.Recently_Used_Character_List.Add(char_index);
+                }
+
+                active_session.Recently_Used_Index = char_index;
+                Console.WriteLine($"Queue count: {active_session.Recently_Used_Character_List.Count}");
+                Console.WriteLine($"Top of Queue: {active_session.Recently_Used_Character_List[0]}");
             }
             catch (Exception e)
             {
@@ -1159,7 +1167,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Enabled = true
             };
 
-            Console.WriteLine("Adding #3");
             return active_session;
         }
 
@@ -1171,6 +1178,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 User = user,
                 Active_Characters = new List<OfficialSetData> { set_data },
                 Recently_Used_Index = 100,
+                Recently_Used_Character_List = new List<int>(),
                 Active_Timer = new Timer()
                 {
                     // Create a timer that expires as a "time out" duration for the user's session.
@@ -1180,9 +1188,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 },
             };
 
-            Console.WriteLine("Adding #1");
             Global.P1_PS1_Usage_List.Add(active_session);
-            Console.WriteLine("Adding #2");
 
             // If the cooldown timer runs out, activate a function.
             active_session.Active_Timer.Elapsed += (sender, e) => Timer_Elapsed(sender, e, user);
@@ -1203,6 +1209,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public SocketGuildUser User { get; set; }
         public List<OfficialSetData> Active_Characters { get; set; }
         public int Recently_Used_Index { get; set; }
+        public List<int> Recently_Used_Character_List { get; set; }
         public Timer Active_Timer { get; set; }
     }
 }
