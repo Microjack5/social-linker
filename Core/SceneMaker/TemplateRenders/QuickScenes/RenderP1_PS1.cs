@@ -36,7 +36,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Get the account information of the command's user.
                 var account = UserInfoClasses.GetAccount(user);
 
-                // We'll also want to get the data for the user's chosed bustup at this time.
+                // Get the data for the chosen bustup.
                 BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
                 // The P1-PS1 template has a unique function where display names are not rendered if the same character is used in succession.
@@ -282,6 +282,52 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                     // Draw the input dialogue to the template.
                     graphics.DrawImage(rendered_dialogue, 0, 0, template_width, template_height);
+                }
+
+                // The user could choose to output the image at different resolutions, so let's handle that point now.
+                // If the user's output setting is at the default resolution, do nothing.
+                if (account.P1_PSX_Resolution == "320 × 240")
+                {
+                    // Do nothing
+                }
+                // If the user's output setting is NOT at the default resolution, however, we need to do some work.
+                else if (account.P1_PSX_Resolution == "1440 × 1080")
+                {
+                    // Change the template width and height variables based on the user's output settings.
+                    template_width = 1440;
+                    template_height = 1080;
+
+                    // Now, we'll want to make a new bitmap that matches these sizes.
+                    // Create a copy of the template so far.
+                    var copied_source = new Bitmap(base_template);
+
+                    // Create a new empty bitmap with the adjusted dimensions.
+                    var scaled_bitmap = new Bitmap(template_width, template_height);
+
+                    // Create a new graphics object so we can render on the empty bitmap.
+                    using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+                    {
+                        // Set the scaling method to the user's choice of Bicubic and Nearest Neighbor.
+                        switch (account.P1_PSX_Scale)
+                        {
+                            case "Bicubic":
+                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                break;
+
+                            case "Nearest Neighbor":
+                                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                                break;
+                        }
+
+                        // Set the rendering quality to high.
+                        graphics.CompositingQuality = CompositingQuality.HighQuality;
+
+                        // Draw the copy of the template to the empty bitmap while fitting to size.
+                        graphics.DrawImage(copied_source, 0, 0, template_width, template_height);
+                    }
+
+                    // Copy the contents of the new bitmap to the base template variable.
+                    base_template = scaled_bitmap;
                 }
 
                 // Save the entire base template to a data stream.
