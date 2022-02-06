@@ -36,74 +36,101 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Get the account information of the command's user.
                 var account = UserInfoClasses.GetAccount(user);
 
+                // We'll also want to get the data for the user's chosed bustup at this time.
                 BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
-                // Before we pass our character's dialogue in, put their display name in front of it.
-                // This is unique to the P1-PS1 template.
+                // The P1-PS1 template has a unique function where display names are not rendered if the same character is used in succession.
+                // We'll call this "context switch". Get or create an active context switch object that stores data for this.
                 ContextSwitchData active_session = ContextSwitchMethods.Get_Active_Session((SocketGuildUser)user, set_data);
 
+                // Check if the list of active characters contains the current data set.
                 if (active_session.Active_Characters.Contains(set_data))
                 {
+                    // If so, check if the most recently used index of the list is not the same index the matching set data is in.
                     if (active_session.Recently_Used_Index != active_session.Active_Characters.IndexOf(set_data))
                     {
+                        // Append the character's display name to their dialogue.
                         command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
                     }
                 }
+                // If not, we'll want to add the set to the list.
                 else
                 {
+                    // Append the character's display name to their dialogue.
                     command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
 
+                    // Check if the number of active characters in the list is three, which is the max number allowed.
                     if (active_session.Active_Characters.Count == 3)
                     {
+                        // If so, replace the set in the first index with the current set.
                         active_session.Active_Characters[active_session.Recently_Used_Character_List[0]] = set_data;
                     }
+                    // If the number is less than three, add the set data to the list.
                     else
                     {
                         active_session.Active_Characters.Add(set_data);
                     }
                 }
 
+                // Create a new int variable that stores the INDEX of the current set data in the session list.
                 int char_index = active_session.Active_Characters.IndexOf(set_data);
 
+                // Parse the dialogue into lines that'll fit on the template and store it in a string array list.
                 List<string>[] dialogue_lines = Line_Parser(message, bustup_data, command_data.Dialogue);
 
+                // The string array list typically has a constant number of indicies when created, so get the number of lines that'll actually be rendered. 
                 int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
 
+                // Check if the number of rendered lines is greater than three.
+                // If so, we'll have to send two images to simulate text scrolling for this template.
                 if (number_of_rendered_lines > 3)
                 {
+                    // Isolate the first three lines of dialogue into a new string array list.
                     List<string>[] dialogue_lines_pt_1 = new List<string>[] { dialogue_lines[0], dialogue_lines[1], dialogue_lines[2] };
 
+                    // Send a loading message for the first image.
                     RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(1, 2).Build());
 
+                    // Render the first image.
                     await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_1, loader);
 
+                    // Move down one line and isolate another three lines of dialogue into a new string array list. This will imitate the text scrolling.
                     List<string>[] dialogue_lines_pt_2 = new List<string>[] { dialogue_lines[1], dialogue_lines[2], dialogue_lines[3] };
 
+                    // Send a loading message for the second image.
                     loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(2, 2).Build());
 
+                    // Render the second image.
                     await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_2, loader);
                 }
+                // If the number of rendered lines is exactly three or less, we'll only need to send one image.
                 else
                 {
+                    // Send a loading message.
                     RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Loading_Message().Build());
 
+                    // Render the image.
                     await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines, loader);
                 }
 
+                // Here, we're at the step where we've already rendered and sent the images we needed.
+                // For the Context Switch feature, we'll want to keep track of the past three unique characters used.
+                // Check if the current Active_Characters index is in the Recently_Used_Character_List.
+                // Remember that the Active_Characters list is always kept at a max of three indicies, so you don't have to worry about overflow here.
                 if (active_session.Recently_Used_Character_List.Contains(char_index))
                 {
-                    // Do nothing
+                    // If the set's index is found, remove it from its current position in the list and add it back to the end.
                     active_session.Recently_Used_Character_List.Remove(char_index);
                     active_session.Recently_Used_Character_List.Add(char_index);
                 }
+                // If the index isn't found in the list (meaning less than three characters have been used in this session), add it to the list.
                 else
                 {
                     active_session.Recently_Used_Character_List.Add(char_index);
                 }
 
+                // Make the Recently_Used_Index the same as the current char_index so we can compare it the next time this template is used.
                 active_session.Recently_Used_Index = char_index;
-                Console.WriteLine($"Queue count: {active_session.Recently_Used_Character_List.Count}");
-                Console.WriteLine($"Top of Queue: {active_session.Recently_Used_Character_List[0]}");
             }
             catch (Exception e)
             {
@@ -238,14 +265,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // Draw the user's background to the base template.
                     graphics.DrawImage(background, 0, 0, template_width, template_height);
 
+                    // Get the chosen bustup, placed in the correct spot.
                     Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session, set_data);
 
+                    // Draw the bustup to the template.
                     graphics.DrawImage(placed_bustup, 0, 0, placed_bustup.Width, placed_bustup.Height);
 
+                    // Draw the message window to the template.
                     graphics.DrawImage(Generate_Message_Window(account), 0, 0, template_width, template_height);
 
+                    // If the user enabled it, draw the moon HUD to the template.
                     graphics.DrawImage(Generate_Moon_HUD(account), 0, 0, template_width, template_height);
 
+                    // Render the input dialogue to a bitmap.
                     Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
 
                     // Draw the input dialogue to the template.
@@ -258,7 +290,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 memoryStream.Seek(0, SeekOrigin.Begin);
 
                 // Send the image.
-                Console.WriteLine("Uploading image...");
                 await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
 
                 // Clean up resources used by the stream and delete the loading message.
@@ -331,13 +362,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int template_width = 320;
             int template_height = 240;
 
+            // Create an empty string to store the wallpaper type in.
             string wallpaper_type = "";
 
             // Create a starting base bitmap to render all graphics on.
             Bitmap base_template = new Bitmap(template_width, template_height);
 
-            Bitmap message_window = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//message_window.png");
-
+            // Set the wallpaper type based on the user's account settings.
             switch (account.P1_PSX_TS_Wallpaper)
             {
                 case "Type 1":
@@ -373,7 +404,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     break;
             }
 
+            // Get the appropriate wallpaper bitmap alongside the message window.
             Bitmap wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//Wallpaper//{wallpaper_type}.png");
+            Bitmap message_window = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//message_window.png");
 
             // Now, time to put the template together!
             using (Graphics graphics = Graphics.FromImage(base_template))
@@ -392,6 +425,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int template_width = 320;
             int template_height = 240;
 
+            // Create a starting base bitmap to render all graphics on.
             Bitmap bitmap = new Bitmap(template_width, template_height);
 
             //Establish an int for the width and height glyphs should be rendered at
@@ -413,7 +447,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Iterate through each character of the array.
                 for (int j = 0; j < char_array.Length; j++)
                 {
-                    //Retrieve glyph information from the JSON file
+                    // Retrieve glyph information from the appropriate JSON file.
                     var glyph = ParsingMethods.Get_P1_PS1_Glyph(char_array[j]);
 
                     if (glyph != null)
@@ -462,6 +496,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // These are where our dialogue input will be organized.
             List<string>[] dialogue_list = new List<string>[max_lines];
 
+            // Initialize each index of the string array list.
             for (int i = 0; i < max_lines; i++)
             {
                 dialogue_list[i] = new List<string>();
@@ -980,7 +1015,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Take each index of the string list array, convert the list to a string, then analyze the string to determine if it's empty or not.
             // If it IS empty, that line won't be rendered.
             // Count the number of lines that will actually be rendered to the screen.
-
             if (String_List_To_String(input_list_array[3]) != "")
             {
                 number_of_lines = 4;
@@ -1151,15 +1185,17 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     {
         public static ContextSwitchData Get_Active_Session(SocketGuildUser user, OfficialSetData set_data)
         {
-            // Find the cooldown session associated with both the current user and command type.
+            // Find the session associated with both the current user and command type.
             var active_session = Global.P1_PS1_Usage_List.SingleOrDefault(x => (x.User.Id == user.Id));
 
+            // If the session doesn't exist, create one and set it to the session variable.
             if (active_session == null)
             {
                 Create_Active_Session(user, set_data);
                 active_session = Global.P1_PS1_Usage_List.SingleOrDefault(x => (x.User.Id == user.Id));
             }
 
+            // Reset the timer to expire in five minutes.
             active_session.Active_Timer = new Timer()
             {
                 Interval = 300000,
@@ -1190,7 +1226,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             Global.P1_PS1_Usage_List.Add(active_session);
 
-            // If the cooldown timer runs out, activate a function.
+            // If the timer runs out, activate a function.
             active_session.Active_Timer.Elapsed += (sender, e) => Timer_Elapsed(sender, e, user);
         }
 
