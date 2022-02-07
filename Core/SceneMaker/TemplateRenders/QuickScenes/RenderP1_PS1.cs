@@ -272,8 +272,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Draw the message window to the template.
                 graphics.DrawImage(Generate_Message_Window(account), 0, 0, template_width, template_height);
 
-                // If the user enabled it, draw the moon HUD to the template.
-                graphics.DrawImage(Generate_Moon_HUD(account), 0, 0, template_width, template_height);
+                // If the user has it enabled, draw the moon HUD to the template.
+                if (account.P1_PSP_TS_Moon_HUD == "On")
+                {
+                    graphics.DrawImage(Generate_Moon_HUD(account), 0, 0, template_width, template_height);
+                }
 
                 // Render the input dialogue to a bitmap.
                 Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
