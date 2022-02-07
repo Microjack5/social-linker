@@ -142,215 +142,223 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public static async Task Render_Offload(SocketMessage message, UserInfoFields account, ContextSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
         {
-            try
+            // Create variables to store the width and height of the template.
+            int template_width = 320;
+            int template_height = 240;
+
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = message.Author;
+            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+
+            // Create a starting base bitmap to render all graphics on.
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            // Create another bitmap the same size.
+            // In case the user has set a colored bitmap in their settings, we'll need to use this to render it.
+            Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
+
+            // Here, we want to grab any images attached to the message to use it as a background.
+            // Create a variable for the message attachment.
+            var attachments = message.Attachments;
+
+            // Create an empty string variable to hold the URL of the attachment.
+            string url = "";
+
+            // If there are no attachments on the message, set the URL string to "None".
+            if (attachments.LongCount() == 0)
             {
-                // Create variables to store the width and height of the template.
-                int template_width = 320;
-                int template_height = 240;
+                url = "None";
+            }
+            // Else, assign the URL of the attachment to the URL string.
+            else
+            {
+                url = attachments.ElementAt(0).Url;
+            }
 
-                // Create two variables for the command user and the command channel, derived from the message object taken in.
-                SocketUser user = message.Author;
-                SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            // Initialize a bitmap object for the user's background. It's small now because we'll reassign it depending on our circumstances.
+            Bitmap background = new Bitmap(2, 2);
 
-                // Create a starting base bitmap to render all graphics on.
-                Bitmap base_template = new Bitmap(template_width, template_height);
-
-                // Create another bitmap the same size.
-                // In case the user has set a colored bitmap in their settings, we'll need to use this to render it.
-                Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
-
-                // Here, we want to grab any images attached to the message to use it as a background.
-                // Create a variable for the message attachment.
-                var attachments = message.Attachments;
-
-                // Create an empty string variable to hold the URL of the attachment.
-                string url = "";
-
-                // If there are no attachments on the message, set the URL string to "None".
-                if (attachments.LongCount() == 0)
+            // If a URL for a message attachment exists, download it and copy its contents to the bitmap variable we just created.
+            if (url != "None")
+            {
+                // Here, we'll want to try and retrieve the user's input image.
+                try
                 {
-                    url = "None";
+                    // Declare variables for a web request to retrieve the image.
+                    System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
+                    webRequest.AllowWriteStreamBuffering = true;
+                    webRequest.Timeout = 30000;
+
+                    // Create a stream and download the image to it.
+                    System.Net.WebResponse webResponse = webRequest.GetResponse();
+                    System.IO.Stream stream = webResponse.GetResponseStream();
+
+                    // Copy the stream's contents to the background bitmap variable.
+                    background = (Bitmap)System.Drawing.Image.FromStream(stream);
+
+                    webResponse.Close();
                 }
-                // Else, assign the URL of the attachment to the URL string.
-                else
+                // If an exception occurs here, the filetype is likely incompatible.
+                // Send an error message, delete the loading message, and return.
+                catch (System.ArgumentException e)
                 {
-                    url = attachments.ElementAt(0).Url;
-                }
-
-                // Initialize a bitmap object for the user's background. It's small now because we'll reassign it depending on our circumstances.
-                Bitmap background = new Bitmap(2, 2);
-
-                // If a URL for a message attachment exists, download it and copy its contents to the bitmap variable we just created.
-                if (url != "None")
-                {
-                    // Here, we'll want to try and retrieve the user's input image.
-                    try
-                    {
-                        // Declare variables for a web request to retrieve the image.
-                        System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
-                        webRequest.AllowWriteStreamBuffering = true;
-                        webRequest.Timeout = 30000;
-
-                        // Create a stream and download the image to it.
-                        System.Net.WebResponse webResponse = webRequest.GetResponse();
-                        System.IO.Stream stream = webResponse.GetResponseStream();
-
-                        // Copy the stream's contents to the background bitmap variable.
-                        background = (Bitmap)System.Drawing.Image.FromStream(stream);
-
-                        webResponse.Close();
-                    }
-                    // If an exception occurs here, the filetype is likely incompatible.
-                    // Send an error message, delete the loading message, and return.
-                    catch (System.ArgumentException e)
-                    {
-                        Console.WriteLine(e);
-                        await loader.DeleteAsync();
-                        _ = ErrorHandling.Incompatible_File_Type(message);
-                        return;
-                    }
-                }
-
-                // Render the uploaded image based on the user's background settings.
-                switch (account.Setting_BG_Upload)
-                {
-                    case "Maintain Aspect Ratio":
-                        background = Center_Image(background);
-                        break;
-
-                    case "Stretch to Fit":
-                        background = Stretch_To_Fit(background);
-                        break;
-                }
-
-                // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
-                // Check if the user's background color setting is set to something other than "Transparent".
-                // If so, we have a color to render for the background!
-                if (account.Setting_BG_Color != "Transparent")
-                {
-                    // Convert the user's HTML color setting to one we can use and assign it to a color variable.
-                    System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
-
-                    // Color the entirety of the background bitmap the user's selected color.
-                    using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
-                    {
-                        graphics.Clear(user_background_color);
-                    }
-                }
-
-                // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
-                Bitmap bustup = new Bitmap(2, 2);
-
-                // Check if the base sprite number is something other than zero.
-                // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-                if (command_data.Base_Sprite != 0)
-                {
-                    bustup = OfficialSetMethods.Bustup_Selection(message, account, set_data, bustup_data, command_data);
-                }
-
-                // If the bustup returns as null, however, something went wrong with rendering the animation frames.
-                // An error message has already been sent in the frame rendering method, so delete the loading message and return.
-                if (bustup == null)
-                {
+                    Console.WriteLine(e);
                     await loader.DeleteAsync();
+                    _ = ErrorHandling.Incompatible_File_Type(message);
                     return;
                 }
+            }
 
-                // Time to put it all together!
-                using (Graphics graphics = Graphics.FromImage(base_template))
+            // Render the uploaded image based on the user's background settings.
+            switch (account.Setting_BG_Upload)
+            {
+                case "Maintain Aspect Ratio":
+                    background = Center_Image(background);
+                    break;
+
+                case "Stretch to Fit":
+                    background = Stretch_To_Fit(background);
+                    break;
+            }
+
+            // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
+            // Check if the user's background color setting is set to something other than "Transparent".
+            // If so, we have a color to render for the background!
+            if (account.Setting_BG_Color != "Transparent")
+            {
+                // Convert the user's HTML color setting to one we can use and assign it to a color variable.
+                System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
+
+                // Color the entirety of the background bitmap the user's selected color.
+                using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
                 {
-                    // Draw the layer with the user's colored default background if it exists.
-                    graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
-
-                    // Draw the user's background to the base template.
-                    graphics.DrawImage(background, 0, 0, template_width, template_height);
-
-                    // Get the chosen bustup, placed in the correct spot.
-                    Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session, set_data);
-
-                    // Draw the bustup to the template.
-                    graphics.DrawImage(placed_bustup, 0, 0, placed_bustup.Width, placed_bustup.Height);
-
-                    // Draw the message window to the template.
-                    graphics.DrawImage(Generate_Message_Window(account), 0, 0, template_width, template_height);
-
-                    // If the user enabled it, draw the moon HUD to the template.
-                    graphics.DrawImage(Generate_Moon_HUD(account), 0, 0, template_width, template_height);
-
-                    // Render the input dialogue to a bitmap.
-                    Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
-
-                    // Draw the input dialogue to the template.
-                    graphics.DrawImage(rendered_dialogue, 0, 0, template_width, template_height);
+                    graphics.Clear(user_background_color);
                 }
+            }
 
-                // The user could choose to output the image at different resolutions, so let's handle that point now.
-                // If the user's output setting is at the default resolution, do nothing.
-                if (account.P1_PSX_Resolution == "320 × 240")
+            // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
+            Bitmap bustup = new Bitmap(2, 2);
+
+            // Check if the base sprite number is something other than zero.
+            // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
+            if (command_data.Base_Sprite != 0)
+            {
+                bustup = OfficialSetMethods.Bustup_Selection(message, account, set_data, bustup_data, command_data);
+            }
+
+            // If the bustup returns as null, however, something went wrong with rendering the animation frames.
+            // An error message has already been sent in the frame rendering method, so delete the loading message and return.
+            if (bustup == null)
+            {
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Time to put it all together!
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Draw the layer with the user's colored default background if it exists.
+                graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
+
+                // Draw the user's background to the base template.
+                graphics.DrawImage(background, 0, 0, template_width, template_height);
+
+                // Get the chosen bustup, placed in the correct spot.
+                Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session, set_data);
+
+                // Draw the bustup to the template.
+                graphics.DrawImage(placed_bustup, 0, 0, placed_bustup.Width, placed_bustup.Height);
+
+                // Draw the message window to the template.
+                graphics.DrawImage(Generate_Message_Window(account), 0, 0, template_width, template_height);
+
+                // If the user enabled it, draw the moon HUD to the template.
+                graphics.DrawImage(Generate_Moon_HUD(account), 0, 0, template_width, template_height);
+
+                // Render the input dialogue to a bitmap.
+                Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
+
+                // Draw the input dialogue to the template.
+                graphics.DrawImage(rendered_dialogue, 0, 0, template_width, template_height);
+            }
+
+            // The user could choose to output the image at different resolutions, so let's handle that point now.
+            // If the user's output setting is at the default resolution, do nothing.
+            if (account.P1_PSX_Resolution == "320 × 240")
+            {
+                // Do nothing
+            }
+            // If the user's output setting is NOT at the default resolution, however, we need to do some work.
+            else if (account.P1_PSX_Resolution == "1440 × 1080")
+            {
+                // Change the template width and height variables based on the user's output settings.
+                template_width = 1440;
+                template_height = 1080;
+
+                // Now, we'll want to make a new bitmap that matches these sizes.
+                // Create a copy of the template so far.
+                var copied_source = new Bitmap(base_template);
+
+                // Create a new empty bitmap with the adjusted dimensions.
+                var scaled_bitmap = new Bitmap(template_width, template_height);
+
+                // Create a new graphics object so we can render on the empty bitmap.
+                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
                 {
-                    // Do nothing
-                }
-                // If the user's output setting is NOT at the default resolution, however, we need to do some work.
-                else if (account.P1_PSX_Resolution == "1440 × 1080")
-                {
-                    // Change the template width and height variables based on the user's output settings.
-                    template_width = 1440;
-                    template_height = 1080;
-
-                    // Now, we'll want to make a new bitmap that matches these sizes.
-                    // Create a copy of the template so far.
-                    var copied_source = new Bitmap(base_template);
-
-                    // Create a new empty bitmap with the adjusted dimensions.
-                    var scaled_bitmap = new Bitmap(template_width, template_height);
-
-                    // Create a new graphics object so we can render on the empty bitmap.
-                    using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+                    // Set the scaling method to the user's choice of Bicubic and Nearest Neighbor.
+                    switch (account.P1_PSX_Scale)
                     {
-                        // Set the scaling method to the user's choice of Bicubic and Nearest Neighbor.
-                        switch (account.P1_PSX_Scale)
-                        {
-                            case "Bicubic":
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                break;
+                        case "Bicubic":
+                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            break;
 
-                            case "Nearest Neighbor":
-                                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                                break;
-                        }
-
-                        // Set the rendering quality to high.
-                        graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-                        // Draw the copy of the template to the empty bitmap while fitting to size.
-                        graphics.DrawImage(copied_source, 0, 0, template_width, template_height);
+                        case "Nearest Neighbor":
+                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                            break;
                     }
 
-                    // Copy the contents of the new bitmap to the base template variable.
-                    base_template = scaled_bitmap;
+                    // Set the rendering quality to high.
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+
+                    // Draw the copy of the template to the empty bitmap while fitting to size.
+                    graphics.DrawImage(copied_source, 0, 0, template_width, template_height);
                 }
 
-                // Save the entire base template to a data stream.
-                MemoryStream memoryStream = new MemoryStream();
-                base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
-                memoryStream.Seek(0, SeekOrigin.Begin);
+                // Copy the contents of the new bitmap to the base template variable.
+                base_template = scaled_bitmap;
+            }
 
+            // Save the entire base template to a data stream.
+            MemoryStream memoryStream = new MemoryStream();
+            base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            try
+            {
                 // Send the image.
                 await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
-
-                // Clean up resources used by the stream and delete the loading message.
-                memoryStream.Dispose();
-                await loader.DeleteAsync();
-
-                // If the user has auto-delete for their commands set to on, delete their command as well.
-                if (account.Auto_Delete_Commands == "On")
-                {
-                    await message.DeleteAsync();
-                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Scene_Upload_Failed(message);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
+
+            // If the user has auto-delete for their commands set to on, delete their command as well.
+            if (account.Auto_Delete_Commands == "On")
+            {
+                await message.DeleteAsync();
             }
         }
 

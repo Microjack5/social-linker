@@ -25,213 +25,221 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     {
         public static async Task Render_Quick_Scene_P5S(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
         {
-            try
+            // Create variables to store the width and height of the template.
+            int template_width = 1920;
+            int template_height = 1080;
+
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = message.Author;
+            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+
+            // Send a loading message to the channel while the sprite sheet is being made.
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P5S_Loading_Message().Build());
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+
+            // Create a starting base bitmap to render all graphics on.
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            // Create another bitmap the same size.
+            // In case the user has set a colored bitmap in their settings, we'll need to use this to render it.
+            Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
+
+            // Here, we want to grab any images attached to the message to use it as a background.
+            // Create a variable for the message attachment.
+            var attachments = message.Attachments;
+
+            // Create an empty string variable to hold the URL of the attachment.
+            string url = "";
+
+            // If there are no attachments on the message, set the URL string to "None".
+            if (attachments.LongCount() == 0)
             {
-                // Create variables to store the width and height of the template.
-                int template_width = 1920;
-                int template_height = 1080;
+                url = "None";
+            }
+            // Else, assign the URL of the attachment to the URL string.
+            else
+            {
+                url = attachments.ElementAt(0).Url;
+            }
 
-                // Create two variables for the command user and the command channel, derived from the message object taken in.
-                SocketUser user = message.Author;
-                SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            // Initialize a bitmap object for the user's background. It's small now because we'll reassign it depending on our circumstances.
+            Bitmap background = new Bitmap(2, 2);
 
-                // Send a loading message to the channel while the sprite sheet is being made.
-                RestUserMessage loader = await channel.SendMessageAsync("", false, P5S_Loading_Message().Build());
-
-                // Get the account information of the command's user.
-                var account = UserInfoClasses.GetAccount(user);
-
-                BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
-
-                // Create a starting base bitmap to render all graphics on.
-                Bitmap base_template = new Bitmap(template_width, template_height);
-
-                // Create another bitmap the same size.
-                // In case the user has set a colored bitmap in their settings, we'll need to use this to render it.
-                Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
-
-                // Here, we want to grab any images attached to the message to use it as a background.
-                // Create a variable for the message attachment.
-                var attachments = message.Attachments;
-
-                // Create an empty string variable to hold the URL of the attachment.
-                string url = "";
-
-                // If there are no attachments on the message, set the URL string to "None".
-                if (attachments.LongCount() == 0)
+            // If a URL for a message attachment exists, download it and copy its contents to the bitmap variable we just created.
+            if (url != "None")
+            {
+                // Here, we'll want to try and retrieve the user's input image.
+                try
                 {
-                    url = "None";
+                    // Declare variables for a web request to retrieve the image.
+                    System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
+                    webRequest.AllowWriteStreamBuffering = true;
+                    webRequest.Timeout = 30000;
+
+                    // Create a stream and download the image to it.
+                    System.Net.WebResponse webResponse = webRequest.GetResponse();
+                    System.IO.Stream stream = webResponse.GetResponseStream();
+
+                    // Copy the stream's contents to the background bitmap variable.
+                    background = (Bitmap)System.Drawing.Image.FromStream(stream);
+
+                    webResponse.Close();
                 }
-                // Else, assign the URL of the attachment to the URL string.
-                else
+                // If an exception occurs here, the filetype is likely incompatible.
+                // Send an error message, delete the loading message, and return.
+                catch (System.ArgumentException e)
                 {
-                    url = attachments.ElementAt(0).Url;
-                }
-
-                // Initialize a bitmap object for the user's background. It's small now because we'll reassign it depending on our circumstances.
-                Bitmap background = new Bitmap(2, 2);
-
-                // If a URL for a message attachment exists, download it and copy its contents to the bitmap variable we just created.
-                if (url != "None")
-                {
-                    // Here, we'll want to try and retrieve the user's input image.
-                    try
-                    {
-                        // Declare variables for a web request to retrieve the image.
-                        System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
-                        webRequest.AllowWriteStreamBuffering = true;
-                        webRequest.Timeout = 30000;
-
-                        // Create a stream and download the image to it.
-                        System.Net.WebResponse webResponse = webRequest.GetResponse();
-                        System.IO.Stream stream = webResponse.GetResponseStream();
-
-                        // Copy the stream's contents to the background bitmap variable.
-                        background = (Bitmap)System.Drawing.Image.FromStream(stream);
-
-                        webResponse.Close();
-                    }
-                    // If an exception occurs here, the filetype is likely incompatible.
-                    // Send an error message, delete the loading message, and return.
-                    catch (System.ArgumentException e)
-                    {
-                        Console.WriteLine(e);
-                        await loader.DeleteAsync();
-                        _ = ErrorHandling.Incompatible_File_Type(message);
-                        return;
-                    }
-                }
-
-                // Render the uploaded image based on the user's background settings.
-                switch (account.Setting_BG_Upload)
-                {
-                    case "Maintain Aspect Ratio":
-                        background = Center_Image(background);
-                        break;
-
-                    case "Stretch to Fit":
-                        background = Stretch_To_Fit(background);
-                        break;
-                }
-
-                // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
-                // Check if the user's background color setting is set to something other than "Transparent".
-                // If so, we have a color to render for the background!
-                if (account.Setting_BG_Color != "Transparent")
-                {
-                    // Convert the user's HTML color setting to one we can use and assign it to a color variable.
-                    System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
-
-                    // Color the entirety of the background bitmap the user's selected color.
-                    using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
-                    {
-                        graphics.Clear(user_background_color);
-                    }
-                }
-
-                // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
-                Bitmap bustup = new Bitmap(2, 2);
-
-                // Check if the base sprite number is something other than zero.
-                // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-                if (command_data.Base_Sprite != 0)
-                {
-                    bustup = OfficialSetMethods.Bustup_Selection(message, account, set_data, bustup_data, command_data);
-                }
-
-                // If the bustup returns as null, however, something went wrong with rendering the animation frames.
-                // An error message has already been sent in the frame rendering method, so delete the loading message and return.
-                if (bustup == null)
-                {
+                    Console.WriteLine(e);
                     await loader.DeleteAsync();
+                    _ = ErrorHandling.Incompatible_File_Type(message);
                     return;
                 }
+            }
 
-                // Time to put it all together!
-                using (Graphics graphics = Graphics.FromImage(base_template))
+            // Render the uploaded image based on the user's background settings.
+            switch (account.Setting_BG_Upload)
+            {
+                case "Maintain Aspect Ratio":
+                    background = Center_Image(background);
+                    break;
+
+                case "Stretch to Fit":
+                    background = Stretch_To_Fit(background);
+                    break;
+            }
+
+            // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
+            // Check if the user's background color setting is set to something other than "Transparent".
+            // If so, we have a color to render for the background!
+            if (account.Setting_BG_Color != "Transparent")
+            {
+                // Convert the user's HTML color setting to one we can use and assign it to a color variable.
+                System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
+
+                // Color the entirety of the background bitmap the user's selected color.
+                using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
                 {
-                    // Draw the layer with the user's colored default background if it exists.
-                    graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
+                    graphics.Clear(user_background_color);
+                }
+            }
 
-                    // Draw the user's background to the base template.
-                    graphics.DrawImage(background, 0, 0, template_width, template_height);
+            // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
+            Bitmap bustup = new Bitmap(2, 2);
 
-                    // If the user has scene borders enabled, render it to the template.
-                    if (account.P5S_TS_Scene_Border != "Off")
-                    {
-                        Bitmap border = Render_Scene_Border();
+            // Check if the base sprite number is something other than zero.
+            // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
+            if (command_data.Base_Sprite != 0)
+            {
+                bustup = OfficialSetMethods.Bustup_Selection(message, account, set_data, bustup_data, command_data);
+            }
 
-                        graphics.DrawImage(border, 0, 0, template_width, template_height);
-                        graphics.DrawImage(Render_Border_Squares(border), 0, 0, template_width, template_height);
-                    }
+            // If the bustup returns as null, however, something went wrong with rendering the animation frames.
+            // An error message has already been sent in the frame rendering method, so delete the loading message and return.
+            if (bustup == null)
+            {
+                await loader.DeleteAsync();
+                return;
+            }
 
-                    // If the user has the control panel enabled, render it to the template.
-                    if (account.P5S_TS_Controller_Type != "None")
-                    {
-                        graphics.DrawImage(Render_Control_Panel(account), 0, 0, template_width, template_height);
-                    }
+            // Time to put it all together!
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Draw the layer with the user's colored default background if it exists.
+                graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
 
-                    // Draw the character bust-up to the template if the base sprite number is not '0'.
-                    if (command_data.Base_Sprite != 0)
-                    {
-                        // Make a drop shadow of the bustup first and render it to the template before the main image.
-                        Bitmap drop_shadow = Create_Bustup_Drop_Shadow(bustup);
-                        graphics.DrawImage(drop_shadow, bustup_data.P5S_Coord_X - 20, bustup_data.P5S_Coord_Y + 20, bustup_data.P5S_Scale_Width, bustup_data.P5S_Scale_Height);
+                // Draw the user's background to the base template.
+                graphics.DrawImage(background, 0, 0, template_width, template_height);
 
-                        // Render the main bustup next.
-                        graphics.DrawImage(bustup, bustup_data.P5S_Coord_X, bustup_data.P5S_Coord_Y, bustup_data.P5S_Scale_Width, bustup_data.P5S_Scale_Height);
-                    }
+                // If the user has scene borders enabled, render it to the template.
+                if (account.P5S_TS_Scene_Border != "Off")
+                {
+                    Bitmap border = Render_Scene_Border();
 
-                    // If the user has the HUD enabled, render it to the template as well.
-                    if (account.P5S_TS_Date_Location_Layout != "None")
-                    {
-                        switch (account.P5S_TS_Date_Location_Layout)
-                        {
-                            case "Display All":
-                                graphics.DrawImage(Render_Location_Icon(message, account), 0, 0, template_width, template_height);
-                                graphics.DrawImage(Render_Calendar_HUD(message, account), 0, 0, template_width, template_height);
-                                break;
-
-                            case "Date Only":
-                                graphics.DrawImage(Render_Calendar_HUD(message, account), -100, 0, template_width, template_height);
-                                break;
-                        }
-                    }
-
-                    // Here's an important step: Rendering all the text and vectors to the template.
-                    // First, let's established a needed variable: The lines of dialogue needed to be rendered, parsed into an array of string lists.
-                    List<string>[] dialogue_lines = Line_Parser(message, command_data.Dialogue);
-
-                    // Using that string array list, let's generate all the vectors and text in one go!
-                    Bitmap merged_vectors_bitmap = Combine_Vector_Bitmaps(account, dialogue_lines);
-                    Bitmap merged_text_bitmap = Combine_Text_Bitmaps(bustup_data, dialogue_lines);
-
-                    // Draw the vectors and text to the template.
-                    graphics.DrawImage(merged_vectors_bitmap, 0, 0, template_width, template_height);
-                    graphics.DrawImage(merged_text_bitmap, 0, 0, template_width, template_height);
+                    graphics.DrawImage(border, 0, 0, template_width, template_height);
+                    graphics.DrawImage(Render_Border_Squares(border), 0, 0, template_width, template_height);
                 }
 
-                // Save the entire base template to a data stream.
-                MemoryStream memoryStream = new MemoryStream();
-                base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
-                memoryStream.Seek(0, SeekOrigin.Begin);
+                // If the user has the control panel enabled, render it to the template.
+                if (account.P5S_TS_Controller_Type != "None")
+                {
+                    graphics.DrawImage(Render_Control_Panel(account), 0, 0, template_width, template_height);
+                }
 
+                // Draw the character bust-up to the template if the base sprite number is not '0'.
+                if (command_data.Base_Sprite != 0)
+                {
+                    // Make a drop shadow of the bustup first and render it to the template before the main image.
+                    Bitmap drop_shadow = Create_Bustup_Drop_Shadow(bustup);
+                    graphics.DrawImage(drop_shadow, bustup_data.P5S_Coord_X - 20, bustup_data.P5S_Coord_Y + 20, bustup_data.P5S_Scale_Width, bustup_data.P5S_Scale_Height);
+
+                    // Render the main bustup next.
+                    graphics.DrawImage(bustup, bustup_data.P5S_Coord_X, bustup_data.P5S_Coord_Y, bustup_data.P5S_Scale_Width, bustup_data.P5S_Scale_Height);
+                }
+
+                // If the user has the HUD enabled, render it to the template as well.
+                if (account.P5S_TS_Date_Location_Layout != "None")
+                {
+                    switch (account.P5S_TS_Date_Location_Layout)
+                    {
+                        case "Display All":
+                            graphics.DrawImage(Render_Location_Icon(message, account), 0, 0, template_width, template_height);
+                            graphics.DrawImage(Render_Calendar_HUD(message, account), 0, 0, template_width, template_height);
+                            break;
+
+                        case "Date Only":
+                            graphics.DrawImage(Render_Calendar_HUD(message, account), -100, 0, template_width, template_height);
+                            break;
+                    }
+                }
+
+                // Here's an important step: Rendering all the text and vectors to the template.
+                // First, let's established a needed variable: The lines of dialogue needed to be rendered, parsed into an array of string lists.
+                List<string>[] dialogue_lines = Line_Parser(message, command_data.Dialogue);
+
+                // Using that string array list, let's generate all the vectors and text in one go!
+                Bitmap merged_vectors_bitmap = Combine_Vector_Bitmaps(account, dialogue_lines);
+                Bitmap merged_text_bitmap = Combine_Text_Bitmaps(bustup_data, dialogue_lines);
+
+                // Draw the vectors and text to the template.
+                graphics.DrawImage(merged_vectors_bitmap, 0, 0, template_width, template_height);
+                graphics.DrawImage(merged_text_bitmap, 0, 0, template_width, template_height);
+            }
+
+            // Save the entire base template to a data stream.
+            MemoryStream memoryStream = new MemoryStream();
+            base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            try
+            {
                 // Send the image.
                 await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
-
-                // Clean up resources used by the stream and delete the loading message.
-                memoryStream.Dispose();
-                await loader.DeleteAsync();
-
-                // If the user has auto-delete for their commands set to on, delete their command as well.
-                if (account.Auto_Delete_Commands == "On")
-                {
-                    await message.DeleteAsync();
-                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Scene_Upload_Failed(message);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
+
+            // If the user has auto-delete for their commands set to on, delete their command as well.
+            if (account.Auto_Delete_Commands == "On")
+            {
+                await message.DeleteAsync();
             }
         }
 

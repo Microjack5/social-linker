@@ -205,10 +205,26 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
             memoryStream.Seek(0, SeekOrigin.Begin);
 
-            // Send the image.
-            await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
+            try
+            {
+                // Send the image.
+                await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Scene_Upload_Failed(message);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
 
             // If the user has auto-delete for their commands set to on, delete their command as well.
