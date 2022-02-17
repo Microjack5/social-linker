@@ -461,5 +461,70 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Return the string variable.
             return output_string;
         }
+
+        public static Bitmap Center_Image(Bitmap input_bitmap)
+        {
+            // Specify the width and height of the template we'll be drawing to.
+            float width = 640;
+            float height = 448;
+
+            // Copy the input bitmap to a new bitmap variable.
+            var image = new Bitmap(input_bitmap);
+
+            // Create a number to scale the image by on the template.
+            float scale = Math.Min(width / image.Width, height / image.Height);
+
+            // Create a new bitmap with the specified width and height variables.
+            var centered_bitmap = new Bitmap((int)width, (int)height);
+
+            // Create a new graphics object so we can render the image to the new bitmap.
+            var graphics = Graphics.FromImage(centered_bitmap);
+
+            // uncomment for higher quality output
+            graphics.InterpolationMode = InterpolationMode.High;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            // Set the pixel density of the image.
+            centered_bitmap.SetResolution(96, 96);
+
+            // Create the new width and height of the image.
+            var scaleWidth = (int)(image.Width * scale);
+            var scaleHeight = (int)(image.Height * scale);
+
+            // Finally, draw the image!
+            graphics.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
+
+            return centered_bitmap;
+        }
+
+        public static Bitmap Stretch_To_Fit(Bitmap input_bitmap)
+        {
+            // Set the width and height of the bitmap to be created
+            float width = 640;
+            float height = 448;
+
+            // Copy the input bitmap to a new variable.
+            var bitmap_copy = new Bitmap(input_bitmap);
+
+            // Create a brand new bitmap with the specified dimensions from earlier.
+            var new_bitmap = new Bitmap((int)width, (int)height);
+
+            // Create a graphics object so we can edit this new bitmap.
+            var graphics = Graphics.FromImage(new_bitmap);
+
+            // uncomment for higher quality output
+            graphics.InterpolationMode = InterpolationMode.High;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            // Set the pixel density of the image.
+            new_bitmap.SetResolution(96, 96);
+
+            // Draw the copy of the input bitmap to the new bitmap.
+            graphics.DrawImage(bitmap_copy, 0, 0, width, height);
+
+            return new_bitmap;
+        }
     }
 }
