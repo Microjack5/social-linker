@@ -33,6 +33,27 @@ namespace SocialLinker.Core.SceneMaker.GlyphParsing
             return null;
         }
 
+        public static ParsingFields Get_P2EP_PS1_Glyph(char character_to_render)
+        {
+            string font_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Font";
+            string font_data = "p2ep-ps1_font_data.json";
+
+            // If the file folder doesn't exist, create it.
+            if (!Directory.Exists(font_folder))
+            {
+                Directory.CreateDirectory(font_folder);
+            }
+
+            // If the file exists, load its contents.
+            if (File.Exists(font_folder + "/" + font_data))
+            {
+                glyphs = LoadGlyphList(font_folder + "/" + font_data).ToList();
+                return GetGlyph(character_to_render);
+            }
+
+            return null;
+        }
+
         public static ParsingFields Get_P3F_Glyph(char character_to_render)
         {
             string font_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Font";

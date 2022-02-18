@@ -32,22 +32,25 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public static Bitmap Render_Name(BustupData bustup_data)
         {
-            // Create a 640 x 480 bitmap.
-            // This is larger than the template's defauly 640 x 448 size, but P3F's font must be rendered with this 640 x 480 dimension in mind.
-            Bitmap base_template = new Bitmap(640, 480);
+            // Create variables to store the width and height of the template.
+            int template_width = 320;
+            int template_height = 240;
 
-            // Establish an int for the width and height glyphs should be rendered at.
-            int multiplier = 32;
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            // Establish ints for the width and height of glyphs.
+            int x_multiplier = 8;
+            int y_multiplier = 12;
 
             // Load the bitmap font.
-            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Font//p3f_font_sheet.png";
+            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Font//p2ep-ps1_font_sheet.png";
 
             // Create a variable to iterate through sections of the bitmap font.
             Bitmap current_glyph;
 
             // Specify X and Y coordinates for where the glyphs should start rendering on the template.
-            int render_position_x = 42;
-            int render_position_y = 354;
+            int render_position_x = 16;
+            int render_position_y = 171;
 
             // Take the sprite's display name and convert it into a char array.
             char[] char_array = bustup_data.Default_Name_EN.ToCharArray();
@@ -56,57 +59,36 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             for (int i = 0; i < char_array.Length; i++)
             {
                 // Retrieve glyph information from the JSON file.
-                var glyph = ParsingMethods.Get_P3F_Glyph(char_array[i]);
+                var glyph = ParsingMethods.Get_P2EP_PS1_Glyph(char_array[i]);
 
                 // Check if the character is a line break.
                 if (char_array[i] == '\u000a')
                 {
                     // Set the X coordinate to the start of the row.
-                    render_position_x = 42;
+                    render_position_x = 16;
                     // Move the Y coordinate down to the next line.
-                    render_position_y += 22;
+                    render_position_y += 14;
                 }
                 else
                 {
-                    int x = multiplier * glyph.Column;
-                    int y = multiplier * glyph.Row;
+                    int x = x_multiplier * glyph.Column;
+                    int y = y_multiplier * glyph.Row;
 
                     using (Graphics graphics = Graphics.FromImage(base_template))
                     {
                         using (var originalImage = new Bitmap(font_sheet))
                         {
                             // Copy the section of the bitmap font needed.
-                            Rectangle crop = new Rectangle(x, y, multiplier, multiplier);
+                            Rectangle crop = new Rectangle(x, y, x_multiplier, y_multiplier);
                             current_glyph = originalImage.Clone(crop, originalImage.PixelFormat);
 
-                            // Draw the glyph to the base bitmap. Some hanging letters will need to be drawn a bit lower to appear natural.
-                            if (char_array[i] == 'g' || char_array[i] == 'j' || char_array[i] == 'p' || char_array[i] == 'q' || char_array[i] == 'y')
-                            {
-                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y + 2, multiplier, multiplier);
-                            }
-                            else
-                            {
-                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, multiplier, multiplier);
-                            }
+                            // Draw the glyph to the base bitmap.
+                            graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, x_multiplier, y_multiplier);
                         }
                     }
 
                     // Set the next X value at the end of the current glyph's right width.
                     render_position_x += (glyph.RightCut - glyph.LeftCut);
-
-                    // Check if the current iterated index is less than the number of indicies available.
-                    if (i < char_array.Length - 1)
-                    {
-                        // If so, edit the position of the X coordinate according to specific kerning pairs.
-                        if (char_array[i] == 'Y' && Char.IsLower(char_array[i + 1]))
-                        {
-                            render_position_x += -2;
-                        }
-                        else if (char_array[i] == 'T' && Char.IsLower(char_array[i + 1]) && char_array[i + 1] != 'h')
-                        {
-                            render_position_x += -2;
-                        }
-                    }
                 }
             }
 
@@ -115,25 +97,25 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public static Bitmap Render_Dialogue(List<string>[] dialogue_lines)
         {
-            // Create a 640 x 480 bitmap.
-            // This is larger than the template's defauly 640 x 448 size, but P3F's font must be rendered with this 640 x 480 dimension in mind.
-            Bitmap bitmap = new Bitmap(640, 480);
+            // Create variables to store the width and height of the template.
+            int template_width = 320;
+            int template_height = 240;
 
-            // Create an int to keep track of rendering errors. This is neccessary to inform the user of any potential issues.
-            int error_counter = 0;
+            Bitmap bitmap = new Bitmap(template_width, template_height);
 
-            //Establish an int for the width and height glyphs should be rendered at
-            int multiplier = 32;
+            // Establish ints for the width and height of glyphs.
+            int x_multiplier = 8;
+            int y_multiplier = 12;
 
-            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Font//p3f_font_sheet.png";
+            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Font//p2ep-ps1_font_sheet.png";
             Bitmap current_glyph;
 
             // Iterate over each line of the dialogue string list with a loop.
             for (int i = 0; i < dialogue_lines.Length; i++)
             {
                 // Specify X and Y coordinates for where the glyphs should start rendering on the template.
-                int render_position_x = 55;
-                int render_position_y = 380 + (22 * i);
+                int render_position_x = 21;
+                int render_position_y = 185 + (14 * i);
 
                 // Take the input dialogue and convert it into a char array.
                 char[] char_array = String_List_To_String(dialogue_lines[i]).ToCharArray();
@@ -142,57 +124,35 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 for (int j = 0; j < char_array.Length; j++)
                 {
                     //Retrieve glyph information from the JSON file
-                    var glyph = ParsingMethods.Get_P3F_Glyph(char_array[j]);
+                    var glyph = ParsingMethods.Get_P2EP_PS1_Glyph(char_array[j]);
 
                     // If the glyph info returns null, we have a rendering error.
-                    // If this occurs and the error counter is at zero, increase the error counter and send a message to the user.
-                    if (glyph == null && error_counter == 0)
+                    // A warning message should have already been sent to the user in the Measure_Word_Pixel_Length method.
+                    if (glyph == null)
                     {
-                        error_counter++;
-                        //message.Channel.SendMessageAsync(":warning: One or more of the characters entered is not supported by this template's font set and will not be rendered.");
+                        // Do nothing
                     }
 
                     if (glyph != null)
                     {
-                        int x = multiplier * glyph.Column;
-                        int y = multiplier * glyph.Row;
+                        int x = x_multiplier * glyph.Column;
+                        int y = y_multiplier * glyph.Row;
 
                         using (Graphics graphics = Graphics.FromImage(bitmap))
                         {
                             using (var originalImage = new Bitmap(font_sheet))
                             {
                                 // Copy the section of the bitmap font needed.
-                                Rectangle crop = new Rectangle(x, y, multiplier, multiplier);
+                                Rectangle crop = new Rectangle(x, y, x_multiplier, y_multiplier);
                                 current_glyph = originalImage.Clone(crop, originalImage.PixelFormat);
 
-                                // Draw the glyph to the base bitmap. Some hanging letters will need to be drawn a bit lower to appear natural.
-                                if (char_array[j] == 'g' || char_array[j] == 'j' || char_array[j] == 'p' || char_array[j] == 'q' || char_array[j] == 'y')
-                                {
-                                    graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y + 2, multiplier, multiplier);
-                                }
-                                else
-                                {
-                                    graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, multiplier, multiplier);
-                                }
+                                // Draw the glyph to the base bitmap.
+                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, x_multiplier, y_multiplier);
                             }
                         }
 
                         // Set the next X value at the end of the current glyph's right width.
                         render_position_x += (glyph.RightCut - glyph.LeftCut);
-
-                        // Check if the current iterated index is less than the number of indicies available.
-                        if (j < char_array.Length - 1)
-                        {
-                            // If so, edit the position of the X coordinate according to specific kerning pairs.
-                            if (char_array[j] == 'Y' && Char.IsLower(char_array[j + 1]))
-                            {
-                                render_position_x += -2;
-                            }
-                            else if (char_array[j] == 'T' && Char.IsLower(char_array[j + 1]) && char_array[j + 1] != 'h')
-                            {
-                                render_position_x += -3;
-                            }
-                        }
                     }
                 }
             }
@@ -204,7 +164,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         {
             // First, let's establish some values.
             // The max pixel length of a line.
-            int max_line_length = 510;
+            int max_line_length = 275;
 
             // The number of pixels in a line remaining. This will gradually decrease as the pixel length of characters are subtracted from it.
             int line_length_remaining = max_line_length;
@@ -251,7 +211,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     completed_word += dialogue_array[i];
 
                     // Now that we have our word, measure the pixel length of the completed string.
-                    int completed_word_length = Measure_Word_Pixel_Length(completed_word);
+                    int completed_word_length = Measure_Word_Pixel_Length(message, completed_word);
 
                     // Check if the completed word is under the current line's allowed length.
                     // This is done by subtracting the completed word string's length from the remaining length of the line.
@@ -354,7 +314,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                             substring += completed_word_array[j];
 
                             // Measure the pixel length of the substring so far.
-                            substring_length = Measure_Word_Pixel_Length(substring);
+                            substring_length = Measure_Word_Pixel_Length(message, substring);
 
                             // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
                             // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
@@ -400,46 +360,50 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return dialogue_list;
         }
 
-        public static int Measure_Word_Pixel_Length(string input_word)
+        public static int Measure_Word_Pixel_Length(SocketMessage message, string input_word)
         {
-            // Create an int variable to keep track of the pixel length of a word.
+            // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
 
-            // Take the input string and convert it into a char array.
+            // Create another int to count the number of times a character comes up null from the font sheet.
+            // We'll want to keep track of this number so we can ensure there's only one error message sent.
+            int error_counter = 0;
+
+            // Take the input string and turn it into a char array.
             char[] char_array = input_word.ToCharArray();
 
-            // Here, we'll process the char array by iterating through each index.
+            // Now, let's iterate through the char array.
             for (int i = 0; i < char_array.Length; i++)
             {
-                // Retrieve glyph information from the P3F JSON file.
-                var glyph = ParsingMethods.Get_P3F_Glyph(char_array[i]);
+                // Retrieve glyph information for the current character from the JSON file.
+                var glyph = ParsingMethods.Get_P2EP_PS1_Glyph(char_array[i]);
 
-                // Confirm that the glyph taken in is catologued in the JSON. If not, the character is unsupported.
+                // Make sure that the glyph info doesn't return null.
                 if (glyph != null)
                 {
-                    // Check if the character is a line break. Strings with line breaks shouldn't make it to this method, but this is a failsafe just in case.
+                    // Check if the current character is a line break.
+                    // If it is, do nothing. Line breaks take up no pixel width space.
                     if (char_array[i] == '\u000a')
                     {
                         // Do nothing
                     }
                     else
                     {
-                        // Check if the current iterated index is less than the number of indicies available.
-                        if (i < char_array.Length - 1)
-                        {
-                            // If so, edit the position of the X coordinate according to specific kerning pairs.
-                            if (char_array[i] == 'Y' && Char.IsLower(char_array[i + 1]))
-                            {
-                                pixel_counter += -2;
-                            }
-                            else if (char_array[i] == 'T' && Char.IsLower(char_array[i + 1]) && char_array[i + 1] != 'h')
-                            {
-                                pixel_counter += -3;
-                            }
-                        }
-
                         // Set the pixel counter to the appropriate width of the string so far.
                         pixel_counter += glyph.RightCut - glyph.LeftCut;
+                    }
+                }
+                // If the character returns null, it's not supported by the template's font set.
+                // Send a warning message to the user.
+                else
+                {
+                    // Increase the error counter by one.
+                    error_counter++;
+
+                    // If the error counter is at exactly 1, send a warning message to the user.
+                    if (error_counter == 1)
+                    {
+                        _ = ErrorHandling.Unsupported_Character(message);
                     }
                 }
             }
