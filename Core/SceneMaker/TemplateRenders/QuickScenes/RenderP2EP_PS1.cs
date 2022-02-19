@@ -310,7 +310,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Set the next X value at the end of the current glyph's right width.
-                        render_position_x += (glyph.RightCut - glyph.LeftCut);
+                        render_position_x += (glyph.RightCut - glyph.LeftCut) - 1;
                     }
                 }
             }
