@@ -177,16 +177,16 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                         var new_bustup_data = new BustupData()
                         {
                             Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
-                            Default_Name_EN = "?????",
-                            Default_Name_JPN = "書記",
-                            P1_PSX_Scale_Width = 88,
-                            P1_PSX_Scale_Height = 96,
-                            P1_PSX_Left_Coord_X = 24,
-                            P1_PSX_Left_Coord_Y = 56,
-                            P1_PSX_Center_Coord_X = 120,
-                            P1_PSX_Center_Coord_Y = 56,
-                            P1_PSX_Right_Coord_X = 208,
-                            P1_PSX_Right_Coord_Y = 56,
+                            Default_Name_EN = "Maya",
+                            Default_Name_JPN = "天野 舞耶",
+                            P2EP_PSX_Scale_Width = 96,
+                            P2EP_PSX_Scale_Height = 96,
+                            P2EP_PSX_Left_Coord_X = 16,
+                            P2EP_PSX_Left_Coord_Y = 70,
+                            P2EP_PSX_Center_Coord_X = 112,
+                            P2EP_PSX_Center_Coord_Y = 70,
+                            P2EP_PSX_Right_Coord_X = 208,
+                            P2EP_PSX_Right_Coord_Y = 70,
                         };
                         new_list.Add(new_bustup_data);
                     }
