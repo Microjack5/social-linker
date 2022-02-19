@@ -827,6 +827,7 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P2EP-PS1":
+                        await RenderP2EP_PS1.Render_Quick_Scene_P2EP_PS1(message, set_data, command_data);
                         return;
 
                     case "P2EP-PSP":
