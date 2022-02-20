@@ -153,7 +153,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Consolidated_Dialogue_Bitmaps(dialogue_lines), 0, 0, template_width, template_height);
+                graphics.DrawImage(Combined_Text_Layers(bustup_data, dialogue_lines), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -242,8 +242,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                             Rectangle crop = new Rectangle(x, y, x_multiplier, y_multiplier);
                             current_glyph = originalImage.Clone(crop, originalImage.PixelFormat);
 
-                            // Draw the glyph to the base bitmap.
-                            graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, x_multiplier, y_multiplier);
+                            // Draw the glyph to the base bitmap. Some hanging letters will need to be drawn a bit lower to appear natural.
+                            if (char_array[i] == 'g' || char_array[i] == 'j' || char_array[i] == 'p' || char_array[i] == 'q' || char_array[i] == 'y')
+                            {
+                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y + 1, x_multiplier, y_multiplier);
+                            }
+                            else
+                            {
+                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, x_multiplier, y_multiplier);
+                            }
                         }
                     }
 
@@ -255,22 +262,29 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static Bitmap Consolidated_Dialogue_Bitmaps(List<string>[] dialogue_lines)
+        public static Bitmap Combined_Text_Layers(BustupData bustup_data, List<string>[] dialogue_lines)
         {
             int template_width = 320;
             int template_height = 240;
 
             Bitmap base_template = new Bitmap(template_width, template_height);
 
+            Bitmap rendered_name = Render_Name(bustup_data);
             Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
 
-            Bitmap white_text = rendered_dialogue;
-            Bitmap black_text = Text_To_Black(rendered_dialogue);
+            Bitmap dialogue_front = rendered_dialogue;
+            Bitmap dialogue_back = Text_To_Black(rendered_dialogue);
+
+            Bitmap display_name_front = Text_To_Yellow(rendered_name);
+            Bitmap display_name_back = Text_To_Dark_Yellow(rendered_name);
 
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                graphics.DrawImage(black_text, 1, 1, template_width, template_height);
-                graphics.DrawImage(white_text, 0, 0, template_width, template_height);
+                graphics.DrawImage(display_name_back, 1, 1, template_width, template_height);
+                graphics.DrawImage(display_name_front, 0, 0, template_width, template_height);
+
+                graphics.DrawImage(dialogue_back, 1, 1, template_width, template_height);
+                graphics.DrawImage(dialogue_front, 0, 0, template_width, template_height);
             }
 
             return base_template;
