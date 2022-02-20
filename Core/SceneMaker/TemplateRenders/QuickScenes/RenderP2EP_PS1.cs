@@ -153,6 +153,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 // Draw the input dialogue to the template.
+                graphics.DrawImage(Render_Bustup(account, bustup_data, bustup), 0, 0, template_width, template_height);
+                graphics.DrawImage(Render_Message_Window(account), 0, 0, template_width, template_height);
                 graphics.DrawImage(Combined_Text_Layers(bustup_data, dialogue_lines), 0, 0, template_width, template_height);
             }
 
@@ -188,6 +190,132 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             {
                 await message.DeleteAsync();
             }
+        }
+
+        public static Bitmap Render_Bustup(UserInfoFields account, BustupData bustup_data, Bitmap bustup)
+        {
+            int template_width = 320;
+            int template_height = 240;
+
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                switch (account.P2EP_PSX_TS_Position)
+                {
+                    case "Default":
+                        switch (bustup_data.P2EP_PSX_Default_Position)
+                        {
+                            case "Left":
+                                graphics.DrawImage(bustup, bustup_data.P2EP_PSX_Left_Coord_X, bustup_data.P2EP_PSX_Left_Coord_Y, bustup_data.P2EP_PSX_Scale_Width, bustup_data.P2EP_PSX_Scale_Height);
+                                break;
+
+                            case "Center":
+                                graphics.DrawImage(bustup, bustup_data.P2EP_PSX_Center_Coord_X, bustup_data.P2EP_PSX_Center_Coord_Y, bustup_data.P2EP_PSX_Scale_Width, bustup_data.P2EP_PSX_Scale_Height);
+                                break;
+
+                            case "Right":
+                                graphics.DrawImage(bustup, bustup_data.P2EP_PSX_Right_Coord_X, bustup_data.P2EP_PSX_Right_Coord_Y, bustup_data.P2EP_PSX_Scale_Width, bustup_data.P2EP_PSX_Scale_Height);
+                                break;
+                        }
+                        break;
+
+                    case "Negotiation":
+                        graphics.DrawImage(bustup, bustup_data.P2EP_PSX_Right_Coord_X, bustup_data.P2EP_PSX_Right_Coord_Y, bustup_data.P2EP_PSX_Scale_Width, bustup_data.P2EP_PSX_Scale_Height);
+                        break;
+                }
+            }
+
+            return base_template;
+        }
+
+        public static Bitmap Render_Message_Window(UserInfoFields account)
+        {
+            int template_width = 320;
+            int template_height = 240;
+
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap window_frame = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//frame.png");
+            Bitmap wallpaper = new Bitmap(template_width, template_height);
+
+            switch (account.P2EP_PSX_TS_Wallpaper)
+            {
+                case "Blue Tone":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//1.png");
+                    break;
+
+                case "Sepia Tone":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//2.png");
+                    break;
+
+                case "Purple Tone":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//3.png");
+                    break;
+
+                case "Seventh":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//4.png");
+                    break;
+
+                case "Baofu":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//5.png");
+                    break;
+
+                case "NWO":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//6.png");
+                    break;
+
+                case "Dragon":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//7.png");
+                    break;
+
+                case "Jack Frost":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//8.png");
+                    break;
+
+                case "Grid":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//9.png");
+                    break;
+
+                case "Star":
+                    wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Wallpaper//10.png");
+                    break;
+            }
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.DrawImage(wallpaper, 0, 0, wallpaper.Width, wallpaper.Height);
+                graphics.DrawImage(window_frame, 0, 0, window_frame.Width, window_frame.Height);
+            }
+
+            return base_template;
+        }
+
+        public static Bitmap Combined_Text_Layers(BustupData bustup_data, List<string>[] dialogue_lines)
+        {
+            int template_width = 320;
+            int template_height = 240;
+
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            Bitmap rendered_name = Render_Name(bustup_data);
+            Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
+
+            Bitmap dialogue_front = rendered_dialogue;
+            Bitmap dialogue_back = Text_To_Black(rendered_dialogue);
+
+            Bitmap display_name_front = Text_To_Yellow(rendered_name);
+            Bitmap display_name_back = Text_To_Dark_Yellow(rendered_name);
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.DrawImage(display_name_back, 1, 1, template_width, template_height);
+                graphics.DrawImage(display_name_front, 0, 0, template_width, template_height);
+
+                graphics.DrawImage(dialogue_back, 1, 1, template_width, template_height);
+                graphics.DrawImage(dialogue_front, 0, 0, template_width, template_height);
+            }
+
+            return base_template;
         }
 
         public static Bitmap Render_Name(BustupData bustup_data)
@@ -257,34 +385,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // Set the next X value at the end of the current glyph's right width.
                     render_position_x += (glyph.RightCut - glyph.LeftCut);
                 }
-            }
-
-            return base_template;
-        }
-
-        public static Bitmap Combined_Text_Layers(BustupData bustup_data, List<string>[] dialogue_lines)
-        {
-            int template_width = 320;
-            int template_height = 240;
-
-            Bitmap base_template = new Bitmap(template_width, template_height);
-
-            Bitmap rendered_name = Render_Name(bustup_data);
-            Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
-
-            Bitmap dialogue_front = rendered_dialogue;
-            Bitmap dialogue_back = Text_To_Black(rendered_dialogue);
-
-            Bitmap display_name_front = Text_To_Yellow(rendered_name);
-            Bitmap display_name_back = Text_To_Dark_Yellow(rendered_name);
-
-            using (Graphics graphics = Graphics.FromImage(base_template))
-            {
-                graphics.DrawImage(display_name_back, 1, 1, template_width, template_height);
-                graphics.DrawImage(display_name_front, 0, 0, template_width, template_height);
-
-                graphics.DrawImage(dialogue_back, 1, 1, template_width, template_height);
-                graphics.DrawImage(dialogue_front, 0, 0, template_width, template_height);
             }
 
             return base_template;

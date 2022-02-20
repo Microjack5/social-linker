@@ -187,6 +187,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             P2EP_PSX_Center_Coord_Y = 70,
                             P2EP_PSX_Right_Coord_X = 208,
                             P2EP_PSX_Right_Coord_Y = 70,
+                            P2EP_PSX_Default_Position = "Left"
                         };
                         new_list.Add(new_bustup_data);
                     }
