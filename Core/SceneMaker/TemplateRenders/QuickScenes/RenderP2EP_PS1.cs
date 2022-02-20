@@ -147,11 +147,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 return;
             }
 
+            List<string>[] dialogue_lines = Line_Parser(message, command_data.Dialogue);
+
             // Time to put it all together!
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Render_Dialogue(Line_Parser(message, command_data.Dialogue)), 0, 0, template_width, template_height);
+                graphics.DrawImage(Consolidated_Dialogue_Bitmaps(dialogue_lines), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -253,13 +255,34 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
+        public static Bitmap Consolidated_Dialogue_Bitmaps(List<string>[] dialogue_lines)
+        {
+            int template_width = 320;
+            int template_height = 240;
+
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
+
+            Bitmap white_text = rendered_dialogue;
+            Bitmap black_text = Text_To_Black(rendered_dialogue);
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.DrawImage(black_text, 1, 1, template_width, template_height);
+                graphics.DrawImage(white_text, 0, 0, template_width, template_height);
+            }
+
+            return base_template;
+        }
+
         public static Bitmap Render_Dialogue(List<string>[] dialogue_lines)
         {
             // Create variables to store the width and height of the template.
             int template_width = 320;
             int template_height = 240;
 
-            Bitmap bitmap = new Bitmap(template_width, template_height);
+            Bitmap base_template = new Bitmap(template_width, template_height);
 
             // Establish ints for the width and height of glyphs.
             int x_multiplier = 8;
@@ -296,7 +319,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         int x = x_multiplier * glyph.Column;
                         int y = y_multiplier * glyph.Row;
 
-                        using (Graphics graphics = Graphics.FromImage(bitmap))
+                        using (Graphics graphics = Graphics.FromImage(base_template))
                         {
                             using (var originalImage = new Bitmap(font_sheet))
                             {
@@ -323,7 +346,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
             }
 
-            return bitmap;
+            return base_template;
         }
 
         public static List<string>[] Line_Parser(SocketMessage message, string dialogue)
