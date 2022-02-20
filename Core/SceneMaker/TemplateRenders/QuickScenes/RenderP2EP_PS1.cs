@@ -592,6 +592,98 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return output_string;
         }
 
+        // Coloring Bitmaps
+        public static Bitmap Text_To_Yellow(Bitmap input_bitmap)
+        {
+            // Create variables to store the width and height of the template.
+            int template_width = 320;
+            int template_height = 240;
+
+            // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
+            System.Drawing.Color actual_color;
+
+            // Make an empty bitmap the same size as the input bitmap.
+            Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            // Create a for loop to iterate over the X values of the bitmap to be changed.
+            for (int x = 0; x < template_width; x++)
+            {
+                // Create a nested for loop to iterate over the Y values of the bitmap to be changed.
+                for (int y = 0; y < template_height; y++)
+                {
+                    // Get the current pixel from the input bitmap.
+                    actual_color = input_bitmap.GetPixel(x, y);
+
+                    // Color in the pixel with the new color while keeping its current alpha value.
+                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(actual_color.A, 222, 222, 74);
+                    new_bitmap.SetPixel(x, y, new_color);
+                }
+            }
+
+            return new_bitmap;
+        }
+
+        public static Bitmap Text_To_Dark_Yellow(Bitmap input_bitmap)
+        {
+            // Create variables to store the width and height of the template.
+            int template_width = 320;
+            int template_height = 240;
+
+            // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
+            System.Drawing.Color actual_color;
+
+            // Make an empty bitmap the same size as the input bitmap.
+            Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            // Create a for loop to iterate over the X values of the bitmap to be changed.
+            for (int x = 0; x < template_width; x++)
+            {
+                // Create a nested for loop to iterate over the Y values of the bitmap to be changed.
+                for (int y = 0; y < template_height; y++)
+                {
+                    // Get the current pixel from the input bitmap.
+                    actual_color = input_bitmap.GetPixel(x, y);
+
+                    // Color in the pixel with the new color while keeping its current alpha value.
+                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(actual_color.A, 49, 49, 24);
+                    new_bitmap.SetPixel(x, y, new_color);
+                }
+            }
+
+            return new_bitmap;
+        }
+
+        public static Bitmap Text_To_Black(Bitmap input_bitmap)
+        {
+            // Create variables to store the width and height of the template.
+            int template_width = 320;
+            int template_height = 240;
+
+            // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
+            System.Drawing.Color actual_color;
+
+            // Make an empty bitmap the same size as the input bitmap.
+            Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            // Create a for loop to iterate over the X values of the bitmap to be changed.
+            for (int x = 0; x < template_width; x++)
+            {
+                // Create a nested for loop to iterate over the Y values of the bitmap to be changed.
+                for (int y = 0; y < template_height; y++)
+                {
+                    // Get the current pixel from the input bitmap.
+                    actual_color = input_bitmap.GetPixel(x, y);
+
+                    // Color in the pixel with the new color while keeping its current alpha value.
+                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(actual_color.A, 24, 24, 24);
+                    new_bitmap.SetPixel(x, y, new_color);
+                }
+            }
+
+            return new_bitmap;
+        }
+
+        // Backgrounds
         public static Bitmap Center_Image(Bitmap input_bitmap)
         {
             // Specify the width and height of the template we'll be drawing to.
