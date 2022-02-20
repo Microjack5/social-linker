@@ -304,13 +304,21 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                                 Rectangle crop = new Rectangle(x, y, x_multiplier, y_multiplier);
                                 current_glyph = originalImage.Clone(crop, originalImage.PixelFormat);
 
-                                // Draw the glyph to the base bitmap.
-                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, x_multiplier, y_multiplier);
+                                // Draw the glyph to the base bitmap. Some hanging letters will need to be drawn a bit lower to appear natural.
+                                if (char_array[j] == 'g' || char_array[j] == 'j' || char_array[j] == 'p' || char_array[j] == 'q' || char_array[j] == 'y')
+                                {
+                                    graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y + 1, x_multiplier, y_multiplier);
+                                }
+                                else
+                                {
+                                    graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, x_multiplier, y_multiplier);
+                                }
+                                
                             }
                         }
 
                         // Set the next X value at the end of the current glyph's right width.
-                        render_position_x += (glyph.RightCut - glyph.LeftCut) - 1;
+                        render_position_x += (glyph.RightCut - glyph.LeftCut) + 1;
                     }
                 }
             }
