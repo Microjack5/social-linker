@@ -482,6 +482,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P2IS-PS1":
+                    await OfficialSetSheets.P2IS_PS1_Sprite_Sheet(message, sprite_set_info);
                     return;
 
                 case "P2IS-PSP":
@@ -822,6 +823,7 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P2IS-PS1":
+                        await RenderP2IS_PS1.Render_Quick_Scene_P2IS_PS1(message, set_data, command_data);
                         return;
 
                     case "P2IS-PSP":
