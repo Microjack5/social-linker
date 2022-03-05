@@ -177,8 +177,8 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                         var new_bustup_data = new BustupData()
                         {
                             Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
-                            Default_Name_EN = "Eikichi",
-                            Default_Name_JPN = "三科栄吉",
+                            Default_Name_EN = "Longinus #1",
+                            Default_Name_JPN = "ロンギヌス",
                             P2IS_PSX_Scale_Width = 96,
                             P2IS_PSX_Scale_Height = 96,
                             P2IS_PSX_Left_Coord_X = 18,
@@ -187,7 +187,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             P2IS_PSX_Center_Coord_Y = 70,
                             P2IS_PSX_Right_Coord_X = 208,
                             P2IS_PSX_Right_Coord_Y = 70,
-                            P2IS_PSX_Default_Position = "Left",
+                            P2IS_PSX_Default_Position = "Right",
                             P2EP_PSX_Scale_Width = 96,
                             P2EP_PSX_Scale_Height = 96,
                             P2EP_PSX_Left_Coord_X = 16,
@@ -196,7 +196,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             P2EP_PSX_Center_Coord_Y = 70,
                             P2EP_PSX_Right_Coord_X = 208,
                             P2EP_PSX_Right_Coord_Y = 70,
-                            P2EP_PSX_Default_Position = "Left"
+                            P2EP_PSX_Default_Position = "Right"
                         };
                         new_list.Add(new_bustup_data);
                     }

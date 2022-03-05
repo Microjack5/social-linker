@@ -572,6 +572,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P2IS-PS1":
+                    await BustupFrameSheets.P2IS_PS1_Bustup_Frame_Sheet(message, set_data, command_data);
                     return;
 
                 case "P2IS-PSP":

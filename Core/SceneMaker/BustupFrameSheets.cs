@@ -4,6 +4,7 @@ using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.LocalStorageTables;
+using SocialLinker.Core.Menus;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -1413,6 +1414,61 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
+        public static async Task P2IS_PS1_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = message.Author;
+            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+
+            // Send a loading message to the channel while the sprite sheet is being made.
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P2IS_PS1_Loading_Message().Build());
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2IS-PS1")
+            };
+
+            embed.WithAuthor(author);
+
+            // Set the color for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
+
+            // Create a footer based on the user's settings.
+            var footer = new EmbedFooterBuilder
+            {
+                Text = Create_Sprite_Sheet_Footer(account, set_data)
+            };
+
+            // Add the footer to the embed.
+            embed.WithFooter(footer);
+
+            // Attach a locally generated image to the embed. This image hasn't been created yet, so the filename is just a placeholder for now.
+            embed.WithImageUrl($"attachment://preview.png");
+
+            // Create a new stream. We'll use this to create the locally generated image.
+            MemoryStream memoryStream = new MemoryStream();
+
+            // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+
+            // Save the sprite set preview bitmap to the stream as a PNG.
+            sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+            // Ensure the stream is set to the beginning of itself.
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            // Send the embeded message to the channel.
+            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+
+            // Delete the loading message.
+            await loader.DeleteAsync();
+        }
+
         public static async Task P3F_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
@@ -1955,12 +2011,28 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/7Z6XU1d.png"
+                IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(207, 200, 233);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl("https://i.imgur.com/Lv794ze.png");
+            embed.WithDescription("This may take a few seconds!");
+
+            return embed;
+        }
+
+        public static EmbedBuilder P2IS_PS1_Loading_Message()
+        {
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = $"Generating Frame Panels...",
+                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2IS-PS1")
+            };
+
+            embed.WithAuthor(author);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -1972,11 +2044,11 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/HlBRK9l.png"
+                IconUrl = EmbedSettings.Get_Game_Thumbnail("P3F")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(37, 149, 255);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
             embed.WithThumbnailUrl("https://i.imgur.com/VwI3i20.gif");
             embed.WithDescription("This may take a few seconds!");
 
