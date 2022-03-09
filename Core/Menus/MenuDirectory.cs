@@ -21,7 +21,7 @@ namespace SocialLinker.Core.Menus
 {
     class MenuDirectory
     {
-        public static async Task ReactionAddedIndex(Cacheable<IUserMessage, ulong> cache, ISocketMessageChannel channel, SocketReaction reaction)
+        public static async Task ReactionAddedIndex(Cacheable<IUserMessage, ulong> cache, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
         {
             // Create a variable for the user that reacted to the message by storing their ID
             var reactedUser = reaction.UserId;
@@ -1252,7 +1252,7 @@ namespace SocialLinker.Core.Menus
             }
         }
 
-        public static async Task ReactionRemovedIndex(Cacheable<IUserMessage, ulong> cache, ISocketMessageChannel channel, SocketReaction reaction)
+        public static async Task ReactionRemovedIndex(Cacheable<IUserMessage, ulong> cache, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
         {
             // Create a variable for the user that reacted to the message by storing their ID
             var reactedUser = reaction.UserId;

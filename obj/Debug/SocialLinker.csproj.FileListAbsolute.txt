@@ -63,3 +63,10 @@ C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.Text.Json.xml
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.ValueTuple.xml
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\obj\Debug\SocialLinker.csproj.AssemblyReference.cache
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Discord.Net.Interactions.dll
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.Memory.Data.dll
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.Reactive.dll
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Discord.Net.Interactions.xml
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.Drawing.Common.xml
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.Memory.Data.xml
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.Reactive.xml
