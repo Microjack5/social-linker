@@ -1,0 +1,646 @@
+[
+  {
+    "Row": 0,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '\u000a' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ ' ' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 1,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '!' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 2,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '\"' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 3,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '#' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 4,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '$' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 5,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '%' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 6,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '&' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 7,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '\\'' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 8,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '(' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 9,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ ')' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 10,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '*' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 11,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '+' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 12,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ ',' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 13,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '-' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 14,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '.' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 15,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '/' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '0' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 1,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '1' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 2,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '2' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 3,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '3' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 4,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '4' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 5,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '5' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 6,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '6' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 7,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '7' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 8,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '8' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 9,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '9' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 10,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ ':' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 11,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ ';' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 12,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '<' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 13,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '=' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 14,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '>' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 15,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '?' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '@' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 1,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'A' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 2,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'B' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 3,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'C' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 4,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'D' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 5,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'E' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 6,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'F' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 7,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'G' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 8,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'H' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 9,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'I' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 10,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'J' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 11,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'K' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 12,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'L' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 13,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'M' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 14,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'N' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 15,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'O' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'P' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 1,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'Q' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 2,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'R' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 3,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'S' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 4,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'T' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 5,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'U' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 6,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'V' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 7,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'W' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 8,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'X' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 9,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'Y' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 10,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'Z' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 11,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '[' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 12,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '\\\\' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 13,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ ']' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 14,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '^' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 15,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '_' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ '`' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 1,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'a' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 2,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'b' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 3,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'c' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 4,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'd' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 5,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'e' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 6,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'f' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 7,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'g' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 8,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'h' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 9,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'i' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 10,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'j' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 11,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'k' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 12,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'l' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 13,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'm' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 14,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'n' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 15,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'o' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'p' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 1,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'q' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 2,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'r' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 3,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 's' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 4,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 't' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 5,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'u' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 6,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'v' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 7,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'w' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 8,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'x' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 9,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'y' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 10,
+    "LeftCut": 0,
+    "RightCut": 8,
+    "SupportedChars": "[ 'z' ]"
+  }
+]

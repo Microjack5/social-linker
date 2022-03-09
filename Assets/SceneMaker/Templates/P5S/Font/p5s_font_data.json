@@ -1,0 +1,3593 @@
+[
+  {
+    "Row": 0,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 0,
+    "SupportedChars": "[ '\u000a' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 0,
+    "LeftCut": 10,
+    "RightCut": 25,
+    "SupportedChars": "[ ' ' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 1,
+    "LeftCut": 16,
+    "RightCut": 25,
+    "SupportedChars": "[ '!' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 2,
+    "LeftCut": 16,
+    "RightCut": 30,
+    "SupportedChars": "[ '\"' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 3,
+    "LeftCut": 10,
+    "RightCut": 31,
+    "SupportedChars": "[ '#' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 4,
+    "LeftCut": 13,
+    "RightCut": 31,
+    "SupportedChars": "[ '$' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 5,
+    "LeftCut": 11,
+    "RightCut": 40,
+    "SupportedChars": "[ '%' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 6,
+    "LeftCut": 7,
+    "RightCut": 35,
+    "SupportedChars": "[ '&' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 7,
+    "LeftCut": 21,
+    "RightCut": 29,
+    "SupportedChars": "[ '\\'' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 8,
+    "LeftCut": 17,
+    "RightCut": 28,
+    "SupportedChars": "[ '(' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 9,
+    "LeftCut": 20,
+    "RightCut": 31,
+    "SupportedChars": "[ ')' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 10,
+    "LeftCut": 16,
+    "RightCut": 32,
+    "SupportedChars": "[ '*' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 11,
+    "LeftCut": 17,
+    "RightCut": 34,
+    "SupportedChars": "[ '+' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 12,
+    "LeftCut": 18,
+    "RightCut": 28,
+    "SupportedChars": "[ ',' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 13,
+    "LeftCut": 18,
+    "RightCut": 31,
+    "SupportedChars": "[ '-' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 14,
+    "LeftCut": 17,
+    "RightCut": 24,
+    "SupportedChars": "[ '.' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 15,
+    "LeftCut": 10,
+    "RightCut": 31,
+    "SupportedChars": "[ '/' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 0,
+    "LeftCut": 13,
+    "RightCut": 36,
+    "SupportedChars": "[ '0' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 1,
+    "LeftCut": 14,
+    "RightCut": 27,
+    "SupportedChars": "[ '1' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 2,
+    "LeftCut": 10,
+    "RightCut": 31,
+    "SupportedChars": "[ '2' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 3,
+    "LeftCut": 12,
+    "RightCut": 32,
+    "SupportedChars": "[ '3' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 4,
+    "LeftCut": 13,
+    "RightCut": 36,
+    "SupportedChars": "[ '4' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 5,
+    "LeftCut": 10,
+    "RightCut": 30,
+    "SupportedChars": "[ '5' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 6,
+    "LeftCut": 14,
+    "RightCut": 35,
+    "SupportedChars": "[ '6' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 7,
+    "LeftCut": 12,
+    "RightCut": 32,
+    "SupportedChars": "[ '7' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 8,
+    "LeftCut": 14,
+    "RightCut": 35,
+    "SupportedChars": "[ '8' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 9,
+    "LeftCut": 14,
+    "RightCut": 35,
+    "SupportedChars": "[ '9' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 10,
+    "LeftCut": 21,
+    "RightCut": 29,
+    "SupportedChars": "[ ':' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 11,
+    "LeftCut": 21,
+    "RightCut": 31,
+    "SupportedChars": "[ ';' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 12,
+    "LeftCut": 12,
+    "RightCut": 40,
+    "SupportedChars": "[ '<' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 13,
+    "LeftCut": 13,
+    "RightCut": 30,
+    "SupportedChars": "[ '=' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 14,
+    "LeftCut": 5,
+    "RightCut": 35,
+    "SupportedChars": "[ '>' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 15,
+    "LeftCut": 15,
+    "RightCut": 29,
+    "SupportedChars": "[ '?' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 0,
+    "LeftCut": 9,
+    "RightCut": 44,
+    "SupportedChars": "[ '@' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 1,
+    "LeftCut": 7,
+    "RightCut": 34,
+    "SupportedChars": "[ 'A' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 2,
+    "LeftCut": 10,
+    "RightCut": 31,
+    "SupportedChars": "[ 'B' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 3,
+    "LeftCut": 8,
+    "RightCut": 34,
+    "SupportedChars": "[ 'C' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 4,
+    "LeftCut": 12,
+    "RightCut": 39,
+    "SupportedChars": "[ 'D' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 5,
+    "LeftCut": 15,
+    "RightCut": 31,
+    "SupportedChars": "[ 'E' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 6,
+    "LeftCut": 17,
+    "RightCut": 33,
+    "SupportedChars": "[ 'F' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 7,
+    "LeftCut": 9,
+    "RightCut": 36,
+    "SupportedChars": "[ 'G' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 8,
+    "LeftCut": 12,
+    "RightCut": 37,
+    "SupportedChars": "[ 'H' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 9,
+    "LeftCut": 20,
+    "RightCut": 28,
+    "SupportedChars": "[ 'I' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 10,
+    "LeftCut": 16,
+    "RightCut": 29,
+    "SupportedChars": "[ 'J' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 11,
+    "LeftCut": 13,
+    "RightCut": 37,
+    "SupportedChars": "[ 'K' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 12,
+    "LeftCut": 14,
+    "RightCut": 31,
+    "SupportedChars": "[ 'L' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 13,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'M' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 14,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ 'N' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 15,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ 'O' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 0,
+    "LeftCut": 15,
+    "RightCut": 35,
+    "SupportedChars": "[ 'P' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 1,
+    "LeftCut": 8,
+    "RightCut": 42,
+    "SupportedChars": "[ 'Q' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 2,
+    "LeftCut": 10,
+    "RightCut": 33,
+    "SupportedChars": "[ 'R' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 3,
+    "LeftCut": 13,
+    "RightCut": 32,
+    "SupportedChars": "[ 'S' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 4,
+    "LeftCut": 13,
+    "RightCut": 35,
+    "SupportedChars": "[ 'T' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 5,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ 'U' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 6,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ 'V' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 7,
+    "LeftCut": 4,
+    "RightCut": 44,
+    "SupportedChars": "[ 'W' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 8,
+    "LeftCut": 12,
+    "RightCut": 37,
+    "SupportedChars": "[ 'X' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 9,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ 'Y' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 10,
+    "LeftCut": 9,
+    "RightCut": 34,
+    "SupportedChars": "[ 'Z' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 11,
+    "LeftCut": 20,
+    "RightCut": 31,
+    "SupportedChars": "[ '[' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 12,
+    "LeftCut": 15,
+    "RightCut": 36,
+    "SupportedChars": "[ '\\\\' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 13,
+    "LeftCut": 18,
+    "RightCut": 28,
+    "SupportedChars": "[ ']' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 14,
+    "LeftCut": 12,
+    "RightCut": 31,
+    "SupportedChars": "[ '^' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 15,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ '_' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 0,
+    "LeftCut": 21,
+    "RightCut": 29,
+    "SupportedChars": "[ '`' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 1,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ 'a' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 2,
+    "LeftCut": 14,
+    "RightCut": 35,
+    "SupportedChars": "[ 'b' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 3,
+    "LeftCut": 13,
+    "RightCut": 32,
+    "SupportedChars": "[ 'c' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 4,
+    "LeftCut": 12,
+    "RightCut": 33,
+    "SupportedChars": "[ 'd' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 5,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ 'e' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 6,
+    "LeftCut": 15,
+    "RightCut": 31,
+    "SupportedChars": "[ 'f' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 7,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ 'g' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 8,
+    "LeftCut": 15,
+    "RightCut": 35,
+    "SupportedChars": "[ 'h' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 9,
+    "LeftCut": 18,
+    "RightCut": 29,
+    "SupportedChars": "[ 'i' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 10,
+    "LeftCut": 16,
+    "RightCut": 28,
+    "SupportedChars": "[ 'j' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 11,
+    "LeftCut": 15,
+    "RightCut": 35,
+    "SupportedChars": "[ 'k' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 12,
+    "LeftCut": 19,
+    "RightCut": 27,
+    "SupportedChars": "[ 'l' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 13,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'm' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 14,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ 'n' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 15,
+    "LeftCut": 14,
+    "RightCut": 36,
+    "SupportedChars": "[ 'o' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 0,
+    "LeftCut": 12,
+    "RightCut": 33,
+    "SupportedChars": "[ 'p' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 1,
+    "LeftCut": 10,
+    "RightCut": 31,
+    "SupportedChars": "[ 'q' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 2,
+    "LeftCut": 16,
+    "RightCut": 31,
+    "SupportedChars": "[ 'r' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 3,
+    "LeftCut": 15,
+    "RightCut": 30,
+    "SupportedChars": "[ 's' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 4,
+    "LeftCut": 16,
+    "RightCut": 30,
+    "SupportedChars": "[ 't' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 5,
+    "LeftCut": 11,
+    "RightCut": 31,
+    "SupportedChars": "[ 'u' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 6,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ 'v' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 7,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'w' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 8,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ 'x' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 9,
+    "LeftCut": 12,
+    "RightCut": 33,
+    "SupportedChars": "[ 'y' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 10,
+    "LeftCut": 12,
+    "RightCut": 31,
+    "SupportedChars": "[ 'z' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 11,
+    "LeftCut": 14,
+    "RightCut": 26,
+    "SupportedChars": "[ '{' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 12,
+    "LeftCut": 21,
+    "RightCut": 25,
+    "SupportedChars": "[ '|' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 13,
+    "LeftCut": 16,
+    "RightCut": 28,
+    "SupportedChars": "[ '}' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 14,
+    "LeftCut": 10,
+    "RightCut": 29,
+    "SupportedChars": "[ '‾' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 15,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ 'ぁ' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 0,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'あ' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 1,
+    "LeftCut": 12,
+    "RightCut": 36,
+    "SupportedChars": "[ 'ぃ' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 2,
+    "LeftCut": 9,
+    "RightCut": 39,
+    "SupportedChars": "[ 'い' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 3,
+    "LeftCut": 12,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ぅ' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 4,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ 'う' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 5,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ 'ぇ' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 6,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'え' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 7,
+    "LeftCut": 11,
+    "RightCut": 37,
+    "SupportedChars": "[ 'ぉ' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 8,
+    "LeftCut": 8,
+    "RightCut": 40,
+    "SupportedChars": "[ 'お' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 9,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'か' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 10,
+    "LeftCut": 6,
+    "RightCut": 42,
+    "SupportedChars": "[ 'が' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 11,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'き' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 12,
+    "LeftCut": 8,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぎ' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 13,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ 'く' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 14,
+    "LeftCut": 10,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ぐ' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 15,
+    "LeftCut": 9,
+    "RightCut": 41,
+    "SupportedChars": "[ 'け' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 0,
+    "LeftCut": 9,
+    "RightCut": 42,
+    "SupportedChars": "[ 'げ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 1,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'こ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 2,
+    "LeftCut": 9,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ご' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 3,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ 'さ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 4,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ざ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 5,
+    "LeftCut": 12,
+    "RightCut": 39,
+    "SupportedChars": "[ 'し' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 6,
+    "LeftCut": 12,
+    "RightCut": 38,
+    "SupportedChars": "[ 'じ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 7,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'す' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 8,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ず' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 9,
+    "LeftCut": 6,
+    "RightCut": 41,
+    "SupportedChars": "[ 'せ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 10,
+    "LeftCut": 6,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぜ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 11,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'そ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 12,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ぞ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 13,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'た' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 14,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'だ' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 15,
+    "LeftCut": 7,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ち' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 0,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぢ' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 1,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ 'っ' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 2,
+    "LeftCut": 6,
+    "RightCut": 39,
+    "SupportedChars": "[ 'つ' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 3,
+    "LeftCut": 6,
+    "RightCut": 42,
+    "SupportedChars": "[ 'づ' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 4,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'て' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'で' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 6,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'と' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 7,
+    "LeftCut": 9,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ど' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 8,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'な' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 9,
+    "LeftCut": 9,
+    "RightCut": 39,
+    "SupportedChars": "[ 'に' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 10,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぬ' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 11,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ね' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 12,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'の' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 13,
+    "LeftCut": 9,
+    "RightCut": 40,
+    "SupportedChars": "[ 'は' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 14,
+    "LeftCut": 8,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ば' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 15,
+    "LeftCut": 8,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぱ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 0,
+    "LeftCut": 8,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ひ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 1,
+    "LeftCut": 8,
+    "RightCut": 42,
+    "SupportedChars": "[ 'び' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 2,
+    "LeftCut": 8,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぴ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 3,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ふ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 4,
+    "LeftCut": 6,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぶ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 5,
+    "LeftCut": 6,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぷ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 6,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'へ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 7,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'べ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 8,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぺ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 9,
+    "LeftCut": 9,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ほ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 10,
+    "LeftCut": 8,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぼ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 11,
+    "LeftCut": 8,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ぽ' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 12,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ま' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 13,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'み' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 14,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'む' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 15,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'め' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 0,
+    "LeftCut": 9,
+    "RightCut": 39,
+    "SupportedChars": "[ 'も' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 1,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ 'ゃ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 2,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'や' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 3,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ 'ゅ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 4,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ゆ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 5,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ょ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 6,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'よ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 7,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ら' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 8,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ 'り' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 9,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ 'る' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 10,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'れ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 11,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ろ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 12,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ 'ゎ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 13,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'わ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 14,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ゐ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 15,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ゑ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 0,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'を' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 1,
+    "LeftCut": 8,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ん' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 2,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ 'ァ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 3,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ア' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 4,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ィ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 37,
+    "SupportedChars": "[ 'イ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 6,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ゥ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 7,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ウ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 8,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ 'ェ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 9,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'エ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 10,
+    "LeftCut": 11,
+    "RightCut": 37,
+    "SupportedChars": "[ 'ォ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 11,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'オ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 12,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ 'カ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 13,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ガ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 14,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'キ' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 15,
+    "LeftCut": 7,
+    "RightCut": 42,
+    "SupportedChars": "[ 'ギ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 0,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ク' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 1,
+    "LeftCut": 7,
+    "RightCut": 42,
+    "SupportedChars": "[ 'グ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 2,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ケ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 3,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ゲ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 4,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ 'コ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 43,
+    "SupportedChars": "[ 'ゴ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 6,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ 'サ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 7,
+    "LeftCut": 6,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ザ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 8,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'シ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 9,
+    "LeftCut": 8,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ジ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 10,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ス' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 11,
+    "LeftCut": 7,
+    "RightCut": 42,
+    "SupportedChars": "[ 'ズ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 12,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'セ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 13,
+    "LeftCut": 6,
+    "RightCut": 42,
+    "SupportedChars": "[ 'ゼ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 14,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ソ' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 15,
+    "LeftCut": 8,
+    "RightCut": 42,
+    "SupportedChars": "[ 'ゾ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 0,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ 'タ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 1,
+    "LeftCut": 8,
+    "RightCut": 42,
+    "SupportedChars": "[ 'ダ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 2,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'チ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 3,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ヂ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 4,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ 'ッ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ツ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 6,
+    "LeftCut": 7,
+    "RightCut": 42,
+    "SupportedChars": "[ 'ヅ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 7,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'テ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 8,
+    "LeftCut": 7,
+    "RightCut": 42,
+    "SupportedChars": "[ 'デ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 9,
+    "LeftCut": 14,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ト' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 10,
+    "LeftCut": 14,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ド' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 11,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ナ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 12,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ニ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 13,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ヌ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 14,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ネ' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 15,
+    "LeftCut": 9,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ノ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ハ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 1,
+    "LeftCut": 5,
+    "RightCut": 41,
+    "SupportedChars": "[ 'バ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 2,
+    "LeftCut": 5,
+    "RightCut": 40,
+    "SupportedChars": "[ 'パ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 3,
+    "LeftCut": 10,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ヒ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 4,
+    "LeftCut": 10,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ビ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 5,
+    "LeftCut": 10,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ピ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 6,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'フ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 7,
+    "LeftCut": 7,
+    "RightCut": 43,
+    "SupportedChars": "[ 'ブ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 8,
+    "LeftCut": 7,
+    "RightCut": 42,
+    "SupportedChars": "[ 'プ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 9,
+    "LeftCut": 7,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ヘ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 10,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ベ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 11,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ペ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 12,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ホ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 13,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ボ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 14,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ポ' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 15,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ 'マ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 0,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ミ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 1,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ム' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 2,
+    "LeftCut": 8,
+    "RightCut": 36,
+    "SupportedChars": "[ 'メ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 3,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'モ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 4,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ 'ャ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 5,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ヤ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 6,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ 'ュ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 7,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ユ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 8,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ョ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 9,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ 'ヨ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 10,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ラ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 11,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ 'リ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 12,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ル' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 13,
+    "LeftCut": 12,
+    "RightCut": 39,
+    "SupportedChars": "[ 'レ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 14,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ 'ロ' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 15,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ヮ' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 0,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ワ' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 1,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ 'ヰ' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 2,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ヱ' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 3,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ 'ヲ' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 4,
+    "LeftCut": 9,
+    "RightCut": 39,
+    "SupportedChars": "[ 'ン' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 41,
+    "SupportedChars": "[ 'ヴ' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 6,
+    "LeftCut": 10,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ヵ' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 7,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ 'ヶ' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 8,
+    "LeftCut": 8,
+    "RightCut": 32,
+    "SupportedChars": "[ '、' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 9,
+    "LeftCut": 8,
+    "RightCut": 30,
+    "SupportedChars": "[ '。' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 10,
+    "LeftCut": 20,
+    "RightCut": 26,
+    "SupportedChars": "[ '・' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 11,
+    "LeftCut": 8,
+    "RightCut": 17,
+    "SupportedChars": "[ '゛' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 12,
+    "LeftCut": 8,
+    "RightCut": 16,
+    "SupportedChars": "[ '゜' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 13,
+    "LeftCut": 19,
+    "RightCut": 28,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 14,
+    "LeftCut": 20,
+    "RightCut": 29,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 15,
+    "LeftCut": 18,
+    "RightCut": 29,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 0,
+    "LeftCut": 15,
+    "RightCut": 31,
+    "SupportedChars": "[ 'ヽ' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 1,
+    "LeftCut": 15,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ヾ' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 2,
+    "LeftCut": 15,
+    "RightCut": 30,
+    "SupportedChars": "[ 'ゝ' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 3,
+    "LeftCut": 15,
+    "RightCut": 33,
+    "SupportedChars": "[ 'ゞ' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 4,
+    "LeftCut": 13,
+    "RightCut": 32,
+    "SupportedChars": "[ '〃' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ '仝' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 6,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ '々' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 7,
+    "LeftCut": 16,
+    "RightCut": 30,
+    "SupportedChars": "[ '〆' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 8,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '〇' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 9,
+    "LeftCut": 19,
+    "RightCut": 32,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 10,
+    "LeftCut": 18,
+    "RightCut": 31,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 11,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ '〜', '~' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 12,
+    "LeftCut": 18,
+    "RightCut": 28,
+    "SupportedChars": "[ '∥' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 13,
+    "LeftCut": 7,
+    "RightCut": 35,
+    "SupportedChars": "[ '…' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 14,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '‥' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 15,
+    "LeftCut": 21,
+    "RightCut": 35,
+    "SupportedChars": "[ '“' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 0,
+    "LeftCut": 18,
+    "RightCut": 39,
+    "SupportedChars": "[ '⟮' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 1,
+    "LeftCut": 8,
+    "RightCut": 32,
+    "SupportedChars": "[ '⟯' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 2,
+    "LeftCut": 13,
+    "RightCut": 41,
+    "SupportedChars": "[ '〈' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 3,
+    "LeftCut": 6,
+    "RightCut": 36,
+    "SupportedChars": "[ '〉' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 4,
+    "LeftCut": 15,
+    "RightCut": 39,
+    "SupportedChars": "[ '《' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 5,
+    "LeftCut": 7,
+    "RightCut": 32,
+    "SupportedChars": "[ '》' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 6,
+    "LeftCut": 15,
+    "RightCut": 38,
+    "SupportedChars": "[ '「' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 7,
+    "LeftCut": 8,
+    "RightCut": 32,
+    "SupportedChars": "[ '」' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 8,
+    "LeftCut": 15,
+    "RightCut": 39,
+    "SupportedChars": "[ '『' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 9,
+    "LeftCut": 8,
+    "RightCut": 32,
+    "SupportedChars": "[ '』' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 10,
+    "LeftCut": 27,
+    "RightCut": 37,
+    "SupportedChars": "[ '【' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 11,
+    "LeftCut": 9,
+    "RightCut": 19,
+    "SupportedChars": "[ '】' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 12,
+    "LeftCut": 15,
+    "RightCut": 28,
+    "SupportedChars": "[ '−' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 13,
+    "LeftCut": 15,
+    "RightCut": 32,
+    "SupportedChars": "[ '±' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 14,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ '×' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 15,
+    "LeftCut": 20,
+    "RightCut": 26,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 0,
+    "LeftCut": 11,
+    "RightCut": 28,
+    "SupportedChars": "[ '÷' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 1,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ '≠' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 2,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ '≦' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 3,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '≧' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 4,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '∞' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 5,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '∴' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 6,
+    "LeftCut": 12,
+    "RightCut": 36,
+    "SupportedChars": "[ '♂' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 7,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '♀' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 8,
+    "LeftCut": 15,
+    "RightCut": 27,
+    "SupportedChars": "[ '°' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 9,
+    "LeftCut": 21,
+    "RightCut": 29,
+    "SupportedChars": "[ '′' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 10,
+    "LeftCut": 14,
+    "RightCut": 28,
+    "SupportedChars": "[ '″' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 11,
+    "LeftCut": 7,
+    "RightCut": 37,
+    "SupportedChars": "[ '℃' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 12,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '¥' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 13,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '¢' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 14,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '£' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 15,
+    "LeftCut": 16,
+    "RightCut": 35,
+    "SupportedChars": "[ '§' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ '☆' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 1,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ '★' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 2,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ '○' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 3,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ '⬤' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 4,
+    "LeftCut": 6,
+    "RightCut": 40,
+    "SupportedChars": "[ '◉' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 5,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '◇' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 6,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '◆' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 7,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ '□' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 8,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ '■' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 9,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '△' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 10,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '▲' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 11,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '▽' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 12,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '▼' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 13,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ '※' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 14,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '〒' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 15,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '→' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 0,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '←' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 1,
+    "LeftCut": 16,
+    "RightCut": 30,
+    "SupportedChars": "[ '↑' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 2,
+    "LeftCut": 16,
+    "RightCut": 30,
+    "SupportedChars": "[ '↓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 3,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 4,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 5,
+    "LeftCut": 12,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 6,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 7,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 8,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 9,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 10,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 11,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 12,
+    "LeftCut": 20,
+    "RightCut": 27,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 13,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 14,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 15,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 0,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 1,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 2,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 3,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 4,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 5,
+    "LeftCut": 11,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 6,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 7,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 8,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 9,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 10,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 11,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 12,
+    "LeftCut": 12,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 13,
+    "LeftCut": 12,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 14,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 22,
+    "Column": 15,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 0,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 1,
+    "LeftCut": 15,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 2,
+    "LeftCut": 13,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 3,
+    "LeftCut": 14,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 4,
+    "LeftCut": 19,
+    "RightCut": 27,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 5,
+    "LeftCut": 13,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 6,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 7,
+    "LeftCut": 12,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 8,
+    "LeftCut": 14,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 9,
+    "LeftCut": 14,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 10,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 11,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 12,
+    "LeftCut": 11,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 13,
+    "LeftCut": 12,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 14,
+    "LeftCut": 15,
+    "RightCut": 31,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 23,
+    "Column": 15,
+    "LeftCut": 14,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 0,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 1,
+    "LeftCut": 12,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 2,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 3,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 4,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 5,
+    "LeftCut": 13,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 6,
+    "LeftCut": 12,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 7,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 8,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 9,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 10,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 11,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 12,
+    "LeftCut": 11,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 13,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 14,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 24,
+    "Column": 15,
+    "LeftCut": 13,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 0,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 1,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 2,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 3,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 4,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 5,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 6,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 7,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 8,
+    "LeftCut": 12,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 9,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 10,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 11,
+    "LeftCut": 12,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 12,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 13,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 14,
+    "LeftCut": 9,
+    "RightCut": 40,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 25,
+    "Column": 15,
+    "LeftCut": 9,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 0,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 1,
+    "LeftCut": 14,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 2,
+    "LeftCut": 11,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 3,
+    "LeftCut": 7,
+    "RightCut": 39,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 4,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 5,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 6,
+    "LeftCut": 14,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 7,
+    "LeftCut": 14,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 8,
+    "LeftCut": 15,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 9,
+    "LeftCut": 12,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 10,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 11,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 12,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 13,
+    "LeftCut": 13,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 14,
+    "LeftCut": 14,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 26,
+    "Column": 15,
+    "LeftCut": 14,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 0,
+    "LeftCut": 15,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 1,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 2,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 3,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 4,
+    "LeftCut": 12,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 5,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 6,
+    "LeftCut": 13,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 7,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 8,
+    "LeftCut": 14,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 9,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 10,
+    "LeftCut": 9,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 11,
+    "LeftCut": 14,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 12,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 13,
+    "LeftCut": 14,
+    "RightCut": 31,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 14,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 27,
+    "Column": 15,
+    "LeftCut": 12,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 0,
+    "LeftCut": 11,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 1,
+    "LeftCut": 12,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 2,
+    "LeftCut": 15,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 3,
+    "LeftCut": 14,
+    "RightCut": 31,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 4,
+    "LeftCut": 11,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 5,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 6,
+    "LeftCut": 17,
+    "RightCut": 25,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 7,
+    "LeftCut": 9,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 8,
+    "LeftCut": 16,
+    "RightCut": 30,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 9,
+    "LeftCut": 12,
+    "RightCut": 31,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 10,
+    "LeftCut": 12,
+    "RightCut": 31,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 11,
+    "LeftCut": 2,
+    "RightCut": 45,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 12,
+    "LeftCut": 11,
+    "RightCut": 30,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 13,
+    "LeftCut": 18,
+    "RightCut": 27,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 14,
+    "LeftCut": 5,
+    "RightCut": 42,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 28,
+    "Column": 15,
+    "LeftCut": 12,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 0,
+    "LeftCut": 16,
+    "RightCut": 30,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 1,
+    "LeftCut": 15,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 2,
+    "LeftCut": 9,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 3,
+    "LeftCut": 15,
+    "RightCut": 29,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 4,
+    "LeftCut": 8,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 5,
+    "LeftCut": 17,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 6,
+    "LeftCut": 14,
+    "RightCut": 23,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 7,
+    "LeftCut": 9,
+    "RightCut": 42,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 8,
+    "LeftCut": 12,
+    "RightCut": 31,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 9,
+    "LeftCut": 10,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 10,
+    "LeftCut": 0,
+    "RightCut": 0,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 11,
+    "LeftCut": 20,
+    "RightCut": 29,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 12,
+    "LeftCut": 13,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 13,
+    "LeftCut": 15,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 14,
+    "LeftCut": 14,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 29,
+    "Column": 15,
+    "LeftCut": 12,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 0,
+    "LeftCut": 19,
+    "RightCut": 24,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 1,
+    "LeftCut": 13,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 2,
+    "LeftCut": 9,
+    "RightCut": 40,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 3,
+    "LeftCut": 18,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 4,
+    "LeftCut": 18,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 5,
+    "LeftCut": 15,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 6,
+    "LeftCut": 18,
+    "RightCut": 28,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 7,
+    "LeftCut": 14,
+    "RightCut": 29,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 8,
+    "LeftCut": 20,
+    "RightCut": 34,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 9,
+    "LeftCut": 21,
+    "RightCut": 35,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 10,
+    "LeftCut": 22,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 11,
+    "LeftCut": 18,
+    "RightCut": 41,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 12,
+    "LeftCut": 21,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 13,
+    "LeftCut": 22,
+    "RightCut": 29,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 14,
+    "LeftCut": 28,
+    "RightCut": 38,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 30,
+    "Column": 15,
+    "LeftCut": 17,
+    "RightCut": 28,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 0,
+    "LeftCut": 22,
+    "RightCut": 40,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 1,
+    "LeftCut": 18,
+    "RightCut": 33,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 2,
+    "LeftCut": 6,
+    "RightCut": 39,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 3,
+    "LeftCut": 6,
+    "RightCut": 39,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 4,
+    "LeftCut": 7,
+    "RightCut": 40,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 5,
+    "LeftCut": 17,
+    "RightCut": 31,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 6,
+    "LeftCut": 9,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 7,
+    "LeftCut": 9,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 8,
+    "LeftCut": 9,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 9,
+    "LeftCut": 9,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 10,
+    "LeftCut": 9,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 11,
+    "LeftCut": 10,
+    "RightCut": 37,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 12,
+    "LeftCut": 6,
+    "RightCut": 39,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 13,
+    "LeftCut": 10,
+    "RightCut": 36,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 14,
+    "LeftCut": 16,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  },
+  {
+    "Row": 31,
+    "Column": 15,
+    "LeftCut": 16,
+    "RightCut": 32,
+    "SupportedChars": "[ '〓' ]"
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "Term": 1,
+    "Condition": "First Day of School",
+    "Month": "April",
+    "Day": 13,
+    "Year": 2021
+  },
+  {
+    "Term": 1,
+    "Condition": "Closing Ceremony",
+    "Month": "July",
+    "Day": 2,
+    "Year": 2021
+  },
+  {
+    "Term": 2,
+    "Condition": "First Day of School",
+    "Month": "August",
+    "Day": 30,
+    "Year": 2021
+  },
+  {
+    "Term": 2,
+    "Condition": "Closing Ceremony",
+    "Month": "December",
+    "Day": 17,
+    "Year": 2021
+  },
+  {
+    "Term": 3,
+    "Condition": "First Day of School",
+    "Month": "January",
+    "Day": 11,
+    "Year": 2022
+  },
+  {
+    "Term": 3,
+    "Condition": "Closing Ceremony",
+    "Month": "April",
+    "Day": 1,
+    "Year": 2022
+  }
+]

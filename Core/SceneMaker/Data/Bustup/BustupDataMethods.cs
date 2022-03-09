@@ -177,8 +177,8 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                         var new_bustup_data = new BustupData()
                         {
                             Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
-                            Default_Name_EN = "Longinus #1",
-                            Default_Name_JPN = "ロンギヌス",
+                            Default_Name_EN = "Makimura",
+                            Default_Name_JPN = "牧村 洋一",
                             P2IS_PSX_Scale_Width = 96,
                             P2IS_PSX_Scale_Height = 96,
                             P2IS_PSX_Left_Coord_X = 18,

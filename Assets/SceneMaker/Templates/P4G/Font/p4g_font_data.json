@@ -1,0 +1,2389 @@
+[
+  {
+    "Row": 0,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 0,
+    "SupportedChars": "[ '\u000a' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 34,
+    "SupportedChars": "[ '\u0020' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 1,
+    "LeftCut": 18,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0021' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 2,
+    "LeftCut": 18,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u0022' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 3,
+    "LeftCut": 14,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u0023' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 4,
+    "LeftCut": 14,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0024' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 5,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u0025' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 6,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u0026' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 7,
+    "LeftCut": 22,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u005c\u0027' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 8,
+    "LeftCut": 16,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u0028' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 9,
+    "LeftCut": 18,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0029' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 10,
+    "LeftCut": 10,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u002a' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 11,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u002b' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 12,
+    "LeftCut": 20,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u002c' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 13,
+    "LeftCut": 14,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u002d' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 14,
+    "LeftCut": 20,
+    "RightCut": 44,
+    "SupportedChars": "[ '\u002e' ]"
+  },
+  {
+    "Row": 0,
+    "Column": 15,
+    "LeftCut": 12,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u002f' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 0,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0030' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 1,
+    "LeftCut": 16,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u0031' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 2,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u0032' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 3,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u0033' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 4,
+    "LeftCut": 8,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u0034' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 5,
+    "LeftCut": 14,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u0035' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 6,
+    "LeftCut": 10,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0036' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 7,
+    "LeftCut": 12,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0037' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 8,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0038' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 9,
+    "LeftCut": 10,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0039' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 10,
+    "LeftCut": 18,
+    "RightCut": 42,
+    "SupportedChars": "[ '\u003a' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 11,
+    "LeftCut": 18,
+    "RightCut": 44,
+    "SupportedChars": "[ '\u003b' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 12,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u003c' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 13,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u003d' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 14,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u003e' ]"
+  },
+  {
+    "Row": 1,
+    "Column": 15,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u003f' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 0,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u0040' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 1,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0041' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 2,
+    "LeftCut": 12,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u0042' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 3,
+    "LeftCut": 10,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u0043' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 4,
+    "LeftCut": 10,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0044' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 5,
+    "LeftCut": 10,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0045' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 6,
+    "LeftCut": 12,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u0046' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 7,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u0047' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 8,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0048' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 9,
+    "LeftCut": 22,
+    "RightCut": 42,
+    "SupportedChars": "[ '\u0049' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 10,
+    "LeftCut": 12,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u004a' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 11,
+    "LeftCut": 12,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u004b' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 12,
+    "LeftCut": 12,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u004c' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 13,
+    "LeftCut": 5,
+    "RightCut": 59,
+    "SupportedChars": "[ '\u004d' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 14,
+    "LeftCut": 8,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u004e' ]"
+  },
+  {
+    "Row": 2,
+    "Column": 15,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u004f' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 0,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0050' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 1,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u0051' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 2,
+    "LeftCut": 12,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u0052' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 3,
+    "LeftCut": 14,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u0053' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 4,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u0054' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0055' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 6,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0056' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 7,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u0057' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 8,
+    "LeftCut": 10,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0058' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 9,
+    "LeftCut": 10,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u0059' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 10,
+    "LeftCut": 12,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u005a' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 11,
+    "LeftCut": 18,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u005b' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 12,
+    "LeftCut": 10,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u005c\u005c' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 13,
+    "LeftCut": 18,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u005d' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 14,
+    "LeftCut": 12,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u005e' ]"
+  },
+  {
+    "Row": 3,
+    "Column": 15,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u005f' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 0,
+    "LeftCut": 20,
+    "RightCut": 44,
+    "SupportedChars": "[ '\u0060' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 1,
+    "LeftCut": 16,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0061' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 2,
+    "LeftCut": 16,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u0062' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 3,
+    "LeftCut": 16,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u0063' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 4,
+    "LeftCut": 12,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0064' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 5,
+    "LeftCut": 16,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u0065' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 6,
+    "LeftCut": 18,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u0066' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 7,
+    "LeftCut": 13,
+    "RightCut": 49,
+    "SupportedChars": "[ '\u0067' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 8,
+    "LeftCut": 14,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u0068' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 9,
+    "LeftCut": 24,
+    "RightCut": 42,
+    "SupportedChars": "[ '\u0069' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 10,
+    "LeftCut": 14,
+    "RightCut": 42,
+    "SupportedChars": "[ '\u006a' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 11,
+    "LeftCut": 17,
+    "RightCut": 51,
+    "SupportedChars": "[ '\u006b' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 12,
+    "LeftCut": 24,
+    "RightCut": 44,
+    "SupportedChars": "[ '\u006c' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 13,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u006d' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 14,
+    "LeftCut": 16,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u006e' ]"
+  },
+  {
+    "Row": 4,
+    "Column": 15,
+    "LeftCut": 14,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u006f' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 0,
+    "LeftCut": 16,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0070' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 1,
+    "LeftCut": 12,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u0071' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 2,
+    "LeftCut": 21,
+    "RightCut": 45,
+    "SupportedChars": "[ '\u0072' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 3,
+    "LeftCut": 18,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u0073' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 4,
+    "LeftCut": 21,
+    "RightCut": 45,
+    "SupportedChars": "[ '\u0074' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 5,
+    "LeftCut": 17,
+    "RightCut": 49,
+    "SupportedChars": "[ '\u0075' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 6,
+    "LeftCut": 15,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0076' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 7,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u0077' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 8,
+    "LeftCut": 14,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0078' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 9,
+    "LeftCut": 14,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u0079' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 10,
+    "LeftCut": 16,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u007a' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 11,
+    "LeftCut": 14,
+    "RightCut": 44,
+    "SupportedChars": "[ '\u007b' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 12,
+    "LeftCut": 24,
+    "RightCut": 42,
+    "SupportedChars": "[ '\u007c' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 13,
+    "LeftCut": 20,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u007d' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 14,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u203e' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 15,
+    "LeftCut": 12,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u3041' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 0,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3042' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 1,
+    "LeftCut": 12,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u3043' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 2,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3044' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 3,
+    "LeftCut": 14,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u3045' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 4,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u3046' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 5,
+    "LeftCut": 12,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u3047' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 6,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3048' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 7,
+    "LeftCut": 12,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u3049' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 8,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u304a' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 9,
+    "LeftCut": 6,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u304b' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 10,
+    "LeftCut": 6,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u304c' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 11,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u304d' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 12,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u304e' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 13,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u304f' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 14,
+    "LeftCut": 10,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3050' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 15,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3051' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 0,
+    "LeftCut": 8,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u3052' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 1,
+    "LeftCut": 10,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u3053' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 2,
+    "LeftCut": 10,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3054' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 3,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u3055' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 4,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3056' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3057' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 6,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3058' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 7,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3059' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 8,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u305a' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 9,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u305b' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 10,
+    "LeftCut": 4,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u305c' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 11,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u305d' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 12,
+    "LeftCut": 6,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u305e' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 13,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u305f' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 14,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3060' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 15,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3061' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3062' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 1,
+    "LeftCut": 10,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u3063' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 2,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3064' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 3,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3065' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 4,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3066' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 5,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3067' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 6,
+    "LeftCut": 8,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u3068' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 7,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3069' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 8,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u306a' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 9,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u306b' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 10,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u306c' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 11,
+    "LeftCut": 4,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u306d' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 12,
+    "LeftCut": 4,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u306e' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 13,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u306f' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 14,
+    "LeftCut": 6,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u3070' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 15,
+    "LeftCut": 6,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u3071' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3072' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 1,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3073' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 2,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3074' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 3,
+    "LeftCut": 2,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3075' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 4,
+    "LeftCut": 2,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3076' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 5,
+    "LeftCut": 2,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3077' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 6,
+    "LeftCut": 2,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3078' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 7,
+    "LeftCut": 2,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3079' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 8,
+    "LeftCut": 2,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u307a' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 9,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u307b' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 10,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u307c' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 11,
+    "LeftCut": 8,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u307d' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 12,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u307e' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 13,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u307f' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 14,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3080' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 15,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3081' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u3082' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 1,
+    "LeftCut": 8,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u3083' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 2,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3084' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 3,
+    "LeftCut": 10,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u3085' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 4,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3086' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 5,
+    "LeftCut": 14,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u3087' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 6,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u3088' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 7,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3089' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 8,
+    "LeftCut": 12,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u308a' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 9,
+    "LeftCut": 6,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u308b' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 10,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u308c' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 11,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u308d' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 12,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u308e' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 13,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u308f' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 14,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3090' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 15,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3091' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 0,
+    "LeftCut": 4,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u3092' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 1,
+    "LeftCut": 2,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3093' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 2,
+    "LeftCut": 10,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u30a1' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 3,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30a2' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 4,
+    "LeftCut": 10,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u30a3' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 5,
+    "LeftCut": 6,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u30a4' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 6,
+    "LeftCut": 10,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u30a5' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 7,
+    "LeftCut": 6,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30a6' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 8,
+    "LeftCut": 10,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u30a7' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 9,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30a8' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 10,
+    "LeftCut": 10,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u30a9' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 11,
+    "LeftCut": 4,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30aa' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 12,
+    "LeftCut": 6,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30ab' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 13,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30ac' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 14,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30ad' ]"
+  },
+  {
+    "Row": 11,
+    "Column": 15,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30ae' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30af' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 1,
+    "LeftCut": 6,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u30b0' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 2,
+    "LeftCut": 2,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30b1' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 3,
+    "LeftCut": 2,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30b2' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 4,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30b3' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30b4' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 6,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30b5' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 7,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30b6' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 8,
+    "LeftCut": 6,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30b7' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 9,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30b8' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 10,
+    "LeftCut": 4,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30b9' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 11,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30ba' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 12,
+    "LeftCut": 6,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30bb' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 13,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30bc' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 14,
+    "LeftCut": 10,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30bd' ]"
+  },
+  {
+    "Row": 12,
+    "Column": 15,
+    "LeftCut": 10,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u30be' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30bf' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 1,
+    "LeftCut": 6,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u30c0' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 2,
+    "LeftCut": 4,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30c1' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 3,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30c2' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 4,
+    "LeftCut": 10,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u30c3' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 5,
+    "LeftCut": 6,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u30c4' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 6,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30c5' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 7,
+    "LeftCut": 4,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30c6' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 8,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30c7' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 9,
+    "LeftCut": 12,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u30c8' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 10,
+    "LeftCut": 12,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30c9' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 11,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30ca' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 12,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30cb' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 13,
+    "LeftCut": 6,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u30cc' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 14,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30cd' ]"
+  },
+  {
+    "Row": 13,
+    "Column": 15,
+    "LeftCut": 8,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30ce' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30cf' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 1,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30d0' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 2,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30d1' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 3,
+    "LeftCut": 8,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u30d2' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 4,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30d3' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 5,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30d4' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 6,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30d5' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 7,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30d6' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 8,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30d7' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 9,
+    "LeftCut": 2,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30d8' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 10,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30d9' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 11,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30da' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 12,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30db' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 13,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30dc' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 14,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30dd' ]"
+  },
+  {
+    "Row": 14,
+    "Column": 15,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30de' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 0,
+    "LeftCut": 10,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30df' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 1,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30e0' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 2,
+    "LeftCut": 6,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u30e1' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 3,
+    "LeftCut": 4,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30e2' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 4,
+    "LeftCut": 10,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u30e3' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 5,
+    "LeftCut": 4,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30e4' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 6,
+    "LeftCut": 6,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30e5' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 7,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30e6' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 8,
+    "LeftCut": 12,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u30e7' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 9,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30e8' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 10,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30e9' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 11,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u30ea' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 12,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30eb' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 13,
+    "LeftCut": 10,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30ec' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 14,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30ed' ]"
+  },
+  {
+    "Row": 15,
+    "Column": 15,
+    "LeftCut": 12,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u30ee' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 0,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30ef' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 1,
+    "LeftCut": 4,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30f0' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 2,
+    "LeftCut": 2,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u30f1' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 3,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u30f2' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 4,
+    "LeftCut": 6,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u30f3' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 5,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u30f4' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 6,
+    "LeftCut": 10,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u30f5' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 7,
+    "LeftCut": 10,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u30f6' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 8,
+    "LeftCut": 18,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u3001' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 9,
+    "LeftCut": 20,
+    "RightCut": 44,
+    "SupportedChars": "[ '\u3002' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 10,
+    "LeftCut": 18,
+    "RightCut": 44,
+    "SupportedChars": "[ '\u30fb' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 11,
+    "LeftCut": 2,
+    "RightCut": 32,
+    "SupportedChars": "[ '\u309b' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 12,
+    "LeftCut": 4,
+    "RightCut": 30,
+    "SupportedChars": "[ '\u309c' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 13,
+    "LeftCut": 14,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 14,
+    "LeftCut": 16,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 16,
+    "Column": 15,
+    "LeftCut": 14,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 0,
+    "LeftCut": 16,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u30fd' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 1,
+    "LeftCut": 16,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u30fe' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 2,
+    "LeftCut": 18,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u309d' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 3,
+    "LeftCut": 18,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u309e' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 4,
+    "LeftCut": 10,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u3003' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 5,
+    "LeftCut": 2,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u4edd' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 6,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u3005' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 7,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3006' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 8,
+    "LeftCut": 4,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u3007' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 9,
+    "LeftCut": 14,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 10,
+    "LeftCut": 16,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 11,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u301c', '\u007e' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 12,
+    "LeftCut": 18,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u2225' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 13,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u2026' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 14,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u2025' ]"
+  },
+  {
+    "Row": 17,
+    "Column": 15,
+    "LeftCut": 10,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u201c' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 0,
+    "LeftCut": 16,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u27ee' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 1,
+    "LeftCut": 16,
+    "RightCut": 44,
+    "SupportedChars": "[ '\u27ef' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 2,
+    "LeftCut": 14,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u3008' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 3,
+    "LeftCut": 22,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u3009' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 4,
+    "LeftCut": 10,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u300a' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 5,
+    "LeftCut": 14,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u300b' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 6,
+    "LeftCut": 18,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u300c' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 7,
+    "LeftCut": 18,
+    "RightCut": 46,
+    "SupportedChars": "[ '\u300d' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 8,
+    "LeftCut": 18,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u300e' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 9,
+    "LeftCut": 16,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u300f' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 10,
+    "LeftCut": 16,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u3010' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 11,
+    "LeftCut": 16,
+    "RightCut": 50,
+    "SupportedChars": "[ '\u3011' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 12,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u2212' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 13,
+    "LeftCut": 10,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u00b1' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 14,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u00d7' ]"
+  },
+  {
+    "Row": 18,
+    "Column": 15,
+    "LeftCut": 0,
+    "RightCut": 0,
+    "SupportedChars": "[ '\u0000' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 56,
+    "SupportedChars": "[ '\u00f7' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 1,
+    "LeftCut": 8,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u2260' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 2,
+    "LeftCut": 8,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u2266' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 3,
+    "LeftCut": 12,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u2267' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 4,
+    "LeftCut": 4,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u221e' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 5,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u2234' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 6,
+    "LeftCut": 16,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u2642' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 7,
+    "LeftCut": 14,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u2640' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 8,
+    "LeftCut": 6,
+    "RightCut": 22,
+    "SupportedChars": "[ '\u00b0' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 9,
+    "LeftCut": 4,
+    "RightCut": 24,
+    "SupportedChars": "[ '\u2032' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 10,
+    "LeftCut": 4,
+    "RightCut": 34,
+    "SupportedChars": "[ '\u2033' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 11,
+    "LeftCut": 2,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u2103' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 12,
+    "LeftCut": 6,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u00a5' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 13,
+    "LeftCut": 16,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u00a2' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 14,
+    "LeftCut": 12,
+    "RightCut": 54,
+    "SupportedChars": "[ '\u00a3' ]"
+  },
+  {
+    "Row": 19,
+    "Column": 15,
+    "LeftCut": 12,
+    "RightCut": 52,
+    "SupportedChars": "[ '\u00a7' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 0,
+    "LeftCut": 2,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u2606' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 1,
+    "LeftCut": 2,
+    "RightCut": 62,
+    "SupportedChars": "[ '\u2605' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 2,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25cb' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 3,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u2b24' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 4,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25c9' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 5,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25c7' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 6,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25c6' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 7,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25a1' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 8,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25a0' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 9,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25b3' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 10,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25b2' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 11,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25bd' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 12,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u25bc' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 13,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u203b' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 14,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3012' ]"
+  },
+  {
+    "Row": 20,
+    "Column": 15,
+    "LeftCut": 4,
+    "RightCut": 58,
+    "SupportedChars": "[ '\u2192' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 0,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u2190' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 1,
+    "LeftCut": 20,
+    "RightCut": 48,
+    "SupportedChars": "[ '\u2191' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 2,
+    "LeftCut": 6,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u2193' ]"
+  },
+  {
+    "Row": 21,
+    "Column": 3,
+    "LeftCut": 4,
+    "RightCut": 60,
+    "SupportedChars": "[ '\u3013' ]"
+  },
+]
