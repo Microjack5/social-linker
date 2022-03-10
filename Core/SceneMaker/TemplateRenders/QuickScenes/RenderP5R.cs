@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Core.SceneMaker.GlyphParsing;
 using System.IO;
 using Discord.WebSocket;
@@ -22,7 +22,7 @@ using System.Drawing.Imaging;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
-    public class RenderP5R : InteractiveBase<SocketCommandContext>
+    public class RenderP5R : ModuleBase<SocketCommandContext>
     {
         public static async Task Render_Quick_Scene_P5R(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
         {

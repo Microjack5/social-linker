@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Core.CloudStorageTables;
 
 namespace SocialLinker.Commands
 {
-    public class Calculator : InteractiveBase<SocketCommandContext>
+    public class Calculator : ModuleBase<SocketCommandContext>
     {
         [Command("calcexp", RunMode = RunMode.Async)]
         public async Task ExpCalculator(int n)

@@ -9,13 +9,13 @@ using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using Discord.Rest;
 using Discord.Commands;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using System.Net;
 using Newtonsoft.Json;
 
 namespace SocialLinker.Core.Menus.Settings.Main.General
 {
-    class Time_Weather_Menu : InteractiveBase<SocketCommandContext>
+    class Time_Weather_Menu : ModuleBase<SocketCommandContext>
     {
         public static async Task Time_Weather_Main(SocketGuildUser user, RestUserMessage message)
         {

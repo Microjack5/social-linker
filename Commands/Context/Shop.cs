@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Core.Menus.Shop.Main;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.CloudStorageTables;
@@ -11,7 +11,7 @@ using SocialLinker.Core.Menus.InitialUsage.Main;
 
 namespace SocialLinker.Commands
 {
-    public class Shop : InteractiveBase<SocketCommandContext>
+    public class Shop : ModuleBase<SocketCommandContext>
     {
         [Command("shop", RunMode = RunMode.Async)]
         public async Task StartShop()

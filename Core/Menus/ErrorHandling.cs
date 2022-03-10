@@ -3,13 +3,13 @@ using System.Timers;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Config;
 using Discord.Rest;
 
 namespace SocialLinker.Core.Menus
 {
-    public class ErrorHandling : InteractiveBase<SocketCommandContext>
+    public class ErrorHandling : ModuleBase<SocketCommandContext>
     {
         public static async Task AttachFilesError(SocketTextChannel channel)
         {

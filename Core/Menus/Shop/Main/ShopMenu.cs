@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using Discord.Rest;
@@ -16,7 +16,7 @@ using System.Drawing;
 
 namespace SocialLinker.Core.Menus.Shop.Main
 {
-    public class ShopMenu : InteractiveBase<SocketCommandContext>
+    public class ShopMenu : ModuleBase<SocketCommandContext>
     {
         public static async Task ShopStart(SocketTextChannel channel, SocketGuildUser user)
         {

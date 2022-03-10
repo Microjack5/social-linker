@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Discord.Addons.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.LevelSystem;
+using Fergun.Interactive;
 
 namespace SocialLinker
 {
     class CommandHandler
     {
         DiscordShardedClient _client;
+        Commands.InteractionHandler _interactionHandler;
         CommandService _service;
         public IServiceProvider _Services;
 
@@ -26,6 +24,10 @@ namespace SocialLinker
             _Services = ConfigureServices();
             await _service.AddModulesAsync(Assembly.GetEntryAssembly(), _Services);
             _client.MessageReceived += HandleCommandAsync;
+
+            _interactionHandler = new Commands.InteractionHandler();
+            await _interactionHandler.InitializeAsync(_client);
+            
         }
 
         private async Task HandleCommandAsync(SocketMessage s)

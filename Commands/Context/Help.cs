@@ -3,18 +3,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
-using SocialLinker.Cooldown;
-using SocialLinker.Core.Menus.Settings.Main;
-using SocialLinker.Core.Menus.InitialUsage.Main;
+using Fergun.Interactive;
 using SocialLinker.Core.CloudStorageTables;
+using SocialLinker.Cooldown;
+using SocialLinker.Core.Menus.Help.Main;
+using SocialLinker.Core.Menus.InitialUsage.Main;
 
 namespace SocialLinker.Commands
 {
-    public class Settings : InteractiveBase<SocketCommandContext>
+    public class Help : ModuleBase<SocketCommandContext>
     {
-        [Command("settings", RunMode = RunMode.Async)]
-        public async Task SettingsMenu()
+        [Command("help", RunMode = RunMode.Async)]
+        public async Task HelpMenu()
         {
             // If there is a cooldown session active for the command type "menu", return the method immediately.
             if (await UserCooldownMethods.IsCooldownActive(Context.Message, "menu") == true)
@@ -43,7 +43,7 @@ namespace SocialLinker.Commands
             {
                 // Case 1: Search by channel successful, user ID does not match. Create new entry for new user.
                 // Create a new menu in the current channel.
-                await Settings_Menu.Settings_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await Help_Menu.Help_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
                 return;
             }
             // Else, if the channel entry exists and the user is the same, assume they want to reset the menu and delete the previous entry.
@@ -68,7 +68,7 @@ namespace SocialLinker.Commands
                 Global.MenuIdList.Remove(channelSearch);
 
                 // Create a new menu in the current channel.
-                await Settings_Menu.Settings_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await Help_Menu.Help_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
                 return;
             }
             // Else, if an entry exists where the user is found but they're in a different channel now, delete previous entry and reset the menu.
@@ -93,7 +93,7 @@ namespace SocialLinker.Commands
                 Global.MenuIdList.Remove(userSearch);
 
                 // Create a new menu in the current channel.
-                await Settings_Menu.Settings_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await Help_Menu.Help_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
                 return;
             }
             // For any other condition (if one should exist and not be handled here), create a new menu entry.
@@ -101,7 +101,7 @@ namespace SocialLinker.Commands
             {
                 // Case 4: No previous entry found. Create new entry.
                 // Create a new menu in the current channel.
-                await Settings_Menu.Settings_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await Help_Menu.Help_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
                 return;
             }
         }

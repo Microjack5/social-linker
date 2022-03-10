@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Cooldown;
@@ -14,10 +14,10 @@ using SocialLinker.Core.Menus.InitialUsage.Main;
 
 namespace SocialLinker.Commands
 {
-    public class Slap : InteractiveBase<SocketCommandContext>
+    public class Pat : ModuleBase<SocketCommandContext>
     {
-        [Command("slap", RunMode = RunMode.Async)]
-        public async Task SlapCommand([Remainder] string arg = "")
+        [Command("pat", RunMode = RunMode.Async)]
+        public async Task PatCommand([Remainder] string arg = "")
         {
             // If there is a cooldown session active for the command type "social", return the method immediately.
             if (await UserCooldownMethods.IsCooldownActive(Context.Message, "social") == true)
@@ -51,19 +51,19 @@ namespace SocialLinker.Commands
             //Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
             {
-                SlapError(Context.Message);
+                PatError(Context.Message);
                 return;
             }
             //If the mentioned user is the command user, send a special message and return
             else if (mentionedUser == commandUser)
             {
-                SlapSelf(Context.Message);
+                PatSelf(Context.Message);
                 return;
             }
             //If the mentioned user is the bot itself, send a special message and return
             else if (mentionedUser.Id == BotConfig.bot.id)
             {
-                SlapBot(Context.Message);
+                PatBot(Context.Message);
                 return;
             }
 
@@ -77,13 +77,13 @@ namespace SocialLinker.Commands
                 Core.LevelSystem.SocialStats.AddExpression(Context.Message, commandTarget);
             }
 
-            //Send a slap message to the mentioned user
-            SlapUser(Context.Message, commandTarget);
+            //Send a hug message to the mentioned user
+            PatUser(Context.Message, commandTarget);
 
             await Task.CompletedTask;
         }
 
-        public static async void SlapUser(SocketMessage message, SocketUser command_target)
+        public static async void PatUser(SocketMessage message, SocketUser command_target)
         {
             var command_user = message.Author;
             var channel = message.Channel;
@@ -96,7 +96,7 @@ namespace SocialLinker.Commands
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{command_user.Username} slapped {command_target.Username} in the face!",
+                Name = $"Pat pat!",
                 IconUrl = command_user.GetAvatarUrl()
             };
 
@@ -117,7 +117,7 @@ namespace SocialLinker.Commands
             embed.WithAuthor(author);
 
             // Create a randomized URL based on the command user and command target's content filters.
-            string randomized_image = RandomizeSlapGif(command_user, command_target);
+            string randomized_image = RandomizePatGif(command_user, command_target);
 
             // If the command user has a set profile theme and the randomized image URL is empty, OR the command target doesn't have an activated account, add a notification to the embed.
             if ((command_user_account.Profile_Theme != "" && randomized_image == "") || command_target_account.Account_Activated == "No")
@@ -142,7 +142,7 @@ namespace SocialLinker.Commands
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async void SlapError(SocketMessage message)
+        public static async void PatError(SocketMessage message)
         {
             var user = message.Author;
             var channel = message.Channel;
@@ -154,7 +154,7 @@ namespace SocialLinker.Commands
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Social Command: Slap",
+                Name = "Social Command: Pat",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -176,24 +176,30 @@ namespace SocialLinker.Commands
             }
 
             embed.WithAuthor(author);
-            embed.WithDescription("Mention a user while using this command to slap them.");
+            embed.WithDescription("Mention a user while using this command to give them a pat.");
 
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async void SlapSelf(SocketMessage message)
+        public static async void PatSelf(SocketMessage message)
         {
             var user = message.Author;
             var channel = message.Channel;
 
-            //Retrieve the account information of the command's user
+            await channel.SendMessageAsync($"*pat pat*");
+        }
+
+        public static async void PatBot(SocketMessage message)
+        {
+            var user = message.Author;
+            var channel = message.Channel;
+
             var account = UserInfoClasses.GetAccount(user);
 
-            //Create an embeded message and declare the title
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"Oh no! Social Linker gave {user.Username} a hug instead.",
+                Name = "Yay!",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -212,53 +218,12 @@ namespace SocialLinker.Commands
             }
 
             embed.WithAuthor(author);
-
-            if (account.Profile_Theme != "")
-            {
-                embed.WithImageUrl($"{Commands.Hug.RandomizeHugGif(user, user)}");
-            }
+            embed.WithDescription("Social Linker enjoys headpats very much!");
 
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async void SlapBot(SocketMessage message)
-        {
-            var user = message.Author;
-            var channel = message.Channel;
-
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Ow!",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            //Determine color for embeded message
-            if (account.Profile_Theme == "P3")
-            {
-                embed.WithColor(37, 149, 255);
-            }
-            else if (account.Profile_Theme == "P4")
-            {
-                embed.WithColor(255, 229, 49);
-            }
-            else if (account.Profile_Theme == "P5")
-            {
-                embed.WithColor(213, 27, 4);
-            }
-
-            embed.WithAuthor(author);
-            embed.WithDescription("Social Linker needs a minute to recover...");
-
-            await channel.SendMessageAsync("", false, embed.Build());
-
-            //If the user slaps Social Linker, their messages will be ignored for 1 minute
-            Core.LevelSystem.TimeOut.SetTimeOut(user, 1);
-        }
-
-        public static string RandomizeSlapGif(SocketUser command_user, SocketUser command_target)
+        public static string RandomizePatGif(SocketUser command_user, SocketUser command_target)
         {
             // Retrieve the account information of the both the command's user and the command's target.
             // These two may be the same account in some cases.
@@ -274,64 +239,66 @@ namespace SocialLinker.Commands
             // Social command GIFs can be divided into subcategories for each title depending on the version, so create separate string arrays for each category.
             // First Title: Persona 3.
             // General P3 GIFs are scenes that can be applied to both versions of P3 or various P3-related media.
-            string[] p3_general_slaps = new string[]
+            string[] p3_general_pats = new string[]
             {
-                "https://i.imgur.com/JDvm8mt.gif",
-                "https://i.imgur.com/dJdJ3I9.gif",
-                "https://i.imgur.com/rKgu0Ae.gif"
+                "https://i.imgur.com/59oKG0T.gif",
+                "https://i.imgur.com/mxyJzMB.gif",
+                "https://i.imgur.com/NhuPqQM.gif"
             };
 
             // P3F GIFs are scenes that exclusively apply to the FES version of P3.
-            string[] p3f_slaps = new string[]
+            string[] p3f_pats = new string[]
             {
-                "https://i.imgur.com/ejDMSV1.gif"
+                // There are no P3F-specific GIFs to add.
             };
 
             // P3P GIFs are scenes that exclusively apply to the Portable version of P3.
-            string[] p3p_slaps = new string[]
+            string[] p3p_pats = new string[]
             {
                 // There are no P3P-specific GIFs to add.
             };
 
             // Second Title: Persona 4.
             // General P4 GIFs are scenes that can be applied to both versions of P4 or various P4-related media.
-            string[] p4_general_slaps = new string[]
+            string[] p4_general_pats = new string[]
             {
-                "https://i.imgur.com/G9hw2Gu.gif",
-                "https://i.imgur.com/XIpku2H.gif",
-                "https://i.imgur.com/g8CsCFD.gif"
+                "https://i.imgur.com/VpNZQi4.gif",
+                "https://i.imgur.com/A8hrKuy.gif"
             };
 
             // P4-PS2 GIFs are scenes that exclusively apply to the PlayStation 2 version of P4.
-            string[] p4_ps2_slaps = new string[]
+            string[] p4_ps2_pats = new string[]
             {
                 // There are no P4-PS2-specific GIFs to add.
             };
 
             // P4G GIFs are scenes that exclusively apply to the Golden version of P4.
-            string[] p4g_slaps = new string[]
+            string[] p4g_pats = new string[]
             {
-                "https://i.imgur.com/2soJYxu.gif"
+                "https://i.imgur.com/KeHfyyI.gif",
+                "https://i.imgur.com/G3oDiHb.gif"
             };
 
             // Third Title: Persona 5.
             // General P5 GIFs are scenes that can be applied to both versions of P5 or various P5-related media.
-            string[] p5_general_slaps = new string[]
+            string[] p5_general_pats = new string[]
             {
-                "https://i.imgur.com/ivGQQ6b.gif",
-                "https://i.imgur.com/HfWXGJN.gif"
+                "https://i.imgur.com/RJomCC2.gif",
+                "https://i.imgur.com/N5DEjCZ.gif"
             };
 
-            // P5-PS4 GIFs are scenes that exclusively apply to the PlayStation 4 version of P5.
-            string[] p5_ps4_slaps = new string[]
+            // P5-PS4 GIFs are scenes that exclusively apply to the PlayStation 3 version of P5.
+            string[] p5_ps4_pats = new string[]
             {
                 // There are no P5-PS4-specific GIFs to add.
             };
 
             // P5R GIFs are scenes that exclusively apply to the Royal version of P5.
-            string[] p5r_slaps = new string[]
+            string[] p5r_pats = new string[]
             {
-                "https://i.imgur.com/F69T307.gif"
+                "https://i.imgur.com/lxqRvBY.gif",
+                "https://i.imgur.com/IbuuKav.gif",
+                "https://i.imgur.com/ZJahCad.gif"
             };
 
             // Create two list variables containing the content filters of both the command's user and the command's target.
@@ -348,57 +315,57 @@ namespace SocialLinker.Commands
             if ((command_user_filter.Contains("P3F") == false || command_user_filter.Contains("P3P") == false) &&
                 (command_target_filter.Contains("P3F") == false || command_target_filter.Contains("P3P") == false))
             {
-                p3_selection_list.AddRange(p3_general_slaps);
+                p3_selection_list.AddRange(p3_general_pats);
             }
 
             // If the command user and command target allows P3F content, add P3F-specific GIFs to the p3_selection_list.
             if (command_user_filter.Contains("P3F") == false && command_target_filter.Contains("P3F") == false)
             {
-                p3_selection_list.AddRange(p3f_slaps);
+                p3_selection_list.AddRange(p3f_pats);
             }
 
             // If the command user and command target allows P3P content, add P3P-specific GIFs to the p3_selection_list.
             if (command_user_filter.Contains("P3P") == false && command_target_filter.Contains("P3P") == false)
             {
-                p3_selection_list.AddRange(p3p_slaps);
+                p3_selection_list.AddRange(p3p_pats);
             }
 
             // If both the command user and command target allows either P4-PS2 and P4G content, add general P4 GIFs to the p4_selection_list.
             if ((command_user_filter.Contains("P4-PS2") == false || command_user_filter.Contains("P4G") == false) &&
                 (command_target_filter.Contains("P4-PS2") == false || command_target_filter.Contains("P4G") == false))
             {
-                p4_selection_list.AddRange(p4_general_slaps);
+                p4_selection_list.AddRange(p4_general_pats);
             }
 
             // If the command user and command target allows P4-PS2 content, add P4-PS2-specific GIFs to the p4_selection_list.
             if (command_user_filter.Contains("P4-PS2") == false && command_target_filter.Contains("P4-PS2") == false)
             {
-                p4_selection_list.AddRange(p4_ps2_slaps);
+                p4_selection_list.AddRange(p4_ps2_pats);
             }
 
             // If the command user and command target allows P4G content, add P4G-specific GIFs to the p4_selection_list.
             if (command_user_filter.Contains("P4G") == false && command_target_filter.Contains("P4G") == false)
             {
-                p4_selection_list.AddRange(p4g_slaps);
+                p4_selection_list.AddRange(p4g_pats);
             }
 
             // If both the command user and command target allows either P5-PS4 and P5R content, add general P5 GIFs to the p5_selection_list.
             if ((command_user_filter.Contains("P5-PS4") == false || command_user_filter.Contains("P5R") == false) &&
                 (command_target_filter.Contains("P5-PS4") == false || command_target_filter.Contains("P5R") == false))
             {
-                p5_selection_list.AddRange(p5_general_slaps);
+                p5_selection_list.AddRange(p5_general_pats);
             }
 
             // If the command user and command target allows P5-PS4 content, add P5-PS4-specific GIFs to the p5_selection_list.
             if (command_user_filter.Contains("P5-PS4") == false && command_target_filter.Contains("P5-PS4") == false)
             {
-                p5_selection_list.AddRange(p5_ps4_slaps);
+                p5_selection_list.AddRange(p5_ps4_pats);
             }
 
             // If the command user and command target allows P5R content, add P5R-specific GIFs to the p5_selection_list.
             if (command_user_filter.Contains("P5R") == false && command_target_filter.Contains("P5R") == false)
             {
-                p5_selection_list.AddRange(p5r_slaps);
+                p5_selection_list.AddRange(p5r_pats);
             }
 
             // Using the created selection lists, get a random GIF based on the command user's profile theme.

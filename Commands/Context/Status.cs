@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.StatusScreens;
 using System.Reflection;
@@ -13,7 +13,7 @@ using SocialLinker.Core.Menus.InitialUsage.Main;
 
 namespace SocialLinker.Commands
 {
-    public class Status : InteractiveBase<SocketCommandContext>
+    public class Status : ModuleBase<SocketCommandContext>
     {
         [Command("status")]
         public async Task StatusCommandParser1()

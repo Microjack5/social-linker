@@ -45,9 +45,6 @@
     <Reference Include="Azure.Storage.Common, Version=12.9.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>packages\Azure.Storage.Common.12.9.0\lib\netstandard2.0\Azure.Storage.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Discord.Addons.Interactive, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Discord.Addons.Interactive.2.0.0\lib\netstandard2.0\Discord.Addons.Interactive.dll</HintPath>
-    </Reference>
     <Reference Include="Discord.Net.Commands, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Discord.Net.Commands.3.4.0\lib\net461\Discord.Net.Commands.dll</HintPath>
     </Reference>
@@ -65,6 +62,9 @@
     </Reference>
     <Reference Include="Discord.Net.WebSocket, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Discord.Net.WebSocket.3.4.0\lib\net461\Discord.Net.WebSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Fergun.Interactive, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Fergun.Interactive.1.4.2\lib\net461\Fergun.Interactive.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=3.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Azure.KeyVault.Core.3.0.5\lib\net461\Microsoft.Azure.KeyVault.Core.dll</HintPath>
@@ -194,17 +194,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
-    <Compile Include="Commands\Calculator.cs" />
-    <Compile Include="Commands\Help.cs" />
-    <Compile Include="Commands\Hug.cs" />
-    <Compile Include="Commands\Maker.cs" />
-    <Compile Include="Commands\Multiply.cs" />
-    <Compile Include="Commands\Pat.cs" />
-    <Compile Include="Commands\Punch.cs" />
-    <Compile Include="Commands\Settings.cs" />
-    <Compile Include="Commands\Shop.cs" />
-    <Compile Include="Commands\Slap.cs" />
-    <Compile Include="Commands\Status.cs" />
+    <Compile Include="Commands\Context\Calculator.cs" />
+    <Compile Include="Commands\Context\Help.cs" />
+    <Compile Include="Commands\Context\Hug.cs" />
+    <Compile Include="Commands\Context\Maker.cs" />
+    <Compile Include="Commands\Context\Multiply.cs" />
+    <Compile Include="Commands\Context\Pat.cs" />
+    <Compile Include="Commands\Context\Punch.cs" />
+    <Compile Include="Commands\Context\Settings.cs" />
+    <Compile Include="Commands\Context\Shop.cs" />
+    <Compile Include="Commands\Context\Slap.cs" />
+    <Compile Include="Commands\InteractionHandler.cs" />
+    <Compile Include="Commands\Context\Status.cs" />
     <Compile Include="Config\AssetDirectoryConfig.cs" />
     <Compile Include="Config\AzureConfig.cs" />
     <Compile Include="Config\BotConfig.cs" />
@@ -382,6 +383,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Commands\Slash\" />
     <Folder Include="Core\SceneMaker\Data\Assist\" />
     <Folder Include="Core\SceneMaker\Data\Calendar\" />
     <Folder Include="Core\SceneMaker\Data\Cutin\" />

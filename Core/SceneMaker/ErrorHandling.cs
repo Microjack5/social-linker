@@ -3,7 +3,7 @@ using System.Timers;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using Discord.Rest;
 using SocialLinker.Core.CloudStorageTables;
 using Discord;
@@ -12,7 +12,7 @@ using SocialLinker.Config;
 
 namespace SocialLinker.Core.SceneMaker
 {
-    class ErrorHandling : InteractiveBase<SocketCommandContext>
+    class ErrorHandling : ModuleBase<SocketCommandContext>
     {
         // Create a global variable for the class that contains the desired duration for error messages.
         // In this case, 60000 milliseconds equates to 1 minute.

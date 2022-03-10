@@ -7,7 +7,7 @@ using Discord;
 using Discord.Rest;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Cooldown;
@@ -18,7 +18,7 @@ using System.Drawing.Imaging;
 
 namespace SocialLinker.Commands
 {
-    public class Multiply : InteractiveBase<SocketCommandContext>
+    public class Multiply : ModuleBase<SocketCommandContext>
     {
         public static System.Drawing.Image SetImageOpacity(System.Drawing.Image image, float opacity)
         {

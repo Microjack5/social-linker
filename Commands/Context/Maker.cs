@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.Menus.InitialUsage.Main;
@@ -9,7 +9,7 @@ using SocialLinker.Core.SceneMaker;
 
 namespace SocialLinker.Commands
 {
-    public class Maker : InteractiveBase<SocketCommandContext>
+    public class Maker : ModuleBase<SocketCommandContext>
     {
         [Command("maker", RunMode = RunMode.Async)]
         public async Task MakerCommandParser([Remainder] string param = "")
