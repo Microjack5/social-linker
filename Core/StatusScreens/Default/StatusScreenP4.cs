@@ -22,13 +22,12 @@ namespace SocialLinker.Core.StatusScreens
     {
         internal static async void RenderImage(SocketUser user, ISocketMessageChannel channel)
         {
-            //Send a loading message while the status screen gets made
             RestUserMessage loader = await channel.SendMessageAsync("", false, LoadingMessage().Build());
 
             // Place the bulk of the function in a try-catch block in case something fails and an error message needs to be sent
             try
             {
-                //Grab the user's account information
+                // Grab the user's account information
                 var account = UserInfoClasses.GetAccount(user);
 
                 //Establish variables to write on the template
@@ -237,7 +236,7 @@ namespace SocialLinker.Core.StatusScreens
             catch (Exception ex)
             {
                 //Send an error message to the user
-                await channel.SendMessageAsync($":warning: Oops! It looks like something went wrong here. Please try again.");
+                _ = ErrorHandling.Scene_Upload_Failed(user, channel);
                 Console.WriteLine(ex);
 
                 //Delete the loading message

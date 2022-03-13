@@ -27,7 +27,6 @@ namespace SocialLinker
             _client.ReactionAdded += Core.Menus.MenuDirectory.ReactionAddedIndex;
             _client.ReactionRemoved += Core.Menus.MenuDirectory.ReactionRemovedIndex;
             _client.MessageReceived += Core.Menus.MenuDirectory.MessageReceivedIndex;
-            //_client.ShardReady += SlashCommands.;
             await _client.LoginAsync(TokenType.Bot, BotConfig.bot.token);
             await _client.StartAsync();
             await _client.SetGameAsync("......");

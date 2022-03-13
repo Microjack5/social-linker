@@ -28,16 +28,33 @@ namespace SocialLinker.Commands
 
         private async Task SlashCommandIndex(SocketSlashCommand command)
         {
-            await command.RespondAsync($"You executed {command.Data.Name}");
+            switch (command.CommandName)
+            {
+                case "status":
+                    try
+                    {
+                        await command.RespondAsync(embed: Slash_Command_Successful().Build(), ephemeral: true);
+                        SocialLinker.Commands.Slash.Status status_class = new SocialLinker.Commands.Slash.Status();
+                        
+                        _ = status_class.StatusCommandParser1(command);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                    break;
+            }
+            await Task.CompletedTask;
         }
 
         public static async Task Status(DiscordSocketClient client)
         {
             ulong guildId = 543226698238394378;
+            //await client.GetGuild(543226698238394378).DeleteApplicationCommandsAsync();
 
             var guildCommand = new SlashCommandBuilder()
                 .WithName("status")
-                .WithDescription("View your status screen or someone else's.")
+                .WithDescription("View your status screen, or specify a user to view theirs.")
                 .AddOption("user", ApplicationCommandOptionType.User, "The user whose status screen you want to view.", isRequired: false);
 
             try
@@ -106,6 +123,16 @@ namespace SocialLinker.Commands
                 var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
                 Console.WriteLine(json);
             }
+        }
+
+        public static EmbedBuilder Slash_Command_Successful()
+        {
+            var embed = new EmbedBuilder();
+
+            embed.WithColor(0, 207, 41);
+            embed.WithDescription("**Slash command successful** :white_check_mark:");
+
+            return embed;
         }
     }
 }

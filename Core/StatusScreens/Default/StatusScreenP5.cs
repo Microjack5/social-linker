@@ -202,8 +202,7 @@ namespace SocialLinker.Core.StatusScreens
             }
             catch (Exception ex)
             {
-                //Send an error message to the user
-                await channel.SendMessageAsync($":warning: Oops! It looks like something went wrong here. Please try again.");
+                _ = ErrorHandling.Scene_Upload_Failed(user, channel);
                 Console.WriteLine(ex);
 
                 //Delete the loading message

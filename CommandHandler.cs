@@ -53,7 +53,7 @@ namespace SocialLinker
                 if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
                 {
                     Console.WriteLine(result.ErrorReason);
-                }
+                } 
 
                 //Add Proficiency to the user's account whenever a command is successfully used
                 SocialStats.AddProficiency(msg);

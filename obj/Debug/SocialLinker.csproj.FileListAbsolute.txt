@@ -71,3 +71,5 @@ C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\obj\Debug\SocialL
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\obj\Debug\SocialLinker.pdb
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Fergun.Interactive.dll
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Fergun.Interactive.xml
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.IO.Hashing.dll
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.IO.Hashing.xml
