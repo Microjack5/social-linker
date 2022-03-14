@@ -22,28 +22,70 @@ namespace SocialLinker.Commands
             _client.ShardReady += Shop;
             _client.ShardReady += Settings;
             _client.ShardReady += Help;
+            _client.ShardReady += Hug;
+            _client.ShardReady += Pat;
             _client.SlashCommandExecuted += SlashCommandIndex;
             await Task.CompletedTask;
         }
 
         private async Task SlashCommandIndex(SocketSlashCommand command)
         {
-            switch (command.CommandName)
+            try
             {
-                case "status":
-                    try
-                    {
+                switch (command.CommandName)
+                {
+                    case "status":
                         await command.RespondAsync(embed: Slash_Command_Successful().Build(), ephemeral: true);
                         SocialLinker.Commands.Slash.Status status_class = new SocialLinker.Commands.Slash.Status();
-                        
                         _ = status_class.StatusCommandParser1(command);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                    break;
+                        break;
+
+                    case "shop":
+                        break;
+
+                    case "settings":
+                        break;
+
+                    case "help":
+                        await command.RespondAsync(embed: Slash_Command_Successful().Build(), ephemeral: true);
+                        SocialLinker.Commands.Slash.Help help_class = new SocialLinker.Commands.Slash.Help();
+                        _ = help_class.HelpMenu(command);
+                        break;
+
+                    case "hug":
+                        await command.RespondAsync(embed: Slash_Command_Successful().Build(), ephemeral: true);
+                        SocialLinker.Commands.Slash.Hug hug_class = new SocialLinker.Commands.Slash.Hug();
+                        _ = hug_class.HugCommand(command);
+                        break;
+
+                    case "pat":
+                        //await command.RespondAsync(embed: Slash_Command_Successful().Build(), ephemeral: true);
+                        await command.RespondAsync("** **", ephemeral: true);
+                        SocialLinker.Commands.Slash.Pat pat_class = new SocialLinker.Commands.Slash.Pat();
+                        _ = pat_class.PatCommand(command);
+                        break;
+
+                    case "punch":
+                        await command.RespondAsync(embed: Slash_Command_Successful().Build(), ephemeral: true);
+                        SocialLinker.Commands.Slash.Punch punch_class = new SocialLinker.Commands.Slash.Punch();
+                        _ = punch_class.PunchCommand(command);
+                        break;
+
+                    case "slap":
+                        await command.RespondAsync(embed: Slash_Command_Successful().Build(), ephemeral: true);
+                        SocialLinker.Commands.Slash.Slap slap_class = new SocialLinker.Commands.Slash.Slap();
+                        _ = slap_class.SlapCommand(command);
+                        break;
+
+                    case "maker":
+                        break;
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            
             await Task.CompletedTask;
         }
 
@@ -55,7 +97,7 @@ namespace SocialLinker.Commands
             var guildCommand = new SlashCommandBuilder()
                 .WithName("status")
                 .WithDescription("View your status screen, or specify a user to view theirs.")
-                .AddOption("user", ApplicationCommandOptionType.User, "The user whose status screen you want to view.", isRequired: false);
+                .AddOption("user", ApplicationCommandOptionType.User, "The user whose status you want to view.", isRequired: false);
 
             try
             {
@@ -113,6 +155,46 @@ namespace SocialLinker.Commands
             var guildCommand = new SlashCommandBuilder()
                 .WithName("help")
                 .WithDescription("Learn how to use Social Linker.");
+
+            try
+            {
+                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+            }
+            catch (HttpException exception)
+            {
+                var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
+                Console.WriteLine(json);
+            }
+        }
+
+        public static async Task Hug(DiscordSocketClient client)
+        {
+            ulong guildId = 543226698238394378;
+
+            var guildCommand = new SlashCommandBuilder()
+                .WithName("hug")
+                .WithDescription("Give a user a hug.")
+                .AddOption("user", ApplicationCommandOptionType.User, "The user you want to hug.", isRequired: true);
+
+            try
+            {
+                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+            }
+            catch (HttpException exception)
+            {
+                var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
+                Console.WriteLine(json);
+            }
+        }
+
+        public static async Task Pat(DiscordSocketClient client)
+        {
+            ulong guildId = 543226698238394378;
+
+            var guildCommand = new SlashCommandBuilder()
+                .WithName("pat")
+                .WithDescription("Give a user a pat.")
+                .AddOption("user", ApplicationCommandOptionType.User, "The user you want to pat.", isRequired: true);
 
             try
             {

@@ -209,6 +209,11 @@
     <Compile Include="Commands\Context\Slap.cs" />
     <Compile Include="Commands\InteractionHandler.cs" />
     <Compile Include="Commands\Context\Status.cs" />
+    <Compile Include="Commands\Slash\Help.cs" />
+    <Compile Include="Commands\Slash\Hug.cs" />
+    <Compile Include="Commands\Slash\Pat.cs" />
+    <Compile Include="Commands\Slash\Punch.cs" />
+    <Compile Include="Commands\Slash\Slap.cs" />
     <Compile Include="Commands\Slash\Status.cs" />
     <Compile Include="Config\AssetDirectoryConfig.cs" />
     <Compile Include="Config\AzureConfig.cs" />
