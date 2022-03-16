@@ -213,6 +213,7 @@
     <Compile Include="Commands\Slash\Hug.cs" />
     <Compile Include="Commands\Slash\Pat.cs" />
     <Compile Include="Commands\Slash\Punch.cs" />
+    <Compile Include="Commands\Slash\Shop.cs" />
     <Compile Include="Commands\Slash\Slap.cs" />
     <Compile Include="Commands\Slash\Status.cs" />
     <Compile Include="Config\AssetDirectoryConfig.cs" />
@@ -379,6 +380,7 @@
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5S.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_Kasumi_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_P3P_1.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_TMS_GamePad_1.cs" />
     <Compile Include="Core\StatusScreens\ErrorHandling.cs" />
     <Compile Include="Core\StatusScreens\ProgressBar.cs" />
     <Compile Include="Core\StatusScreens\Default\StatusScreenP3.cs" />

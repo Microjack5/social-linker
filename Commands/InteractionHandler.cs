@@ -24,6 +24,8 @@ namespace SocialLinker.Commands
             _client.ShardReady += Help;
             _client.ShardReady += Hug;
             _client.ShardReady += Pat;
+            _client.ShardReady += Punch;
+            _client.ShardReady += Slap;
             _client.SlashCommandExecuted += SlashCommandIndex;
             await Task.CompletedTask;
         }
@@ -41,6 +43,9 @@ namespace SocialLinker.Commands
                         break;
 
                     case "shop":
+                        await command.RespondAsync(embed: Slash_Command_Successful().Build(), ephemeral: true);
+                        SocialLinker.Commands.Slash.Shop shop_class = new SocialLinker.Commands.Slash.Shop();
+                        _ = shop_class.StartShop(command);
                         break;
 
                     case "settings":
@@ -195,6 +200,46 @@ namespace SocialLinker.Commands
                 .WithName("pat")
                 .WithDescription("Give a user a pat.")
                 .AddOption("user", ApplicationCommandOptionType.User, "The user you want to pat.", isRequired: true);
+
+            try
+            {
+                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+            }
+            catch (HttpException exception)
+            {
+                var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
+                Console.WriteLine(json);
+            }
+        }
+
+        public static async Task Punch(DiscordSocketClient client)
+        {
+            ulong guildId = 543226698238394378;
+
+            var guildCommand = new SlashCommandBuilder()
+                .WithName("punch")
+                .WithDescription("Give out unbridled violence.")
+                .AddOption("user", ApplicationCommandOptionType.User, "The user you want to punch.", isRequired: true);
+
+            try
+            {
+                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+            }
+            catch (HttpException exception)
+            {
+                var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
+                Console.WriteLine(json);
+            }
+        }
+
+        public static async Task Slap(DiscordSocketClient client)
+        {
+            ulong guildId = 543226698238394378;
+
+            var guildCommand = new SlashCommandBuilder()
+                .WithName("slap")
+                .WithDescription("Hand out a high five. In the face.")
+                .AddOption("user", ApplicationCommandOptionType.User, "The user you want to slap.", isRequired: true);
 
             try
             {

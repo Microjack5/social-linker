@@ -14,7 +14,7 @@ namespace SocialLinker.Core.LevelSystem
             DateTime current_time = DateTime.UtcNow;
 
             // Create a variable for max Proficiency value.
-            int max_proficiency = 1730;
+            int max_proficiency = SocialStatRanks.proficiency_rank_5_max;
 
             // If the daily loop point has not passed and the daily Proficiency cap has been reached, skip this step.
             TimeSpan time_since_last_day = (TimeSpan)(current_time - account.Loop_Point_Day);
@@ -80,7 +80,7 @@ namespace SocialLinker.Core.LevelSystem
             DateTime current_time = DateTime.UtcNow;
 
             // Create a variable for max Diligence value.
-            int max_diligence = 2800;
+            int max_diligence = SocialStatRanks.diligence_rank_5_max;
 
             // If the daily loop point has not passed and the daily Diligence cap has been reached, return.
             TimeSpan time_since_last_day = (TimeSpan)(current_time - account.Loop_Point_Day);
@@ -164,7 +164,7 @@ namespace SocialLinker.Core.LevelSystem
             DateTime current_time = DateTime.UtcNow;
 
             // Create a variable for max Expression value.
-            int max_expression = 1700;
+            int max_expression = SocialStatRanks.expression_rank_5_max;
 
             // If the daily loop point has not passed and the daily Expression cap has been reached, skip this step.
             TimeSpan time_since_last_day = (TimeSpan)(current_time - account.Loop_Point_Day);
@@ -230,23 +230,23 @@ namespace SocialLinker.Core.LevelSystem
             int answer = 0;
 
             //Comparison values for Proficiency ranks
-            if (input_value < 240)
+            if (input_value <= SocialStatRanks.proficiency_rank_1_max)
             {
                 answer = 1;
             }
-            else if (input_value < 680)
+            else if (input_value <= SocialStatRanks.proficiency_rank_2_max)
             {
                 answer = 2;
             }
-            else if (input_value < 1200)
+            else if (input_value <= SocialStatRanks.proficiency_rank_3_max)
             {
                 answer = 3;
             }
-            else if (input_value < 1730)
+            else if (input_value <= SocialStatRanks.proficiency_rank_4_max)
             {
                 answer = 4;
             }
-            else if (input_value >= 1730)
+            else if (input_value >= SocialStatRanks.proficiency_rank_5_max)
             {
                 answer = 5;
             }
@@ -260,23 +260,23 @@ namespace SocialLinker.Core.LevelSystem
             int answer = 0;
 
             //Comparison values for Diligence ranks
-            if (input_value < 320)
+            if (input_value <= SocialStatRanks.diligence_rank_1_max)
             {
                 answer = 1;
             }
-            else if (input_value < 800)
+            else if (input_value <= SocialStatRanks.diligence_rank_2_max)
             {
                 answer = 2;
             }
-            else if (input_value < 1600)
+            else if (input_value <= SocialStatRanks.diligence_rank_3_max)
             {
                 answer = 3;
             }
-            else if (input_value < 2800)
+            else if (input_value <= SocialStatRanks.diligence_rank_4_max)
             {
                 answer = 4;
             }
-            else if (input_value >= 2800)
+            else if (input_value >= SocialStatRanks.diligence_rank_5_max)
             {
                 answer = 5;
             }
@@ -290,23 +290,23 @@ namespace SocialLinker.Core.LevelSystem
             int answer = 0;
 
             //Comparison values for Expression ranks
-            if (input_value < 260)
+            if (input_value <= SocialStatRanks.expression_rank_1_max)
             {
                 answer = 1;
             }
-            else if (input_value < 660)
+            else if (input_value <= SocialStatRanks.expression_rank_2_max)
             {
                 answer = 2;
             }
-            else if (input_value < 1060)
+            else if (input_value <= SocialStatRanks.expression_rank_3_max)
             {
                 answer = 3;
             }
-            else if (input_value < 1700)
+            else if (input_value <= SocialStatRanks.expression_rank_4_max)
             {
                 answer = 4;
             }
-            else if (input_value >= 1700)
+            else if (input_value >= SocialStatRanks.expression_rank_5_max)
             {
                 answer = 5;
             }
@@ -796,5 +796,29 @@ namespace SocialLinker.Core.LevelSystem
 
             await channel.SendMessageAsync("", false, embed.Build());
         }
+    }
+
+    public class SocialStatRanks
+    {
+        // Proficiency
+        public const int proficiency_rank_1_max = 239;
+        public const int proficiency_rank_2_max = 679;
+        public const int proficiency_rank_3_max = 1199;
+        public const int proficiency_rank_4_max = 1729;
+        public const int proficiency_rank_5_max = 1730;
+
+        // Diligence
+        public const int diligence_rank_1_max = 319;
+        public const int diligence_rank_2_max = 799;
+        public const int diligence_rank_3_max = 1599;
+        public const int diligence_rank_4_max = 2799;
+        public const int diligence_rank_5_max = 2800;
+
+        // Expression
+        public const int expression_rank_1_max = 259;
+        public const int expression_rank_2_max = 659;
+        public const int expression_rank_3_max = 1059;
+        public const int expression_rank_4_max = 1699;
+        public const int expression_rank_5_max = 1700;
     }
 }
