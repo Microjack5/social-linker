@@ -8,6 +8,7 @@ namespace SocialLinker.Core.LevelSystem
 {
     internal static class SocialStats
     {
+        // Add stats to accounts
         internal static void AddProficiency(SocketMessage message)
         {
             var account = UserInfoClasses.GetAccount(message.Author);
@@ -224,6 +225,7 @@ namespace SocialLinker.Core.LevelSystem
             AllRanksMaxedCheck(message);
         }
 
+        // Utility methods
         internal static int CalculateProficiencyRank(double input_value)
         {
             //Create variable
@@ -314,6 +316,11 @@ namespace SocialLinker.Core.LevelSystem
             return answer;
         }
 
+        public static decimal SocialStatToDecimal(int input_integer)
+        {
+            return decimal.Round((decimal)input_integer / 10, 2, MidpointRounding.AwayFromZero);
+        }
+
         internal static string ProficiencyRankTitle(int rank)
         {
             string title = "";
@@ -398,6 +405,7 @@ namespace SocialLinker.Core.LevelSystem
             return title;
         }
 
+        // Rank messages
         internal static async void ProficiencyRankUpMessage(SocketMessage message, int new_rank)
         {
             var user = message.Author;
@@ -801,6 +809,12 @@ namespace SocialLinker.Core.LevelSystem
     public class SocialStatRanks
     {
         // Proficiency
+        public const int proficiency_rank_1_min = 0;
+        public const int proficiency_rank_2_min = 240;
+        public const int proficiency_rank_3_min = 680;
+        public const int proficiency_rank_4_min = 1200;
+        public const int proficiency_rank_5_min = 1730;
+
         public const int proficiency_rank_1_max = 239;
         public const int proficiency_rank_2_max = 679;
         public const int proficiency_rank_3_max = 1199;
@@ -808,6 +822,12 @@ namespace SocialLinker.Core.LevelSystem
         public const int proficiency_rank_5_max = 1730;
 
         // Diligence
+        public const int diligence_rank_1_min = 0;
+        public const int diligence_rank_2_min = 320;
+        public const int diligence_rank_3_min = 800;
+        public const int diligence_rank_4_min = 1600;
+        public const int diligence_rank_5_min = 2800;
+
         public const int diligence_rank_1_max = 319;
         public const int diligence_rank_2_max = 799;
         public const int diligence_rank_3_max = 1599;
@@ -815,6 +835,12 @@ namespace SocialLinker.Core.LevelSystem
         public const int diligence_rank_5_max = 2800;
 
         // Expression
+        public const int expression_rank_1_min = 0;
+        public const int expression_rank_2_min = 300;
+        public const int expression_rank_3_min = 660;
+        public const int expression_rank_4_min = 1060;
+        public const int expression_rank_5_min = 1700;
+
         public const int expression_rank_1_max = 259;
         public const int expression_rank_2_max = 659;
         public const int expression_rank_3_max = 1059;

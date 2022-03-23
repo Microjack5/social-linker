@@ -49,9 +49,9 @@ namespace SocialLinker.Core.StatusScreens.Decor
                 int total_exp = account.Total_Exp;
                 string profile_picture = user.GetAvatarUrl();
                 string pmedals = $"{account.P_Medals}";
-                string proficiency_title = Core.LevelSystem.SocialStats.ProficiencyRankTitle(account.Proficiency_Rank);
-                string diligence_title = Core.LevelSystem.SocialStats.DiligenceRankTitle(account.Diligence_Rank);
-                string expression_title = Core.LevelSystem.SocialStats.ExpressionRankTitle(account.Expression_Rank);
+                string proficiency_title = LevelSystem.SocialStats.ProficiencyRankTitle(account.Proficiency_Rank);
+                string diligence_title = LevelSystem.SocialStats.DiligenceRankTitle(account.Diligence_Rank);
+                string expression_title = LevelSystem.SocialStats.ExpressionRankTitle(account.Expression_Rank);
 
                 //Determine the Next Exp value
                 int next_exp = 0;

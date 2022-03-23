@@ -19,13 +19,13 @@ namespace SocialLinker.Commands
         {
             _client = client;
             _client.ShardReady += Status;
-            _client.ShardReady += Shop;
+            /*_client.ShardReady += Shop;
             _client.ShardReady += Settings;
             _client.ShardReady += Help;
             _client.ShardReady += Hug;
             _client.ShardReady += Pat;
             _client.ShardReady += Punch;
-            _client.ShardReady += Slap;
+            _client.ShardReady += Slap; */
             _client.SlashCommandExecuted += SlashCommandIndex;
             await Task.CompletedTask;
         }
