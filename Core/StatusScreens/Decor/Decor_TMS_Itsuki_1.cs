@@ -67,15 +67,12 @@ namespace SocialLinker.Core.StatusScreens.Decor
                     }
                 }
 
-                //Save the bitmap to a data stream
                 MemoryStream memoryStream = new MemoryStream();
                 base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
                 memoryStream.Seek(0, SeekOrigin.Begin);
 
-                //Send the image
                 await channel.SendFileAsync(memoryStream, $"status_{user.Id}_{DateTime.UtcNow}.png");
 
-                //Delete the loading message
                 await loader.DeleteAsync();
             }
             catch (Exception ex)
@@ -83,7 +80,6 @@ namespace SocialLinker.Core.StatusScreens.Decor
                 _ = ErrorHandling.Scene_Upload_Failed(user, channel);
                 Console.WriteLine(ex);
 
-                //Delete the loading message
                 await loader.DeleteAsync();
 
                 return;
@@ -223,12 +219,12 @@ namespace SocialLinker.Core.StatusScreens.Decor
         {
             var account = UserInfoClasses.GetAccount(user);
 
-            Bitmap new_bitmap = new Bitmap(1920, 1080);
+            Bitmap new_bitmap = new Bitmap(template_width, template_height);
 
             int total_exp = account.Total_Exp;
 
-            Rectangle main_bar = new Rectangle(412 - 55, 202 + 60, 352, 18);
-            Rectangle shadow_bar = new Rectangle(412 - 55, 218 + 60, 352, 2);
+            Rectangle main_bar = new Rectangle(357, 262, 352, 18);
+            Rectangle shadow_bar = new Rectangle(357, 278, 352, 2);
 
             int bar_max_value = 0;
             int bar_filled_value = 0;
@@ -288,7 +284,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
 
         public static Bitmap RenderRankBarLayer(UserInfoFields account)
         {
-            Bitmap new_bitmap = new Bitmap(1920, 1080);
+            Bitmap new_bitmap = new Bitmap(template_width, template_height);
 
             System.Drawing.Color tms_white = System.Drawing.Color.White;
             System.Drawing.Color tms_yellow = System.Drawing.Color.FromArgb(255, 255, 3);
@@ -299,8 +295,8 @@ namespace SocialLinker.Core.StatusScreens.Decor
             int diligence_rank = LevelSystem.SocialStats.CalculateDiligenceRank(account.Diligence);
             int expression_rank = LevelSystem.SocialStats.CalculateExpressionRank(account.Expression);
 
-            int initial_x_value = 412 - 55;
-            int initial_y_value = 488 + 60;
+            int initial_x_value = 357;
+            int initial_y_value = 548;
             int shadow_y_value = 0;
             int x = 0;
             int y = 0;
@@ -374,7 +370,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
         public static Bitmap RenderRankProgressBar(UserInfoFields account, string social_stat, int x, int y)
         {
             // Create a working space bitmap
-            Bitmap new_bitmap = new Bitmap(1920, 1080);
+            Bitmap new_bitmap = new Bitmap(template_width, template_height);
 
             int bar_max_value = 0;
             int bar_filled_value = 0;
@@ -465,9 +461,9 @@ namespace SocialLinker.Core.StatusScreens.Decor
             using (Graphics graphics = Graphics.FromImage(base_bitmap))
             {
                 graphics.DrawImage(RenderRankBarLayer(account), 0, 0, template_width, template_height);
-                graphics.DrawImage(RenderRankProgressBar(account, "Proficiency", 412 - 55, 529 + 60), 0, 0, template_width, template_height);
-                graphics.DrawImage(RenderRankProgressBar(account, "Diligence", 412 - 55, 683 + 60), 0, 0, template_width, template_height);
-                graphics.DrawImage(RenderRankProgressBar(account, "Expression", 412 - 55, 837 + 60), 0, 0, template_width, template_height);
+                graphics.DrawImage(RenderRankProgressBar(account, "Proficiency", 357, 589), 0, 0, template_width, template_height);
+                graphics.DrawImage(RenderRankProgressBar(account, "Diligence", 357, 743), 0, 0, template_width, template_height);
+                graphics.DrawImage(RenderRankProgressBar(account, "Expression", 357, 897), 0, 0, template_width, template_height);
 
                 graphics.DrawImage(KeepOverlapWithMatchedColor(base_bitmap, CreateMaxRankShineBitmap("Proficiency"), tms_yellow, area_x, area_y, area_width, area_height), 0, 0, template_width, template_height);
                 graphics.DrawImage(KeepOverlapWithMatchedColor(base_bitmap, CreateMaxRankShineBitmap("Diligence"), tms_yellow, area_x, area_y, area_width, area_height), 0, 0, template_width, template_height);
