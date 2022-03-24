@@ -28,16 +28,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             {
                 var account = UserInfoClasses.GetAccount(user);
 
-                string username = "";
-
-                if (user.Username.Length > 24)
-                {
-                    username = $"{username.Substring(0, 24)}...";
-                }
-                else
-                {
-                    username = $"{user.Username}";
-                }
+                string username = Shorten_Long_Strings(user.Username, 24);
 
                 //Establish other variables of the user's data
                 string level = $"{account.Level}";
