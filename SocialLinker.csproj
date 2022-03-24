@@ -382,6 +382,7 @@
     <Compile Include="Core\StatusScreens\Decor\Decor_P3P_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_TMS_GamePad_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_TMS_Itsuki_1.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_TMS_Kiria_1.cs" />
     <Compile Include="Core\StatusScreens\ErrorHandling.cs" />
     <Compile Include="Core\StatusScreens\ProgressBar.cs" />
     <Compile Include="Core\StatusScreens\Default\StatusScreenP3.cs" />
