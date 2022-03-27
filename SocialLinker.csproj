@@ -369,6 +369,7 @@
     <Compile Include="Core\SceneMaker\MoonPhaseCalculator.cs" />
     <Compile Include="Core\SceneMaker\OfficialSetLists.cs" />
     <Compile Include="Core\SceneMaker\OfficialSetSheets.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderBBTAG.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP1_PS1.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP2EP_PS1.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP2IS_PS1.cs" />
