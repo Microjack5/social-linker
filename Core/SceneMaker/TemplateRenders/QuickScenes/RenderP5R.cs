@@ -529,7 +529,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         {
             // First, let's establish some values.
             // The max pixel length of a line.
-            int max_line_length = 800;
+            int max_line_length = 660;
 
             // The number of pixels in a line remaining. This will gradually decrease as the pixel length of characters are subtracted from it.
             int line_length_remaining = max_line_length;
@@ -843,7 +843,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Render_Message_Window(int number_of_lines, int max_line_length)
         {
             // How the vectors are rendered is strongly determined
-            int default_line_length = 536;
+            int default_line_length = 365;
             int starting_dialogue_position = 672;
 
             int end_of_line = 0;
@@ -879,70 +879,87 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Random rnd = new Random();
 
             // Create multiple variables for the potential min and max values of the thirteen black outer points of the message window.
-            int black_point_1_x_min = 479;
-            int black_point_1_x_max = 479;
-            int black_point_1_y_min = 909;
-            int black_point_1_y_max = 909;
+            int black_point_1_x_min = 448;
+            int black_point_1_x_max = 456;
+            int black_point_1_y_min = 902;
+            int black_point_1_y_max = 912;
 
-            int black_point_2_x_min = 549;
-            int black_point_2_x_max = 570;
-            int black_point_2_y_min = 1034;
-            int black_point_2_y_max = 1062;
+            int black_point_2_x_min = 448;
+            int black_point_2_x_max = 460;
+            int black_point_2_y_min = 912;
+            int black_point_2_y_max = 921;
 
-            int black_point_3_x_min = 575;
-            int black_point_3_x_max = 584;
-            int black_point_3_y_min = 1004;
-            int black_point_3_y_max = 1013;
+            int black_point_3_x_min = 541;
+            int black_point_3_x_max = 555;
+            int black_point_3_y_min = 990;
+            int black_point_3_y_max = 994;
 
-            int black_point_4_x_min = 624;
-            int black_point_4_x_max = 625;
-            int black_point_4_y_min = 1066;
-            int black_point_4_y_max = 1073;
+            int black_point_4_x_min = 557;
+            int black_point_4_x_max = 576;
+            int black_point_4_y_min = 969;
+            int black_point_4_y_max = 973;
 
-            int black_point_5_x_min = 652;
-            int black_point_5_x_max = 653;
-            int black_point_5_y_min = 1037;
-            int black_point_5_y_max = 1041;
+            int black_point_5_x_min = 633;
+            int black_point_5_x_max = 643;
+            int black_point_5_y_min = 1025;
+            int black_point_5_y_max = 1029;
 
-            int black_point_6_x_min = 671;
-            int black_point_6_x_max = 677;
-            int black_point_6_y_min = 1047;
-            int black_point_6_y_max = 1049;
+            int black_point_6_x_min = 662;
+            int black_point_6_x_max = 675;
+            int black_point_6_y_min = 999;
+            int black_point_6_y_max = 1005;
 
-            int black_point_7_x_min = end_of_line + 51; // 1259
-            int black_point_7_x_max = end_of_line + 52; // 1260
-            int black_point_7_y_min = 1024;
-            int black_point_7_y_max = 1026;
+            // Sect 1
 
-            int black_point_8_x_min = end_of_line + 151; // 1359
-            int black_point_8_x_max = end_of_line + 152; // 1361
-            int black_point_8_y_min = 891;
-            int black_point_8_y_max = 892;
+            int black_point_7_x_min = end_of_line + 0;
+            int black_point_7_x_max = end_of_line + 0;
+            int black_point_7_y_min = 0;
+            int black_point_7_y_max = 0;
 
-            int black_point_9_x_min = end_of_line + 26; // 1234
-            int black_point_9_x_max = end_of_line + 35; // 1243
-            int black_point_9_y_min = 779;
-            int black_point_9_y_max = 784;
+            int black_point_8_x_min = end_of_line + 0;
+            int black_point_8_x_max = end_of_line + 0;
+            int black_point_8_y_min = 0;
+            int black_point_8_y_max = 0;
 
-            int black_point_10_x_min = 612;
-            int black_point_10_x_max = 617;
-            int black_point_10_y_min = 838;
-            int black_point_10_y_max = 843;
+            int black_point_9_x_min = end_of_line + 0;
+            int black_point_9_x_max = end_of_line + 0;
+            int black_point_9_y_min = 0;
+            int black_point_9_y_max = 0;
 
-            int black_point_11_x_min = 602;
-            int black_point_11_x_max = 608;
-            int black_point_11_y_min = 890;
-            int black_point_11_y_max = 897;
+            int black_point_10_x_min = end_of_line + 0;
+            int black_point_10_x_max = end_of_line + 0;
+            int black_point_10_y_min = 0;
+            int black_point_10_y_max = 0;
 
-            int black_point_12_x_min = 561;
-            int black_point_12_x_max = 571;
-            int black_point_12_y_min = 849;
-            int black_point_12_y_max = 872;
+            int black_point_11_x_min = 0;
+            int black_point_11_x_max = 0;
+            int black_point_11_y_min = 0;
+            int black_point_11_y_max = 0;
 
-            int black_point_13_x_min = 541;
-            int black_point_13_x_max = 546;
-            int black_point_13_y_min = 913;
-            int black_point_13_y_max = 918;
+            int black_point_12_x_min = 598;
+            int black_point_12_x_max = 605;
+            int black_point_12_y_min = 854;
+            int black_point_12_y_max = 859;
+
+            int black_point_13_x_min = 578;
+            int black_point_13_x_max = 590;
+            int black_point_13_y_min = 907;
+            int black_point_13_y_max = 914;
+
+            int black_point_14_x_min = 0;
+            int black_point_14_x_max = 0;
+            int black_point_14_y_min = 0;
+            int black_point_14_y_max = 0;
+
+            int black_point_15_x_min = 0;
+            int black_point_15_x_max = 0;
+            int black_point_15_y_min = 0;
+            int black_point_15_y_max = 0;
+
+            int black_point_16_x_min = 507;
+            int black_point_16_x_max = 525;
+            int black_point_16_y_min = 906;
+            int black_point_16_y_max = 919;
 
             switch (number_of_lines)
             {
