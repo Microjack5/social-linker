@@ -842,20 +842,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         // Vector rendering
         public static Bitmap Render_Message_Window(int number_of_lines, int max_line_length)
         {
-            // How the vectors are rendered is strongly determined
-            int default_line_length = 365;
-            int starting_dialogue_position = 672;
-
-            int end_of_line = 0;
-
-            if (max_line_length > default_line_length)
-            {
-                end_of_line = starting_dialogue_position + max_line_length;
-            }
-            else
-            {
-                end_of_line = starting_dialogue_position + default_line_length;
-            }
+            
 
             // We'll need to create four layers:
             // - Base layer
@@ -877,6 +864,23 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Create a new random variable.
             Random rnd = new Random();
+
+            // How the vectors are rendered is strongly determined
+            int default_line_length = 365;
+            int starting_dialogue_position = 672;
+
+            int line_ended = 1107;
+
+            int end_of_line = 0;
+
+            if (max_line_length > default_line_length)
+            {
+                end_of_line = starting_dialogue_position + max_line_length;
+            }
+            else
+            {
+                end_of_line = starting_dialogue_position + default_line_length;
+            }
 
             // Create multiple variables for the potential min and max values of the thirteen black outer points of the message window.
             int black_point_1_x_min = 448;
