@@ -197,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="Commands\CommandConverter.cs" />
     <Compile Include="Commands\Context\Calculator.cs" />
     <Compile Include="Commands\Context\Help.cs" />
     <Compile Include="Commands\Context\Hug.cs" />
