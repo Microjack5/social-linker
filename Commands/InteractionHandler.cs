@@ -32,8 +32,6 @@ namespace SocialLinker.Commands
 
         private async Task SlashCommandIndex(SocketSlashCommand command)
         {
-            command.
-
             try
             {
                 switch (command.CommandName)
