@@ -197,26 +197,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
-    <Compile Include="Commands\CommandConverter.cs" />
-    <Compile Include="Commands\Context\Calculator.cs" />
-    <Compile Include="Commands\Context\Help.cs" />
-    <Compile Include="Commands\Context\Hug.cs" />
-    <Compile Include="Commands\Context\Maker.cs" />
-    <Compile Include="Commands\Context\Multiply.cs" />
-    <Compile Include="Commands\Context\Pat.cs" />
-    <Compile Include="Commands\Context\Punch.cs" />
-    <Compile Include="Commands\Context\Settings.cs" />
-    <Compile Include="Commands\Context\Shop.cs" />
-    <Compile Include="Commands\Context\Slap.cs" />
+    <Compile Include="Commands\Calculator.cs" />
+    <Compile Include="Commands\Help.cs" />
+    <Compile Include="Commands\Hug.cs" />
+    <Compile Include="Commands\Maker.cs" />
+    <Compile Include="Commands\Multiply.cs" />
+    <Compile Include="Commands\Pat.cs" />
+    <Compile Include="Commands\Punch.cs" />
+    <Compile Include="Commands\Settings.cs" />
+    <Compile Include="Commands\Shop.cs" />
+    <Compile Include="Commands\Slap.cs" />
     <Compile Include="Commands\InteractionHandler.cs" />
-    <Compile Include="Commands\Context\Status.cs" />
-    <Compile Include="Commands\Slash\Help.cs" />
-    <Compile Include="Commands\Slash\Hug.cs" />
-    <Compile Include="Commands\Slash\Pat.cs" />
-    <Compile Include="Commands\Slash\Punch.cs" />
-    <Compile Include="Commands\Slash\Shop.cs" />
-    <Compile Include="Commands\Slash\Slap.cs" />
-    <Compile Include="Commands\Slash\Status.cs" />
+    <Compile Include="Commands\Status.cs" />
     <Compile Include="Config\AssetDirectoryConfig.cs" />
     <Compile Include="Config\AzureConfig.cs" />
     <Compile Include="Config\BotConfig.cs" />
