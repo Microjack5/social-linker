@@ -87,7 +87,7 @@ namespace SocialLinker
                 CommandName = parsed_command_name,
                 User = message.Author,
                 Channel = message.Channel,
-                MentionedUser = message.MentionedUsers.First(),
+                //MentionedUser = message.MentionedUsers.First() ?? null,
                 Content = parsed_content,
                 Attachments = message.Attachments,
                 Message = (SocketUserMessage)message
@@ -142,7 +142,7 @@ namespace SocialLinker
             
         }
 
-        private async Task HandleCommandAsync(SocketMessage s)
+        /*private async Task HandleCommandAsync(SocketMessage s)
         {
             var msg = s as SocketUserMessage;
             if (msg == null) return;
@@ -176,9 +176,9 @@ namespace SocialLinker
 
             //Leveling up manages the user's time caps, so make sure it comes after AddProficiency and AddDiligence have ran
             Leveling.UserSentMessage(msg);
-        }
+        } */
 
-        private async Task HandleContextCommandAsync(SocketMessage s)
+        private async Task HandleCommandAsync(SocketMessage s)
         {
             var msg = s as SocketUserMessage;
             if (msg == null) return;
@@ -194,10 +194,23 @@ namespace SocialLinker
             //If the user is in a time out status, do nothing and return
             if (TimeOut.TimeOutStatus(msg) == "Yes") return;
 
+            Console.WriteLine("Here 0");
+
             int argPos = 0;
             if (msg.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
             {
-                var converted_sl_command = CommandConverter.ContextCommandConverter(msg);
+                Console.WriteLine("Here 1");
+                try
+                {
+                    var converted_sl_command = CommandConverter.ContextCommandConverter(msg);
+                    Console.WriteLine("Here 2");
+                    Console.WriteLine(converted_sl_command.CommandName);
+                    await CommandIndex(converted_sl_command);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
 
                 //Add Proficiency to the user's account whenever a command is successfully used
                 //SocialStats.AddProficiency(msg);
@@ -230,6 +243,7 @@ namespace SocialLinker
                     break;
 
                 case "help":
+                    await Commands.Help.HelpMenu(command);
                     break;
 
                 case "hug":

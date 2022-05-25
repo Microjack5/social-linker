@@ -387,6 +387,14 @@
                 The maximum number of users that can be gotten per-batch.
             </returns>
         </member>
+        <member name="F:Discord.DiscordConfig.MaxBansPerBatch">
+            <summary>
+                Returns the max bans allowed to be in a request.
+            </summary>
+            <returns>
+                The maximum number of bans that can be gotten per-batch.
+            </returns>
+        </member>
         <member name="F:Discord.DiscordConfig.MaxGuildEventUsersPerBatch">
             <summary>
                 Returns the max users allowed to be in a request for guild event users.
@@ -480,6 +488,16 @@
                 will be set to when it was received instead of the snowflakes date.
                 <br/>
                 <b>This will still require a stable clock on your system.</b>
+            </remarks>
+        </member>
+        <member name="P:Discord.DiscordConfig.FormatUsersInBidirectionalUnicode">
+            <summary>
+                Gets or sets if the Rest/Socket user <see cref="M:System.Object.ToString"/> override formats the string in respect to bidirectional unicode.
+            </summary>
+            <remarks>
+                By default, the returned value will be "?Discord?#1234", to work with bidirectional usernames.
+                <br/>
+                If set to <see langword="false"/>, this value will be "Discord#1234".
             </remarks>
         </member>
         <member name="T:Discord.DiscordErrorCode">
@@ -1398,10 +1416,10 @@
         </member>
         <member name="T:Discord.Direction">
             <summary>
-                Specifies the direction of where message(s) should be retrieved from.
+                Specifies the direction of where entities (e.g. bans/messages) should be retrieved from.
             </summary>
             <remarks>
-                This enum is used to specify the direction for retrieving messages.
+                This enum is used to specify the direction for retrieving entities.
                 <note type="important">
                     At the time of writing, <see cref="F:Discord.Direction.Around"/> is not yet implemented into 
                     <see cref="M:Discord.IMessageChannel.GetMessagesAsync(System.Int32,Discord.CacheMode,Discord.RequestOptions)"/>.
@@ -1412,17 +1430,17 @@
         </member>
         <member name="F:Discord.Direction.Before">
             <summary>
-                The message(s) should be retrieved before a message.
+                The entity(s) should be retrieved before an entity.
             </summary>
         </member>
         <member name="F:Discord.Direction.After">
             <summary>
-                The message(s) should be retrieved after a message.
+                The entity(s) should be retrieved after an entity.
             </summary>
         </member>
         <member name="F:Discord.Direction.Around">
             <summary>
-                The message(s) should be retrieved around a message.
+                The entity(s) should be retrieved around an entity.
             </summary>
         </member>
         <member name="T:Discord.GuildChannelProperties">
@@ -3392,26 +3410,6 @@
             <param name="feature">The feature to check for.</param>
             <returns><see langword="true"/> if this guild has the provided feature, otherwise <see langword="false"/>.</returns>
         </member>
-        <member name="T:Discord.GuildIntegrationProperties">
-            <summary>
-                Provides properties used to modify an <see cref="T:Discord.IGuildIntegration" /> with the specified changes.
-            </summary>
-        </member>
-        <member name="P:Discord.GuildIntegrationProperties.ExpireBehavior">
-            <summary>
-                Gets or sets the behavior when an integration subscription lapses.
-            </summary>
-        </member>
-        <member name="P:Discord.GuildIntegrationProperties.ExpireGracePeriod">
-            <summary>
-                Gets or sets the period (in seconds) where the integration will ignore lapsed subscriptions.
-            </summary>
-        </member>
-        <member name="P:Discord.GuildIntegrationProperties.EnableEmoticons">
-            <summary>
-                Gets or sets whether emoticons should be synced for this integration.
-            </summary>
-        </member>
         <member name="T:Discord.GuildProperties">
             <summary>
                 Provides properties that are used to modify an <see cref="T:Discord.IGuild" /> with the specified changes.
@@ -4151,15 +4149,71 @@
                 A task that represents the asynchronous leave operation.
             </returns>
         </member>
-        <member name="M:Discord.IGuild.GetBansAsync(Discord.RequestOptions)">
+        <member name="M:Discord.IGuild.GetBansAsync(System.Int32,Discord.RequestOptions)">
             <summary>
-                Gets a collection of all users banned in this guild.
+                Gets <paramref name="limit"/> amount of bans from the guild ordered by user ID.
             </summary>
+            <remarks>
+                <note type="important">
+                    The returned collection is an asynchronous enumerable object; one must call 
+                    <see cref="M:Discord.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})"/> to access the individual messages as a
+                    collection.
+                </note>
+                <note type="warning">
+                    Do not fetch too many bans at once! This may cause unwanted preemptive rate limit or even actual
+                    rate limit, causing your bot to freeze!
+                </note>
+            </remarks>
+            <param name="limit">The amount of bans to get from the guild.</param>
             <param name="options">The options to be used when sending the request.</param>
             <returns>
-                A task that represents the asynchronous get operation. The task result contains a read-only collection of
-                ban objects that this guild currently possesses, with each object containing the user banned and reason
-                behind the ban.
+                A paged collection of bans.
+            </returns>
+        </member>
+        <member name="M:Discord.IGuild.GetBansAsync(System.UInt64,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <summary>
+                Gets <paramref name="limit"/> amount of bans from the guild starting at the provided <paramref name="fromUserId"/> ordered by user ID.
+            </summary>
+            <remarks>
+                <note type="important">
+                    The returned collection is an asynchronous enumerable object; one must call 
+                    <see cref="M:Discord.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})"/> to access the individual messages as a
+                    collection.
+                </note>
+                <note type="warning">
+                    Do not fetch too many bans at once! This may cause unwanted preemptive rate limit or even actual
+                    rate limit, causing your bot to freeze!
+                </note>
+            </remarks>
+            <param name="fromUserId">The ID of the user to start to get bans from.</param>
+            <param name="dir">The direction of the bans to be gotten.</param>
+            <param name="limit">The number of bans to get.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A paged collection of bans.
+            </returns>
+        </member>
+        <member name="M:Discord.IGuild.GetBansAsync(Discord.IUser,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <summary>
+                Gets <paramref name="limit"/> amount of bans from the guild starting at the provided <paramref name="fromUser"/> ordered by user ID.
+            </summary>
+            <remarks>
+                <note type="important">
+                    The returned collection is an asynchronous enumerable object; one must call 
+                    <see cref="M:Discord.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})"/> to access the individual messages as a
+                    collection.
+                </note>
+                <note type="warning">
+                    Do not fetch too many bans at once! This may cause unwanted preemptive rate limit or even actual
+                    rate limit, causing your bot to freeze!
+                </note>
+            </remarks>
+            <param name="fromUser">The user to start to get bans from.</param>
+            <param name="dir">The direction of the bans to be gotten.</param>
+            <param name="limit">The number of bans to get.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A paged collection of bans.
             </returns>
         </member>
         <member name="M:Discord.IGuild.GetBanAsync(Discord.IUser,Discord.RequestOptions)">
@@ -4482,6 +4536,26 @@
             <returns>
                 A task that represents the asynchronous get operation. The task result contains a read-only collection of
                 voice regions the guild can access.
+            </returns>
+        </member>
+        <member name="M:Discord.IGuild.GetIntegrationsAsync(Discord.RequestOptions)">
+            <summary>
+                Gets a collection of all the integrations this guild contains.
+            </summary>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents the asynchronous get operation. The task result contains a read-only collection of
+                integrations the guild can has.
+            </returns>
+        </member>
+        <member name="M:Discord.IGuild.DeleteIntegrationAsync(System.UInt64,Discord.RequestOptions)">
+            <summary>
+                Deletes an integration.
+            </summary>
+            <param name="id">The id for the integration.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents the asynchronous removal operation.
             </returns>
         </member>
         <member name="M:Discord.IGuild.GetInvitesAsync(Discord.RequestOptions)">
@@ -4928,78 +5002,6 @@
                 A task that represents the asynchronous creation operation. The task result contains a collection of commands that was created.
             </returns>
         </member>
-        <member name="T:Discord.IGuildIntegration">
-            <summary>
-                Holds information for a guild integration feature.
-            </summary>
-        </member>
-        <member name="P:Discord.IGuildIntegration.Id">
-            <summary>
-                Gets the integration ID.
-            </summary>
-            <returns>
-                An <see cref="T:System.UInt64"/> representing the unique identifier value of this integration.
-            </returns>
-        </member>
-        <member name="P:Discord.IGuildIntegration.Name">
-            <summary>
-                Gets the integration name.
-            </summary>
-            <returns>
-                A string containing the name of this integration.
-            </returns>
-        </member>
-        <member name="P:Discord.IGuildIntegration.Type">
-            <summary>
-                Gets the integration type (Twitch, YouTube, etc).
-            </summary>
-            <returns>
-                A string containing the name of the type of integration.
-            </returns>
-        </member>
-        <member name="P:Discord.IGuildIntegration.IsEnabled">
-            <summary>
-                Gets a value that indicates whether this integration is enabled or not.
-            </summary>
-            <returns>
-                <c>true</c> if this integration is enabled; otherwise <c>false</c>.
-            </returns>
-        </member>
-        <member name="P:Discord.IGuildIntegration.IsSyncing">
-            <summary>
-                Gets a value that indicates whether this integration is syncing or not.
-            </summary>
-            <remarks>
-                An integration with syncing enabled will update its "subscribers" on an interval, while one with syncing
-                disabled will not. A user must manually choose when sync the integration if syncing is disabled.
-            </remarks>
-            <returns>
-                 <c>true</c> if this integration is syncing; otherwise <c>false</c>.
-            </returns>
-        </member>
-        <member name="P:Discord.IGuildIntegration.ExpireBehavior">
-            <summary>
-                Gets the ID that this integration uses for "subscribers".
-            </summary>
-        </member>
-        <member name="P:Discord.IGuildIntegration.ExpireGracePeriod">
-            <summary>
-                Gets the grace period before expiring "subscribers".
-            </summary>
-        </member>
-        <member name="P:Discord.IGuildIntegration.SyncedAt">
-            <summary>
-                Gets when this integration was last synced.
-            </summary>
-            <returns>
-                A <see cref="T:System.DateTimeOffset"/> containing a date and time of day when the integration was last synced.
-            </returns>
-        </member>
-        <member name="P:Discord.IGuildIntegration.Account">
-            <summary>
-                Gets integration account information.
-            </summary>
-        </member>
         <member name="T:Discord.IGuildScheduledEvent">
             <summary>
                 Represents a generic guild scheduled event.
@@ -5167,14 +5169,6 @@
             <returns>
                 Paged collection of users.
             </returns>
-        </member>
-        <member name="P:Discord.IntegrationAccount.Id">
-            <summary> Gets the ID of the account. </summary>
-            <returns> A <see cref="T:System.String"/> unique identifier of this integration account. </returns>
-        </member>
-        <member name="P:Discord.IntegrationAccount.Name">
-            <summary> Gets the name of the account. </summary>
-            <returns> A string containing the name of this integration account. </returns>
         </member>
         <member name="P:Discord.IUserGuild.Name">
             <summary>
@@ -5556,6 +5550,180 @@
                 A string that is recognized by Discord as a mention (e.g. &lt;@168693960628371456&gt;).
             </returns>
         </member>
+        <member name="T:Discord.IIntegration">
+            <summary>
+                Holds information for an integration feature.
+                Nullable fields not provided for Discord bot integrations, but are for Twitch etc.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegration.Id">
+            <summary>
+                Gets the integration ID.
+            </summary>
+            <returns>
+                A <see cref="T:System.UInt64"/> representing the unique identifier value of this integration.
+            </returns>
+        </member>
+        <member name="P:Discord.IIntegration.Name">
+            <summary>
+                Gets the integration name.
+            </summary>
+            <returns>
+                A string containing the name of this integration.
+            </returns>
+        </member>
+        <member name="P:Discord.IIntegration.Type">
+            <summary>
+                Gets the integration type (Twitch, YouTube, etc).
+            </summary>
+            <returns>
+                A string containing the name of the type of integration.
+            </returns>
+        </member>
+        <member name="P:Discord.IIntegration.IsEnabled">
+            <summary>
+                Gets a value that indicates whether this integration is enabled or not.
+            </summary>
+            <returns>
+                <c>true</c> if this integration is enabled; otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="P:Discord.IIntegration.IsSyncing">
+            <summary>
+                Gets a value that indicates whether this integration is syncing or not.
+            </summary>
+            <remarks>
+                An integration with syncing enabled will update its "subscribers" on an interval, while one with syncing
+                disabled will not. A user must manually choose when sync the integration if syncing is disabled.
+            </remarks>
+            <returns>
+                 <c>true</c> if this integration is syncing; otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="P:Discord.IIntegration.RoleId">
+            <summary>
+                Gets the ID that this integration uses for "subscribers".
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegration.HasEnabledEmoticons">
+            <summary>
+                Gets whether emoticons should be synced for this integration (twitch only currently).
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegration.ExpireBehavior">
+            <summary>
+                Gets the behavior of expiring subscribers.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegration.ExpireGracePeriod">
+            <summary>
+                Gets the grace period before expiring "subscribers".
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegration.User">
+            <summary>
+                Gets the user for this integration.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegration.Account">
+            <summary>
+                Gets integration account information.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegration.SyncedAt">
+            <summary>
+                Gets when this integration was last synced.
+            </summary>
+            <returns>
+                A <see cref="T:System.DateTimeOffset"/> containing a date and time of day when the integration was last synced.
+            </returns>
+        </member>
+        <member name="P:Discord.IIntegration.SubscriberCount">
+            <summary>
+                Gets how many subscribers this integration has.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegration.IsRevoked">
+            <summary>
+                Gets whether this integration been revoked.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegration.Application">
+            <summary>
+                Gets the bot/OAuth2 application for a discord integration.
+            </summary>
+        </member>
+        <member name="T:Discord.IIntegrationAccount">
+            <summary>
+                Provides the account information for an <see cref="T:Discord.IIntegration" />.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegrationAccount.Id">
+            <summary>
+                Gets the ID of the account.
+            </summary>
+            <returns>
+                A <see cref="T:System.String"/> unique identifier of this integration account.
+            </returns>
+        </member>
+        <member name="P:Discord.IIntegrationAccount.Name">
+            <summary>
+                Gets the name of the account.
+            </summary>
+            <returns>
+                A string containing the name of this integration account.
+            </returns>
+        </member>
+        <member name="T:Discord.IIntegrationApplication">
+            <summary>
+                Provides the bot/OAuth2 application for an <see cref="T:Discord.IIntegration" />.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegrationApplication.Id">
+            <summary>
+                Gets the id of the app.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegrationApplication.Name">
+            <summary>
+                Gets the name of the app.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegrationApplication.Icon">
+            <summary>
+                Gets the icon hash of the app.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegrationApplication.Description">
+            <summary>
+                Gets the description of the app.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegrationApplication.Summary">
+            <summary>
+                Gets the summary of the app.
+            </summary>
+        </member>
+        <member name="P:Discord.IIntegrationApplication.Bot">
+            <summary>
+                Gets the bot associated with this application.
+            </summary>
+        </member>
+        <member name="T:Discord.IntegrationExpireBehavior">
+            <summary>
+                The behavior of expiring subscribers for an <see cref="T:Discord.IIntegration" />.
+            </summary>
+        </member>
+        <member name="F:Discord.IntegrationExpireBehavior.RemoveRole">
+            <summary>
+                Removes a role from an expired subscriber.
+            </summary>
+        </member>
+        <member name="F:Discord.IntegrationExpireBehavior.Kick">
+            <summary>
+                Kicks an expired subscriber from the guild.
+            </summary>
+        </member>
         <member name="T:Discord.ApplicationCommandOptionProperties">
             <summary>
                 Represents a <see cref="T:Discord.IApplicationCommandOption"/> for making slash commands.
@@ -5709,6 +5877,16 @@
                 Gets or sets whether the command is enabled by default when the app is added to a guild. Default is <see langword="true"/>
             </summary>
         </member>
+        <member name="P:Discord.ApplicationCommandProperties.IsDMEnabled">
+            <summary>
+                Gets or sets whether or not this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="P:Discord.ApplicationCommandProperties.DefaultMemberPermissions">
+            <summary>
+                Gets or sets the default permissions required by a user to execute this application command.
+            </summary>
+        </member>
         <member name="T:Discord.ApplicationCommandType">
             <summary>
                Represents the types of application commands.
@@ -5851,6 +6029,16 @@
                 Gets or sets whether the command is enabled by default when the app is added to a guild
             </summary>
         </member>
+        <member name="P:Discord.MessageCommandBuilder.IsDMEnabled">
+            <summary>
+                Gets or sets whether or not this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="P:Discord.MessageCommandBuilder.DefaultMemberPermissions">
+            <summary>
+                Gets or sets the default permission required to use this slash command.
+            </summary>
+        </member>
         <member name="M:Discord.MessageCommandBuilder.Build">
             <summary>
                 Build the current builder into a <see cref="T:Discord.MessageCommandProperties"/> class.
@@ -5873,6 +6061,20 @@
                 Sets the default permission of the current command.
             </summary>
             <param name="isDefaultPermission">The default permission value to set.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.MessageCommandBuilder.WithDMPermission(System.Boolean)">
+            <summary>
+                Sets whether or not this command can be used in dms
+            </summary>
+            <param name="permission"><see langword="true"/> if the command is available in dms, otherwise <see langword="false"/>.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.MessageCommandBuilder.WithDefaultMemberPermissions(System.Nullable{Discord.GuildPermission})">
+            <summary>
+                Sets the default member permissions required to use this application command.
+            </summary>
+            <param name="permissions">The permissions required to use this command.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="T:Discord.MessageCommandProperties">
@@ -5900,6 +6102,16 @@
                 Gets or sets whether the command is enabled by default when the app is added to a guild.
             </summary>
         </member>
+        <member name="P:Discord.UserCommandBuilder.IsDMEnabled">
+            <summary>
+                Gets or sets whether or not this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="P:Discord.UserCommandBuilder.DefaultMemberPermissions">
+            <summary>
+                Gets or sets the default permission required to use this slash command.
+            </summary>
+        </member>
         <member name="M:Discord.UserCommandBuilder.Build">
             <summary>
                 Build the current builder into a <see cref="T:Discord.UserCommandProperties"/> class.
@@ -5920,6 +6132,20 @@
                 Sets the default permission of the current command.
             </summary>
             <param name="isDefaultPermission">The default permission value to set.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.UserCommandBuilder.WithDMPermission(System.Boolean)">
+            <summary>
+                Sets whether or not this command can be used in dms
+            </summary>
+            <param name="permission"><see langword="true"/> if the command is available in dms, otherwise <see langword="false"/>.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.UserCommandBuilder.WithDefaultMemberPermissions(System.Nullable{Discord.GuildPermission})">
+            <summary>
+                Sets the default member permissions required to use this application command.
+            </summary>
+            <param name="permissions">The permissions required to use this command.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="T:Discord.UserCommandProperties">
@@ -5955,6 +6181,19 @@
         <member name="P:Discord.IApplicationCommand.IsDefaultPermission">
             <summary>
                 Gets whether the command is enabled by default when the app is added to a guild.
+            </summary>
+        </member>
+        <member name="P:Discord.IApplicationCommand.IsEnabledInDm">
+            <summary>
+                Indicates whether the command is available in DMs with the app.
+            </summary>
+            <remarks>
+                Only for globally-scoped commands.
+            </remarks>
+        </member>
+        <member name="P:Discord.IApplicationCommand.DefaultMemberPermissions">
+            <summary>
+                Set of default <see cref="T:Discord.GuildPermission"/> required to invoke the command.
             </summary>
         </member>
         <member name="P:Discord.IApplicationCommand.Options">
@@ -7342,13 +7581,29 @@
         </member>
         <member name="P:Discord.IComponentInteraction.Data">
             <summary>
-                Gets the data received with this interaction, contains the button that was clicked.
+                Gets the data received with this component interaction.
             </summary>
         </member>
         <member name="P:Discord.IComponentInteraction.Message">
             <summary>
                 Gets the message that contained the trigger for this interaction.
             </summary>
+        </member>
+        <member name="M:Discord.IComponentInteraction.UpdateAsync(System.Action{Discord.MessageProperties},Discord.RequestOptions)">
+            <summary>
+                Updates the message which this component resides in with the type <see cref="F:Discord.InteractionResponseType.UpdateMessage"/>
+            </summary>
+            <param name="func">A delegate containing the properties to modify the message with.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>A task that represents the asynchronous operation of updating the message.</returns>
+        </member>
+        <member name="M:Discord.IComponentInteraction.DeferLoadingAsync(System.Boolean,Discord.RequestOptions)">
+            <summary>
+                Defers an interaction with the response type 5 (<see cref="F:Discord.InteractionResponseType.DeferredChannelMessageWithSource"/>).
+            </summary>
+            <param name="ephemeral"><see langword="true"/> to defer ephemerally, otherwise <see langword="false"/>.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>A task that represents the asynchronous operation of acknowledging the interaction.</returns>
         </member>
         <member name="T:Discord.IComponentInteractionData">
             <summary>
@@ -7808,6 +8063,16 @@
                 Gets or sets whether the command is enabled by default when the app is added to a guild
             </summary>
         </member>
+        <member name="P:Discord.SlashCommandBuilder.IsDMEnabled">
+            <summary>
+                Gets or sets whether or not this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="P:Discord.SlashCommandBuilder.DefaultMemberPermissions">
+            <summary>
+                Gets or sets the default permission required to use this slash command.
+            </summary>
+        </member>
         <member name="M:Discord.SlashCommandBuilder.Build">
             <summary>
                 Build the current builder into a <see cref="T:Discord.SlashCommandProperties"/> class.
@@ -7835,6 +8100,20 @@
                 Sets the default permission of the current command.
             </summary>
             <param name="value">The default permission value to set.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.SlashCommandBuilder.WithDMPermission(System.Boolean)">
+            <summary>
+                Sets whether or not this command can be used in dms
+            </summary>
+            <param name="permission"><see langword="true"/> if the command is available in dms, otherwise <see langword="false"/>.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.SlashCommandBuilder.WithDefaultMemberPermissions(System.Nullable{Discord.GuildPermission})">
+            <summary>
+                Sets the default member permissions required to use this application command.
+            </summary>
+            <param name="permissions">The permissions required to use this command.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Discord.SlashCommandBuilder.AddOption(System.String,Discord.ApplicationCommandOptionType,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Boolean,System.Nullable{System.Double},System.Nullable{System.Double},System.Collections.Generic.List{Discord.SlashCommandOptionBuilder},System.Collections.Generic.List{Discord.ChannelType},Discord.ApplicationCommandOptionChoiceProperties[])">
@@ -12255,6 +12534,21 @@
                 The user is active using the web application.
             </summary>
         </member>
+        <member name="T:Discord.ConnectionVisibility">
+            <summary>
+            The visibility of the connected account.
+            </summary>
+        </member>
+        <member name="F:Discord.ConnectionVisibility.None">
+            <summary>
+                Invisible to everyone except the user themselves.
+            </summary>
+        </member>
+        <member name="F:Discord.ConnectionVisibility.Everyone">
+            <summary>
+                Visible to everyone.
+            </summary>
+        </member>
         <member name="T:Discord.GuildUserProperties">
             <summary>
                 Properties that are used to modify an <see cref="T:Discord.IGuildUser" /> with the following parameters.
@@ -12342,27 +12636,61 @@
             </remarks>
         </member>
         <member name="P:Discord.IConnection.Id">
-            <summary> Gets the ID of the connection account. </summary>
-            <returns> A <see cref="T:System.String"/> representing the unique identifier value of this connection. </returns>
-        </member>
-        <member name="P:Discord.IConnection.Type">
-            <summary> Gets the service of the connection (twitch, youtube). </summary>
-            <returns> A string containing the name of this type of connection. </returns>
+            <summary>
+                Gets the ID of the connection account.
+            </summary>
+            <returns>
+                A <see cref="T:System.String"/> representing the unique identifier value of this connection.
+            </returns>
         </member>
         <member name="P:Discord.IConnection.Name">
-            <summary> Gets the username of the connection account. </summary>
-            <returns> A string containing the name of this connection. </returns>
+            <summary>
+                Gets the username of the connection account.
+            </summary>
+            <returns>
+                A string containing the name of this connection.
+            </returns>
+        </member>
+        <member name="P:Discord.IConnection.Type">
+            <summary>
+                Gets the service of the connection (twitch, youtube).
+            </summary>
+            <returns>
+                A string containing the name of this type of connection.
+            </returns>
         </member>
         <member name="P:Discord.IConnection.IsRevoked">
-            <summary> Gets whether the connection is revoked. </summary>
-            <returns> A value which if true indicates that this connection has been revoked, otherwise false. </returns>
-        </member>
-        <member name="P:Discord.IConnection.IntegrationIds">
-            <summary> Gets a <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> of integration IDs. </summary>
+            <summary>
+                Gets whether the connection is revoked.
+            </summary>
             <returns>
-                An <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> containing <see cref="T:System.UInt64"/>
-                representations of unique identifier values of integrations.
+                A value which if true indicates that this connection has been revoked, otherwise false.
             </returns>
+        </member>
+        <member name="P:Discord.IConnection.Integrations">
+            <summary>
+                Gets a <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> of integration parials.
+            </summary>
+        </member>
+        <member name="P:Discord.IConnection.Verified">
+            <summary>
+                Gets whether the connection is verified.
+            </summary>
+        </member>
+        <member name="P:Discord.IConnection.FriendSync">
+            <summary>
+                Gets whether friend sync is enabled for this connection.
+            </summary>
+        </member>
+        <member name="P:Discord.IConnection.ShowActivity">
+            <summary>
+                Gets whether activities related to this connection will be shown in presence updates.
+            </summary>
+        </member>
+        <member name="P:Discord.IConnection.Visibility">
+            <summary>
+                Visibility of this connection.
+            </summary>
         </member>
         <member name="T:Discord.IGroupUser">
             <summary>
@@ -13598,10 +13926,11 @@
             <param name="text">The to remove markdown from.</param>
             <returns>Gets the unformatted text.</returns>
         </member>
-        <member name="M:Discord.Format.UsernameAndDiscriminator(Discord.IUser)">
+        <member name="M:Discord.Format.UsernameAndDiscriminator(Discord.IUser,System.Boolean)">
             <summary>
-                Formats a user's username + discriminator while maintaining bidirectional unicode
+                Formats a user's username + discriminator.
             </summary>
+            <param name="doBidirectional">To format the string in bidirectional unicode or not</param>
             <param name="user">The user whos username and discriminator to format</param>
             <returns>The username + discriminator</returns>
         </member>
@@ -14040,6 +14369,46 @@
             <remarks>
                 If this property is <see langword="null"/> the default callback will be used.
             </remarks>
+        </member>
+        <member name="T:Discord.IRouteMatchContainer">
+            <summary>
+                Represents a container for temporarily storing CustomId wild card matches of a component.
+            </summary>
+        </member>
+        <member name="P:Discord.IRouteMatchContainer.SegmentMatches">
+             <summary>
+                 Gets the collection of captured route segments in this container.
+             </summary>
+             <returns>
+                A collection of captured route segments.
+            </returns>
+        </member>
+        <member name="M:Discord.IRouteMatchContainer.SetSegmentMatches(System.Collections.Generic.IEnumerable{Discord.IRouteSegmentMatch})">
+            <summary>
+                Sets the <see cref="P:Discord.IRouteMatchContainer.SegmentMatches"/> property of this container.
+            </summary>
+            <param name="segmentMatches">The collection of captured route segments.</param>
+        </member>
+        <member name="T:Discord.IRouteSegmentMatch">
+            <summary>
+                Represents an object for storing a CustomId wild card match.
+            </summary>
+        </member>
+        <member name="P:Discord.IRouteSegmentMatch.Value">
+            <summary>
+                Gets the captured value of this wild card match.
+            </summary>
+            <returns>
+               The value of this wild card.
+            </returns>
+        </member>
+        <member name="T:Discord.RouteSegmentMatch">
+            <summary>
+                Represents an object for storing a CustomId wild card match.
+            </summary>
+        </member>
+        <member name="P:Discord.RouteSegmentMatch.Value">
+            <inheritdoc/>
         </member>
         <member name="T:Discord.LogMessage">
             <summary>
@@ -15027,6 +15396,10 @@
         </member>
         <member name="M:Discord.Preconditions.NotEveryoneRole(System.UInt64[],System.UInt64,System.String)">
             <exception cref="T:System.ArgumentException">The everyone role cannot be assigned to a user.</exception>
+        </member>
+        <member name="M:Discord.Preconditions.Options(System.String,System.String)">
+            <exception cref="T:System.ArgumentNullException"><paramref name="description"/> or <paramref name="name"/> is null.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="description"/> or <paramref name="name"/> are either empty or their length exceed limits.</exception>
         </member>
         <member name="T:Discord.SnowflakeUtils">
             <summary>

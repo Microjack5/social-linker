@@ -603,6 +603,26 @@
             Gets the text (content) of this page.
             </summary>
         </member>
+        <member name="P:Fergun.Interactive.IPage`1.IsTTS">
+            <summary>
+            Gets a value that determines whether the text of this page should be read aloud by Discord.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.IPage`1.AllowedMentions">
+            <summary>
+            Gets the allowed mentions of this page.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.IPage`1.MessageReference">
+            <summary>
+            Gets the message reference of this page.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.IPage`1.Stickers">
+            <summary>
+            Gets or sets the stickers of this page.
+            </summary>
+        </member>
         <member name="P:Fergun.Interactive.IPage`1.Embeds">
             <summary>
             Gets the embeds of this page.
@@ -641,6 +661,18 @@
         <member name="P:Fergun.Interactive.MultiEmbedPage.Text">
             <inheritdoc/>
         </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPage.IsTTS">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPage.AllowedMentions">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPage.MessageReference">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPage.Stickers">
+            <inheritdoc/>
+        </member>
         <member name="P:Fergun.Interactive.MultiEmbedPage.Embeds">
             <inheritdoc/>
         </member>
@@ -665,9 +697,29 @@
         </member>
         <member name="P:Fergun.Interactive.MultiEmbedPageBuilder.Text">
             <summary>
-            Gets or sets the text of a <see cref="T:Fergun.Interactive.MultiEmbedPage"/>.
+            Gets or sets the text of the <see cref="T:Fergun.Interactive.MultiEmbedPage"/>.
             </summary>
             <returns>The text of the page.</returns>
+        </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPageBuilder.IsTTS">
+            <summary>
+            Gets or sets a value that determines whether the text in <see cref="T:Fergun.Interactive.MultiEmbedPage"/> should be read aloud by Discord.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPageBuilder.AllowedMentions">
+            <summary>
+            Gets or sets the allowed mentions of the <see cref="T:Fergun.Interactive.MultiEmbedPage"/>.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPageBuilder.MessageReference">
+            <summary>
+            Gets or sets the message reference of the <see cref="T:Fergun.Interactive.MultiEmbedPage"/>.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPageBuilder.Stickers">
+            <summary>
+            Gets or sets the stickers of the <see cref="T:Fergun.Interactive.MultiEmbedPage"/>.
+            </summary>
         </member>
         <member name="P:Fergun.Interactive.MultiEmbedPageBuilder.Builders">
             <summary>
@@ -730,6 +782,34 @@
             <param name="embed">The embed.</param>
             <returns>This builder.</returns>
         </member>
+        <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.WithIsTTS(System.Boolean)">
+            <summary>
+            Sets the <see cref="P:Fergun.Interactive.MultiEmbedPageBuilder.IsTTS"/> value of the <see cref="T:Fergun.Interactive.MultiEmbedPage"/>.
+            </summary>
+            <param name="isTTS">Whether the text should be read aloud by Discord.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.WithAllowedMentions(Discord.AllowedMentions)">
+            <summary>
+            Sets the allowed mentions the <see cref="T:Fergun.Interactive.MultiEmbedPage"/>.
+            </summary>
+            <param name="allowedMentions">The allowed mentions.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.WithMessageReference(Discord.MessageReference)">
+            <summary>
+            Sets the message reference of the <see cref="T:Fergun.Interactive.MultiEmbedPage"/>.
+            </summary>
+            <param name="messageReference">The message reference.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.WithStickers(System.Collections.Generic.IReadOnlyCollection{Discord.ISticker})">
+            <summary>
+            Sets the stickers of the <see cref="T:Fergun.Interactive.MultiEmbedPage"/>.
+            </summary>
+            <param name="stickers">The stickers.</param>
+            <returns>The current builder.</returns>
+        </member>
         <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.Fergun#Interactive#IPageBuilder{Fergun#Interactive#IPage}#Build">
             <inheritdoc/>
         </member>
@@ -739,6 +819,18 @@
             </summary>
         </member>
         <member name="P:Fergun.Interactive.Page.Text">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.Page.IsTTS">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.Page.AllowedMentions">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.Page.MessageReference">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.Page.Stickers">
             <inheritdoc/>
         </member>
         <member name="P:Fergun.Interactive.Page.Embed">
@@ -784,67 +876,87 @@
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.Text">
             <summary>
-            Gets or sets the text of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the text of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The text of the page.</returns>
         </member>
+        <member name="P:Fergun.Interactive.PageBuilder.IsTTS">
+            <summary>
+            Gets or sets a value that determines whether the text of the <see cref="T:Fergun.Interactive.Page"/> should be read aloud by Discord.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.PageBuilder.AllowedMentions">
+            <summary>
+            Gets or sets the allowed mentions of the <see cref="T:Fergun.Interactive.Page"/>.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.PageBuilder.MessageReference">
+            <summary>
+            Gets or sets the message reference of the <see cref="T:Fergun.Interactive.Page"/>.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.PageBuilder.Stickers">
+            <summary>
+            Gets or sets the stickers of the <see cref="T:Fergun.Interactive.Page"/>.
+            </summary>
+        </member>
         <member name="P:Fergun.Interactive.PageBuilder.Title">
             <summary>
-            Gets or sets the title of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the title of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The title of the page.</returns>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.Description">
             <summary>
-            Gets or sets the description of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the description of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The description of the page.</returns>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.Url">
             <summary>
-            Gets or sets the URL of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the URL of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The URL of the page.</returns>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.ThumbnailUrl">
             <summary>
-            Gets or sets the thumbnail URL of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the thumbnail URL of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The thumbnail URL of the page.</returns>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.ImageUrl">
             <summary>
-            Gets or sets the image URL of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the image URL of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The image URL of the page.</returns>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.Fields">
             <summary>
-            Gets or sets the list of <see cref="T:Fergun.Interactive.PageBuilder"/> of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the list of <see cref="T:Fergun.Interactive.PageBuilder"/> of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The list of existing <see cref="T:Discord.EmbedFieldBuilder"/>.</returns>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.Timestamp">
             <summary>
-            Gets or sets the timestamp of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the timestamp of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The timestamp of the page, or <c>null</c> if none is set.</returns>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.Color">
             <summary>
-            Gets or sets the sidebar color of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the sidebar color of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The color of the page, or <c>null</c> if none is set.</returns>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.Author">
             <summary>
-            Gets or sets the <see cref="T:Discord.EmbedAuthorBuilder"/> of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the <see cref="T:Discord.EmbedAuthorBuilder"/> of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The author field builder of the page, or <c>null</c> if none is set.</returns>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.Footer">
             <summary>
-            Gets or sets the <see cref="T:Discord.EmbedFooterBuilder"/> of a <see cref="T:Fergun.Interactive.Page"/>.
+            Gets or sets the <see cref="T:Discord.EmbedFooterBuilder"/> of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>The footer field builder of the page, or <c>null</c> if none is set.</returns>
         </member>
@@ -879,83 +991,83 @@
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithText(System.String)">
             <summary>
-            Sets the text of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the text of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="text">The text to be set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithTitle(System.String)">
             <summary>
-            Sets the title of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the title of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="title">The title to be set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithDescription(System.String)">
             <summary>
-            Sets the description of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the description of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="description"> The description to be set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithUrl(System.String)">
             <summary>
-            Sets the URL of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the URL of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="url"> The URL to be set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithThumbnailUrl(System.String)">
             <summary>
-            Sets the thumbnail URL of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the thumbnail URL of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="thumbnailUrl"> The thumbnail URL to be set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithImageUrl(System.String)">
             <summary>
-            Sets the image URL of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the image URL of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="imageUrl">The image URL to be set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithCurrentTimestamp">
             <summary>
-            Sets the timestamp of a <see cref="T:Fergun.Interactive.Page"/> to the current time.
+            Sets the timestamp of the <see cref="T:Fergun.Interactive.Page"/> to the current time.
             </summary>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithTimestamp(System.Nullable{System.DateTimeOffset})">
             <summary>
-            Sets the timestamp of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the timestamp of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="dateTimeOffset">The timestamp to be set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithColor(Discord.Color)">
             <summary>
-            Sets the sidebar color of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the sidebar color of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="color">The color to be set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithAuthor(Discord.EmbedAuthorBuilder)">
             <summary>
-            Sets the <see cref="T:Discord.EmbedAuthorBuilder"/> of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the <see cref="T:Discord.EmbedAuthorBuilder"/> of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="author">The author builder class containing the author field properties.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithAuthor(System.Action{Discord.EmbedAuthorBuilder})">
             <summary>
-            Sets the author field of a <see cref="T:Fergun.Interactive.Page"/> with the provided properties.
+            Sets the author field of the <see cref="T:Fergun.Interactive.Page"/> with the provided properties.
             </summary>
             <param name="action">The delegate containing the author field properties.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithAuthor(System.String,System.String,System.String)">
             <summary>
-            Sets the author field of a <see cref="T:Fergun.Interactive.Page"/> with the provided name, icon URL, and URL.
+            Sets the author field of the <see cref="T:Fergun.Interactive.Page"/> with the provided name, icon URL, and URL.
             </summary>
             <param name="name">The title of the author field.</param>
             <param name="iconUrl">The icon URL of the author field.</param>
@@ -971,20 +1083,20 @@
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithFooter(Discord.EmbedFooterBuilder)">
             <summary>
-            Sets the <see cref="T:Discord.EmbedFooterBuilder"/> of a <see cref="T:Fergun.Interactive.Page"/>.
+            Sets the <see cref="T:Discord.EmbedFooterBuilder"/> of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="footer">The footer builder class containing the footer field properties.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithFooter(System.Action{Discord.EmbedFooterBuilder})">
             <summary>
-            Sets the footer field of a <see cref="T:Fergun.Interactive.Page"/> with the provided properties.
+            Sets the footer field of the <see cref="T:Fergun.Interactive.Page"/> with the provided properties.
             </summary>
             <param name="action">The delegate containing the footer field properties.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithFooter(System.String,System.String)">
-            <summary>Sets the footer field of a <see cref="T:Fergun.Interactive.Page"/> with the provided name, icon URL.</summary>
+            <summary>Sets the footer field of the <see cref="T:Fergun.Interactive.Page"/> with the provided name, icon URL.</summary>
             <param name="text">The title of the footer field.</param>
             <param name="iconUrl">The icon URL of the footer field.</param>
             <returns>The current builder.</returns>
@@ -1026,6 +1138,34 @@
             <param name="action">The delegate containing the field properties.</param>
             <returns>The current builder.</returns>
         </member>
+        <member name="M:Fergun.Interactive.PageBuilder.WithIsTTS(System.Boolean)">
+            <summary>
+            Sets the <see cref="P:Fergun.Interactive.PageBuilder.IsTTS"/> value of the <see cref="T:Fergun.Interactive.Page"/>.
+            </summary>
+            <param name="isTTs">Whether the text of the page should be read aloud by Discord.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.PageBuilder.WithAllowedMentions(Discord.AllowedMentions)">
+            <summary>
+            Sets the allowed mentions the <see cref="T:Fergun.Interactive.Page"/>.
+            </summary>
+            <param name="allowedMentions">The allowed mentions.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.PageBuilder.WithMessageReference(Discord.MessageReference)">
+            <summary>
+            Sets the message reference of the <see cref="T:Fergun.Interactive.Page"/>.
+            </summary>
+            <param name="messageReference">The message reference.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.PageBuilder.WithStickers(System.Collections.Generic.IReadOnlyCollection{Discord.ISticker})">
+            <summary>
+            Sets the stickers of the <see cref="T:Fergun.Interactive.Page"/>.
+            </summary>
+            <param name="stickers">The stickers.</param>
+            <returns>The current builder.</returns>
+        </member>
         <member name="M:Fergun.Interactive.PageBuilder.Fergun#Interactive#IPageBuilder{Fergun#Interactive#IPage}#Build">
             <inheritdoc/>
         </member>
@@ -1034,6 +1174,16 @@
             Represents a <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> with a timeout timer which can be reset.
             </summary>
             <typeparam name="TResult">The type of the result value associated with this <see cref="T:Fergun.Interactive.TimeoutTaskCompletionSource`1"/>.</typeparam>
+        </member>
+        <member name="M:Fergun.Interactive.TimeoutTaskCompletionSource`1.#ctor(System.TimeSpan,System.Boolean,`0,`0,System.Threading.CancellationToken)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fergun.Interactive.TimeoutTaskCompletionSource`1"/> class.
+            </summary>
+            <param name="delay">The delay before the timeout.</param>
+            <param name="canReset">Whether the internal <see cref="T:System.Threading.Timer"/> can be reset.</param>
+            <param name="timeoutResult">The timeout result.</param>
+            <param name="cancelResult">The cancel result.</param>
+            <param name="cancellationToken">The cancellation token.</param>
         </member>
         <member name="P:Fergun.Interactive.TimeoutTaskCompletionSource`1.Delay">
             <summary>
@@ -1060,6 +1210,11 @@
             Gets the <see cref="T:System.Threading.Tasks.Task`1"/> created by this <see cref="T:Fergun.Interactive.TimeoutTaskCompletionSource`1"/>.
             </summary>
         </member>
+        <member name="M:Fergun.Interactive.TimeoutTaskCompletionSource`1.ResetTaskSource">
+            <summary>
+            Resets the underlying <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/>.
+            </summary>
+        </member>
         <member name="M:Fergun.Interactive.TimeoutTaskCompletionSource`1.TryReset">
             <summary>
             Attempts to reset the internal <see cref="T:System.Threading.Timer"/>.
@@ -1079,11 +1234,13 @@
             <param name="result">The result to set.</param>
             <returns><see langword="true"/> if the operation was successful; otherwise, <see langword="false"/>.</returns>
         </member>
-        <member name="M:Fergun.Interactive.TimeoutTaskCompletionSource`1.TryDispose">
+        <member name="M:Fergun.Interactive.TimeoutTaskCompletionSource`1.Dispose">
             <summary>
-            Attempts to dispose the internal <see cref="T:System.Threading.Timer"/> and cancel the underlying <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/>.
+            Disposes the internal <see cref="T:System.Threading.Timer"/> and cancels the underlying <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/>.
             </summary>
-            <returns><see langword="true"/> if the operation was successful; otherwise, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.TimeoutTaskCompletionSource`1.Dispose(System.Boolean)">
+            <inheritdoc cref="M:Fergun.Interactive.TimeoutTaskCompletionSource`1.Dispose"/>
         </member>
         <member name="T:Fergun.Interactive.Extensions.InteractiveBuilderExtensions">
             <summary>
@@ -1163,6 +1320,39 @@
             <summary>
             Gets or sets the minimum log level severity that will be sent to the <see cref="E:Fergun.Interactive.InteractiveService.Log"/> event.
             </summary>
+        </member>
+        <member name="P:Fergun.Interactive.InteractiveConfig.ReturnAfterSendingPaginator">
+            <summary>
+            Gets or sets a value indicating if the SendPaginatorAsync() methods should immediately return after sending the paginated message instead of waiting for a timeout or a cancellation.
+            </summary>
+            <remarks>
+            The default value is <see langword="false"/>. If set to <see langword="true"/>, the SendPaginatorAsync() methods will return an <see cref="T:Fergun.Interactive.InteractiveMessageResult"/> with status <see cref="F:Fergun.Interactive.InteractiveStatus.Success"/>.<br/>
+            Note that any exceptions that would otherwise be thrown will be swallowed instead.
+            </remarks>
+        </member>
+        <member name="P:Fergun.Interactive.InteractiveConfig.DeferStopPaginatorInteractions">
+            <summary>
+            Gets or sets a value indicating if the interactions that stop paginators should be deferred.
+            </summary>
+            <remarks>
+            These interactions get deferred depending of the <see cref="T:Fergun.Interactive.ActionOnStop"/> and some specific circumstances:<br/>
+            - <see cref="F:Fergun.Interactive.ActionOnStop.None"/>: Always deferred.<br/>
+            - <see cref="F:Fergun.Interactive.ActionOnStop.DeleteMessage"/>: If the interaction message is ephemeral.<br/>
+            - <see cref="F:Fergun.Interactive.ActionOnStop.ModifyMessage"/>: If there's no page to modify to.<br/>
+            - <see cref="F:Fergun.Interactive.ActionOnStop.DeleteInput"/> and <see cref="F:Fergun.Interactive.ActionOnStop.DisableInput"/>: If the input type is neither <see cref="F:Fergun.Interactive.InputType.Buttons"/> nor <see cref="F:Fergun.Interactive.InputType.SelectMenus"/>.
+            </remarks>
+        </member>
+        <member name="P:Fergun.Interactive.InteractiveConfig.DeferStopSelectionInteractions">
+            <summary>
+            Gets or sets a value indicating if the interactions that stop selections should be deferred.
+            </summary>
+            <remarks>
+            These interactions get deferred depending of the <see cref="T:Fergun.Interactive.ActionOnStop"/> and some specific circumstances:<br/>
+            - <see cref="F:Fergun.Interactive.ActionOnStop.None"/>: Always deferred.<br/>
+            - <see cref="F:Fergun.Interactive.ActionOnStop.DeleteMessage"/>: If the interaction message is ephemeral.<br/>
+            - <see cref="F:Fergun.Interactive.ActionOnStop.ModifyMessage"/>: If there's no page to modify to.<br/>
+            - <see cref="F:Fergun.Interactive.ActionOnStop.DeleteInput"/> and <see cref="F:Fergun.Interactive.ActionOnStop.DisableInput"/>: If the input type is neither <see cref="F:Fergun.Interactive.InputType.Buttons"/> nor <see cref="F:Fergun.Interactive.InputType.SelectMenus"/>.
+            </remarks>
         </member>
         <member name="T:Fergun.Interactive.InteractiveInputStatus">
             <summary>
@@ -1535,7 +1725,7 @@
             <exception cref="T:System.ArgumentNullException"/>
             <exception cref="T:System.NotSupportedException"/>
         </member>
-        <member name="M:Fergun.Interactive.InteractiveService.SendPaginatorAsync(Fergun.Interactive.Pagination.Paginator,Discord.WebSocket.SocketInteraction,System.Nullable{System.TimeSpan},Discord.InteractionResponseType,System.Boolean,System.Action{Discord.IUserMessage},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Fergun.Interactive.InteractiveService.SendPaginatorAsync(Fergun.Interactive.Pagination.Paginator,Discord.IDiscordInteraction,System.Nullable{System.TimeSpan},Discord.InteractionResponseType,System.Boolean,System.Action{Discord.IUserMessage},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Responds an interaction with a paginator.
             </summary>
@@ -1604,7 +1794,7 @@
             <exception cref="T:System.ArgumentNullException"/>
             <exception cref="T:System.NotSupportedException"/>
         </member>
-        <member name="M:Fergun.Interactive.InteractiveService.SendSelectionAsync``1(Fergun.Interactive.Selection.BaseSelection{``0},Discord.WebSocket.SocketInteraction,System.Nullable{System.TimeSpan},Discord.InteractionResponseType,System.Boolean,System.Action{Discord.IUserMessage},System.Threading.CancellationToken)">
+        <member name="M:Fergun.Interactive.InteractiveService.SendSelectionAsync``1(Fergun.Interactive.Selection.BaseSelection{``0},Discord.IDiscordInteraction,System.Nullable{System.TimeSpan},Discord.InteractionResponseType,System.Boolean,System.Action{Discord.IUserMessage},System.Threading.CancellationToken)">
             <summary>
             Responds an interaction with a selection.
             </summary>
@@ -1682,6 +1872,41 @@
         <member name="P:Fergun.Interactive.Pagination.IBasePaginatorBuilderProperties.Options">
             <summary>
             Gets or sets the emotes and their related actions of the paginator.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.IBasePaginatorBuilderProperties.JumpInputTimeout">
+            <summary>
+            Gets or sets the maximum time to wait for a "jump to page" input.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.IBasePaginatorBuilderProperties.JumpInputPrompt">
+            <summary>
+            Gets or sets the "jump to page" prompt that is displayed to the user.
+            </summary>
+            <remarks>
+            In button inputs, this is the title of the modal that is displayed.<br/>
+            In reaction inputs, this is the content of the temporary message that is sent.
+            </remarks>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.IBasePaginatorBuilderProperties.JumpInputTextLabel">
+            <summary>
+            Gets or sets the "jump to page" text label that is displayed in the modal.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.IBasePaginatorBuilderProperties.InvalidJumpInputMessage">
+            <summary>
+            Gets or sets the message to display when receiving an invalid "jump to page" input.
+            </summary>
+            <remarks>An invalid input may be one that isn't a number, or a number that is outside the valid range.</remarks>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.IBasePaginatorBuilderProperties.JumpInputInUseMessage">
+            <summary>
+            Gets or sets the message to display when a user attempts to use the "jump to page" action while other user is using it.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.IBasePaginatorBuilderProperties.ExpiredJumpInputMessage">
+            <summary>
+            Gets or sets the message to display when receiving an expired "jump to page" input.
             </summary>
         </member>
         <member name="T:Fergun.Interactive.Pagination.BaseLazyPaginator">
@@ -1857,6 +2082,57 @@
             Gets the action that will be done after a timeout.
             </summary>
         </member>
+        <member name="P:Fergun.Interactive.Pagination.Paginator.JumpInputTimeout">
+            <summary>
+            Gets the maximum time to wait for a "jump to page" input.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.Paginator.JumpInputPrompt">
+            <summary>
+            Gets the "jump to page" prompt that is displayed to the user.
+            </summary>
+            <remarks>
+            In button inputs, this is the title of the modal that is displayed.<br/>
+            In reaction inputs, this is the content of the temporary message that is sent.
+            </remarks>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.Paginator.JumpInputTextLabel">
+            <summary>
+            Gets the "jump to page" text label that is displayed in the modal.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.Paginator.InvalidJumpInputMessage">
+            <summary>
+            Gets the message to display when receiving an invalid "jump to page" input.
+            </summary>
+            <remarks>An invalid input may be one that isn't a number, or a number that is outside the valid range.</remarks>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.Paginator.JumpInputInUseMessage">
+            <summary>
+            Gets the message to display when a user attempts to use the "jump to page" action while other user is using it.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.Paginator.ExpiredJumpInputMessage">
+            <summary>
+            Gets the message to display when receiving an expired "jump to page" input.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.Paginator.JumpInputUserId">
+            <summary>
+            Gets or sets the ID of the user that is currently using the "jump to page" action.
+            </summary>
+            <remarks>If the value is <c>0</c>, then no one is currently using the action.</remarks>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.Paginator.MessageTaskCompletionSource">
+            <summary>
+            Gets the <see cref="T:Fergun.Interactive.TimeoutTaskCompletionSource`1"/> used to receive modal interactions in <see cref="M:Fergun.Interactive.Pagination.Paginator.JumpToPageAsync(Discord.WebSocket.SocketReaction)"/>.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.Paginator.ModalTaskCompletionSource">
+            <summary>
+            Gets the <see cref="T:Fergun.Interactive.TimeoutTaskCompletionSource`1"/> used to receive modal interactions in <see cref="M:Fergun.Interactive.Pagination.Paginator.JumpToPageAsync(Discord.WebSocket.SocketMessageComponent)"/>.
+            </summary>
+        </member>
         <member name="P:Fergun.Interactive.Pagination.Paginator.Fergun#Interactive#IInteractiveElement{System#Collections#Generic#KeyValuePair{Discord#IEmote,Fergun#Interactive#Pagination#PaginatorAction}}#Options">
             <inheritdoc/>
         </member>
@@ -1887,18 +2163,40 @@
             <param name="action">The paginator action.</param>
             <returns>A task representing the asynchronous operation. The task result contains whether the action succeeded.</returns>
         </member>
+        <member name="M:Fergun.Interactive.Pagination.Paginator.JumpToPageAsync(Discord.WebSocket.SocketReaction)">
+            <summary>
+            Responds <paramref name="reaction"/> with a message, waits for a message with a valid page number and jumps (skips) to that page.
+            </summary>
+            <param name="reaction">The reaction.</param>
+            <returns>A task representing the asynchronous operation. The task result contains whether the action succeeded.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.Pagination.Paginator.JumpToPageAsync(Discord.WebSocket.SocketMessageComponent)">
+            <summary>
+            Responds <paramref name="interaction"/> with a modal, waits for a valid page number and jumps (skips) to that page.
+            </summary>
+            <param name="interaction">The component interaction.</param>
+            <returns>A task representing the asynchronous operation. The task result contains whether the action succeeded.</returns>
+        </member>
         <member name="M:Fergun.Interactive.Pagination.Paginator.GetOrAddComponents(System.Boolean,Discord.ComponentBuilder)">
             <inheritdoc/>
         </member>
         <member name="M:Fergun.Interactive.Pagination.Paginator.HandleMessageAsync(Discord.IMessage,Discord.IUserMessage)">
             <inheritdoc cref="M:Fergun.Interactive.IInteractiveInputHandler.HandleMessageAsync(Discord.IMessage,Discord.IUserMessage)"/>
-            <remarks>If this method is not overriden, it will throw a <see cref="T:System.NotSupportedException"/> since paginators don't support message input by default.</remarks>
+            <remarks>By default, paginators only accept a message input for the "jump to page" action.</remarks>
         </member>
         <member name="M:Fergun.Interactive.Pagination.Paginator.HandleReactionAsync(Discord.WebSocket.SocketReaction,Discord.IUserMessage)">
             <inheritdoc cref="M:Fergun.Interactive.IInteractiveInputHandler.HandleReactionAsync(Discord.IReaction,Discord.IUserMessage)"/>
         </member>
         <member name="M:Fergun.Interactive.Pagination.Paginator.HandleInteractionAsync(Discord.WebSocket.SocketMessageComponent,Discord.IUserMessage)">
             <inheritdoc cref="M:Fergun.Interactive.IInteractiveInputHandler.HandleInteractionAsync(Discord.IComponentInteraction,Discord.IUserMessage)"/>
+        </member>
+        <member name="M:Fergun.Interactive.Pagination.Paginator.HandleModalAsync(Discord.IModalInteraction,Discord.IUserMessage)">
+            <summary>
+            Handles a modal interaction.
+            </summary>
+            <param name="input">The modal interaction to handle.</param>
+            <param name="message">The message containing the interactive element.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> containing the result.</returns>
         </member>
         <member name="M:Fergun.Interactive.Pagination.Paginator.Fergun#Interactive#IInteractiveInputHandler#HandleMessageAsync(Discord.IMessage,Discord.IUserMessage)">
             <inheritdoc />
@@ -1948,6 +2246,11 @@
             Exit the paginator.
             </summary>
         </member>
+        <member name="F:Fergun.Interactive.Pagination.PaginatorAction.Jump">
+            <summary>
+            Jump to a specific page.
+            </summary>
+        </member>
         <member name="T:Fergun.Interactive.Pagination.PaginatorBuilder`2">
             <summary>
             Represents an abstract paginator builder.
@@ -1991,6 +2294,25 @@
         <member name="P:Fergun.Interactive.Pagination.PaginatorBuilder`2.ActionOnTimeout">
             <inheritdoc/>
             <remarks>The default value is <see cref="F:Fergun.Interactive.ActionOnStop.ModifyMessage"/>.</remarks>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.PaginatorBuilder`2.JumpInputTimeout">
+            <inheritdoc/>
+            <remarks>The default value is 30 seconds.</remarks>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.PaginatorBuilder`2.JumpInputPrompt">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.PaginatorBuilder`2.JumpInputTextLabel">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.PaginatorBuilder`2.InvalidJumpInputMessage">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.PaginatorBuilder`2.JumpInputInUseMessage">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.Pagination.PaginatorBuilder`2.ExpiredJumpInputMessage">
+            <inheritdoc/>
         </member>
         <member name="P:Fergun.Interactive.Pagination.PaginatorBuilder`2.Fergun#Interactive#IInteractiveBuilderProperties{System#Collections#Generic#KeyValuePair{Discord#IEmote,Fergun#Interactive#Pagination#PaginatorAction}}#Options">
             <inheritdoc/>
@@ -2092,6 +2414,47 @@
         </member>
         <member name="M:Fergun.Interactive.Pagination.PaginatorBuilder`2.WithActionOnTimeout(Fergun.Interactive.ActionOnStop)">
             <inheritdoc/>
+        </member>
+        <member name="M:Fergun.Interactive.Pagination.PaginatorBuilder`2.WithJumpInputTimeout(System.TimeSpan)">
+            <summary>
+            Sets the maximum time to wait for a "jump to page" input.
+            </summary>
+            <remarks>The default value is 30 seconds.</remarks>
+        </member>
+        <member name="M:Fergun.Interactive.Pagination.PaginatorBuilder`2.WithJumpInputPrompt(System.String)">
+            <summary>
+            Sets the "jump to page" prompt that is displayed to the user.
+            </summary>
+            <remarks>
+            In button inputs, this is the title of the modal that is displayed.<br/>
+            In reaction inputs, this is the content of the temporary message that is sent.
+            </remarks>
+        </member>
+        <member name="M:Fergun.Interactive.Pagination.PaginatorBuilder`2.WithJumpInputTextLabel(System.String)">
+            <summary>
+            Gets or sets the "jump to page" text label that is displayed in the modal.
+            </summary>
+        </member>
+        <member name="M:Fergun.Interactive.Pagination.PaginatorBuilder`2.WithInvalidJumpInputMessage(System.String)">
+            <summary>
+            Sets the message to display when receiving an invalid "jump to page" input.
+            </summary>
+            <remarks>
+            An invalid input may be one that isn't a number, or a number that is outside the valid range.<br/>
+            To avoid sending a warning message about this, set the value to an empty string.
+            </remarks>
+        </member>
+        <member name="M:Fergun.Interactive.Pagination.PaginatorBuilder`2.WithJumpInputInUseMessage(System.String)">
+            <summary>
+            Sets the message to display when a user attempts to use the "jump to page" action while other user is using it.
+            </summary>
+            <remarks>To avoid sending a warning message about this, set the value to an empty string.</remarks>
+        </member>
+        <member name="M:Fergun.Interactive.Pagination.PaginatorBuilder`2.WithExpiredJumpInputMessage(System.String)">
+            <summary>
+            Sets the message to display when receiving an expired "jump to page" input.
+            </summary>
+            <remarks>To avoid sending a warning message about this, set the value to an empty string.</remarks>
         </member>
         <member name="M:Fergun.Interactive.Pagination.PaginatorBuilder`2.WithDefaultEmotes">
             <summary>

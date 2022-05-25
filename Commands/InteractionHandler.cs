@@ -26,11 +26,11 @@ namespace SocialLinker.Commands
             _client.ShardReady += Pat;
             _client.ShardReady += Punch;
             _client.ShardReady += Slap; */
-            _client.SlashCommandExecuted += SlashCommandIndex;
+            //_client.SlashCommandExecuted += SlashCommandIndex;
             await Task.CompletedTask;
         }
 
-        private async Task SlashCommandIndex(SocketSlashCommand command)
+        /*private async Task SlashCommandIndex(SocketSlashCommand command)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace SocialLinker.Commands
             }
             
             await Task.CompletedTask;
-        }
+        } */
 
         public static async Task Status(DiscordSocketClient client)
         {

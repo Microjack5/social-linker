@@ -17,21 +17,21 @@ namespace SocialLinker.Commands
     public class Slap : ModuleBase<SocketCommandContext>
     {
         [Command("slap", RunMode = RunMode.Async)]
-        public async Task SlapCommand([Remainder] string arg = "")
+        public async Task SlapCommand(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "social", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(Context.Message, "social") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command.Message, "social") == true)
             {
                 return;
             }
 
             // Get the account information of the command's user.
-            var command_user_account = UserInfoClasses.GetAccount(Context.User);
+            var command_user_account = UserInfoClasses.GetAccount(command.User);
 
             // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
             if (command_user_account.Account_Activated == "No")
             {
-                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
                 return;
             }
 
@@ -42,28 +42,28 @@ namespace SocialLinker.Commands
             SocketUser commandUser = null;
 
             //Retreive the first mentioned user of the message if there is one
-            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
 
             //If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
-            commandTarget = mentionedUser ?? Context.User;
-            commandUser = Context.User;
+            commandTarget = mentionedUser ?? command.User;
+            commandUser = command.User;
 
             //Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
             {
-                SlapError(Context.Message);
+                SlapError(command.Message);
                 return;
             }
             //If the mentioned user is the command user, send a special message and return
             else if (mentionedUser == commandUser)
             {
-                SlapSelf(Context.Message);
+                SlapSelf(command.Message);
                 return;
             }
             //If the mentioned user is the bot itself, send a special message and return
             else if (mentionedUser.Id == BotConfig.bot.id)
             {
-                SlapBot(Context.Message);
+                SlapBot(command.Message);
                 return;
             }
 
@@ -71,14 +71,14 @@ namespace SocialLinker.Commands
             var account = UserInfoClasses.GetAccount(commandTarget);
 
             //If a user is mentioned and they're not the command user and not a bot, add Expression to both users
-            if ((mentionedUser != null) && (mentionedUser != Context.User) && (mentionedUser.IsBot == false))
+            if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                Core.LevelSystem.SocialStats.AddExpression(Context.Message, commandUser);
-                Core.LevelSystem.SocialStats.AddExpression(Context.Message, commandTarget);
+                Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
+                Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
             }
 
             //Send a slap message to the mentioned user
-            SlapUser(Context.Message, commandTarget);
+            SlapUser(command.Message, commandTarget);
 
             await Task.CompletedTask;
         }

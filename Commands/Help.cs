@@ -14,7 +14,7 @@ namespace SocialLinker.Commands
     public class Help : ModuleBase<SocketCommandContext>
     {
         [Command("help", RunMode = RunMode.Async)]
-        public async Task HelpMenu(SocialLinkerCommand command)
+        public static async Task HelpMenu(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "menu", return the method immediately.
             /*if (await UserCooldownMethods.IsCooldownActive(Context.Message, "menu") == true) // COME BACK TO HERE SOON

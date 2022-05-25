@@ -732,6 +732,15 @@
                 Fired when a guild event is started.
             </summary>
         </member>
+        <member name="E:Discord.WebSocket.BaseSocketClient.IntegrationCreated">
+            <summary> Fired when an integration is created. </summary>
+        </member>
+        <member name="E:Discord.WebSocket.BaseSocketClient.IntegrationUpdated">
+            <summary> Fired when an integration is updated. </summary>
+        </member>
+        <member name="E:Discord.WebSocket.BaseSocketClient.IntegrationDeleted">
+            <summary> Fired when an integration is deleted. </summary>
+        </member>
         <member name="E:Discord.WebSocket.BaseSocketClient.UserJoined">
             <summary> Fired when a user joins a guild. </summary>
         </member>
@@ -748,7 +757,7 @@
             <summary> Fired when a user is updated. </summary>
         </member>
         <member name="E:Discord.WebSocket.BaseSocketClient.GuildMemberUpdated">
-            <summary> Fired when a guild member is updated, or a member presence is updated. </summary>
+            <summary> Fired when a guild member is updated. </summary>
         </member>
         <member name="E:Discord.WebSocket.BaseSocketClient.UserVoiceStateUpdated">
             <summary> Fired when a user joins, leaves, or moves voice channels. </summary>
@@ -3346,16 +3355,14 @@
         <member name="M:Discord.WebSocket.SocketGuild.LeaveAsync(Discord.RequestOptions)">
             <inheritdoc />
         </member>
-        <member name="M:Discord.WebSocket.SocketGuild.GetBansAsync(Discord.RequestOptions)">
-            <summary>
-                Gets a collection of all users banned in this guild.
-            </summary>
-            <param name="options">The options to be used when sending the request.</param>
-            <returns>
-                A task that represents the asynchronous get operation. The task result contains a read-only collection of
-                ban objects that this guild currently possesses, with each object containing the user banned and reason
-                behind the ban.
-            </returns>
+        <member name="M:Discord.WebSocket.SocketGuild.GetBansAsync(System.Int32,Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IGuild.GetBansAsync(System.Int32,Discord.RequestOptions)" />
+        </member>
+        <member name="M:Discord.WebSocket.SocketGuild.GetBansAsync(System.UInt64,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IGuild.GetBansAsync(System.UInt64,Discord.Direction,System.Int32,Discord.RequestOptions)" />
+        </member>
+        <member name="M:Discord.WebSocket.SocketGuild.GetBansAsync(Discord.IUser,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IGuild.GetBansAsync(Discord.IUser,Discord.Direction,System.Int32,Discord.RequestOptions)" />
         </member>
         <member name="M:Discord.WebSocket.SocketGuild.GetBanAsync(Discord.IUser,Discord.RequestOptions)">
             <summary>
@@ -3932,7 +3939,13 @@
         <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#GetEventsAsync(Discord.RequestOptions)">
             <inheritdoc />
         </member>
-        <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#GetBansAsync(Discord.RequestOptions)">
+        <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#GetBansAsync(System.Int32,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#GetBansAsync(System.UInt64,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#GetBansAsync(Discord.IUser,Discord.Direction,System.Int32,Discord.RequestOptions)">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#GetBanAsync(Discord.IUser,Discord.RequestOptions)">
@@ -4010,7 +4023,7 @@
         <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#GetIntegrationsAsync(Discord.RequestOptions)">
             <inheritdoc />
         </member>
-        <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#CreateIntegrationAsync(System.UInt64,System.String,Discord.RequestOptions)">
+        <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#DeleteIntegrationAsync(System.UInt64,Discord.RequestOptions)">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketGuild.Discord#IGuild#GetInvitesAsync(Discord.RequestOptions)">
@@ -4324,12 +4337,7 @@
             <inheritdoc/>
         </member>
         <member name="M:Discord.WebSocket.SocketMessageComponent.UpdateAsync(System.Action{Discord.MessageProperties},Discord.RequestOptions)">
-            <summary>
-                Updates the message which this component resides in with the type <see cref="F:Discord.InteractionResponseType.UpdateMessage"/>
-            </summary>
-            <param name="func">A delegate containing the properties to modify the message with.</param>
-            <param name="options">The request options for this <see langword="async"/> request.</param>
-            <returns>A task that represents the asynchronous operation of updating the message.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:Discord.WebSocket.SocketMessageComponent.FollowupAsync(System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)">
             <inheritdoc/>
@@ -4338,14 +4346,7 @@
             <inheritdoc/>
         </member>
         <member name="M:Discord.WebSocket.SocketMessageComponent.DeferLoadingAsync(System.Boolean,Discord.RequestOptions)">
-            <summary>
-                Defers an interaction and responds with type 5 (<see cref="F:Discord.InteractionResponseType.DeferredChannelMessageWithSource"/>)
-            </summary>
-            <param name="ephemeral"><see langword="true"/> to send this message ephemerally, otherwise <see langword="false"/>.</param>
-            <param name="options">The request options for this <see langword="async"/> request.</param>
-            <returns>
-                A task that represents the asynchronous operation of acknowledging the interaction.
-            </returns>
+            <inheritdoc/>
         </member>
         <member name="M:Discord.WebSocket.SocketMessageComponent.DeferAsync(System.Boolean,Discord.RequestOptions)">
             <inheritdoc/>
@@ -4578,6 +4579,12 @@
         <member name="P:Discord.WebSocket.SocketApplicationCommand.IsDefaultPermission">
             <inheritdoc/>
         </member>
+        <member name="P:Discord.WebSocket.SocketApplicationCommand.IsEnabledInDm">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketApplicationCommand.DefaultMemberPermissions">
+            <inheritdoc/>
+        </member>
         <member name="P:Discord.WebSocket.SocketApplicationCommand.Options">
             <summary>
                 Gets a collection of <see cref="T:Discord.WebSocket.SocketApplicationCommandOption"/>s for this command.
@@ -4726,13 +4733,25 @@
                 Gets the <see cref="T:Discord.WebSocket.ISocketMessageChannel"/> this interaction was used in.
             </summary>
             <remarks>
-                If the channel isn't cached or the bot doesn't have access to it then
+                If the channel isn't cached, the bot scope isn't used, or the bot doesn't have access to it then
                 this property will be <see langword="null"/>.
+            </remarks>
+        </member>
+        <member name="P:Discord.WebSocket.SocketInteraction.ChannelId">
+            <summary>
+                Gets the ID of the channel this interaction was used in.
+            </summary>
+            <remarks>
+                This property is exposed in cases where the bot scope is not provided, so the channel entity cannot be retrieved.
+                <br />
+                To get the channel, you can call <see cref="M:Discord.WebSocket.SocketInteraction.GetChannelAsync(Discord.RequestOptions)"/>
+                as this method makes a request for a <see cref="T:Discord.Rest.RestChannel"/> if nothing was found in cache.
             </remarks>
         </member>
         <member name="P:Discord.WebSocket.SocketInteraction.User">
             <summary>
                 Gets the <see cref="T:Discord.WebSocket.SocketUser"/> who triggered this interaction.
+                This property will be <see langword="null"/> if the bot scope isn't used.
             </summary>
         </member>
         <member name="P:Discord.WebSocket.SocketInteraction.Type">
@@ -6649,12 +6668,21 @@
                 Gets the <see cref="T:Discord.WebSocket.SocketInteraction"/> the command was recieved with.
             </summary>
         </member>
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.SegmentMatches">
+            <inheritdoc cref="P:Discord.IRouteMatchContainer.SegmentMatches"/>
+        </member>
         <member name="M:Discord.Interactions.SocketInteractionContext`1.#ctor(Discord.WebSocket.DiscordSocketClient,`0)">
             <summary>
                 Initializes a new <see cref="T:Discord.Interactions.SocketInteractionContext`1"/>. 
             </summary>
             <param name="client">The underlying client.</param>
             <param name="interaction">The underlying interaction.</param>
+        </member>
+        <member name="M:Discord.Interactions.SocketInteractionContext`1.SetSegmentMatches(System.Collections.Generic.IEnumerable{Discord.IRouteSegmentMatch})">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Discord#IRouteMatchContainer#SegmentMatches">
+            <inheritdoc/>
         </member>
         <member name="P:Discord.Interactions.SocketInteractionContext`1.Discord#IInteractionContext#Client">
             <inheritdoc/>

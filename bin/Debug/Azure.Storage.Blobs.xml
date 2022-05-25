@@ -4181,7 +4181,7 @@
              container's previously-acquired lease.
             
              The lease can be renewed if the leaseId
-             matches that associated with the blob or container.  Note that the]
+             matches that associated with the blob or container.  Note that the
              lease may be renewed even if it has expired as long as the blob or
              container has not been leased again since the expiration of that
              lease.  When you renew a lease, the lease duration clock resets.
@@ -6820,10 +6820,112 @@
              a failure occurs.
              </remarks>
         </member>
+        <member name="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRanges(Azure.Storage.Blobs.Models.GetPageRangesOptions,System.Threading.CancellationToken)">
+             <summary>
+             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRanges(Azure.Storage.Blobs.Models.GetPageRangesOptions,System.Threading.CancellationToken)" /> operation returns the list of
+             valid page ranges for a page blob or snapshot of a page blob.
+            
+             For more information, see
+             <see href="https://docs.microsoft.com/en-us/rest/api/storageservices/get-page-ranges">
+             Get Page Ranges</see>.
+             </summary>
+             <param name="options">
+             Optional parameters.
+             </param>
+             <param name="cancellationToken">
+             Optional <see cref="T:System.Threading.CancellationToken" /> to propagate
+             notifications that the operation should be cancelled.
+             </param>
+             <returns>
+             A <see cref="T:Azure.Page`1" /> describing the
+             valid page ranges for this blob.
+             </returns>
+             <remarks>
+             A <see cref="T:Azure.RequestFailedException" /> will be thrown if
+             a failure occurs.
+             </remarks>
+        </member>
+        <member name="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesAsync(Azure.Storage.Blobs.Models.GetPageRangesOptions,System.Threading.CancellationToken)">
+             <summary>
+             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesAsync(Azure.Storage.Blobs.Models.GetPageRangesOptions,System.Threading.CancellationToken)" /> operation returns the list of
+             valid page ranges for a page blob or snapshot of a page blob.
+            
+             For more information, see
+             <see href="https://docs.microsoft.com/en-us/rest/api/storageservices/get-page-ranges">
+             Get Page Ranges</see>.
+             </summary>
+             <param name="options">
+             Optional parameters.
+             </param>
+             <param name="cancellationToken">
+             Optional <see cref="T:System.Threading.CancellationToken" /> to propagate
+             notifications that the operation should be cancelled.
+             </param>
+             <returns>
+             A <see cref="T:Azure.AsyncPageable`1" /> describing the
+             valid page ranges for this blob.
+             </returns>
+             <remarks>
+             A <see cref="T:Azure.RequestFailedException" /> will be thrown if
+             a failure occurs.
+             </remarks>
+        </member>
+        <member name="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesInteral(System.String,System.Nullable{System.Int32},System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Boolean,System.Threading.CancellationToken)">
+             <summary>
+             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesInteral(System.String,System.Nullable{System.Int32},System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Boolean,System.Threading.CancellationToken)" /> operation returns the list
+             of valid page ranges for a page blob or snapshot of a page blob.
+            
+             For more information, see For more information, see
+             <see href="https://docs.microsoft.com/en-us/rest/api/storageservices/get-page-ranges">
+             Get Page Ranges</see>.
+             </summary>
+             <param name="marker">
+             An optional string value that identifies the segment of the list
+             of blobs to be returned with the next listing operation.  The
+             operation returns a non-empty <see cref="P:Azure.Storage.Blobs.Models.ListBlobsFlatSegmentResponse.NextMarker" />
+             if the listing operation did not return all blobs remaining to be
+             listed with the current segment.  The NextMarker value can
+             be used as the value for the <paramref name="marker" /> parameter
+             in a subsequent call to request the next segment of list items.
+             </param>
+             <param name="pageSizeHint">
+             Gets or sets a value indicating the size of the page that should be
+             requested.
+             </param>
+             <param name="range">
+             Optionally specifies the range of bytes over which to list ranges,
+             inclusively. If omitted, then all ranges for the blob are returned.
+             </param>
+             <param name="snapshot">
+             Optionally specifies the blob snapshot to retrieve page ranges
+             information from. For more information on working with blob snapshots,
+             <see href="https://docs.microsoft.com/rest/api/storageservices/creating-a-snapshot-of-a-blob">
+             Create a snapshot of a blob</see>.
+             </param>
+             <param name="conditions">
+             Optional <see cref="T:Azure.Storage.Blobs.Models.PageBlobRequestConditions" /> to add
+             conditions on getting page ranges for the this blob.
+             </param>
+             <param name="async">
+             Whether to invoke the operation asynchronously.
+             </param>
+             <param name="cancellationToken">
+             Optional <see cref="T:System.Threading.CancellationToken" /> to propagate
+             notifications that the operation should be cancelled.
+             </param>
+             <returns>
+             A <see cref="T:Azure.Response`1" /> describing the
+             valid page ranges for this blob.
+             </returns>
+             <remarks>
+             A <see cref="T:Azure.RequestFailedException" /> will be thrown if
+             a failure occurs.
+             </remarks>
+        </member>
         <member name="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRanges(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)">
              <summary>
-             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRanges(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" /> operation returns the list of
-             valid page ranges for a page blob or snapshot of a page blob.
+             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRanges(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />
+             operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
             
              For more information, see
              <see href="https://docs.microsoft.com/en-us/rest/api/storageservices/get-page-ranges">
@@ -6858,8 +6960,8 @@
         </member>
         <member name="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRangesAsync(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)">
              <summary>
-             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRangesAsync(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" /> operation returns the list of
-             valid page ranges for a page blob or snapshot of a page blob.
+             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRangesAsync(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />
+             operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
             
              For more information, see
              <see href="https://docs.microsoft.com/en-us/rest/api/storageservices/get-page-ranges">
@@ -6885,6 +6987,132 @@
              </param>
              <returns>
              A <see cref="T:Azure.Response`1" /> describing the
+             valid page ranges for this blob.
+             </returns>
+             <remarks>
+             A <see cref="T:Azure.RequestFailedException" /> will be thrown if
+             a failure occurs.
+             </remarks>
+        </member>
+        <member name="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesDiff(Azure.Storage.Blobs.Models.GetPageRangesDiffOptions,System.Threading.CancellationToken)">
+             <summary>
+             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesDiff(Azure.Storage.Blobs.Models.GetPageRangesDiffOptions,System.Threading.CancellationToken)" />
+             operation returns the list of page ranges that differ between a
+             <see cref="P:Azure.Storage.Blobs.Models.GetPageRangesDiffOptions.PreviousSnapshot" /> and this page blob. Changed pages
+             include both updated and cleared pages.
+            
+             For more information, see
+             <see href="https://docs.microsoft.com/en-us/rest/api/storageservices/get-page-ranges">
+             Get Page Ranges</see>.
+             </summary>
+             <param name="options">
+             Optional parameters.
+             </param>
+             <param name="cancellationToken">
+             Optional <see cref="T:System.Threading.CancellationToken" /> to propagate
+             notifications that the operation should be cancelled.
+             </param>
+             <returns>
+             A <see cref="T:Azure.Pageable`1" /> describing the
+             valid page ranges for this blob.
+             </returns>
+             <remarks>
+             A <see cref="T:Azure.RequestFailedException" /> will be thrown if
+             a failure occurs.
+             </remarks>
+        </member>
+        <member name="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesDiffAsync(Azure.Storage.Blobs.Models.GetPageRangesDiffOptions,System.Threading.CancellationToken)">
+             <summary>
+             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesDiffAsync(Azure.Storage.Blobs.Models.GetPageRangesDiffOptions,System.Threading.CancellationToken)" />
+             operation returns the list of page ranges that differ between a
+             <see cref="P:Azure.Storage.Blobs.Models.GetPageRangesDiffOptions.PreviousSnapshot" /> and this page blob. Changed pages
+             include both updated and cleared pages.
+            
+             For more information, see
+             <see href="https://docs.microsoft.com/en-us/rest/api/storageservices/get-page-ranges">
+             Get Page Ranges</see>.
+             </summary>
+             <param name="options">
+             Optional parameters.
+             </param>
+             <param name="cancellationToken">
+             Optional <see cref="T:System.Threading.CancellationToken" /> to propagate
+             notifications that the operation should be cancelled.
+             </param>
+             <returns>
+             A <see cref="T:Azure.AsyncPageable`1" /> describing the
+             valid page ranges for this blob.
+             </returns>
+             <remarks>
+             A <see cref="T:Azure.RequestFailedException" /> will be thrown if
+             a failure occurs.
+             </remarks>
+        </member>
+        <member name="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesDiffInternal(System.String,System.Nullable{System.Int32},System.Nullable{Azure.HttpRange},System.String,System.String,System.Uri,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Boolean,System.String,System.Threading.CancellationToken)">
+             <summary>
+             The <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesDiffInternal(System.String,System.Nullable{System.Int32},System.Nullable{Azure.HttpRange},System.String,System.String,System.Uri,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Boolean,System.String,System.Threading.CancellationToken)" /> operation returns the
+             list of page ranges that differ between a
+             <paramref name="previousSnapshot" /> and this page blob. Changed pages
+             include both updated and cleared pages.
+            
+             For more information, see
+             <see href="https://docs.microsoft.com/en-us/rest/api/storageservices/get-page-ranges">
+             Get Page Ranges</see>.
+             </summary>
+             <param name="marker">
+             An optional string value that identifies the segment of the list
+             of blobs to be returned with the next listing operation.  The
+             operation returns a non-empty <see cref="P:Azure.Storage.Blobs.Models.ListBlobsFlatSegmentResponse.NextMarker" />
+             if the listing operation did not return all blobs remaining to be
+             listed with the current segment.  The NextMarker value can
+             be used as the value for the <paramref name="marker" /> parameter
+             in a subsequent call to request the next segment of list items.
+             </param>
+             <param name="pageSizeHint">
+             Gets or sets a value indicating the size of the page that should be
+             requested.
+             </param>
+             <param name="range">
+             Optionally specifies the range of bytes over which to list ranges,
+             inclusively. If omitted, then all ranges for the blob are returned.
+             </param>
+             <param name="snapshot">
+             Optionally specifies the blob snapshot to retrieve page ranges
+             information from. For more information on working with blob snapshots,
+             <see href="https://docs.microsoft.com/rest/api/storageservices/creating-a-snapshot-of-a-blob">
+             Create a snapshot of a blob</see>.
+             </param>
+             <param name="previousSnapshot">
+             Specifies that the response will contain only pages that were
+             changed between target blob and previous snapshot.  Changed pages
+             include both updated and cleared pages. The target blob may be a
+             snapshot, as long as the snapshot specified by
+             <paramref name="previousSnapshot" /> is the older of the two.
+             </param>
+             <param name="previousSnapshotUri">
+             This parameter only works with managed disk storage accounts.
+             Specifies that the response will contain only pages that were
+             changed between target blob and previous snapshot.  Changed pages
+             include both updated and cleared pages. The target blob may be a
+             snapshot, as long as the snapshot specified by
+             <paramref name="previousSnapshotUri" /> is the older of the two.
+             </param>
+             <param name="conditions">
+             Optional <see cref="T:Azure.Storage.Blobs.Models.PageBlobRequestConditions" /> to add
+             conditions on getting page ranges for the this blob.
+             </param>
+             <param name="async">
+             Whether to invoke the operation asynchronously.
+             </param>
+             <param name="operationName">
+             The name of the operation.
+             </param>
+             <param name="cancellationToken">
+             Optional <see cref="T:System.Threading.CancellationToken" /> to propagate
+             notifications that the operation should be cancelled.
+             </param>
+             <returns>
+             A <see cref="T:Azure.Core.ResponseWithHeaders`2" /> describing the
              valid page ranges for this blob.
              </returns>
              <remarks>
@@ -7313,10 +7541,10 @@
              from the source.  Each subsequent call to <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.StartCopyIncremental(System.Uri,System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />
              will create a new snapshot by copying only the differential
              changes from the previously copied snapshot.  The differential
-             changes are computed on the server by issuing a <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRanges(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />
+             changes are computed on the server by issuing a <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRanges(Azure.Storage.Blobs.Models.GetPageRangesOptions,System.Threading.CancellationToken)" />
              call on the source blob snapshot with prevSnapshot set to the most
              recently copied snapshot. Therefore, the same restrictions on
-             <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRanges(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" /> apply to
+             <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRanges(Azure.Storage.Blobs.Models.GetPageRangesOptions,System.Threading.CancellationToken)" /> apply to
              <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.StartCopyIncremental(System.Uri,System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />.
              Specifically, snapshots must be copied in ascending order and if
              the source blob is recreated using <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.UploadPages(System.IO.Stream,System.Int64,System.Byte[],Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.IProgress{System.Int64},System.Threading.CancellationToken)" /> or
@@ -7327,7 +7555,7 @@
              The additional storage space consumed by the copied snapshot is
              the size of the differential data transferred during the copy.
              This can be determined by performing a
-             <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRangesDiff(System.Nullable{Azure.HttpRange},System.String,System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />
+             <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesDiff(Azure.Storage.Blobs.Models.GetPageRangesDiffOptions,System.Threading.CancellationToken)" />
              call on the snapshot to compare it to the previous snapshot.
              </remarks>
         </member>
@@ -7404,10 +7632,10 @@
              from the source.  Each subsequent call to <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.StartCopyIncrementalAsync(System.Uri,System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />
              will create a new snapshot by copying only the differential
              changes from the previously copied snapshot.  The differential
-             changes are computed on the server by issuing a <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRangesAsync(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />
+             changes are computed on the server by issuing a <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesAsync(Azure.Storage.Blobs.Models.GetPageRangesOptions,System.Threading.CancellationToken)" />
              call on the source blob snapshot with prevSnapshot set to the most
              recently copied snapshot. Therefore, the same restrictions on
-             <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRangesAsync(System.Nullable{Azure.HttpRange},System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" /> apply to
+             <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesAsync(Azure.Storage.Blobs.Models.GetPageRangesOptions,System.Threading.CancellationToken)" /> apply to
              <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.StartCopyIncrementalAsync(System.Uri,System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />.
              Specifically, snapshots must be copied in ascending order and if
              the source blob is recreated using <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.UploadPagesAsync(System.IO.Stream,System.Int64,System.Byte[],Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.IProgress{System.Int64},System.Threading.CancellationToken)" /> or
@@ -7418,7 +7646,7 @@
              The additional storage space consumed by the copied snapshot is
              the size of the differential data transferred during the copy.
              This can be determined by performing a
-             <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetPageRangesDiffAsync(System.Nullable{Azure.HttpRange},System.String,System.String,Azure.Storage.Blobs.Models.PageBlobRequestConditions,System.Threading.CancellationToken)" />
+             <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesDiffAsync(Azure.Storage.Blobs.Models.GetPageRangesDiffOptions,System.Threading.CancellationToken)" />
              call on the snapshot to compare it to the previous snapshot.
              </remarks>
         </member>
@@ -9129,6 +9357,11 @@
         <member name="F:Azure.Storage.Blobs.BlobClientOptions.ServiceVersion.V2021_04_10">
             <summary>
             The 2021-04-10 serivce version.
+            </summary>
+        </member>
+        <member name="F:Azure.Storage.Blobs.BlobClientOptions.ServiceVersion.V2021_06_08">
+            <summary>
+            The 2021-06-08 service version.
             </summary>
         </member>
         <member name="P:Azure.Storage.Blobs.BlobClientOptions.Version">
@@ -12581,7 +12814,7 @@
             <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
             <param name="url"> The URL of the service account, container, or blob that is the target of the desired operation. </param>
             <param name="version"> Specifies the version of the operation to use for this request. </param>
-            <exception cref="T:System.ArgumentNullException"> <paramref name="url" /> or <paramref name="version" /> is null. </exception>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="clientDiagnostics" />, <paramref name="pipeline" />, <paramref name="url" /> or <paramref name="version" /> is null. </exception>
         </member>
         <member name="M:Azure.Storage.Blobs.AppendBlobRestClient.CreateAsync(System.Int64,System.Nullable{System.Int32},System.String,System.String,System.String,System.Byte[],System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.String,System.String,System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.EncryptionAlgorithmTypeInternal},System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{Azure.Storage.Blobs.Models.BlobImmutabilityPolicyMode},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary> The Create Append Blob operation creates a new append blob. </summary>
@@ -13202,7 +13435,7 @@
             <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
             <param name="url"> The URL of the service account, container, or blob that is the target of the desired operation. </param>
             <param name="version"> Specifies the version of the operation to use for this request. </param>
-            <exception cref="T:System.ArgumentNullException"> <paramref name="url" /> or <paramref name="version" /> is null. </exception>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="clientDiagnostics" />, <paramref name="pipeline" />, <paramref name="url" /> or <paramref name="version" /> is null. </exception>
         </member>
         <member name="M:Azure.Storage.Blobs.BlobRestClient.DownloadAsync(System.String,System.String,System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.EncryptionAlgorithmTypeInternal},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary> The Download operation reads or downloads a blob from the system, including its metadata and properties. You can also call Download to read a snapshot. </summary>
@@ -13636,7 +13869,7 @@
             <param name="cancellationToken"> The cancellation token to use. </param>
             <exception cref="T:System.ArgumentNullException"> <paramref name="copySource" /> is null. </exception>
         </member>
-        <member name="M:Azure.Storage.Blobs.BlobRestClient.CopyFromURLAsync(System.String,System.Nullable{System.Int32},System.Collections.Generic.IDictionary{System.String,System.String},System.Nullable{Azure.Storage.Blobs.Models.AccessTier},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Byte[],System.String,System.Nullable{System.DateTimeOffset},System.Nullable{Azure.Storage.Blobs.Models.BlobImmutabilityPolicyMode},System.Nullable{System.Boolean},System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Azure.Storage.Blobs.BlobRestClient.CopyFromURLAsync(System.String,System.Nullable{System.Int32},System.Collections.Generic.IDictionary{System.String,System.String},System.Nullable{Azure.Storage.Blobs.Models.AccessTier},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Byte[],System.String,System.Nullable{System.DateTimeOffset},System.Nullable{Azure.Storage.Blobs.Models.BlobImmutabilityPolicyMode},System.Nullable{System.Boolean},System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.BlobCopySourceTagsMode},System.Threading.CancellationToken)">
             <summary> The Copy From URL operation copies a blob or an internet resource to a new blob. It will not return a response until the copy is complete. </summary>
             <param name="copySource"> Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature. </param>
             <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
@@ -13659,10 +13892,11 @@
             <param name="legalHold"> Specified if a legal hold should be set on the blob. </param>
             <param name="copySourceAuthorization"> Only Bearer type is supported. Credentials should be a valid OAuth access token to copy source. </param>
             <param name="encryptionScope"> Optional. Version 2019-07-07 and later.  Specifies the name of the encryption scope to use to encrypt the data provided in the request. If not specified, encryption is performed with the default account encryption scope.  For more information, see Encryption at Rest for Azure Storage Services. </param>
+            <param name="copySourceTags"> Optional, default 'replace'.  Indicates if source tags should be copied or replaced with the tags specified by x-ms-tags. </param>
             <param name="cancellationToken"> The cancellation token to use. </param>
             <exception cref="T:System.ArgumentNullException"> <paramref name="copySource" /> is null. </exception>
         </member>
-        <member name="M:Azure.Storage.Blobs.BlobRestClient.CopyFromURL(System.String,System.Nullable{System.Int32},System.Collections.Generic.IDictionary{System.String,System.String},System.Nullable{Azure.Storage.Blobs.Models.AccessTier},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Byte[],System.String,System.Nullable{System.DateTimeOffset},System.Nullable{Azure.Storage.Blobs.Models.BlobImmutabilityPolicyMode},System.Nullable{System.Boolean},System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Azure.Storage.Blobs.BlobRestClient.CopyFromURL(System.String,System.Nullable{System.Int32},System.Collections.Generic.IDictionary{System.String,System.String},System.Nullable{Azure.Storage.Blobs.Models.AccessTier},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Byte[],System.String,System.Nullable{System.DateTimeOffset},System.Nullable{Azure.Storage.Blobs.Models.BlobImmutabilityPolicyMode},System.Nullable{System.Boolean},System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.BlobCopySourceTagsMode},System.Threading.CancellationToken)">
             <summary> The Copy From URL operation copies a blob or an internet resource to a new blob. It will not return a response until the copy is complete. </summary>
             <param name="copySource"> Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature. </param>
             <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
@@ -13685,6 +13919,7 @@
             <param name="legalHold"> Specified if a legal hold should be set on the blob. </param>
             <param name="copySourceAuthorization"> Only Bearer type is supported. Credentials should be a valid OAuth access token to copy source. </param>
             <param name="encryptionScope"> Optional. Version 2019-07-07 and later.  Specifies the name of the encryption scope to use to encrypt the data provided in the request. If not specified, encryption is performed with the default account encryption scope.  For more information, see Encryption at Rest for Azure Storage Services. </param>
+            <param name="copySourceTags"> Optional, default 'replace'.  Indicates if source tags should be copied or replaced with the tags specified by x-ms-tags. </param>
             <param name="cancellationToken"> The cancellation token to use. </param>
             <exception cref="T:System.ArgumentNullException"> <paramref name="copySource" /> is null. </exception>
         </member>
@@ -15768,16 +16003,20 @@
         <member name="M:Azure.Storage.Blobs.Models.PageList.#ctor">
             <summary> Initializes a new instance of PageList. </summary>
         </member>
-        <member name="M:Azure.Storage.Blobs.Models.PageList.#ctor(System.Collections.Generic.IReadOnlyList{Azure.Storage.Blobs.Models.PageRange},System.Collections.Generic.IReadOnlyList{Azure.Storage.Blobs.Models.ClearRange})">
+        <member name="M:Azure.Storage.Blobs.Models.PageList.#ctor(System.Collections.Generic.IReadOnlyList{Azure.Storage.Blobs.Models.PageRange},System.Collections.Generic.IReadOnlyList{Azure.Storage.Blobs.Models.ClearRange},System.String)">
             <summary> Initializes a new instance of PageList. </summary>
             <param name="pageRange"></param>
             <param name="clearRange"></param>
+            <param name="nextMarker"></param>
         </member>
         <member name="P:Azure.Storage.Blobs.Models.PageList.PageRange">
             <summary> Gets the page range. </summary>
         </member>
         <member name="P:Azure.Storage.Blobs.Models.PageList.ClearRange">
             <summary> Gets the clear range. </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.PageList.NextMarker">
+            <summary> Gets the next marker. </summary>
         </member>
         <member name="T:Azure.Storage.Blobs.Models.PageRange">
             <summary> The PageRange. </summary>
@@ -16547,7 +16786,8 @@
         </member>
         <member name="P:Azure.Storage.Blobs.Models.BlobCopyFromUriOptions.Tags">
             <summary>
-            Options tags to set for this append blob.
+            Options tags to set on the destination blob.
+            Not valid if <see cref="P:Azure.Storage.Blobs.Models.BlobCopyFromUriOptions.CopySourceTagsMode" /> is set to <see cref="F:Azure.Storage.Blobs.Models.BlobCopySourceTagsMode.Copy" />.
             </summary>
         </member>
         <member name="P:Azure.Storage.Blobs.Models.BlobCopyFromUriOptions.AccessTier">
@@ -16605,6 +16845,14 @@
             <see cref="M:Azure.Storage.Blobs.Specialized.BlobBaseClient.StartCopyFromUriAsync(System.Uri,Azure.Storage.Blobs.Models.BlobCopyFromUriOptions,System.Threading.CancellationToken)" />.
             </summary>
         </member>
+        <member name="P:Azure.Storage.Blobs.Models.BlobCopyFromUriOptions.CopySourceTagsMode">
+            <summary>
+            Optional.
+            If <see cref="F:Azure.Storage.Blobs.Models.BlobCopySourceTagsMode.Replace" />, the tags on the destination blob will be set to <see cref="P:Azure.Storage.Blobs.Models.BlobCopyFromUriOptions.Tags" />.
+            If <see cref="F:Azure.Storage.Blobs.Models.BlobCopySourceTagsMode.Copy" />, the tags on the source blob will be copied to the destination blob.
+            Default is to replace.
+            </summary>
+        </member>
         <member name="T:Azure.Storage.Blobs.Models.BlobCopyInfo">
             <summary>
             BlobCopyInfo.
@@ -16650,6 +16898,22 @@
             <summary>
             Prevent direct instantiation of BlobCopyInfo instances.
             You can use BlobsModelFactory.BlobCopyInfo instead.
+            </summary>
+        </member>
+        <member name="T:Azure.Storage.Blobs.Models.BlobCopySourceTagsMode">
+            <summary>
+            Blob copy source tags mode.
+            </summary>
+        </member>
+        <member name="F:Azure.Storage.Blobs.Models.BlobCopySourceTagsMode.Replace">
+            <summary>
+            Default.  The tags on the destination blob will be set to <see cref="P:Azure.Storage.Blobs.Models.BlobCopyFromUriOptions.Tags" />.
+            </summary>
+        </member>
+        <member name="F:Azure.Storage.Blobs.Models.BlobCopySourceTagsMode.Copy">
+            <summary>
+            The tags on the source blob will be copied to the destination blob.
+            Not compatible with <see cref="P:Azure.Storage.Blobs.Models.BlobCopyFromUriOptions.Tags" />.
             </summary>
         </member>
         <member name="T:Azure.Storage.Blobs.Models.BlobDownloadDetails">
@@ -18157,6 +18421,13 @@
             Optional.  Source authentication used to access the source blob.
             </summary>
         </member>
+        <member name="P:Azure.Storage.Blobs.Models.BlobSyncUploadFromUriOptions.CopySourceTagsMode">
+            <summary>
+            Optional.  Indicates if the source blob's tags should be copied to the destination blob,
+            or replaced on the destination blob with the tags specified by <see cref="P:Azure.Storage.Blobs.Models.BlobSyncUploadFromUriOptions.Tags" />.
+            Default is to replace.
+            </summary>
+        </member>
         <member name="T:Azure.Storage.Blobs.Models.BlobTraits">
             <summary>
             Specifies trait information to be included when listing blobs with the
@@ -18742,6 +19013,65 @@
             Blob Tags.
             </summary>
         </member>
+        <member name="T:Azure.Storage.Blobs.Models.GetPageRangesDiffOptions">
+            <summary>
+            Optional parameters for PageRangeClient.GetPageRangesDiff().
+            </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.GetPageRangesDiffOptions.Range">
+            <summary>
+            Optionally specifies the range of bytes over which to list ranges,
+            inclusively. If omitted, then all ranges for the blob are returned.
+            </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.GetPageRangesDiffOptions.Snapshot">
+            <summary>
+            Optionally specifies the blob snapshot to retrieve page ranges
+            information from. For more information on working with blob snapshots,
+            <see href="https://docs.microsoft.com/rest/api/storageservices/creating-a-snapshot-of-a-blob">
+            Create a snapshot of a blob</see>.
+            </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.GetPageRangesDiffOptions.PreviousSnapshot">
+            <summary>
+            Specifies that the response will contain only pages that were
+            changed between target blob and previous snapshot.  Changed pages
+            include both updated and cleared pages. The target blob may be a
+            snapshot, as long as the snapshot specified by
+            <see cref="P:Azure.Storage.Blobs.Models.GetPageRangesDiffOptions.PreviousSnapshot" /> is the older of the two.
+            </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.GetPageRangesDiffOptions.Conditions">
+            <summary>
+            Optional <see cref="T:Azure.Storage.Blobs.Models.PageBlobRequestConditions" /> to add
+            conditions on getting page ranges for the this blob.
+            </summary>
+        </member>
+        <member name="T:Azure.Storage.Blobs.Models.GetPageRangesOptions">
+            <summary>
+            Optional parameters for PageBlobClient.GetPageRanges().
+            </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.GetPageRangesOptions.Range">
+            <summary>
+            Optionally specifies the range of bytes over which to list ranges,
+            inclusively. If omitted, then all ranges for the blob are returned.
+            </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.GetPageRangesOptions.Snapshot">
+            <summary>
+            Optionally specifies the blob snapshot to retrieve page ranges
+            information from. For more information on working with blob snapshots,
+            <see href="https://docs.microsoft.com/rest/api/storageservices/creating-a-snapshot-of-a-blob">
+            Create a snapshot of a blob</see>.
+            </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.GetPageRangesOptions.Conditions">
+            <summary>
+            Optional <see cref="T:Azure.Storage.Blobs.Models.PageBlobRequestConditions" /> to add
+            conditions on getting page ranges for the this blob.
+            </summary>
+        </member>
         <member name="T:Azure.Storage.Blobs.Models.BlobDeleteType">
             <summary>
             The BlobDeleteType.
@@ -19228,6 +19558,21 @@
             You can use BlobsModelFactory.PageInfo instead.
             </summary>
         </member>
+        <member name="T:Azure.Storage.Blobs.Models.PageRangeItem">
+            <summary>
+            Represents a range of bytes returned by <see cref="M:Azure.Storage.Blobs.Specialized.PageBlobClient.GetAllPageRangesAsync(Azure.Storage.Blobs.Models.GetPageRangesOptions,System.Threading.CancellationToken)" />.
+            </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.PageRangeItem.Range">
+            <summary>
+            Range in bytes of this PageBlobRange.
+            </summary>
+        </member>
+        <member name="P:Azure.Storage.Blobs.Models.PageRangeItem.IsClear">
+            <summary>
+            Indicates if this PageBlobRange is empty bytes.
+            </summary>
+        </member>
         <member name="T:Azure.Storage.Blobs.Models.PageRangesInfo">
             <summary>
             Contains blob page range information returned from the PageBlobClient.GetPageRanges operations.
@@ -19567,7 +19912,7 @@
             <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
             <param name="url"> The URL of the service account, container, or blob that is the target of the desired operation. </param>
             <param name="version"> Specifies the version of the operation to use for this request. </param>
-            <exception cref="T:System.ArgumentNullException"> <paramref name="url" /> or <paramref name="version" /> is null. </exception>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="clientDiagnostics" />, <paramref name="pipeline" />, <paramref name="url" /> or <paramref name="version" /> is null. </exception>
         </member>
         <member name="M:Azure.Storage.Blobs.BlockBlobRestClient.UploadAsync(System.Int64,System.IO.Stream,System.Nullable{System.Int32},System.Byte[],System.String,System.String,System.String,System.Byte[],System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.String,System.String,System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.EncryptionAlgorithmTypeInternal},System.String,System.Nullable{Azure.Storage.Blobs.Models.AccessTier},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{Azure.Storage.Blobs.Models.BlobImmutabilityPolicyMode},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary> The Upload Block Blob operation updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation. </summary>
@@ -19631,7 +19976,7 @@
             <param name="cancellationToken"> The cancellation token to use. </param>
             <exception cref="T:System.ArgumentNullException"> <paramref name="body" /> is null. </exception>
         </member>
-        <member name="M:Azure.Storage.Blobs.BlockBlobRestClient.PutBlobFromUrlAsync(System.Int64,System.String,System.Nullable{System.Int32},System.Byte[],System.String,System.String,System.String,System.Byte[],System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.String,System.String,System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.EncryptionAlgorithmTypeInternal},System.String,System.Nullable{Azure.Storage.Blobs.Models.AccessTier},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Byte[],System.String,System.Nullable{System.Boolean},System.String,System.Threading.CancellationToken)">
+        <member name="M:Azure.Storage.Blobs.BlockBlobRestClient.PutBlobFromUrlAsync(System.Int64,System.String,System.Nullable{System.Int32},System.Byte[],System.String,System.String,System.String,System.Byte[],System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.String,System.String,System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.EncryptionAlgorithmTypeInternal},System.String,System.Nullable{Azure.Storage.Blobs.Models.AccessTier},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Byte[],System.String,System.Nullable{System.Boolean},System.String,System.Nullable{Azure.Storage.Blobs.Models.BlobCopySourceTagsMode},System.Threading.CancellationToken)">
             <summary> The Put Blob from URL operation creates a new Block Blob where the contents of the blob are read from a given URL.  This API is supported beginning with the 2020-04-08 version. Partial updates are not supported with Put Blob from URL; the content of an existing blob is overwritten with the content of the new blob.  To perform partial updates to a block blob’s contents using a source URL, use the Put Block from URL API in conjunction with Put Block List. </summary>
             <param name="contentLength"> The length of the request. </param>
             <param name="copySource"> Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature. </param>
@@ -19664,10 +20009,11 @@
             <param name="blobTagsString"> Optional.  Used to set blob tags in various blob operations. </param>
             <param name="copySourceBlobProperties"> Optional, default is true.  Indicates if properties from the source blob should be copied. </param>
             <param name="copySourceAuthorization"> Only Bearer type is supported. Credentials should be a valid OAuth access token to copy source. </param>
+            <param name="copySourceTags"> Optional, default 'replace'.  Indicates if source tags should be copied or replaced with the tags specified by x-ms-tags. </param>
             <param name="cancellationToken"> The cancellation token to use. </param>
             <exception cref="T:System.ArgumentNullException"> <paramref name="copySource" /> is null. </exception>
         </member>
-        <member name="M:Azure.Storage.Blobs.BlockBlobRestClient.PutBlobFromUrl(System.Int64,System.String,System.Nullable{System.Int32},System.Byte[],System.String,System.String,System.String,System.Byte[],System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.String,System.String,System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.EncryptionAlgorithmTypeInternal},System.String,System.Nullable{Azure.Storage.Blobs.Models.AccessTier},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Byte[],System.String,System.Nullable{System.Boolean},System.String,System.Threading.CancellationToken)">
+        <member name="M:Azure.Storage.Blobs.BlockBlobRestClient.PutBlobFromUrl(System.Int64,System.String,System.Nullable{System.Int32},System.Byte[],System.String,System.String,System.String,System.Byte[],System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.String,System.String,System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.EncryptionAlgorithmTypeInternal},System.String,System.Nullable{Azure.Storage.Blobs.Models.AccessTier},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Byte[],System.String,System.Nullable{System.Boolean},System.String,System.Nullable{Azure.Storage.Blobs.Models.BlobCopySourceTagsMode},System.Threading.CancellationToken)">
             <summary> The Put Blob from URL operation creates a new Block Blob where the contents of the blob are read from a given URL.  This API is supported beginning with the 2020-04-08 version. Partial updates are not supported with Put Blob from URL; the content of an existing blob is overwritten with the content of the new blob.  To perform partial updates to a block blob’s contents using a source URL, use the Put Block from URL API in conjunction with Put Block List. </summary>
             <param name="contentLength"> The length of the request. </param>
             <param name="copySource"> Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature. </param>
@@ -19700,6 +20046,7 @@
             <param name="blobTagsString"> Optional.  Used to set blob tags in various blob operations. </param>
             <param name="copySourceBlobProperties"> Optional, default is true.  Indicates if properties from the source blob should be copied. </param>
             <param name="copySourceAuthorization"> Only Bearer type is supported. Credentials should be a valid OAuth access token to copy source. </param>
+            <param name="copySourceTags"> Optional, default 'replace'.  Indicates if source tags should be copied or replaced with the tags specified by x-ms-tags. </param>
             <param name="cancellationToken"> The cancellation token to use. </param>
             <exception cref="T:System.ArgumentNullException"> <paramref name="copySource" /> is null. </exception>
         </member>
@@ -20036,7 +20383,7 @@
             <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
             <param name="url"> The URL of the service account, container, or blob that is the target of the desired operation. </param>
             <param name="version"> Specifies the version of the operation to use for this request. </param>
-            <exception cref="T:System.ArgumentNullException"> <paramref name="url" /> or <paramref name="version" /> is null. </exception>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="clientDiagnostics" />, <paramref name="pipeline" />, <paramref name="url" /> or <paramref name="version" /> is null. </exception>
         </member>
         <member name="M:Azure.Storage.Blobs.ContainerRestClient.CreateAsync(System.Nullable{System.Int32},System.Collections.Generic.IDictionary{System.String,System.String},System.Nullable{Azure.Storage.Blobs.Models.PublicAccessType},System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary> creates a new container under the specified account. If the container with the same name already exists, the operation fails. </summary>
@@ -20475,7 +20822,7 @@
             <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
             <param name="url"> The URL of the service account, container, or blob that is the target of the desired operation. </param>
             <param name="version"> Specifies the version of the operation to use for this request. </param>
-            <exception cref="T:System.ArgumentNullException"> <paramref name="url" /> or <paramref name="version" /> is null. </exception>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="clientDiagnostics" />, <paramref name="pipeline" />, <paramref name="url" /> or <paramref name="version" /> is null. </exception>
         </member>
         <member name="M:Azure.Storage.Blobs.PageBlobRestClient.CreateAsync(System.Int64,System.Int64,System.Nullable{System.Int32},System.Nullable{Azure.Storage.Blobs.Models.PremiumPageBlobAccessTier},System.String,System.String,System.String,System.Byte[],System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.String,System.String,System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.EncryptionAlgorithmTypeInternal},System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.DateTimeOffset},System.Nullable{Azure.Storage.Blobs.Models.BlobImmutabilityPolicyMode},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary> The Create operation creates a new page blob. </summary>
@@ -20685,7 +21032,7 @@
             <param name="cancellationToken"> The cancellation token to use. </param>
             <exception cref="T:System.ArgumentNullException"> <paramref name="sourceUrl" />, <paramref name="sourceRange" /> or <paramref name="range" /> is null. </exception>
         </member>
-        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesAsync(System.String,System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesAsync(System.String,System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary> The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob. </summary>
             <param name="snapshot"> The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;. </param>
             <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
@@ -20696,9 +21043,11 @@
             <param name="ifMatch"> Specify an ETag value to operate only on blobs with a matching value. </param>
             <param name="ifNoneMatch"> Specify an ETag value to operate only on blobs without a matching value. </param>
             <param name="ifTags"> Specify a SQL where clause on blob tags to operate only on blobs with a matching value. </param>
+            <param name="marker"> A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. The NextMarker value can be used as the value for the marker parameter in a subsequent call to request the next page of list items. The marker value is opaque to the client. </param>
+            <param name="maxresults"> Specifies the maximum number of containers to return. If the request does not specify maxresults, or specifies a value greater than 5000, the server will return up to 5000 items. Note that if the listing operation crosses a partition boundary, then the service will return a continuation token for retrieving the remainder of the results. For this reason, it is possible that the service will return fewer results than specified by maxresults, or than the default of 5000. </param>
             <param name="cancellationToken"> The cancellation token to use. </param>
         </member>
-        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRanges(System.String,System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRanges(System.String,System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary> The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob. </summary>
             <param name="snapshot"> The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;. </param>
             <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
@@ -20709,9 +21058,11 @@
             <param name="ifMatch"> Specify an ETag value to operate only on blobs with a matching value. </param>
             <param name="ifNoneMatch"> Specify an ETag value to operate only on blobs without a matching value. </param>
             <param name="ifTags"> Specify a SQL where clause on blob tags to operate only on blobs with a matching value. </param>
+            <param name="marker"> A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. The NextMarker value can be used as the value for the marker parameter in a subsequent call to request the next page of list items. The marker value is opaque to the client. </param>
+            <param name="maxresults"> Specifies the maximum number of containers to return. If the request does not specify maxresults, or specifies a value greater than 5000, the server will return up to 5000 items. Note that if the listing operation crosses a partition boundary, then the service will return a continuation token for retrieving the remainder of the results. For this reason, it is possible that the service will return fewer results than specified by maxresults, or than the default of 5000. </param>
             <param name="cancellationToken"> The cancellation token to use. </param>
         </member>
-        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesDiffAsync(System.String,System.Nullable{System.Int32},System.String,System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesDiffAsync(System.String,System.Nullable{System.Int32},System.String,System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary> The Get Page Ranges Diff operation returns the list of valid page ranges for a page blob that were changed between target blob and previous snapshot. </summary>
             <param name="snapshot"> The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;. </param>
             <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
@@ -20724,9 +21075,11 @@
             <param name="ifMatch"> Specify an ETag value to operate only on blobs with a matching value. </param>
             <param name="ifNoneMatch"> Specify an ETag value to operate only on blobs without a matching value. </param>
             <param name="ifTags"> Specify a SQL where clause on blob tags to operate only on blobs with a matching value. </param>
+            <param name="marker"> A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. The NextMarker value can be used as the value for the marker parameter in a subsequent call to request the next page of list items. The marker value is opaque to the client. </param>
+            <param name="maxresults"> Specifies the maximum number of containers to return. If the request does not specify maxresults, or specifies a value greater than 5000, the server will return up to 5000 items. Note that if the listing operation crosses a partition boundary, then the service will return a continuation token for retrieving the remainder of the results. For this reason, it is possible that the service will return fewer results than specified by maxresults, or than the default of 5000. </param>
             <param name="cancellationToken"> The cancellation token to use. </param>
         </member>
-        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesDiff(System.String,System.Nullable{System.Int32},System.String,System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesDiff(System.String,System.Nullable{System.Int32},System.String,System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary> The Get Page Ranges Diff operation returns the list of valid page ranges for a page blob that were changed between target blob and previous snapshot. </summary>
             <param name="snapshot"> The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;. </param>
             <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
@@ -20739,6 +21092,8 @@
             <param name="ifMatch"> Specify an ETag value to operate only on blobs with a matching value. </param>
             <param name="ifNoneMatch"> Specify an ETag value to operate only on blobs without a matching value. </param>
             <param name="ifTags"> Specify a SQL where clause on blob tags to operate only on blobs with a matching value. </param>
+            <param name="marker"> A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. The NextMarker value can be used as the value for the marker parameter in a subsequent call to request the next page of list items. The marker value is opaque to the client. </param>
+            <param name="maxresults"> Specifies the maximum number of containers to return. If the request does not specify maxresults, or specifies a value greater than 5000, the server will return up to 5000 items. Note that if the listing operation crosses a partition boundary, then the service will return a continuation token for retrieving the remainder of the results. For this reason, it is possible that the service will return fewer results than specified by maxresults, or than the default of 5000. </param>
             <param name="cancellationToken"> The cancellation token to use. </param>
         </member>
         <member name="M:Azure.Storage.Blobs.PageBlobRestClient.ResizeAsync(System.Int64,System.Nullable{System.Int32},System.String,System.String,System.String,System.Nullable{Azure.Storage.Blobs.Models.EncryptionAlgorithmTypeInternal},System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Threading.CancellationToken)">
@@ -20822,6 +21177,78 @@
             <param name="ifTags"> Specify a SQL where clause on blob tags to operate only on blobs with a matching value. </param>
             <param name="cancellationToken"> The cancellation token to use. </param>
             <exception cref="T:System.ArgumentNullException"> <paramref name="copySource" /> is null. </exception>
+        </member>
+        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesNextPageAsync(System.String,System.String,System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary> The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob. </summary>
+            <param name="nextLink"> The URL to the next page of results. </param>
+            <param name="snapshot"> The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;. </param>
+            <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
+            <param name="range"> Return only the bytes of the blob in the specified range. </param>
+            <param name="leaseId"> If specified, the operation only succeeds if the resource's lease is active and matches this ID. </param>
+            <param name="ifModifiedSince"> Specify this header value to operate only on a blob if it has been modified since the specified date/time. </param>
+            <param name="ifUnmodifiedSince"> Specify this header value to operate only on a blob if it has not been modified since the specified date/time. </param>
+            <param name="ifMatch"> Specify an ETag value to operate only on blobs with a matching value. </param>
+            <param name="ifNoneMatch"> Specify an ETag value to operate only on blobs without a matching value. </param>
+            <param name="ifTags"> Specify a SQL where clause on blob tags to operate only on blobs with a matching value. </param>
+            <param name="marker"> A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. The NextMarker value can be used as the value for the marker parameter in a subsequent call to request the next page of list items. The marker value is opaque to the client. </param>
+            <param name="maxresults"> Specifies the maximum number of containers to return. If the request does not specify maxresults, or specifies a value greater than 5000, the server will return up to 5000 items. Note that if the listing operation crosses a partition boundary, then the service will return a continuation token for retrieving the remainder of the results. For this reason, it is possible that the service will return fewer results than specified by maxresults, or than the default of 5000. </param>
+            <param name="cancellationToken"> The cancellation token to use. </param>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="nextLink" /> is null. </exception>
+        </member>
+        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesNextPage(System.String,System.String,System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary> The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob. </summary>
+            <param name="nextLink"> The URL to the next page of results. </param>
+            <param name="snapshot"> The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;. </param>
+            <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
+            <param name="range"> Return only the bytes of the blob in the specified range. </param>
+            <param name="leaseId"> If specified, the operation only succeeds if the resource's lease is active and matches this ID. </param>
+            <param name="ifModifiedSince"> Specify this header value to operate only on a blob if it has been modified since the specified date/time. </param>
+            <param name="ifUnmodifiedSince"> Specify this header value to operate only on a blob if it has not been modified since the specified date/time. </param>
+            <param name="ifMatch"> Specify an ETag value to operate only on blobs with a matching value. </param>
+            <param name="ifNoneMatch"> Specify an ETag value to operate only on blobs without a matching value. </param>
+            <param name="ifTags"> Specify a SQL where clause on blob tags to operate only on blobs with a matching value. </param>
+            <param name="marker"> A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. The NextMarker value can be used as the value for the marker parameter in a subsequent call to request the next page of list items. The marker value is opaque to the client. </param>
+            <param name="maxresults"> Specifies the maximum number of containers to return. If the request does not specify maxresults, or specifies a value greater than 5000, the server will return up to 5000 items. Note that if the listing operation crosses a partition boundary, then the service will return a continuation token for retrieving the remainder of the results. For this reason, it is possible that the service will return fewer results than specified by maxresults, or than the default of 5000. </param>
+            <param name="cancellationToken"> The cancellation token to use. </param>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="nextLink" /> is null. </exception>
+        </member>
+        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesDiffNextPageAsync(System.String,System.String,System.Nullable{System.Int32},System.String,System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary> The Get Page Ranges Diff operation returns the list of valid page ranges for a page blob that were changed between target blob and previous snapshot. </summary>
+            <param name="nextLink"> The URL to the next page of results. </param>
+            <param name="snapshot"> The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;. </param>
+            <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
+            <param name="prevsnapshot"> Optional in version 2015-07-08 and newer. The prevsnapshot parameter is a DateTime value that specifies that the response will contain only pages that were changed between target blob and previous snapshot. Changed pages include both updated and cleared pages. The target blob may be a snapshot, as long as the snapshot specified by prevsnapshot is the older of the two. Note that incremental snapshots are currently supported only for blobs created on or after January 1, 2016. </param>
+            <param name="prevSnapshotUrl"> Optional. This header is only supported in service versions 2019-04-19 and after and specifies the URL of a previous snapshot of the target blob. The response will only contain pages that were changed between the target blob and its previous snapshot. </param>
+            <param name="range"> Return only the bytes of the blob in the specified range. </param>
+            <param name="leaseId"> If specified, the operation only succeeds if the resource's lease is active and matches this ID. </param>
+            <param name="ifModifiedSince"> Specify this header value to operate only on a blob if it has been modified since the specified date/time. </param>
+            <param name="ifUnmodifiedSince"> Specify this header value to operate only on a blob if it has not been modified since the specified date/time. </param>
+            <param name="ifMatch"> Specify an ETag value to operate only on blobs with a matching value. </param>
+            <param name="ifNoneMatch"> Specify an ETag value to operate only on blobs without a matching value. </param>
+            <param name="ifTags"> Specify a SQL where clause on blob tags to operate only on blobs with a matching value. </param>
+            <param name="marker"> A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. The NextMarker value can be used as the value for the marker parameter in a subsequent call to request the next page of list items. The marker value is opaque to the client. </param>
+            <param name="maxresults"> Specifies the maximum number of containers to return. If the request does not specify maxresults, or specifies a value greater than 5000, the server will return up to 5000 items. Note that if the listing operation crosses a partition boundary, then the service will return a continuation token for retrieving the remainder of the results. For this reason, it is possible that the service will return fewer results than specified by maxresults, or than the default of 5000. </param>
+            <param name="cancellationToken"> The cancellation token to use. </param>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="nextLink" /> is null. </exception>
+        </member>
+        <member name="M:Azure.Storage.Blobs.PageBlobRestClient.GetPageRangesDiffNextPage(System.String,System.String,System.Nullable{System.Int32},System.String,System.String,System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary> The Get Page Ranges Diff operation returns the list of valid page ranges for a page blob that were changed between target blob and previous snapshot. </summary>
+            <param name="nextLink"> The URL to the next page of results. </param>
+            <param name="snapshot"> The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;. </param>
+            <param name="timeout"> The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;. </param>
+            <param name="prevsnapshot"> Optional in version 2015-07-08 and newer. The prevsnapshot parameter is a DateTime value that specifies that the response will contain only pages that were changed between target blob and previous snapshot. Changed pages include both updated and cleared pages. The target blob may be a snapshot, as long as the snapshot specified by prevsnapshot is the older of the two. Note that incremental snapshots are currently supported only for blobs created on or after January 1, 2016. </param>
+            <param name="prevSnapshotUrl"> Optional. This header is only supported in service versions 2019-04-19 and after and specifies the URL of a previous snapshot of the target blob. The response will only contain pages that were changed between the target blob and its previous snapshot. </param>
+            <param name="range"> Return only the bytes of the blob in the specified range. </param>
+            <param name="leaseId"> If specified, the operation only succeeds if the resource's lease is active and matches this ID. </param>
+            <param name="ifModifiedSince"> Specify this header value to operate only on a blob if it has been modified since the specified date/time. </param>
+            <param name="ifUnmodifiedSince"> Specify this header value to operate only on a blob if it has not been modified since the specified date/time. </param>
+            <param name="ifMatch"> Specify an ETag value to operate only on blobs with a matching value. </param>
+            <param name="ifNoneMatch"> Specify an ETag value to operate only on blobs without a matching value. </param>
+            <param name="ifTags"> Specify a SQL where clause on blob tags to operate only on blobs with a matching value. </param>
+            <param name="marker"> A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. The NextMarker value can be used as the value for the marker parameter in a subsequent call to request the next page of list items. The marker value is opaque to the client. </param>
+            <param name="maxresults"> Specifies the maximum number of containers to return. If the request does not specify maxresults, or specifies a value greater than 5000, the server will return up to 5000 items. Note that if the listing operation crosses a partition boundary, then the service will return a continuation token for retrieving the remainder of the results. For this reason, it is possible that the service will return fewer results than specified by maxresults, or than the default of 5000. </param>
+            <param name="cancellationToken"> The cancellation token to use. </param>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="nextLink" /> is null. </exception>
         </member>
         <member name="P:Azure.Storage.Blobs.PageBlobUpdateSequenceNumberHeaders.LastModified">
             <summary> Returns the date and time the container was last modified. Any operation that modifies the blob, including an update of the blob's metadata or properties, changes the last-modified time of the blob. </summary>
@@ -20916,7 +21343,7 @@
             <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
             <param name="url"> The URL of the service account, container, or blob that is the target of the desired operation. </param>
             <param name="version"> Specifies the version of the operation to use for this request. </param>
-            <exception cref="T:System.ArgumentNullException"> <paramref name="url" /> or <paramref name="version" /> is null. </exception>
+            <exception cref="T:System.ArgumentNullException"> <paramref name="clientDiagnostics" />, <paramref name="pipeline" />, <paramref name="url" /> or <paramref name="version" /> is null. </exception>
         </member>
         <member name="M:Azure.Storage.Blobs.ServiceRestClient.SetPropertiesAsync(Azure.Storage.Blobs.Models.BlobServiceProperties,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary> Sets properties for a storage account's Blob service endpoint, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules. </summary>
@@ -23134,124 +23561,6 @@
             Executed in the event a 401 response with a WWW-Authenticate authentication challenge header is received after the initial request.
             </summary><remarks>Service client libraries may override this to handle service specific authentication challenges.</remarks><param name="message">The <see cref="T:Azure.Core.HttpMessage" /> to be authenticated.</param><returns>A boolean indicating whether the request was successfully authenticated and should be sent to the transport.</returns>
         </member>
-        <member name="T:Azure.Core.AppContextSwitchHelper">
-            <summary>
-            Helper for interacting with AppConfig settings and their related Environment variable settings.
-            </summary>
-        </member>
-        <member name="M:Azure.Core.AppContextSwitchHelper.GetConfigValue(System.String,System.String)">
-            <summary>
-            Determines if either an AppContext switch or its corresponding Environment Variable is set
-            </summary>
-            <param name="appContexSwitchName">Name of the AppContext switch.</param>
-            <param name="environmentVariableName">Name of the Environment variable.</param>
-            <returns>If the AppContext switch has been set, returns the value of the switch.
-            If the AppContext switch has not been set, returns the value of the environment variable.
-            False if neither is set.
-            </returns>
-        </member>
-        <member name="T:Azure.Core.Argument">
-            <summary>
-            Argument validation.
-            </summary>
-            <remarks>
-              <para>This class should be shared via source using Azure.Core.props and contain only common argument validation.
-                It is declared partial so that you can use the same familiar class name but extend it with project-specific validation.
-                To extend the functionality of this class, just declare your own partial <see cref="T:Azure.Core.Argument" /> class with project-specific methods.
-              </para>
-              <para>
-                Be sure to document exceptions thrown by these methods on your public methods.
-              </para>
-            </remarks>
-        </member>
-        <member name="M:Azure.Core.Argument.AssertNotNull``1(``0,System.String)">
-            <summary>
-            Throws if <paramref name="value" /> is null.
-            </summary>
-            <param name="value">The value to validate.</param>
-            <param name="name">The name of the parameter.</param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
-        </member>
-        <member name="M:Azure.Core.Argument.AssertNotNull``1(System.Nullable{``0},System.String)">
-            <summary>
-            Throws if <paramref name="value" /> has not been initialized.
-            </summary>
-            <param name="value">The value to validate.</param>
-            <param name="name">The name of the parameter.</param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> has not been initialized.</exception>
-        </member>
-        <member name="M:Azure.Core.Argument.AssertNotNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0},System.String)">
-            <summary>
-            Throws if <paramref name="value" /> is null or an empty collection.
-            </summary>
-            <param name="value">The value to validate.</param>
-            <param name="name">The name of the parameter.</param>
-            <exception cref="T:System.ArgumentException"><paramref name="value" /> is an empty collection.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
-        </member>
-        <member name="M:Azure.Core.Argument.AssertNotNullOrEmpty(System.String,System.String)">
-            <summary>
-            Throws if <paramref name="value" /> is null or an empty string.
-            </summary>
-            <param name="value">The value to validate.</param>
-            <param name="name">The name of the parameter.</param>
-            <exception cref="T:System.ArgumentException"><paramref name="value" /> is an empty string.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
-        </member>
-        <member name="M:Azure.Core.Argument.AssertNotNullOrWhiteSpace(System.String,System.String)">
-            <summary>
-            Throws if <paramref name="value" /> is null, an empty string, or consists only of white-space characters.
-            </summary>
-            <param name="value">The value to validate.</param>
-            <param name="name">The name of the parameter.</param>
-            <exception cref="T:System.ArgumentException"><paramref name="value" /> is an empty string or consists only of white-space characters.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
-        </member>
-        <member name="M:Azure.Core.Argument.AssertNotDefault``1(``0@,System.String)">
-            <summary>
-            Throws if <paramref name="value" /> is the default value for type <typeparamref name="T" />.
-            </summary>
-            <typeparam name="T">The type of structure to validate which implements <see cref="T:System.IEquatable`1" />.</typeparam>
-            <param name="value">The value to validate.</param>
-            <param name="name">The name of the parameter.</param>
-            <exception cref="T:System.ArgumentException"><paramref name="value" /> is the default value for type <typeparamref name="T" />.</exception>
-        </member>
-        <member name="M:Azure.Core.Argument.AssertInRange``1(``0,``0,``0,System.String)">
-            <summary>
-            Throws if <paramref name="value" /> is less than the <paramref name="minimum" /> or greater than the <paramref name="maximum" />.
-            </summary>
-            <typeparam name="T">The type of to validate which implements <see cref="T:System.IComparable`1" />.</typeparam>
-            <param name="value">The value to validate.</param>
-            <param name="minimum">The minimum value to compare.</param>
-            <param name="maximum">The maximum value to compare.</param>
-            <param name="name">The name of the parameter.</param>
-        </member>
-        <member name="M:Azure.Core.Argument.CheckNotNull``1(``0,System.String)">
-            <summary>
-            Throws if <paramref name="value" /> has not been initialized; otherwise, returns <paramref name="value" />.
-            </summary>
-            <param name="value">The value to validate.</param>
-            <param name="name">The name of the parameter.</param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> has not been initialized.</exception>
-        </member>
-        <member name="M:Azure.Core.Argument.CheckNotNullOrEmpty(System.String,System.String)">
-            <summary>
-            Throws if <paramref name="value" /> is null or an empty string; otherwise, returns <paramref name="value" />.
-            </summary>
-            <param name="value">The value to validate.</param>
-            <param name="name">The name of the parameter.</param>
-            <exception cref="T:System.ArgumentException"><paramref name="value" /> is an empty string.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
-        </member>
-        <member name="M:Azure.Core.Argument.AssertNull``1(``0,System.String,System.String)">
-            <summary>
-            Throws if <paramref name="value" /> is not null.
-            </summary>
-            <param name="value">The value to validate.</param>
-            <param name="name">The name of the parameter.</param>
-            <param name="message">The error message.</param>
-            <exception cref="T:System.ArgumentException"><paramref name="value" /> is not null.</exception>
-        </member>
         <member name="T:Azure.Core.AuthorizationChallengeParser">
             <summary>
             A helper class for parsing Authorization challenge headers.
@@ -23310,14 +23619,6 @@
             Method is invoked before the request is sent.
             </summary><param name="message">The <see cref="T:Azure.Core.HttpMessage" /> containing the request.</param>
         </member>
-        <member name="T:Azure.Core.Pipeline.TaskExtensions.Enumerable`1">
-            <summary>
-            Both <see cref="T:Azure.Core.Pipeline.TaskExtensions.Enumerable`1" /> and <see cref="T:Azure.Core.Pipeline.TaskExtensions.Enumerator`1" /> are defined as public structs so that foreach can use duck typing
-            to call <see cref="M:Azure.Core.Pipeline.TaskExtensions.Enumerable`1.GetEnumerator" /> and avoid heap memory allocation.
-            Please don't delete this method and don't make these types private.
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
         <member name="M:Azure.Core.Pipeline.StorageClientDiagnostics.ExtractFailureContent(System.String,Azure.Core.ResponseHeaders,System.Collections.Generic.IDictionary{System.String,System.String}@)">
             <summary>
             Partial method that can optionally be defined to extract the error
@@ -23371,6 +23672,14 @@
             <summary>
             Until we can reference the 5.0 of System.Diagnostics.DiagnosticSource
             </summary>
+        </member>
+        <member name="T:Azure.Core.Pipeline.TaskExtensions.Enumerable`1">
+            <summary>
+            Both <see cref="T:Azure.Core.Pipeline.TaskExtensions.Enumerable`1" /> and <see cref="T:Azure.Core.Pipeline.TaskExtensions.Enumerator`1" /> are defined as public structs so that foreach can use duck typing
+            to call <see cref="M:Azure.Core.Pipeline.TaskExtensions.Enumerable`1.GetEnumerator" /> and avoid heap memory allocation.
+            Please don't delete this method and don't make these types private.
+            </summary>
+            <typeparam name="T"></typeparam>
         </member>
         <member name="M:Azure.Core.CancellationHelper.ShouldWrapInOperationCanceledException(System.Exception,System.Threading.CancellationToken)">
             <summary>Determines whether to wrap an <see cref="T:System.Exception" /> in a cancellation exception.</summary>
@@ -23643,6 +23952,41 @@
             </summary>
             <typeparam name="T">The final result of the LRO.</typeparam>
         </member>
+        <member name="T:Azure.Core.AsyncLockWithValue`1">
+            <summary>
+            Primitive that combines async lock and value cache
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Azure.Core.AsyncLockWithValue`1.GetLockOrValueAsync(System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Method that either returns cached value or acquire a lock.
+            If one caller has acquired a lock, other callers will be waiting for the lock to be released.
+            If value is set, lock is released and all waiters get that value.
+            If value isn't set, the next waiter in the queue will get the lock.
+            </summary>
+            <param name="async"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Azure.Core.AsyncLockWithValue`1.LockOrValue.HasValue">
+            <summary>
+            Returns true if lock contains the cached value. Otherwise false.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AsyncLockWithValue`1.LockOrValue.Value">
+            <summary>
+            Returns cached value if it was set when lock has been created. Throws exception otherwise.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Value isn't set.</exception>
+        </member>
+        <member name="M:Azure.Core.AsyncLockWithValue`1.LockOrValue.SetValue(`0)">
+            <summary>
+            Set value to the cache and to all the waiters.
+            </summary>
+            <param name="value"></param>
+            <exception cref="T:System.InvalidOperationException">Value is set already.</exception>
+        </member>
         <member name="T:Azure.Core.OperationInternal">
             <summary>
             A helper class used to build long-running operation instances. In order to use this helper:
@@ -23674,6 +24018,19 @@
             </list>
             </summary>
         </member>
+        <member name="M:Azure.Core.OperationInternal.Succeeded(Azure.Response)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Azure.Core.OperationInternal" /> class in a final successful state.
+            </summary>
+            <param name="rawResponse">The final value of <see cref="P:Azure.Core.OperationInternalBase.RawResponse" />.</param>
+        </member>
+        <member name="M:Azure.Core.OperationInternal.Failed(Azure.Response,Azure.RequestFailedException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Azure.Core.OperationInternal" /> class in a final failed state.
+            </summary>
+            <param name="rawResponse">The final value of <see cref="P:Azure.Core.OperationInternalBase.RawResponse" />.</param>
+            <param name="operationFailedException">The exception that will be thrown by <c>UpdateStatusAsync</c>.</param>
+        </member>
         <member name="M:Azure.Core.OperationInternal.#ctor(Azure.Core.Pipeline.ClientDiagnostics,Azure.Core.IOperation,Azure.Response,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},Azure.Core.DelayStrategy)">
             <summary>
             Initializes a new instance of the <see cref="T:Azure.Core.OperationInternal" /> class.
@@ -23698,12 +24055,6 @@
             </param>
             <param name="scopeAttributes">The attributes to use during diagnostic scope creation.</param>
             <param name="fallbackStrategy">The fallback delay strategy when Retry-After header is not present.  When it is present, the longer of the two delays will be used. Default is <see cref="T:Azure.Core.ConstantDelayStrategy" />.</param>
-        </member>
-        <member name="M:Azure.Core.OperationInternal.SetState(Azure.Core.OperationState)">
-            <summary>
-            Sets the <see cref="T:Azure.Core.OperationInternal" /> state immediately.
-            </summary>
-            <param name="state">The <see cref="T:Azure.Core.OperationState" /> used to set <see cref="P:Azure.Core.OperationInternalBase.HasCompleted" /> and other members.</param>
         </member>
         <member name="T:Azure.Core.IOperation">
             <summary>
@@ -23952,6 +24303,20 @@
             </summary>
             <typeparam name="T">The final result of the long-running operation. Must match the type used in <see cref="T:Azure.Operation`1" />.</typeparam>
         </member>
+        <member name="M:Azure.Core.OperationInternal`1.Succeeded(Azure.Response,`0)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Azure.Core.OperationInternal" /> class in a final successful state.
+            </summary>
+            <param name="rawResponse">The final value of <see cref="P:Azure.Core.OperationInternalBase.RawResponse" />.</param>
+            <param name="value">The final result of the long-running operation.</param>
+        </member>
+        <member name="M:Azure.Core.OperationInternal`1.Failed(Azure.Response,Azure.RequestFailedException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Azure.Core.OperationInternal" /> class in a final failed state.
+            </summary>
+            <param name="rawResponse">The final value of <see cref="P:Azure.Core.OperationInternalBase.RawResponse" />.</param>
+            <param name="operationFailedException">The exception that will be thrown by <c>UpdateStatusAsync</c>.</param>
+        </member>
         <member name="M:Azure.Core.OperationInternal`1.#ctor(Azure.Core.Pipeline.ClientDiagnostics,Azure.Core.IOperation{`0},Azure.Response,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},Azure.Core.DelayStrategy)">
             <summary>
             Initializes a new instance of the <see cref="T:Azure.Core.OperationInternal`1" /> class.
@@ -24074,12 +24439,6 @@
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> controlling the request lifetime.</param>
             <returns>The last HTTP response received from the server, including the final result of the long-running operation.</returns>
             <exception cref="T:Azure.RequestFailedException">Thrown if there's been any issues during the connection, or if the operation has completed with failures.</exception>
-        </member>
-        <member name="M:Azure.Core.OperationInternal`1.SetState(Azure.Core.OperationState{`0})">
-            <summary>
-            Sets the <see cref="T:Azure.Core.OperationInternal`1" /> state immediately.
-            </summary>
-            <param name="state">The <see cref="T:Azure.Core.OperationState`1" /> used to set <see cref="P:Azure.Core.OperationInternalBase.HasCompleted" /> and other members.</param>
         </member>
         <member name="T:Azure.Core.IOperation`1">
             <summary>
@@ -24230,6 +24589,124 @@
             <summary>
             Implementation of LRO polling logic.
             </summary>
+        </member>
+        <member name="T:Azure.Core.Argument">
+            <summary>
+            Argument validation.
+            </summary>
+            <remarks>
+              <para>This class should be shared via source using Azure.Core.props and contain only common argument validation.
+                It is declared partial so that you can use the same familiar class name but extend it with project-specific validation.
+                To extend the functionality of this class, just declare your own partial <see cref="T:Azure.Core.Argument" /> class with project-specific methods.
+              </para>
+              <para>
+                Be sure to document exceptions thrown by these methods on your public methods.
+              </para>
+            </remarks>
+        </member>
+        <member name="M:Azure.Core.Argument.AssertNotNull``1(``0,System.String)">
+            <summary>
+            Throws if <paramref name="value" /> is null.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <param name="name">The name of the parameter.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
+        </member>
+        <member name="M:Azure.Core.Argument.AssertNotNull``1(System.Nullable{``0},System.String)">
+            <summary>
+            Throws if <paramref name="value" /> has not been initialized.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <param name="name">The name of the parameter.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> has not been initialized.</exception>
+        </member>
+        <member name="M:Azure.Core.Argument.AssertNotNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Throws if <paramref name="value" /> is null or an empty collection.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <param name="name">The name of the parameter.</param>
+            <exception cref="T:System.ArgumentException"><paramref name="value" /> is an empty collection.</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
+        </member>
+        <member name="M:Azure.Core.Argument.AssertNotNullOrEmpty(System.String,System.String)">
+            <summary>
+            Throws if <paramref name="value" /> is null or an empty string.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <param name="name">The name of the parameter.</param>
+            <exception cref="T:System.ArgumentException"><paramref name="value" /> is an empty string.</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
+        </member>
+        <member name="M:Azure.Core.Argument.AssertNotNullOrWhiteSpace(System.String,System.String)">
+            <summary>
+            Throws if <paramref name="value" /> is null, an empty string, or consists only of white-space characters.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <param name="name">The name of the parameter.</param>
+            <exception cref="T:System.ArgumentException"><paramref name="value" /> is an empty string or consists only of white-space characters.</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
+        </member>
+        <member name="M:Azure.Core.Argument.AssertNotDefault``1(``0@,System.String)">
+            <summary>
+            Throws if <paramref name="value" /> is the default value for type <typeparamref name="T" />.
+            </summary>
+            <typeparam name="T">The type of structure to validate which implements <see cref="T:System.IEquatable`1" />.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="name">The name of the parameter.</param>
+            <exception cref="T:System.ArgumentException"><paramref name="value" /> is the default value for type <typeparamref name="T" />.</exception>
+        </member>
+        <member name="M:Azure.Core.Argument.AssertInRange``1(``0,``0,``0,System.String)">
+            <summary>
+            Throws if <paramref name="value" /> is less than the <paramref name="minimum" /> or greater than the <paramref name="maximum" />.
+            </summary>
+            <typeparam name="T">The type of to validate which implements <see cref="T:System.IComparable`1" />.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="minimum">The minimum value to compare.</param>
+            <param name="maximum">The maximum value to compare.</param>
+            <param name="name">The name of the parameter.</param>
+        </member>
+        <member name="M:Azure.Core.Argument.CheckNotNull``1(``0,System.String)">
+            <summary>
+            Throws if <paramref name="value" /> has not been initialized; otherwise, returns <paramref name="value" />.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <param name="name">The name of the parameter.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> has not been initialized.</exception>
+        </member>
+        <member name="M:Azure.Core.Argument.CheckNotNullOrEmpty(System.String,System.String)">
+            <summary>
+            Throws if <paramref name="value" /> is null or an empty string; otherwise, returns <paramref name="value" />.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <param name="name">The name of the parameter.</param>
+            <exception cref="T:System.ArgumentException"><paramref name="value" /> is an empty string.</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="value" /> is null.</exception>
+        </member>
+        <member name="M:Azure.Core.Argument.AssertNull``1(``0,System.String,System.String)">
+            <summary>
+            Throws if <paramref name="value" /> is not null.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <param name="name">The name of the parameter.</param>
+            <param name="message">The error message.</param>
+            <exception cref="T:System.ArgumentException"><paramref name="value" /> is not null.</exception>
+        </member>
+        <member name="T:Azure.Core.AppContextSwitchHelper">
+            <summary>
+            Helper for interacting with AppConfig settings and their related Environment variable settings.
+            </summary>
+        </member>
+        <member name="M:Azure.Core.AppContextSwitchHelper.GetConfigValue(System.String,System.String)">
+            <summary>
+            Determines if either an AppContext switch or its corresponding Environment Variable is set
+            </summary>
+            <param name="appContexSwitchName">Name of the AppContext switch.</param>
+            <param name="environmentVariableName">Name of the Environment variable.</param>
+            <returns>If the AppContext switch has been set, returns the value of the switch.
+            If the AppContext switch has not been set, returns the value of the environment variable.
+            False if neither is set.
+            </returns>
         </member>
         <member name="T:Microsoft.Extensions.Azure.BlobClientBuilderExtensions">
             <summary>

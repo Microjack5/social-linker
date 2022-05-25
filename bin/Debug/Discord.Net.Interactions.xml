@@ -290,6 +290,22 @@
                 Tag a type constructor as the preferred Complex command constructor.
             </summary>
         </member>
+        <member name="T:Discord.Interactions.DefaultMemberPermissionsAttribute">
+            <summary>
+                Sets the <see cref="P:Discord.Interactions.IApplicationCommandInfo.DefaultMemberPermissions"/> of an application command or module.
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.DefaultMemberPermissionsAttribute.Permissions">
+            <summary>
+                Gets the default permission required to use this command.
+            </summary>
+        </member>
+        <member name="M:Discord.Interactions.DefaultMemberPermissionsAttribute.#ctor(Discord.GuildPermission)">
+            <summary>
+                Sets the <see cref="P:Discord.Interactions.IApplicationCommandInfo.DefaultMemberPermissions"/> of an application command or module.
+            </summary>
+            <param name="permissions">The default permission required to use this command.</param>
+        </member>
         <member name="T:Discord.Interactions.DefaultPermissionAttribute">
             <summary>
                 Set the "Default Permission" property of an Application Command.
@@ -311,6 +327,22 @@
                 <see cref="T:Discord.Interactions.InteractionModuleBase`1"/>s with this attribute will not be registered by the <see cref="M:Discord.Interactions.InteractionService.RegisterCommandsGloballyAsync(System.Boolean)"/> or
                 <see cref="M:Discord.Interactions.InteractionService.RegisterCommandsToGuildAsync(System.UInt64,System.Boolean)"/> methods.
             </summary>
+        </member>
+        <member name="T:Discord.Interactions.EnabledInDmAttribute">
+            <summary>
+                Sets the <see cref="P:Discord.Interactions.IApplicationCommandInfo.IsEnabledInDm"/> property of an application command or module.
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.EnabledInDmAttribute.IsEnabled">
+            <summary>
+                Gets whether or not this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="M:Discord.Interactions.EnabledInDmAttribute.#ctor(System.Boolean)">
+            <summary>
+                Sets the <see cref="P:Discord.Interactions.IApplicationCommandInfo.IsEnabledInDm"/> property of an application command or module.
+            </summary>
+            <param name="isEnabled">Whether or not this command can be used in DMs.</param>
         </member>
         <member name="T:Discord.Interactions.ChoiceDisplayAttribute">
             <summary>
@@ -1018,6 +1050,16 @@
                 Gets the default permission of this command.
             </summary>
         </member>
+        <member name="P:Discord.Interactions.Builders.ContextCommandBuilder.IsEnabledInDm">
+            <summary>
+                Gets whether this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.Builders.ContextCommandBuilder.DefaultMemberPermissions">
+            <summary>
+                Gets the default permissions needed for executing this command.
+            </summary>
+        </member>
         <member name="M:Discord.Interactions.Builders.ContextCommandBuilder.#ctor(Discord.Interactions.Builders.ModuleBuilder,System.String,Discord.Interactions.ExecuteCallback)">
             <summary>
                 Initializes a new <see cref="T:Discord.Interactions.Builders.ContextCommandBuilder"/>.
@@ -1049,6 +1091,24 @@
                 Adds a command parameter to the parameters collection.
             </summary>
             <param name="configure"><see cref="T:Discord.Interactions.Builders.CommandParameterBuilder"/> factory.</param>
+            <returns>
+                The builder instance.
+            </returns>
+        </member>
+        <member name="M:Discord.Interactions.Builders.ContextCommandBuilder.SetEnabledInDm(System.Boolean)">
+            <summary>
+                Sets <see cref="P:Discord.Interactions.Builders.ContextCommandBuilder.IsEnabledInDm"/>.
+            </summary>
+            <param name="isEnabled">New value of the <see cref="P:Discord.Interactions.Builders.ContextCommandBuilder.IsEnabledInDm"/>.</param>
+            <returns>
+                The builder instance.
+            </returns>
+        </member>
+        <member name="M:Discord.Interactions.Builders.ContextCommandBuilder.WithDefaultMemberPermissions(Discord.GuildPermission)">
+            <summary>
+                Sets <see cref="P:Discord.Interactions.Builders.ContextCommandBuilder.DefaultMemberPermissions"/>.
+            </summary>
+            <param name="permissions">New value of the <see cref="P:Discord.Interactions.Builders.ContextCommandBuilder.DefaultMemberPermissions"/>.</param>
             <returns>
                 The builder instance.
             </returns>
@@ -1201,6 +1261,16 @@
                 Gets and sets the default permission of this command.
             </summary>
         </member>
+        <member name="P:Discord.Interactions.Builders.SlashCommandBuilder.IsEnabledInDm">
+            <summary>
+                Gets whether this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.Builders.SlashCommandBuilder.DefaultMemberPermissions">
+            <summary>
+                Gets the default permissions needed for executing this command.
+            </summary>
+        </member>
         <member name="M:Discord.Interactions.Builders.SlashCommandBuilder.#ctor(Discord.Interactions.Builders.ModuleBuilder,System.String,Discord.Interactions.ExecuteCallback)">
             <summary>
                 Initializes a new <see cref="T:Discord.Interactions.Builders.SlashCommandBuilder"/>.
@@ -1232,6 +1302,24 @@
                 Adds a command parameter to the parameters collection.
             </summary>
             <param name="configure"><see cref="T:Discord.Interactions.Builders.SlashCommandParameterBuilder"/> factory.</param>
+            <returns>
+                The builder instance.
+            </returns>
+        </member>
+        <member name="M:Discord.Interactions.Builders.SlashCommandBuilder.SetEnabledInDm(System.Boolean)">
+            <summary>
+                Sets <see cref="P:Discord.Interactions.Builders.SlashCommandBuilder.IsEnabledInDm"/>.
+            </summary>
+            <param name="isEnabled">New value of the <see cref="P:Discord.Interactions.Builders.SlashCommandBuilder.IsEnabledInDm"/>.</param>
+            <returns>
+                The builder instance.
+            </returns>
+        </member>
+        <member name="M:Discord.Interactions.Builders.SlashCommandBuilder.WithDefaultMemberPermissions(Discord.GuildPermission)">
+            <summary>
+                Sets <see cref="P:Discord.Interactions.Builders.SlashCommandBuilder.DefaultMemberPermissions"/>.
+            </summary>
+            <param name="permissions">New value of the <see cref="P:Discord.Interactions.Builders.SlashCommandBuilder.DefaultMemberPermissions"/>.</param>
             <returns>
                 The builder instance.
             </returns>
@@ -1631,6 +1719,16 @@
                 Gets and sets the default permission of this module.
             </summary>
         </member>
+        <member name="P:Discord.Interactions.Builders.ModuleBuilder.IsEnabledInDm">
+            <summary>
+                Gets whether this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.Builders.ModuleBuilder.DefaultMemberPermissions">
+            <summary>
+                Gets the default permissions needed for executing this command.
+            </summary>
+        </member>
         <member name="P:Discord.Interactions.Builders.ModuleBuilder.DontAutoRegister">
             <summary>
                 Gets and sets whether this has a <see cref="T:Discord.Interactions.DontAutoRegisterAttribute"/>.
@@ -1707,6 +1805,24 @@
                 Sets <see cref="P:Discord.Interactions.Builders.ModuleBuilder.DefaultPermission"/>.
             </summary>
             <param name="permission">New value of the <see cref="P:Discord.Interactions.Builders.ModuleBuilder.DefaultPermission"/>.</param>
+            <returns>
+                The builder instance.
+            </returns>
+        </member>
+        <member name="M:Discord.Interactions.Builders.ModuleBuilder.SetEnabledInDm(System.Boolean)">
+            <summary>
+                Sets <see cref="P:Discord.Interactions.Builders.ModuleBuilder.IsEnabledInDm"/>.
+            </summary>
+            <param name="isEnabled">New value of the <see cref="P:Discord.Interactions.Builders.ModuleBuilder.IsEnabledInDm"/>.</param>
+            <returns>
+                The builder instance.
+            </returns>
+        </member>
+        <member name="M:Discord.Interactions.Builders.ModuleBuilder.WithDefaultMemberPermissions(Discord.GuildPermission)">
+            <summary>
+                Sets <see cref="P:Discord.Interactions.Builders.ModuleBuilder.DefaultMemberPermissions"/>.
+            </summary>
+            <param name="permissions">New value of the <see cref="P:Discord.Interactions.Builders.ModuleBuilder.DefaultMemberPermissions"/>.</param>
             <returns>
                 The builder instance.
             </returns>
@@ -2328,12 +2444,13 @@
                 Discord type for <see cref="T:System.Double"/>.
             </summary>
         </member>
-        <member name="M:Discord.Interactions.IDiscordInteractionExtentions.RespondWithModalAsync``1(Discord.IDiscordInteraction,System.String,Discord.RequestOptions)">
+        <member name="M:Discord.Interactions.IDiscordInteractionExtentions.RespondWithModalAsync``1(Discord.IDiscordInteraction,System.String,Discord.RequestOptions,System.Action{Discord.ModalBuilder})">
             <summary>
                 Respond to an interaction with a <see cref="T:Discord.Interactions.IModal"/>.
             </summary>
             <typeparam name="T">Type of the <see cref="T:Discord.Interactions.IModal"/> implementation.</typeparam>
             <param name="interaction">The interaction to respond to.</param>
+            <param name="modifyModal">Delegate that can be used to modify the modal.</param>
             <param name="options">The request options for this <see langword="async"/> request.</param>
             <returns>A task that represents the asynchronous operation of responding to the interaction.</returns>
         </member>
@@ -2518,6 +2635,12 @@
         <member name="P:Discord.Interactions.ContextCommandInfo.DefaultPermission">
             <inheritdoc/>
         </member>
+        <member name="P:Discord.Interactions.ContextCommandInfo.IsEnabledInDm">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.ContextCommandInfo.DefaultMemberPermissions">
+            <inheritdoc/>
+        </member>
         <member name="P:Discord.Interactions.ContextCommandInfo.Parameters">
             <inheritdoc/>
         </member>
@@ -2604,6 +2727,12 @@
         <member name="P:Discord.Interactions.SlashCommandInfo.DefaultPermission">
             <inheritdoc/>
         </member>
+        <member name="P:Discord.Interactions.SlashCommandInfo.IsEnabledInDm">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.SlashCommandInfo.DefaultMemberPermissions">
+            <inheritdoc/>
+        </member>
         <member name="P:Discord.Interactions.SlashCommandInfo.Parameters">
             <inheritdoc/>
         </member>
@@ -2636,6 +2765,16 @@
         <member name="P:Discord.Interactions.IApplicationCommandInfo.DefaultPermission">
             <summary>
                 Gets the DefaultPermission of this command.
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.IApplicationCommandInfo.IsEnabledInDm">
+            <summary>
+                Gets whether this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.IApplicationCommandInfo.DefaultMemberPermissions">
+            <summary>
+                Gets the default permissions needed for executing this command.
             </summary>
         </member>
         <member name="T:Discord.Interactions.ICommandInfo">
@@ -2933,6 +3072,16 @@
                 Gets the default Permission of this module.
             </summary>
         </member>
+        <member name="P:Discord.Interactions.ModuleInfo.IsEnabledInDm">
+            <summary>
+                Gets whether this command can be used in DMs.
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.ModuleInfo.DefaultMemberPermissions">
+            <summary>
+                Gets the default permissions needed for executing this command.
+            </summary>
+        </member>
         <member name="P:Discord.Interactions.ModuleInfo.SubModules">
             <summary>
                 Gets the collection of Sub Modules of this module.
@@ -3197,6 +3346,9 @@
         <member name="P:Discord.Interactions.InteractionContext.Interaction">
             <inheritdoc/>
         </member>
+        <member name="P:Discord.Interactions.InteractionContext.SegmentMatches">
+            <inheritdoc cref="P:Discord.IRouteMatchContainer.SegmentMatches"/>
+        </member>
         <member name="M:Discord.Interactions.InteractionContext.#ctor(Discord.IDiscordClient,Discord.IDiscordInteraction,Discord.IMessageChannel)">
             <summary>
                 Initializes a new <see cref="T:Discord.Interactions.SocketInteractionContext`1"/>.
@@ -3205,6 +3357,12 @@
             <param name="interaction">The underlying interaction.</param>
             <param name="user"><see cref="T:Discord.IUser"/> who executed the command.</param>
             <param name="channel"><see cref="!:ISocketMessageChannel"/> the command originated from.</param>
+        </member>
+        <member name="M:Discord.Interactions.InteractionContext.SetSegmentMatches(System.Collections.Generic.IEnumerable{Discord.IRouteSegmentMatch})">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.InteractionContext.Discord#IRouteMatchContainer#SegmentMatches">
+            <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.InteractionModuleBase`1">
             <summary>
@@ -3302,6 +3460,11 @@
         <member name="E:Discord.Interactions.InteractionService.Log">
             <summary>
                 Occurs when a Slash Command related information is recieved.
+            </summary>
+        </member>
+        <member name="E:Discord.Interactions.InteractionService.InteractionExecuted">
+            <summary>
+                Occurs when any type of interaction is executed.
             </summary>
         </member>
         <member name="E:Discord.Interactions.InteractionService.SlashCommandExecuted">
@@ -3684,10 +3847,58 @@
             <param name="targetType">Generic Type constraint of the <see cref="T:System.Type"/> of the <see cref="T:Discord.Interactions.TypeReader`1"/>.</param>
             <param name="readerType">Type of the <see cref="T:Discord.Interactions.TypeReader`1"/>.</param>
         </member>
+        <member name="M:Discord.Interactions.InteractionService.TryRemoveTypeReader``1(Discord.Interactions.TypeReader@)">
+            <summary>
+                Removes a type reader for the type <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The type to remove the readers from.</typeparam>
+            <param name="reader">The reader if the resulting remove operation was successful.</param>
+            <returns><see langword="true"/> if the remove operation was successful; otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="M:Discord.Interactions.InteractionService.TryRemoveTypeReader(System.Type,Discord.Interactions.TypeReader@)">
+            <summary>
+                Removes a type reader for the given type.
+            </summary>
+            <remarks>
+                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="!:CommandService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
+                You need to reload the modules for the changes to take effect.
+            </remarks>
+            <param name="type">The type to remove the reader from.</param>
+            <param name="reader">The reader if the resulting remove operation was successful.</param>
+            <returns><see langword="true"/> if the remove operation was successful; otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="M:Discord.Interactions.InteractionService.TryRemoveGenericTypeReader``1(System.Type@)">
+            <summary>
+                Removes a generic type reader from the type <typeparamref name="T"/>.
+            </summary>
+            <remarks>
+                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="!:CommandService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
+                You need to reload the modules for the changes to take effect.
+            </remarks>
+            <typeparam name="T">The type to remove the readers from.</typeparam>
+            <param name="readerType">The removed readers type.</param>
+            <returns><see langword="true"/> if the remove operation was successful; otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="M:Discord.Interactions.InteractionService.TryRemoveGenericTypeReader(System.Type,System.Type@)">
+            <summary>
+                Removes a generic type reader from the given type.
+            </summary>
+            <remarks>
+                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="!:CommandService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
+                You need to reload the modules for the changes to take effect.
+            </remarks>
+            <param name="type">The type to remove the reader from.</param>
+            <param name="readerType">The readers type if the remove operation was successful.</param>
+            <returns><see langword="true"/> if the remove operation was successful; otherwise <see langword="false"/>.</returns>
+        </member>
         <member name="M:Discord.Interactions.InteractionService.SerializeValueAsync``1(``0,System.IServiceProvider)">
             <summary>
                 Serialize an object using a <see cref="T:Discord.Interactions.TypeReader"/> into a <see cref="T:System.String"/> to be placed in a Component CustomId.
             </summary>
+            <remarks>
+                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="!:CommandService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
+                You need to reload the modules for the changes to take effect.
+            </remarks>
             <typeparam name="T">Type of the object to be serialized.</typeparam>
             <param name="obj">Object to be serialized.</param>
             <param name="services">Services that will be passed on to the <see cref="T:Discord.Interactions.TypeReader"/>.</param>
@@ -3905,6 +4116,16 @@
                 A Task representing the operation of creating the interaction response.
             </returns>
             <exception cref="T:System.InvalidOperationException">Thrown if the interaction isn't a type of <see cref="T:Discord.Rest.RestInteraction"/>.</exception>
+        </member>
+        <member name="M:Discord.Interactions.RestInteractionModuleBase`1.RespondWithModalAsync(Discord.Modal,Discord.RequestOptions)">
+            <summary>
+                Responds to the interaction with a modal.
+            </summary>
+            <param name="modal">The modal to respond with.</param>
+            <param name="options">The request options for this <see langword="async"/> request.</param>
+            <returns>A string that contains json to write back to the incoming http request.</returns>
+            <exception cref="T:System.TimeoutException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="T:Discord.Interactions.AutocompletionResult">
             <summary>
@@ -4505,6 +4726,15 @@
             <summary>
                 Create a compiled lambda property setter.
             </summary>
+        </member>
+        <member name="M:Discord.Rest.RestExtensions.RespondWithModal``1(Discord.Rest.RestInteraction,System.String,Discord.RequestOptions,System.Action{Discord.ModalBuilder})">
+            <summary>
+                Respond to an interaction with a <see cref="T:Discord.Interactions.IModal"/>.
+            </summary>
+            <typeparam name="T">Type of the <see cref="T:Discord.Interactions.IModal"/> implementation.</typeparam>
+            <param name="interaction">The interaction to respond to.</param>
+            <param name="options">The request options for this <see langword="async"/> request.</param>
+            <returns>Serialized payload to be used to create a HTTP response.</returns>
         </member>
         <member name="M:Discord.WebSocket.WebSocketExtensions.GetCommandKeywords(Discord.IApplicationCommandInteractionData)">
             <summary>

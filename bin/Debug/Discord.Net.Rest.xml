@@ -107,12 +107,8 @@
             <exception cref="T:System.ArgumentException"><paramref name="guildId"/> must not be equal to zero.</exception>
             <exception cref="T:System.ArgumentNullException"><paramref name="args"/> must not be <see langword="null"/>.</exception>
         </member>
-        <member name="M:Discord.API.DiscordRestApiClient.GetGuildIntegrationsAsync(System.UInt64,Discord.RequestOptions)">
+        <member name="M:Discord.API.DiscordRestApiClient.GetIntegrationsAsync(System.UInt64,Discord.RequestOptions)">
             <exception cref="T:System.ArgumentException"><paramref name="guildId"/> must not be equal to zero.</exception>
-        </member>
-        <member name="M:Discord.API.DiscordRestApiClient.CreateGuildIntegrationAsync(System.UInt64,Discord.API.Rest.CreateGuildIntegrationParams,Discord.RequestOptions)">
-            <exception cref="T:System.ArgumentException"><paramref name="guildId"/> and <paramref name="args.Id.Id"/> must not be equal to zero.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="args"/> must not be <see langword="null"/>.</exception>
         </member>
         <member name="M:Discord.API.DiscordRestApiClient.GetInviteAsync(System.String,Discord.RequestOptions)">
             <exception cref="T:System.ArgumentException"><paramref name="inviteId"/> cannot be blank.</exception>
@@ -3650,16 +3646,14 @@
                 slash command created by the current user.
             </returns>
         </member>
-        <member name="M:Discord.Rest.RestGuild.GetBansAsync(Discord.RequestOptions)">
-            <summary>
-                Gets a collection of all users banned in this guild.
-            </summary>
-            <param name="options">The options to be used when sending the request.</param>
-            <returns>
-                A task that represents the asynchronous get operation. The task result contains a read-only collection of
-                ban objects that this guild currently possesses, with each object containing the user banned and reason
-                behind the ban.
-            </returns>
+        <member name="M:Discord.Rest.RestGuild.GetBansAsync(System.Int32,Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IGuild.GetBansAsync(System.Int32,Discord.RequestOptions)" />
+        </member>
+        <member name="M:Discord.Rest.RestGuild.GetBansAsync(System.UInt64,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IGuild.GetBansAsync(System.UInt64,Discord.Direction,System.Int32,Discord.RequestOptions)" />
+        </member>
+        <member name="M:Discord.Rest.RestGuild.GetBansAsync(Discord.IUser,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IGuild.GetBansAsync(Discord.IUser,Discord.Direction,System.Int32,Discord.RequestOptions)" />
         </member>
         <member name="M:Discord.Rest.RestGuild.GetBanAsync(Discord.IUser,Discord.RequestOptions)">
             <summary>
@@ -4315,7 +4309,13 @@
         <member name="M:Discord.Rest.RestGuild.Discord#IGuild#GetEventsAsync(Discord.RequestOptions)">
             <inheritdoc />
         </member>
-        <member name="M:Discord.Rest.RestGuild.Discord#IGuild#GetBansAsync(Discord.RequestOptions)">
+        <member name="M:Discord.Rest.RestGuild.Discord#IGuild#GetBansAsync(System.Int32,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.Rest.RestGuild.Discord#IGuild#GetBansAsync(System.UInt64,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.Rest.RestGuild.Discord#IGuild#GetBansAsync(Discord.IUser,Discord.Direction,System.Int32,Discord.RequestOptions)">
             <inheritdoc />
         </member>
         <member name="M:Discord.Rest.RestGuild.Discord#IGuild#GetBanAsync(Discord.IUser,Discord.RequestOptions)">
@@ -4393,7 +4393,7 @@
         <member name="M:Discord.Rest.RestGuild.Discord#IGuild#GetIntegrationsAsync(Discord.RequestOptions)">
             <inheritdoc />
         </member>
-        <member name="M:Discord.Rest.RestGuild.Discord#IGuild#CreateIntegrationAsync(System.UInt64,System.String,Discord.RequestOptions)">
+        <member name="M:Discord.Rest.RestGuild.Discord#IGuild#DeleteIntegrationAsync(System.UInt64,Discord.RequestOptions)">
             <inheritdoc />
         </member>
         <member name="M:Discord.Rest.RestGuild.Discord#IGuild#GetInvitesAsync(Discord.RequestOptions)">
@@ -4593,42 +4593,6 @@
         <member name="M:Discord.Rest.RestGuildEvent.Discord#IGuildScheduledEvent#GetUsersAsync(System.UInt64,Discord.Direction,System.Int32,Discord.RequestOptions)">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.Name">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.Type">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.IsEnabled">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.IsSyncing">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.ExpireBehavior">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.ExpireGracePeriod">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.GuildId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.RoleId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.Account">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.SyncedAt">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.Discord#IGuildIntegration#Guild">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuildIntegration.Discord#IGuildIntegration#User">
-            <inheritdoc />
-        </member>
         <member name="P:Discord.Rest.RestUserGuild.Name">
             <inheritdoc />
         </member>
@@ -4666,6 +4630,69 @@
         </member>
         <member name="P:Discord.Rest.RestVoiceRegion.IsCustom">
             <inheritdoc />
+        </member>
+        <member name="T:Discord.Rest.RestIntegration">
+            <summary>
+                Represents a Rest-based implementation of <see cref="T:Discord.IIntegration"/>.
+            </summary>
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.Type">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.IsEnabled">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.IsSyncing">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.RoleId">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.HasEnabledEmoticons">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.ExpireBehavior">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.ExpireGracePeriod">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.Discord#IIntegration#User">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.Account">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.SyncedAt">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.SubscriberCount">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.IsRevoked">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.Application">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.GuildId">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestIntegration.Discord#IIntegration#Guild">
+            <inheritdoc />
+        </member>
+        <member name="T:Discord.Rest.RestIntegrationAccount">
+            <summary>
+                Represents a Rest-based implementation of <see cref="T:Discord.IIntegrationAccount"/>.
+            </summary>
+        </member>
+        <member name="T:Discord.Rest.RestIntegrationApplication">
+            <summary>
+                Represents a Rest-based implementation of <see cref="T:Discord.IIntegrationApplication"/>.
+            </summary>
         </member>
         <member name="T:Discord.Rest.RestCommandBase">
             <summary>
@@ -4918,6 +4945,12 @@
         <member name="P:Discord.Rest.RestMessageComponent.Discord#IComponentInteraction#Message">
             <inheritdoc/>
         </member>
+        <member name="M:Discord.Rest.RestMessageComponent.Discord#IComponentInteraction#UpdateAsync(System.Action{Discord.MessageProperties},Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.Rest.RestMessageComponent.Discord#IComponentInteraction#DeferLoadingAsync(System.Boolean,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
         <member name="T:Discord.Rest.RestMessageComponentData">
             <summary>
                 Represents data for a <see cref="T:Discord.Rest.RestMessageComponent"/>.
@@ -5067,6 +5100,12 @@
             <inheritdoc/>
         </member>
         <member name="P:Discord.Rest.RestApplicationCommand.IsDefaultPermission">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Rest.RestApplicationCommand.IsEnabledInDm">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Rest.RestApplicationCommand.DefaultMemberPermissions">
             <inheritdoc/>
         </member>
         <member name="P:Discord.Rest.RestApplicationCommand.Options">
@@ -6137,16 +6176,28 @@
         <member name="P:Discord.Rest.RestConnection.Id">
             <inheritdoc />
         </member>
-        <member name="P:Discord.Rest.RestConnection.Type">
+        <member name="P:Discord.Rest.RestConnection.Name">
             <inheritdoc />
         </member>
-        <member name="P:Discord.Rest.RestConnection.Name">
+        <member name="P:Discord.Rest.RestConnection.Type">
             <inheritdoc />
         </member>
         <member name="P:Discord.Rest.RestConnection.IsRevoked">
             <inheritdoc />
         </member>
-        <member name="P:Discord.Rest.RestConnection.IntegrationIds">
+        <member name="P:Discord.Rest.RestConnection.Integrations">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestConnection.Verified">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestConnection.FriendSync">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestConnection.ShowActivity">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestConnection.Visibility">
             <inheritdoc />
         </member>
         <member name="M:Discord.Rest.RestConnection.ToString">
@@ -6675,6 +6726,9 @@
                 If this property is <see langword="null"/> the default callback will be used.
             </remarks>
         </member>
+        <member name="P:Discord.Rest.RestInteractionContext`1.SegmentMatches">
+            <inheritdoc cref="P:Discord.IRouteMatchContainer.SegmentMatches"/>
+        </member>
         <member name="M:Discord.Rest.RestInteractionContext`1.#ctor(Discord.Rest.DiscordRestClient,`0)">
             <summary>
                 Initializes a new <see cref="T:Discord.Rest.RestInteractionContext`1"/>. 
@@ -6689,6 +6743,12 @@
             <param name="client">The underlying client.</param>
             <param name="interaction">The underlying interaction.</param>
             <param name="interactionResponseCallback">The callback for outgoing json.</param>
+        </member>
+        <member name="M:Discord.Rest.RestInteractionContext`1.SetSegmentMatches(System.Collections.Generic.IEnumerable{Discord.IRouteSegmentMatch})">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Rest.RestInteractionContext`1.Discord#IRouteMatchContainer#SegmentMatches">
+            <inheritdoc/>
         </member>
         <member name="P:Discord.Rest.RestInteractionContext`1.Discord#IInteractionContext#Client">
             <inheritdoc/>

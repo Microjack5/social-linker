@@ -11,27 +11,28 @@ using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.Menus.InitialUsage.Main;
+using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Commands
 {
     public class Hug : ModuleBase<SocketCommandContext>
     {
         [Command("hug", RunMode = RunMode.Async)]
-        public async Task HugCommand([Remainder] string arg = "")
+        public async Task HugCommand(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "social", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(Context.Message, "social") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command.Message, "social") == true)
             {
                 return;
             }
 
             // Get the account information of the command's user.
-            var command_user_account = UserInfoClasses.GetAccount(Context.User);
+            var command_user_account = UserInfoClasses.GetAccount(command.User);
 
             // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
             if (command_user_account.Account_Activated == "No")
             {
-                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
                 return;
             }
 
@@ -42,28 +43,28 @@ namespace SocialLinker.Commands
             SocketUser command_user = null;
 
             // Retreive the first mentioned user of the message if there is one.
-            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
 
             // If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
-            command_target = mentionedUser ?? Context.User;
-            command_user = Context.User;
+            command_target = mentionedUser ?? command.User;
+            command_user = command.User;
 
             // Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
             {
-                HugError(Context.Message);
+                HugError(command.Message);
                 return;
             }
             // If the mentioned user is the command user, send a special message and return.
             else if (mentionedUser == command_user)
             {
-                HugSelf(Context.Message);
+                HugSelf(command.Message);
                 return;
             }
             // If the mentioned user is the bot itself, send a special message and return.
             else if (mentionedUser.Id == BotConfig.bot.id)
             {
-                HugBot(Context.Message);
+                HugBot(command.Message);
                 return;
             }
 
@@ -71,14 +72,14 @@ namespace SocialLinker.Commands
             var account = UserInfoClasses.GetAccount(command_target);
 
             // If a user is mentioned and they're not the command user and not a bot, add Expression to both users.
-            if ((mentionedUser != null) && (mentionedUser != Context.User) && (mentionedUser.IsBot == false))
+            if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                Core.LevelSystem.SocialStats.AddExpression(Context.Message, command_user);
-                Core.LevelSystem.SocialStats.AddExpression(Context.Message, command_target);
+                Core.LevelSystem.SocialStats.AddExpression(command.Message, command_user);
+                Core.LevelSystem.SocialStats.AddExpression(command.Message, command_target);
             }
 
             // Send a hug message to the mentioned user.
-            HugUser(Context.Message, command_target);
+            HugUser(command.Message, command_target);
 
             await Task.CompletedTask;
         }
@@ -158,22 +159,9 @@ namespace SocialLinker.Commands
                 IconUrl = user.GetAvatarUrl()
             };
 
-            //Determine color for embeded message
-            if (account.Profile_Theme == "P3")
-            {
-                embed.WithColor(37, 149, 255);
-                embed.WithThumbnailUrl("https://i.imgur.com/CguM1ql.png");
-            }
-            else if (account.Profile_Theme == "P4")
-            {
-                embed.WithColor(255, 229, 49);
-                embed.WithThumbnailUrl("https://i.imgur.com/PW7VtuB.png");
-            }
-            else if (account.Profile_Theme == "P5")
-            {
-                embed.WithColor(213, 27, 4);
-                embed.WithThumbnailUrl("https://i.imgur.com/tubdL8K.png");
-            }
+            // Determine the color and thumbnail for the embeded message
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithAuthor(author);
             embed.WithDescription("Mention a user while using this command to give them a hug.");
@@ -204,18 +192,7 @@ namespace SocialLinker.Commands
             };
 
             //Determine color for embeded message
-            if (account.Profile_Theme == "P3")
-            {
-                embed.WithColor(37, 149, 255);
-            }
-            else if (account.Profile_Theme == "P4")
-            {
-                embed.WithColor(255, 229, 49);
-            }
-            else if (account.Profile_Theme == "P5")
-            {
-                embed.WithColor(213, 27, 4);
-            }
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
 
             embed.WithAuthor(author);
             embed.WithDescription("❤️ ❤️ ❤️ ❤️ ❤️");

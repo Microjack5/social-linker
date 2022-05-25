@@ -752,6 +752,19 @@
                 it exists.
             </param>
         </member>
+        <member name="M:Discord.Commands.CommandService.TryRemoveTypeReader(System.Type,System.Boolean,System.Collections.Generic.IDictionary{System.Type,Discord.Commands.TypeReader}@)">
+            <summary>
+                Removes a type reader from the list of type readers.
+            </summary>
+            <remarks>
+                Removing a <see cref="T:Discord.Commands.TypeReader"/> from the <see cref="T:Discord.Commands.CommandService"/> will not dereference the <see cref="T:Discord.Commands.TypeReader"/> from the loaded module/command instances.
+                You need to reload the modules for the changes to take effect.
+            </remarks>
+            <param name="type">The type to remove the readers from.</param>
+            <param name="isDefaultTypeReader"><see langword="true"/> if the default readers for <paramref name="type"/> should be removed; otherwise <see langword="false"/>.</param>
+            <param name="readers">The removed collection of type readers.</param>
+            <returns><see langword="true"/> if the remove operation was successful; otherwise <see langword="false"/>.</returns>
+        </member>
         <member name="M:Discord.Commands.CommandService.Search(Discord.Commands.ICommandContext,System.Int32)">
             <summary>
                 Searches for the command.
