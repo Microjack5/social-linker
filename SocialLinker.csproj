@@ -207,7 +207,6 @@
     <Compile Include="Commands\Settings.cs" />
     <Compile Include="Commands\Shop.cs" />
     <Compile Include="Commands\Slap.cs" />
-    <Compile Include="Commands\InteractionHandler.cs" />
     <Compile Include="Commands\Status.cs" />
     <Compile Include="Config\AssetDirectoryConfig.cs" />
     <Compile Include="Config\AzureConfig.cs" />

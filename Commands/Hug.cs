@@ -17,11 +17,10 @@ namespace SocialLinker.Commands
 {
     public class Hug : ModuleBase<SocketCommandContext>
     {
-        [Command("hug", RunMode = RunMode.Async)]
-        public async Task HugCommand(SocialLinkerCommand command)
+        public static async Task HugCommand(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "social", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command.Message, "social") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command, "social") == true)
             {
                 return;
             }
@@ -43,7 +42,7 @@ namespace SocialLinker.Commands
             SocketUser command_user = null;
 
             // Retreive the first mentioned user of the message if there is one.
-            var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.MentionedUser;
 
             // If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
             command_target = mentionedUser ?? command.User;
@@ -74,20 +73,20 @@ namespace SocialLinker.Commands
             // If a user is mentioned and they're not the command user and not a bot, add Expression to both users.
             if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                Core.LevelSystem.SocialStats.AddExpression(command.Message, command_user);
-                Core.LevelSystem.SocialStats.AddExpression(command.Message, command_target);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, command_user);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, command_target);
             }
 
             // Send a hug message to the mentioned user.
-            HugUser(command.Message, command_target);
+            HugUser(command, command_target);
 
             await Task.CompletedTask;
         }
 
-        public static async void HugUser(SocketMessage message, SocketUser command_target)
+        public static async void HugUser(SocialLinkerCommand command, SocketUser command_target)
         {
-            var command_user = message.Author;
-            var channel = message.Channel;
+            var command_user = command.User;
+            var channel = command.Channel;
 
             // Retrieve the account information of both the command's user and the command's target.
             var command_user_account = UserInfoClasses.GetAccount(command_user);

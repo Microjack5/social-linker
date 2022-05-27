@@ -13,14 +13,13 @@ namespace SocialLinker.Commands
 {
     public class Help : ModuleBase<SocketCommandContext>
     {
-        [Command("help", RunMode = RunMode.Async)]
         public static async Task HelpMenu(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "menu", return the method immediately.
-            /*if (await UserCooldownMethods.IsCooldownActive(Context.Message, "menu") == true) // COME BACK TO HERE SOON
+            if (await UserCooldownMethods.IsCooldownActive(command, "menu") == true) // COME BACK TO HERE SOON
             {
                 return;
-            } */
+            } 
 
             // Get the account information of the command's user.
             var command_user_account = UserInfoClasses.GetAccount(command.User);

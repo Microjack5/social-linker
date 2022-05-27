@@ -16,11 +16,10 @@ namespace SocialLinker.Commands
 {
     public class Pat : ModuleBase<SocketCommandContext>
     {
-        [Command("pat", RunMode = RunMode.Async)]
-        public async Task PatCommand(SocialLinkerCommand command)
+        public static async Task PatCommand(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "social", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command.Message, "social") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command, "social") == true)
             {
                 return;
             }

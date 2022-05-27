@@ -11,11 +11,10 @@ namespace SocialLinker.Commands
 {
     public class Maker : ModuleBase<SocketCommandContext>
     {
-        [Command("maker", RunMode = RunMode.Async)]
-        public async Task MakerCommandParser(SocialLinkerCommand command)
+        public static async Task MakerCommandParser(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "scene", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command.Message, "scene") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command, "scene") == true)
             {
                 return;
             }

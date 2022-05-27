@@ -13,11 +13,10 @@ namespace SocialLinker.Commands
 {
     public class Settings : ModuleBase<SocketCommandContext>
     {
-        [Command("settings", RunMode = RunMode.Async)]
-        public async Task SettingsMenu(SocialLinkerCommand command)
+        public static async Task SettingsMenu(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "menu", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command.Message, "menu") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command, "menu") == true)
             {
                 return;
             }

@@ -10,16 +10,16 @@ using SocialLinker.Core.StatusScreens;
 using System.Reflection;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.Menus.InitialUsage.Main;
+using System.Collections.Generic;
 
 namespace SocialLinker.Commands
 {
     public class Status : ModuleBase<SocketCommandContext>
     {
-        [Command("status")]
-        public async Task StatusCommandParser1(SocialLinkerCommand command)
+        public static async Task ContentCheck(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "status", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command.Message, "status") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command, "status") == true)
             {
                 return;
             }
@@ -36,31 +36,60 @@ namespace SocialLinker.Commands
 
             // End of initial usage and cooldown checks.
 
+            Status status_object = new Status();
+
+            if (command.MentionedUser == default)
+            {
+                if (command.Content == "")
+                {
+                    await status_object.StatusScreen(command);
+                }
+                else if (command.Content.ToLower().Contains("detail"))
+                {
+                    await status_object.StatusDetails(command);
+                }
+            }
+            else
+            {
+                if (command.Content == "")
+                {
+                    await status_object.StatusScreen(command);
+                }
+                else if (command.Content.ToLower().Contains("detail"))
+                {
+                    await status_object.StatusDetails(command);
+                }
+            }
+        }
+
+        public async Task StatsCommandDefault(SocialLinkerCommand command)
+        {
             //Since there are no parameters, invoke StatusScreen for the command user
             await StatusScreen(command);
         }
 
-        [Command("status", RunMode = RunMode.Async)]
+        public async Task StatsCommandDetail(SocialLinkerCommand command)
+        {
+            //Since there are no parameters, invoke StatusScreen for the command user
+            await StatusScreen(command);
+        }
+
+        public async Task StatsCommandDefaultMention(SocialLinkerCommand command)
+        {
+            //Since there are no parameters, invoke StatusScreen for the command user
+            await StatusScreen(command);
+        }
+
+        public async Task StatsCommandDetailMention(SocialLinkerCommand command)
+        {
+            //Since there are no parameters, invoke StatusScreen for the command user
+            await StatusScreen(command);
+        }
+
+        // -----------------------------
+
         public async Task StatusCommandParser2(SocialLinkerCommand command, string param)
         {
-            // If there is a cooldown session active for the command type "status", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command.Message, "status") == true)
-            {
-                return;
-            }
-
-            // Get the account information of the command's user.
-            var command_user_account = UserInfoClasses.GetAccount(command.User);
-
-            // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
-            if (command_user_account.Account_Activated == "No")
-            {
-                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
-                return;
-            }
-
-            // End of initial usage and cooldown checks.
-
             //Create a variable for a potential mentioned user
             var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
 
@@ -76,27 +105,8 @@ namespace SocialLinker.Commands
             }
         }
 
-        [Command("status", RunMode = RunMode.Async)]
         public async Task StatusCommandParser3(SocialLinkerCommand command, string param1, string param2)
         {
-            // If there is a cooldown session active for the command type "status", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command.Message, "status") == true)
-            {
-                return;
-            }
-
-            // Get the account information of the command's user.
-            var command_user_account = UserInfoClasses.GetAccount(command.User);
-
-            // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
-            if (command_user_account.Account_Activated == "No")
-            {
-                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
-                return;
-            }
-
-            // End of initial usage and cooldown checks.
-
             //Create a variable for a potential mentioned user
             var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
 
@@ -114,7 +124,7 @@ namespace SocialLinker.Commands
             SocketUser commandUser = null;
 
             //Create a variable for a potential mentioned user
-            var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.MentionedUser;
 
             //If there is a mentioned user, they become the command's target. If not, the command's user is also the target.
             commandTarget = mentionedUser ?? command.User;
@@ -126,8 +136,8 @@ namespace SocialLinker.Commands
             //If a user is mentioned and they're not the command user and not a bot, add Expression to both users
             if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
-                Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
             }
 
             // Call different status screen functions depending on the account's profile theme and decor settings.
@@ -181,7 +191,7 @@ namespace SocialLinker.Commands
         public async Task StartThemeMenu(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "menu", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command.Message, "menu") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command, "menu") == true)
             {
                 return;
             }
@@ -265,7 +275,7 @@ namespace SocialLinker.Commands
             SocketUser commandUser = null;
 
             // Create a variable for a potential mentioned user.
-            var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.MentionedUser;
 
             // If there is a mentioned user, they become the command's target. If not, the command's user is also the target.
             commandTarget = mentionedUser ?? command.User;
@@ -277,8 +287,8 @@ namespace SocialLinker.Commands
             // If a user is mentioned and they're not the command user and not a bot, add Expression to both users.
             if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
-                Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
             }
 
             // Construct embeded message.

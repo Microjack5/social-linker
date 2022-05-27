@@ -11,11 +11,11 @@ namespace SocialLinker.Cooldown
 {
     public class UserCooldownMethods
     {
-        public static async Task<bool> IsCooldownActive(SocketMessage message, string command_type)
+        public static async Task<bool> IsCooldownActive(SocialLinkerCommand command, string command_type)
         {
             // Create variables for the command user and the channel being used.
-            SocketGuildUser user = (SocketGuildUser)message.Author;
-            ISocketMessageChannel channel = message.Channel;
+            SocketGuildUser user = (SocketGuildUser)command.User;
+            ISocketMessageChannel channel = command.Channel;
 
             // Find the cooldown session associated with both the current user and command type.
             var cooldownSession = Global.CooldownList.SingleOrDefault(x => (x.User.Id == user.Id) && (x.CommandType == command_type));
@@ -49,7 +49,7 @@ namespace SocialLinker.Cooldown
             else
             {
                 // Create a new entry and return false.
-                CreateCooldownSession(message, command_type);
+                CreateCooldownSession(command, command_type);
                 return false;
             }
 
@@ -60,10 +60,10 @@ namespace SocialLinker.Cooldown
             return false;
         }
 
-        public static void CreateCooldownSession(SocketMessage message, string command_type)
+        public static void CreateCooldownSession(SocialLinkerCommand command, string command_type)
         {
             // Create a variable for the command user.
-            SocketGuildUser user = (SocketGuildUser)message.Author;
+            SocketGuildUser user = (SocketGuildUser)command.User;
 
             // Create an int initialized at zero.
             int timer_duration = 0;
@@ -114,7 +114,7 @@ namespace SocialLinker.Cooldown
             Global.CooldownList.Add(cooldown_session);
 
             // If the cooldown timer runs out, activate a function.
-            cooldown_session.CooldownTimer.Elapsed += (sender, e) => CooldownTimer_Elapsed(sender, e, message, command_type);
+            cooldown_session.CooldownTimer.Elapsed += (sender, e) => CooldownTimer_Elapsed(sender, e, command, command_type);
         }
 
         public static int CheckTimeRemaining(UserCooldownFields cooldown_session)
@@ -126,10 +126,10 @@ namespace SocialLinker.Cooldown
             return (int)time_remaining.TotalSeconds;
         }
 
-        private static void CooldownTimer_Elapsed(object sender, ElapsedEventArgs e, SocketMessage message, string command_type)
+        private static void CooldownTimer_Elapsed(object sender, ElapsedEventArgs e, SocialLinkerCommand command, string command_type)
         {
             // Create a variable for the command user.
-            SocketGuildUser user = (SocketGuildUser)message.Author;
+            SocketGuildUser user = (SocketGuildUser)command.User;
 
             // Find the cooldown session associated with both the current user and command type.
             var cooldownSession = Global.CooldownList.SingleOrDefault(x => (x.User.Id == user.Id) && (x.CommandType == command_type));

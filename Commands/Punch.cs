@@ -16,11 +16,10 @@ namespace SocialLinker.Commands
 {
     public class Punch : ModuleBase<SocketCommandContext>
     {
-        [Command("punch", RunMode = RunMode.Async)]
-        public async Task PunchCommand(SocialLinkerCommand command)
+        public static async Task PunchCommand(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "social", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command.Message, "social") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command, "social") == true)
             {
                 return;
             }

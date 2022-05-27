@@ -35,17 +35,19 @@ namespace SocialLinker
         {
             SocketUser data_to_mentioneduser;
             string data_to_string;
-
-            if ((command.Data != null)) // Maker, help, settings, shop, status
+            Console.WriteLine(command.Data.Options);
+            if ((command.Data.Options.FirstOrDefault() != default)) // Maker, help, settings, shop, status
             {
-                data_to_mentioneduser = (SocketUser)command.Data.Options.First().Value;
+                Console.WriteLine("Here #1");
+                data_to_mentioneduser = (SocketUser)command.Data.Options.FirstOrDefault().Value; //(SocketUser)command.Data.Options.First().Value;
                 data_to_string = null;
             }
             else
             {
+                Console.WriteLine("Here #2");
                 data_to_mentioneduser = null;
-                data_to_string = command.Data.Options.ToString();
-            }
+                data_to_string = command.Data.Options.ToString(); 
+            } 
 
             SocialLinkerCommand slash_to_command = new SocialLinkerCommand
             {
@@ -87,7 +89,7 @@ namespace SocialLinker
                 CommandName = parsed_command_name,
                 User = message.Author,
                 Channel = message.Channel,
-                //MentionedUser = message.MentionedUsers.First() ?? null,
+                MentionedUser = message.MentionedUsers.FirstOrDefault(),
                 Content = parsed_content,
                 Attachments = message.Attachments,
                 Message = (SocketUserMessage)message
@@ -115,7 +117,6 @@ namespace SocialLinker
     class CommandHandler
     {
         DiscordShardedClient _client;
-        Commands.InteractionHandler _interactionHandler;
         CommandService _service;
         public IServiceProvider _Services;
 
@@ -128,55 +129,32 @@ namespace SocialLinker
             _client.MessageReceived += HandleCommandAsync;
 
             _client.ShardReady += Status;
-            /*_client.ShardReady += Shop;
+            _client.ShardReady += Shop;
             _client.ShardReady += Settings;
             _client.ShardReady += Help;
-            _client.ShardReady += Hug;
+            /*_client.ShardReady += Hug;
             _client.ShardReady += Pat;
             _client.ShardReady += Punch;
             _client.ShardReady += Slap; */
+            _client.SlashCommandExecuted += SlashAnnex;
             await Task.CompletedTask;
 
-            _interactionHandler = new Commands.InteractionHandler();
-            await _interactionHandler.InitializeAsync(_client);
+            //await InitializeAsync(_client);
             
         }
 
-        /*private async Task HandleCommandAsync(SocketMessage s)
+        private async Task SlashAnnex(SocketSlashCommand slash_command)
         {
-            var msg = s as SocketUserMessage;
-            if (msg == null) return;
-            var context = new ShardedCommandContext(_client, msg);
-            if (context.User.IsBot) return;
-
-            // If the message is a direct message, return immediately.
-            if (msg.Channel.GetType() == typeof(SocketDMChannel))
+            try
             {
-                return;
+                SocialLinkerCommand sl_command = CommandConverter.SlashCommandConverter(slash_command);
+                await CommandIndex(sl_command);
             }
-
-            //If the user is in a time out status, do nothing and return
-            if (TimeOut.TimeOutStatus(msg) == "Yes") return;
-
-            int argPos = 0;
-            if (msg.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
+            catch (Exception e)
             {
-                var result = await _service.ExecuteAsync(context, argPos, _Services);
-                if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
-                {
-                    Console.WriteLine(result.ErrorReason);
-                } 
-
-                //Add Proficiency to the user's account whenever a command is successfully used
-                SocialStats.AddProficiency(msg);
+                Console.WriteLine(e);
             }
-
-            //Calculate if the user gains Diligence for this message
-            SocialStats.AddDiligence(msg);
-
-            //Leveling up manages the user's time caps, so make sure it comes after AddProficiency and AddDiligence have ran
-            Leveling.UserSentMessage(msg);
-        } */
+        }
 
         private async Task HandleCommandAsync(SocketMessage s)
         {
@@ -194,17 +172,14 @@ namespace SocialLinker
             //If the user is in a time out status, do nothing and return
             if (TimeOut.TimeOutStatus(msg) == "Yes") return;
 
-            Console.WriteLine("Here 0");
-
             int argPos = 0;
             if (msg.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
             {
-                Console.WriteLine("Here 1");
                 try
                 {
                     var converted_sl_command = CommandConverter.ContextCommandConverter(msg);
-                    Console.WriteLine("Here 2");
                     Console.WriteLine(converted_sl_command.CommandName);
+
                     await CommandIndex(converted_sl_command);
                 }
                 catch (Exception e)
@@ -233,13 +208,15 @@ namespace SocialLinker
             switch (command.CommandName)
             {
                 case "status":
-
+                    //await Commands.Status.
                     break;
 
                 case "shop":
+                    await Commands.Shop.StartShop(command);
                     break;
 
                 case "settings":
+                    await Commands.Settings.SettingsMenu(command);
                     break;
 
                 case "help":
@@ -247,18 +224,23 @@ namespace SocialLinker
                     break;
 
                 case "hug":
+                    await Commands.Hug.HugCommand(command);
                     break;
 
                 case "pat":
+                    await Commands.Pat.PatCommand(command);
                     break;
 
                 case "punch":
+                    await Commands.Punch.PunchCommand(command);
                     break;
 
                 case "slap":
+                    await Commands.Slap.SlapCommand(command);
                     break;
 
                 case "maker":
+                    await Commands.Maker.MakerCommandParser(command);
                     break;
             }
         }
