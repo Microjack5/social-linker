@@ -20,10 +20,10 @@ namespace SocialLinker.Core.SceneMaker
     public class BustupFrameSheets
     {
         // Sprite sheet formation
-        public static Bitmap Generate_Standard_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static Bitmap Generate_Standard_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(message.Author);
+            var account = UserInfoClasses.GetAccount(sl_command.User);
 
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -34,7 +34,7 @@ namespace SocialLinker.Core.SceneMaker
             string mouth_frame_path = $@"{set_path}//Mouth";
 
             // Create a filename for the bitmap that will be generated.
-            var fileName = $"{message.Author.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
+            var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path);
@@ -502,10 +502,10 @@ namespace SocialLinker.Core.SceneMaker
         }
 
         // Methods made specifically for P4D
-        public static Bitmap Generate_P4D_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static Bitmap Generate_P4D_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(message.Author);
+            var account = UserInfoClasses.GetAccount(sl_command.User);
 
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -516,7 +516,7 @@ namespace SocialLinker.Core.SceneMaker
             string mouth_frame_path = $@"{set_path}//Mouth";
 
             // Create a filename for the bitmap that will be generated.
-            var fileName = $"{message.Author.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
+            var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path);
@@ -1359,11 +1359,11 @@ namespace SocialLinker.Core.SceneMaker
         }
 
         // Animation frame messages
-        public static async Task P1_PS1_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P1_PS1_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Loading_Message().Build());
@@ -1399,7 +1399,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1408,17 +1408,17 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task P2IS_PS1_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P2IS_PS1_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P2IS_PS1_Loading_Message().Build());
@@ -1454,7 +1454,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1463,17 +1463,17 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task P3F_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P3F_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P3F_Loading_Message().Build());
@@ -1509,7 +1509,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1518,20 +1518,20 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task P3P_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P3P_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
-            RestUserMessage loader = await channel.SendMessageAsync("", false, P3P_Loading_Message(message).Build());
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P3P_Loading_Message(sl_command).Build());
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -1571,7 +1571,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1580,17 +1580,17 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task P4_PS2_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P4_PS2_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P4_PS2_Loading_Message().Build());
@@ -1626,7 +1626,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1635,17 +1635,17 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task P4G_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P4G_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P4G_Loading_Message().Build());
@@ -1681,7 +1681,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1690,17 +1690,17 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task P4D_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P4D_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P4D_Loading_Message().Build());
@@ -1736,7 +1736,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_P4D_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_P4D_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1745,17 +1745,17 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task P5_PS4_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P5_PS4_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P5_PS4_Loading_Message().Build());
@@ -1791,7 +1791,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1800,17 +1800,17 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task P5R_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P5R_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P5R_Loading_Message().Build());
@@ -1846,7 +1846,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1855,17 +1855,17 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task P5S_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P5S_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P5S_Loading_Message().Build());
@@ -1901,7 +1901,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1910,17 +1910,17 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
         }
 
-        public static async Task BBTAG_Bustup_Frame_Sheet(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task BBTAG_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, BBTAG_Loading_Message(set_data).Build());
@@ -1989,7 +1989,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(message, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1998,7 +1998,7 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await message.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
 
             // Delete the loading message.
             await loader.DeleteAsync();
@@ -2055,10 +2055,10 @@ namespace SocialLinker.Core.SceneMaker
             return embed;
         }
 
-        public static EmbedBuilder P3P_Loading_Message(SocketMessage message)
+        public static EmbedBuilder P3P_Loading_Message(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
+            SocketUser user = sl_command.User;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);

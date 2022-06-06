@@ -10,11 +10,11 @@ namespace SocialLinker.Core.SceneMaker
 {
     public class OfficialSetLists
     {
-        public static async Task P1_PS1_Set_List(SocketMessage message)
+        public static async Task P1_PS1_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -48,11 +48,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P1_PSP_Set_List(SocketMessage message)
+        public static async Task P1_PSP_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -86,11 +86,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P2IS_PS1_Set_List(SocketMessage message)
+        public static async Task P2IS_PS1_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -124,11 +124,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P2IS_PSP_Set_List(SocketMessage message)
+        public static async Task P2IS_PSP_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -162,11 +162,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P2EP_PS1_Set_List(SocketMessage message)
+        public static async Task P2EP_PS1_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -200,11 +200,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P2EP_PSP_Set_List(SocketMessage message)
+        public static async Task P2EP_PSP_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -238,11 +238,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P3F_Set_List(SocketMessage message)
+        public static async Task P3F_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -276,11 +276,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P3P_Set_List(SocketMessage message)
+        public static async Task P3P_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -314,11 +314,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P4_PS2_Set_List(SocketMessage message)
+        public static async Task P4_PS2_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -352,11 +352,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P4G_Set_List(SocketMessage message)
+        public static async Task P4G_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -390,11 +390,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P4AU_Set_List(SocketMessage message)
+        public static async Task P4AU_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -419,11 +419,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P4D_Set_List(SocketMessage message)
+        public static async Task P4D_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -448,11 +448,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P5_PS4_Set_List(SocketMessage message)
+        public static async Task P5_PS4_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -486,11 +486,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P5R_Set_List(SocketMessage message)
+        public static async Task P5R_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -524,11 +524,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task P5S_Set_List(SocketMessage message)
+        public static async Task P5S_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -553,11 +553,11 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async Task BBTAG_Set_List(SocketMessage message)
+        public static async Task BBTAG_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);

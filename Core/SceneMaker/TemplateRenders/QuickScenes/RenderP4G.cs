@@ -22,15 +22,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
     public class RenderP4G : ModuleBase<SocketCommandContext>
     {
-        public static async Task Render_Quick_Scene_P4G(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task Render_Quick_Scene_P4G(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create variables to store the width and height of the template.
             int template_width = 1920;
             int template_height = 1080;
 
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P4G_Loading_Message().Build());
@@ -49,7 +49,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Here, we want to grab any images attached to the message to use it as a background.
             // Create a variable for the message attachment.
-            var attachments = message.Attachments;
+            var attachments = sl_command.Attachments;
 
             // Create an empty string variable to hold the URL of the attachment.
             string url = "";
@@ -94,7 +94,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     Console.WriteLine(e);
                     await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(message);
+                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
                     return;
                 }
             }
@@ -133,7 +133,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
             if (command_data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(message, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -174,7 +174,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // If the user has the HUD enabled, render it to the template as well.
                 if (account.P4G_TS_HUD != "None")
                 {
-                    graphics.DrawImage(Render_Calendar_HUD(message, account), 0, 0, template_width, template_height);
+                    graphics.DrawImage(Render_Calendar_HUD(sl_command, account), 0, 0, template_width, template_height);
                 }
 
                 // Now, it's time to render the text.
@@ -197,7 +197,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Render_Dialogue(Line_Parser(message, command_data.Dialogue)), 0, 0, template_width, template_height);
+                graphics.DrawImage(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue)), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -208,14 +208,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             try
             {
                 // Send the image.
-                await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
+                await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
 
                 // Send an error message to the user if the image upload fails.
-                _ = ErrorHandling.Scene_Upload_Failed(message);
+                _ = ErrorHandling.Scene_Upload_Failed(sl_command);
 
                 // Clean up resources used by the stream, delete the loading message, and return.
                 memoryStream.Dispose();
@@ -230,19 +230,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If the user has auto-delete for their commands set to on, delete their command as well.
             if (account.Auto_Delete_Commands == "On")
             {
-                await message.DeleteAsync();
+                await sl_command.Message.DeleteAsync();
             }
         }
 
-        public static async Task Render_System_Message(SocketMessage message, MakerCommandData command_data)
+        public static async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
         {
             // Create variables to store the width and height of the template.
             int template_width = 1920;
             int template_height = 1080;
 
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P4G_Loading_Message().Build());
@@ -262,7 +262,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Here, we want to grab any images attached to the message to use it as a background.
             // Create a variable for the message attachment.
-            var attachments = message.Attachments;
+            var attachments = sl_command.Attachments;
 
             // Create an empty string variable to hold the URL of the attachment.
             string url = "";
@@ -307,7 +307,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     Console.WriteLine(e);
                     await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(message);
+                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
                     return;
                 }
             }
@@ -359,12 +359,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // If the user has the HUD enabled, render it to the template as well.
                 if (account.P4G_TS_HUD != "None")
                 {
-                    graphics.DrawImage(Render_Calendar_HUD(message, account), 0, 0, template_width, template_height);
+                    graphics.DrawImage(Render_Calendar_HUD(sl_command, account), 0, 0, template_width, template_height);
                 }
 
                 // Now, it's time to render the text.
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Render_Dialogue(Line_Parser(message, command_data.Dialogue)), 0, 0, template_width, template_height);
+                graphics.DrawImage(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue)), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -373,7 +373,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the image.
-            await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
+            await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
 
             // Delete the loading message.
             await loader.DeleteAsync();
@@ -381,7 +381,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If the user has auto-delete for their commands set to on, delete their command as well.
             if (account.Auto_Delete_Commands == "On")
             {
-                await message.DeleteAsync();
+                await sl_command.Message.DeleteAsync();
             }
         }
 
@@ -542,7 +542,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return bitmap;
         }
 
-        public static List<string>[] Line_Parser(SocketMessage message, string dialogue)
+        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, string dialogue)
         {
             // First, let's establish some values.
             // The max pixel length of a line.
@@ -593,7 +593,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     completed_word += dialogue_array[i];
 
                     // Now that we have our word, measure the pixel length of the completed string.
-                    int completed_word_length = Measure_Word_Pixel_Length(message, completed_word);
+                    int completed_word_length = Measure_Word_Pixel_Length(sl_command, completed_word);
 
                     // Check if the completed word is under the current line's allowed length.
                     // This is done by subtracting the completed word string's length from the remaining length of the line.
@@ -696,7 +696,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                             substring += completed_word_array[j];
 
                             // Measure the pixel length of the substring so far.
-                            substring_length = Measure_Word_Pixel_Length(message, substring);
+                            substring_length = Measure_Word_Pixel_Length(sl_command, substring);
 
                             // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
                             // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
@@ -742,7 +742,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return dialogue_list;
         }
 
-        public static int Measure_Word_Pixel_Length(SocketMessage message, string input_word)
+        public static int Measure_Word_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
         {
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
@@ -803,7 +803,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // If the error counter is at exactly 1, send a warning message to the user.
                     if (error_counter == 1)
                     {
-                        _ = ErrorHandling.Unsupported_Character(message);
+                        _ = ErrorHandling.Unsupported_Character(sl_command);
                     }
                 }
             }
@@ -826,7 +826,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return output_string;
         }
 
-        public static Bitmap Render_Calendar_HUD(SocketMessage message, UserInfoFields account)
+        public static Bitmap Render_Calendar_HUD(SocialLinkerCommand sl_command, UserInfoFields account)
         {
             // Create variables to store the width and height of the template.
             int template_width = 1920;
@@ -878,7 +878,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Bitmap weather = null;
 
                 // Get the user's current date and time according to their settings.
-                DateTime user_time = Get_Date(message, account);
+                DateTime user_time = Get_Date(sl_command, account);
 
                 // Use the user's date and time to determine which assets to use.
                 // Months
@@ -933,7 +933,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Getter methods
-        public static DateTime Get_Date(SocketMessage message, UserInfoFields account)
+        public static DateTime Get_Date(SocialLinkerCommand sl_command, UserInfoFields account)
         {
             // Create an empty string variable. This is where the API request will be stored.
             string json_location = "";
@@ -963,7 +963,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Console.WriteLine(ex);
 
                 // Send a warning message to the user.
-                _ = ErrorHandling.API_Timeout(message);
+                _ = ErrorHandling.API_Timeout(sl_command);
 
                 // Set the user's time to the current UTC time.
                 user_time = DateTime.UtcNow;

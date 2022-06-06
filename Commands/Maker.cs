@@ -33,7 +33,9 @@ namespace SocialLinker.Commands
 
             SocketMessage message = command.Message;
 
-            await CommandParser.Parser(message, command.Content);
+            //await OfficialSetMethods.System_Message_Directory(message, command_data);
+
+            //await CommandParser.Parser(command);
         }
     }
 }

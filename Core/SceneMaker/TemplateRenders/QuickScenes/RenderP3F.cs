@@ -23,15 +23,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
     public static class RenderP3F
     {
-        public static async Task Render_Quick_Scene_P3F(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task Render_Quick_Scene_P3F(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create variables to store the width and height of the template.
             int template_width = 640;
             int template_height = 448;
 
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P3F_Loading_Message().Build());
@@ -50,7 +50,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Here, we want to grab any images attached to the message to use it as a background.
             // Create a variable for the message attachment.
-            var attachments = message.Attachments;
+            var attachments = sl_command.Attachments;
 
             // Create an empty string variable to hold the URL of the attachment.
             string url = "";
@@ -95,7 +95,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     Console.WriteLine(e);
                     await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(message);
+                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
                     return;
                 }
             }
@@ -134,7 +134,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
             if (command_data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(message, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -262,7 +262,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Text_To_Gray(Render_Dialogue(Line_Parser(message, command_data.Dialogue))), 0, 0, template_width, template_height);
+                graphics.DrawImage(Text_To_Gray(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue))), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -273,14 +273,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             try
             {
                 // Send the image.
-                await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
+                await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
 
                 // Send an error message to the user if the image upload fails.
-                _ = ErrorHandling.Scene_Upload_Failed(message);
+                _ = ErrorHandling.Scene_Upload_Failed(sl_command);
 
                 // Clean up resources used by the stream, delete the loading message, and return.
                 memoryStream.Dispose();
@@ -294,11 +294,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If the user has auto-delete for their commands set to on, delete their command as well.
             if (account.Auto_Delete_Commands == "On")
             {
-                await message.DeleteAsync();
+                await sl_command.Message.DeleteAsync();
             }
         }
 
-        public static async Task Render_System_Message(SocketMessage message, MakerCommandData command_data)
+        public static async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
         {
             // Create variables to store the width and height of the template.
             int template_width = 640;
@@ -308,8 +308,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             command_data.Dialogue = $"> {command_data.Dialogue}";
 
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P3F_Loading_Message().Build());
@@ -326,7 +326,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Here, we want to grab any images attached to the message to use it as a background.
             // Create a variable for the message attachment.
-            var attachments = message.Attachments;
+            var attachments = sl_command.Attachments;
 
             // Create an empty string variable to hold the URL of the attachment.
             string url = "";
@@ -371,7 +371,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     Console.WriteLine(e);
                     await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(message);
+                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
                     return;
                 }
             }
@@ -504,7 +504,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Text_To_Gray(Render_Dialogue(Line_Parser(message, command_data.Dialogue))), 0, 0, template_width, template_height);
+                graphics.DrawImage(Text_To_Gray(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue))), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -513,7 +513,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the image.
-            await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
+            await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
 
             // Delete the loading message.
             await loader.DeleteAsync();
@@ -521,7 +521,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If the user has auto-delete for their commands set to on, delete their command as well.
             if (account.Auto_Delete_Commands == "On")
             {
-                await message.DeleteAsync();
+                await sl_command.Message.DeleteAsync();
             }
         }
 
@@ -695,7 +695,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return bitmap;
         }
 
-        public static List<string>[] Line_Parser(SocketMessage message, string dialogue)
+        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, string dialogue)
         {
             // First, let's establish some values.
             // The max pixel length of a line.

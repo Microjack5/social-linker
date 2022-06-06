@@ -11,10 +11,12 @@ namespace SocialLinker.Core.SceneMaker
 {
     public class CommandParser
     {
-        public static async Task Parser(SocketMessage message, string arg)
+        public static async Task Parser(SocialLinkerCommand sl_command)
         {
             // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(message.Author);
+            var account = UserInfoClasses.GetAccount(sl_command.User);
+
+            var message = sl_command.Message;
 
             // Create an OfficialSetData variable and set it to null.
             // We'll be assigning a proper object to it depending on how far we progress through the method.
@@ -44,7 +46,7 @@ namespace SocialLinker.Core.SceneMaker
             char[] delimiterChars = { ' ' };
 
             // Using the char array, split the user's input into indicies of the string list by seperating each one per whitespace.
-            input_substring = arg.Split(delimiterChars).ToList();
+            input_substring = sl_command.Content.Split(delimiterChars).ToList();
 
             // Iterate through the list to ensure no index is a whitespace.
             for (int i = input_substring.Count - 1; i >= 0; i--)
@@ -59,7 +61,7 @@ namespace SocialLinker.Core.SceneMaker
             // If there are no indicies in the input_substring string list, we have a successful command! Generate a tutorial menu and return.
             if (input_substring.Count == 0)
             {
-                await message.Channel.SendMessageAsync(":white_check_mark: **Parsing successful.** A tutorial menu for the scene maker will be displayed.");
+                await sl_command.Channel.SendMessageAsync(":white_check_mark: **Parsing successful.** A tutorial menu for the scene maker will be displayed.");
                 return;
             }
 
@@ -114,7 +116,7 @@ namespace SocialLinker.Core.SceneMaker
                     command_data.Template = OfficialSetMethods.InputToTemplate(account, command_data.Template);
 
                     // Generate the sprite set list for the user's selected title.
-                    await OfficialSetMethods.Set_List_Message_Directory(message, command_data.Template);
+                    await OfficialSetMethods.Set_List_Message_Directory(sl_command, command_data.Template);
                 }
                 return;
             }
@@ -226,7 +228,7 @@ namespace SocialLinker.Core.SceneMaker
             // These keywords will trigger special scene maker functions and cannot be used as part of a character's access keyword.
             if (command_data.Character_Keyword.ToLower() == "system")
             {
-                await System_Message_Parser(message, arg);
+                await System_Message_Parser(sl_command, sl_command.Content);
                 return;
             }
             else if (command_data.Character_Keyword.ToLower() == "dual")
@@ -248,7 +250,7 @@ namespace SocialLinker.Core.SceneMaker
                 if (command_data.Character_Keyword.ToLower() == generic_keywords[i])
                 {
                     // If a match is found, send an error message. The command was improperly input.
-                    await ErrorHandling.Char_Keyword_Not_Found(message);
+                    await ErrorHandling.Char_Keyword_Not_Found(sl_command);
                     return;
                 }
             }
@@ -260,7 +262,7 @@ namespace SocialLinker.Core.SceneMaker
                 if (command_data.Character_Keyword.ToLower() == version_keywords[i])
                 {
                     // If a match is found, send an error message. The command was improperly input.
-                    await ErrorHandling.Char_Keyword_Not_Found(message);
+                    await ErrorHandling.Char_Keyword_Not_Found(sl_command);
                     return;
                 }
             }
@@ -281,7 +283,7 @@ namespace SocialLinker.Core.SceneMaker
                     // If so, the user entered a quotation mark prematurely. Quotation marks only come after a sprite number, so output an error message and return.
                     if (command_data.Character_Keyword.Contains(quotation_check[i]))
                     {
-                        await ErrorHandling.Sprite_Number_Missing(message);
+                        await ErrorHandling.Sprite_Number_Missing(sl_command);
                         return;
                     }
                 }
@@ -291,12 +293,12 @@ namespace SocialLinker.Core.SceneMaker
                 // If both the template keyword and character keyword are not empty, send an error message. A template keyword without sprite number and dialogue is incorrect syntax.
                 if (command_data.Template != "" && command_data.Character_Keyword != "")
                 {
-                    await ErrorHandling.Sprite_Number_And_Dialogue_Missing(message);
+                    await ErrorHandling.Sprite_Number_And_Dialogue_Missing(sl_command);
                 }
                 // If the template keyword is not empty and the character keyword is empty, we have a successful command! Generate a character list from the specified title.
                 else if (command_data.Template != "" && command_data.Character_Keyword == "")
                 {
-                    await OfficialSetMethods.Set_List_Message_Directory(message, command_data.Template);
+                    await OfficialSetMethods.Set_List_Message_Directory(sl_command, command_data.Template);
                 }
                 // If the character keyword is not empty and the sprite sheet specifier is empty, we have a successful command! Generate a sprite sheet from the character's game of origin.
                 else if (command_data.Character_Keyword != "" && command_data.Sprite_Set_Version == "")
@@ -307,12 +309,12 @@ namespace SocialLinker.Core.SceneMaker
                     // If the sprite set info is not null, decide how to generate the embeded message.
                     if (sprite_set_info != null)
                     {
-                        await OfficialSetMethods.Sprite_Sheet_Message_Directory(message, sprite_set_info);
+                        await OfficialSetMethods.Sprite_Sheet_Message_Directory(sl_command, sprite_set_info);
                     }
                     // If the sprite set info is null, send an error message. The sprite set doesn't exist.
                     else
                     {
-                        await ErrorHandling.Sprite_Set_Not_Found_Generic(message, command_data.Character_Keyword);
+                        await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, command_data.Character_Keyword);
                         return;
                     }
                 }
@@ -325,12 +327,12 @@ namespace SocialLinker.Core.SceneMaker
                     // If the sprite set info is not null, decide how to generate the embeded message.
                     if (sprite_set_info != null)
                     {
-                        await OfficialSetMethods.Sprite_Sheet_Message_Directory(message, sprite_set_info);
+                        await OfficialSetMethods.Sprite_Sheet_Message_Directory(sl_command, sprite_set_info);
                     }
                     // If the sprite set info is null, send an error message. The sprite set doesn't exist.
                     else
                     {
-                        await ErrorHandling.Sprite_Set_Not_Found_Generic(message, command_data.Character_Keyword);
+                        await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, command_data.Character_Keyword);
                         return;
                     }
                 }
@@ -363,7 +365,7 @@ namespace SocialLinker.Core.SceneMaker
             // If there are more than three indices in the sprite_number_temp string list, send an error message and return.
             if (sprite_number_temp.Count > 3)
             {
-                await ErrorHandling.Too_Many_Animation_Frames(message);
+                await ErrorHandling.Too_Many_Animation_Frames(sl_command);
                 return;
             }
 
@@ -383,7 +385,7 @@ namespace SocialLinker.Core.SceneMaker
                 // If not, send an error message and return. We only want integer values at this step.
                 else
                 {
-                    await ErrorHandling.Non_Digit_In_Sprite_Number(message);
+                    await ErrorHandling.Non_Digit_In_Sprite_Number(sl_command);
                     return;
                 }
             }
@@ -415,14 +417,14 @@ namespace SocialLinker.Core.SceneMaker
                 // If the character keyword is empty, send an error message and return.
                 if (command_data.Character_Keyword == "")
                 {
-                    await ErrorHandling.Sprite_Number_Before_Char_Keyword(message);
+                    await ErrorHandling.Sprite_Number_Before_Char_Keyword(sl_command);
                     return;
                 }
                 // If the base sprite was read in as zero and the eye frame or mouth frame values are not empty, send an error message and return.
                 // Zero can be read in as the base sprite, but eye and mouth frames can't be specified after it.
                 else if ((command_data.Base_Sprite == 0) && ((command_data.Eye_Frame != default) || (command_data.Mouth_Frame != default)))
                 {
-                    await ErrorHandling.Animation_Frame_With_Blank_Sprite(message);
+                    await ErrorHandling.Animation_Frame_With_Blank_Sprite(sl_command);
                     return;
                 }
 
@@ -437,26 +439,26 @@ namespace SocialLinker.Core.SceneMaker
                 // The base sprite being zero indicates the lack of a sprite, so sprite details are impossible to view.
                 if ((command_data.Base_Sprite == 0) && ((command_data.Eye_Frame == default) || (command_data.Mouth_Frame == default)))
                 {
-                    await ErrorHandling.Viewing_Sprite_Details_With_Blank_Sprite(message);
+                    await ErrorHandling.Viewing_Sprite_Details_With_Blank_Sprite(sl_command);
                 }
                 // If the base sprite was read in as zero and the eye frame or mouth frame values are not empty, send an error message and return.
                 // Zero can be read in as the base sprite, but eye and mouth frames can't be specified after it.
                 // Eye frames and mouth frames being specified without dialouge afterwards is also incorrect syntax.
                 else if ((command_data.Base_Sprite == 0) && ((command_data.Eye_Frame != default) || (command_data.Mouth_Frame != default)))
                 {
-                    await ErrorHandling.Animation_Frame_With_Blank_Sprite_And_Without_Dialogue(message);
+                    await ErrorHandling.Animation_Frame_With_Blank_Sprite_And_Without_Dialogue(sl_command);
                 }
                 // If the base sprite is not at the default value and neither is the eye frame or mouth frame, send an error message and return.
                 // Eye frames and mouth frames being specified without dialouge afterwards is incorrect syntax.
                 else if ((command_data.Base_Sprite != default) && ((command_data.Eye_Frame != default) || (command_data.Mouth_Frame != default)))
                 {
-                    await ErrorHandling.Animation_Frames_Without_Dialogue(message);
+                    await ErrorHandling.Animation_Frames_Without_Dialogue(sl_command);
                 }
                 // If the character keyword is empty but the base sprite value is not, send an error message and return.
                 // A character keyword must always come before the sprite number.
                 else if ((command_data.Character_Keyword == "") && (command_data.Base_Sprite != default))
                 {
-                    await ErrorHandling.Char_Keyword_Not_Found(message);
+                    await ErrorHandling.Char_Keyword_Not_Found(sl_command);
                 }
                 // If the base sprite is not at the default value but the eye frames and mouth frames are, we have a successful command! Generate an image viewing the details for the specified character sprite.
                 else if ((command_data.Base_Sprite != default) && (command_data.Eye_Frame == default) && (command_data.Mouth_Frame == default))
@@ -468,12 +470,12 @@ namespace SocialLinker.Core.SceneMaker
                     // The first step of this is checking the validity of the user's inputted base sprite in relation to the chosen set.
                     if (sprite_set_info != null)
                     {
-                        OfficialSetMethods.Base_Sprite_Validity_Check(message, sprite_set_info, command_data);
+                        OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, command_data);
                     }
                     // If the sprite set info is null, send an error message. The sprite set doesn't exist.
                     else
                     {
-                        await ErrorHandling.Sprite_Set_Not_Found_Generic(message, command_data.Character_Keyword);
+                        await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, command_data.Character_Keyword);
                         return;
                     }
                 }
@@ -508,7 +510,7 @@ namespace SocialLinker.Core.SceneMaker
             // If not, send an error message and return. Dialogue should always be placed between quotation marks.
             else
             {
-                await ErrorHandling.Text_After_Sprite_Number_Not_Quoted(message);
+                await ErrorHandling.Text_After_Sprite_Number_Not_Quoted(sl_command);
                 return;
             }
 
@@ -543,29 +545,29 @@ namespace SocialLinker.Core.SceneMaker
             // If this happens and the user didn't specify a template, send a generic "set not found" error message.
             if (sprite_set_info == null && command_data.Sprite_Set_Version == "")
             {
-                await ErrorHandling.Sprite_Set_Not_Found_Generic(message, command_data.Character_Keyword);
+                await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, command_data.Character_Keyword);
                 return;
             }
             // Else, if this happens and the user did specify a template, send a "set not found" error message specifying the template.
             else if (sprite_set_info == null && command_data.Sprite_Set_Version != "")
             {
-                await ErrorHandling.Sprite_Set_Not_Found_In_Template(message, command_data.Character_Keyword, OfficialSetMethods.InputToTemplate(account, command_data.Sprite_Set_Version));
+                await ErrorHandling.Sprite_Set_Not_Found_In_Template(sl_command, command_data.Character_Keyword, OfficialSetMethods.InputToTemplate(account, command_data.Sprite_Set_Version));
                 return;
             }
             // If the sprite set did not return null, the command was successful!
             else if (sprite_set_info != null)
             {
-                await OfficialSetMethods.Quick_Scene_Directory(message, sprite_set_info, command_data);
+                await OfficialSetMethods.Quick_Scene_Directory(sl_command, sprite_set_info, command_data);
                 //await message.Channel.SendMessageAsync(":white_check_mark: **Parsing successful.** Full command has been parsed and sprite set has been found.");
             }
         }
 
-        public static async Task System_Message_Parser(SocketMessage message, string arg)
+        public static async Task System_Message_Parser(SocialLinkerCommand sl_command, string arg)
         {
             try
             {
                 // Get the account information of the command's user.
-                var account = UserInfoClasses.GetAccount(message.Author);
+                var account = UserInfoClasses.GetAccount(sl_command.User);
 
                 // Create an OfficialSetData variable and set it to null.
                 // We'll be assigning a proper object to it depending on how far we progress through the method.
@@ -610,7 +612,7 @@ namespace SocialLinker.Core.SceneMaker
                 // If there are no indicies in the input_substring string list, we have a successful command! Generate a tutorial menu and return.
                 if (input_substring.Count == 0)
                 {
-                    await message.Channel.SendMessageAsync(":white_check_mark: **Parsing successful.** A tutorial menu for the scene maker will be displayed.");
+                    await sl_command.Channel.SendMessageAsync(":white_check_mark: **Parsing successful.** A tutorial menu for the scene maker will be displayed.");
                     return;
                 }
 
@@ -629,7 +631,7 @@ namespace SocialLinker.Core.SceneMaker
                     // If a match is found, the user specified a template first before the "System" keyword. Send an error message and return.
                     if (current_string.ToLower() == generic_keywords[i])
                     {
-                        await ErrorHandling.Template_Specified_First_On_System_Message(message);
+                        await ErrorHandling.Template_Specified_First_On_System_Message(sl_command);
                         return;
                     }
                 }
@@ -644,7 +646,7 @@ namespace SocialLinker.Core.SceneMaker
                         // If a match is found, the user specified a template first before the "System" keyword. Send an error message and return.
                         if (current_string.ToLower() == version_keywords[i])
                         {
-                            await ErrorHandling.Template_Specified_First_On_System_Message(message);
+                            await ErrorHandling.Template_Specified_First_On_System_Message(sl_command);
                             return;
                         }
                     }
@@ -769,7 +771,7 @@ namespace SocialLinker.Core.SceneMaker
                         // If so, the user entered a quotation mark prematurely. Quotation marks only come after a sprite number, so output an error message and return.
                         if (command_data.Character_Keyword.Contains(quotation_check[i]))
                         {
-                            await ErrorHandling.Sprite_Number_Missing(message);
+                            await ErrorHandling.Sprite_Number_Missing(sl_command);
                             return;
                         }
                     }
@@ -779,7 +781,7 @@ namespace SocialLinker.Core.SceneMaker
                     // If the character keyword is not empty, send an error message. A character keyword without sprite number and dialogue is incorrect syntax.
                     if (command_data.Character_Keyword != "")
                     {
-                        await ErrorHandling.Sprite_Number_And_Dialogue_Missing_On_System_Message(message);
+                        await ErrorHandling.Sprite_Number_And_Dialogue_Missing_On_System_Message(sl_command);
                     }
                     return;
                 }
@@ -810,7 +812,7 @@ namespace SocialLinker.Core.SceneMaker
                 // If there is more than one index in the sprite_number_temp string list, send an error message and return.
                 if (sprite_number_temp.Count > 1)
                 {
-                    await ErrorHandling.Animation_Frames_Specified_On_System_Message(message);
+                    await ErrorHandling.Animation_Frames_Specified_On_System_Message(sl_command);
                     return;
                 }
 
@@ -830,7 +832,7 @@ namespace SocialLinker.Core.SceneMaker
                     // If not, send an error message and return. We only want integer values at this step.
                     else
                     {
-                        await ErrorHandling.Non_Digit_In_Sprite_Number(message);
+                        await ErrorHandling.Non_Digit_In_Sprite_Number(sl_command);
                         return;
                     }
                 }
@@ -845,7 +847,7 @@ namespace SocialLinker.Core.SceneMaker
                     // If the character keyword is empty, send an error message and return.
                     if (command_data.Character_Keyword == "")
                     {
-                        await ErrorHandling.Sprite_Number_Before_Char_Keyword(message);
+                        await ErrorHandling.Sprite_Number_Before_Char_Keyword(sl_command);
                         return;
                     }
 
@@ -856,7 +858,7 @@ namespace SocialLinker.Core.SceneMaker
                 // In this case, send an error message. Dialogue should always be present when forming a system message.
                 else
                 {
-                    await ErrorHandling.Missing_Dialogue_On_System_Message(message);
+                    await ErrorHandling.Missing_Dialogue_On_System_Message(sl_command);
                     return;
                 }
 
@@ -888,7 +890,7 @@ namespace SocialLinker.Core.SceneMaker
                 // If not, send an error message and return. Dialogue should always be placed between quotation marks.
                 else
                 {
-                    await ErrorHandling.Text_After_Sprite_Number_Not_Quoted(message);
+                    await ErrorHandling.Text_After_Sprite_Number_Not_Quoted(sl_command);
                     return;
                 }
 
@@ -917,7 +919,7 @@ namespace SocialLinker.Core.SceneMaker
                 }
 
                 // With that, we've reached the end of the parser! Use the completed command data to render the appropriate template.
-                await OfficialSetMethods.System_Message_Directory(message, command_data);
+                await OfficialSetMethods.System_Message_Directory(sl_command, command_data);
             }
             catch (Exception e)
             {
