@@ -11,6 +11,154 @@ namespace SocialLinker.Core.SceneMaker
 {
     public class CommandParser
     {
+        public static async Task Type_Directory(SocialLinkerCommand sl_command)
+        {
+            switch (sl_command.CommandType)
+            {
+                case "Context":
+                    await CommandParser.Parser(sl_command);
+                    break;
+
+                case "Slash":
+                    var account = UserInfoClasses.GetAccount(sl_command.User);
+                    MakerCommandData maker_command = sl_command.MakerCommand;
+                    OfficialSetData sprite_set_info = null;
+
+                    switch (sl_command.CommandName)
+                    {
+                        case "maker_list":
+                            if (maker_command.Template != "" && maker_command.Character_Keyword == "")
+                            {
+                                await OfficialSetMethods.Set_List_Message_Directory(sl_command);
+                            }
+                            break;
+
+                        case "maker_view":
+
+                            
+                            // If the base sprite is not at the default value but the eye frames and mouth frames are, we have a successful command! Generate an image viewing the details for the specified character sprite.
+                            if (maker_command.Base_Sprite != default)
+                            {
+                                // Test for zero entries in the sprite specifiers.
+                                // If the base sprite was read in as zero, send an error message and return.
+                                // The base sprite being zero indicates the lack of a sprite, so sprite details are impossible to view.
+                                if (maker_command.Base_Sprite == 0)
+                                {
+                                    await ErrorHandling.Viewing_Sprite_Details_With_Blank_Sprite(sl_command);
+                                    return;
+                                }
+
+                                // Get the information of the chosen sprite set.
+                                sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, maker_command);
+
+                                // If the sprite set info is not null, start creating a sprite sheet detailing the chosen sprite's frames.
+                                // The first step of this is checking the validity of the user's inputted base sprite in relation to the chosen set.
+                                if (sprite_set_info != null)
+                                {
+                                    OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, maker_command);
+                                    return;
+                                }
+                                // If the sprite set info is null, send an error message. The sprite set doesn't exist.
+                                else
+                                {
+                                    await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, maker_command.Character_Keyword);
+                                    return;
+                                }
+                            }
+
+                            else if (maker_command.Character_Keyword != "" && maker_command.Sprite_Set_Version == "")
+                            {
+                                // Get the information of the chosen sprite set.
+                                sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, maker_command);
+
+                                // If the sprite set info is not null, decide how to generate the embeded message.
+                                if (sprite_set_info != null)
+                                {
+                                    await OfficialSetMethods.Sprite_Sheet_Message_Directory(sl_command, sprite_set_info);
+                                    return;
+                                }
+                                // If the sprite set info is null, send an error message. The sprite set doesn't exist.
+                                else
+                                {
+                                    await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, maker_command.Character_Keyword);
+                                    return;
+                                }
+                            }
+                            // If both the character keyword and the sprite sheet specifier are not empty, we have a successful command! Generate a character sprite sheet from the specified title.
+                            else if (maker_command.Character_Keyword != "" && maker_command.Sprite_Set_Version != "")
+                            {
+                                // Get the information of the chosen sprite set.
+                                sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, maker_command);
+
+                                // If the sprite set info is not null, decide how to generate the embeded message.
+                                if (sprite_set_info != null)
+                                {
+                                    await OfficialSetMethods.Sprite_Sheet_Message_Directory(sl_command, sprite_set_info);
+                                    return;
+                                }
+                                // If the sprite set info is null, send an error message. The sprite set doesn't exist.
+                                else
+                                {
+                                    await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, maker_command.Character_Keyword);
+                                    return;
+                                }
+                            }
+
+                            
+                            break;
+
+                        case "maker_create":
+                            if (maker_command.Character_Keyword.ToLower() == "system")
+                            {
+                                await System_Message_Parser(sl_command, sl_command.Content);
+                                return;
+                            }
+                            else if (maker_command.Character_Keyword.ToLower() == "dual")
+                            {
+                                // Redirect to dual scene maker menu
+                                return;
+                            }
+                            else if (maker_command.Character_Keyword.ToLower() == "help")
+                            {
+                                // Redirect to scene maker help menu
+                                return;
+                            }
+
+                            // If the base sprite was read in as zero and the eye frame or mouth frame values are not empty, send an error message and return.
+                            // Zero can be read in as the base sprite, but eye and mouth frames can't be specified after it.
+                            else if ((maker_command.Base_Sprite == 0) && ((maker_command.Eye_Frame != default) || (maker_command.Mouth_Frame != default)))
+                            {
+                                await ErrorHandling.Animation_Frame_With_Blank_Sprite(sl_command);
+                                return;
+                            }
+
+                            // Get the information of the chosen sprite set.
+                            sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, maker_command);
+
+                            // If the sprite set's info returns null, it means the character keyword the user typed doesn't exist in the files.
+                            // If this happens and the user didn't specify a template, send a generic "set not found" error message.
+                            if (sprite_set_info == null && maker_command.Sprite_Set_Version == "")
+                            {
+                                await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, maker_command.Character_Keyword);
+                                return;
+                            }
+                            // Else, if this happens and the user did specify a template, send a "set not found" error message specifying the template.
+                            else if (sprite_set_info == null && maker_command.Sprite_Set_Version != "")
+                            {
+                                await ErrorHandling.Sprite_Set_Not_Found_In_Template(sl_command, maker_command.Character_Keyword, OfficialSetMethods.InputToTemplate(account, maker_command.Sprite_Set_Version));
+                                return;
+                            }
+                            // If the sprite set did not return null, the command was successful!
+                            else if (sprite_set_info != null)
+                            {
+                                await OfficialSetMethods.Quick_Scene_Directory(sl_command, sprite_set_info, maker_command);
+                            }
+                            break;
+                    }
+                    break;
+            }
+        }
+
         public static async Task Parser(SocialLinkerCommand sl_command)
         {
             // Get the account information of the command's user.
@@ -116,7 +264,7 @@ namespace SocialLinker.Core.SceneMaker
                     command_data.Template = OfficialSetMethods.InputToTemplate(account, command_data.Template);
 
                     // Generate the sprite set list for the user's selected title.
-                    await OfficialSetMethods.Set_List_Message_Directory(sl_command, command_data.Template);
+                    await OfficialSetMethods.Set_List_Message_Directory(sl_command);
                 }
                 return;
             }
@@ -298,7 +446,7 @@ namespace SocialLinker.Core.SceneMaker
                 // If the template keyword is not empty and the character keyword is empty, we have a successful command! Generate a character list from the specified title.
                 else if (command_data.Template != "" && command_data.Character_Keyword == "")
                 {
-                    await OfficialSetMethods.Set_List_Message_Directory(sl_command, command_data.Template);
+                    await OfficialSetMethods.Set_List_Message_Directory(sl_command);
                 }
                 // If the character keyword is not empty and the sprite sheet specifier is empty, we have a successful command! Generate a sprite sheet from the character's game of origin.
                 else if (command_data.Character_Keyword != "" && command_data.Sprite_Set_Version == "")

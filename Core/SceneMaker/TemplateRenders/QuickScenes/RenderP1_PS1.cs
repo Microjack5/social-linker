@@ -165,7 +165,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             string url = "";
 
             // If there are no attachments on the message, set the URL string to "None".
-            if (attachments.LongCount() == 0)
+            if (attachments == default || attachments.LongCount() == 0)
             {
                 url = "None";
             }

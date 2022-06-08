@@ -14,6 +14,7 @@ using Discord.Interactions;
 using Newtonsoft.Json;
 using Discord.Net;
 using SocialLinker.Core.SceneMaker;
+using System.Timers;
 
 namespace SocialLinker
 {
@@ -37,10 +38,8 @@ namespace SocialLinker
         {
             SocketUser data_to_mentioneduser;
             string data_to_string;
-            Console.WriteLine(command.Data.Options);
             if ((command.Data.Options.FirstOrDefault() != default)) // Maker, help, settings, shop, status
             {
-                Console.WriteLine("Here #1");
                 data_to_mentioneduser = null;
                 /*List<SocketSlashCommandDataOption> temp = command.Data.Options.ToList();
                 string temp_string = "";
@@ -68,6 +67,7 @@ namespace SocialLinker
                 Channel = command.Channel,
                 MentionedUser = data_to_mentioneduser,
                 //Content = data_to_string,
+                Attachments = default,
                 Message = null,
                 SlashCommand = command
             };
@@ -192,8 +192,6 @@ namespace SocialLinker
                 try
                 {
                     var converted_sl_command = CommandConverter.ContextCommandConverter(msg);
-                    Console.WriteLine(converted_sl_command.CommandName);
-
                     await CommandIndex(converted_sl_command);
                 }
                 catch (Exception e)
@@ -216,7 +214,18 @@ namespace SocialLinker
         {
             if (command.CommandType == "Slash")
             {
-                await command.SlashCommand.RespondAsync(embed: Slash_Command_Successful().Build(), ephemeral: true);
+                await command.SlashCommand.RespondAsync(embed: Slash_Command_Response().Build(), ephemeral: false);
+
+                Timer notice_deletion_timer = new Timer()
+                {
+                    // Create a timer that expires as a "time out" duration for the user.
+                    Interval = 5000,
+                    AutoReset = false,
+                    Enabled = true
+                };
+
+                // If the timer runs out, activate a function.
+                notice_deletion_timer.Elapsed += (sender, e) => Timer_Elapsed(sender, e, command);
             }
 
             switch (command.CommandName)
@@ -259,18 +268,17 @@ namespace SocialLinker
 
                 case "maker_list":
                     command.MakerCommand = SL_To_Maker_Command(command);
-                    //await Commands.Maker.MakerCommandParser(command);
+                    await Commands.Maker.MakerCommandParser(command);
                     break;
 
                 case "maker_view":
                     command.MakerCommand = SL_To_Maker_Command(command);
-                    //await Commands.Maker.MakerCommandParser(command);
+                    await Commands.Maker.MakerCommandParser(command);
                     break;
 
                 case "maker_create":
                     command.MakerCommand = SL_To_Maker_Command(command);
-                    //Console.WriteLine($"Content: {command.Content}");
-                    //await Commands.Maker.MakerCommandParser(command);
+                    await Commands.Maker.MakerCommandParser(command);
                     break;
             }
         }
@@ -483,7 +491,7 @@ namespace SocialLinker
                 .WithDescription("View the sprite sheet for a character with optional animation frames.")
                 .AddOption("character", ApplicationCommandOptionType.String, "Name of the character you wish to view.", isRequired: true)
                 .AddOption("character_version", ApplicationCommandOptionType.String, "Specifies the game a character's sprite sheet comes from.", isRequired: false)
-                .AddOption("sprite_number", ApplicationCommandOptionType.String, "View animation frames for a character's specific sprite.", isRequired: true);
+                .AddOption("sprite_number", ApplicationCommandOptionType.Integer, "View animation frames for a character's specific sprite.", isRequired: false);
 
             try
             {
@@ -505,12 +513,32 @@ namespace SocialLinker
                 var guildCommand = new SlashCommandBuilder()
                 .WithName("maker_create")
                 .WithDescription("Create a realistic screenshot from various Persona titles.")
-                //.AddOption("game_style", ApplicationCommandOptionType.String, "temp", isRequired: false)
                 .AddOption("character", ApplicationCommandOptionType.String, "Name of the character you wish to use.", isRequired: true)
-                .AddOption("character_version", ApplicationCommandOptionType.String, "Specifies the game a character's sprite sheet comes from.", isRequired: false)
-                .AddOption("sprite_number", ApplicationCommandOptionType.String, "The specific sprite from the character's sprite sheet to use.", isRequired: true)
-                .AddOption("eye_frame", ApplicationCommandOptionType.String, "Use an eye frame linked to the character's sprite.", isRequired: false)
-                .AddOption("mouth_frame", ApplicationCommandOptionType.String, "Use a mouth frame linked to the character's sprite.", isRequired: false)
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("character_version")
+                    .WithDescription("Specifies the game a character's sprite sheet comes from.")
+                    .WithRequired(false)
+                    .AddChoice("P1-PS1", 1)
+                    .AddChoice("P1-PSP", 2)
+                    .AddChoice("P2IS-PS1", 3)
+                    .AddChoice("P2IS-PSP", 4)
+                    .AddChoice("P2EP-PS1", 5)
+                    .AddChoice("P2EP-PSP", 6)
+                    .AddChoice("P3F", 7)
+                    .AddChoice("P3P", 8)
+                    .AddChoice("P4-PS2", 9)
+                    .AddChoice("P4G", 10)
+                    .AddChoice("P4AU", 11)
+                    .AddChoice("P4D", 12)
+                    .AddChoice("P5-PS4", 13)
+                    .AddChoice("P5R", 14)
+                    .AddChoice("P5S", 15)
+                    .AddChoice("BBTAG", 16)
+                    .WithType(ApplicationCommandOptionType.Integer)
+                    )
+                .AddOption("sprite_number", ApplicationCommandOptionType.Integer, "The specific sprite from the character's sprite sheet to use.", isRequired: true)
+                .AddOption("eye_frame", ApplicationCommandOptionType.Integer, "Use an eye frame linked to the character's sprite.", isRequired: false)
+                .AddOption("mouth_frame", ApplicationCommandOptionType.Integer, "Use a mouth frame linked to the character's sprite.", isRequired: false)
                 .AddOption("dialogue", ApplicationCommandOptionType.String, "The character's spoken text.", isRequired: true);
 
                 await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
@@ -522,9 +550,9 @@ namespace SocialLinker
             }
         }
 
-        public static MakerCommandData SL_To_Maker_Command(SocialLinkerCommand command)
+        public static MakerCommandData SL_To_Maker_Command(SocialLinkerCommand sl_command)
         {
-            MakerCommandData command_data = new MakerCommandData()
+            MakerCommandData maker_command_data = new MakerCommandData()
             {
                 Template = "",
                 Character_Keyword = "",
@@ -535,53 +563,140 @@ namespace SocialLinker
                 Dialogue = ""
             };
 
-            List<SocketSlashCommandDataOption> temp = command.SlashCommand.Data.Options.ToList();
+            List<SocketSlashCommandDataOption> slash_command_data_options_list = sl_command.SlashCommand.Data.Options.ToList();
 
-            for (int i = 0; i < temp.Count; i++)
+            for (int i = 0; i < slash_command_data_options_list.Count; i++)
             {
-                switch (temp[i].Name)
+                switch (slash_command_data_options_list[i].Name)
                 {
                     case "game":
-                        command_data.Template = temp[i].Value.ToString();
+                        maker_command_data.Template = Value_To_Template(slash_command_data_options_list[i].Value.ToString());
                         break;
 
                     case "character":
-                        command_data.Character_Keyword = temp[i].Value.ToString();
+                        maker_command_data.Character_Keyword = slash_command_data_options_list[i].Value.ToString();
                         break;
 
                     case "character_version":
-                        command_data.Sprite_Set_Version = temp[i].Value.ToString();
+                        maker_command_data.Sprite_Set_Version = slash_command_data_options_list[i].Value.ToString();
                         break;
 
                     case "sprite_number":
-                        command_data.Base_Sprite = Convert.ToInt32(temp[i].Value.ToString());
+                        maker_command_data.Base_Sprite = Convert.ToInt32(slash_command_data_options_list[i].Value.ToString());
                         break;
 
                     case "eye_frame":
-                        command_data.Eye_Frame = Convert.ToInt32(temp[i].Value.ToString());
+                        maker_command_data.Eye_Frame = Convert.ToInt32(slash_command_data_options_list[i].Value.ToString());
                         break;
 
                     case "mouth_frame":
-                        command_data.Mouth_Frame = Convert.ToInt32(temp[i].Value.ToString());
+                        maker_command_data.Mouth_Frame = Convert.ToInt32(slash_command_data_options_list[i].Value.ToString());
                         break;
 
                     case "dialogue":
-                        command_data.Dialogue = temp[i].Value.ToString();
+                        maker_command_data.Dialogue = slash_command_data_options_list[i].Value.ToString();
                         break;
                 } 
             }
 
-            return command_data;
+            return maker_command_data;
         }
 
-        public static EmbedBuilder Slash_Command_Successful()
+        public static string Value_To_Template(string value)
+        {
+            string template = "";
+
+            switch (value)
+            {
+                case "1":
+                    template = "P1-PS1";
+                    break;
+
+                case "2":
+                    template = "P1-PSP";
+                    break;
+
+                case "3":
+                    template = "P2IS-PS1";
+                    break;
+
+                case "4":
+                    template = "P2IS-PSP";
+                    break;
+
+                case "5":
+                    template = "P2EP-PS1";
+                    break;
+
+                case "6":
+                    template = "P2EP-PSP";
+                    break;
+
+                case "7":
+                    template = "P3F";
+                    break;
+
+                case "8":
+                    template = "P3P";
+                    break;
+
+                case "9":
+                    template = "P4-PS2";
+                    break;
+
+                case "10":
+                    template = "P4G";
+                    break;
+
+                case "11":
+                    template = "P4AU";
+                    break;
+
+                case "12":
+                    template = "P4D";
+                    break;
+
+                case "13":
+                    template = "P5-PS4";
+                    break;
+
+                case "14":
+                    template = "P5R";
+                    break;
+
+                case "15":
+                    template = "P5S";
+                    break;
+
+                case "16":
+                    template = "BBTAG";
+                    break;
+            }
+
+            return template;
+        }
+
+        public static EmbedBuilder Slash_Command_Response()
         {
             var embed = new EmbedBuilder();
 
             embed.WithColor(0, 207, 41);
-            embed.WithDescription("**Slash command successful** :white_check_mark:");
+            embed.WithDescription("**Slash command processing** <a:Loading:983845611482783814>");
 
             return embed;
+        }
+
+        public static async void Timer_Elapsed(object sender, ElapsedEventArgs e, SocialLinkerCommand command)
+        {
+            try
+            {
+                await command.SlashCommand.DeleteOriginalResponseAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return;
+            }
         }
 
         private IServiceProvider ConfigureServices()

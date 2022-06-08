@@ -399,9 +399,9 @@ namespace SocialLinker.Core.LocalStorageTables
         }
 
         // Main methods to assist the functions of the scene maker.
-        public static async Task Set_List_Message_Directory(SocialLinkerCommand sl_command, string title)
+        public static async Task Set_List_Message_Directory(SocialLinkerCommand sl_command)
         {
-            switch (title)
+            switch (sl_command.MakerCommand.Template)
             {
                 case "P1-PS1":
                     await OfficialSetLists.P1_PS1_Set_List(sl_command);
@@ -467,6 +467,8 @@ namespace SocialLinker.Core.LocalStorageTables
                     await OfficialSetLists.BBTAG_Set_List(sl_command);
                     return;
             }
+            Console.WriteLine("Here #3.5");
+            Console.WriteLine(sl_command.MakerCommand.Template);
             return;
         }
 
