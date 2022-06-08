@@ -135,6 +135,9 @@ namespace SocialLinker.Core.SceneMaker
                             // Get the information of the chosen sprite set.
                             sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, maker_command);
 
+                            Console.WriteLine(maker_command.Character_Keyword);
+                            Console.WriteLine(maker_command.Sprite_Set_Version);
+
                             // If the sprite set's info returns null, it means the character keyword the user typed doesn't exist in the files.
                             // If this happens and the user didn't specify a template, send a generic "set not found" error message.
                             if (sprite_set_info == null && maker_command.Sprite_Set_Version == "")

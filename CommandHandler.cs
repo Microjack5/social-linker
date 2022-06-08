@@ -578,7 +578,7 @@ namespace SocialLinker
                         break;
 
                     case "character_version":
-                        maker_command_data.Sprite_Set_Version = slash_command_data_options_list[i].Value.ToString();
+                        maker_command_data.Sprite_Set_Version = Value_To_Template(slash_command_data_options_list[i].Value.ToString());
                         break;
 
                     case "sprite_number":
