@@ -25,7 +25,6 @@ namespace SocialLinker
         public SocketUser User { get; set; }
         public ISocketMessageChannel Channel { get; set; }
         public SocketUser MentionedUser { get; set; }
-        public string Content { get; set; }
         public IReadOnlyCollection<Attachment> Attachments { get; set; }
         public SocketUserMessage Message { get; set; }
         public SocketSlashCommand SlashCommand { get; set; }
@@ -37,26 +36,14 @@ namespace SocialLinker
         public static SocialLinkerCommand SlashCommandConverter(SocketSlashCommand command)
         {
             SocketUser data_to_mentioneduser;
-            string data_to_string;
-            if ((command.Data.Options.FirstOrDefault() != default)) // Maker, help, settings, shop, status
+
+            if (((SocketUser)command.Data.Options.FirstOrDefault().Value is SocketUser)) // Maker, help, settings, shop, status
             {
-                data_to_mentioneduser = null;
-                /*List<SocketSlashCommandDataOption> temp = command.Data.Options.ToList();
-                string temp_string = "";
-
-                for (int i = 0; i < temp.Count; i++)
-                {
-                    Console.WriteLine(temp[i].Name);
-                    temp_string += temp[i].Value.ToString() + " ";
-                }
-
-                data_to_string = temp_string; */
+                data_to_mentioneduser = (SocketUser)command.Data.Options.FirstOrDefault().Value;
             }
             else
             {
-                Console.WriteLine("Here #2");
                 data_to_mentioneduser = null;
-                data_to_string = command.Data.Options.ToString(); 
             } 
 
             SocialLinkerCommand slash_to_command = new SocialLinkerCommand
@@ -66,7 +53,6 @@ namespace SocialLinker
                 User = command.User,
                 Channel = command.Channel,
                 MentionedUser = data_to_mentioneduser,
-                //Content = data_to_string,
                 Attachments = default,
                 Message = null,
                 SlashCommand = command
@@ -87,13 +73,6 @@ namespace SocialLinker
 
             string parsed_command_name = input_substring[0].Substring(prefix_length);
 
-            if (input_substring.Count > 1)
-            {
-                input_substring.RemoveAt(0);
-            }
-
-            string parsed_content = String_List_To_String(input_substring);
-
             SocialLinkerCommand context_to_command = new SocialLinkerCommand
             {
                 CommandType = "Context",
@@ -101,27 +80,11 @@ namespace SocialLinker
                 User = message.Author,
                 Channel = message.Channel,
                 MentionedUser = message.MentionedUsers.FirstOrDefault(),
-                Content = parsed_content,
                 Attachments = message.Attachments,
                 Message = (SocketUserMessage)message
             };
 
             return context_to_command;
-        }
-
-        public static string String_List_To_String(List<string> input_list)
-        {
-            // Create an empty string variable.
-            string output_string = "";
-
-            // Iterate through each index of the list and add it to the string variable.
-            for (int i = 0; i < input_list.Count; i++)
-            {
-                output_string += input_list[i];
-            }
-
-            // Return the string variable.
-            return output_string;
         }
     }
 
@@ -231,8 +194,8 @@ namespace SocialLinker
             switch (command.CommandName)
             {
                 case "status":
-                    //await Commands.Status.
-                    break;
+                    await Commands.Status.ContentCheck(command);
+                    break; 
 
                 case "shop":
                     await Commands.Shop.StartShop(command);

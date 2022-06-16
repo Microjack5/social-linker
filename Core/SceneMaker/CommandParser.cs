@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 using Discord.WebSocket;
 using SocialLinker.Core.LocalStorageTables;
 using SocialLinker.Core.CloudStorageTables;
+using SocialLinker.Config;
 
 namespace SocialLinker.Core.SceneMaker
 {
@@ -16,7 +17,19 @@ namespace SocialLinker.Core.SceneMaker
             switch (sl_command.CommandType)
             {
                 case "Context":
-                    await CommandParser.Parser(sl_command);
+                    // Split the command prefix and name from the content
+                    List<string> input_substring;
+                    char[] delimiterChars = { ' ' };
+                    input_substring = sl_command.Message.Content.Split(delimiterChars).ToList();
+
+                    if (input_substring.Count > 1)
+                    {
+                        input_substring.RemoveAt(0);
+                    }
+
+                    string message_content = String_List_To_String(input_substring);
+
+                    await CommandParser.Parser(sl_command, message_content);
                     break;
 
                 case "Slash":
@@ -34,8 +47,6 @@ namespace SocialLinker.Core.SceneMaker
                             break;
 
                         case "maker_view":
-
-                            
                             // If the base sprite is not at the default value but the eye frames and mouth frames are, we have a successful command! Generate an image viewing the details for the specified character sprite.
                             if (maker_command.Base_Sprite != default)
                             {
@@ -110,7 +121,7 @@ namespace SocialLinker.Core.SceneMaker
                         case "maker_create":
                             if (maker_command.Character_Keyword.ToLower() == "system")
                             {
-                                await System_Message_Parser(sl_command, sl_command.Content);
+                                //await System_Message_Parser(sl_command, sl_command.Content);
                                 return;
                             }
                             else if (maker_command.Character_Keyword.ToLower() == "dual")
@@ -162,12 +173,14 @@ namespace SocialLinker.Core.SceneMaker
             }
         }
 
-        public static async Task Parser(SocialLinkerCommand sl_command)
+        public static async Task Parser(SocialLinkerCommand sl_command, string message_content)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(sl_command.User);
 
             var message = sl_command.Message;
+
+            Console.WriteLine(message.Content.ToString());
 
             // Create an OfficialSetData variable and set it to null.
             // We'll be assigning a proper object to it depending on how far we progress through the method.
@@ -197,7 +210,7 @@ namespace SocialLinker.Core.SceneMaker
             char[] delimiterChars = { ' ' };
 
             // Using the char array, split the user's input into indicies of the string list by seperating each one per whitespace.
-            input_substring = sl_command.Content.Split(delimiterChars).ToList();
+            input_substring = message_content.Split(delimiterChars).ToList();
 
             // Iterate through the list to ensure no index is a whitespace.
             for (int i = input_substring.Count - 1; i >= 0; i--)
@@ -379,7 +392,7 @@ namespace SocialLinker.Core.SceneMaker
             // These keywords will trigger special scene maker functions and cannot be used as part of a character's access keyword.
             if (command_data.Character_Keyword.ToLower() == "system")
             {
-                await System_Message_Parser(sl_command, sl_command.Content);
+                await System_Message_Parser(sl_command, message.Content);
                 return;
             }
             else if (command_data.Character_Keyword.ToLower() == "dual")
@@ -1076,6 +1089,21 @@ namespace SocialLinker.Core.SceneMaker
             {
                 Console.WriteLine(e);
             }
+        }
+
+        public static string String_List_To_String(List<string> input_list)
+        {
+            // Create an empty string variable.
+            string output_string = "";
+
+            // Iterate through each index of the list and add it to the string variable.
+            for (int i = 0; i < input_list.Count; i++)
+            {
+                output_string += input_list[i] + " ";
+            }
+
+            // Return the string variable.
+            return output_string;
         }
     }
 

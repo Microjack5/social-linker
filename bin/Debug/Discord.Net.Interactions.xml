@@ -6,7 +6,7 @@
     <members>
         <member name="T:Discord.Interactions.AutocompleteAttribute">
             <summary>
-                Set the <see cref="!:ApplicationCommandOptionProperties.Autocomplete"/> to <see langword="true"/>.
+                Set the <see cref="P:Discord.ApplicationCommandOptionProperties.IsAutocomplete"/> to <see langword="true"/>.
             </summary>
         </member>
         <member name="P:Discord.Interactions.AutocompleteAttribute.AutocompleteHandlerType">
@@ -16,7 +16,7 @@
         </member>
         <member name="M:Discord.Interactions.AutocompleteAttribute.#ctor(System.Type)">
             <summary>
-                Set the <see cref="!:ApplicationCommandOptionProperties.Autocomplete"/> to <see langword="true"/> and define a <see cref="T:Discord.Interactions.AutocompleteHandler"/> to handle
+                Set the <see cref="P:Discord.ApplicationCommandOptionProperties.IsAutocomplete"/> to <see langword="true"/> and define a <see cref="T:Discord.Interactions.AutocompleteHandler"/> to handle
                 Autocomplete interactions targeting the parameter this <see cref="T:System.Attribute"/> is applied to.
             </summary>
             <remarks>
@@ -25,7 +25,7 @@
         </member>
         <member name="M:Discord.Interactions.AutocompleteAttribute.#ctor">
             <summary>
-                Set the <see cref="!:ApplicationCommandOptionProperties.Autocomplete"/> to <see langword="true"/> without specifying a <see cref="T:Discord.Interactions.AutocompleteHandler"/>.
+                Set the <see cref="P:Discord.ApplicationCommandOptionProperties.IsAutocomplete"/> to <see langword="true"/> without specifying a <see cref="T:Discord.Interactions.AutocompleteHandler"/>.
             </summary>
         </member>
         <member name="T:Discord.Interactions.ChannelTypesAttribute">
@@ -452,9 +452,7 @@
             <summary>
                 Create a new <see cref="T:Discord.Interactions.ModalInputAttribute"/>.
             </summary>
-            <param name="label">The label of the input.</param>
             <param name="customId">The custom id of the input.</param>
-            <param name="required">Whether the user is required to input a value.></param>
         </member>
         <member name="T:Discord.Interactions.ModalTextInputAttribute">
             <summary>
@@ -489,7 +487,17 @@
                 Gets the initial value to be displayed by this input.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Discord.Interactions.ModalTextInputAttribute.#ctor(System.String,Discord.TextInputStyle,System.String,System.Int32,System.Int32,System.String)" -->
+        <member name="M:Discord.Interactions.ModalTextInputAttribute.#ctor(System.String,Discord.TextInputStyle,System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+                Create a new <see cref="T:Discord.Interactions.ModalTextInputAttribute"/>.
+            </summary>
+            <param name="customId">The custom id of the text input.></param>
+            <param name="style">The style of the text input.</param>
+            <param name="placeholder">The placeholder of the text input.</param>
+            <param name="minLength">The minimum length of the text input's content.</param>
+            <param name="maxLength">The maximum length of the text input's content.</param>
+            <param name="initValue">The initial value to be displayed by this input.</param>
+        </member>
         <member name="T:Discord.Interactions.RequiredInputAttribute">
             <summary>
                 Sets the input as required or optional.
@@ -769,7 +777,7 @@
             <remarks>
                 This precondition will always fail if the command is being invoked in a <see cref="T:Discord.IPrivateChannel"/>.
             </remarks>
-            <param name="permission">
+            <param name="guildPermission">
                 The <see cref="T:Discord.GuildPermission" /> that the user must have. Multiple permissions can be
                 specified by ORing the permissions together.
             </param>
@@ -778,7 +786,7 @@
             <summary>
                 Requires that the user invoking the command to have a specific <see cref="T:Discord.ChannelPermission"/>.
             </summary>
-            <param name="permission">
+            <param name="channelPermission">
                 The <see cref="T:Discord.ChannelPermission"/> that the user must have. Multiple permissions can be
                 specified by ORing the permissions together.
             </param>
@@ -1292,7 +1300,7 @@
             <summary>
                 Sets <see cref="P:Discord.Interactions.Builders.SlashCommandBuilder.DefaultPermission"/>.
             </summary>
-            <param name="defaultPermision">New value of the <see cref="P:Discord.Interactions.Builders.SlashCommandBuilder.DefaultPermission"/>.</param>
+            <param name="permission">New value of the <see cref="P:Discord.Interactions.Builders.SlashCommandBuilder.DefaultPermission"/>.</param>
             <returns>
                 The builder instance.
             </returns>
@@ -1589,7 +1597,7 @@
             <summary>
                 Sets <see cref="P:Discord.Interactions.Builders.TextInputComponentBuilder.Style"/>.
             </summary>
-            <param name="style">New value of the <see cref="!:SetValue(string)"/>.</param>
+            <param name="style">New value of the <see cref="P:Discord.Interactions.Builders.TextInputComponentBuilder.Style"/>.</param>
             <returns>
                 The builder instance.
             </returns>
@@ -1672,7 +1680,7 @@
         </member>
         <member name="M:Discord.Interactions.Builders.ModalBuilder.AddTextComponent(System.Action{Discord.Interactions.Builders.TextInputComponentBuilder})">
             <summary>
-                Adds text components to <see cref="!:TextComponents"/>.
+                Adds text components to <see cref="P:Discord.Interactions.Builders.ModalBuilder.Components"/>.
             </summary>
             <param name="configure">Text Component builder factory.</param>
             <returns>
@@ -1925,7 +1933,15 @@
                 The builder instance.
             </returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Discord.Interactions.Builders.ModuleBuilder.AddModalCommand(System.Action{Discord.Interactions.Builders.ModalCommandBuilder})" -->
+        <member name="M:Discord.Interactions.Builders.ModuleBuilder.AddModalCommand(System.Action{Discord.Interactions.Builders.ModalCommandBuilder})">
+            <summary>
+                Adds a modal command builder to <see cref="P:Discord.Interactions.Builders.ModuleBuilder.ModalCommands"/>.
+            </summary>
+            <param name="configure"><see cref="P:Discord.Interactions.Builders.ModuleBuilder.ModalCommands"/> factory.</param>
+            <returns>
+                The builder instance.
+            </returns>
+        </member>
         <member name="M:Discord.Interactions.Builders.ModuleBuilder.AddModule(System.Action{Discord.Interactions.Builders.ModuleBuilder})">
             <summary>
                 Adds sub-module builder to <see cref="P:Discord.Interactions.Builders.ModuleBuilder.SubModules"/>.
@@ -2211,7 +2227,7 @@
             <summary>
                 Adds preconditions to <see cref="P:Discord.Interactions.Builders.ParameterBuilder`2.Preconditions"/>
             </summary>
-            <param name="preconditions">New attributes to be added to <see cref="P:Discord.Interactions.Builders.ParameterBuilder`2.Preconditions"/>.</param>
+            <param name="attributes">New attributes to be added to <see cref="P:Discord.Interactions.Builders.ParameterBuilder`2.Preconditions"/>.</param>
             <returns>
                 The builder instance.
             </returns>
@@ -3355,8 +3371,7 @@
             </summary>
             <param name="client">The underlying client.</param>
             <param name="interaction">The underlying interaction.</param>
-            <param name="user"><see cref="T:Discord.IUser"/> who executed the command.</param>
-            <param name="channel"><see cref="!:ISocketMessageChannel"/> the command originated from.</param>
+            <param name="channel"><see cref="T:Discord.IMessageChannel"/> the command originated from.</param>
         </member>
         <member name="M:Discord.Interactions.InteractionContext.SetSegmentMatches(System.Collections.Generic.IEnumerable{Discord.IRouteSegmentMatch})">
             <inheritdoc/>
@@ -3397,7 +3412,7 @@
             <inheritdoc cref="M:Discord.IDiscordInteraction.DeferAsync(System.Boolean,Discord.RequestOptions)"/>
         </member>
         <member name="M:Discord.Interactions.InteractionModuleBase`1.RespondAsync(System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.RequestOptions,Discord.MessageComponent,Discord.Embed)">
-            <inheritdoc cref="!:IDiscordInteraction.RespondAsync(string, Embed[], bool, bool, AllowedMentions, RequestOptions, MessageComponent, Embed)"/>
+            <inheritdoc cref="M:Discord.IDiscordInteraction.RespondAsync(System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)"/>
         </member>
         <member name="M:Discord.Interactions.InteractionModuleBase`1.RespondWithFileAsync(System.IO.Stream,System.String,System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)">
             <inheritdoc cref="M:Discord.IDiscordInteraction.RespondWithFileAsync(System.IO.Stream,System.String,System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)"/>
@@ -3412,7 +3427,7 @@
             <inheritdoc cref="M:Discord.IDiscordInteraction.RespondWithFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)"/>
         </member>
         <member name="M:Discord.Interactions.InteractionModuleBase`1.FollowupAsync(System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.RequestOptions,Discord.MessageComponent,Discord.Embed)">
-            <inheritdoc cref="!:IDiscordInteraction.FollowupAsync(string, Embed[], bool, bool, AllowedMentions, RequestOptions, MessageComponent, Embed)"/>
+            <inheritdoc cref="M:Discord.IDiscordInteraction.FollowupAsync(System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)"/>
         </member>
         <member name="M:Discord.Interactions.InteractionModuleBase`1.FollowupWithFileAsync(System.IO.Stream,System.String,System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)">
             <inheritdoc cref="M:Discord.IDiscordInteraction.FollowupWithFileAsync(System.IO.Stream,System.String,System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)"/>
@@ -3427,7 +3442,7 @@
             <inheritdoc cref="M:Discord.IDiscordInteraction.FollowupWithFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)"/>
         </member>
         <member name="M:Discord.Interactions.InteractionModuleBase`1.ReplyAsync(System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent)">
-            <inheritdoc cref="!:IMessageChannel.SendMessageAsync(string, bool, Embed, RequestOptions, AllowedMentions, MessageReference, MessageComponent, ISticker[], Embed[])"/>
+            <inheritdoc cref="M:Discord.IMessageChannel.SendMessageAsync(System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)"/>
         </member>
         <member name="M:Discord.Interactions.InteractionModuleBase`1.GetOriginalResponseAsync(Discord.RequestOptions)">
             <inheritdoc cref="M:Discord.IDiscordInteraction.GetOriginalResponseAsync(Discord.RequestOptions)"/>
@@ -3442,7 +3457,7 @@
             <inheritdoc cref="M:Discord.IDiscordInteraction.RespondWithModalAsync(Discord.Modal,Discord.RequestOptions)"/>
         </member>
         <member name="M:Discord.Interactions.InteractionModuleBase`1.RespondWithModalAsync``1(System.String,Discord.RequestOptions)">
-            <inheritdoc cref="!:IDiscordInteractionExtentions.RespondWithModalAsync(IDiscordInteraction, IModal, RequestOptions)"/>
+            <inheritdoc cref="M:Discord.Interactions.IDiscordInteractionExtentions.RespondWithModalAsync``1(Discord.IDiscordInteraction,System.String,Discord.RequestOptions,System.Action{Discord.ModalBuilder})"/>
         </member>
         <member name="M:Discord.Interactions.InteractionModuleBase`1.Discord#Interactions#IInteractionModuleBase#SetContext(Discord.IInteractionContext)">
             <inheritdoc/>
@@ -3638,9 +3653,25 @@
             </summary>
             <remarks>
                 Commands will be registered as standalone commands, if you want the <see cref="T:Discord.Interactions.GroupAttribute"/> to take effect,
-                use <see cref="!:AddModulesToGuildAsync(IGuild, ModuleInfo[])"/>. Registering a commands without group names might cause the command traversal to fail.
+                use <see cref="M:Discord.Interactions.InteractionService.AddModulesToGuildAsync(Discord.IGuild,System.Boolean,Discord.Interactions.ModuleInfo[])"/>. Registering a commands without group names might cause the command traversal to fail.
             </remarks>
             <param name="guild">The target guild.</param>
+            <param name="deleteMissing">If <see langword="false"/>, this operation will not delete the commands that are missing from <see cref="T:Discord.Interactions.InteractionService"/>.</param>
+            <param name="commands">Commands to be registered to Discord.</param>
+            <returns>
+                A task representing the command registration process. The task result contains the active application commands of the target guild.
+            </returns>
+        </member>
+        <member name="M:Discord.Interactions.InteractionService.AddCommandsToGuildAsync(System.UInt64,System.Boolean,Discord.Interactions.ICommandInfo[])">
+            <summary>
+                Register Application Commands from <paramref name="commands"/> to a guild.
+            </summary>
+            <remarks>
+                Commands will be registered as standalone commands, if you want the <see cref="T:Discord.Interactions.GroupAttribute"/> to take effect,
+                use <see cref="M:Discord.Interactions.InteractionService.AddModulesToGuildAsync(System.UInt64,System.Boolean,Discord.Interactions.ModuleInfo[])"/>. Registering a commands without group names might cause the command traversal to fail.
+            </remarks>
+            <param name="guildId">The target guild ID.</param>
+            <param name="deleteMissing">If <see langword="false"/>, this operation will not delete the commands that are missing from <see cref="T:Discord.Interactions.InteractionService"/>.</param>
             <param name="commands">Commands to be registered to Discord.</param>
             <returns>
                 A task representing the command registration process. The task result contains the active application commands of the target guild.
@@ -3651,6 +3682,18 @@
                 Register Application Commands from modules provided in <paramref name="modules"/> to a guild.
             </summary>
             <param name="guild">The target guild.</param>
+            <param name="deleteMissing">If <see langword="false"/>, this operation will not delete the commands that are missing from <see cref="T:Discord.Interactions.InteractionService"/>.</param>
+            <param name="modules">Modules to be registered to Discord.</param>
+            <returns>
+                A task representing the command registration process. The task result contains the active application commands of the target guild.
+            </returns>
+        </member>
+        <member name="M:Discord.Interactions.InteractionService.AddModulesToGuildAsync(System.UInt64,System.Boolean,Discord.Interactions.ModuleInfo[])">
+            <summary>
+                Register Application Commands from modules provided in <paramref name="modules"/> to a guild.
+            </summary>
+            <param name="guildId">The target guild ID.</param>
+            <param name="deleteMissing">If <see langword="false"/>, this operation will not delete the commands that are missing from <see cref="T:Discord.Interactions.InteractionService"/>.</param>
             <param name="modules">Modules to be registered to Discord.</param>
             <returns>
                 A task representing the command registration process. The task result contains the active application commands of the target guild.
@@ -3660,6 +3703,7 @@
             <summary>
                 Register Application Commands from modules provided in <paramref name="modules"/> as global commands.
             </summary>
+            <param name="deleteMissing">If <see langword="false"/>, this operation will not delete the commands that are missing from <see cref="T:Discord.Interactions.InteractionService"/>.</param>
             <param name="modules">Modules to be registered to Discord.</param>
             <returns>
                 A task representing the command registration process. The task result contains the active application commands of the target guild.
@@ -3671,8 +3715,9 @@
             </summary>
             <remarks>
                 Commands will be registered as standalone commands, if you want the <see cref="T:Discord.Interactions.GroupAttribute"/> to take effect,
-                use <see cref="!:AddModulesToGuildAsync(IGuild, ModuleInfo[])"/>. Registering a commands without group names might cause the command traversal to fail.
+                use <see cref="M:Discord.Interactions.InteractionService.AddModulesToGuildAsync(Discord.IGuild,System.Boolean,Discord.Interactions.ModuleInfo[])"/>. Registering a commands without group names might cause the command traversal to fail.
             </remarks>
+            <param name="deleteMissing">If <see langword="false"/>, this operation will not delete the commands that are missing from <see cref="T:Discord.Interactions.InteractionService"/>.</param>
             <param name="commands">Commands to be registered to Discord.</param>
             <returns>
                 A task representing the command registration process. The task result contains the active application commands of the target guild.
@@ -3860,7 +3905,7 @@
                 Removes a type reader for the given type.
             </summary>
             <remarks>
-                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="!:CommandService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
+                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="T:Discord.Interactions.InteractionService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
                 You need to reload the modules for the changes to take effect.
             </remarks>
             <param name="type">The type to remove the reader from.</param>
@@ -3872,7 +3917,7 @@
                 Removes a generic type reader from the type <typeparamref name="T"/>.
             </summary>
             <remarks>
-                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="!:CommandService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
+                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="T:Discord.Interactions.InteractionService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
                 You need to reload the modules for the changes to take effect.
             </remarks>
             <typeparam name="T">The type to remove the readers from.</typeparam>
@@ -3884,7 +3929,7 @@
                 Removes a generic type reader from the given type.
             </summary>
             <remarks>
-                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="!:CommandService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
+                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="T:Discord.Interactions.InteractionService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
                 You need to reload the modules for the changes to take effect.
             </remarks>
             <param name="type">The type to remove the reader from.</param>
@@ -3896,7 +3941,7 @@
                 Serialize an object using a <see cref="T:Discord.Interactions.TypeReader"/> into a <see cref="T:System.String"/> to be placed in a Component CustomId.
             </summary>
             <remarks>
-                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="!:CommandService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
+                Removing a <see cref="T:Discord.Interactions.TypeReader"/> from the <see cref="T:Discord.Interactions.InteractionService"/> will not dereference the <see cref="T:Discord.Interactions.TypeReader"/> from the loaded module/command instances.
                 You need to reload the modules for the changes to take effect.
             </remarks>
             <typeparam name="T">Type of the object to be serialized.</typeparam>
@@ -3938,6 +3983,17 @@
                 The active command permissions after the modification.
             </returns>
         </member>
+        <member name="M:Discord.Interactions.InteractionService.ModifySlashCommandPermissionsAsync(Discord.Interactions.ModuleInfo,System.UInt64,Discord.ApplicationCommandPermission[])">
+            <summary>
+                Modify the command permissions of the matching Discord Slash Command.
+            </summary>
+            <param name="module">Module representing the top level Slash Command.</param>
+            <param name="guildId">Target guild ID.</param>
+            <param name="permissions">New permission values.</param>
+            <returns>
+                The active command permissions after the modification.
+            </returns>
+        </member>
         <member name="M:Discord.Interactions.InteractionService.ModifySlashCommandPermissionsAsync(Discord.Interactions.SlashCommandInfo,Discord.IGuild,Discord.ApplicationCommandPermission[])">
             <summary>
                 Modify the command permissions of the matching Discord Slash Command.
@@ -3949,12 +4005,34 @@
                 The active command permissions after the modification.
             </returns>
         </member>
+        <member name="M:Discord.Interactions.InteractionService.ModifySlashCommandPermissionsAsync(Discord.Interactions.SlashCommandInfo,System.UInt64,Discord.ApplicationCommandPermission[])">
+            <summary>
+                Modify the command permissions of the matching Discord Slash Command.
+            </summary>
+            <param name="command">The Slash Command.</param>
+            <param name="guildId">Target guild ID.</param>
+            <param name="permissions">New permission values.</param>
+            <returns>
+                The active command permissions after the modification.
+            </returns>
+        </member>
         <member name="M:Discord.Interactions.InteractionService.ModifyContextCommandPermissionsAsync(Discord.Interactions.ContextCommandInfo,Discord.IGuild,Discord.ApplicationCommandPermission[])">
             <summary>
                 Modify the command permissions of the matching Discord Slash Command.
             </summary>
             <param name="command">The Context Command.</param>
             <param name="guild">Target guild.</param>
+            <param name="permissions">New permission values.</param>
+            <returns>
+                The active command permissions after the modification.
+            </returns>
+        </member>
+        <member name="M:Discord.Interactions.InteractionService.ModifyContextCommandPermissionsAsync(Discord.Interactions.ContextCommandInfo,System.UInt64,Discord.ApplicationCommandPermission[])">
+            <summary>
+                Modify the command permissions of the matching Discord Slash Command.
+            </summary>
+            <param name="command">The Context Command.</param>
+            <param name="guildId">Target guild ID.</param>
             <param name="permissions">New permission values.</param>
             <returns>
                 The active command permissions after the modification.
@@ -4495,7 +4573,7 @@
         </member>
         <member name="T:Discord.Interactions.TypeConverterResult">
             <summary>
-                Represents a result type for <see cref="!:TypeConverter.ReadAsync(IInteractionContext, WebSocket.SocketSlashCommandDataOption, IServiceProvider)"/>.
+                Represents a result type for <see cref="M:Discord.Interactions.TypeConverter.ReadAsync(Discord.IInteractionContext,Discord.IApplicationCommandInteractionDataOption,System.IServiceProvider)"/>.
             </summary>
         </member>
         <member name="P:Discord.Interactions.TypeConverterResult.Value">

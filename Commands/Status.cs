@@ -38,27 +38,31 @@ namespace SocialLinker.Commands
 
             Status status_object = new Status();
 
-            if (command.MentionedUser == default)
+            switch (command.CommandType)
             {
-                if (command.Content == "")
-                {
-                    await status_object.StatusScreen(command);
-                }
-                else if (command.Content.ToLower().Contains("detail"))
-                {
-                    await status_object.StatusDetails(command);
-                }
-            }
-            else
-            {
-                if (command.Content == "")
-                {
-                    await status_object.StatusScreen(command);
-                }
-                else if (command.Content.ToLower().Contains("detail"))
-                {
-                    await status_object.StatusDetails(command);
-                }
+                case "Slash":
+                    switch (command.CommandName)
+                    {
+                        case "status":
+                            await status_object.StatusScreen(command);
+                            break;
+
+                        case "status_text":
+                            break;
+                    }
+                    break;
+
+
+                case "Context":
+                    if (command.Message.Content.ToLower().Contains("detail"))
+                    {
+                        await status_object.StatusDetails(command);
+                    }
+                    else
+                    {
+                        await status_object.StatusScreen(command);
+                    }
+                    break;
             }
         }
 

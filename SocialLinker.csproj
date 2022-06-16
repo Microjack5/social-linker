@@ -367,6 +367,7 @@
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP2IS_PS1.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP3F.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP3P.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP4D.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP4_PS2.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP4G.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5R.cs" />

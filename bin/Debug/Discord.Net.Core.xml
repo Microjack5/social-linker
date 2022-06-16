@@ -427,6 +427,16 @@
                 The maximum number of audit log entries that can be gotten per-batch.
             </returns>
         </member>
+        <member name="F:Discord.DiscordConfig.MaxStickersPerMessage">
+            <summary>
+                Returns the max number of stickers that can be sent with a message.
+            </summary>
+        </member>
+        <member name="F:Discord.DiscordConfig.MaxEmbedsPerMessage">
+            <summary>
+                Returns the max number of embeds that can be sent with a message.
+            </summary>
+        </member>
         <member name="P:Discord.DiscordConfig.DefaultRetryMode">
             <summary>
                 Gets or sets how a request should act in the case of an error, by default.
@@ -1414,6 +1424,9 @@
         <member name="F:Discord.ChannelType.GuildDirectory">
             <summary> The channel is a guild directory used in hub servers. (Unreleased)</summary>
         </member>
+        <member name="F:Discord.ChannelType.Forum">
+            <summary> The channel is a forum channel containing multiple threads. </summary>
+        </member>
         <member name="T:Discord.Direction">
             <summary>
                 Specifies the direction of where entities (e.g. bans/messages) should be retrieved from.
@@ -1597,6 +1610,198 @@
             <param name="options">The options to be used when sending the request.</param>
             <returns>
                 A task that represents the asynchronous close operation.
+            </returns>
+        </member>
+        <member name="P:Discord.IForumChannel.IsNsfw">
+            <summary>
+                Gets a value that indicates whether the channel is NSFW.
+            </summary>
+            <returns>
+                <c>true</c> if the channel has the NSFW flag enabled; otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="P:Discord.IForumChannel.Topic">
+            <summary>
+                Gets the current topic for this text channel.
+            </summary>
+            <returns>
+                A string representing the topic set in the channel; <c>null</c> if none is set.
+            </returns>
+        </member>
+        <member name="P:Discord.IForumChannel.DefaultAutoArchiveDuration">
+            <summary>
+                Gets the default archive duration for a newly created post.
+            </summary>
+        </member>
+        <member name="P:Discord.IForumChannel.Tags">
+            <summary>
+                Gets a collection of tags inside of this forum channel.
+            </summary>
+        </member>
+        <member name="M:Discord.IForumChannel.CreatePostAsync(System.String,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <summary>
+                Creates a new post (thread) within the forum.
+            </summary>
+            <param name="title">The title of the post.</param>
+            <param name="archiveDuration">The archive duration of the post.</param>
+            <param name="slowmode">The slowmode for the posts thread.</param>
+            <param name="text">The message to be sent.</param>
+            <param name="embed">The <see cref="F:Discord.EmbedType.Rich"/> <see cref="T:Discord.Embed"/> to be sent.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <param name="allowedMentions">
+                Specifies if notifications are sent for mentioned users and roles in the message <paramref name="text"/>.
+                If <c>null</c>, all mentioned roles and users will be notified.
+            </param>
+            <param name="components">The message components to be included with this message. Used for interactions.</param>
+            <param name="stickers">A collection of stickers to send with the message.</param>
+            <param name="embeds">A array of <see cref="T:Discord.Embed"/>s to send with this response. Max 10.</param>
+            <param name="flags">A message flag to be applied to the sent message, only <see cref="F:Discord.MessageFlags.SuppressEmbeds"/> is permitted.</param>
+            <returns>
+                A task that represents the asynchronous creation operation.
+            </returns>
+        </member>
+        <member name="M:Discord.IForumChannel.CreatePostWithFileAsync(System.String,System.String,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <summary>
+                Creates a new post (thread) within the forum.
+            </summary>
+            <param name="title">The title of the post.</param>
+            <param name="archiveDuration">The archive duration of the post.</param>
+            <param name="slowmode">The slowmode for the posts thread.</param>
+            <param name="filePath">The file path of the file.</param>
+            <param name="text">The message to be sent.</param>
+            <param name="embed">The <see cref="F:Discord.EmbedType.Rich" /> <see cref="T:Discord.Embed" /> to be sent.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <param name="isSpoiler">Whether the message attachment should be hidden as a spoiler.</param>
+            <param name="allowedMentions">
+                Specifies if notifications are sent for mentioned users and roles in the message <paramref name="text"/>.
+                If <c>null</c>, all mentioned roles and users will be notified.
+            </param>
+            <param name="components">The message components to be included with this message. Used for interactions.</param>
+            <param name="stickers">A collection of stickers to send with the file.</param>
+            <param name="embeds">A array of <see cref="T:Discord.Embed"/>s to send with this response. Max 10.</param>
+            <param name="flags">A message flag to be applied to the sent message, only <see cref="F:Discord.MessageFlags.SuppressEmbeds"/> is permitted.</param>
+            <returns>
+                A task that represents the asynchronous creation operation.
+            </returns>
+        </member>
+        <member name="M:Discord.IForumChannel.CreatePostWithFileAsync(System.String,System.IO.Stream,System.String,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <summary>
+                Creates a new post (thread) within the forum.
+            </summary>
+            <param name="title">The title of the post.</param>
+            <param name="stream">The <see cref="T:System.IO.Stream" /> of the file to be sent.</param>
+            <param name="filename">The name of the attachment.</param>
+            <param name="archiveDuration">The archive duration of the post.</param>
+            <param name="slowmode">The slowmode for the posts thread.</param>
+            <param name="text">The message to be sent.</param>
+            <param name="embed">The <see cref="F:Discord.EmbedType.Rich"/> <see cref="T:Discord.Embed"/> to be sent.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <param name="isSpoiler">Whether the message attachment should be hidden as a spoiler.</param>
+            <param name="allowedMentions">
+                Specifies if notifications are sent for mentioned users and roles in the message <paramref name="text"/>.
+                If <c>null</c>, all mentioned roles and users will be notified.
+            </param>
+            <param name="components">The message components to be included with this message. Used for interactions.</param>
+            <param name="stickers">A collection of stickers to send with the file.</param>
+            <param name="embeds">A array of <see cref="T:Discord.Embed"/>s to send with this response. Max 10.</param>
+            <param name="flags">A message flag to be applied to the sent message, only <see cref="F:Discord.MessageFlags.SuppressEmbeds"/> is permitted.</param>
+            <returns>
+                A task that represents the asynchronous creation operation.
+            </returns>
+        </member>
+        <member name="M:Discord.IForumChannel.CreatePostWithFileAsync(System.String,Discord.FileAttachment,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <summary>
+                Creates a new post (thread) within the forum.
+            </summary>
+            <param name="title">The title of the post.</param>
+            <param name="attachment">The attachment containing the file and description.</param>
+            <param name="archiveDuration">The archive duration of the post.</param>
+            <param name="slowmode">The slowmode for the posts thread.</param>
+            <param name="text">The message to be sent.</param>
+            <param name="embed">The <see cref="F:Discord.EmbedType.Rich"/> <see cref="T:Discord.Embed"/> to be sent.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <param name="allowedMentions">
+                Specifies if notifications are sent for mentioned users and roles in the message <paramref name="text"/>.
+                If <c>null</c>, all mentioned roles and users will be notified.
+            </param>
+            <param name="components">The message components to be included with this message. Used for interactions.</param>
+            <param name="stickers">A collection of stickers to send with the file.</param>
+            <param name="embeds">A array of <see cref="T:Discord.Embed"/>s to send with this response. Max 10.</param>
+            <param name="flags">A message flag to be applied to the sent message, only <see cref="F:Discord.MessageFlags.SuppressEmbeds"/> is permitted.</param>
+            <returns>
+                A task that represents the asynchronous creation operation.
+            </returns>
+        </member>
+        <member name="M:Discord.IForumChannel.CreatePostWithFilesAsync(System.String,System.Collections.Generic.IEnumerable{Discord.FileAttachment},Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <summary>
+                Creates a new post (thread) within the forum.
+            </summary>
+            <param name="title">The title of the post.</param>
+            <param name="attachments">A collection of attachments to upload.</param>
+            <param name="archiveDuration">The archive duration of the post.</param>
+            <param name="slowmode">The slowmode for the posts thread.</param>
+            <param name="text">The message to be sent.</param>
+            <param name="embed">The <see cref="F:Discord.EmbedType.Rich"/> <see cref="T:Discord.Embed"/> to be sent.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <param name="allowedMentions">
+                Specifies if notifications are sent for mentioned users and roles in the message <paramref name="text"/>.
+                If <c>null</c>, all mentioned roles and users will be notified.
+            </param>
+            <param name="components">The message components to be included with this message. Used for interactions.</param>
+            <param name="stickers">A collection of stickers to send with the file.</param>
+            <param name="embeds">A array of <see cref="T:Discord.Embed"/>s to send with this response. Max 10.</param>
+            <param name="flags">A message flag to be applied to the sent message, only <see cref="F:Discord.MessageFlags.SuppressEmbeds"/> is permitted.</param>
+            <returns>
+                A task that represents the asynchronous creation operation.
+            </returns>
+        </member>
+        <member name="M:Discord.IForumChannel.GetActiveThreadsAsync(Discord.RequestOptions)">
+            <summary>
+                Gets a collection of active threads within this forum channel.
+            </summary>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents an asynchronous get operation for retrieving the threads. The task result contains
+                a collection of active threads.
+            </returns>
+        </member>
+        <member name="M:Discord.IForumChannel.GetPublicArchivedThreadsAsync(System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},Discord.RequestOptions)">
+            <summary>
+                Gets a collection of publicly archived threads within this forum channel.
+            </summary>
+            <param name="limit">The optional limit of how many to get.</param>
+            <param name="before">The optional date to return threads created before this timestamp.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents an asynchronous get operation for retrieving the threads. The task result contains
+                a collection of publicly archived threads.
+            </returns>
+        </member>
+        <member name="M:Discord.IForumChannel.GetPrivateArchivedThreadsAsync(System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},Discord.RequestOptions)">
+            <summary>
+                Gets a collection of privately archived threads within this forum channel.
+            </summary>
+            <remarks>
+                The bot requires the <see cref="F:Discord.GuildPermission.ManageThreads"/> permission in order to execute this request.
+            </remarks>
+            <param name="limit">The optional limit of how many to get.</param>
+            <param name="before">The optional date to return threads created before this timestamp.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents an asynchronous get operation for retrieving the threads. The task result contains
+                a collection of privately archived threads.
+            </returns>
+        </member>
+        <member name="M:Discord.IForumChannel.GetJoinedPrivateArchivedThreadsAsync(System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},Discord.RequestOptions)">
+            <summary>
+                Gets a collection of privately archived threads that the current bot has joined within this forum channel.
+            </summary>
+            <param name="limit">The optional limit of how many to get.</param>
+            <param name="before">The optional date to return threads created before this timestamp.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents an asynchronous get operation for retrieving the threads. The task result contains
+                a collection of privately archived threads.
             </returns>
         </member>
         <member name="T:Discord.IGroupChannel">
@@ -2423,6 +2628,17 @@
                 message; <c>0</c> if disabled.
             </returns>
         </member>
+        <member name="P:Discord.ITextChannel.DefaultArchiveDuration">
+            <summary>
+                Gets the default auto-archive duration for client-created threads in this channel.
+            </summary>
+            <remarks>
+                The value of this property does not affect API thread creation, it will not respect this value.
+            </remarks>
+            <returns>
+                The default auto-archive duration for thread creation in this channel.
+            </returns>
+        </member>
         <member name="M:Discord.ITextChannel.DeleteMessagesAsync(System.Collections.Generic.IEnumerable{Discord.IMessage},Discord.RequestOptions)">
             <summary>
                 Bulk-deletes multiple messages.
@@ -3028,6 +3244,26 @@
             <returns>
                 A string representing the display name or the Unicode representation (e.g. <c>🤔</c>) of this emote.
             </returns>
+        </member>
+        <member name="T:Discord.ForumTag">
+            <summary>
+                A struct representing a forum channel tag.
+            </summary>
+        </member>
+        <member name="P:Discord.ForumTag.Id">
+            <summary>
+                Gets the Id of the tag.
+            </summary>
+        </member>
+        <member name="P:Discord.ForumTag.Name">
+            <summary>
+                Gets the name of the tag.
+            </summary>
+        </member>
+        <member name="P:Discord.ForumTag.Emoji">
+            <summary>
+                Gets the emoji of the tag or <see langword="null"/> if none is set.
+            </summary>
         </member>
         <member name="T:Discord.BotGateway">
             <summary>
@@ -4952,7 +5188,6 @@
                 in order to use this property.
                 </remarks>
             </param>
-            <param name="speakers">A collection of speakers for the event.</param>
             <param name="location">The location of the event; links are supported</param>
             <param name="coverImage">The optional banner image for the event.</param>
             <param name="options">The options to be used when sending the request.</param>
@@ -5081,7 +5316,14 @@
                 Gets the user count of the event.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Discord.IGuildScheduledEvent.GetCoverImageUrl(Discord.ImageFormat,System.UInt16)" -->
+        <member name="M:Discord.IGuildScheduledEvent.GetCoverImageUrl(Discord.ImageFormat,System.UInt16)">
+            <summary>
+                Gets this events banner image url.
+            </summary>
+            <param name="format">The format to return.</param>
+            <param name="size">The size of the image to return in. This can be any power of two between 16 and 2048.</param>
+            <returns>The cover images url.</returns>
+        </member>
         <member name="M:Discord.IGuildScheduledEvent.StartAsync(Discord.RequestOptions)">
             <summary>
                 Starts the event.
@@ -5859,7 +6101,7 @@
         </member>
         <member name="F:Discord.ApplicationCommandOptionType.Attachment">
             <summary>
-                A <see cref="!:Discord.Attachment"/>.
+                A <see cref="T:Discord.IAttachment"/>.
             </summary>
         </member>
         <member name="T:Discord.ApplicationCommandProperties">
@@ -6403,10 +6645,13 @@
             <summary>
                 Gets the preferred locale of the invoking User.
             </summary>
+            <remarks>
+                This property returns <see langword="null"/> if the interaction is a REST ping interaction.
+            </remarks>
         </member>
         <member name="P:Discord.IDiscordInteraction.GuildLocale">
             <summary>
-                Gets the preferred locale of the guild this interaction was executed in. <see cref="!:null"/> if not executed in a guild.
+                Gets the preferred locale of the guild this interaction was executed in. <see langword="null"/> if not executed in a guild.
             </summary>
             <remarks>
                 Non-community guilds (With no locale setting available) will have en-US as the default value sent by Discord.
@@ -6415,6 +6660,27 @@
         <member name="P:Discord.IDiscordInteraction.IsDMInteraction">
             <summary>
                 Gets whether or not this interaction was executed in a dm channel.
+            </summary>
+        </member>
+        <member name="P:Discord.IDiscordInteraction.ChannelId">
+            <summary>
+                Gets the ID of the channel this interaction was executed in.
+            </summary>
+            <remarks>
+                This property returns <see langword="null"/> if the interaction is a REST ping interaction.
+            </remarks>
+        </member>
+        <member name="P:Discord.IDiscordInteraction.GuildId">
+            <summary>
+                Gets the ID of the guild this interaction was executed in.
+            </summary>
+            <remarks>
+                This property returns <see langword="null"/> if the interaction was not executed in a guild.
+            </remarks>
+        </member>
+        <member name="P:Discord.IDiscordInteraction.ApplicationId">
+            <summary>
+                Gets the ID of the application this interaction is for.
             </summary>
         </member>
         <member name="M:Discord.IDiscordInteraction.RespondAsync(System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)">
@@ -6895,7 +7161,7 @@
             </summary>
             <param name="button">The button to add.</param>
             <param name="row">The row to add the button.</param>
-            <exception cref="T:System.InvalidOperationException">There is no more row to add a menu.</exception>
+            <exception cref="T:System.InvalidOperationException">There is no more row to add a button.</exception>
             <exception cref="T:System.ArgumentException"><paramref name="row"/> must be less than <see cref="F:Discord.ComponentBuilder.MaxActionRowCount"/>.</exception>
             <returns>The current builder.</returns>
         </member>
@@ -6952,6 +7218,47 @@
             </summary>
             <param name="component">The component to add.</param>
             <exception cref="T:System.InvalidOperationException">Components count reached <see cref="F:Discord.ActionRowBuilder.MaxChildCount"/></exception>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.ActionRowBuilder.WithSelectMenu(System.String,System.Collections.Generic.List{Discord.SelectMenuOptionBuilder},System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+                Adds a <see cref="T:Discord.SelectMenuBuilder"/> to the <see cref="T:Discord.ActionRowBuilder"/>.
+            </summary>
+            <param name="customId">The custom id of the menu.</param>
+            <param name="options">The options of the menu.</param>
+            <param name="placeholder">The placeholder of the menu.</param>
+            <param name="minValues">The min values of the placeholder.</param>
+            <param name="maxValues">The max values of the placeholder.</param>
+            <param name="disabled">Whether or not the menu is disabled.</param>
+            <returns>The current builder.</returns> 
+        </member>
+        <member name="M:Discord.ActionRowBuilder.WithSelectMenu(Discord.SelectMenuBuilder)">
+            <summary>
+                Adds a <see cref="T:Discord.SelectMenuBuilder"/> to the <see cref="T:Discord.ActionRowBuilder"/>.
+            </summary>
+            <param name="menu">The menu to add.</param>
+            <exception cref="T:System.InvalidOperationException">A Select Menu cannot exist in a pre-occupied ActionRow.</exception>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.ActionRowBuilder.WithButton(System.String,System.String,Discord.ButtonStyle,Discord.IEmote,System.String,System.Boolean)">
+            <summary>
+                Adds a <see cref="T:Discord.ButtonBuilder"/> with specified parameters to the <see cref="T:Discord.ActionRowBuilder"/>.
+            </summary>
+            <param name="label">The label text for the newly added button.</param>
+            <param name="style">The style of this newly added button.</param>
+            <param name="emote">A <see cref="T:Discord.IEmote"/> to be used with this button.</param>
+            <param name="customId">The custom id of the newly added button.</param>
+            <param name="url">A URL to be used only if the <see cref="T:Discord.ButtonStyle"/> is a Link.</param>
+            <param name="disabled">Whether or not the newly created button is disabled.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.ActionRowBuilder.WithButton(Discord.ButtonBuilder)">
+            <summary>
+                Adds a <see cref="T:Discord.ButtonBuilder"/> to the <see cref="T:Discord.ActionRowBuilder"/>.
+            </summary>
+            <param name="button">The button to add.</param>
+            <exception cref="T:System.InvalidOperationException">Components count reached <see cref="F:Discord.ActionRowBuilder.MaxChildCount"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">A button cannot be added to a row with a SelectMenu.</exception>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Discord.ActionRowBuilder.Build">
@@ -7466,9 +7773,9 @@
             <summary>
                 Gets or sets the default value of the text input.
             </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException"><see cref="!:Value.Length"/> is less than 0.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><see cref="P:Discord.TextInputBuilder.Value"/>.Length is less than 0.</exception>
             <exception cref="T:System.ArgumentOutOfRangeException">
-                <see cref="!:Value.Length"/> is greater than <see cref="F:Discord.TextInputBuilder.LargestMaxLength"/> or <see cref="P:Discord.TextInputBuilder.MaxLength"/>.
+                <see cref="P:Discord.TextInputBuilder.Value"/>.Length is greater than <see cref="F:Discord.TextInputBuilder.LargestMaxLength"/> or <see cref="P:Discord.TextInputBuilder.MaxLength"/>.
             </exception>
         </member>
         <member name="M:Discord.TextInputBuilder.#ctor(System.String,System.String,Discord.TextInputStyle,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Boolean},System.String)">
@@ -7527,14 +7834,14 @@
             <summary>
                 Sets the minimum length of the current builder.
             </summary>
-            <param name="placeholder">The value to set.</param>
+            <param name="minLength">The value to set.</param>
             <returns>The current builder. </returns>
         </member>
         <member name="M:Discord.TextInputBuilder.WithMaxLength(System.Int32)">
             <summary>
                 Sets the maximum length of the current builder.
             </summary>
-            <param name="placeholder">The value to set.</param>
+            <param name="maxLength">The value to set.</param>
             <returns>The current builder. </returns>
         </member>
         <member name="M:Discord.TextInputBuilder.WithRequired(System.Boolean)">
@@ -7871,14 +8178,14 @@
             <summary>
                 Sets the custom id of the current modal.
             </summary>
-            <param name="title">The value to set the custom id to.</param>
+            <param name="customId">The value to set the custom id to.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Discord.ModalBuilder.AddTextInput(Discord.TextInputBuilder)">
             <summary>
                 Adds a component to the current builder.
             </summary>
-            <param name="title">The component to add.</param>
+            <param name="component">The component to add.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Discord.ModalBuilder.AddTextInput(System.String,System.String,Discord.TextInputStyle,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Boolean},System.String)">
@@ -7951,7 +8258,17 @@
             <param name="style">The input's style.</param>
             <returns>The current builder.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Discord.ModalComponentBuilder.WithTextInput(Discord.TextInputBuilder,System.Int32)" -->
+        <member name="M:Discord.ModalComponentBuilder.WithTextInput(Discord.TextInputBuilder,System.Int32)">
+            <summary>
+                Adds a <see cref="T:Discord.TextInputBuilder"/> to the <see cref="T:Discord.ModalComponentBuilder"/> at the specific row.
+                If the row cannot accept the component then it will add it to a row that can.
+            </summary>
+            <param name="text">The <see cref="T:Discord.TextInputBuilder"/> to add.</param>
+            <param name="row">The row to add the text input.</param>
+            <exception cref="T:System.InvalidOperationException">There are no more rows to add a text input to.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="row"/> must be less than <see cref="F:Discord.ModalComponentBuilder.MaxActionRowCount"/>.</exception>
+            <returns>The current builder.</returns>
+        </member>
         <member name="M:Discord.ModalComponentBuilder.Build">
             <summary>
                 Get a <see cref="T:Discord.ModalComponent"/> representing the builder.
@@ -8245,6 +8562,13 @@
                 Adds a sub option to the current option.
             </summary>
             <param name="option">The sub option to add.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.SlashCommandOptionBuilder.AddOptions(Discord.SlashCommandOptionBuilder[])">
+            <summary>
+                Adds a collection of options to the current option.
+            </summary>
+            <param name="options">The collection of options to add.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Discord.SlashCommandOptionBuilder.AddChoice(System.String,System.Int32)">
@@ -8845,6 +9169,22 @@
                 The combined length of <see cref="P:Discord.EmbedBuilder.Title"/>, <see cref="P:Discord.EmbedAuthor.Name"/>, <see cref="P:Discord.EmbedBuilder.Description"/>,
                 <see cref="P:Discord.EmbedFooter.Text"/>, <see cref="P:Discord.EmbedField.Name"/>, and <see cref="P:Discord.EmbedField.Value"/>.
             </returns>
+        </member>
+        <member name="M:Discord.EmbedBuilder.TryParse(System.String,Discord.EmbedBuilder@)">
+            <summary>
+                Tries to parse a string into an <see cref="T:Discord.EmbedBuilder"/>. 
+            </summary>
+            <param name="json">The json string to parse.</param>
+            <param name="builder">The <see cref="T:Discord.EmbedBuilder"/> with populated values. An empty instance if method returns <see langword="false"/>.</param>
+            <returns><see langword="true"/> if <paramref name="json"/> was succesfully parsed. <see langword="false"/> if not.</returns>
+        </member>
+        <member name="M:Discord.EmbedBuilder.Parse(System.String)">
+            <summary>
+                Parses a string into an <see cref="T:Discord.EmbedBuilder"/>.
+            </summary>
+            <param name="json">The json string to parse.</param>
+            <returns>An <see cref="T:Discord.EmbedBuilder"/> with populated values from the passed <paramref name="json"/>.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if the string passed is not valid json.</exception>
         </member>
         <member name="M:Discord.EmbedBuilder.WithTitle(System.String)">
             <summary>
@@ -10411,7 +10751,13 @@
                 Gets the Guild ID of the original message.
             </summary>
         </member>
-        <member name="M:Discord.MessageReference.#ctor(System.Nullable{System.UInt64},System.Nullable{System.UInt64},System.Nullable{System.UInt64})">
+        <member name="P:Discord.MessageReference.FailIfNotExists">
+            <summary>
+                Gets whether to error if the referenced message doesn't exist instead of sending as a normal (non-reply) message
+                Defaults to true.
+            </summary>
+        </member>
+        <member name="M:Discord.MessageReference.#ctor(System.Nullable{System.UInt64},System.Nullable{System.UInt64},System.Nullable{System.UInt64},System.Nullable{System.Boolean})">
             <summary>
                 Initializes a new instance of the <see cref="T:Discord.MessageReference"/> class.
             </summary>
@@ -10423,6 +10769,9 @@
             </param>
             <param name="guildId">
                 The ID of the guild that will be referenced. It will be validated if sent.
+            </param>
+            <param name="failIfNotExists">
+                Whether to error if the referenced message doesn't exist instead of sending as a normal (non-reply) message. Defaults to true.
             </param>
         </member>
         <member name="T:Discord.MessageSource">
@@ -10985,29 +11334,47 @@
             </summary>
         </member>
         <member name="F:Discord.ChannelPermissions.None">
-            <summary> Gets a blank <see cref="T:Discord.ChannelPermissions"/> that grants no permissions.</summary>
-            <returns> A <see cref="T:Discord.ChannelPermissions"/> structure that does not contain any set permissions.</returns>
+            <summary>
+                Gets a blank <see cref="T:Discord.ChannelPermissions"/> that grants no permissions.
+            </summary>
+            <returns>
+                A <see cref="T:Discord.ChannelPermissions"/> structure that does not contain any set permissions.
+            </returns>
         </member>
         <member name="F:Discord.ChannelPermissions.Text">
-            <summary> Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for text channels.</summary>
+            <summary>
+                Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for text channels.
+            </summary>
         </member>
         <member name="F:Discord.ChannelPermissions.Voice">
-            <summary> Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for voice channels.</summary>
+            <summary>
+                Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for voice channels.
+            </summary>
         </member>
         <member name="F:Discord.ChannelPermissions.Stage">
-            <summary> Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for stage channels.</summary>
+            <summary>
+                Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for stage channels.
+            </summary>
         </member>
         <member name="F:Discord.ChannelPermissions.Category">
-            <summary> Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for category channels.</summary>
+            <summary>
+                Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for category channels.
+            </summary>
         </member>
         <member name="F:Discord.ChannelPermissions.DM">
-            <summary> Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for direct message channels.</summary>
+            <summary>
+                Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for direct message channels.
+            </summary>
         </member>
         <member name="F:Discord.ChannelPermissions.Group">
-            <summary> Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for group channels.</summary>
+            <summary>
+                Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for group channels.
+            </summary>
         </member>
         <member name="M:Discord.ChannelPermissions.All(Discord.IChannel)">
-            <summary> Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for a given channel type.</summary>
+            <summary>
+                Gets a <see cref="T:Discord.ChannelPermissions"/> that grants all permissions for a given channel type.
+            </summary>
             <exception cref="T:System.ArgumentException">Unknown channel type.</exception>
         </member>
         <member name="P:Discord.ChannelPermissions.RawValue">
@@ -12632,7 +12999,7 @@
                 Sets a timestamp how long a user should be timed out for.
             </summary>
             <remarks>
-                <see cref="!:null"/> or a time in the past to clear a currently existing timeout.
+                <see langword="null"/> or a time in the past to clear a currently existing timeout.
             </remarks>
         </member>
         <member name="P:Discord.IConnection.Id">
@@ -12806,7 +13173,7 @@
                 Gets the date and time that indicates if and for how long a user has been timed out.
             </summary>
             <remarks>
-                <see cref="!:null"/> or a timestamp in the past if the user is not timed out.
+                <see langword="null"/> or a timestamp in the past if the user is not timed out.
             </remarks>
             <returns>
                 A <see cref="T:System.DateTimeOffset"/> indicating how long the user will be timed out for.
@@ -12818,7 +13185,7 @@
             </summary>
             <example>
                 <para>The following example checks if the current user has the ability to send a message with attachment in
-                this channel; if so, uploads a file via <see cref="!:IMessageChannel.SendFileAsync(string, string, bool, Embed, RequestOptions, bool, AllowedMentions, MessageReference)"/>.</para>
+                this channel; if so, uploads a file via <see cref="M:Discord.IMessageChannel.SendFileAsync(System.String,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)"/>.</para>
             <code language="cs">
                 if (currentUser?.GetPermissions(targetChannel)?.AttachFiles)
                     await targetChannel.SendFileAsync("fortnite.png");
@@ -12845,7 +13212,20 @@
                 A string representing the user's avatar URL; <see langword="null"/> if the user does not have an avatar in place.
             </returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Discord.IGuildUser.GetDisplayAvatarUrl(Discord.ImageFormat,System.UInt16)" -->
+        <member name="M:Discord.IGuildUser.GetDisplayAvatarUrl(Discord.ImageFormat,System.UInt16)">
+            <summary>
+                Gets the display avatar URL for this user.
+            </summary>
+            <remarks>
+                This property retrieves an URL for this guild user's displayed avatar.
+                If the user does not have a guild avatar, this will be the user's regular avatar.
+            </remarks>
+            <param name="format">The format to return.</param>
+            <param name="size">The size of the image to return in. This can be any power of two between 16 and 2048.</param>
+            <returns>
+                A string representing the URL of the displayed avatar for this user. <see langword="null"/> if the user does not have an avatar in place.
+            </returns>
+        </member>
         <member name="M:Discord.IGuildUser.KickAsync(System.String,Discord.RequestOptions)">
             <summary>
                 Kicks this user from this guild.
@@ -15515,7 +15895,7 @@
         <member name="M:Discord.Utils.UrlValidation.ValidateButton(System.String)">
             <summary>
                 Not full URL validation right now. Just Ensures the protocol is either http, https, or discord
-            <see cref="!:Validate(string)"/> should be used everything other than url buttons.
+            <see cref="M:Discord.Utils.UrlValidation.Validate(System.String,System.Boolean)"/> should be used everything other than url buttons.
             </summary>
             <param name="url">The URL to validate before sending to discord.</param>
             <exception cref="T:System.InvalidOperationException">A URL must include a protocol (either http, https, or discord).</exception>

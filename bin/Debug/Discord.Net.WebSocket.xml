@@ -2004,6 +2004,53 @@
         <member name="M:Discord.WebSocket.SocketDMChannel.Discord#IChannel#GetUsersAsync(Discord.CacheMode,Discord.RequestOptions)">
             <inheritdoc />
         </member>
+        <member name="T:Discord.WebSocket.SocketForumChannel">
+            <summary>
+                Represents a forum channel in a guild.
+            </summary>
+        </member>
+        <member name="P:Discord.WebSocket.SocketForumChannel.IsNsfw">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketForumChannel.Topic">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketForumChannel.DefaultAutoArchiveDuration">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketForumChannel.Tags">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketForumChannel.Mention">
+            <inheritdoc/>
+        </member>
+        <member name="M:Discord.WebSocket.SocketForumChannel.CreatePostAsync(System.String,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc cref="M:Discord.IForumChannel.CreatePostAsync(System.String,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)"/>
+        </member>
+        <member name="M:Discord.WebSocket.SocketForumChannel.CreatePostWithFileAsync(System.String,System.String,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc cref="M:Discord.IForumChannel.CreatePostWithFileAsync(System.String,System.String,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)"/>
+        </member>
+        <member name="M:Discord.WebSocket.SocketForumChannel.CreatePostWithFileAsync(System.String,System.IO.Stream,System.String,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc cref="M:Discord.IForumChannel.CreatePostWithFileAsync(System.String,System.IO.Stream,System.String,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)"/>
+        </member>
+        <member name="M:Discord.WebSocket.SocketForumChannel.CreatePostWithFileAsync(System.String,Discord.FileAttachment,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc cref="M:Discord.IForumChannel.CreatePostWithFileAsync(System.String,Discord.FileAttachment,Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)"/>
+        </member>
+        <member name="M:Discord.WebSocket.SocketForumChannel.CreatePostWithFilesAsync(System.String,System.Collections.Generic.IEnumerable{Discord.FileAttachment},Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc cref="M:Discord.IForumChannel.CreatePostWithFilesAsync(System.String,System.Collections.Generic.IEnumerable{Discord.FileAttachment},Discord.ThreadArchiveDuration,System.Nullable{System.Int32},System.String,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)"/>
+        </member>
+        <member name="M:Discord.WebSocket.SocketForumChannel.GetActiveThreadsAsync(Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IForumChannel.GetActiveThreadsAsync(Discord.RequestOptions)"/>
+        </member>
+        <member name="M:Discord.WebSocket.SocketForumChannel.GetJoinedPrivateArchivedThreadsAsync(System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IForumChannel.GetJoinedPrivateArchivedThreadsAsync(System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},Discord.RequestOptions)"/>
+        </member>
+        <member name="M:Discord.WebSocket.SocketForumChannel.GetPrivateArchivedThreadsAsync(System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IForumChannel.GetPrivateArchivedThreadsAsync(System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},Discord.RequestOptions)"/>
+        </member>
+        <member name="M:Discord.WebSocket.SocketForumChannel.GetPublicArchivedThreadsAsync(System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},Discord.RequestOptions)">
+            <inheritdoc cref="M:Discord.IForumChannel.GetPublicArchivedThreadsAsync(System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},Discord.RequestOptions)"/>
+        </member>
         <member name="T:Discord.WebSocket.SocketGroupChannel">
             <summary>
                 Represents a WebSocket-based private group channel.
@@ -2362,6 +2409,9 @@
         <member name="M:Discord.WebSocket.SocketGuildChannel.Discord#IGuildChannel#GetUserAsync(System.UInt64,Discord.CacheMode,Discord.RequestOptions)">
             <inheritdoc />
         </member>
+        <member name="P:Discord.WebSocket.SocketGuildChannel.Discord#IChannel#Name">
+            <inheritdoc />
+        </member>
         <member name="M:Discord.WebSocket.SocketGuildChannel.Discord#IChannel#GetUsersAsync(Discord.CacheMode,Discord.RequestOptions)">
             <inheritdoc />
         </member>
@@ -2391,8 +2441,11 @@
                 Represents a stage channel received over the gateway.
             </summary>
         </member>
-        <member name="P:Discord.WebSocket.SocketStageChannel.Topic">
+        <member name="P:Discord.WebSocket.SocketStageChannel.IsTextInVoice">
             <inheritdoc/>
+            <remarks>
+                This field is always false for stage channels.
+            </remarks>
         </member>
         <member name="P:Discord.WebSocket.SocketStageChannel.PrivacyLevel">
             <inheritdoc/>
@@ -2463,6 +2516,9 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketTextChannel.IsNsfw">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.WebSocket.SocketTextChannel.DefaultArchiveDuration">
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketTextChannel.Mention">
@@ -2944,6 +3000,16 @@
                 Represents a WebSocket-based voice channel in a guild.
             </summary>
         </member>
+        <member name="P:Discord.WebSocket.SocketVoiceChannel.IsTextInVoice">
+            <summary>
+                Gets whether or not the guild has Text-In-Voice enabled and the voice channel is a TiV channel.
+            </summary>
+            <remarks>
+                Discord currently doesn't have a way to disable Text-In-Voice yet so this field is always
+                <see langword="true"/> on <see cref="T:Discord.WebSocket.SocketVoiceChannel"/>s and <see langword="false"/> on
+                <see cref="T:Discord.WebSocket.SocketStageChannel"/>s.
+            </remarks>
+        </member>
         <member name="P:Discord.WebSocket.SocketVoiceChannel.Bitrate">
             <inheritdoc />
         </member>
@@ -2951,26 +3017,9 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketVoiceChannel.RTCRegion">
-            <inheritdoc/>
-        </member>
-        <member name="P:Discord.WebSocket.SocketVoiceChannel.CategoryId">
             <inheritdoc />
         </member>
-        <member name="P:Discord.WebSocket.SocketVoiceChannel.Category">
-            <summary>
-                Gets the parent (category) channel of this channel.
-            </summary>
-            <returns>
-                A category channel representing the parent of this channel; <c>null</c> if none is set.
-            </returns>
-        </member>
-        <member name="P:Discord.WebSocket.SocketVoiceChannel.Mention">
-            <inheritdoc />
-        </member>
-        <member name="M:Discord.WebSocket.SocketVoiceChannel.SyncPermissionsAsync(Discord.RequestOptions)">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketVoiceChannel.Users">
+        <member name="P:Discord.WebSocket.SocketVoiceChannel.ConnectedUsers">
             <summary>
                 Gets a collection of users that are currently connected to this voice channel.
             </summary>
@@ -2996,20 +3045,83 @@
         <member name="M:Discord.WebSocket.SocketVoiceChannel.GetUser(System.UInt64)">
             <inheritdoc />
         </member>
-        <member name="M:Discord.WebSocket.SocketVoiceChannel.CreateInviteAsync(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Boolean,System.Boolean,Discord.RequestOptions)">
-            <inheritdoc />
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.CreateThreadAsync(System.String,Discord.ThreadType,Discord.ThreadArchiveDuration,Discord.IMessage,System.Nullable{System.Boolean},System.Nullable{System.Int32},Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.InvalidOperationException">Cannot create threads in voice channels.</exception>
         </member>
-        <member name="M:Discord.WebSocket.SocketVoiceChannel.CreateInviteToApplicationAsync(System.UInt64,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Boolean,System.Boolean,Discord.RequestOptions)">
-            <inheritdoc />
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.ModifyAsync(System.Action{Discord.TextChannelProperties},Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.InvalidOperationException">Cannot modify text channel properties for voice channels.</exception>
         </member>
-        <member name="M:Discord.WebSocket.SocketVoiceChannel.CreateInviteToApplicationAsync(Discord.DefaultApplications,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Boolean,System.Boolean,Discord.RequestOptions)">
-            <inheritdoc />
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetMessageAsync(System.UInt64,Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
         </member>
-        <member name="M:Discord.WebSocket.SocketVoiceChannel.CreateInviteToStreamAsync(Discord.IUser,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Boolean,System.Boolean,Discord.RequestOptions)">
-            <inheritdoc />
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.DeleteMessageAsync(Discord.IMessage,Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
         </member>
-        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetInvitesAsync(Discord.RequestOptions)">
-            <inheritdoc />
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.DeleteMessageAsync(System.UInt64,Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.DeleteMessagesAsync(System.Collections.Generic.IEnumerable{Discord.IMessage},Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.DeleteMessagesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.EnterTypingState(Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetCachedMessage(System.UInt64)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetCachedMessages(Discord.IMessage,Discord.Direction,System.Int32)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetCachedMessages(System.Int32)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetCachedMessages(System.UInt64,Discord.Direction,System.Int32)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetMessagesAsync(Discord.IMessage,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetMessagesAsync(System.Int32,Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetMessagesAsync(System.UInt64,Discord.Direction,System.Int32,Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetPinnedMessagesAsync(Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetWebhookAsync(System.UInt64,Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.GetWebhooksAsync(Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.CreateWebhookAsync(System.String,System.IO.Stream,Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.ModifyMessageAsync(System.UInt64,System.Action{Discord.MessageProperties},Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.SendFileAsync(System.IO.Stream,System.String,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.SendFileAsync(System.String,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.SendMessageAsync(System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[],Discord.MessageFlags)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketVoiceChannel.TriggerTypingAsync(Discord.RequestOptions)">
+            <inheritdoc/> <exception cref="T:System.NotSupportedException">This function is only supported in Text-In-Voice channels.</exception>
         </member>
         <member name="M:Discord.WebSocket.SocketVoiceChannel.Discord#IGuildChannel#GetUserAsync(System.UInt64,Discord.CacheMode,Discord.RequestOptions)">
             <inheritdoc />
@@ -3425,6 +3537,15 @@
                 A thread channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
             </returns>
         </member>
+        <member name="M:Discord.WebSocket.SocketGuild.GetForumChannel(System.UInt64)">
+            <summary>
+                Gets a forum channel in this guild.
+            </summary>
+            <param name="id">The snowflake identifier for the forum channel.</param>
+            <returns>
+                A forum channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+            </returns>
+        </member>
         <member name="M:Discord.WebSocket.SocketGuild.GetVoiceChannel(System.UInt64)">
             <summary>
                 Gets a voice channel in this guild.
@@ -3732,7 +3853,6 @@
                 in order to use this property.
                 </remarks>
             </param>
-            <param name="speakers">A collection of speakers for the event.</param>
             <param name="location">The location of the event; links are supported</param>
             <param name="coverImage">The optional banner image for the event.</param>
             <param name="options">The options to be used when sending the request.</param>
@@ -4738,20 +4858,11 @@
             </remarks>
         </member>
         <member name="P:Discord.WebSocket.SocketInteraction.ChannelId">
-            <summary>
-                Gets the ID of the channel this interaction was used in.
-            </summary>
-            <remarks>
-                This property is exposed in cases where the bot scope is not provided, so the channel entity cannot be retrieved.
-                <br />
-                To get the channel, you can call <see cref="M:Discord.WebSocket.SocketInteraction.GetChannelAsync(Discord.RequestOptions)"/>
-                as this method makes a request for a <see cref="T:Discord.Rest.RestChannel"/> if nothing was found in cache.
-            </remarks>
+            <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketInteraction.User">
             <summary>
                 Gets the <see cref="T:Discord.WebSocket.SocketUser"/> who triggered this interaction.
-                This property will be <see langword="null"/> if the bot scope isn't used.
             </summary>
         </member>
         <member name="P:Discord.WebSocket.SocketInteraction.Type">
@@ -4784,6 +4895,12 @@
             </summary>
         </member>
         <member name="P:Discord.WebSocket.SocketInteraction.IsDMInteraction">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketInteraction.GuildId">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketInteraction.ApplicationId">
             <inheritdoc/>
         </member>
         <member name="M:Discord.WebSocket.SocketInteraction.RespondAsync(System.String,Discord.Embed[],System.Boolean,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.Embed,Discord.RequestOptions)">

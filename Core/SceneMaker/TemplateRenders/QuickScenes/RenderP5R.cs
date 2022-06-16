@@ -1605,7 +1605,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     dayBottom = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Bottom//Day//Single_Digit//{user_time.Day}.png");
                     dayMiddle = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Middle//Day//Single_Digit//{user_time.Day}.png");
-                    dayTop = System.Drawing.Image.FromFile($@"C:\Users\Microjack5\Desktop\Public Test Storage\calendar_top\day\single_digit\{user_time.Day}.png");
+                    dayTop = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Top//Day//Single_Digit//{user_time.Day}.png");
                 }
                 // If the day is ten or more, we need two digits for the day.
                 else if (user_time.Day >= 10)

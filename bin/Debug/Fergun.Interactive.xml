@@ -628,6 +628,11 @@
             Gets the embeds of this page.
             </summary>
         </member>
+        <member name="P:Fergun.Interactive.IPage`1.AttachmentsFactory">
+            <summary>
+            Gets the factory of attachments.
+            </summary>
+        </member>
         <member name="T:Fergun.Interactive.IPage">
             <inheritdoc/>
         </member>
@@ -674,6 +679,9 @@
             <inheritdoc/>
         </member>
         <member name="P:Fergun.Interactive.MultiEmbedPage.Embeds">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPage.AttachmentsFactory">
             <inheritdoc/>
         </member>
         <member name="M:Fergun.Interactive.MultiEmbedPage.ToMultiEmbedPageBuilder">
@@ -726,6 +734,11 @@
             Gets or sets the builders that will be in the page.
             </summary>
             <returns>The list of builders.</returns>
+        </member>
+        <member name="P:Fergun.Interactive.MultiEmbedPageBuilder.AttachmentsFactory">
+            <summary>
+            Gets or sets the factory of attachments.
+            </summary>
         </member>
         <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.Build">
             <summary>
@@ -810,6 +823,38 @@
             <param name="stickers">The stickers.</param>
             <returns>The current builder.</returns>
         </member>
+        <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.WithAttachmentFactory(System.Func{System.Nullable{Discord.FileAttachment}})">
+            <summary>
+            Sets the function that generates the attachment.
+            </summary>
+            <remarks>To leave the attachment in the message unmodified, <paramref name="attachmentFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</remarks>
+            <param name="attachmentFactory">The attachment factory. To leave the attachment in the message unmodified, <paramref name="attachmentFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.WithAttachmentFactory(System.Func{System.Threading.Tasks.ValueTask{System.Nullable{Discord.FileAttachment}}})">
+            <summary>
+            Sets the function that generates the attachment.
+            </summary>
+            <remarks>To leave the attachment in the message unmodified, <paramref name="attachmentFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</remarks>
+            <param name="attachmentFactory">The attachment factory. To leave the attachment in the message unmodified, <paramref name="attachmentFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.WithAttachmentsFactory(System.Func{System.Collections.Generic.IEnumerable{Discord.FileAttachment}})">
+            <summary>
+            Sets the function that generates the attachments.
+            </summary>
+            <remarks>To leave the attachments in the message unmodified, <paramref name="attachmentsFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</remarks>
+            <param name="attachmentsFactory">The attachments factory. To leave the attachments in the message unmodified, <paramref name="attachmentsFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.WithAttachmentsFactory(System.Func{System.Threading.Tasks.ValueTask{System.Collections.Generic.IEnumerable{Discord.FileAttachment}}})">
+            <summary>
+            Sets the function that generates the attachments.
+            </summary>
+            <remarks>To leave the attachments in the message unmodified, <paramref name="attachmentsFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</remarks>
+            <param name="attachmentsFactory">The attachments factory. To leave the attachments in the message unmodified, <paramref name="attachmentsFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</param>
+            <returns>The current builder.</returns>
+        </member>
         <member name="M:Fergun.Interactive.MultiEmbedPageBuilder.Fergun#Interactive#IPageBuilder{Fergun#Interactive#IPage}#Build">
             <inheritdoc/>
         </member>
@@ -831,6 +876,9 @@
             <inheritdoc/>
         </member>
         <member name="P:Fergun.Interactive.Page.Stickers">
+            <inheritdoc/>
+        </member>
+        <member name="P:Fergun.Interactive.Page.AttachmentsFactory">
             <inheritdoc/>
         </member>
         <member name="P:Fergun.Interactive.Page.Embed">
@@ -898,6 +946,11 @@
         <member name="P:Fergun.Interactive.PageBuilder.Stickers">
             <summary>
             Gets or sets the stickers of the <see cref="T:Fergun.Interactive.Page"/>.
+            </summary>
+        </member>
+        <member name="P:Fergun.Interactive.PageBuilder.AttachmentsFactory">
+            <summary>
+            Gets or sets the factory of attachments.
             </summary>
         </member>
         <member name="P:Fergun.Interactive.PageBuilder.Title">
@@ -988,6 +1041,12 @@
             Builds this builder to an immutable <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <returns>A <see cref="T:Fergun.Interactive.Page"/>.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.PageBuilder.GetEmbedBuilder">
+            <summary>
+            Gets the inner <see cref="T:Discord.EmbedBuilder"/> used by this builder.
+            </summary>
+            <returns>The inner <see cref="T:Discord.EmbedBuilder"/>.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithText(System.String)">
             <summary>
@@ -1142,7 +1201,7 @@
             <summary>
             Sets the <see cref="P:Fergun.Interactive.PageBuilder.IsTTS"/> value of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
-            <param name="isTTs">Whether the text of the page should be read aloud by Discord.</param>
+            <param name="isTTS">Whether the text of the page should be read aloud by Discord.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.WithAllowedMentions(Discord.AllowedMentions)">
@@ -1164,6 +1223,38 @@
             Sets the stickers of the <see cref="T:Fergun.Interactive.Page"/>.
             </summary>
             <param name="stickers">The stickers.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.PageBuilder.WithAttachmentFactory(System.Func{System.Nullable{Discord.FileAttachment}})">
+            <summary>
+            Sets the function that generates the attachment.
+            </summary>
+            <remarks>To leave the attachment in the message unmodified, <paramref name="attachmentFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</remarks>
+            <param name="attachmentFactory">The attachment factory. To leave the attachment in the message unmodified, <paramref name="attachmentFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.PageBuilder.WithAttachmentFactory(System.Func{System.Threading.Tasks.ValueTask{System.Nullable{Discord.FileAttachment}}})">
+            <summary>
+            Sets the function that generates the attachment.
+            </summary>
+            <remarks>To leave the attachment in the message unmodified, <paramref name="attachmentFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</remarks>
+            <param name="attachmentFactory">The attachment factory. To leave the attachment in the message unmodified, <paramref name="attachmentFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.PageBuilder.WithAttachmentsFactory(System.Func{System.Collections.Generic.IEnumerable{Discord.FileAttachment}})">
+            <summary>
+            Sets the function that generates the attachments.
+            </summary>
+            <remarks>To leave the attachments in the message unmodified, <paramref name="attachmentsFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</remarks>
+            <param name="attachmentsFactory">The attachments factory. To leave the attachments in the message unmodified, <paramref name="attachmentsFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Fergun.Interactive.PageBuilder.WithAttachmentsFactory(System.Func{System.Threading.Tasks.ValueTask{System.Collections.Generic.IEnumerable{Discord.FileAttachment}}})">
+            <summary>
+            Sets the function that generates the attachments.
+            </summary>
+            <remarks>To leave the attachments in the message unmodified, <paramref name="attachmentsFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</remarks>
+            <param name="attachmentsFactory">The attachments factory. To leave the attachments in the message unmodified, <paramref name="attachmentsFactory"/> must return <see langword="null"/> instead of a <see cref="T:Discord.FileAttachment"/> object.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Fergun.Interactive.PageBuilder.Fergun#Interactive#IPageBuilder{Fergun#Interactive#IPage}#Build">

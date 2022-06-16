@@ -31,11 +31,11 @@
             <exception cref="T:System.ArgumentException">Thrown if the <paramref name="webhookUrl"/> is an invalid format.</exception>
             <exception cref="T:System.ArgumentNullException">Thrown if the <paramref name="webhookUrl"/> is null or whitespace.</exception>
         </member>
-        <member name="M:Discord.Webhook.DiscordWebhookClient.SendMessageAsync(System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags)">
+        <member name="M:Discord.Webhook.DiscordWebhookClient.SendMessageAsync(System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags,System.Nullable{System.UInt64})">
             <summary> Sends a message to the channel for this webhook. </summary>
             <returns> Returns the ID of the created message. </returns>
         </member>
-        <member name="M:Discord.Webhook.DiscordWebhookClient.ModifyMessageAsync(System.UInt64,System.Action{Discord.Webhook.WebhookMessageProperties},Discord.RequestOptions)">
+        <member name="M:Discord.Webhook.DiscordWebhookClient.ModifyMessageAsync(System.UInt64,System.Action{Discord.Webhook.WebhookMessageProperties},Discord.RequestOptions,System.Nullable{System.UInt64})">
             <summary>
                 Modifies a message posted using this webhook.
             </summary>
@@ -49,7 +49,7 @@
                 A task that represents the asynchronous modification operation.
             </returns>
         </member>
-        <member name="M:Discord.Webhook.DiscordWebhookClient.DeleteMessageAsync(System.UInt64,Discord.RequestOptions)">
+        <member name="M:Discord.Webhook.DiscordWebhookClient.DeleteMessageAsync(System.UInt64,Discord.RequestOptions,System.Nullable{System.UInt64})">
             <summary>
                 Deletes a message posted using this webhook.
             </summary>
@@ -62,19 +62,19 @@
                 A task that represents the asynchronous deletion operation.
             </returns>
         </member>
-        <member name="M:Discord.Webhook.DiscordWebhookClient.SendFileAsync(System.String,System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags)">
+        <member name="M:Discord.Webhook.DiscordWebhookClient.SendFileAsync(System.String,System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags,System.Nullable{System.UInt64})">
             <summary> Sends a message to the channel for this webhook with an attachment. </summary>
             <returns> Returns the ID of the created message. </returns>
         </member>
-        <member name="M:Discord.Webhook.DiscordWebhookClient.SendFileAsync(System.IO.Stream,System.String,System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags)">
+        <member name="M:Discord.Webhook.DiscordWebhookClient.SendFileAsync(System.IO.Stream,System.String,System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags,System.Nullable{System.UInt64})">
             <summary> Sends a message to the channel for this webhook with an attachment. </summary>
             <returns> Returns the ID of the created message. </returns>
         </member>
-        <member name="M:Discord.Webhook.DiscordWebhookClient.SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags)">
+        <member name="M:Discord.Webhook.DiscordWebhookClient.SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags,System.Nullable{System.UInt64})">
             <summary> Sends a message to the channel for this webhook with an attachment. </summary>
             <returns> Returns the ID of the created message. </returns>
         </member>
-        <member name="M:Discord.Webhook.DiscordWebhookClient.SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags)">
+        <member name="M:Discord.Webhook.DiscordWebhookClient.SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,System.Collections.Generic.IEnumerable{Discord.Embed},System.String,System.String,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageComponent,Discord.MessageFlags,System.Nullable{System.UInt64})">
             <summary> Sends a message to the channel for this webhook with an attachment. </summary>
             <returns> Returns the ID of the created message. </returns>
         </member>
