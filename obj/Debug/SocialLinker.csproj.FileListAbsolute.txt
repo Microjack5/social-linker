@@ -39,7 +39,6 @@ C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Azure.S
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Discord.Net.Commands.xml
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Discord.Net.Core.xml
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Discord.Net.Interactions.xml
-C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Discord.Net.Rest.xml
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Discord.Net.Webhook.xml
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Discord.Net.WebSocket.xml
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
@@ -73,3 +72,5 @@ C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Fergun.
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Fergun.Interactive.xml
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.IO.Hashing.dll
 C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\System.IO.Hashing.xml
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\bin\Debug\Discord.Net.Rest.pdb
+C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\obj\Debug\SocialLinker.csproj.SuggestedBindingRedirects.cache
