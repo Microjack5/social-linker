@@ -36,15 +36,38 @@ namespace SocialLinker
         public static SocialLinkerCommand SlashCommandConverter(SocketSlashCommand command)
         {
             SocketUser data_to_mentioneduser;
+            bool social_bool = false;
 
-            if (((SocketUser)command.Data.Options.FirstOrDefault().Value is SocketUser)) // Maker, help, settings, shop, status
+            switch (command.CommandName)
+            {
+                case "hug":
+                    social_bool = true;
+                    break;
+
+                case "pat":
+                    social_bool = true;
+                    break;
+
+                case "punch":
+                    social_bool = true;
+                    break;
+
+                case "slap":
+                    social_bool = true;
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (social_bool == true)
             {
                 data_to_mentioneduser = (SocketUser)command.Data.Options.FirstOrDefault().Value;
             }
             else
             {
                 data_to_mentioneduser = null;
-            } 
+            }
 
             SocialLinkerCommand slash_to_command = new SocialLinkerCommand
             {
@@ -108,10 +131,10 @@ namespace SocialLinker
             _client.ShardReady += Maker_List;
             _client.ShardReady += Maker_View;
             _client.ShardReady += Maker_Create;
-            /*_client.ShardReady += Hug;
+            _client.ShardReady += Hug;
             _client.ShardReady += Pat;
             _client.ShardReady += Punch;
-            _client.ShardReady += Slap; */
+            _client.ShardReady += Slap;
             _client.SlashCommandExecuted += SlashAnnex;
             
             await Task.CompletedTask;
