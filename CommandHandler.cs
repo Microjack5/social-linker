@@ -40,6 +40,13 @@ namespace SocialLinker
 
             switch (command.CommandName)
             {
+                case "status":
+                    if (command.Data.Options.FirstOrDefault() != default)
+                    {
+                        social_bool = true;
+                    }
+                    break;
+
                 case "hug":
                     social_bool = true;
                     break;
@@ -198,6 +205,19 @@ namespace SocialLinker
 
         private async Task CommandIndex(SocialLinkerCommand command)
         {
+            var commandChannel = (SocketGuildChannel)command.Channel;
+            ulong[] allowed_servers = new ulong[] { 543226698238394378, 488920941041025025, 981870056688480266 };
+
+            if (allowed_servers.Contains(commandChannel.Guild.Id))
+            {
+                // Do nothing
+            }
+            else
+            {
+                await command.Channel.SendMessageAsync("Global slash commands are temporarily disabled for this server.");
+                return;
+            }
+
             if (command.CommandType == "Slash")
             {
                 await command.SlashCommand.RespondAsync(embed: Slash_Command_Response().Build(), ephemeral: false);
@@ -271,7 +291,6 @@ namespace SocialLinker
 
         public static async Task Status(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
             //await client.GetGuild(543226698238394378).DeleteApplicationCommandsAsync();
 
             var guildCommand = new SlashCommandBuilder()
@@ -281,7 +300,7 @@ namespace SocialLinker
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -292,15 +311,13 @@ namespace SocialLinker
 
         public static async Task Shop(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             var guildCommand = new SlashCommandBuilder()
                 .WithName("shop")
                 .WithDescription("Browse the décor shop.");
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -311,15 +328,13 @@ namespace SocialLinker
 
         public static async Task Settings(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             var guildCommand = new SlashCommandBuilder()
                 .WithName("settings")
                 .WithDescription("Change and customize user settings.");
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -330,15 +345,13 @@ namespace SocialLinker
 
         public static async Task Help(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             var guildCommand = new SlashCommandBuilder()
                 .WithName("help")
                 .WithDescription("Learn how to use Social Linker.");
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -349,8 +362,6 @@ namespace SocialLinker
 
         public static async Task Hug(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             var guildCommand = new SlashCommandBuilder()
                 .WithName("hug")
                 .WithDescription("Give a user a hug.")
@@ -358,7 +369,7 @@ namespace SocialLinker
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -369,8 +380,6 @@ namespace SocialLinker
 
         public static async Task Pat(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             var guildCommand = new SlashCommandBuilder()
                 .WithName("pat")
                 .WithDescription("Give a user a pat.")
@@ -378,7 +387,7 @@ namespace SocialLinker
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -389,8 +398,6 @@ namespace SocialLinker
 
         public static async Task Punch(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             var guildCommand = new SlashCommandBuilder()
                 .WithName("punch")
                 .WithDescription("Give out unbridled violence.")
@@ -398,7 +405,7 @@ namespace SocialLinker
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -409,8 +416,6 @@ namespace SocialLinker
 
         public static async Task Slap(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             var guildCommand = new SlashCommandBuilder()
                 .WithName("slap")
                 .WithDescription("Hand out a high five. In the face.")
@@ -418,7 +423,7 @@ namespace SocialLinker
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -429,8 +434,6 @@ namespace SocialLinker
 
         public static async Task Maker_List(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             var guildCommand = new SlashCommandBuilder()
                 .WithName("maker_list")
                 .WithDescription("View the list of usable characters from a certain game.")
@@ -459,7 +462,7 @@ namespace SocialLinker
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -470,8 +473,6 @@ namespace SocialLinker
 
         public static async Task Maker_View(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             var guildCommand = new SlashCommandBuilder()
                 .WithName("maker_view")
                 .WithDescription("View the sprite sheet for a character with optional animation frames.")
@@ -481,7 +482,7 @@ namespace SocialLinker
 
             try
             {
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -492,8 +493,6 @@ namespace SocialLinker
 
         public static async Task Maker_Create(DiscordSocketClient client)
         {
-            ulong guildId = 543226698238394378;
-
             try
             {
                 var guildCommand = new SlashCommandBuilder()
@@ -527,7 +526,7 @@ namespace SocialLinker
                 .AddOption("mouth_frame", ApplicationCommandOptionType.Integer, "Use a mouth frame linked to the character's sprite.", isRequired: false)
                 .AddOption("dialogue", ApplicationCommandOptionType.String, "The character's spoken text.", isRequired: true);
 
-                await client.Rest.CreateGuildCommand(guildCommand.Build(), guildId);
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)
             {
