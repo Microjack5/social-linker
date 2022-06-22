@@ -249,6 +249,7 @@
     <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Spriteless_Reactions.cs" />
     <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_VC_Reactions.cs" />
     <Compile Include="Core\Menus\Help\Reactions\Status_Tutorial_Reactions.cs" />
+    <Compile Include="Core\Menus\InitialUsage\InviteMessage.cs" />
     <Compile Include="Core\Menus\InitialUsage\Main\First_Use_Content_Filter_Menu.cs" />
     <Compile Include="Core\Menus\InitialUsage\Main\SetFirstTheme_Menu.cs" />
     <Compile Include="Core\Menus\InitialUsage\Reactions\First_Use_Content_Filter_Reactions.cs" />
