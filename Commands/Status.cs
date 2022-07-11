@@ -4,130 +4,144 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.StatusScreens;
 using System.Reflection;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.Menus.InitialUsage.Main;
+using System.Collections.Generic;
 
 namespace SocialLinker.Commands
 {
-    public class Status : InteractiveBase<SocketCommandContext>
+    public class Status : ModuleBase<SocketCommandContext>
     {
-        [Command("status")]
-        public async Task StatusCommandParser1()
+        public static async Task ContentCheck(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "status", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(Context.Message, "status") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command, "status") == true)
             {
                 return;
             }
 
             // Get the account information of the command's user.
-            var command_user_account = UserInfoClasses.GetAccount(Context.User);
+            var command_user_account = UserInfoClasses.GetAccount(command.User);
 
             // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
             if (command_user_account.Account_Activated == "No")
             {
-                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
                 return;
             }
 
             // End of initial usage and cooldown checks.
 
-            //Since there are no parameters, invoke StatusScreen for the command user
-            await StatusScreen();
+            Status status_object = new Status();
+
+            switch (command.CommandType)
+            {
+                case "Slash":
+                    switch (command.CommandName)
+                    {
+                        case "status":
+                            await status_object.StatusScreen(command);
+                            break;
+
+                        case "status_text":
+                            break;
+                    }
+                    break;
+
+
+                case "Context":
+                    if (command.Message.Content.ToLower().Contains("detail"))
+                    {
+                        await status_object.StatusDetails(command);
+                    }
+                    else
+                    {
+                        await status_object.StatusScreen(command);
+                    }
+                    break;
+            }
         }
 
-        [Command("status", RunMode = RunMode.Async)]
-        public async Task StatusCommandParser2(string param)
+        public async Task StatsCommandDefault(SocialLinkerCommand command)
         {
-            // If there is a cooldown session active for the command type "status", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(Context.Message, "status") == true)
-            {
-                return;
-            }
+            //Since there are no parameters, invoke StatusScreen for the command user
+            await StatusScreen(command);
+        }
 
-            // Get the account information of the command's user.
-            var command_user_account = UserInfoClasses.GetAccount(Context.User);
+        public async Task StatsCommandDetail(SocialLinkerCommand command)
+        {
+            //Since there are no parameters, invoke StatusScreen for the command user
+            await StatusScreen(command);
+        }
 
-            // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
-            if (command_user_account.Account_Activated == "No")
-            {
-                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
-                return;
-            }
+        public async Task StatsCommandDefaultMention(SocialLinkerCommand command)
+        {
+            //Since there are no parameters, invoke StatusScreen for the command user
+            await StatusScreen(command);
+        }
 
-            // End of initial usage and cooldown checks.
+        public async Task StatsCommandDetailMention(SocialLinkerCommand command)
+        {
+            //Since there are no parameters, invoke StatusScreen for the command user
+            await StatusScreen(command);
+        }
 
+        // -----------------------------
+
+        public async Task StatusCommandParser2(SocialLinkerCommand command, string param)
+        {
             //Create a variable for a potential mentioned user
-            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
 
             //If the mentioned user is not null, invoke StatusScreen for the mentioned user
             if (mentionedUser != null)
             {
-                await StatusScreen(param);
+                await StatusScreen(command);
             }
             //Else, if the entered parameter is the word "detail", invoke StatusDetails for the command user
             else if (param.ToLower() == "detail")
             {
-                await StatusDetails(param);
+                await StatusDetails(command);
             }
         }
 
-        [Command("status", RunMode = RunMode.Async)]
-        public async Task StatusCommandParser3(string param1, string param2)
+        public async Task StatusCommandParser3(SocialLinkerCommand command, string param1, string param2)
         {
-            // If there is a cooldown session active for the command type "status", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(Context.Message, "status") == true)
-            {
-                return;
-            }
-
-            // Get the account information of the command's user.
-            var command_user_account = UserInfoClasses.GetAccount(Context.User);
-
-            // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
-            if (command_user_account.Account_Activated == "No")
-            {
-                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
-                return;
-            }
-
-            // End of initial usage and cooldown checks.
-
             //Create a variable for a potential mentioned user
-            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
 
             //If the first parameter is the word "detail" and the second parameter is a mentioned user, invoke StatusDetails for the mentioned user
             if (param1.ToLower() == "detail" && mentionedUser != null)
             {
-                await StatusDetails(param2);
+                await StatusDetails(command);
             }
         }
 
-        public async Task StatusScreen([Remainder] string arg = "")
+        public async Task StatusScreen(SocialLinkerCommand command)
         {
             //Establish variables for the command user and the command's target
             SocketUser commandTarget = null;
             SocketUser commandUser = null;
 
             //Create a variable for a potential mentioned user
-            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.MentionedUser;
 
             //If there is a mentioned user, they become the command's target. If not, the command's user is also the target.
-            commandTarget = mentionedUser ?? Context.User;
-            commandUser = Context.User;
+            commandTarget = mentionedUser ?? command.User;
+            commandUser = command.User;
 
             //Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(commandTarget);
 
             //If a user is mentioned and they're not the command user and not a bot, add Expression to both users
-            if ((mentionedUser != null) && (mentionedUser != Context.User) && (mentionedUser.IsBot == false))
+            if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                Core.LevelSystem.SocialStats.AddExpression(Context.Message, commandUser);
-                Core.LevelSystem.SocialStats.AddExpression(Context.Message, commandTarget);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
             }
 
             // Call different status screen functions depending on the account's profile theme and decor settings.
@@ -143,7 +157,7 @@ namespace SocialLinker.Commands
                     MethodInfo methodInfo = type.GetMethod("RenderImage");
 
                     // Store the typical parameters for a RenderImage method within an object array.
-                    object[] parametersArray = new object[] { commandTarget, Context.Channel };
+                    object[] parametersArray = new object[] { commandTarget, command.Channel };
 
                     // Call the method to render the user's set décor.
                     methodInfo.Invoke(this, parametersArray);
@@ -151,7 +165,7 @@ namespace SocialLinker.Commands
                 // If something goes awry in rendering the décor, send an error message to the user and return.
                 catch (Exception ex)
                 {
-                    await Context.Channel.SendMessageAsync($":warning: Oh no! It looks like a mistake was made. Please visit the support server to report this issue and gain access to the décor.");
+                    await command.Channel.SendMessageAsync($":warning: Oh no! It looks like a mistake was made. Please visit the support server to report this issue and gain access to the décor.");
                     Console.WriteLine(ex);
                     return;
                 }
@@ -159,47 +173,47 @@ namespace SocialLinker.Commands
             }
             else if (account.Profile_Theme == "P3")
             {
-                StatusScreenP3.RenderImage(commandTarget, Context.Channel);
+                StatusScreenP3.RenderImage(commandTarget, command.Channel);
             }
             else if (account.Profile_Theme == "P4")
             {
-                StatusScreenP4.RenderImage(commandTarget, Context.Channel);
+                StatusScreenP4.RenderImage(commandTarget, command.Channel);
             }
             else if (account.Profile_Theme == "P5")
             {
-                StatusScreenP5.RenderImage(commandTarget, Context.Channel);
+                StatusScreenP5.RenderImage(commandTarget, command.Channel);
             }
             else if (account.Profile_Theme == "")
             {
                 // If the user doesn't have a profile theme set, send a message to do so.
-                _ = StartThemeMenu();
+                _ = StartThemeMenu(command);
             }
 
             await Task.CompletedTask;
         }
 
-        public async Task StartThemeMenu()
+        public async Task StartThemeMenu(SocialLinkerCommand command)
         {
             // If there is a cooldown session active for the command type "menu", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(Context.Message, "menu") == true)
+            if (await UserCooldownMethods.IsCooldownActive(command, "menu") == true)
             {
                 return;
             }
 
             // Create two variables to check if there is a menu list entry with either the current channel ID or current user ID.
-            var channelSearch = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Channel.Id == Context.Channel.Id);
-            var userSearch = Global.MenuIdList.SingleOrDefault(x => x.User.Id == Context.User.Id);
+            var channelSearch = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Channel.Id == command.Channel.Id);
+            var userSearch = Global.MenuIdList.SingleOrDefault(x => x.User.Id == command.User.Id);
 
             // If the channel entry exists and the user is not the same, send an error message.
-            if (channelSearch != null && channelSearch.User.Id != Context.User.Id)
+            if (channelSearch != null && channelSearch.User.Id != command.User.Id)
             {
                 // Case 1: Search by channel successful, user ID does not match. Create new entry for new user.
                 // Create a new menu in the current channel.
-                await SetFirstTheme_Menu.SetFirstThemeMain((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await SetFirstTheme_Menu.SetFirstThemeMain((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
                 return;
             }
             // Else, if the channel entry exists and the user is the same, assume they want to reset the menu and delete the previous entry.
-            else if (channelSearch != null && channelSearch.User.Id == Context.User.Id)
+            else if (channelSearch != null && channelSearch.User.Id == command.User.Id)
             {
                 // Case 2: Search by channel successful, user ID matches. Resetting menu in same channel.
                 // Attempt deleting the message if it hasn't been deleted by the user yet.
@@ -220,11 +234,11 @@ namespace SocialLinker.Commands
                 Global.MenuIdList.Remove(channelSearch);
 
                 // Create a new menu in the current channel.
-                await SetFirstTheme_Menu.SetFirstThemeMain((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await SetFirstTheme_Menu.SetFirstThemeMain((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
                 return;
             }
             // Else, if an entry exists where the user is found but they're in a different channel now, delete previous entry and reset the menu.
-            else if (userSearch != null && userSearch.MenuMessage.Channel.Id != Context.Channel.Id)
+            else if (userSearch != null && userSearch.MenuMessage.Channel.Id != command.Channel.Id)
             {
                 // Case 3: Search by user successful, channel ID does not match. Resetting menu in new channel.
                 // Attempt deleting the message if it hasn't been deleted by the user yet.
@@ -245,7 +259,7 @@ namespace SocialLinker.Commands
                 Global.MenuIdList.Remove(userSearch);
 
                 // Create a new menu in the current channel.
-                await SetFirstTheme_Menu.SetFirstThemeMain((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await SetFirstTheme_Menu.SetFirstThemeMain((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
                 return;
             }
             // For any other condition (if one should exist and not be handled here), create a new menu entry.
@@ -253,32 +267,32 @@ namespace SocialLinker.Commands
             {
                 // Case 4: No previous entry found. Create new entry.
                 // Create a new menu in the current channel.
-                await SetFirstTheme_Menu.SetFirstThemeMain((SocketTextChannel)Context.Channel, (SocketGuildUser)Context.User);
+                await SetFirstTheme_Menu.SetFirstThemeMain((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
                 return;
             }
         }
 
-        public async Task StatusDetails([Remainder]string arg = "")
+        public async Task StatusDetails(SocialLinkerCommand command)
         {
             // Establish variables for the command user and the command's target.
             SocketUser commandTarget = null;
             SocketUser commandUser = null;
 
             // Create a variable for a potential mentioned user.
-            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.MentionedUser;
 
             // If there is a mentioned user, they become the command's target. If not, the command's user is also the target.
-            commandTarget = mentionedUser ?? Context.User;
-            commandUser = Context.User;
+            commandTarget = mentionedUser ?? command.User;
+            commandUser = command.User;
 
             // Get the account information of the command's target.
             var account = UserInfoClasses.GetAccount(commandTarget);
 
             // If a user is mentioned and they're not the command user and not a bot, add Expression to both users.
-            if ((mentionedUser != null) && (mentionedUser != Context.User) && (mentionedUser.IsBot == false))
+            if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                Core.LevelSystem.SocialStats.AddExpression(Context.Message, commandUser);
-                Core.LevelSystem.SocialStats.AddExpression(Context.Message, commandTarget);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
+                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
             }
 
             // Construct embeded message.

@@ -23,15 +23,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
     public static class RenderP3P
     {
-        public static async Task Render_Quick_Scene_P3P(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task Render_Quick_Scene_P3P(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Create variables to store the width and height of the template.
             int template_width = 480;
             int template_height = 272;
 
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -50,13 +50,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Here, we want to grab any images attached to the message to use it as a background.
             // Create a variable for the message attachment.
-            var attachments = message.Attachments;
+            var attachments = sl_command.Attachments;
 
             // Create an empty string variable to hold the URL of the attachment.
             string url = "";
 
             // If there are no attachments on the message, set the URL string to "None".
-            if (attachments.LongCount() == 0)
+            if (attachments == default || attachments.LongCount() == 0)
             {
                 url = "None";
             }
@@ -239,7 +239,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Text_To_Gray(Render_Dialogue(Line_Parser(message, command_data.Dialogue))), 0, 0, template_width, template_height);
+                graphics.DrawImage(Text_To_Gray(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue))), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -250,14 +250,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             try
             {
                 // Send the image.
-                await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
+                await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
 
                 // Send an error message to the user if the image upload fails.
-                _ = ErrorHandling.Scene_Upload_Failed(message);
+                _ = ErrorHandling.Scene_Upload_Failed(sl_command);
 
                 // Clean up resources used by the stream, delete the loading message, and return.
                 memoryStream.Dispose();
@@ -272,7 +272,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If the user has auto-delete for their commands set to on, delete their command as well.
             if (account.Auto_Delete_Commands == "On")
             {
-                await message.DeleteAsync();
+                await sl_command.Message.DeleteAsync();
             }
         }
 
@@ -424,7 +424,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return bitmap;
         }
 
-        public static List<string>[] Line_Parser(SocketMessage message, string dialogue)
+        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, string dialogue)
         {
             // First, let's establish some values.
             // The max pixel length of a line.

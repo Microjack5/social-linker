@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Core.SceneMaker.GlyphParsing;
 using System.IO;
 using Discord.WebSocket;
@@ -22,19 +22,18 @@ using System.Drawing.Imaging;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
-    public class RenderP5R : InteractiveBase<SocketCommandContext>
+    public class RenderP5R : ModuleBase<SocketCommandContext>
     {
-        public static async Task Render_Quick_Scene_P5R(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public const int template_width = 1920;
+        public const int template_height = 1080;
+
+        public static async Task Render_Quick_Scene_P5R(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             try
             {
-                // Create variables to store the width and height of the template.
-                int template_width = 1920;
-                int template_height = 1080;
-
                 // Create two variables for the command user and the command channel, derived from the message object taken in.
-                SocketUser user = message.Author;
-                SocketTextChannel channel = (SocketTextChannel)message.Channel;
+                SocketUser user = sl_command.User;
+                SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
                 // Send a loading message to the channel while the sprite sheet is being made.
                 RestUserMessage loader = await channel.SendMessageAsync("", false, P5R_Loading_Message().Build());
@@ -53,13 +52,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 // Here, we want to grab any images attached to the message to use it as a background.
                 // Create a variable for the message attachment.
-                var attachments = message.Attachments;
+                var attachments = sl_command.Attachments;
 
                 // Create an empty string variable to hold the URL of the attachment.
                 string url = "";
 
                 // If there are no attachments on the message, set the URL string to "None".
-                if (attachments.LongCount() == 0)
+                if (attachments == default || attachments.LongCount() == 0)
                 {
                     url = "None";
                 }
@@ -98,7 +97,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     {
                         Console.WriteLine(e);
                         await loader.DeleteAsync();
-                        _ = ErrorHandling.Incompatible_File_Type(message);
+                        _ = ErrorHandling.Incompatible_File_Type(sl_command);
                         return;
                     }
                 }
@@ -137,7 +136,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
                 if (command_data.Base_Sprite != 0)
                 {
-                    bustup = OfficialSetMethods.Bustup_Selection(message, account, set_data, bustup_data, command_data);
+                    bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
                 }
 
                 // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -181,11 +180,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // If the user has the HUD enabled, render it to the template as well.
                     if (account.P5R_TS_HUD != "None")
                     {
-                        graphics.DrawImage(Construct_Calendar(message, account), 0, 0, template_width, template_height);
+                        graphics.DrawImage(Construct_Calendar(sl_command, account), 0, 0, template_width, template_height);
                     }
 
                     // Draw the input dialogue to the template.
-                    graphics.DrawImage(Render_Dialogue(Line_Parser(message, command_data.Dialogue)), 0, 0, template_width, template_height);
+                    graphics.DrawImage(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue)), 0, 0, template_width, template_height);
                 }
 
                 // Save the entire base template to a data stream.
@@ -197,14 +196,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 try
                 {
                     // Send the image.
-                    await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
+                    await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
 
                     // Send an error message to the user if the image upload fails.
-                    _ = ErrorHandling.Scene_Upload_Failed(message);
+                    _ = ErrorHandling.Scene_Upload_Failed(sl_command);
 
                     // Clean up resources used by the stream, delete the loading message, and return.
                     memoryStream.Dispose();
@@ -219,7 +218,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // If the user has auto-delete for their commands set to on, delete their command as well.
                 if (account.Auto_Delete_Commands == "On")
                 {
-                    await message.DeleteAsync();
+                    await sl_command.Message.DeleteAsync();
                 }
             }
             catch (Exception e)
@@ -231,7 +230,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Render_Dialogue(List<string>[] dialogue_lines)
         {
             //Create a bitmap as large as the template
-            Bitmap bitmap = new Bitmap(1920, 1080);
+            Bitmap bitmap = new Bitmap(template_width, template_height);
 
             // Create an int to keep track of rendering errors. This is neccessary to inform the user of any potential issues.
             int error_counter = 0;
@@ -526,11 +525,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return bitmap;
         }
 
-        public static List<string>[] Line_Parser(SocketMessage message, string dialogue)
+        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, string dialogue)
         {
             // First, let's establish some values.
             // The max pixel length of a line.
-            int max_line_length = 800;
+            int max_line_length = 660;
 
             // The number of pixels in a line remaining. This will gradually decrease as the pixel length of characters are subtracted from it.
             int line_length_remaining = max_line_length;
@@ -577,7 +576,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     completed_word += dialogue_array[i];
 
                     // Now that we have our word, measure the pixel length of the completed string.
-                    int completed_word_length = Measure_Word_Pixel_Length(message, completed_word);
+                    int completed_word_length = Measure_Word_Pixel_Length(sl_command, completed_word);
 
                     // Check if the completed word is under the current line's allowed length.
                     // This is done by subtracting the completed word string's length from the remaining length of the line.
@@ -680,7 +679,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                             substring += completed_word_array[j];
 
                             // Measure the pixel length of the substring so far.
-                            substring_length = Measure_Word_Pixel_Length(message, substring);
+                            substring_length = Measure_Word_Pixel_Length(sl_command, substring);
 
                             // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
                             // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
@@ -726,7 +725,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return dialogue_list;
         }
 
-        public static int Measure_Word_Pixel_Length(SocketMessage message, string input_word)
+        public static int Measure_Word_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
         {
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
@@ -787,7 +786,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // If the error counter is at exactly 1, send a warning message to the user.
                     if (error_counter == 1)
                     {
-                        _ = ErrorHandling.Unsupported_Character(message);
+                        _ = ErrorHandling.Unsupported_Character(sl_command);
                     }
                 }
             }
@@ -810,12 +809,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return output_string;
         }
 
-        public static Bitmap Render_Screen_Border(SocketMessage message, UserInfoFields account)
+        public static Bitmap Render_Screen_Border(SocialLinkerCommand sl_command, UserInfoFields account)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 1920;
-            int template_height = 1080;
-
             Bitmap base_template = new Bitmap(template_width, template_height);
 
             Bitmap border_main = new Bitmap(2, 2);
@@ -841,6 +836,449 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(border_secondary, 0, 0, template_width, template_height);
             }
 
+            return base_template;
+        }
+
+        // Vector rendering
+        public static Bitmap Render_Message_Window(int number_of_lines, int max_line_length)
+        {
+            
+
+            // We'll need to create four layers:
+            // - Base layer
+            // - Outer black vector layer
+            // - White vector layer
+            // - A layer for merging the black and white vectors
+            // - Inner transparent black layer (We'll call this one a 'void layer' for short)
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap black_layer = new Bitmap(template_width, template_height);
+            Bitmap white_layer = new Bitmap(template_width, template_height);
+            Bitmap black_white_layer = new Bitmap(template_width, template_height);
+            Bitmap void_layer = new Bitmap(template_width, template_height);
+
+            // Create a brush for the color white.
+            SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
+
+            // Create a brush for the color white.
+            SolidBrush whiteBrush = new SolidBrush(System.Drawing.Color.White);
+
+            // Create a new random variable.
+            Random rnd = new Random();
+
+            // How the vectors are rendered is strongly determined
+            int default_line_length = 365;
+            int starting_dialogue_position = 672;
+
+            int line_ended = 1107;
+
+            int end_of_line = 0;
+
+            if (max_line_length > default_line_length)
+            {
+                end_of_line = starting_dialogue_position + max_line_length;
+            }
+            else
+            {
+                end_of_line = starting_dialogue_position + default_line_length;
+            }
+
+            // Create multiple variables for the potential min and max values of the thirteen black outer points of the message window.
+            int black_point_1_x_min = 448;
+            int black_point_1_x_max = 456;
+            int black_point_1_y_min = 902;
+            int black_point_1_y_max = 912;
+
+            int black_point_2_x_min = 448;
+            int black_point_2_x_max = 460;
+            int black_point_2_y_min = 912;
+            int black_point_2_y_max = 921;
+
+            int black_point_3_x_min = 541;
+            int black_point_3_x_max = 555;
+            int black_point_3_y_min = 990;
+            int black_point_3_y_max = 994;
+
+            int black_point_4_x_min = 557;
+            int black_point_4_x_max = 576;
+            int black_point_4_y_min = 969;
+            int black_point_4_y_max = 973;
+
+            int black_point_5_x_min = 633;
+            int black_point_5_x_max = 643;
+            int black_point_5_y_min = 1025;
+            int black_point_5_y_max = 1029;
+
+            int black_point_6_x_min = 662;
+            int black_point_6_x_max = 675;
+            int black_point_6_y_min = 999;
+            int black_point_6_y_max = 1005;
+
+            // Sect 1
+
+            int black_point_7_x_min = end_of_line + 0;
+            int black_point_7_x_max = end_of_line + 0;
+            int black_point_7_y_min = 0;
+            int black_point_7_y_max = 0;
+
+            int black_point_8_x_min = end_of_line + 0;
+            int black_point_8_x_max = end_of_line + 0;
+            int black_point_8_y_min = 0;
+            int black_point_8_y_max = 0;
+
+            int black_point_9_x_min = end_of_line + 0;
+            int black_point_9_x_max = end_of_line + 0;
+            int black_point_9_y_min = 0;
+            int black_point_9_y_max = 0;
+
+            int black_point_10_x_min = end_of_line + 0;
+            int black_point_10_x_max = end_of_line + 0;
+            int black_point_10_y_min = 0;
+            int black_point_10_y_max = 0;
+
+            int black_point_11_x_min = 0;
+            int black_point_11_x_max = 0;
+            int black_point_11_y_min = 0;
+            int black_point_11_y_max = 0;
+
+            int black_point_12_x_min = 598;
+            int black_point_12_x_max = 605;
+            int black_point_12_y_min = 854;
+            int black_point_12_y_max = 859;
+
+            int black_point_13_x_min = 578;
+            int black_point_13_x_max = 590;
+            int black_point_13_y_min = 907;
+            int black_point_13_y_max = 914;
+
+            int black_point_14_x_min = 0;
+            int black_point_14_x_max = 0;
+            int black_point_14_y_min = 0;
+            int black_point_14_y_max = 0;
+
+            int black_point_15_x_min = 0;
+            int black_point_15_x_max = 0;
+            int black_point_15_y_min = 0;
+            int black_point_15_y_max = 0;
+
+            int black_point_16_x_min = 507;
+            int black_point_16_x_max = 525;
+            int black_point_16_y_min = 906;
+            int black_point_16_y_max = 919;
+
+            switch (number_of_lines)
+            {
+                case 2:
+                    black_point_6_y_min = black_point_6_y_min + 19;
+                    black_point_6_y_max = black_point_6_y_max + 19;
+
+                    black_point_7_y_min = black_point_7_y_min + 19;
+                    black_point_7_y_max = black_point_7_y_max + 19;
+
+                    black_point_8_y_min = black_point_8_y_min - 8;
+                    black_point_8_y_max = black_point_8_y_max - 8;
+
+                    black_point_9_y_min = black_point_9_y_min - 22;
+                    black_point_9_y_max = black_point_9_y_max - 22;
+
+                    black_point_10_y_min = black_point_10_y_min - 22;
+                    black_point_10_y_max = black_point_10_y_max - 22;
+                    break;
+
+                case 3:
+                    black_point_6_y_min = black_point_6_y_min + 38;
+                    black_point_6_y_max = black_point_6_y_max + 38;
+
+                    black_point_7_y_min = black_point_7_y_min + 38;
+                    black_point_7_y_max = black_point_7_y_max + 38;
+
+                    black_point_8_y_min = black_point_8_y_min - 16;
+                    black_point_8_y_max = black_point_8_y_max - 16;
+
+                    black_point_9_y_min = black_point_9_y_min - 44;
+                    black_point_9_y_max = black_point_9_y_max - 44;
+
+                    black_point_10_y_min = black_point_10_y_min - 44;
+                    black_point_10_y_max = black_point_10_y_max - 44;
+                    break;
+
+                default:
+                    // Do nothing
+                    break;
+            }
+
+            // Randomly set the X and Y values of the outer thirteen points of the vector using the min and max values.
+            int black_point_1_x = rnd.Next(black_point_1_x_min, black_point_1_x_max + 1);
+            int black_point_1_y = rnd.Next(black_point_1_y_min, black_point_1_y_max + 1);
+
+            int black_point_2_x = rnd.Next(black_point_2_x_min, black_point_2_x_max + 1);
+            int black_point_2_y = rnd.Next(black_point_2_y_min, black_point_2_y_max + 1);
+
+            int black_point_3_x = rnd.Next(black_point_3_x_min, black_point_3_x_max + 1);
+            int black_point_3_y = rnd.Next(black_point_3_y_min, black_point_3_y_max + 1);
+
+            int black_point_4_x = rnd.Next(black_point_4_x_min, black_point_4_x_max + 1);
+            int black_point_4_y = rnd.Next(black_point_4_y_min, black_point_4_y_max + 1);
+
+            int black_point_5_x = rnd.Next(black_point_5_x_min, black_point_5_x_max + 1);
+            int black_point_5_y = rnd.Next(black_point_5_y_min, black_point_5_y_max + 1);
+
+            int black_point_6_x = rnd.Next(black_point_6_x_min, black_point_6_x_max + 1);
+            int black_point_6_y = rnd.Next(black_point_6_y_min, black_point_6_y_max + 1);
+
+            int black_point_7_x = rnd.Next(black_point_7_x_min, black_point_7_x_max + 1);
+            int black_point_7_y = rnd.Next(black_point_7_y_min, black_point_7_y_max + 1);
+
+            int black_point_8_x = rnd.Next(black_point_8_x_min, black_point_8_x_max + 1);
+            int black_point_8_y = rnd.Next(black_point_8_y_min, black_point_8_y_max + 1);
+
+            int black_point_9_x = rnd.Next(black_point_9_x_min, black_point_9_x_max + 1);
+            int black_point_9_y = rnd.Next(black_point_9_y_min, black_point_9_y_max + 1);
+
+            int black_point_10_x = rnd.Next(black_point_10_x_min, black_point_10_x_max + 1);
+            int black_point_10_y = rnd.Next(black_point_10_y_min, black_point_10_y_max + 1);
+
+            int black_point_11_x = rnd.Next(black_point_11_x_min, black_point_11_x_max + 1);
+            int black_point_11_y = rnd.Next(black_point_11_y_min, black_point_11_y_max + 1);
+
+            int black_point_12_x = rnd.Next(black_point_12_x_min, black_point_12_x_max + 1);
+            int black_point_12_y = rnd.Next(black_point_12_y_min, black_point_12_y_max + 1);
+
+            int black_point_13_x = rnd.Next(black_point_13_x_min, black_point_13_x_max + 1);
+            int black_point_13_y = rnd.Next(black_point_13_y_min, black_point_13_y_max + 1);
+
+            // Randomly set the X and Y values of the thirteen points of the inner white vector based on the set black point X & Y values.
+            int white_point_1_x = rnd.Next(black_point_1_x + 15, black_point_1_x + 16);
+            int white_point_1_y = rnd.Next(black_point_1_y + 14, black_point_1_y + 15);
+
+            int white_point_2_x = rnd.Next(black_point_2_x - 4, black_point_2_x + 3);
+            int white_point_2_y = rnd.Next(black_point_2_y - 31, black_point_2_y - 26);
+
+            int white_point_3_x = rnd.Next(black_point_3_x - 7, black_point_3_x - 1);
+            int white_point_3_y = rnd.Next(black_point_3_y - 23, black_point_3_y - 19);
+
+            int white_point_4_x = rnd.Next(black_point_4_x - 4, black_point_4_x + 0);
+            int white_point_4_y = rnd.Next(black_point_4_y - 29, black_point_4_y - 20);
+
+            int white_point_5_x = rnd.Next(black_point_5_x - 6, black_point_5_x - 1);
+            int white_point_5_y = rnd.Next(black_point_5_y - 29, black_point_5_y - 23);
+
+            int white_point_6_x = rnd.Next(black_point_6_x - 2, black_point_6_x + 3);
+            int white_point_6_y = rnd.Next(black_point_6_y - 21, black_point_6_y - 18);
+
+            int white_point_7_x = rnd.Next(black_point_7_x - 8, black_point_7_x - 5);
+            int white_point_7_y = rnd.Next(black_point_7_y - 17, black_point_7_y - 13);
+
+            int white_point_8_x = rnd.Next(black_point_8_x - 17, black_point_8_x - 14);
+            int white_point_8_y = rnd.Next(black_point_8_y + 4, black_point_8_y + 7);
+
+            int white_point_9_x = rnd.Next(black_point_9_x - 10, black_point_9_x - 3);
+            int white_point_9_y = rnd.Next(black_point_9_y + 14, black_point_9_y + 19);
+
+            int white_point_10_x = rnd.Next(black_point_10_x + 14, black_point_10_x + 20);
+            int white_point_10_y = rnd.Next(black_point_10_y + 13, black_point_10_y + 19);
+
+            int white_point_11_x = rnd.Next(black_point_11_x + 4, black_point_11_x + 12);
+            int white_point_11_y = rnd.Next(black_point_11_y + 26, black_point_11_y + 33);
+
+            int white_point_12_x = rnd.Next(black_point_12_x - 2, black_point_12_x + 12);
+            int white_point_12_y = rnd.Next(black_point_12_y + 21, black_point_12_y + 29);
+
+            int white_point_13_x = rnd.Next(black_point_13_x + 3, black_point_13_x + 10);
+            int white_point_13_y = rnd.Next(black_point_13_y + 18, black_point_13_y + 30);
+
+            // Randomly set the X and Y values of the thirteen points of the innermost black vector (we'll call it 'void' here) based on the set white point X & Y values.
+            int void_point_1_x = rnd.Next(white_point_1_x + 19, white_point_1_x + 20);
+            int void_point_1_y = rnd.Next(white_point_1_y + 20, white_point_1_y + 21);
+
+            int void_point_2_x = rnd.Next(white_point_2_x - 3, white_point_2_x + 3);
+            int void_point_2_y = rnd.Next(white_point_2_y - 36, white_point_2_y - 21);
+
+            int void_point_3_x = rnd.Next(white_point_3_x - 4, white_point_3_x - 1);
+            int void_point_3_y = rnd.Next(white_point_3_y - 26, white_point_3_y - 22);
+
+            int void_point_4_x = rnd.Next(white_point_4_x - 2, white_point_4_x + 1);
+            int void_point_4_y = rnd.Next(white_point_4_y - 30, white_point_4_y - 21);
+
+            int void_point_5_x = rnd.Next(white_point_5_x - 2, white_point_5_x + 0);
+            int void_point_5_y = rnd.Next(white_point_5_y - 25, white_point_5_y - 21);
+
+            int void_point_6_x = rnd.Next(white_point_6_x + 0, white_point_6_x + 7);
+            int void_point_6_y = rnd.Next(white_point_6_y - 16, white_point_6_y - 13);
+
+            int void_point_7_x = rnd.Next(white_point_7_x - 15, white_point_7_x - 4);
+            int void_point_7_y = rnd.Next(white_point_7_y - 10, white_point_7_y - 7);
+
+            int void_point_8_x = rnd.Next(white_point_8_x - 19, white_point_8_x - 16);
+            int void_point_8_y = rnd.Next(white_point_8_y - 1, white_point_8_y + 5);
+
+            int void_point_9_x = rnd.Next(white_point_9_x - 6, white_point_9_x + 4);
+            int void_point_9_y = rnd.Next(white_point_9_y + 15, white_point_9_y + 19);
+
+            int void_point_10_x = rnd.Next(white_point_10_x + 14, white_point_10_x + 18);
+            int void_point_10_y = rnd.Next(white_point_10_y + 10, white_point_10_y + 16);
+
+            int void_point_11_x = rnd.Next(white_point_11_x + 6, white_point_11_x + 10);
+            int void_point_11_y = rnd.Next(white_point_11_y + 23, white_point_11_y + 30);
+
+            int void_point_12_x = rnd.Next(white_point_12_x + 4, white_point_12_x + 9);
+            int void_point_12_y = rnd.Next(white_point_12_y + 18, white_point_12_y + 29);
+
+            int void_point_13_x = rnd.Next(white_point_13_x + 3, white_point_13_x + 9);
+            int void_point_13_y = rnd.Next(white_point_13_y + 16, white_point_13_y + 22);
+
+            // Create the thirteen points of the black vector from the randomly chosen values.
+            Point black_point_1 = new Point(black_point_1_x, black_point_1_y);
+            Point black_point_2 = new Point(black_point_2_x, black_point_2_y);
+            Point black_point_3 = new Point(black_point_3_x, black_point_3_y);
+            Point black_point_4 = new Point(black_point_4_x, black_point_4_y);
+            Point black_point_5 = new Point(black_point_5_x, black_point_5_y);
+            Point black_point_6 = new Point(black_point_6_x, black_point_6_y);
+            Point black_point_7 = new Point(black_point_7_x, black_point_7_y);
+            Point black_point_8 = new Point(black_point_8_x, black_point_8_y);
+            Point black_point_9 = new Point(black_point_9_x, black_point_9_y);
+            Point black_point_10 = new Point(black_point_10_x, black_point_10_y);
+            Point black_point_11 = new Point(black_point_11_x, black_point_11_y);
+            Point black_point_12 = new Point(black_point_12_x, black_point_12_y);
+            Point black_point_13 = new Point(black_point_13_x, black_point_13_y);
+
+            // Create the thirteen points of the white vector from the randomly chosen values.
+            Point white_point_1 = new Point(white_point_1_x, white_point_1_y);
+            Point white_point_2 = new Point(white_point_2_x, white_point_2_y);
+            Point white_point_3 = new Point(white_point_3_x, white_point_3_y);
+            Point white_point_4 = new Point(white_point_4_x, white_point_4_y);
+            Point white_point_5 = new Point(white_point_5_x, white_point_5_y);
+            Point white_point_6 = new Point(white_point_6_x, white_point_6_y);
+            Point white_point_7 = new Point(white_point_7_x, white_point_7_y);
+            Point white_point_8 = new Point(white_point_8_x, white_point_8_y);
+            Point white_point_9 = new Point(white_point_9_x, white_point_9_y);
+            Point white_point_10 = new Point(white_point_10_x, white_point_10_y);
+            Point white_point_11 = new Point(white_point_11_x, white_point_11_y);
+            Point white_point_12 = new Point(white_point_12_x, white_point_12_y);
+            Point white_point_13 = new Point(white_point_13_x, white_point_13_y);
+
+            // Create the thirteen points of the void vector from the randomly chosen values.
+            Point void_point_1 = new Point(void_point_1_x, void_point_1_y);
+            Point void_point_2 = new Point(void_point_2_x, void_point_2_y);
+            Point void_point_3 = new Point(void_point_3_x, void_point_3_y);
+            Point void_point_4 = new Point(void_point_4_x, void_point_4_y);
+            Point void_point_5 = new Point(void_point_5_x, void_point_5_y);
+            Point void_point_6 = new Point(void_point_6_x, void_point_6_y);
+            Point void_point_7 = new Point(void_point_7_x, void_point_7_y);
+            Point void_point_8 = new Point(void_point_8_x, void_point_8_y);
+            Point void_point_9 = new Point(void_point_9_x, void_point_9_y);
+            Point void_point_10 = new Point(void_point_10_x, void_point_10_y);
+            Point void_point_11 = new Point(void_point_11_x, void_point_11_y);
+            Point void_point_12 = new Point(void_point_12_x, void_point_12_y);
+            Point void_point_13 = new Point(void_point_13_x, void_point_13_y);
+
+            // Add all the points for the outer black vector into a point array.
+            Point[] black_poly_points = {
+                    black_point_1,
+                    black_point_2,
+                    black_point_3,
+                    black_point_4,
+                    black_point_5,
+                    black_point_6,
+                    black_point_7,
+                    black_point_8,
+                    black_point_9,
+                    black_point_10,
+                    black_point_11,
+                    black_point_12,
+                    black_point_13 };
+
+            // Add all the points for the inner white vector into a point array.
+            Point[] white_poly_points = {
+                    white_point_1,
+                    white_point_2,
+                    white_point_3,
+                    white_point_4,
+                    white_point_5,
+                    white_point_6,
+                    white_point_7,
+                    white_point_8,
+                    white_point_9,
+                    white_point_10,
+                    white_point_11,
+                    white_point_12,
+                    white_point_13 };
+
+            // Add all the points for the innermost void vector into a point array.
+            Point[] void_poly_points = {
+                    void_point_1,
+                    void_point_2,
+                    void_point_3,
+                    void_point_4,
+                    void_point_5,
+                    void_point_6,
+                    void_point_7,
+                    void_point_8,
+                    void_point_9,
+                    void_point_10,
+                    void_point_11,
+                    void_point_12,
+                    void_point_13 };
+
+            // First, put together the black layer.
+            using (Graphics graphics = Graphics.FromImage(black_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Use the black_poly_points array to create a polygon and fill it with black color.
+                graphics.FillPolygon(blackBrush, black_poly_points);
+            }
+
+            // Next, put together the white layer.
+            using (Graphics graphics = Graphics.FromImage(white_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Use the white_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(whiteBrush, white_poly_points);
+            }
+
+            // Void layer next...
+            using (Graphics graphics = Graphics.FromImage(void_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Use the white_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(blackBrush, white_poly_points);
+            }
+
+            // Let's merge the black and white layers into one bitmap.
+            using (Graphics graphics = Graphics.FromImage(black_white_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Draw the two layers to the template.
+                graphics.DrawImage(black_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(white_layer, 0, 0, template_width, template_height);
+            }
+
+            // Now, using the merged layer, let's cut out a section for the transparent void layer to appear in.
+            // We'll use a custom function for this to get proper antiailiasing.
+            black_white_layer = Custom_Antiailiasing(black_white_layer, void_poly_points);
+
+            // Lastly, let's put the merged and void layers together!
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Before we draw the void layer here, lower its opacity.
+                void_layer = (Bitmap)Set_Image_Opacity(void_layer, (float)0.85);
+
+                // Draw the two layers to the template.
+                graphics.DrawImage(void_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(black_white_layer, 0, 0, template_width, template_height);
+            }
+
+            // Return the base template.
             return base_template;
         }
 
@@ -968,8 +1406,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
                     }
 
-                    
-                    
+
+
                 }
             }
 
@@ -990,7 +1428,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Render_Scene_Border(UserInfoFields account)
         {
             // Make an empty bitmap.
-            Bitmap base_bitmap = new Bitmap(1920, 1080);
+            Bitmap base_bitmap = new Bitmap(template_width, template_height);
 
             // Create needed bitmap variables for needed assets. We'll initialize them to small bitmaps for now.
             Bitmap border_main = new Bitmap(2, 2);
@@ -1016,8 +1454,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Draw the assets to the template.
             using (Graphics graphics = Graphics.FromImage(base_bitmap))
             {
-                graphics.DrawImage(border_main, 0, 0, 1920, 1080);
-                graphics.DrawImage(border_secondary, 0, 0, 1920, 1080);
+                graphics.DrawImage(border_main, 0, 0, template_width, template_height);
+                graphics.DrawImage(border_secondary, 0, 0, template_width, template_height);
             }
 
             return base_bitmap;
@@ -1026,7 +1464,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Render_Control_Panel(UserInfoFields account)
         {
             // Make an empty bitmap.
-            Bitmap base_bitmap = new Bitmap(1920, 1080);
+            Bitmap base_bitmap = new Bitmap(template_width, template_height);
 
             // Create needed bitmap variables for needed assets. We'll initialize them to small bitmaps for now.
             Bitmap auto_toggle = new Bitmap(2, 2);
@@ -1061,20 +1499,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Draw the assets to the template.
             using (Graphics graphics = Graphics.FromImage(base_bitmap))
             {
-                graphics.DrawImage(ffwd_button, 0, 0, 1920, 1080);
-                graphics.DrawImage(auto_wheel, 0, 0, 1920, 1080);
-                graphics.DrawImage(auto_toggle, 0, 0, 1920, 1080);
-                graphics.DrawImage(log_button, 0, 0, 1920, 1080);
+                graphics.DrawImage(ffwd_button, 0, 0, template_width, template_height);
+                graphics.DrawImage(auto_wheel, 0, 0, template_width, template_height);
+                graphics.DrawImage(auto_toggle, 0, 0, template_width, template_height);
+                graphics.DrawImage(log_button, 0, 0, template_width, template_height);
             }
 
             return base_bitmap;
         }
 
         // Calendar rendering
-        public static Bitmap Construct_Calendar(SocketMessage message, UserInfoFields account)
+        public static Bitmap Construct_Calendar(SocialLinkerCommand sl_command, UserInfoFields account)
         {
             // Get the user's current date and time according to their settings.
-            DateTime user_time = Get_Date(message, account);
+            DateTime user_time = Get_Date(sl_command, account);
 
             // Halloween calendar
             if (user_time.Month == 10 && user_time.Day == 31)
@@ -1114,7 +1552,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Construct_Basic_Calendar(DateTime user_time, UserInfoFields account)
         {
             // Make an empty bitmap.
-            Bitmap bitmap = new Bitmap(1920, 1080);
+            Bitmap bitmap = new Bitmap(template_width, template_height);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -1167,7 +1605,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     dayBottom = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Bottom//Day//Single_Digit//{user_time.Day}.png");
                     dayMiddle = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Middle//Day//Single_Digit//{user_time.Day}.png");
-                    dayTop = System.Drawing.Image.FromFile($@"C:\Users\Microjack5\Desktop\Public Test Storage\calendar_top\day\single_digit\{user_time.Day}.png");
+                    dayTop = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Top//Day//Single_Digit//{user_time.Day}.png");
                 }
                 // If the day is ten or more, we need two digits for the day.
                 else if (user_time.Day >= 10)
@@ -1186,28 +1624,28 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Create multiple bitmap layers for the calendar.
-                Bitmap bottom_layer = new Bitmap(1920, 1080);
-                Bitmap middle_layer = new Bitmap(1920, 1080);
-                Bitmap top_layer = new Bitmap(1920, 1080);
-                Bitmap merged_layer = new Bitmap(1920, 1080);
+                Bitmap bottom_layer = new Bitmap(template_width, template_height);
+                Bitmap middle_layer = new Bitmap(template_width, template_height);
+                Bitmap top_layer = new Bitmap(template_width, template_height);
+                Bitmap merged_layer = new Bitmap(template_width, template_height);
 
                 using (Graphics calendar_bottom = Graphics.FromImage(bottom_layer))
                 {
                     if (user_time.Day < 10)
                     {
-                        calendar_bottom.DrawImage(monthBottom, 0, 0, 1920, 1080);
-                        calendar_bottom.DrawImage(dayBottom, 0, 0, 1920, 1080);
-                        calendar_bottom.DrawImage(weatherBox, -15, 0, 1920, 1080);
+                        calendar_bottom.DrawImage(monthBottom, 0, 0, template_width, template_height);
+                        calendar_bottom.DrawImage(dayBottom, 0, 0, template_width, template_height);
+                        calendar_bottom.DrawImage(weatherBox, -15, 0, template_width, template_height);
                     }
                     else
                     {
-                        calendar_bottom.DrawImage(monthBottom, -30, 0, 1920, 1080);
-                        calendar_bottom.DrawImage(dayBottom_ones, 0, 0, 1920, 1080);
-                        calendar_bottom.DrawImage(dayBottom_tens, 0, 0, 1920, 1080);
-                        calendar_bottom.DrawImage(weatherBox, 0, 0, 1920, 1080);
+                        calendar_bottom.DrawImage(monthBottom, -30, 0, template_width, template_height);
+                        calendar_bottom.DrawImage(dayBottom_ones, 0, 0, template_width, template_height);
+                        calendar_bottom.DrawImage(dayBottom_tens, 0, 0, template_width, template_height);
+                        calendar_bottom.DrawImage(weatherBox, 0, 0, template_width, template_height);
                     }
 
-                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1226,20 +1664,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     if (user_time.Day < 10)
                     {
-                        calendar_middle.DrawImage(monthMiddle, 0, 0, 1920, 1080);
-                        calendar_middle.DrawImage(dayMiddle, 0, 0, 1920, 1080);
-                        calendar_middle.DrawImage(weatherIcon, -15, 0, 1920, 1080);
+                        calendar_middle.DrawImage(monthMiddle, 0, 0, template_width, template_height);
+                        calendar_middle.DrawImage(dayMiddle, 0, 0, template_width, template_height);
+                        calendar_middle.DrawImage(weatherIcon, -15, 0, template_width, template_height);
                     }
                     else
                     {
-                        calendar_middle.DrawImage(monthMiddle, -30, 0, 1920, 1080);
-                        calendar_middle.DrawImage(dayMiddle_ones, 0, 0, 1920, 1080);
-                        calendar_middle.DrawImage(dayMiddle_tens, 0, 0, 1920, 1080);
-                        calendar_middle.DrawImage(dayMiddle_filler, 0, 0, 1920, 1080);
-                        calendar_middle.DrawImage(weatherIcon, 0, 0, 1920, 1080);
+                        calendar_middle.DrawImage(monthMiddle, -30, 0, template_width, template_height);
+                        calendar_middle.DrawImage(dayMiddle_ones, 0, 0, template_width, template_height);
+                        calendar_middle.DrawImage(dayMiddle_tens, 0, 0, template_width, template_height);
+                        calendar_middle.DrawImage(dayMiddle_filler, 0, 0, template_width, template_height);
+                        calendar_middle.DrawImage(weatherIcon, 0, 0, template_width, template_height);
                     }
 
-                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1258,14 +1696,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     if (user_time.Day < 10)
                     {
-                        calendar_top.DrawImage(monthTop, 0, 0, 1920, 1080);
-                        calendar_top.DrawImage(dayTop, 0, 0, 1920, 1080);
+                        calendar_top.DrawImage(monthTop, 0, 0, template_width, template_height);
+                        calendar_top.DrawImage(dayTop, 0, 0, template_width, template_height);
                     }
                     else
                     {
-                        calendar_top.DrawImage(monthTop, -30, 0, 1920, 1080);
-                        calendar_top.DrawImage(dayTop_ones, 0, 0, 1920, 1080);
-                        calendar_top.DrawImage(dayTop_tens, 0, 0, 1920, 1080);
+                        calendar_top.DrawImage(monthTop, -30, 0, template_width, template_height);
+                        calendar_top.DrawImage(dayTop_ones, 0, 0, template_width, template_height);
+                        calendar_top.DrawImage(dayTop_tens, 0, 0, template_width, template_height);
                     }
                 }
 
@@ -1284,9 +1722,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Use the merged_layer to merge all bottom, middle, and top layers together.
                 using (Graphics merged_calendar = Graphics.FromImage(merged_layer))
                 {
-                    merged_calendar.DrawImage(bottom_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(middle_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(top_layer, 0, 0, 1920, 1080);
+                    merged_calendar.DrawImage(bottom_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(middle_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(top_layer, 0, 0, template_width, template_height);
 
                     if (account.P5R_TS_HUD == "Normal")
                     {
@@ -1306,8 +1744,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                     else if (account.P5R_TS_HUD == "Inverted")
                     {
@@ -1330,8 +1768,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Invert their colors, then draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                 }
 
@@ -1339,7 +1777,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 merged_layer = Black_To_Opaque(merged_layer);
 
                 // Draw the merged layer to the final bitmap.
-                graphics.DrawImage(merged_layer, 0, 0, 1920, 1080);
+                graphics.DrawImage(merged_layer, 0, 0, template_width, template_height);
             }
 
             return bitmap;
@@ -1348,7 +1786,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Construct_Halloween_Calendar(DateTime user_time, UserInfoFields account)
         {
             // Create an empty bitmap.
-            Bitmap bitmap = new Bitmap(1920, 1080);
+            Bitmap bitmap = new Bitmap(template_width, template_height);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -1419,24 +1857,24 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 dayTop_ones = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Holiday//Halloween//Calendar//Day//1.png");
 
                 // Create multiple bitmap layers for the calendar.
-                Bitmap bottom_layer = new Bitmap(1920, 1080);
-                Bitmap middle_layer = new Bitmap(1920, 1080);
-                Bitmap top_layer = new Bitmap(1920, 1080);
-                Bitmap merged_layer = new Bitmap(1920, 1080);
-                Bitmap decoration_layer = new Bitmap(1920, 1080);
+                Bitmap bottom_layer = new Bitmap(template_width, template_height);
+                Bitmap middle_layer = new Bitmap(template_width, template_height);
+                Bitmap top_layer = new Bitmap(template_width, template_height);
+                Bitmap merged_layer = new Bitmap(template_width, template_height);
+                Bitmap decoration_layer = new Bitmap(template_width, template_height);
 
                 using (Graphics calendar_bottom = Graphics.FromImage(bottom_layer))
                 {
-                    calendar_bottom.DrawImage(monthBottom, -30, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(weatherBox, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(monthBottom, -30, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(weatherBox, 0, 0, template_width, template_height);
 
-                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, template_width, template_height);
 
                     // Draw the spider decorations here so it can change colors if inverted.
-                    calendar_bottom.DrawImage(decoration_3, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(decoration_4, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(decoration_3, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(decoration_4, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1453,13 +1891,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_middle = Graphics.FromImage(middle_layer))
                 {
-                    calendar_middle.DrawImage(monthMiddle, -30, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(weatherIcon, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(monthMiddle, -30, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(weatherIcon, 0, 0, template_width, template_height);
 
-                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1476,9 +1914,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_top = Graphics.FromImage(top_layer))
                 {
-                    calendar_top.DrawImage(monthTop, -30, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_ones, 0, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_tens, 0, 0, 1920, 1080);
+                    calendar_top.DrawImage(monthTop, -30, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_ones, 0, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_tens, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1496,9 +1934,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Use the merged_layer to merge all bottom, middle, and top layers together.
                 using (Graphics merged_calendar = Graphics.FromImage(merged_layer))
                 {
-                    merged_calendar.DrawImage(bottom_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(middle_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(top_layer, 0, 0, 1920, 1080);
+                    merged_calendar.DrawImage(bottom_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(middle_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(top_layer, 0, 0, template_width, template_height);
 
                     if (account.P5R_TS_HUD == "Normal")
                     {
@@ -1518,8 +1956,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                     else if (account.P5R_TS_HUD == "Inverted")
                     {
@@ -1542,8 +1980,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Invert their colors, then draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                 }
 
@@ -1553,13 +1991,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Since it's a specialized date, we need a new layer for the decorations.
                 using (Graphics calendar_decorations = Graphics.FromImage(decoration_layer))
                 {
-                    calendar_decorations.DrawImage(decoration_1, -30, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_2, -30, 0, 1920, 1080);
+                    calendar_decorations.DrawImage(decoration_1, -30, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_2, -30, 0, template_width, template_height);
                 }
 
                 // Draw the merged layer to the final bitmap.
-                graphics.DrawImage(merged_layer, 0, 0, 1920, 1080);
-                graphics.DrawImage(decoration_layer, 0, 0, 1920, 1080);
+                graphics.DrawImage(merged_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(decoration_layer, 0, 0, template_width, template_height);
             }
 
             return bitmap;
@@ -1568,7 +2006,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Construct_Christmas_Calendar(DateTime user_time, UserInfoFields account)
         {
             // Make an empty bitmap.
-            Bitmap bitmap = new Bitmap(1920, 1080);
+            Bitmap bitmap = new Bitmap(template_width, template_height);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -1640,20 +2078,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 dayTop_ones = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Top//Day//Double_Digit//Ones_Place//{day[1]}.png");
 
                 // Create multiple bitmap layers for the calendar.
-                Bitmap bottom_layer = new Bitmap(1920, 1080);
-                Bitmap middle_layer = new Bitmap(1920, 1080);
-                Bitmap top_layer = new Bitmap(1920, 1080);
-                Bitmap merged_layer = new Bitmap(1920, 1080);
-                Bitmap decoration_layer = new Bitmap(1920, 1080);
+                Bitmap bottom_layer = new Bitmap(template_width, template_height);
+                Bitmap middle_layer = new Bitmap(template_width, template_height);
+                Bitmap top_layer = new Bitmap(template_width, template_height);
+                Bitmap merged_layer = new Bitmap(template_width, template_height);
+                Bitmap decoration_layer = new Bitmap(template_width, template_height);
 
                 using (Graphics calendar_bottom = Graphics.FromImage(bottom_layer))
                 {
-                    calendar_bottom.DrawImage(monthBottom, -30, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(weatherBox, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(monthBottom, -30, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(weatherBox, 0, 0, template_width, template_height);
 
-                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1670,13 +2108,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_middle = Graphics.FromImage(middle_layer))
                 {
-                    calendar_middle.DrawImage(monthMiddle, -30, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(weatherIcon, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(monthMiddle, -30, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(weatherIcon, 0, 0, template_width, template_height);
 
-                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1693,9 +2131,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_top = Graphics.FromImage(top_layer))
                 {
-                    calendar_top.DrawImage(monthTop, -30, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_ones, 0, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_tens, 0, 0, 1920, 1080);
+                    calendar_top.DrawImage(monthTop, -30, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_ones, 0, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_tens, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1713,9 +2151,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Use the merged_layer to merge all bottom, middle, and top layers together.
                 using (Graphics merged_calendar = Graphics.FromImage(merged_layer))
                 {
-                    merged_calendar.DrawImage(bottom_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(middle_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(top_layer, 0, 0, 1920, 1080);
+                    merged_calendar.DrawImage(bottom_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(middle_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(top_layer, 0, 0, template_width, template_height);
 
                     if (account.P5R_TS_HUD == "Normal")
                     {
@@ -1735,8 +2173,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                     else if (account.P5R_TS_HUD == "Inverted")
                     {
@@ -1759,8 +2197,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Invert their colors, then draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                 }
 
@@ -1770,17 +2208,17 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Since it's a specialized date, we need a new layer for the decorations.
                 using (Graphics calendar_decorations = Graphics.FromImage(decoration_layer))
                 {
-                    calendar_decorations.DrawImage(decoration_1, -30, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_2, -30, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_3, -30, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_4, -30, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_5, -30, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_6, -30, 0, 1920, 1080);
+                    calendar_decorations.DrawImage(decoration_1, -30, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_2, -30, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_3, -30, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_4, -30, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_5, -30, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_6, -30, 0, template_width, template_height);
                 }
 
                 // Draw the merged layer to the final bitmap.
-                graphics.DrawImage(merged_layer, 0, 0, 1920, 1080);
-                graphics.DrawImage(decoration_layer, 0, 0, 1920, 1080);
+                graphics.DrawImage(merged_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(decoration_layer, 0, 0, template_width, template_height);
             }
 
             return bitmap;
@@ -1789,7 +2227,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Construct_New_Year_Calendar(DateTime user_time, UserInfoFields account)
         {
             // Make an empty bitmap.
-            Bitmap bitmap = new Bitmap(1920, 1080);
+            Bitmap bitmap = new Bitmap(template_width, template_height);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -1859,19 +2297,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 dayTop = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Holiday//New_Year//Calendar//Day//{user_time.Day}.png");
 
                 // Create multiple bitmap layers for the calendar.
-                Bitmap bottom_layer = new Bitmap(1920, 1080);
-                Bitmap middle_layer = new Bitmap(1920, 1080);
-                Bitmap top_layer = new Bitmap(1920, 1080);
-                Bitmap merged_layer = new Bitmap(1920, 1080);
-                Bitmap decoration_layer = new Bitmap(1920, 1080);
+                Bitmap bottom_layer = new Bitmap(template_width, template_height);
+                Bitmap middle_layer = new Bitmap(template_width, template_height);
+                Bitmap top_layer = new Bitmap(template_width, template_height);
+                Bitmap merged_layer = new Bitmap(template_width, template_height);
+                Bitmap decoration_layer = new Bitmap(template_width, template_height);
 
                 using (Graphics calendar_bottom = Graphics.FromImage(bottom_layer))
                 {
-                    calendar_bottom.DrawImage(monthBottom, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(weatherBox, -15, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(monthBottom, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(weatherBox, -15, 0, template_width, template_height);
 
-                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1888,11 +2326,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_middle = Graphics.FromImage(middle_layer))
                 {
-                    calendar_middle.DrawImage(monthMiddle, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(weatherIcon, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(monthMiddle, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(weatherIcon, 0, 0, template_width, template_height);
 
-                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1909,8 +2347,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_top = Graphics.FromImage(top_layer))
                 {
-                    calendar_top.DrawImage(monthTop, 0, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop, 0, 0, 1920, 1080);
+                    calendar_top.DrawImage(monthTop, 0, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -1928,9 +2366,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Use the merged_layer to merge all bottom, middle, and top layers together.
                 using (Graphics merged_calendar = Graphics.FromImage(merged_layer))
                 {
-                    merged_calendar.DrawImage(bottom_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(middle_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(top_layer, 0, 0, 1920, 1080);
+                    merged_calendar.DrawImage(bottom_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(middle_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(top_layer, 0, 0, template_width, template_height);
 
                     if (account.P5R_TS_HUD == "Normal")
                     {
@@ -1950,8 +2388,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                     else if (account.P5R_TS_HUD == "Inverted")
                     {
@@ -1974,8 +2412,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Invert their colors, then draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                 }
 
@@ -1985,16 +2423,16 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Since it's a specialized date, we need a new layer for the decorations.
                 using (Graphics calendar_decorations = Graphics.FromImage(decoration_layer))
                 {
-                    calendar_decorations.DrawImage(decoration_1, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_2, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_3, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_4, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_5, 0, 0, 1920, 1080);
+                    calendar_decorations.DrawImage(decoration_1, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_2, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_3, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_4, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_5, 0, 0, template_width, template_height);
                 }
 
                 // Draw the merged layer to the final bitmap.
-                graphics.DrawImage(merged_layer, 0, 0, 1920, 1080);
-                graphics.DrawImage(decoration_layer, 0, 0, 1920, 1080);
+                graphics.DrawImage(merged_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(decoration_layer, 0, 0, template_width, template_height);
             }
 
             return bitmap;
@@ -2003,7 +2441,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Construct_Valentine_Calendar(DateTime user_time, UserInfoFields account)
         {
             // Make an empty bitmap.
-            Bitmap bitmap = new Bitmap(1920, 1080);
+            Bitmap bitmap = new Bitmap(template_width, template_height);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -2077,20 +2515,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 dayTop_ones = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Top//Day//Double_Digit//Ones_Place//4.png");
 
                 // Create multiple bitmap layers for the calendar.
-                Bitmap bottom_layer = new Bitmap(1920, 1080);
-                Bitmap middle_layer = new Bitmap(1920, 1080);
-                Bitmap top_layer = new Bitmap(1920, 1080);
-                Bitmap merged_layer = new Bitmap(1920, 1080);
-                Bitmap decoration_layer = new Bitmap(1920, 1080);
+                Bitmap bottom_layer = new Bitmap(template_width, template_height);
+                Bitmap middle_layer = new Bitmap(template_width, template_height);
+                Bitmap top_layer = new Bitmap(template_width, template_height);
+                Bitmap merged_layer = new Bitmap(template_width, template_height);
+                Bitmap decoration_layer = new Bitmap(template_width, template_height);
 
                 using (Graphics calendar_bottom = Graphics.FromImage(bottom_layer))
                 {
-                    calendar_bottom.DrawImage(monthBottom, -30, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(weatherBox, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(monthBottom, -30, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(weatherBox, 0, 0, template_width, template_height);
 
-                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -2107,13 +2545,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_middle = Graphics.FromImage(middle_layer))
                 {
-                    calendar_middle.DrawImage(monthMiddle, -30, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(weatherIcon, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(monthMiddle, -30, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(weatherIcon, 0, 0, template_width, template_height);
 
-                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -2130,9 +2568,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_top = Graphics.FromImage(top_layer))
                 {
-                    calendar_top.DrawImage(monthTop, -30, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_ones, 0, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_tens, 0, 0, 1920, 1080);
+                    calendar_top.DrawImage(monthTop, -30, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_ones, 0, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_tens, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -2150,23 +2588,23 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Use the merged_layer to merge all bottom, middle, and top layers together.
                 using (Graphics merged_calendar = Graphics.FromImage(merged_layer))
                 {
-                    merged_calendar.DrawImage(bottom_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(middle_layer, 0, 0, 1920, 1080);
+                    merged_calendar.DrawImage(bottom_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(middle_layer, 0, 0, template_width, template_height);
 
                     if (account.P5R_TS_HUD == "Inverted")
                     {
                         // Before the decorations are overwritten, draw what's supposed to go over the middle layer filler.
-                        merged_calendar.DrawImage(Keep_Pixel_Overlap((Bitmap)dayMiddle_filler, (Bitmap)decoration_2), 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(Keep_Pixel_Overlap((Bitmap)dayMiddle_filler, (Bitmap)decoration_2), 0, 0, template_width, template_height);
 
                         // Alter the chocolate layers so that only the pixels where it overlaps with the middle day appears.
                         decoration_1 = Keep_Pixel_Overlap((Bitmap)dayMiddle_tens, (Bitmap)decoration_1);
                         decoration_2 = Keep_Pixel_Overlap((Bitmap)dayMiddle_ones, (Bitmap)decoration_2);
 
-                        merged_calendar.DrawImage(decoration_1, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(decoration_2, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(decoration_1, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(decoration_2, 0, 0, template_width, template_height);
                     }
 
-                    merged_calendar.DrawImage(top_layer, 0, 0, 1920, 1080);
+                    merged_calendar.DrawImage(top_layer, 0, 0, template_width, template_height);
 
                     if (account.P5R_TS_HUD == "Normal")
                     {
@@ -2186,8 +2624,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                     else if (account.P5R_TS_HUD == "Inverted")
                     {
@@ -2210,8 +2648,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Invert their colors, then draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                 }
 
@@ -2224,33 +2662,33 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     if (account.P5R_TS_HUD == "Normal")
                     {
                         //Alter the chocolate layers so that only the pixels where it overlaps with the day appears
-                        calendar_decorations.DrawImage(Keep_Pixel_Overlap((Bitmap)dayTop_tens, (Bitmap)decoration_1), 0, 0, 1920, 1080);
-                        calendar_decorations.DrawImage(Keep_Pixel_Overlap((Bitmap)dayTop_ones, (Bitmap)decoration_2), 0, 0, 1920, 1080);
+                        calendar_decorations.DrawImage(Keep_Pixel_Overlap((Bitmap)dayTop_tens, (Bitmap)decoration_1), 0, 0, template_width, template_height);
+                        calendar_decorations.DrawImage(Keep_Pixel_Overlap((Bitmap)dayTop_ones, (Bitmap)decoration_2), 0, 0, template_width, template_height);
                     }
 
-                    calendar_decorations.DrawImage(decoration_3, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_4, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_5, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_6, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_7, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_8, 0, 0, 1920, 1080);
+                    calendar_decorations.DrawImage(decoration_3, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_4, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_5, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_6, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_7, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_8, 0, 0, template_width, template_height);
                 }
 
                 //Draw the merged layer to the final bitmap
-                graphics.DrawImage(merged_layer, 0, 0, 1920, 1080);
+                graphics.DrawImage(merged_layer, 0, 0, template_width, template_height);
 
                 if (account.P5R_TS_HUD == "Inverted")
                 {
                     //The dark parts of the chocolate turned transparent if the calendar's inverted, so let's draw another chocolate layer on top of it
-                    Bitmap chocolate_invert = new Bitmap(1920, 1080);
+                    Bitmap chocolate_invert = new Bitmap(template_width, template_height);
 
                     //Alter the chocolate layers so that only the pixels where it overlaps with the day appears
-                    graphics.DrawImage(Keep_Chocolate_Pixel_Overlap(merged_layer, (Bitmap)decoration_1), 0, 0, 1920, 1080);
-                    graphics.DrawImage(Keep_Chocolate_Pixel_Overlap(merged_layer, (Bitmap)decoration_2), 0, 0, 1920, 1080);
+                    graphics.DrawImage(Keep_Chocolate_Pixel_Overlap(merged_layer, (Bitmap)decoration_1), 0, 0, template_width, template_height);
+                    graphics.DrawImage(Keep_Chocolate_Pixel_Overlap(merged_layer, (Bitmap)decoration_2), 0, 0, template_width, template_height);
                 }
 
                 //Draw the decoration layer to the final bitmap
-                graphics.DrawImage(decoration_layer, 0, 0, 1920, 1080);
+                graphics.DrawImage(decoration_layer, 0, 0, template_width, template_height);
             }
 
             return bitmap;
@@ -2259,7 +2697,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Construct_White_Calendar(DateTime user_time, UserInfoFields account)
         {
             // Make an empty bitmap.
-            Bitmap bitmap = new Bitmap(1920, 1080);
+            Bitmap bitmap = new Bitmap(template_width, template_height);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -2330,28 +2768,28 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 dayTop_ones = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Top//Day//Double_Digit//Ones_Place//4.png");
 
                 // Create multiple bitmap layers for the calendar.
-                Bitmap bottom_layer = new Bitmap(1920, 1080);
-                Bitmap middle_layer = new Bitmap(1920, 1080);
-                Bitmap top_layer = new Bitmap(1920, 1080);
-                Bitmap merged_layer = new Bitmap(1920, 1080);
-                Bitmap decoration_layer_1 = new Bitmap(1920, 1080);
-                Bitmap decoration_layer_2 = new Bitmap(1920, 1080);
+                Bitmap bottom_layer = new Bitmap(template_width, template_height);
+                Bitmap middle_layer = new Bitmap(template_width, template_height);
+                Bitmap top_layer = new Bitmap(template_width, template_height);
+                Bitmap merged_layer = new Bitmap(template_width, template_height);
+                Bitmap decoration_layer_1 = new Bitmap(template_width, template_height);
+                Bitmap decoration_layer_2 = new Bitmap(template_width, template_height);
 
                 // Since it's a specialized date, we need a new layer for the decorations. White Day needs a layer behind the date.
                 using (Graphics calendar_decorations = Graphics.FromImage(decoration_layer_1))
                 {
-                    calendar_decorations.DrawImage(decoration_1, 0, 0, 1920, 1080);
+                    calendar_decorations.DrawImage(decoration_1, 0, 0, template_width, template_height);
                 }
-                graphics.DrawImage(decoration_layer_1, 0, 0, 1920, 1080);
+                graphics.DrawImage(decoration_layer_1, 0, 0, template_width, template_height);
 
                 using (Graphics calendar_bottom = Graphics.FromImage(bottom_layer))
                 {
-                    calendar_bottom.DrawImage(monthBottom, -30, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(weatherBox, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(monthBottom, -30, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(weatherBox, 0, 0, template_width, template_height);
 
-                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -2368,13 +2806,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_middle = Graphics.FromImage(middle_layer))
                 {
-                    calendar_middle.DrawImage(monthMiddle, -30, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(weatherIcon, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(monthMiddle, -30, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(weatherIcon, 0, 0, template_width, template_height);
 
-                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -2391,9 +2829,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_top = Graphics.FromImage(top_layer))
                 {
-                    calendar_top.DrawImage(monthTop, -30, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_ones, 0, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_tens, 0, 0, 1920, 1080);
+                    calendar_top.DrawImage(monthTop, -30, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_ones, 0, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_tens, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -2411,9 +2849,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Use the merged_layer to merge all bottom, middle, and top layers together.
                 using (Graphics merged_calendar = Graphics.FromImage(merged_layer))
                 {
-                    merged_calendar.DrawImage(bottom_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(middle_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(top_layer, 0, 0, 1920, 1080);
+                    merged_calendar.DrawImage(bottom_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(middle_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(top_layer, 0, 0, template_width, template_height);
 
                     if (account.P5R_TS_HUD == "Normal")
                     {
@@ -2433,8 +2871,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                     else if (account.P5R_TS_HUD == "Inverted")
                     {
@@ -2457,8 +2895,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         //Invert their colors, then draw them to the merged layer
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                 }
 
@@ -2469,16 +2907,16 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 using (Graphics calendar_decorations = Graphics.FromImage(decoration_layer_2))
                 {
                     // Call the KeepPixelOverlap function on decoration_2 to make sure it's wrapped around the merged_layer correctly.
-                    calendar_decorations.DrawImage(Keep_Pixel_Overlap(merged_layer, (Bitmap)decoration_2), 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_3, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_4, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_5, 0, 0, 1920, 1080);
+                    calendar_decorations.DrawImage(Keep_Pixel_Overlap(merged_layer, (Bitmap)decoration_2), 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_3, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_4, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_5, 0, 0, template_width, template_height);
 
                     // There is a 1 in 3 chance of a shine appearing on the decoration.
                     if (rnd.Next(1, 4) == 3)
                     {
                         // Form a bitmap for the shine texture to be drawn onto before cropping.
-                        Bitmap shine = new Bitmap(1920, 1080);
+                        Bitmap shine = new Bitmap(template_width, template_height);
 
                         // Choose a random number betwwn 1 and 4 for the animation frames.
                         int frame = rnd.Next(1, 5);
@@ -2493,7 +2931,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                                         shine_to_fullscreen.DrawImage(decoration_6, 41, 89, 106, 117);
                                     }
 
-                                    calendar_decorations.DrawImage(Keep_Shine_Pixel_Overlap((Bitmap)decoration_5, (Bitmap)shine), 0, 0, 1920, 1080);
+                                    calendar_decorations.DrawImage(Keep_Shine_Pixel_Overlap((Bitmap)decoration_5, (Bitmap)shine), 0, 0, template_width, template_height);
                                 }
                                 break;
                             case 2:
@@ -2503,7 +2941,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                                         shine_to_fullscreen.DrawImage(decoration_6, 66, 116, 106, 117);
                                     }
 
-                                    calendar_decorations.DrawImage(Keep_Shine_Pixel_Overlap((Bitmap)decoration_5, (Bitmap)shine), 0, 0, 1920, 1080);
+                                    calendar_decorations.DrawImage(Keep_Shine_Pixel_Overlap((Bitmap)decoration_5, (Bitmap)shine), 0, 0, template_width, template_height);
                                 }
                                 break;
                             case 3:
@@ -2513,7 +2951,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                                         shine_to_fullscreen.DrawImage(decoration_6, 90, 132, 106, 117);
                                     }
 
-                                    calendar_decorations.DrawImage(Keep_Shine_Pixel_Overlap((Bitmap)decoration_5, (Bitmap)shine), 0, 0, 1920, 1080);
+                                    calendar_decorations.DrawImage(Keep_Shine_Pixel_Overlap((Bitmap)decoration_5, (Bitmap)shine), 0, 0, template_width, template_height);
                                 }
                                 break;
                             case 4:
@@ -2523,7 +2961,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                                         shine_to_fullscreen.DrawImage(decoration_6, 108, 146, 106, 117);
                                     }
 
-                                    calendar_decorations.DrawImage(Keep_Shine_Pixel_Overlap((Bitmap)decoration_5, (Bitmap)shine), 0, 0, 1920, 1080);
+                                    calendar_decorations.DrawImage(Keep_Shine_Pixel_Overlap((Bitmap)decoration_5, (Bitmap)shine), 0, 0, template_width, template_height);
                                 }
                                 break;
                             default:
@@ -2536,8 +2974,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Draw the merged layer to the final bitmap.
-                graphics.DrawImage(merged_layer, 0, 0, 1920, 1080);
-                graphics.DrawImage(decoration_layer_2, 0, 0, 1920, 1080);
+                graphics.DrawImage(merged_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(decoration_layer_2, 0, 0, template_width, template_height);
             }
 
             return bitmap;
@@ -2546,7 +2984,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public static Bitmap Construct_Harvest_Calendar(DateTime user_time, UserInfoFields account)
         {
             // Make an empty bitmap.
-            Bitmap bitmap = new Bitmap(1920, 1080);
+            Bitmap bitmap = new Bitmap(template_width, template_height);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -2624,20 +3062,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 dayTop_ones = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Top//Day//Double_Digit//Ones_Place//5.png");
 
                 // Create multiple bitmap layers for the calendar.
-                Bitmap bottom_layer = new Bitmap(1920, 1080);
-                Bitmap middle_layer = new Bitmap(1920, 1080);
-                Bitmap top_layer = new Bitmap(1920, 1080);
-                Bitmap merged_layer = new Bitmap(1920, 1080);
-                Bitmap decoration_layer = new Bitmap(1920, 1080);
+                Bitmap bottom_layer = new Bitmap(template_width, template_height);
+                Bitmap middle_layer = new Bitmap(template_width, template_height);
+                Bitmap top_layer = new Bitmap(template_width, template_height);
+                Bitmap merged_layer = new Bitmap(template_width, template_height);
+                Bitmap decoration_layer = new Bitmap(template_width, template_height);
 
                 using (Graphics calendar_bottom = Graphics.FromImage(bottom_layer))
                 {
-                    calendar_bottom.DrawImage(monthBottom, -30, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, 1920, 1080);
-                    calendar_bottom.DrawImage(weatherBox, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(monthBottom, -30, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_ones, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(dayBottom_tens, 0, 0, template_width, template_height);
+                    calendar_bottom.DrawImage(weatherBox, 0, 0, template_width, template_height);
 
-                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, 1920, 1080);
+                    calendar_bottom.DrawImage(weekdayBottom, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -2654,13 +3092,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_middle = Graphics.FromImage(middle_layer))
                 {
-                    calendar_middle.DrawImage(monthMiddle, -30, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, 1920, 1080);
-                    calendar_middle.DrawImage(weatherIcon, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(monthMiddle, -30, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_ones, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_tens, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(dayMiddle_filler, 0, 0, template_width, template_height);
+                    calendar_middle.DrawImage(weatherIcon, 0, 0, template_width, template_height);
 
-                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, 1920, 1080);
+                    calendar_middle.DrawImage(weekdayMiddle, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -2677,9 +3115,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 using (Graphics calendar_top = Graphics.FromImage(top_layer))
                 {
-                    calendar_top.DrawImage(monthTop, -30, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_ones, 0, 0, 1920, 1080);
-                    calendar_top.DrawImage(dayTop_tens, 0, 0, 1920, 1080);
+                    calendar_top.DrawImage(monthTop, -30, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_ones, 0, 0, template_width, template_height);
+                    calendar_top.DrawImage(dayTop_tens, 0, 0, template_width, template_height);
                 }
 
                 switch (account.P5R_TS_HUD)
@@ -2697,9 +3135,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Use the merged_layer to merge all bottom, middle, and top layers together.
                 using (Graphics merged_calendar = Graphics.FromImage(merged_layer))
                 {
-                    merged_calendar.DrawImage(bottom_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(middle_layer, 0, 0, 1920, 1080);
-                    merged_calendar.DrawImage(top_layer, 0, 0, 1920, 1080);
+                    merged_calendar.DrawImage(bottom_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(middle_layer, 0, 0, template_width, template_height);
+                    merged_calendar.DrawImage(top_layer, 0, 0, template_width, template_height);
 
                     if (account.P5R_TS_HUD == "Normal")
                     {
@@ -2719,8 +3157,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                     else if (account.P5R_TS_HUD == "Inverted")
                     {
@@ -2743,8 +3181,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
 
                         // Invert their colors, then draw them to the merged layer.
-                        merged_calendar.DrawImage(weekdayTop, 0, 0, 1920, 1080);
-                        merged_calendar.DrawImage(timeOfDay, 0, 0, 1920, 1080);
+                        merged_calendar.DrawImage(weekdayTop, 0, 0, template_width, template_height);
+                        merged_calendar.DrawImage(timeOfDay, 0, 0, template_width, template_height);
                     }
                 }
 
@@ -2754,28 +3192,28 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Since it's a specialized date, we need a new layer for the decorations.
                 using (Graphics calendar_decorations = Graphics.FromImage(decoration_layer))
                 {
-                    calendar_decorations.DrawImage(decoration_1, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_2, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_3, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_4, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_5, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_6, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_7, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_8, 0, 0, 1920, 1080);
-                    calendar_decorations.DrawImage(decoration_9, 0, 0, 1920, 1080);
+                    calendar_decorations.DrawImage(decoration_1, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_2, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_3, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_4, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_5, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_6, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_7, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_8, 0, 0, template_width, template_height);
+                    calendar_decorations.DrawImage(decoration_9, 0, 0, template_width, template_height);
                 }
 
                 // Draw the merged layer to the final bitmap.
-                graphics.DrawImage(merged_layer, 0, 0, 1920, 1080);
+                graphics.DrawImage(merged_layer, 0, 0, template_width, template_height);
 
                 // Randomly generate petals and color the returned bitmap from white to pink.
                 Bitmap petal_layer = White_To_Pink(Generate_Petals());
 
                 // Draw the petal layer where there are white pixels.
-                graphics.DrawImage(Keep_Petal_Pixel_Overlap(merged_layer, petal_layer), 0, 0, 1920, 1080);
+                graphics.DrawImage(Keep_Petal_Pixel_Overlap(merged_layer, petal_layer), 0, 0, template_width, template_height);
                 //graphics.DrawImage(petal_layer, 0, 0, 435, 330);
 
-                graphics.DrawImage(decoration_layer, 0, 0, 1920, 1080);
+                graphics.DrawImage(decoration_layer, 0, 0, template_width, template_height);
 
             }
 
@@ -2980,7 +3418,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Getter methods
-        public static DateTime Get_Date(SocketMessage message, UserInfoFields account)
+        public static DateTime Get_Date(SocialLinkerCommand sl_command, UserInfoFields account)
         {
             // Create an empty string variable. This is where the API request will be stored.
             string json_location = "";
@@ -3010,7 +3448,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Console.WriteLine(ex);
 
                 // Send a warning message to the user.
-                _ = ErrorHandling.API_Timeout(message);
+                _ = ErrorHandling.API_Timeout(sl_command);
 
                 // Set the user's time to the current UTC time.
                 user_time = DateTime.UtcNow;
@@ -3590,6 +4028,40 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Console.WriteLine(ex);
                 return null;
             }
+        }
+
+        // Method from https://www.codeproject.com/Articles/9184/Custom-AntiAliasing-with-GDI
+        public static Bitmap Custom_Antiailiasing(Bitmap input_bitmap, Point[] input_array)
+        {
+            // Make a 4X offscreen bitmap, power of 2's are important because 
+            // interpolating other size images takes significantly longer.
+            Bitmap scaled_bitmap = new Bitmap(input_bitmap.Width * 4, input_bitmap.Height * 4);
+            using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+            {
+                graphics.DrawImage(input_bitmap, 0, 0, scaled_bitmap.Width, scaled_bitmap.Height);
+            }
+            Bitmap base_template = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            // Update transform for additional pixels
+            Matrix myMatrix = new Matrix();
+            myMatrix.Scale(4, 4, MatrixOrder.Append);
+            myMatrix.TransformPoints(input_array);
+
+            using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+            {
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                graphics.FillPolygon(new SolidBrush(System.Drawing.Color.Transparent), input_array);
+            }
+
+            // Stretch blit the rendered image to the actual image
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(scaled_bitmap, 0, 0, base_template.Width, base_template.Height);
+            }
+
+            return base_template;
         }
 
         // Loading message

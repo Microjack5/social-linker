@@ -9,7 +9,7 @@ using Discord;
 using Discord.Rest;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using System.Drawing.Text;
@@ -49,9 +49,9 @@ namespace SocialLinker.Core.StatusScreens.Decor
                 int total_exp = account.Total_Exp;
                 string profile_picture = user.GetAvatarUrl();
                 string pmedals = $"{account.P_Medals}";
-                string proficiency_title = Core.LevelSystem.SocialStats.ProficiencyRankTitle(account.Proficiency_Rank);
-                string diligence_title = Core.LevelSystem.SocialStats.DiligenceRankTitle(account.Diligence_Rank);
-                string expression_title = Core.LevelSystem.SocialStats.ExpressionRankTitle(account.Expression_Rank);
+                string proficiency_title = LevelSystem.SocialStats.ProficiencyRankTitle(account.Proficiency_Rank);
+                string diligence_title = LevelSystem.SocialStats.DiligenceRankTitle(account.Diligence_Rank);
+                string expression_title = LevelSystem.SocialStats.ExpressionRankTitle(account.Expression_Rank);
 
                 //Determine the Next Exp value
                 int next_exp = 0;
@@ -196,8 +196,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             }
             catch (Exception ex)
             {
-                //Send an error message to the user
-                await channel.SendMessageAsync($":warning: Oops! It looks like something went wrong here. Please try again.");
+                _ = ErrorHandling.Scene_Upload_Failed(user, channel);
                 Console.WriteLine(ex);
 
                 //Delete the loading message

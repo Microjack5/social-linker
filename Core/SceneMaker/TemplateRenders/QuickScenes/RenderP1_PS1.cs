@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Core.SceneMaker.GlyphParsing;
 using System.IO;
 using Discord.WebSocket;
@@ -23,15 +23,15 @@ using System.Timers;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
-    public class RenderP1_PS1 : InteractiveBase<SocketCommandContext>
+    public class RenderP1_PS1 : ModuleBase<SocketCommandContext>
     {
-        public static async Task Render_Quick_Scene_P1_PS1(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task Render_Quick_Scene_P1_PS1(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             try
             {
                 // Create two variables for the command user and the command channel, derived from the message object taken in.
-                SocketUser user = message.Author;
-                SocketTextChannel channel = (SocketTextChannel)message.Channel;
+                SocketUser user = sl_command.User;
+                SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
                 // Get the account information of the command's user.
                 var account = UserInfoClasses.GetAccount(user);
@@ -76,7 +76,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 int char_index = active_session.Active_Characters.IndexOf(set_data);
 
                 // Parse the dialogue into lines that'll fit on the template and store it in a string array list.
-                List<string>[] dialogue_lines = Line_Parser(message, bustup_data, command_data.Dialogue);
+                List<string>[] dialogue_lines = Line_Parser(sl_command, bustup_data, command_data.Dialogue);
 
                 // The string array list typically has a constant number of indicies when created, so get the number of lines that'll actually be rendered. 
                 int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
@@ -92,7 +92,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(1, 2).Build());
 
                     // Render the first image.
-                    await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_1, loader);
+                    await Render_Offload(sl_command, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_1, loader);
 
                     // Move down one line and isolate another three lines of dialogue into a new string array list. This will imitate the text scrolling.
                     List<string>[] dialogue_lines_pt_2 = new List<string>[] { dialogue_lines[1], dialogue_lines[2], dialogue_lines[3] };
@@ -101,7 +101,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(2, 2).Build());
 
                     // Render the second image.
-                    await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_2, loader);
+                    await Render_Offload(sl_command, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_2, loader);
                 }
                 // If the number of rendered lines is exactly three or less, we'll only need to send one image.
                 else
@@ -110,7 +110,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Loading_Message().Build());
 
                     // Render the image.
-                    await Render_Offload(message, account, active_session, set_data, bustup_data, command_data, dialogue_lines, loader);
+                    await Render_Offload(sl_command, account, active_session, set_data, bustup_data, command_data, dialogue_lines, loader);
                 }
 
                 // Here, we're at the step where we've already rendered and sent the images we needed.
@@ -140,15 +140,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         }
 
-        public static async Task Render_Offload(SocketMessage message, UserInfoFields account, ContextSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
+        public static async Task Render_Offload(SocialLinkerCommand sl_command, UserInfoFields account, ContextSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
         {
             // Create variables to store the width and height of the template.
             int template_width = 320;
             int template_height = 240;
 
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Create a starting base bitmap to render all graphics on.
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -159,13 +159,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Here, we want to grab any images attached to the message to use it as a background.
             // Create a variable for the message attachment.
-            var attachments = message.Attachments;
+            var attachments = sl_command.Attachments;
 
             // Create an empty string variable to hold the URL of the attachment.
             string url = "";
 
             // If there are no attachments on the message, set the URL string to "None".
-            if (attachments.LongCount() == 0)
+            if (attachments == default || attachments.LongCount() == 0)
             {
                 url = "None";
             }
@@ -204,7 +204,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     Console.WriteLine(e);
                     await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(message);
+                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
                     return;
                 }
             }
@@ -243,7 +243,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
             if (command_data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(message, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -339,14 +339,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             try
             {
                 // Send the image.
-                await message.Channel.SendFileAsync(memoryStream, $"scene_{message.Author.Id}_{DateTime.UtcNow}.png");
+                await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
 
                 // Send an error message to the user if the image upload fails.
-                _ = ErrorHandling.Scene_Upload_Failed(message);
+                _ = ErrorHandling.Scene_Upload_Failed(sl_command);
 
                 // Clean up resources used by the stream, delete the loading message, and return.
                 memoryStream.Dispose();
@@ -361,7 +361,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If the user has auto-delete for their commands set to on, delete their command as well.
             if (account.Auto_Delete_Commands == "On")
             {
-                await message.DeleteAsync();
+                await sl_command.Message.DeleteAsync();
             }
         }
 
@@ -534,7 +534,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return bitmap;
         }
 
-        public static List<string>[] Line_Parser(SocketMessage message, BustupData bustup_data, string dialogue)
+        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, BustupData bustup_data, string dialogue)
         {
             // First, let's establish some values.
             // The max pixel length of a line.
@@ -587,7 +587,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     completed_word += dialogue_array[i];
 
                     // Now that we have our word, measure the pixel length of the completed string.
-                    int completed_word_length = Measure_String_Pixel_Length(message, completed_word);
+                    int completed_word_length = Measure_String_Pixel_Length(sl_command, completed_word);
 
                     // Check if the completed word is under the current line's allowed length.
                     // This is done by subtracting the completed word string's length from the remaining length of the line.
@@ -690,7 +690,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                             substring += completed_word_array[j];
 
                             // Measure the pixel length of the substring so far.
-                            substring_length = Measure_String_Pixel_Length(message, substring);
+                            substring_length = Measure_String_Pixel_Length(sl_command, substring);
 
                             // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
                             // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
@@ -736,7 +736,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return dialogue_list;
         }
 
-        public static int Measure_String_Pixel_Length(SocketMessage message, string input_word)
+        public static int Measure_String_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
         {
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
@@ -779,7 +779,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // If the error counter is at exactly 1, send a warning message to the user.
                     if (error_counter == 1)
                     {
-                        _ = ErrorHandling.Unsupported_Character(message);
+                        _ = ErrorHandling.Unsupported_Character(sl_command);
                     }
                 }
             }

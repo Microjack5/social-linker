@@ -399,145 +399,147 @@ namespace SocialLinker.Core.LocalStorageTables
         }
 
         // Main methods to assist the functions of the scene maker.
-        public static async Task Set_List_Message_Directory(SocketMessage message, string title)
+        public static async Task Set_List_Message_Directory(SocialLinkerCommand sl_command)
         {
-            switch (title)
+            switch (sl_command.MakerCommand.Template)
             {
                 case "P1-PS1":
-                    await OfficialSetLists.P1_PS1_Set_List(message);
+                    await OfficialSetLists.P1_PS1_Set_List(sl_command);
                     return;
 
                 case "P1-PSP":
-                    await OfficialSetLists.P1_PSP_Set_List(message);
+                    await OfficialSetLists.P1_PSP_Set_List(sl_command);
                     return;
 
                 case "P2IS-PS1":
-                    await OfficialSetLists.P2IS_PS1_Set_List(message);
+                    await OfficialSetLists.P2IS_PS1_Set_List(sl_command);
                     return;
 
                 case "P2IS-PSP":
-                    await OfficialSetLists.P2IS_PSP_Set_List(message);
+                    await OfficialSetLists.P2IS_PSP_Set_List(sl_command);
                     return;
 
                 case "P2EP-PS1":
-                    await OfficialSetLists.P2EP_PS1_Set_List(message);
+                    await OfficialSetLists.P2EP_PS1_Set_List(sl_command);
                     return;
 
                 case "P2EP-PSP":
-                    await OfficialSetLists.P2EP_PSP_Set_List(message);
+                    await OfficialSetLists.P2EP_PSP_Set_List(sl_command);
                     return;
 
                 case "P3F":
-                    await OfficialSetLists.P3F_Set_List(message);
+                    await OfficialSetLists.P3F_Set_List(sl_command);
                     return;
 
                 case "P3P":
-                    await OfficialSetLists.P3P_Set_List(message);
+                    await OfficialSetLists.P3P_Set_List(sl_command);
                     return;
 
                 case "P4-PS2":
-                    await OfficialSetLists.P4_PS2_Set_List(message);
+                    await OfficialSetLists.P4_PS2_Set_List(sl_command);
                     return;
 
                 case "P4G":
-                    await OfficialSetLists.P4G_Set_List(message);
+                    await OfficialSetLists.P4G_Set_List(sl_command);
                     return;
 
                 case "P4AU":
-                    await OfficialSetLists.P4AU_Set_List(message);
+                    await OfficialSetLists.P4AU_Set_List(sl_command);
                     return;
 
                 case "P4D":
-                    await OfficialSetLists.P4D_Set_List(message);
+                    await OfficialSetLists.P4D_Set_List(sl_command);
                     return;
 
                 case "P5-PS4":
-                    await OfficialSetLists.P5_PS4_Set_List(message);
+                    await OfficialSetLists.P5_PS4_Set_List(sl_command);
                     return;
 
                 case "P5R":
-                    await OfficialSetLists.P5R_Set_List(message);
+                    await OfficialSetLists.P5R_Set_List(sl_command);
                     return;
 
                 case "P5S":
-                    await OfficialSetLists.P5S_Set_List(message);
+                    await OfficialSetLists.P5S_Set_List(sl_command);
                     return;
 
                 case "BBTAG":
-                    await OfficialSetLists.BBTAG_Set_List(message);
+                    await OfficialSetLists.BBTAG_Set_List(sl_command);
                     return;
             }
+            Console.WriteLine("Here #3.5");
+            Console.WriteLine(sl_command.MakerCommand.Template);
             return;
         }
 
-        public static async Task Sprite_Sheet_Message_Directory(SocketMessage message, OfficialSetData sprite_set_info)
+        public static async Task Sprite_Sheet_Message_Directory(SocialLinkerCommand sl_command, OfficialSetData sprite_set_info)
         {
             switch (sprite_set_info.Origin)
             {
                 case "P1-PS1":
-                    await OfficialSetSheets.P1_PS1_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P1_PS1_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P1-PSP":
                     return;
 
                 case "P2IS-PS1":
-                    await OfficialSetSheets.P2IS_PS1_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P2IS_PS1_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P2IS-PSP":
                     return;
 
                 case "P2EP-PS1":
-                    await OfficialSetSheets.P2EP_PS1_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P2EP_PS1_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P2EP-PSP":
                     return;
 
                 case "P3F":
-                    await OfficialSetSheets.P3F_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P3F_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P3P":
-                    await OfficialSetSheets.P3P_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P3P_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P4-PS2":
-                    await OfficialSetSheets.P4_PS2_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P4_PS2_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P4G":
-                    await OfficialSetSheets.P4G_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P4G_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P4AU":
                     return;
 
                 case "P4D":
-                    await OfficialSetSheets.P4D_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P4D_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P5-PS4":
-                    await OfficialSetSheets.P5_PS4_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P5_PS4_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P5R":
-                    await OfficialSetSheets.P5R_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P5R_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P5S":
-                    await OfficialSetSheets.P5S_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.P5S_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "BBTAG":
-                    await OfficialSetSheets.BBTAG_Sprite_Sheet(message, sprite_set_info);
+                    await OfficialSetSheets.BBTAG_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
             }
             return;
         }
 
-        public static async void Base_Sprite_Validity_Check(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async void Base_Sprite_Validity_Check(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -549,30 +551,30 @@ namespace SocialLinker.Core.LocalStorageTables
             // If not, send an error message and cancel the request.
             if (command_data.Base_Sprite > filecount)
             {
-                _ = ErrorHandling.Sprite_Number_Not_Found(message, set_data.Name, set_data.Origin);
+                _ = ErrorHandling.Sprite_Number_Not_Found(sl_command, set_data.Name, set_data.Origin);
             }
             // If so, continue with creating the frame sheet!
             else
             {
-                await Bustup_Frame_Sheet_Message_Directory(message, set_data, command_data);
+                await Bustup_Frame_Sheet_Message_Directory(sl_command, set_data, command_data);
             }
 
             return;
         }
 
-        public static async Task Bustup_Frame_Sheet_Message_Directory(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task Bustup_Frame_Sheet_Message_Directory(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             switch (set_data.Origin)
             {
                 case "P1-PS1":
-                    await BustupFrameSheets.P1_PS1_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P1_PS1_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P1-PSP":
                     return;
 
                 case "P2IS-PS1":
-                    await BustupFrameSheets.P2IS_PS1_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P2IS_PS1_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P2IS-PSP":
@@ -585,42 +587,42 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P3F":
-                    await BustupFrameSheets.P3F_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P3F_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P3P":
-                    await BustupFrameSheets.P3P_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P3P_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P4-PS2":
-                    await BustupFrameSheets.P4_PS2_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P4_PS2_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P4G":
-                    await BustupFrameSheets.P4G_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P4G_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P4AU":
                     return;
 
                 case "P4D":
-                    await BustupFrameSheets.P4D_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P4D_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P5-PS4":
-                    await BustupFrameSheets.P5_PS4_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P5_PS4_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P5R":
-                    await BustupFrameSheets.P5R_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P5R_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P5S":
-                    await BustupFrameSheets.P5S_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.P5S_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "BBTAG":
-                    await BustupFrameSheets.BBTAG_Bustup_Frame_Sheet(message, set_data, command_data);
+                    await BustupFrameSheets.BBTAG_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
             }
             return;
@@ -810,47 +812,47 @@ namespace SocialLinker.Core.LocalStorageTables
             return output_string;
         }
 
-        public static async Task Quick_Scene_Directory(SocketMessage message, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task Quick_Scene_Directory(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             if (command_data.Template == "")
             {
                 switch (set_data.Origin)
                 {
                     case "P1-PS1":
-                        await RenderP1_PS1.Render_Quick_Scene_P1_PS1(message, set_data, command_data);
+                        await RenderP1_PS1.Render_Quick_Scene_P1_PS1(sl_command, set_data, command_data);
                         return;
 
                     case "P1-PSP":
                         return;
 
                     case "P2IS-PS1":
-                        await RenderP2IS_PS1.Render_Quick_Scene_P2IS_PS1(message, set_data, command_data);
+                        await RenderP2IS_PS1.Render_Quick_Scene_P2IS_PS1(sl_command, set_data, command_data);
                         return;
 
                     case "P2IS-PSP":
                         return;
 
                     case "P2EP-PS1":
-                        await RenderP2EP_PS1.Render_Quick_Scene_P2EP_PS1(message, set_data, command_data);
+                        await RenderP2EP_PS1.Render_Quick_Scene_P2EP_PS1(sl_command, set_data, command_data);
                         return;
 
                     case "P2EP-PSP":
                         return;
 
                     case "P3F":
-                        await RenderP3F.Render_Quick_Scene_P3F(message, set_data, command_data);
+                        await RenderP3F.Render_Quick_Scene_P3F(sl_command, set_data, command_data);
                         return;
 
                     case "P3P":
-                        await RenderP3P.Render_Quick_Scene_P3P(message, set_data, command_data);
+                        await RenderP3P.Render_Quick_Scene_P3P(sl_command, set_data, command_data);
                         return;
 
                     case "P4-PS2":
-                        await RenderP4_PS2.Render_Quick_Scene_P4_PS2(message, set_data, command_data);
+                        await RenderP4_PS2.Render_Quick_Scene_P4_PS2(sl_command, set_data, command_data);
                         return;
 
                     case "P4G":
-                        await RenderP4G.Render_Quick_Scene_P4G(message, set_data, command_data);
+                        await RenderP4G.Render_Quick_Scene_P4G(sl_command, set_data, command_data);
                         return;
 
                     case "P4AU":
@@ -863,11 +865,11 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P5R":
-                        await RenderP5R.Render_Quick_Scene_P5R(message, set_data, command_data);
+                        await RenderP5R.Render_Quick_Scene_P5R(sl_command, set_data, command_data);
                         return;
 
                     case "P5S":
-                        await RenderP5S.Render_Quick_Scene_P5S(message, set_data, command_data);
+                        await RenderP5S.Render_Quick_Scene_P5S(sl_command, set_data, command_data);
                         return;
 
                     case "BBTAG":
@@ -878,10 +880,10 @@ namespace SocialLinker.Core.LocalStorageTables
             return;
         }
 
-        public static async Task System_Message_Directory(SocketMessage message, MakerCommandData command_data)
+        public static async Task System_Message_Directory(SocialLinkerCommand sl_command, MakerCommandData command_data)
         {
             // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(message.Author);
+            var account = UserInfoClasses.GetAccount(sl_command.User);
 
             // Convert the user's template input into one usable depending on their version control settings.
             string template = InputToTemplate(account, command_data.Sprite_Set_Version);
@@ -907,18 +909,18 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P3F":
-                    await RenderP3F.Render_System_Message(message, command_data);
+                    await RenderP3F.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P3P":
                     return;
 
                 case "P4-PS2":
-                    await RenderP4_PS2.Render_System_Message(message, command_data);
+                    await RenderP4_PS2.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P4G":
-                    await RenderP4G.Render_System_Message(message, command_data);
+                    await RenderP4G.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P4AU":
@@ -944,7 +946,7 @@ namespace SocialLinker.Core.LocalStorageTables
         }
 
         // Bustup construction
-        public static Bitmap Bustup_Selection(SocketMessage message, UserInfoFields account, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data)
+        public static Bitmap Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data)
         {
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -1052,12 +1054,12 @@ namespace SocialLinker.Core.LocalStorageTables
             else
             {
                 Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(message, set_data, bustup_data, command_data, base_sprite);
+                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, command_data, base_sprite);
                 return bustup_with_frames;
             }
         }
 
-        public static Bitmap Construct_Bustup_With_Frames(SocketMessage message, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, Bitmap bustup)
+        public static Bitmap Construct_Bustup_With_Frames(SocialLinkerCommand sl_command, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, Bitmap bustup)
         {
             // Create a copy of the bitmap taken in.
             // This is the version we'll be editing and returning.
@@ -1097,7 +1099,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    _ = ErrorHandling.Eye_Frame_Not_Found(message, command_data, set_data.Name, set_data.Origin);
+                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, command_data, set_data.Name, set_data.Origin);
                     return null;
                 }
             }
@@ -1138,7 +1140,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    _ = ErrorHandling.Mouth_Frame_Not_Found(message, command_data, set_data.Name, set_data.Origin);
+                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, command_data, set_data.Name, set_data.Origin);
                     return null;
                 }
             }

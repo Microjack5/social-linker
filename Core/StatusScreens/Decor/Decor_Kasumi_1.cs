@@ -9,7 +9,7 @@ using Discord;
 using Discord.Rest;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using System.Drawing.Text;
@@ -207,8 +207,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             }
             catch (Exception ex)
             {
-                //Send an error message to the user
-                await channel.SendMessageAsync($":warning: Oops! It looks like something went wrong here. Please try again.");
+                _ = ErrorHandling.Scene_Upload_Failed(user, channel);
                 Console.WriteLine(ex);
 
                 //Delete the loading message

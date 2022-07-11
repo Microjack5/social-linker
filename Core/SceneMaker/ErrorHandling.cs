@@ -3,7 +3,7 @@ using System.Timers;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord.Addons.Interactive;
+using Fergun.Interactive;
 using Discord.Rest;
 using SocialLinker.Core.CloudStorageTables;
 using Discord;
@@ -12,17 +12,17 @@ using SocialLinker.Config;
 
 namespace SocialLinker.Core.SceneMaker
 {
-    class ErrorHandling : InteractiveBase<SocketCommandContext>
+    class ErrorHandling : ModuleBase<SocketCommandContext>
     {
         // Create a global variable for the class that contains the desired duration for error messages.
         // In this case, 60000 milliseconds equates to 1 minute.
         public static double error_duration = 60000;
 
-        public static async Task Char_Keyword_Not_Found(SocketMessage message)
+        public static async Task Char_Keyword_Not_Found(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -58,11 +58,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Sprite_Number_Missing(SocketMessage message)
+        public static async Task Sprite_Number_Missing(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -98,11 +98,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Sprite_Number_And_Dialogue_Missing(SocketMessage message)
+        public static async Task Sprite_Number_And_Dialogue_Missing(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -138,11 +138,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Too_Many_Animation_Frames(SocketMessage message)
+        public static async Task Too_Many_Animation_Frames(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -179,11 +179,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Non_Digit_In_Sprite_Number(SocketMessage message)
+        public static async Task Non_Digit_In_Sprite_Number(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -220,11 +220,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Sprite_Number_Before_Char_Keyword(SocketMessage message)
+        public static async Task Sprite_Number_Before_Char_Keyword(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -260,11 +260,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Animation_Frame_With_Blank_Sprite(SocketMessage message)
+        public static async Task Animation_Frame_With_Blank_Sprite(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -299,11 +299,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Viewing_Sprite_Details_With_Blank_Sprite(SocketMessage message)
+        public static async Task Viewing_Sprite_Details_With_Blank_Sprite(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -338,11 +338,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Animation_Frames_Without_Dialogue(SocketMessage message)
+        public static async Task Animation_Frames_Without_Dialogue(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -378,11 +378,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Animation_Frame_With_Blank_Sprite_And_Without_Dialogue(SocketMessage message)
+        public static async Task Animation_Frame_With_Blank_Sprite_And_Without_Dialogue(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -420,11 +420,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Text_After_Sprite_Number_Not_Quoted(SocketMessage message)
+        public static async Task Text_After_Sprite_Number_Not_Quoted(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -460,11 +460,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Cutins_Not_Cross_Compatible(SocketMessage message)
+        public static async Task Cutins_Not_Cross_Compatible(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -500,11 +500,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Sprite_Set_Not_Found_Generic(SocketMessage message, string user_input)
+        public static async Task Sprite_Set_Not_Found_Generic(SocialLinkerCommand command, string user_input)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -541,11 +541,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Sprite_Set_Not_Found_In_Template(SocketMessage message, string char_keyword, string template)
+        public static async Task Sprite_Set_Not_Found_In_Template(SocialLinkerCommand command, string char_keyword, string template)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -582,11 +582,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Cutin_Not_Found(SocketMessage message, string user_input)
+        public static async Task Cutin_Not_Found(SocialLinkerCommand command, string user_input)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -623,11 +623,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Sprite_Number_Not_Found(SocketMessage message, string character_name, string game_version)
+        public static async Task Sprite_Number_Not_Found(SocialLinkerCommand command, string character_name, string game_version)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -664,11 +664,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Scene_Upload_Failed(SocketMessage message)
+        public static async Task Scene_Upload_Failed(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -703,11 +703,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Incompatible_Custom_Sprite_Set(SocketMessage message)
+        public static async Task Incompatible_Custom_Sprite_Set(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -743,11 +743,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Incompatible_Template_Setting(SocketMessage message, string template_setting, string game_version)
+        public static async Task Incompatible_Template_Setting(SocialLinkerCommand command, string template_setting, string game_version)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -783,11 +783,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Max_Custom_Sprite_Sets_Reached(SocketMessage message)
+        public static async Task Max_Custom_Sprite_Sets_Reached(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -823,11 +823,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Restricted_Channel_Access(SocketMessage message)
+        public static async Task Restricted_Channel_Access(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -862,11 +862,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Incompatible_File_Type(SocketMessage message)
+        public static async Task Incompatible_File_Type(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -901,11 +901,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Eye_Frame_Not_Found(SocketMessage message, MakerCommandData command_data, string character_name, string game_version)
+        public static async Task Eye_Frame_Not_Found(SocialLinkerCommand command, MakerCommandData command_data, string character_name, string game_version)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -943,11 +943,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Mouth_Frame_Not_Found(SocketMessage message, MakerCommandData command_data, string character_name, string game_version)
+        public static async Task Mouth_Frame_Not_Found(SocialLinkerCommand command, MakerCommandData command_data, string character_name, string game_version)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -984,24 +984,24 @@ namespace SocialLinker.Core.SceneMaker
         }
 
         // Warnings
-        public static async Task Unsupported_Character(SocketMessage message)
+        public static async Task Unsupported_Character(SocialLinkerCommand command)
         {
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
             await channel.SendMessageAsync(":warning: One or more of the characters entered is not supported by this template's font set and will not be rendered.");
         }
 
-        public static async Task API_Timeout(SocketMessage message)
+        public static async Task API_Timeout(SocialLinkerCommand command)
         {
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
             await channel.SendMessageAsync(":warning: There was some trouble retrieving template data, so we'll use some default settings for now.");
         }
 
         // System messages
-        public static async Task Sprite_Sheet_Called_On_System_Message(SocketMessage message)
+        public static async Task Sprite_Sheet_Called_On_System_Message(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -1036,11 +1036,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Animation_Frame_Sheet_Called_On_System_Message(SocketMessage message)
+        public static async Task Animation_Frame_Sheet_Called_On_System_Message(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -1075,11 +1075,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Animation_Frames_Specified_On_System_Message(SocketMessage message)
+        public static async Task Animation_Frames_Specified_On_System_Message(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -1114,11 +1114,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Incorrect_Sprite_Number_On_System_Message(SocketMessage message)
+        public static async Task Incorrect_Sprite_Number_On_System_Message(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -1153,11 +1153,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Missing_Dialogue_On_System_Message(SocketMessage message)
+        public static async Task Missing_Dialogue_On_System_Message(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -1192,11 +1192,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Sprite_Number_And_Dialogue_Missing_On_System_Message(SocketMessage message)
+        public static async Task Sprite_Number_And_Dialogue_Missing_On_System_Message(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -1231,11 +1231,11 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Template_Specified_First_On_System_Message(SocketMessage message)
+        public static async Task Template_Specified_First_On_System_Message(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = message.Author;
-            SocketTextChannel channel = (SocketTextChannel)message.Channel;
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
 
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
