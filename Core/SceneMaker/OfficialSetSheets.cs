@@ -1456,9 +1456,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1511,9 +1527,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1566,9 +1598,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1621,9 +1669,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1678,9 +1742,25 @@ namespace SocialLinker.Core.SceneMaker
                 memoryStream.Seek(0, SeekOrigin.Begin);
 
                 // Send the embeded message to the channel.
-                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+                try
+                {
+                    await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
 
-                // Delete the loading message.
+                    // Send an error message to the user if the image upload fails.
+                    _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                    // Clean up resources used by the stream, delete the loading message, and return.
+                    memoryStream.Dispose();
+                    await loader.DeleteAsync();
+                    return;
+                }
+
+                // Clean up resources used by the stream and delete the loading message.
+                memoryStream.Dispose();
                 await loader.DeleteAsync();
             }
             catch (Exception ex)
@@ -1740,9 +1820,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1795,9 +1891,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1850,9 +1962,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1896,7 +2024,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of thumbnail previews of the décor being listed on the current page.
-            Bitmap sprite_set_preview = Generate_P4D_Bustup_Sprite_Sheet(sl_command, set_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Sprite_Sheet(sl_command, set_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1905,9 +2033,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1960,9 +2104,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -2015,9 +2175,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -2070,9 +2246,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -2125,9 +2317,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -2219,6 +2427,23 @@ namespace SocialLinker.Core.SceneMaker
             // Assign a color based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
 
+            embed.WithDescription("This may take a few seconds!");
+
+            return embed;
+        }
+
+        public static EmbedBuilder P4AU_Loading_Message()
+        {
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Generating Sprite Sheet...",
+                IconUrl = EmbedSettings.Get_Game_Logo("P4AU")
+            };
+
+            embed.WithAuthor(author);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4AU", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;

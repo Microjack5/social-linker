@@ -280,7 +280,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Console.WriteLine(e);
 
                 // Send an error message to the user if the image upload fails.
-                _ = ErrorHandling.Scene_Upload_Failed(sl_command);
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
 
                 // Clean up resources used by the stream, delete the loading message, and return.
                 memoryStream.Dispose();

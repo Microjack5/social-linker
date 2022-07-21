@@ -664,7 +664,7 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Scene_Upload_Failed(SocialLinkerCommand command)
+        public static async Task Image_Upload_Failed(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = command.User;

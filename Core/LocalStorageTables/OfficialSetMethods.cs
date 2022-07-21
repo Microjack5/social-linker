@@ -604,6 +604,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P4AU":
+                    await BustupFrameSheets.P4AU_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P4D":
