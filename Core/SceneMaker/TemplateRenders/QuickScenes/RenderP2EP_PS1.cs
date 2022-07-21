@@ -892,7 +892,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = $"Generating Scene...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2EP-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2EP-PS1")
             };
 
             embed.WithAuthor(author);

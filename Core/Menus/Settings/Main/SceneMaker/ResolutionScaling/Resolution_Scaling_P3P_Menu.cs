@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -120,7 +120,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 "**Choose a resolution to output your scenes in.**\n" +
@@ -208,7 +208,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 "**Choose a scaling method for your scenes. (This will not affect output resolutions on the lowest setting.)**\n" +
@@ -291,7 +291,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 $"Scenes will be output at a **`{account.P3P_Resolution}`** resolution.\n");
@@ -368,7 +368,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 $"Scenes will be scaled with **`{account.P3P_Scale}`** interpolation.\n");

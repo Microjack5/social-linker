@@ -1430,7 +1430,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2IS-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PS1")
             };
 
             embed.WithAuthor(author);
@@ -2004,7 +2004,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
             embed.WithAuthor(author);
@@ -2021,7 +2021,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"Generating Frame Panels...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2IS-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PS1")
             };
 
             embed.WithAuthor(author);
@@ -2037,7 +2037,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P3F")
+                IconUrl = EmbedSettings.Get_Game_Logo("P3F")
             };
 
             embed.WithAuthor(author);
@@ -2208,7 +2208,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Loading Frame Panels...",
-                IconUrl = "https://i.imgur.com/orZV4eI.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("BBTAG")
             };
 
             embed.WithAuthor(author);
@@ -2249,7 +2249,7 @@ namespace SocialLinker.Core.SceneMaker
                     break;
             }
 
-            embed.WithThumbnailUrl("https://i.imgur.com/f6dSxc1.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("BBTAG", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;

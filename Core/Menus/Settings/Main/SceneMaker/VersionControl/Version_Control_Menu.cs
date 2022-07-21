@@ -128,7 +128,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             EmbedSettings.Get_Game_Color("P1-PSP", null);
-            EmbedSettings.Get_Game_Thumbnail("P1-PSP");
+            EmbedSettings.Get_Game_Logo("P1-PSP");
 
             // Create an empty string variable.
             string version_title = "";
@@ -228,7 +228,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             EmbedSettings.Get_Game_Color("P2IS-PSP", null);
-            EmbedSettings.Get_Game_Thumbnail("P2IS-PSP");
+            EmbedSettings.Get_Game_Logo("P2IS-PSP");
 
             // Create an empty string variable.
             string version_title = "";
@@ -328,7 +328,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             EmbedSettings.Get_Game_Color("P2EP-PSP", null);
-            EmbedSettings.Get_Game_Thumbnail("P2EP-PSP");
+            EmbedSettings.Get_Game_Logo("P2EP-PSP");
 
             // Create an empty string variable.
             string version_title = "";
@@ -528,7 +528,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             EmbedSettings.Get_Game_Color("P4-PS2", null);
-            EmbedSettings.Get_Game_Thumbnail("P4-PS2");
+            EmbedSettings.Get_Game_Logo("P4-PS2");
 
             // Create an empty string variable.
             string version_title = "";
@@ -628,7 +628,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             EmbedSettings.Get_Game_Color("P5-PS4", null);
-            EmbedSettings.Get_Game_Thumbnail("P5-PS4");
+            EmbedSettings.Get_Game_Logo("P5-PS4");
 
             // Create an empty string variable.
             string version_title = "";

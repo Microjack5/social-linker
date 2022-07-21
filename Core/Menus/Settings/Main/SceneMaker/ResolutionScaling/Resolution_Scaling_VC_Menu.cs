@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P1-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
                 "**Which version would you like to edit?**\n" +
@@ -120,7 +120,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PSP"));
 
             embed.WithDescription("" +
                 "**Which version would you like to edit?**\n" +
@@ -201,7 +201,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2EP-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2EP-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PSP"));
 
             embed.WithDescription("" +
                 "**Which version would you like to edit?**\n" +

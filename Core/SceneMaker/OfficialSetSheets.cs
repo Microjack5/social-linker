@@ -1423,7 +1423,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
             embed.WithAuthor(author);
@@ -1478,7 +1478,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2IS-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PS1")
             };
 
             embed.WithAuthor(author);
@@ -1533,7 +1533,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2EP-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2EP-PS1")
             };
 
             embed.WithAuthor(author);
@@ -1588,7 +1588,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P3F")
+                IconUrl = EmbedSettings.Get_Game_Logo("P3F")
             };
 
             embed.WithAuthor(author);
@@ -1645,7 +1645,7 @@ namespace SocialLinker.Core.SceneMaker
                 var author = new EmbedAuthorBuilder
                 {
                     Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                    IconUrl = EmbedSettings.Get_Game_Thumbnail("P3P")
+                    IconUrl = EmbedSettings.Get_Game_Logo("P3P")
                 };
 
                 embed.WithAuthor(author);
@@ -1707,7 +1707,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4-PS2")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4-PS2")
             };
 
             embed.WithAuthor(author);
@@ -1762,7 +1762,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4G")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4G")
             };
 
             embed.WithAuthor(author);
@@ -1817,7 +1817,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4D")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4D")
             };
 
             embed.WithAuthor(author);
@@ -1872,7 +1872,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4AU")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4AU")
             };
 
             embed.WithAuthor(author);
@@ -1927,7 +1927,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5-PS4")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5-PS4")
             };
 
             embed.WithAuthor(author);
@@ -1982,7 +1982,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5R")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5R")
             };
 
             embed.WithAuthor(author);
@@ -2037,7 +2037,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5S")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5S")
             };
 
             embed.WithAuthor(author);
@@ -2092,7 +2092,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("BBTAG")
+                IconUrl = EmbedSettings.Get_Game_Logo("BBTAG")
             };
 
             embed.WithAuthor(author);
@@ -2138,7 +2138,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
             embed.WithAuthor(author);
@@ -2155,7 +2155,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2IS-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PS1")
             };
 
             embed.WithAuthor(author);
@@ -2171,7 +2171,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2EP-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2EP-PS1")
             };
 
             embed.WithAuthor(author);
@@ -2188,7 +2188,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P3F")
+                IconUrl = EmbedSettings.Get_Game_Logo("P3F")
             };
 
             embed.WithAuthor(author);
@@ -2211,7 +2211,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P3P")
+                IconUrl = EmbedSettings.Get_Game_Logo("P3P")
             };
 
             embed.WithAuthor(author);
@@ -2230,7 +2230,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4-PS2")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4-PS2")
             };
 
             embed.WithAuthor(author);
@@ -2247,7 +2247,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4G")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4G")
             };
 
             embed.WithAuthor(author);
@@ -2264,7 +2264,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4D")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4D")
             };
 
             embed.WithAuthor(author);
@@ -2281,7 +2281,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5-PS4")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5-PS4")
             };
 
             embed.WithAuthor(author);
@@ -2298,7 +2298,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5R")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5R")
             };
 
             embed.WithAuthor(author);
@@ -2315,7 +2315,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5S")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5S")
             };
 
             embed.WithAuthor(author);
@@ -2333,7 +2333,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Loading Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("BBTAG")
+                IconUrl = EmbedSettings.Get_Game_Logo("BBTAG")
             };
 
             embed.WithAuthor(author);

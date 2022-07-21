@@ -40,7 +40,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             // Assign a color and thumbnail based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -121,7 +121,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
                 "**Choose a resolution to output your scenes in.**\n" +
@@ -213,7 +213,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
                 "**Choose a scaling method for your scenes. (This will not affect output resolutions on the lowest setting.)**\n" +
@@ -296,7 +296,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
                 $"Scenes will be output at a **`{account.P4_PS2_Resolution}`** resolution.\n");
@@ -373,7 +373,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
                 $"Scenes will be scaled with **`{account.P4_PS2_Scale}`** interpolation.\n");

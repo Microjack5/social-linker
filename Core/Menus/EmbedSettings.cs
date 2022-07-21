@@ -146,7 +146,7 @@ namespace SocialLinker.Core.Menus
             }
         }
 
-        public static string Get_Game_Thumbnail(string title)
+        public static string Get_Game_Logo(string title)
         {
             // Return a thumbnail to be used on embedded menu messages.
             switch (title)

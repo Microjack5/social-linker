@@ -190,7 +190,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.General
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P1-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
                 "**Which version of Persona would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
@@ -272,7 +272,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.General
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PSP"));
 
             embed.WithDescription("" +
                 "**Which version of Persona 2: Innocent Sin would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
@@ -354,7 +354,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.General
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2EP-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2EP-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PSP"));
 
             embed.WithDescription("" +
                 "**Which version of Persona 2: Eternal Punishment would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
@@ -518,7 +518,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.General
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
                 "**Which version of Persona 4 would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
@@ -600,7 +600,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.General
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
                 "**Which version of Persona 5 would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +

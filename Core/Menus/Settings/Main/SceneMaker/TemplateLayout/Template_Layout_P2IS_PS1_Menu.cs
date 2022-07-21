@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -122,7 +122,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 "**Change the background of the message window. Pick the one that suits you.**\n" +
@@ -221,7 +221,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 "**Toggle inverted colors for character sprites on and off.**\n" +
@@ -304,7 +304,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 "**Choose the default position character sprites are rendered at.**\n" +
@@ -390,7 +390,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 $"Your wallpaper has been set to **`{account.P2IS_PSX_TS_Wallpaper}`**.\n");
@@ -467,7 +467,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 $"Inverted colors for character sprites have been set to **`{account.P2IS_PSX_TS_Invert}`**.\n");
@@ -544,7 +544,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 $"Sprite placements have been set to **`{account.P2IS_PSX_TS_Position}`**.\n");

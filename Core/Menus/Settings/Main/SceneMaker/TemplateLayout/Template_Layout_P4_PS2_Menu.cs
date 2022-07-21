@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -118,7 +118,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
                 "**Toggle the date & weather HUD between normal and TV World versions, or hide entirely.**\n" +
@@ -203,7 +203,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
                 $"The date & weather HUD has been set to **`{account.P4_PS2_TS_HUD}`**.\n");

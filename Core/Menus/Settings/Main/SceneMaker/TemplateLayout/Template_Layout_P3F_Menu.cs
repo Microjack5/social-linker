@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3F"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3F"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -120,7 +120,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3F"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3F"));
 
             embed.WithDescription("" +
                 "**Toggle parts of the date & moon HUD on and off.**\n" +
@@ -207,7 +207,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3F"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3F"));
 
             embed.WithDescription("" +
                 "**Choose to display character sprites within navigator windows.**\n" +
@@ -291,7 +291,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3F"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3F"));
 
             embed.WithDescription("" +
                 $"Date & moon phases have been set to **`{account.P3F_TS_HUD}`**.\n");
@@ -368,7 +368,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3F"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3F"));
 
             embed.WithDescription("" +
                 $"The navigator window has been set to **`{account.P3F_TS_Nav}`**.\n");

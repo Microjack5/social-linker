@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -122,7 +122,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
                 "**Toggle the date & weather HUD on and off.**\n" +
@@ -205,7 +205,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
                 "**Toggle between scene borders used in different contexts.**\n" +
@@ -290,7 +290,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
                 "**Change how the message window and control panel are displayed.**\n" +
@@ -375,7 +375,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
                 $"The date & weather HUD has been set to **`{account.P5_PS4_TS_HUD}`**.\n");
@@ -452,7 +452,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
                 $"The scene border has been set to **`{account.P5_PS4_TS_Border}`**.\n");
@@ -529,7 +529,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
                 $"The control panel has been set to **`{account.P5_PS4_TS_Panel}`**.\n");

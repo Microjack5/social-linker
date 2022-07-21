@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4G"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4G"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -118,7 +118,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4G"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4G"));
 
             embed.WithDescription("" +
                 "**Toggle the date & weather HUD between normal and TV World versions, or hide entirely.**\n" +
@@ -203,7 +203,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4G"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4G"));
 
             embed.WithDescription("" +
                 $"The date & weather HUD has been set to **`{account.P4G_TS_HUD}`**.\n");

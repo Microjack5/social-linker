@@ -40,7 +40,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4D"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4D"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -121,7 +121,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4D"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4D"));
 
             embed.WithDescription("" +
                 "**Toggle between dialogue and narration formats for created scenes.**\n" +
@@ -204,7 +204,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4D"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4D"));
 
             embed.WithDescription("" +
                 "**Change how left-sided sprites are displayed in dual character scenes.**\n" +
@@ -289,7 +289,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4D"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4D"));
 
             embed.WithDescription("" +
                 "**Choose a location to set the background for navigators and phone calls.**\n" +
@@ -374,7 +374,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4D"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4D"));
 
             embed.WithDescription("" +
                 $"The scene type has been set to **`{account.P4D_TS_Scene_Type}`**.\n");
@@ -451,7 +451,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4D"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4D"));
 
             embed.WithDescription("" +
                 $"Left-sided sprites in dual character scenes have been set to **`{account.P4D_TS_Dual}`**.\n");
@@ -528,7 +528,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4D"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4D"));
 
             embed.WithDescription("" +
                 $"Left-sided sprites in dual character scenes have been set to **`{account.P4D_TS_Dual}`**.\n" +
@@ -608,7 +608,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4D"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4D"));
 
             embed.WithDescription("" +
                 $"The navigator & caller location has been set to **`Location {account.P4D_TS_Nav_Call_Location}`**.\n");
