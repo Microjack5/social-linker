@@ -301,5 +301,35 @@ namespace SocialLinker.Core.Menus
 
             return imgurl;
         }
+        
+        public static Color Get_BBTAG_Series_Color(string series)
+        {
+            switch (series)
+            {
+                case "BlazBlue":
+                    return new Color(66, 119, 255);
+
+                case "Persona 4 Arena":
+                    return new Color(250, 238, 50);
+
+                case "Under Night In-Birth":
+                    return new Color(141, 72, 249);
+
+                case "RWBY":
+                    return new Color(250, 50, 85);
+
+                case "Arcana Heart":
+                    return new Color(255, 69, 175);
+
+                case "Senran Kagura":
+                    return new Color(203, 223, 255);
+
+                case "Akatsuki En-Eins":
+                    return new Color(188, 170, 141);
+
+                default:
+                    return new Color(250, 238, 50);
+            }
+        }
     }
 }
