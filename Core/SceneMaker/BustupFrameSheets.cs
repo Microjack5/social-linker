@@ -1381,7 +1381,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Set the color and thumbnail for the embeded message.
-            embed.WithColor(207, 200, 233);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -1491,7 +1491,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Set the color and thumbnail for the embeded message.
-            embed.WithColor(37, 149, 255);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -1546,14 +1546,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Assign a color based on the user's color setting for the P3P template.
-            if (account.P3P_TS_Color == "Male Protagonist")
-            {
-                embed.WithColor(37, 149, 255);
-            }
-            else if (account.P3P_TS_Color == "Female Protagonist")
-            {
-                embed.WithColor(255, 117, 154);
-            }
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -1608,7 +1601,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Set the color and thumbnail for the embeded message.
-            embed.WithColor(255, 229, 49);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -1663,7 +1656,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Set the color and thumbnail for the embeded message.
-            embed.WithColor(255, 229, 49);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -1718,7 +1711,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Set the color and thumbnail for the embeded message.
-            embed.WithColor(228, 0, 126);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -1773,7 +1766,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Set the color and thumbnail for the embeded message.
-            embed.WithColor(213, 27, 4);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -1828,7 +1821,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Set the color and thumbnail for the embeded message.
-            embed.WithColor(213, 27, 4);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -1883,7 +1876,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Set the color and thumbnail for the embeded message.
-            embed.WithColor(213, 27, 4);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -2075,7 +2068,7 @@ namespace SocialLinker.Core.SceneMaker
             // Assign a color based on the user's color setting for the P3P template.
             if (account.P3P_TS_Color == "Male Protagonist")
             {
-                embed.WithColor(37, 149, 255);
+                embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
                 embed.WithThumbnailUrl("https://i.imgur.com/VwI3i20.gif");
             }
             else if (account.P3P_TS_Color == "Female Protagonist")
@@ -2099,7 +2092,7 @@ namespace SocialLinker.Core.SceneMaker
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(255, 229, 49);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
             embed.WithThumbnailUrl("https://i.imgur.com/Nr5mEap.gif");
             embed.WithDescription("This may take a few seconds!");
 
@@ -2107,6 +2100,23 @@ namespace SocialLinker.Core.SceneMaker
         }
 
         public static EmbedBuilder P4G_Loading_Message()
+        {
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Generating Frame Panels...",
+                IconUrl = "https://i.imgur.com/B7fyUwl.png"
+            };
+
+            embed.WithAuthor(author);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
+            embed.WithThumbnailUrl("https://i.imgur.com/8FOF81K.gif");
+            embed.WithDescription("This may take a few seconds!");
+
+            return embed;
+        }
+
+        public static EmbedBuilder P4AU_Loading_Message()
         {
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder

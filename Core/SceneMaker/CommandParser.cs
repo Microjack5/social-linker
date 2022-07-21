@@ -46,7 +46,7 @@ namespace SocialLinker.Core.SceneMaker
                             }
                             break;
 
-                        case "maker_view":
+                        case "maker_sheet":
                             // If the base sprite is not at the default value but the eye frames and mouth frames are, we have a successful command! Generate an image viewing the details for the specified character sprite.
                             if (maker_command.Base_Sprite != default)
                             {
@@ -114,8 +114,6 @@ namespace SocialLinker.Core.SceneMaker
                                     return;
                                 }
                             }
-
-                            
                             break;
 
                         case "maker_create":

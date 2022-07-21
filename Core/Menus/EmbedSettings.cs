@@ -1,6 +1,6 @@
 ﻿using SocialLinker.Core.CloudStorageTables;
 using Discord;
-
+using System;
 
 namespace SocialLinker.Core.Menus
 {
@@ -202,6 +202,104 @@ namespace SocialLinker.Core.Menus
                 default:
                     return "";
             }
+        }
+
+        public static string Get_Loading_Icon(string title, UserInfoFields account)
+        {
+            // Return a thumbnail to be used on embedded menu messages.
+            switch (title)
+            {
+                case "P1-PS1":
+                    return "https://i.imgur.com/Lv794ze.png";
+
+                case "P1-PSP":
+                    return "";
+
+                case "P2IS-PS1":
+                    return "";
+
+                case "P2IS-PSP":
+                    return "";
+
+                case "P2EP-PS1":
+                    return "";
+
+                case "P2EP-PSP":
+                    return "";
+
+                case "P3F":
+                    return "https://i.imgur.com/VwI3i20.gif";
+
+                case "P3P":
+                    switch (account.P3P_TS_Color)
+                    {
+                        case "Male Protagonist":
+                            return "https://i.imgur.com/VwI3i20.gif";
+
+                        case "Female Protagonist":
+                            return "https://i.imgur.com/pkb4OJa.gif";
+
+                        default:
+                            return "https://i.imgur.com/VwI3i20.gif";
+                    }
+
+                case "P4-PS2":
+                    return "https://i.imgur.com/Nr5mEap.gif";
+
+                case "P4G":
+                    return "https://i.imgur.com/8FOF81K.gif";
+
+                case "P4AU":
+                    return "https://i.imgur.com/fHHawut.gif";
+
+                case "P4D":
+                    return Randomize_P4D_Gif();
+
+                case "P5-PS4":
+                    return "https://i.imgur.com/PYMB6XG.gif";
+
+                case "P5R":
+                    return "https://i.imgur.com/PYMB6XG.gif";
+
+                case "P5S":
+                    return "https://i.imgur.com/IkrlV0c.gif";
+
+                case "BBTAG":
+                    return "https://i.imgur.com/f6dSxc1.gif";
+
+                default:
+                    return "";
+            }
+        }
+
+        // Supplimental methods
+        public static string Randomize_P4D_Gif()
+        {
+            // Create a random variable.
+            Random r = new Random();
+
+            // Create an empty string variable that will return as the final answer.
+            string imgurl = "";
+
+            // P3F GIFs are scenes that exclusively apply to the FES version of P3.
+            string[] p4d_loading_icons = new string[]
+            {
+                "https://i.imgur.com/sfn7xIQ.gif",
+                "https://i.imgur.com/oCT0vi7.gif",
+                "https://i.imgur.com/itKoJAD.gif",
+                "https://i.imgur.com/psRGa2G.gif",
+                "https://i.imgur.com/hIOykos.gif",
+                "https://i.imgur.com/7tkBnC8.gif",
+                "https://i.imgur.com/3W8PaMZ.gif",
+                "https://i.imgur.com/c0pwkMY.gif",
+                "https://i.imgur.com/7drzbNI.gif",
+                "https://i.imgur.com/rGmuwTd.gif",
+                "https://i.imgur.com/EgZYZbc.gif"
+            };
+
+            imgurl = p4d_loading_icons[r.Next(0, p4d_loading_icons.Length)];
+
+            return imgurl;
         }
     }
 }

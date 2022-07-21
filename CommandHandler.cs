@@ -136,7 +136,7 @@ namespace SocialLinker
             _client.ShardReady += Settings;
             _client.ShardReady += Help;
             _client.ShardReady += Maker_List;
-            _client.ShardReady += Maker_View;
+            _client.ShardReady += Maker_Sheet;
             _client.ShardReady += Maker_Create;
             _client.ShardReady += Hug;
             _client.ShardReady += Pat;
@@ -145,9 +145,6 @@ namespace SocialLinker
             _client.SlashCommandExecuted += SlashAnnex;
             
             await Task.CompletedTask;
-
-            //await InitializeAsync(_client);
-            
         }
 
         private async Task SlashAnnex(SocketSlashCommand slash_command)
@@ -277,7 +274,7 @@ namespace SocialLinker
                     await Commands.Maker.MakerCommandParser(command);
                     break;
 
-                case "maker_view":
+                case "maker_sheet":
                     command.MakerCommand = SL_To_Maker_Command(command);
                     await Commands.Maker.MakerCommandParser(command);
                     break;
@@ -291,7 +288,7 @@ namespace SocialLinker
 
         public static async Task Status(DiscordSocketClient client)
         {
-            //await client.GetGuild(543226698238394378).DeleteApplicationCommandsAsync();
+            //await client.Rest.DeleteAllGlobalCommandsAsync();
 
             var guildCommand = new SlashCommandBuilder()
                 .WithName("status")
@@ -471,10 +468,10 @@ namespace SocialLinker
             }
         }
 
-        public static async Task Maker_View(DiscordSocketClient client)
+        public static async Task Maker_Sheet(DiscordSocketClient client)
         {
             var guildCommand = new SlashCommandBuilder()
-                .WithName("maker_view")
+                .WithName("maker_sheet")
                 .WithDescription("View the sprite sheet for a character with optional animation frames.")
                 .AddOption("character", ApplicationCommandOptionType.String, "Name of the character you wish to view.", isRequired: true)
                 .AddOption("character_version", ApplicationCommandOptionType.String, "Specifies the game a character's sprite sheet comes from.", isRequired: false)

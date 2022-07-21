@@ -147,36 +147,24 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Time to put it all together!
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                // Create and assign bitmap variables for the assets needed.
-                Bitmap layer_1 = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4G//Main//layer_1.png");
-                Bitmap layer_2 = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4G//Main//layer_2.png");
-                Bitmap cursor = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4G//Main//cursor.png");
-
                 // Draw the layer with the user's colored default background if it exists.
                 graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
 
                 // Draw the user's background to the base template.
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
 
-                // Draw the first textbox layer to the base template.
-                graphics.DrawImage(layer_1, 0, 0, template_width, template_height);
-
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
                 if (command_data.Base_Sprite != 0)
                 {
-                    graphics.DrawImage(bustup, bustup_data.P4G_Coord_X, bustup_data.P4G_Coord_Y, bustup_data.P4G_Scale_Width, bustup_data.P4G_Scale_Height);
+                    graphics.DrawImage(bustup, bustup_data.P4D_Center_Coord_X, bustup_data.P4D_Center_Coord_Y, bustup_data.P4D_Scale_Width, bustup_data.P4D_Scale_Height);
                 }
-
-                // Draw the brown textbox layer and cursor to the template last.
-                graphics.DrawImage(layer_2, 0, 0, template_width, template_height);
-                graphics.DrawImage(cursor, 0, 0, template_width, template_height);
 
                 // Now, it's time to render the text.
                 // Render the character's name to the template.
                 // Check if the base sprite number is something other than zero.
                 if (command_data.Base_Sprite != 0)
                 {
-                    graphics.DrawImage(Text_To_Brown(Render_Name(bustup_data)), 0, 0, template_width, template_height);
+                    //graphics.DrawImage(Text_To_Blue(Render_Name(bustup_data)), 0, 0, template_width, template_height);
                 }
                 // If the base sprite number IS zero, we need a sprite to actually retrieve a display name from.
                 else
@@ -187,11 +175,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                     // Get the bustup data for the first sprite and render the display name to the template.
                     bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
-                    graphics.DrawImage(Text_To_Brown(Render_Name(bustup_data)), 0, 0, template_width, template_height);
+                    //graphics.DrawImage(Text_To_Blue(Render_Name(bustup_data)), 0, 0, template_width, template_height);
                 }
 
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue)), 0, 0, template_width, template_height);
+                //graphics.DrawImage(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue)), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -316,7 +304,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             //Establish an int for the width and height glyphs should be rendered at
             int multiplier = 64;
 
-            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4G//Font//p4g_font_sheet.png";
+            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Font//p4d_font_sheet.png";
             Bitmap current_glyph;
 
             for (int i = 0; i < dialogue_lines.Length; i++)
@@ -670,7 +658,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Coloring bitmaps
-        public static Bitmap Text_To_Brown(Bitmap input_bitmap)
+        public static Bitmap Text_To_Blue(Bitmap input_bitmap)
         {
             // Create a color variable to store the color value of a pixel on the input bitmap later.
             System.Drawing.Color actual_color;
@@ -679,17 +667,17 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
             // Create a for loop to iterate over the X values where the name could be rendered.
-            for (int i = 90; i < 1320; i++)
+            for (int x = 117; x < 1803; x++)
             {
                 // Create a nested for loop to iterate over the Y values where the name could be rendered.
-                for (int j = 735; j < 810; j++)
+                for (int y = 731; y < 820; y++)
                 {
                     // Get the current pixel from the input bitmap.
-                    actual_color = input_bitmap.GetPixel(i, j);
+                    actual_color = input_bitmap.GetPixel(x, y);
 
                     // Color in the pixel with the new color while keeping its current alpha value.
-                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(actual_color.A, 77, 40, 13);
-                    new_bitmap.SetPixel(i, j, new_color);
+                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(actual_color.A, 0, 138, 255);
+                    new_bitmap.SetPixel(x, y, new_color);
                 }
             }
 
@@ -760,15 +748,45 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Scene...",
-                IconUrl = "https://i.imgur.com/B7fyUwl.png"
+                IconUrl = "https://i.imgur.com/MSQjGuu.png"
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(255, 229, 49);
-            embed.WithThumbnailUrl("https://i.imgur.com/8FOF81K.gif");
+            embed.WithColor(228, 0, 126);
+            embed.WithThumbnailUrl(Randomize_P4D_Gif());
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
+        }
+
+        // Supplimental methods
+        public static string Randomize_P4D_Gif()
+        {
+            // Create a random variable.
+            Random r = new Random();
+
+            // Create an empty string variable that will return as the final answer.
+            string imgurl = "";
+
+            // P3F GIFs are scenes that exclusively apply to the FES version of P3.
+            string[] p4d_loading_icons = new string[]
+            {
+                "https://i.imgur.com/sfn7xIQ.gif",
+                "https://i.imgur.com/oCT0vi7.gif",
+                "https://i.imgur.com/itKoJAD.gif",
+                "https://i.imgur.com/psRGa2G.gif",
+                "https://i.imgur.com/hIOykos.gif",
+                "https://i.imgur.com/7tkBnC8.gif",
+                "https://i.imgur.com/3W8PaMZ.gif",
+                "https://i.imgur.com/c0pwkMY.gif",
+                "https://i.imgur.com/7drzbNI.gif",
+                "https://i.imgur.com/rGmuwTd.gif",
+                "https://i.imgur.com/EgZYZbc.gif"
+            };
+
+            imgurl = p4d_loading_icons[r.Next(0, p4d_loading_icons.Length)];
+
+            return imgurl;
         }
     }
 }
