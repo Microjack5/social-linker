@@ -2009,7 +2009,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/Lv794ze.png");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P1-PS1", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2042,7 +2042,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/VwI3i20.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3F", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2060,23 +2060,14 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/y7x9wce.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P3P")
             };
 
             embed.WithAuthor(author);
 
             // Assign a color based on the user's color setting for the P3P template.
-            if (account.P3P_TS_Color == "Male Protagonist")
-            {
-                embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-                embed.WithThumbnailUrl("https://i.imgur.com/VwI3i20.gif");
-            }
-            else if (account.P3P_TS_Color == "Female Protagonist")
-            {
-                embed.WithColor(255, 117, 154);
-                embed.WithThumbnailUrl("https://i.imgur.com/pkb4OJa.gif");
-            }
-
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3P", account));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2088,12 +2079,12 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/8Qs9g1d.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4-PS2")
             };
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/Nr5mEap.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4-PS2", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2105,12 +2096,12 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/B7fyUwl.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4G")
             };
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/8FOF81K.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4G", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2122,12 +2113,12 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/B7fyUwl.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4AU")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(255, 229, 49);
-            embed.WithThumbnailUrl("https://i.imgur.com/8FOF81K.gif");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4AU", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2139,12 +2130,12 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/MSQjGuu.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4D")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(228, 0, 126);
-            embed.WithThumbnailUrl(Randomize_P4D_Gif());
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4D", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2156,12 +2147,12 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/1jk1MZw.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P5-PS4")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(213, 27, 4);
-            embed.WithThumbnailUrl("https://i.imgur.com/PYMB6XG.gif");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P5-PS4", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2173,12 +2164,12 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/WV32GRK.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P5R")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(213, 27, 4);
-            embed.WithThumbnailUrl("https://i.imgur.com/PYMB6XG.gif");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P5R", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2190,13 +2181,12 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Frame Panels...",
-                IconUrl = "https://i.imgur.com/PE7vGLY.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P5S")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(213, 27, 4);
-            //embed.WithThumbnailUrl("https://i.imgur.com/YA9WUNA.gif");
-            embed.WithThumbnailUrl("https://i.imgur.com/IkrlV0c.gif");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P5S", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2213,42 +2203,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
 
-            // Determine the embeded message's color based on the origin series of the sprite set.
-            switch (set_data.Series)
-            {
-                case "BlazBlue":
-                    embed.WithColor(66, 119, 255);
-                    break;
-
-                case "Persona 4 Arena":
-                    embed.WithColor(250, 238, 50);
-                    break;
-
-                case "Under Night In-Birth":
-                    embed.WithColor(141, 72, 249);
-                    break;
-
-                case "RWBY":
-                    embed.WithColor(250, 50, 85);
-                    break;
-
-                case "Arcana Heart":
-                    embed.WithColor(255, 69, 175);
-                    break;
-
-                case "Senran Kagura":
-                    embed.WithColor(203, 223, 255);
-                    break;
-
-                case "Akatsuki En-Eins":
-                    embed.WithColor(188, 170, 141);
-                    break;
-
-                default:
-                    embed.WithColor(250, 238, 50);
-                    break;
-            }
-
+            embed.WithColor(EmbedSettings.Get_BBTAG_Series_Color(set_data.Series));
             embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("BBTAG", null));
             embed.WithDescription("This may take a few seconds!");
 
