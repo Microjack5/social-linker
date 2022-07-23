@@ -40,7 +40,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -125,7 +125,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 "**Toggle between dialogue and narration formats for created scenes.**\n" +
@@ -208,7 +208,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 "**Toggle between PlayStation®️ 3 and Xbox 360 control guides.**\n" +
@@ -293,7 +293,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 "**Change how left-sided sprites are displayed in dual character scenes.**\n" +
@@ -373,7 +373,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             // Search for an item list that corresponds to the user's ID.
             var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == user.Id);
@@ -564,7 +564,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 "**Choose a location to set the background for phone calls.**\n" +
@@ -661,7 +661,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 "**Toggle the highlight for the scene’s protagonist on and off when speaking.**\n" +
@@ -744,7 +744,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 $"The scene type has been set to **`{account.P4AU_TS_Scene_Type}`**.\n");
@@ -821,7 +821,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 $"The control panel has been set to **`{account.P4AU_TS_Panel}`**.\n");
@@ -898,7 +898,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 $"Left-sided sprites in dual character scenes have been set to **`{account.P4AU_TS_Dual}`**.\n");
@@ -975,7 +975,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 $"Left-sided sprites in dual character scenes have been set to **`{account.P4AU_TS_Dual}`**.\n" +
@@ -1055,7 +1055,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 $"Left-sided sprites in dual character scenes have been set to **`{account.P4AU_TS_Dual}`**.\n" +
@@ -1144,7 +1144,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 $"The navigator location has been set to **`Location {account.P4AU_TS_Nav_BG}`**.\n");
@@ -1221,7 +1221,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 $"The caller location has been set to **`{account.P4AU_TS_Phone_BG}`**.\n");
@@ -1298,7 +1298,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             embed.WithDescription("" +
                 $"Highlights for right-sided sprites have been set to **`{account.P4AU_TS_Highlight}`** when speaking.\n");

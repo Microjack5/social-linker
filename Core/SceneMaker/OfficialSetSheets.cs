@@ -1423,7 +1423,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
             embed.WithAuthor(author);
@@ -1456,9 +1456,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1478,7 +1494,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2IS-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PS1")
             };
 
             embed.WithAuthor(author);
@@ -1511,9 +1527,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1533,7 +1565,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2EP-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2EP-PS1")
             };
 
             embed.WithAuthor(author);
@@ -1566,9 +1598,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1588,7 +1636,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P3F")
+                IconUrl = EmbedSettings.Get_Game_Logo("P3F")
             };
 
             embed.WithAuthor(author);
@@ -1621,9 +1669,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1645,7 +1709,7 @@ namespace SocialLinker.Core.SceneMaker
                 var author = new EmbedAuthorBuilder
                 {
                     Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                    IconUrl = EmbedSettings.Get_Game_Thumbnail("P3P")
+                    IconUrl = EmbedSettings.Get_Game_Logo("P3P")
                 };
 
                 embed.WithAuthor(author);
@@ -1678,9 +1742,25 @@ namespace SocialLinker.Core.SceneMaker
                 memoryStream.Seek(0, SeekOrigin.Begin);
 
                 // Send the embeded message to the channel.
-                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+                try
+                {
+                    await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
 
-                // Delete the loading message.
+                    // Send an error message to the user if the image upload fails.
+                    _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                    // Clean up resources used by the stream, delete the loading message, and return.
+                    memoryStream.Dispose();
+                    await loader.DeleteAsync();
+                    return;
+                }
+
+                // Clean up resources used by the stream and delete the loading message.
+                memoryStream.Dispose();
                 await loader.DeleteAsync();
             }
             catch (Exception ex)
@@ -1707,7 +1787,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4-PS2")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4-PS2")
             };
 
             embed.WithAuthor(author);
@@ -1740,9 +1820,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1762,7 +1858,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4G")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4G")
             };
 
             embed.WithAuthor(author);
@@ -1795,9 +1891,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1817,13 +1929,13 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4D")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4D")
             };
 
             embed.WithAuthor(author);
 
             // Set the color and thumbnail for the embeded message.
-            embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
 
             // Create a footer based on the user's settings.
             var footer = new EmbedFooterBuilder
@@ -1850,9 +1962,96 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
+        }
+
+        public static async Task P4AU_Sprite_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            // Send a loading message to the channel while the sprite sheet is being made.
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P4AU_Loading_Message().Build());
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
+                IconUrl = EmbedSettings.Get_Game_Logo("P4AU")
+            };
+
+            embed.WithAuthor(author);
+
+            // Set the color and thumbnail for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
+
+            // Create a footer based on the user's settings.
+            var footer = new EmbedFooterBuilder
+            {
+                Text = Create_Sprite_Sheet_Footer(account, set_data)
+            };
+
+            // Add the footer to the embed.
+            embed.WithFooter(footer);
+
+            // Attach a locally generated image to the embed. This image hasn't been created yet, so the filename is just a placeholder for now.
+            embed.WithImageUrl($"attachment://preview.png");
+
+            // Create a new stream. We'll use this to create the locally generated image.
+            MemoryStream memoryStream = new MemoryStream();
+
+            // Generate a bitmap comprised of thumbnail previews of the décor being listed on the current page.
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Sprite_Sheet(sl_command, set_data);
+
+            // Save the sprite set preview bitmap to the stream as a PNG.
+            sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+            // Ensure the stream is set to the beginning of itself.
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            // Send the embeded message to the channel.
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1872,7 +2071,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5-PS4")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5-PS4")
             };
 
             embed.WithAuthor(author);
@@ -1905,9 +2104,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1927,7 +2142,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5R")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5R")
             };
 
             embed.WithAuthor(author);
@@ -1960,9 +2175,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -1982,7 +2213,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5S")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5S")
             };
 
             embed.WithAuthor(author);
@@ -2015,9 +2246,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -2037,7 +2284,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("BBTAG")
+                IconUrl = EmbedSettings.Get_Game_Logo("BBTAG")
             };
 
             embed.WithAuthor(author);
@@ -2070,9 +2317,25 @@ namespace SocialLinker.Core.SceneMaker
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             // Send the embeded message to the channel.
-            await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Delete the loading message.
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
             await loader.DeleteAsync();
         }
 
@@ -2083,7 +2346,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
             embed.WithAuthor(author);
@@ -2100,7 +2363,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2IS-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PS1")
             };
 
             embed.WithAuthor(author);
@@ -2116,7 +2379,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P2EP-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P2EP-PS1")
             };
 
             embed.WithAuthor(author);
@@ -2133,7 +2396,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P3F")
+                IconUrl = EmbedSettings.Get_Game_Logo("P3F")
             };
 
             embed.WithAuthor(author);
@@ -2156,7 +2419,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P3P")
+                IconUrl = EmbedSettings.Get_Game_Logo("P3P")
             };
 
             embed.WithAuthor(author);
@@ -2169,13 +2432,30 @@ namespace SocialLinker.Core.SceneMaker
             return embed;
         }
 
+        public static EmbedBuilder P4AU_Loading_Message()
+        {
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Generating Sprite Sheet...",
+                IconUrl = EmbedSettings.Get_Game_Logo("P4AU")
+            };
+
+            embed.WithAuthor(author);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4AU", null));
+            embed.WithDescription("This may take a few seconds!");
+
+            return embed;
+        }
+
         public static EmbedBuilder P4_PS2_Loading_Message()
         {
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4-PS2")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4-PS2")
             };
 
             embed.WithAuthor(author);
@@ -2192,7 +2472,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4G")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4G")
             };
 
             embed.WithAuthor(author);
@@ -2209,7 +2489,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P4D")
+                IconUrl = EmbedSettings.Get_Game_Logo("P4D")
             };
 
             embed.WithAuthor(author);
@@ -2226,7 +2506,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5-PS4")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5-PS4")
             };
 
             embed.WithAuthor(author);
@@ -2243,7 +2523,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5R")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5R")
             };
 
             embed.WithAuthor(author);
@@ -2260,7 +2540,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P5S")
+                IconUrl = EmbedSettings.Get_Game_Logo("P5S")
             };
 
             embed.WithAuthor(author);
@@ -2278,7 +2558,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = "Loading Sprite Sheet...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("BBTAG")
+                IconUrl = EmbedSettings.Get_Game_Logo("BBTAG")
             };
 
             embed.WithAuthor(author);

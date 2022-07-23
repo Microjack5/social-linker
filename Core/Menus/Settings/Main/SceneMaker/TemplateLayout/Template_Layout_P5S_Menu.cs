@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -130,7 +130,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 "**Change button icons between PlayStation® 4, Nintendo Switch, Xbox One, and keyboard displays.**\n" +
@@ -217,7 +217,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 "**Toggle the skip button of the control panel on and off.**\n" +
@@ -300,7 +300,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 "**Toggle the auto-advance icon of the control panel on and off.**\n" +
@@ -383,7 +383,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 "**Toggle the scene border on and off.**\n" +
@@ -466,7 +466,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 "**Toggle parts of the date & location HUD on and off.**\n" +
@@ -551,7 +551,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 "**Change the displayed location icon.**\n" +
@@ -652,7 +652,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 "**Toggle the screenshot watermark on and off.**\n" +
@@ -735,7 +735,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 $"The controller type has been set to **`{account.P5S_TS_Controller_Type}`**.\n");
@@ -812,7 +812,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 $"The skip button has been set to **`{account.P5S_TS_Skip_Button}`**.\n");
@@ -889,7 +889,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 $"The auto-advance icon has been set to **`{account.P5S_TS_Auto_Advance}`**.\n");
@@ -966,7 +966,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 $"The scene border has been set to **`{account.P5S_TS_Scene_Border}`**.\n");
@@ -1043,7 +1043,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 $"The date & location layout has been set to **`{account.P5S_TS_Date_Location_Layout}`**.\n");
@@ -1120,7 +1120,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 $"The location icon has been set to **`{account.P5S_TS_Location_Icon}`**.\n");
@@ -1197,7 +1197,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
                 $"The screenshot watermark has been set to **`{account.P5S_TS_Watermark}`**.\n");

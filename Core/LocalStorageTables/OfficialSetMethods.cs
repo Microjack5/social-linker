@@ -514,6 +514,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P4AU":
+                    await OfficialSetSheets.P4AU_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P4D":
@@ -603,6 +604,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P4AU":
+                    await BustupFrameSheets.P4AU_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P4D":
@@ -859,6 +861,7 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P4D":
+                        await RenderP4D.Render_Quick_Scene_P4D(sl_command, set_data, command_data);
                         return;
 
                     case "P5-PS4":

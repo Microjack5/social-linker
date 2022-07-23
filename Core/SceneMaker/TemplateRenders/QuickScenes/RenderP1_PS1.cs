@@ -346,7 +346,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Console.WriteLine(e);
 
                 // Send an error message to the user if the image upload fails.
-                _ = ErrorHandling.Scene_Upload_Failed(sl_command);
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
 
                 // Clean up resources used by the stream, delete the loading message, and return.
                 memoryStream.Dispose();
@@ -1209,7 +1209,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = $"Generating Scene...",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
             embed.WithAuthor(author);
@@ -1226,7 +1226,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = $"Generating Scene... (Part {passthrough} / {number_of_scenes})",
-                IconUrl = EmbedSettings.Get_Game_Thumbnail("P1-PS1")
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
             embed.WithAuthor(author);

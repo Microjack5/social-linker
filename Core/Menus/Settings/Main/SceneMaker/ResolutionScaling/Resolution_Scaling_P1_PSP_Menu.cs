@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P1-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -120,7 +120,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P1-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
                 "**Choose a resolution to output your scenes in.**\n" +
@@ -208,7 +208,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P1-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
                 "**Choose a scaling method for your scenes. (This will not affect output resolutions on the lowest setting.)**\n" +
@@ -291,7 +291,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P1-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
                 $"Scenes will be output at a **`{account.P1_PSP_Resolution}`** resolution.\n");
@@ -368,7 +368,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P1-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
                 $"Scenes will be scaled with **`{account.P1_PSP_Scale}`** interpolation.\n");

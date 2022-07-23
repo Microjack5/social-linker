@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("BBTAG", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("BBTAG"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("BBTAG"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -120,7 +120,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("BBTAG", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("BBTAG"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("BBTAG"));
 
             embed.WithDescription("" +
                 "**Choose an episode header to display. The chapters will change throughout the week.**\n" +
@@ -211,7 +211,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("BBTAG", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("BBTAG"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("BBTAG"));
 
             embed.WithDescription("" +
                 "**Choose to toggle background blur on or off.**\n" +
@@ -294,7 +294,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("BBTAG", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("BBTAG"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("BBTAG"));
 
             embed.WithDescription("" +
                 $"The episode header has been set to **`{account.BBTAG_TS_Header}`**.\n");
@@ -371,7 +371,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("BBTAG", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("BBTAG"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("BBTAG"));
 
             embed.WithDescription("" +
                 $"Background blur has been set to **`{account.BBTAG_TS_BG_Blur}`**.\n");

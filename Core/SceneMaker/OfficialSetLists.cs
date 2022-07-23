@@ -30,7 +30,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P1-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_P1_PS1_Set_List()}");
@@ -68,7 +68,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P1-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P1-PSP")}");
@@ -106,7 +106,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P2IS-PS1")}");
@@ -144,7 +144,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2IS-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PSP"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P2IS-PSP")}");
@@ -182,7 +182,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2EP-PS1", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2EP-PS1"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PS1"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P2EP-PS1")}");
@@ -220,7 +220,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2EP-PSP", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P2EP-PSP"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PSP"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P2EP-PSP")}");
@@ -258,7 +258,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Assign a color and thumbnail to the embeded message based on the title.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3F"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3F"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P3F")}");
@@ -296,7 +296,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Assign a color based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P3P")}");
@@ -334,7 +334,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P4-PS2")}");
@@ -372,7 +372,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4G"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4G"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P4G")}");
@@ -410,7 +410,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4AU", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4AU"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4AU"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P4AU")}");
@@ -439,7 +439,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4D"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4D"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P4D")}");
@@ -468,7 +468,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P5-PS4")}");
@@ -506,7 +506,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P5R")}");
@@ -544,7 +544,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Set the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5S"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P5S")}");
@@ -573,7 +573,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Assign an embed color and thumbnail based on the user's episode header setting for the BBTAG template.
             embed.WithColor(EmbedSettings.Get_Game_Color("BBTAG", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("BBTAG"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("BBTAG"));
 
             // Create a description with the list of sprite sets available for the title.
             embed.WithDescription($"{OfficialSetMethods.Generate_BBTAG_Set_List()}");

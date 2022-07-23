@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -122,7 +122,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 "**Change the color scheme of the template.**\n" +
@@ -205,7 +205,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 "**Toggle parts of the date & moon HUD on and off.**\n" +
@@ -290,7 +290,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 "**Change how left-sided sprites are displayed in dual character scenes.**\n" +
@@ -374,7 +374,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 $"The color scheme has been set to **`{account.P3P_TS_Color}`**.\n");
@@ -451,7 +451,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 $"Date & moon phases have been set to **`{account.P3P_TS_HUD}`**.\n");
@@ -528,7 +528,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P3P"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
 
             embed.WithDescription("" +
                 $"Left-sided sprites in dual character scenes have been set to **`{account.P3P_TS_Dual}`**.\n");

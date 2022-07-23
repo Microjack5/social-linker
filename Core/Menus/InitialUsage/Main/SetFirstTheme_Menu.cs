@@ -183,12 +183,12 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             else if (account.Profile_Theme == "P4")
             {
                 game_title = "Persona 4";
-                embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P4-PS2"));
+                embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
             }
             else if (account.Profile_Theme == "P5")
             {
                 game_title = "Persona 5";
-                embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5-PS4"));
+                embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
             }
 
             embed.WithDescription($"" +

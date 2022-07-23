@@ -177,26 +177,21 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                         var new_bustup_data = new BustupData()
                         {
                             Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
-                            Default_Name_EN = "Makimura",
-                            Default_Name_JPN = "牧村 洋一",
-                            P2IS_PSX_Scale_Width = 96,
-                            P2IS_PSX_Scale_Height = 96,
-                            P2IS_PSX_Left_Coord_X = 18,
-                            P2IS_PSX_Left_Coord_Y = 70,
-                            P2IS_PSX_Center_Coord_X = 112,
-                            P2IS_PSX_Center_Coord_Y = 70,
-                            P2IS_PSX_Right_Coord_X = 208,
-                            P2IS_PSX_Right_Coord_Y = 70,
-                            P2IS_PSX_Default_Position = "Right",
-                            P2EP_PSX_Scale_Width = 96,
-                            P2EP_PSX_Scale_Height = 96,
-                            P2EP_PSX_Left_Coord_X = 16,
-                            P2EP_PSX_Left_Coord_Y = 70,
-                            P2EP_PSX_Center_Coord_X = 112,
-                            P2EP_PSX_Center_Coord_Y = 70,
-                            P2EP_PSX_Right_Coord_X = 208,
-                            P2EP_PSX_Right_Coord_Y = 70,
-                            P2EP_PSX_Default_Position = "Right"
+                            Default_Name_EN = "Rise",
+                            Default_Name_JPN = "久慈川 りせ",
+                            P4D_Scale_Width = 1024,
+                            P4D_Scale_Height = 1024,
+                            P4D_Left_Coord_X = -64,
+                            P4D_Left_Coord_Y = 64,
+                            P4D_Center_Coord_X = 448,
+                            P4D_Center_Coord_Y = 64,
+                            P4D_Right_Coord_X = 960,
+                            P4D_Right_Coord_Y = 64,
+                            P4D_Nav_Scale_Width = 0,
+                            P4D_Nav_Scale_Height = 0,
+                            P4D_Nav_Coord_X = 0,
+                            P4D_Nav_Coord_Y = 0,
+                            P4D_Dual_Flip = false
                         };
                         new_list.Add(new_bustup_data);
                     }

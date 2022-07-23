@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -124,7 +124,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 "**Toggle the date & weather HUD on and off.**\n" +
@@ -209,7 +209,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 "**Toggle between scene borders used in different contexts.**\n" +
@@ -294,7 +294,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 "**Change how the message window and control panel are displayed.**\n" +
@@ -379,7 +379,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 "**Select a setting to edit.**\n" +
@@ -460,7 +460,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 "**Toggle phone call settings for character sprites on and off.**\n" +
@@ -543,7 +543,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 "**Toggle between normal and Velvet Room calling locations.**\n" +
@@ -626,7 +626,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 $"The date & weather HUD has been set to **`{account.P5R_TS_HUD}`**.\n");
@@ -703,7 +703,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 $"The scene border has been set to **`{account.P5R_TS_Border}`**.\n");
@@ -780,7 +780,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 $"The control panel has been set to **`{account.P5R_TS_Panel}`**.\n");
@@ -857,7 +857,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 $"The phone call setting has been set to **`{account.P5R_TS_Caller_Toggle}`**.\n");
@@ -934,7 +934,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Thumbnail("P5R"));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
                 $"The caller location has been set to **`{account.P5R_TS_Caller_Location}`**.\n");
