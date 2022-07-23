@@ -288,7 +288,7 @@ namespace SocialLinker
 
         public static async Task Status(DiscordSocketClient client)
         {
-            //await client.Rest.DeleteAllGlobalCommandsAsync();
+            await client.Rest.DeleteAllGlobalCommandsAsync();
 
             var guildCommand = new SlashCommandBuilder()
                 .WithName("status")
@@ -438,22 +438,16 @@ namespace SocialLinker
                     .WithName("game")
                     .WithDescription("The game you wish to choose.")
                     .WithRequired(true)
-                    .AddChoice("P1-PS1", 1)
-                    .AddChoice("P1-PSP", 2)
-                    .AddChoice("P2IS-PS1", 3)
-                    .AddChoice("P2IS-PSP", 4)
-                    .AddChoice("P2EP-PS1", 5)
-                    .AddChoice("P2EP-PSP", 6)
-                    .AddChoice("P3F", 7)
-                    .AddChoice("P3P", 8)
-                    .AddChoice("P4-PS2", 9)
-                    .AddChoice("P4G", 10)
-                    .AddChoice("P4AU", 11)
-                    .AddChoice("P4D", 12)
-                    .AddChoice("P5-PS4", 13)
-                    .AddChoice("P5R", 14)
-                    .AddChoice("P5S", 15)
-                    .AddChoice("BBTAG", 16)
+                    .AddChoice("P1", 1)
+                    .AddChoice("P2IS", 2)
+                    .AddChoice("P2EP", 3)
+                    .AddChoice("P3", 4)
+                    .AddChoice("P4", 5)
+                    .AddChoice("P4AU", 6)
+                    .AddChoice("P4D", 7)
+                    .AddChoice("P5", 8)
+                    .AddChoice("P5S", 9)
+                    .AddChoice("BBTAG", 10)
                     .WithType(ApplicationCommandOptionType.Integer)
                     );
 
@@ -474,7 +468,22 @@ namespace SocialLinker
                 .WithName("maker_sheet")
                 .WithDescription("View the sprite sheet for a character with optional animation frames.")
                 .AddOption("character", ApplicationCommandOptionType.String, "Name of the character you wish to view.", isRequired: true)
-                .AddOption("character_version", ApplicationCommandOptionType.String, "Specifies the game a character's sprite sheet comes from.", isRequired: false)
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("character_version")
+                    .WithDescription("Specifies the game a character's sprite sheet comes from.")
+                    .WithRequired(false)
+                    .AddChoice("P1", 1)
+                    .AddChoice("P2IS", 2)
+                    .AddChoice("P2EP", 3)
+                    .AddChoice("P3", 4)
+                    .AddChoice("P4", 5)
+                    .AddChoice("P4AU", 6)
+                    .AddChoice("P4D", 7)
+                    .AddChoice("P5", 8)
+                    .AddChoice("P5S", 9)
+                    .AddChoice("BBTAG", 10)
+                    .WithType(ApplicationCommandOptionType.Integer)
+                    )
                 .AddOption("sprite_number", ApplicationCommandOptionType.Integer, "View animation frames for a character's specific sprite.", isRequired: false);
 
             try
@@ -500,22 +509,16 @@ namespace SocialLinker
                     .WithName("character_version")
                     .WithDescription("Specifies the game a character's sprite sheet comes from.")
                     .WithRequired(false)
-                    .AddChoice("P1-PS1", 1)
-                    .AddChoice("P1-PSP", 2)
-                    .AddChoice("P2IS-PS1", 3)
-                    .AddChoice("P2IS-PSP", 4)
-                    .AddChoice("P2EP-PS1", 5)
-                    .AddChoice("P2EP-PSP", 6)
-                    .AddChoice("P3F", 7)
-                    .AddChoice("P3P", 8)
-                    .AddChoice("P4-PS2", 9)
-                    .AddChoice("P4G", 10)
-                    .AddChoice("P4AU", 11)
-                    .AddChoice("P4D", 12)
-                    .AddChoice("P5-PS4", 13)
-                    .AddChoice("P5R", 14)
-                    .AddChoice("P5S", 15)
-                    .AddChoice("BBTAG", 16)
+                    .AddChoice("P1", 1)
+                    .AddChoice("P2IS", 2)
+                    .AddChoice("P2EP", 3)
+                    .AddChoice("P3", 4)
+                    .AddChoice("P4", 5)
+                    .AddChoice("P4AU", 6)
+                    .AddChoice("P4D", 7)
+                    .AddChoice("P5", 8)
+                    .AddChoice("P5S", 9)
+                    .AddChoice("BBTAG", 10)
                     .WithType(ApplicationCommandOptionType.Integer)
                     )
                 .AddOption("sprite_number", ApplicationCommandOptionType.Integer, "The specific sprite from the character's sprite sheet to use.", isRequired: true)
@@ -591,66 +594,42 @@ namespace SocialLinker
             switch (value)
             {
                 case "1":
-                    template = "P1-PS1";
+                    template = "P1";
                     break;
 
                 case "2":
-                    template = "P1-PSP";
+                    template = "P2IS";
                     break;
 
                 case "3":
-                    template = "P2IS-PS1";
+                    template = "P2EP";
                     break;
 
                 case "4":
-                    template = "P2IS-PSP";
+                    template = "P3";
                     break;
 
                 case "5":
-                    template = "P2EP-PS1";
+                    template = "P4";
                     break;
 
                 case "6":
-                    template = "P2EP-PSP";
-                    break;
-
-                case "7":
-                    template = "P3F";
-                    break;
-
-                case "8":
-                    template = "P3P";
-                    break;
-
-                case "9":
-                    template = "P4-PS2";
-                    break;
-
-                case "10":
-                    template = "P4G";
-                    break;
-
-                case "11":
                     template = "P4AU";
                     break;
 
-                case "12":
+                case "7":
                     template = "P4D";
                     break;
 
-                case "13":
-                    template = "P5-PS4";
+                case "8":
+                    template = "P5";
                     break;
 
-                case "14":
-                    template = "P5R";
-                    break;
-
-                case "15":
+                case "9":
                     template = "P5S";
                     break;
 
-                case "16":
+                case "10":
                     template = "BBTAG";
                     break;
             }
