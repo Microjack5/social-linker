@@ -2423,35 +2423,5 @@ namespace SocialLinker.Core.SceneMaker
 
             return embed;
         }
-
-        // Supplimental methods
-        public static string Randomize_P4D_Gif()
-        {
-            // Create a random variable.
-            Random r = new Random();
-
-            // Create an empty string variable that will return as the final answer.
-            string imgurl = "";
-
-            // P3F GIFs are scenes that exclusively apply to the FES version of P3.
-            string[] p4d_loading_icons = new string[]
-            {
-                "https://i.imgur.com/sfn7xIQ.gif",
-                "https://i.imgur.com/oCT0vi7.gif",
-                "https://i.imgur.com/itKoJAD.gif",
-                "https://i.imgur.com/psRGa2G.gif",
-                "https://i.imgur.com/hIOykos.gif",
-                "https://i.imgur.com/7tkBnC8.gif",
-                "https://i.imgur.com/3W8PaMZ.gif",
-                "https://i.imgur.com/c0pwkMY.gif",
-                "https://i.imgur.com/7drzbNI.gif",
-                "https://i.imgur.com/rGmuwTd.gif",
-                "https://i.imgur.com/EgZYZbc.gif"
-            };
-
-            imgurl = p4d_loading_icons[r.Next(0, p4d_loading_icons.Length)];
-
-            return imgurl;
-        }
     }
 }
