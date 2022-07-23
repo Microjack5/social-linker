@@ -1375,7 +1375,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/7Z6XU1d.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
             embed.WithAuthor(author);
@@ -1517,7 +1517,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/HlBRK9l.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P3F")
             };
 
             embed.WithAuthor(author);
@@ -1588,7 +1588,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/y7x9wce.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P3P")
             };
 
             embed.WithAuthor(author);
@@ -1659,7 +1659,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/8Qs9g1d.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4-PS2")
             };
 
             embed.WithAuthor(author);
@@ -1730,7 +1730,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/B7fyUwl.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4G")
             };
 
             embed.WithAuthor(author);
@@ -1801,7 +1801,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/MSQjGuu.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4D")
             };
 
             embed.WithAuthor(author);
@@ -1896,7 +1896,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_P4D_Bustup_Frame_Sheet(sl_command, set_data, command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1943,7 +1943,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/1jk1MZw.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P5-PS4")
             };
 
             embed.WithAuthor(author);
@@ -2014,7 +2014,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/WV32GRK.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P5R")
             };
 
             embed.WithAuthor(author);
@@ -2085,7 +2085,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/PE7vGLY.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P5S")
             };
 
             embed.WithAuthor(author);
@@ -2156,7 +2156,7 @@ namespace SocialLinker.Core.SceneMaker
             var author = new EmbedAuthorBuilder
             {
                 Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
-                IconUrl = "https://i.imgur.com/orZV4eI.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("BBTAG")
             };
 
             embed.WithAuthor(author);
