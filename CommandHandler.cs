@@ -288,7 +288,7 @@ namespace SocialLinker
 
         public static async Task Status(DiscordSocketClient client)
         {
-            await client.Rest.DeleteAllGlobalCommandsAsync();
+            //await client.Rest.DeleteAllGlobalCommandsAsync();
 
             var guildCommand = new SlashCommandBuilder()
                 .WithName("status")

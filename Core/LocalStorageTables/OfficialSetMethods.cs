@@ -467,7 +467,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     await OfficialSetLists.BBTAG_Set_List(sl_command);
                     return;
             }
-            Console.WriteLine("Here #3.5");
+
             Console.WriteLine(sl_command.MakerCommand.Template);
             return;
         }
