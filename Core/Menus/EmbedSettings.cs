@@ -213,13 +213,13 @@ namespace SocialLinker.Core.Menus
                     return "https://i.imgur.com/Lv794ze.png";
 
                 case "P1-PSP":
-                    return "";
+                    return "https://i.imgur.com/Czvm3H6.gif";
 
                 case "P2IS-PS1":
                     return "";
 
                 case "P2IS-PSP":
-                    return "";
+                    return "https://i.imgur.com/FrGz5rP.gif";
 
                 case "P2EP-PS1":
                     return "";
@@ -268,7 +268,7 @@ namespace SocialLinker.Core.Menus
                     return "https://i.imgur.com/f6dSxc1.gif";
 
                 default:
-                    return "";
+                    return "https://i.imgur.com/NtqQju4.gif";
             }
         }
 

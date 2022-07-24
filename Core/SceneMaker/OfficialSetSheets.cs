@@ -1478,6 +1478,77 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
+        public static async Task P1_PSP_Sprite_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            // Send a loading message to the channel while the sprite sheet is being made.
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PSP_Loading_Message().Build());
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PSP")
+            };
+
+            embed.WithAuthor(author);
+
+            // Set the color and thumbnail for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
+
+            // Create a footer based on the user's settings.
+            var footer = new EmbedFooterBuilder
+            {
+                Text = Create_Sprite_Sheet_Footer(account, set_data)
+            };
+
+            // Add the footer to the embed.
+            embed.WithFooter(footer);
+
+            // Attach a locally generated image to the embed. This image hasn't been created yet, so the filename is just a placeholder for now.
+            embed.WithImageUrl($"attachment://preview.png");
+
+            // Create a new stream. We'll use this to create the locally generated image.
+            MemoryStream memoryStream = new MemoryStream();
+
+            // Generate a bitmap comprised of thumbnail previews of the décor being listed on the current page.
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Sprite_Sheet(sl_command, set_data);
+
+            // Save the sprite set preview bitmap to the stream as a PNG.
+            sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+            // Ensure the stream is set to the beginning of itself.
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            // Send the embeded message to the channel.
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
+        }
+
         public static async Task P2IS_PS1_Sprite_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
@@ -2351,7 +2422,24 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/Lv794ze.png");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P1-PS1", null));
+            embed.WithDescription("This may take a few seconds!");
+
+            return embed;
+        }
+
+        public static EmbedBuilder P1_PSP_Loading_Message()
+        {
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Generating Sprite Sheet...",
+                IconUrl = EmbedSettings.Get_Game_Logo("P1-PSP")
+            };
+
+            embed.WithAuthor(author);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P1-PSP", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2384,7 +2472,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P2EP-PS1", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/KXcVCmG.png");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P2EP-PS1", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2401,7 +2489,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/VwI3i20.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3F", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2426,7 +2514,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Assign a color based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3P", account));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2460,7 +2548,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/Nr5mEap.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4-PS2", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2477,7 +2565,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/8FOF81K.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4G", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2511,7 +2599,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/PYMB6XG.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P5-PS4", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2528,7 +2616,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/PYMB6XG.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P5R", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2545,8 +2633,7 @@ namespace SocialLinker.Core.SceneMaker
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P5S", null));
-            //embed.WithThumbnailUrl("https://i.imgur.com/YA9WUNA.gif");
-            embed.WithThumbnailUrl("https://i.imgur.com/IkrlV0c.gif");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P5S", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -2562,44 +2649,8 @@ namespace SocialLinker.Core.SceneMaker
             };
 
             embed.WithAuthor(author);
-
-            // Determine the embeded message's color based on the origin series of the sprite set.
-            switch (set_data.Series)
-            {
-                case "BlazBlue":
-                    embed.WithColor(66, 119, 255);
-                    break;
-
-                case "Persona 4 Arena":
-                    embed.WithColor(250, 238, 50);
-                    break;
-
-                case "Under Night In-Birth":
-                    embed.WithColor(141, 72, 249);
-                    break;
-
-                case "RWBY":
-                    embed.WithColor(250, 50, 85);
-                    break;
-
-                case "Arcana Heart":
-                    embed.WithColor(255, 69, 175);
-                    break;
-
-                case "Senran Kagura":
-                    embed.WithColor(203, 223, 255);
-                    break;
-
-                case "Akatsuki En-Eins":
-                    embed.WithColor(188, 170, 141);
-                    break;
-
-                default:
-                    embed.WithColor(250, 238, 50);
-                    break;
-            }
-
-            embed.WithThumbnailUrl("https://i.imgur.com/f6dSxc1.gif");
+            embed.WithColor(EmbedSettings.Get_BBTAG_Series_Color(set_data.Series));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("BBTAG", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
