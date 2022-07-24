@@ -1214,7 +1214,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/Lv794ze.png");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P1-PS1", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
@@ -1231,7 +1231,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/Lv794ze.png");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P1-PS1", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;

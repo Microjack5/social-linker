@@ -17,6 +17,7 @@ using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Globalization;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -1635,12 +1636,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Scene...",
-                IconUrl = "https://i.imgur.com/8Qs9g1d.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4-PS2")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(255, 229, 49);
-            embed.WithThumbnailUrl("https://i.imgur.com/Nr5mEap.gif");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4-PS2", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;

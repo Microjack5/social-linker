@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Immutable;
-using Discord.WebSocket;
 using SocialLinker.Core.LocalStorageTables;
 using SocialLinker.Core.CloudStorageTables;
-using SocialLinker.Config;
 
 namespace SocialLinker.Core.SceneMaker
 {
@@ -144,9 +142,6 @@ namespace SocialLinker.Core.SceneMaker
                             // Get the information of the chosen sprite set.
                             sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, maker_command);
 
-                            Console.WriteLine(maker_command.Character_Keyword);
-                            Console.WriteLine(maker_command.Sprite_Set_Version);
-
                             // If the sprite set's info returns null, it means the character keyword the user typed doesn't exist in the files.
                             // If this happens and the user didn't specify a template, send a generic "set not found" error message.
                             if (sprite_set_info == null && maker_command.Sprite_Set_Version == "")
@@ -177,8 +172,6 @@ namespace SocialLinker.Core.SceneMaker
             var account = UserInfoClasses.GetAccount(sl_command.User);
 
             var message = sl_command.Message;
-
-            Console.WriteLine(message.Content.ToString());
 
             // Create an OfficialSetData variable and set it to null.
             // We'll be assigning a proper object to it depending on how far we progress through the method.
@@ -245,7 +238,7 @@ namespace SocialLinker.Core.SceneMaker
                 // Revome the current string from the input substring list afterwards, bringing the next string to index 0.
                 if (current_string.ToLower() == generic_keywords[i])
                 {
-                    command_data.Template = current_string;
+                    sl_command.MakerCommand.Template = current_string;
                     input_substring.RemoveAt(iterator);
                     break;
                 }
@@ -253,7 +246,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Let's assume a generic keyword was not found during the last step. 
             // If the "template" string is empty, a generic keyword wasn't assigned to it. Let's try searching for a version keyword next.
-            if (command_data.Template == "")
+            if (sl_command.MakerCommand.Template == "")
             {
                 // Iterate through every index in the version_keywords array to check if the current string is a match.
                 for (int i = 0; i < version_keywords.Length; i++)
@@ -262,7 +255,7 @@ namespace SocialLinker.Core.SceneMaker
                     // Revome the current string from the input substring list afterwards, bringing the next string to index 0.
                     if (current_string.ToLower() == version_keywords[i])
                     {
-                        command_data.Template = current_string;
+                        sl_command.MakerCommand.Template = current_string;
                         input_substring.RemoveAt(iterator);
                         break;
                     }
@@ -274,10 +267,10 @@ namespace SocialLinker.Core.SceneMaker
             if (input_substring.Count == 0)
             {
                 // If the template string is no longer empty and the character keyword string is, the user wants to generate a character list.
-                if (command_data.Template != "" && command_data.Character_Keyword == "")
+                if (sl_command.MakerCommand.Template != "" && sl_command.MakerCommand.Character_Keyword == "")
                 {
                     // Convert the user's input template into a usable form that follows their version control settings.
-                    command_data.Template = OfficialSetMethods.InputToTemplate(account, command_data.Template);
+                    sl_command.MakerCommand.Template = OfficialSetMethods.InputToTemplate(account, sl_command.MakerCommand.Template);
 
                     // Generate the sprite set list for the user's selected title.
                     await OfficialSetMethods.Set_List_Message_Directory(sl_command);
@@ -358,14 +351,14 @@ namespace SocialLinker.Core.SceneMaker
                         // If they match, a generic keyword specifying which game to pull the character's sprites from is present.
                         // Assign the last index of the char_temp list to the "character_sheet" string variable.
                         // Afterwards, remove the last index of char_temp from the list and break the loop. All that should remain is the character keyword.
-                        command_data.Sprite_Set_Version = char_temp[char_temp.Count - 1];
+                        sl_command.MakerCommand.Sprite_Set_Version = char_temp[char_temp.Count - 1];
                         char_temp.RemoveAt(char_temp.Count - 1);
                         break;
                     }
                 }
 
                 // Check if the Sprite_Set_Version variable is still empty. If so, this means the char_temp list did not contain a generic keyword.
-                if (command_data.Sprite_Set_Version == "")
+                if (sl_command.MakerCommand.Sprite_Set_Version == "")
                 {
                     // Next, let's start checking for version keywords.
                     // Start iterating through the version_keywords string list. There may be a template keyword present at the end of the character keyword.
@@ -377,7 +370,7 @@ namespace SocialLinker.Core.SceneMaker
                             // If they match, a version keyword specifying which game to pull the character's sprites from is present.
                             // Assign the last index of the char_temp list to the "Sprite_Set_Version" string variable.
                             // Afterwards, remove the last index of char_temp from the list and break the loop. All that should remain is the character keyword.
-                            command_data.Sprite_Set_Version = char_temp[char_temp.Count - 1];
+                            sl_command.MakerCommand.Sprite_Set_Version = char_temp[char_temp.Count - 1];
                             char_temp.RemoveAt(char_temp.Count - 1);
                             break;
                         }
@@ -386,21 +379,21 @@ namespace SocialLinker.Core.SceneMaker
             }
 
             // Take the remaining entries in char_temp and place them in a single string declared earlier.
-            command_data.Character_Keyword = string.Join(" ", char_temp.ToArray());
+            sl_command.MakerCommand.Character_Keyword = string.Join(" ", char_temp.ToArray());
 
             // Before we go any further, we'll want to check if the user entered any special keywords in the character keyword's place.
             // These keywords will trigger special scene maker functions and cannot be used as part of a character's access keyword.
-            if (command_data.Character_Keyword.ToLower() == "system")
+            if (sl_command.MakerCommand.Character_Keyword.ToLower() == "system")
             {
                 await System_Message_Parser(sl_command, message.Content);
                 return;
             }
-            else if (command_data.Character_Keyword.ToLower() == "dual")
+            else if (sl_command.MakerCommand.Character_Keyword.ToLower() == "dual")
             {
                 // Redirect to dual scene maker menu
                 return;
             }
-            else if (command_data.Character_Keyword.ToLower() == "help")
+            else if (sl_command.MakerCommand.Character_Keyword.ToLower() == "help")
             {
                 // Redirect to scene maker help menu
                 return;
@@ -411,7 +404,7 @@ namespace SocialLinker.Core.SceneMaker
             for (int i = 0; i < generic_keywords.Length; i++)
             {
                 // Take the character_keyword variable and compare it against the current generic_keywords index iteration.
-                if (command_data.Character_Keyword.ToLower() == generic_keywords[i])
+                if (sl_command.MakerCommand.Character_Keyword.ToLower() == generic_keywords[i])
                 {
                     // If a match is found, send an error message. The command was improperly input.
                     await ErrorHandling.Char_Keyword_Not_Found(sl_command);
@@ -423,7 +416,7 @@ namespace SocialLinker.Core.SceneMaker
             for (int i = 0; i < version_keywords.Length; i++)
             {
                 // Take the character_keyword variable and compare it against the current version_keywords index iteration.
-                if (command_data.Character_Keyword.ToLower() == version_keywords[i])
+                if (sl_command.MakerCommand.Character_Keyword.ToLower() == version_keywords[i])
                 {
                     // If a match is found, send an error message. The command was improperly input.
                     await ErrorHandling.Char_Keyword_Not_Found(sl_command);
@@ -445,7 +438,7 @@ namespace SocialLinker.Core.SceneMaker
                 {
                     // Compare the entirety of the character_keyword string against the current iteration of the quotation_check char array to check if a match exists.
                     // If so, the user entered a quotation mark prematurely. Quotation marks only come after a sprite number, so output an error message and return.
-                    if (command_data.Character_Keyword.Contains(quotation_check[i]))
+                    if (sl_command.MakerCommand.Character_Keyword.Contains(quotation_check[i]))
                     {
                         await ErrorHandling.Sprite_Number_Missing(sl_command);
                         return;
@@ -455,20 +448,20 @@ namespace SocialLinker.Core.SceneMaker
                 // Here, we want to check for other possible parsing conditions and account for other errors or command types.
                 // Reminder: At this point, only the possible template keyword and character keyword should be taken in.
                 // If both the template keyword and character keyword are not empty, send an error message. A template keyword without sprite number and dialogue is incorrect syntax.
-                if (command_data.Template != "" && command_data.Character_Keyword != "")
+                if (sl_command.MakerCommand.Template != "" && sl_command.MakerCommand.Character_Keyword != "")
                 {
                     await ErrorHandling.Sprite_Number_And_Dialogue_Missing(sl_command);
                 }
                 // If the template keyword is not empty and the character keyword is empty, we have a successful command! Generate a character list from the specified title.
-                else if (command_data.Template != "" && command_data.Character_Keyword == "")
+                else if (sl_command.MakerCommand.Template != "" && sl_command.MakerCommand.Character_Keyword == "")
                 {
                     await OfficialSetMethods.Set_List_Message_Directory(sl_command);
                 }
                 // If the character keyword is not empty and the sprite sheet specifier is empty, we have a successful command! Generate a sprite sheet from the character's game of origin.
-                else if (command_data.Character_Keyword != "" && command_data.Sprite_Set_Version == "")
+                else if (sl_command.MakerCommand.Character_Keyword != "" && sl_command.MakerCommand.Sprite_Set_Version == "")
                 {
                     // Get the information of the chosen sprite set.
-                    sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, command_data);
+                    sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, sl_command.MakerCommand);
 
                     // If the sprite set info is not null, decide how to generate the embeded message.
                     if (sprite_set_info != null)
@@ -478,15 +471,15 @@ namespace SocialLinker.Core.SceneMaker
                     // If the sprite set info is null, send an error message. The sprite set doesn't exist.
                     else
                     {
-                        await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, command_data.Character_Keyword);
+                        await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, sl_command.MakerCommand.Character_Keyword);
                         return;
                     }
                 }
                 // If both the character keyword and the sprite sheet specifier are not empty, we have a successful command! Generate a character sprite sheet from the specified title.
-                else if (command_data.Character_Keyword != "" && command_data.Sprite_Set_Version != "")
+                else if (sl_command.MakerCommand.Character_Keyword != "" && sl_command.MakerCommand.Sprite_Set_Version != "")
                 {
                     // Get the information of the chosen sprite set.
-                    sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, command_data);
+                    sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, sl_command.MakerCommand);
 
                     // If the sprite set info is not null, decide how to generate the embeded message.
                     if (sprite_set_info != null)
@@ -496,7 +489,7 @@ namespace SocialLinker.Core.SceneMaker
                     // If the sprite set info is null, send an error message. The sprite set doesn't exist.
                     else
                     {
-                        await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, command_data.Character_Keyword);
+                        await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, sl_command.MakerCommand.Character_Keyword);
                         return;
                     }
                 }
@@ -558,20 +551,20 @@ namespace SocialLinker.Core.SceneMaker
             // If the number of indices present is one, the user only specified the base sprite.
             if (sprite_number_temp.Count == 1)
             {
-                command_data.Base_Sprite = Int32.Parse(sprite_number_temp[0]);
+                sl_command.MakerCommand.Base_Sprite = Int32.Parse(sprite_number_temp[0]);
             }
             // If the number of indices present is two, the user specified both the base sprite and the eye frame.
             else if (sprite_number_temp.Count == 2)
             {
-                command_data.Base_Sprite = Int32.Parse(sprite_number_temp[0]);
-                command_data.Eye_Frame = Int32.Parse(sprite_number_temp[1]);
+                sl_command.MakerCommand.Base_Sprite = Int32.Parse(sprite_number_temp[0]);
+                sl_command.MakerCommand.Eye_Frame = Int32.Parse(sprite_number_temp[1]);
             }
             // If the number of indices present is three, the user specified the base sprite, eye frame, and mouth frame.
             else if (sprite_number_temp.Count == 3)
             {
-                command_data.Base_Sprite = Int32.Parse(sprite_number_temp[0]);
-                command_data.Eye_Frame = Int32.Parse(sprite_number_temp[1]);
-                command_data.Mouth_Frame = Int32.Parse(sprite_number_temp[2]);
+                sl_command.MakerCommand.Base_Sprite = Int32.Parse(sprite_number_temp[0]);
+                sl_command.MakerCommand.Eye_Frame = Int32.Parse(sprite_number_temp[1]);
+                sl_command.MakerCommand.Mouth_Frame = Int32.Parse(sprite_number_temp[2]);
             }
 
             // The command input can potentially end here, so let's first test the case that there's still more input remaining.
@@ -579,14 +572,14 @@ namespace SocialLinker.Core.SceneMaker
             {
                 // If the user makes it this far, there should be a character keyword present since we've already taken in the sprite number.
                 // If the character keyword is empty, send an error message and return.
-                if (command_data.Character_Keyword == "")
+                if (sl_command.MakerCommand.Character_Keyword == "")
                 {
                     await ErrorHandling.Sprite_Number_Before_Char_Keyword(sl_command);
                     return;
                 }
                 // If the base sprite was read in as zero and the eye frame or mouth frame values are not empty, send an error message and return.
                 // Zero can be read in as the base sprite, but eye and mouth frames can't be specified after it.
-                else if ((command_data.Base_Sprite == 0) && ((command_data.Eye_Frame != default) || (command_data.Mouth_Frame != default)))
+                else if ((sl_command.MakerCommand.Base_Sprite == 0) && ((sl_command.MakerCommand.Eye_Frame != default) || (sl_command.MakerCommand.Mouth_Frame != default)))
                 {
                     await ErrorHandling.Animation_Frame_With_Blank_Sprite(sl_command);
                     return;
@@ -601,45 +594,45 @@ namespace SocialLinker.Core.SceneMaker
                 // Test for zero entries in the sprite specifiers.
                 // If the base sprite was read in as zero and the eye frame or mouth frame values are both empty, send an error message and return.
                 // The base sprite being zero indicates the lack of a sprite, so sprite details are impossible to view.
-                if ((command_data.Base_Sprite == 0) && ((command_data.Eye_Frame == default) || (command_data.Mouth_Frame == default)))
+                if ((sl_command.MakerCommand.Base_Sprite == 0) && ((sl_command.MakerCommand.Eye_Frame == default) || (sl_command.MakerCommand.Mouth_Frame == default)))
                 {
                     await ErrorHandling.Viewing_Sprite_Details_With_Blank_Sprite(sl_command);
                 }
                 // If the base sprite was read in as zero and the eye frame or mouth frame values are not empty, send an error message and return.
                 // Zero can be read in as the base sprite, but eye and mouth frames can't be specified after it.
                 // Eye frames and mouth frames being specified without dialouge afterwards is also incorrect syntax.
-                else if ((command_data.Base_Sprite == 0) && ((command_data.Eye_Frame != default) || (command_data.Mouth_Frame != default)))
+                else if ((sl_command.MakerCommand.Base_Sprite == 0) && ((sl_command.MakerCommand.Eye_Frame != default) || (sl_command.MakerCommand.Mouth_Frame != default)))
                 {
                     await ErrorHandling.Animation_Frame_With_Blank_Sprite_And_Without_Dialogue(sl_command);
                 }
                 // If the base sprite is not at the default value and neither is the eye frame or mouth frame, send an error message and return.
                 // Eye frames and mouth frames being specified without dialouge afterwards is incorrect syntax.
-                else if ((command_data.Base_Sprite != default) && ((command_data.Eye_Frame != default) || (command_data.Mouth_Frame != default)))
+                else if ((sl_command.MakerCommand.Base_Sprite != default) && ((sl_command.MakerCommand.Eye_Frame != default) || (sl_command.MakerCommand.Mouth_Frame != default)))
                 {
                     await ErrorHandling.Animation_Frames_Without_Dialogue(sl_command);
                 }
                 // If the character keyword is empty but the base sprite value is not, send an error message and return.
                 // A character keyword must always come before the sprite number.
-                else if ((command_data.Character_Keyword == "") && (command_data.Base_Sprite != default))
+                else if ((sl_command.MakerCommand.Character_Keyword == "") && (sl_command.MakerCommand.Base_Sprite != default))
                 {
                     await ErrorHandling.Char_Keyword_Not_Found(sl_command);
                 }
                 // If the base sprite is not at the default value but the eye frames and mouth frames are, we have a successful command! Generate an image viewing the details for the specified character sprite.
-                else if ((command_data.Base_Sprite != default) && (command_data.Eye_Frame == default) && (command_data.Mouth_Frame == default))
+                else if ((sl_command.MakerCommand.Base_Sprite != default) && (sl_command.MakerCommand.Eye_Frame == default) && (sl_command.MakerCommand.Mouth_Frame == default))
                 {
                     // Get the information of the chosen sprite set.
-                    sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, command_data);
+                    sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, sl_command.MakerCommand);
 
                     // If the sprite set info is not null, start creating a sprite sheet detailing the chosen sprite's frames.
                     // The first step of this is checking the validity of the user's inputted base sprite in relation to the chosen set.
                     if (sprite_set_info != null)
                     {
-                        OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, command_data);
+                        OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, sl_command.MakerCommand);
                     }
                     // If the sprite set info is null, send an error message. The sprite set doesn't exist.
                     else
                     {
-                        await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, command_data.Character_Keyword);
+                        await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, sl_command.MakerCommand.Character_Keyword);
                         return;
                     }
                 }
@@ -681,7 +674,7 @@ namespace SocialLinker.Core.SceneMaker
             // Add each entry of the dialogue_temp char list to the dialogue string variable.
             foreach (char ch in dialogue_temp)
             {
-                command_data.Dialogue += ch;
+                sl_command.MakerCommand.Dialogue += ch;
             }
 
             // Check if the dialogue variable is empty or full of whitespace. It should be filled with something.
@@ -699,29 +692,29 @@ namespace SocialLinker.Core.SceneMaker
             // If the dialogue is filled with whitespace, replace it with ellipses.
             if (whitespace_check == charArr.Length)
             {
-                command_data.Dialogue = "......";
+                sl_command.MakerCommand.Dialogue = "......";
             }
 
             // Get the information of the chosen sprite set.
-            sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, command_data);
+            sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, sl_command.MakerCommand);
 
             // If the sprite set's info returns null, it means the character keyword the user typed doesn't exist in the files.
             // If this happens and the user didn't specify a template, send a generic "set not found" error message.
-            if (sprite_set_info == null && command_data.Sprite_Set_Version == "")
+            if (sprite_set_info == null && sl_command.MakerCommand.Sprite_Set_Version == "")
             {
-                await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, command_data.Character_Keyword);
+                await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, sl_command.MakerCommand.Character_Keyword);
                 return;
             }
             // Else, if this happens and the user did specify a template, send a "set not found" error message specifying the template.
-            else if (sprite_set_info == null && command_data.Sprite_Set_Version != "")
+            else if (sprite_set_info == null && sl_command.MakerCommand.Sprite_Set_Version != "")
             {
-                await ErrorHandling.Sprite_Set_Not_Found_In_Template(sl_command, command_data.Character_Keyword, OfficialSetMethods.InputToTemplate(account, command_data.Sprite_Set_Version));
+                await ErrorHandling.Sprite_Set_Not_Found_In_Template(sl_command, sl_command.MakerCommand.Character_Keyword, OfficialSetMethods.InputToTemplate(account, sl_command.MakerCommand.Sprite_Set_Version));
                 return;
             }
             // If the sprite set did not return null, the command was successful!
             else if (sprite_set_info != null)
             {
-                await OfficialSetMethods.Quick_Scene_Directory(sl_command, sprite_set_info, command_data);
+                await OfficialSetMethods.Quick_Scene_Directory(sl_command, sprite_set_info, sl_command.MakerCommand);
                 //await message.Channel.SendMessageAsync(":white_check_mark: **Parsing successful.** Full command has been parsed and sprite set has been found.");
             }
         }

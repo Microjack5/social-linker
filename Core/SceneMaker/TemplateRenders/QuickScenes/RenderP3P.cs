@@ -18,6 +18,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -1932,22 +1933,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Scene...",
-                IconUrl = "https://i.imgur.com/y7x9wce.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P3P")
             };
 
             embed.WithAuthor(author);
 
             // Assign a color based on the user's color setting for the P3P template.
-            if (account.P3P_TS_Color == "Male Protagonist")
-            {
-                embed.WithColor(37, 149, 255);
-                embed.WithThumbnailUrl("https://i.imgur.com/VwI3i20.gif");
-            }
-            else if (account.P3P_TS_Color == "Female Protagonist")
-            {
-                embed.WithColor(255, 117, 154);
-                embed.WithThumbnailUrl("https://i.imgur.com/pkb4OJa.gif");
-            }
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3P", account));
 
             embed.WithDescription("This may take a few seconds!");
 

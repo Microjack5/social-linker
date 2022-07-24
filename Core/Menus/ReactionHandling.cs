@@ -35,7 +35,6 @@ namespace SocialLinker.Core.Menus
                     {
                         // If not, send an error message to the channel.
                         await ErrorHandling.AddReactionsError((SocketTextChannel)message.Channel);
-                        Console.WriteLine(ex.Message);
                     }
                     // If so, the failure must have come from the message being deleted.
                     else

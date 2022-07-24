@@ -211,7 +211,7 @@ namespace SocialLinker
             }
             else
             {
-                await command.Channel.SendMessageAsync("Global slash commands are temporarily disabled for this server.");
+                await command.SlashCommand.RespondAsync("Global slash commands are temporarily disabled for this server.", ephemeral: true);
                 return;
             }
 

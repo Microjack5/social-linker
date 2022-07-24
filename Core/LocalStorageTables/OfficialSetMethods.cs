@@ -4,7 +4,6 @@ using System.IO;
 using Newtonsoft.Json;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.SceneMaker;
-using Discord.WebSocket;
 using System.Threading.Tasks;
 using System.Drawing;
 using System;
@@ -468,7 +467,6 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
             }
 
-            Console.WriteLine(sl_command.MakerCommand.Template);
             return;
         }
 

@@ -18,6 +18,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -2142,12 +2143,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Scene...",
-                IconUrl = "https://i.imgur.com/HlBRK9l.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P3F")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(37, 149, 255);
-            embed.WithThumbnailUrl("https://i.imgur.com/VwI3i20.gif");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3F", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;

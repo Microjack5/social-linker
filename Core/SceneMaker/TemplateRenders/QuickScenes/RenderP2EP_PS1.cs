@@ -897,7 +897,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P2EP-PS1", null));
-            embed.WithThumbnailUrl("https://i.imgur.com/KXcVCmG.png");
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P2EP-PS1", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;

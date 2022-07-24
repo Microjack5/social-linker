@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Globalization;
+using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -748,45 +749,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Scene...",
-                IconUrl = "https://i.imgur.com/MSQjGuu.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4D")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(228, 0, 126);
-            embed.WithThumbnailUrl(Randomize_P4D_Gif());
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4D", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4D", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
-        }
-
-        // Supplimental methods
-        public static string Randomize_P4D_Gif()
-        {
-            // Create a random variable.
-            Random r = new Random();
-
-            // Create an empty string variable that will return as the final answer.
-            string imgurl = "";
-
-            // P3F GIFs are scenes that exclusively apply to the FES version of P3.
-            string[] p4d_loading_icons = new string[]
-            {
-                "https://i.imgur.com/sfn7xIQ.gif",
-                "https://i.imgur.com/oCT0vi7.gif",
-                "https://i.imgur.com/itKoJAD.gif",
-                "https://i.imgur.com/psRGa2G.gif",
-                "https://i.imgur.com/hIOykos.gif",
-                "https://i.imgur.com/7tkBnC8.gif",
-                "https://i.imgur.com/3W8PaMZ.gif",
-                "https://i.imgur.com/c0pwkMY.gif",
-                "https://i.imgur.com/7drzbNI.gif",
-                "https://i.imgur.com/rGmuwTd.gif",
-                "https://i.imgur.com/EgZYZbc.gif"
-            };
-
-            imgurl = p4d_loading_icons[r.Next(0, p4d_loading_icons.Length)];
-
-            return imgurl;
         }
     }
 }

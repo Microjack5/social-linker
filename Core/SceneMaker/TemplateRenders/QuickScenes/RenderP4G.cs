@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Globalization;
+using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -1376,12 +1377,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Scene...",
-                IconUrl = "https://i.imgur.com/B7fyUwl.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P4G")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(255, 229, 49);
-            embed.WithThumbnailUrl("https://i.imgur.com/8FOF81K.gif");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P4G", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;

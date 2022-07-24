@@ -19,6 +19,7 @@ using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Globalization;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -4071,12 +4072,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var author = new EmbedAuthorBuilder
             {
                 Name = "Generating Scene...",
-                IconUrl = "https://i.imgur.com/WV32GRK.png"
+                IconUrl = EmbedSettings.Get_Game_Logo("P5R")
             };
 
             embed.WithAuthor(author);
-            embed.WithColor(213, 27, 4);
-            embed.WithThumbnailUrl("https://i.imgur.com/PYMB6XG.gif");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5R", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P5R", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
