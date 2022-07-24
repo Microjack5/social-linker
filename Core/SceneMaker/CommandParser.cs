@@ -197,6 +197,8 @@ namespace SocialLinker.Core.SceneMaker
                 Dialogue = ""
             };
 
+            sl_command.MakerCommand = command_data;
+
             // Declare other variables that will be needed throughout the method.
             int iterator = 0;
             string current_string = "";

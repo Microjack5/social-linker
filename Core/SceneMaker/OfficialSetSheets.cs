@@ -69,7 +69,7 @@ namespace SocialLinker.Core.SceneMaker
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 if (set_data.Origin == "P1-PS1" ||
-                    set_data.Origin == "P1-PS2" ||
+                    set_data.Origin == "P1-PSP" ||
                     set_data.Origin == "P2IS-PS1" ||
                     set_data.Origin == "P2IS-PSP" ||
                     set_data.Origin == "P2EP-PS1" ||

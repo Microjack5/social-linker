@@ -170,7 +170,7 @@ namespace SocialLinker.Core.Menus
                     return "https://i.imgur.com/3Fc0L7q.png";
 
                 case "P3F":
-                    return "https://i.imgur.com/HlBRK9l.png";
+                    return "https://i.imgur.com/9dta60u.png";
 
                 case "P3P":
                     return "https://i.imgur.com/y7x9wce.png";
