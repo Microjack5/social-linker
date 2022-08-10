@@ -487,6 +487,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P2IS-PSP":
+                    await OfficialSetSheets.P2IS_PSP_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P2EP-PS1":
@@ -494,6 +495,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P2EP-PSP":
+                    await OfficialSetSheets.P2EP_PSP_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P3F":
