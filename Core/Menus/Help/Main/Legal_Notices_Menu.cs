@@ -44,9 +44,9 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithDescription(
                 "**Content: :copyright: ATLUS / SEGA / KOEI TECMO GAMES / ARC SYSTEM WORKS / FRENCH-BREAD / Rooster Teeth Productions, LLC. / Team ARCANA / Marvelous, Inc. / SUBTLE STYLE**\n" +
                 "\n" +
-                "\"PlayStation\", \"PS\", \"PS2\", \"PS3\", \"PS4\", \"PSP\", \"PSVITA\", and the \"PS\" Family logos are either registered trademarks or trademarks of Sony Interactive Entertainment Inc.\n" +
+                "\"PlayStation\", \"PS\", \"PS2\", \"PS3\", \"PS4\", \"PS5\", \"PSP\", \"PSVITA\", and the \"PS\" Family logos are either registered trademarks or trademarks of Sony Interactive Entertainment Inc.\n" +
                 "\n" +
-                "Xbox 360, Xbox One, and the Xbox logos are either registered trademarks or trademarks of the Microsoft group of companies.\n" +
+                "Xbox 360, Xbox One, Xbox Series XS, and the Xbox logos are either registered trademarks or trademarks of the Microsoft group of companies.\n" +
                 "\n" +
                 "Wii U and Nintendo Switch are trademarks of Nintendo.\n" +
                 "\n" +

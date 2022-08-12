@@ -45,8 +45,8 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "[Microjack5](https://twitter.com/Microjack5)\n");
 
             embed.AddField("Quality Assurance Advisors", "" +
-                "[Angel ✨](https://twitter.com/_Amaurot)\n" +
                 "[Arkane](https://twitter.com/ArkaneOnline)\n" +
+                "[Ash!!](https://twitter.com/_Amaurot)\n" +
                 "[Azure](https://twitter.com/Azure_Blazes)\n" +
                 "[Camz](https://twitter.com/Camzcer)\n" +
                 "[Corrin](https://twitter.com/LocalSynth)\n" +
@@ -55,7 +55,7 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "[Naanos](https://www.youtube.com/channel/UCiUR9b-ptxqSbKw0vIaDklg)\n" +
                 "[無限 | Nate](https://twitter.com/CrestofDog)\n" +
                 "[RomIsALemon](https://twitter.com/phighters_rom)\n" +
-                "[Shadow Kawa](https://discordapp.com/users/210080634498973696/)\n" +
+                "[A Teacher](https://discordapp.com/users/210080634498973696/)\n" +
                 "[SlimePupAribaba](https://twitter.com/SlimePupAribaba)\n" +
                 "[Squishy](https://twitter.com/Squishy_Mona)\n" +
                 "[Thena](https://twitter.com/ThenaIsLost)\n" +
@@ -67,10 +67,10 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "[Arkane](https://twitter.com/ArkaneOnline)\n" +
                 "[Canasniimehugh](https://www.vg-resource.com/user-17021.html)\n" +
                 "[EsperKnight](https://twitter.com/esperknight)\n" +
-                "[Geo](https://github.com/Geordan9)\n");
+                "[Geordan9](https://github.com/Geordan9)\n");
 
             embed.AddField("Status Décor Designers", "" +
-                "[danny !](https://twitter.com/SPACECHANEL5)\n" +
+                "[poi](https://discordapp.com/users/800614229865922570/)\n" +
                 "[Microjack5](https://twitter.com/Microjack5)\n" +
                 "[無限 | Nate](https://discordapp.com/users/140846765275348993/)\n" +
                 "[TooBlue!](https://twitter.com/EMOMESSlAH)\n");
