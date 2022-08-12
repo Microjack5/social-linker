@@ -135,7 +135,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen wallpaper to the user's account settings.
-                account.P2IS_PSX_TS_Wallpaper = "Seventh";
+                account.P2IS_PSX_TS_Wallpaper = "Jack Frost";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -155,7 +155,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen wallpaper to the user's account settings.
-                account.P2IS_PSX_TS_Wallpaper = "Baofu";
+                account.P2IS_PSX_TS_Wallpaper = "Star";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -175,7 +175,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen wallpaper to the user's account settings.
-                account.P2IS_PSX_TS_Wallpaper = "NWO";
+                account.P2IS_PSX_TS_Wallpaper = "Punched Metal";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -195,7 +195,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen wallpaper to the user's account settings.
-                account.P2IS_PSX_TS_Wallpaper = "Dragon";
+                account.P2IS_PSX_TS_Wallpaper = "Seventh";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -215,7 +215,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen wallpaper to the user's account settings.
-                account.P2IS_PSX_TS_Wallpaper = "Jack Frost";
+                account.P2IS_PSX_TS_Wallpaper = "Cuss High";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -235,7 +235,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen wallpaper to the user's account settings.
-                account.P2IS_PSX_TS_Wallpaper = "Grid";
+                account.P2IS_PSX_TS_Wallpaper = "Butterfly";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -255,7 +255,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen wallpaper to the user's account settings.
-                account.P2IS_PSX_TS_Wallpaper = "Star";
+                account.P2IS_PSX_TS_Wallpaper = "Grid";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);

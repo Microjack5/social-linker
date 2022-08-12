@@ -54,6 +54,31 @@ namespace SocialLinker.Core.SceneMaker.GlyphParsing
             return null;
         }
 
+        public static ParsingFields Get_P2IS_PSP_Glyph(char character_to_render)
+        {
+            string font_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2IS-PSP//Font";
+            string font_data = "p2is-psp_font_data.json";
+
+            // If the file folder doesn't exist, create it.
+            if (!Directory.Exists(font_folder))
+            {
+                Directory.CreateDirectory(font_folder);
+            }
+
+            // If the file exists, load its contents.
+            if (File.Exists(font_folder + "/" + font_data))
+            {
+                glyphs = LoadGlyphList(font_folder + "/" + font_data).ToList();
+                return GetGlyph(character_to_render);
+            }
+            else
+            {
+                Create_Font_Data_Sheet();
+            }
+
+            return null;
+        }
+
         public static ParsingFields Get_P2EP_PS1_Glyph(char character_to_render)
         {
             string font_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2EP-PS1//Font";
@@ -250,7 +275,7 @@ namespace SocialLinker.Core.SceneMaker.GlyphParsing
             {
                 string converted_xml_to_json = $@"C://Users//Microjack5//Downloads//converted_p5r_xml.json";
                 string base_data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4G//Font//p4g_font_data.json";
-                string new_data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5S//Font//p5s_font_data.json";
+                string new_data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P2IS-PS1//Font//p2is_ps1_font_data.json";
 
                 string current_line = "";
                 string current_glyph = "";

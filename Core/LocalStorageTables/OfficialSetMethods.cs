@@ -834,6 +834,8 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P2IS-PSP":
+                        RenderP2IS_PSP test_obj = new RenderP2IS_PSP();
+                        await test_obj.Render_Quick_Scene_P2IS_PSP(sl_command, set_data, command_data);
                         return;
 
                     case "P2EP-PS1":

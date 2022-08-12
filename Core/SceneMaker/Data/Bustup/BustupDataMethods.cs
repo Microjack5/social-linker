@@ -177,21 +177,17 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                         var new_bustup_data = new BustupData()
                         {
                             Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
-                            Default_Name_EN = "Rise",
-                            Default_Name_JPN = "久慈川 りせ",
-                            P4D_Scale_Width = 1024,
-                            P4D_Scale_Height = 1024,
-                            P4D_Left_Coord_X = -64,
-                            P4D_Left_Coord_Y = 64,
-                            P4D_Center_Coord_X = 448,
-                            P4D_Center_Coord_Y = 64,
-                            P4D_Right_Coord_X = 960,
-                            P4D_Right_Coord_Y = 64,
-                            P4D_Nav_Scale_Width = 0,
-                            P4D_Nav_Scale_Height = 0,
-                            P4D_Nav_Coord_X = 0,
-                            P4D_Nav_Coord_Y = 0,
-                            P4D_Dual_Flip = false
+                            Default_Name_EN = "Mitsugi, the Theater Guide",
+                            Default_Name_JPN = "ミツギモトコ",
+                            P2IS_PSP_Scale_Width = 256,
+                            P2IS_PSP_Scale_Height = 256,
+                            P2IS_PSP_Left_Coord_X = 0, 
+                            P2IS_PSP_Left_Coord_Y = 0,
+                            P2IS_PSP_Center_Coord_X = 144,
+                            P2IS_PSP_Center_Coord_Y = 0,
+                            P2IS_PSP_Right_Coord_X = 288,
+                            P2IS_PSP_Right_Coord_Y = 0,
+                            P2IS_PSP_Default_Position = "Left",
                         };
                         new_list.Add(new_bustup_data);
                     }

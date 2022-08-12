@@ -132,13 +132,13 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":one: Blue Tone\n" +
                 ":two: Sepia Tone\n" +
                 ":three: Purple Tone\n" +
-                ":four: Seventh\n" +
-                ":five: Baofu\n" +
-                ":six: NWO\n" +
-                ":seven: Dragon\n" +
-                ":eight: Jack Frost\n" +
-                ":nine: Grid\n" +
-                ":keycap_ten: Star\n");
+                ":four: Jack Frost\n" +
+                ":five: Star\n" +
+                ":six: Punched Metal\n" +
+                ":seven: Seventh\n" +
+                ":eight: Cuss High\n" +
+                ":nine: Butterfly\n" +
+                ":keycap_ten: Grid\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
