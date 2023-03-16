@@ -51,8 +51,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
                 "<:P2EP:788950163363463172> **Persona 2: Eternal Punishment**\n" +
                 "<:P3:751133114918633483> **Persona 3**\n" +
                 "<:P4:751133120530612274> **Persona 4**\n" +
-                "<:P4AU:751133122342420572> **Persona 4 Arena Ultimax**\n" +
-                "<:P4D:751133120346062859> **Persona 4: Dancing All Night**\n");
+                "<:P4AU:751133122342420572> **Persona 4 Arena Ultimax**\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -100,7 +99,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
             reaction_list.Add(Emote.Parse("<:P3:751133114918633483>"));
             reaction_list.Add(Emote.Parse("<:P4:751133120530612274>"));
             reaction_list.Add(Emote.Parse("<:P4AU:751133122342420572>"));
-            reaction_list.Add(Emote.Parse("<:P4D:751133120346062859>"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);

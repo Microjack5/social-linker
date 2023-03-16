@@ -128,8 +128,8 @@
   {
     "Row": 1,
     "Column": 1,
-    "LeftCut": 3,
-    "RightCut": 6,
+    "LeftCut": 0,
+    "RightCut": 7,
     "SupportedChars": "[ '1' ]"
   },
   {
@@ -431,7 +431,7 @@
     "Column": 12,
     "LeftCut": 1,
     "RightCut": 6,
-    "SupportedChars": "[ '\\\\' ]"
+    "SupportedChars": "[ '¥' ]"
   },
   {
     "Row": 3,
@@ -618,7 +618,7 @@
   {
     "Row": 5,
     "Column": 7,
-    "LeftCut": 1,
+    "LeftCut": 0,
     "RightCut": 8,
     "SupportedChars": "[ 'w' ]"
   },

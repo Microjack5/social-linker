@@ -9,9 +9,9 @@ namespace SocialLinker.Core.LevelSystem
     internal static class SocialStats
     {
         // Add stats to accounts
-        internal static void AddProficiency(SocketMessage message)
+        internal static void AddProficiency(SocialLinkerCommand sl_command)
         {
-            var account = UserInfoClasses.GetAccount(message.Author);
+            var account = UserInfoClasses.GetAccount(sl_command.User);
             DateTime current_time = DateTime.UtcNow;
 
             // Create a variable for max Proficiency value.
@@ -58,7 +58,7 @@ namespace SocialLinker.Core.LevelSystem
                 // If the user's account is actiated, has a profile theme set, and has notifications set to on, send a rank up message.
                 if (account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Rank_Up_Notifications == "On")
                 {
-                    ProficiencyRankUpMessage(message, new_rank);
+                    ProficiencyRankUpMessage(sl_command, new_rank);
 
                     // If this is the first time the user is receiving a rank up message, set the First_Rank_Msg_Sent field to "yes" after the message is sent.
                     if (account.First_Rank_Msg_Sent == "No")
@@ -72,12 +72,12 @@ namespace SocialLinker.Core.LevelSystem
             UserInfoClasses.UpdateAccount(account);
 
             // Check if the user has maxed out all social stats.
-            AllRanksMaxedCheck(message);
+            AllRanksMaxedCheck(sl_command);
         }
 
-        internal static void AddDiligence(SocketMessage message)
+        internal static void AddDiligence(SocialLinkerCommand sl_command)
         {
-            var account = UserInfoClasses.GetAccount(message.Author);
+            var account = UserInfoClasses.GetAccount(sl_command.User);
             DateTime current_time = DateTime.UtcNow;
 
             // Create a variable for max Diligence value.
@@ -112,7 +112,7 @@ namespace SocialLinker.Core.LevelSystem
             account.Diligence += account.Diligence_Multiplier;
 
             // Calculate the amount of P-Medals the user keeps before reaching the P-Medal cap.
-            account.P_Medals += LevelSystem.Leveling.CalculateMedalsKept(message, 1);
+            account.P_Medals += LevelSystem.Leveling.CalculateMedalsKept(sl_command, 1);
 
             // Daily_Diligence_Gained is set to "yes" to signify the day has been counted for any amount.
             account.Daily_Diligence_Gained = "Yes";
@@ -142,7 +142,7 @@ namespace SocialLinker.Core.LevelSystem
                 // If the user's account is actiated, has a profile theme set, and has notifications set to on, send a rank up message.
                 if (account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Rank_Up_Notifications == "On")
                 {
-                    DiligenceRankUpMessage(message, new_rank);
+                    DiligenceRankUpMessage(sl_command, new_rank);
 
                     // If this is the first time the user is receiving a rank up message, set the First_Rank_Msg_Sent field to "yes" after the message is sent.
                     if (account.First_Rank_Msg_Sent == "No")
@@ -156,10 +156,10 @@ namespace SocialLinker.Core.LevelSystem
             UserInfoClasses.UpdateAccount(account);
 
             //Check if the user has maxed out all social stats.
-            AllRanksMaxedCheck(message);
+            AllRanksMaxedCheck(sl_command);
         }
 
-        internal static void AddExpression(SocketMessage message, SocketUser user)
+        internal static void AddExpression(SocialLinkerCommand sl_command, SocketUser user)
         {
             var account = UserInfoClasses.GetAccount(user);
             DateTime current_time = DateTime.UtcNow;
@@ -208,7 +208,7 @@ namespace SocialLinker.Core.LevelSystem
                 // If the user's account is actiated, has a profile theme set, and has notifications set to on, send a rank up message.
                 if (account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Rank_Up_Notifications == "On")
                 {
-                    ExpressionRankUpMessage(message, new_rank);
+                    ExpressionRankUpMessage(sl_command, new_rank);
 
                     // If this is the first time the user is receiving a rank up message, set the First_Rank_Msg_Sent field to "yes" after the message is sent.
                     if (account.First_Rank_Msg_Sent == "No")
@@ -222,7 +222,7 @@ namespace SocialLinker.Core.LevelSystem
             UserInfoClasses.UpdateAccount(account);
 
             // Check if the user has maxed out all social stats.
-            AllRanksMaxedCheck(message);
+            AllRanksMaxedCheck(sl_command);
         }
 
         // Utility methods
@@ -406,10 +406,10 @@ namespace SocialLinker.Core.LevelSystem
         }
 
         // Rank messages
-        internal static async void ProficiencyRankUpMessage(SocketMessage message, int new_rank)
+        internal static async void ProficiencyRankUpMessage(SocialLinkerCommand sl_command, int new_rank)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             var account = UserInfoClasses.GetAccount(user);
 
@@ -519,10 +519,10 @@ namespace SocialLinker.Core.LevelSystem
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        internal static async void DiligenceRankUpMessage(SocketMessage message, int new_rank)
+        internal static async void DiligenceRankUpMessage(SocialLinkerCommand sl_command, int new_rank)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             var account = UserInfoClasses.GetAccount(user);
 
@@ -632,10 +632,10 @@ namespace SocialLinker.Core.LevelSystem
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        internal static async void ExpressionRankUpMessage(SocketMessage message, int new_rank)
+        internal static async void ExpressionRankUpMessage(SocialLinkerCommand sl_command, int new_rank)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             var account = UserInfoClasses.GetAccount(user);
 
@@ -745,9 +745,9 @@ namespace SocialLinker.Core.LevelSystem
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        internal static void AllRanksMaxedCheck(SocketMessage message)
+        internal static void AllRanksMaxedCheck(SocialLinkerCommand sl_command)
         {
-            var user = message.Author;
+            var user = sl_command.User;
 
             var account = UserInfoClasses.GetAccount(user);
 
@@ -757,7 +757,7 @@ namespace SocialLinker.Core.LevelSystem
                 && account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Rank_Up_Notifications == "On")
             {
                 // If all these conditions are fulfilled, send a notification to the user notifying them that all three social stats are maxed.
-                AllRanksMaxedMessage(message);
+                AllRanksMaxedMessage(sl_command);
 
                 // Set the All_Ranks_Maxed_Msg_Sent field to "yes" after the message is sent.
                 account.All_Ranks_Maxed_Msg_Sent = "Yes";
@@ -767,10 +767,10 @@ namespace SocialLinker.Core.LevelSystem
             }
         }
 
-        internal static async void AllRanksMaxedMessage(SocketMessage message)
+        internal static async void AllRanksMaxedMessage(SocialLinkerCommand sl_command)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             var account = UserInfoClasses.GetAccount(user);
 
@@ -823,16 +823,16 @@ namespace SocialLinker.Core.LevelSystem
 
         // Diligence
         public const int diligence_rank_1_min = 0;
-        public const int diligence_rank_2_min = 320;
-        public const int diligence_rank_3_min = 800;
-        public const int diligence_rank_4_min = 1600;
-        public const int diligence_rank_5_min = 2800;
+        public const int diligence_rank_2_min = 640;
+        public const int diligence_rank_3_min = 1600;
+        public const int diligence_rank_4_min = 3200;
+        public const int diligence_rank_5_min = 5600;
 
-        public const int diligence_rank_1_max = 319;
-        public const int diligence_rank_2_max = 799;
-        public const int diligence_rank_3_max = 1599;
-        public const int diligence_rank_4_max = 2799;
-        public const int diligence_rank_5_max = 2800;
+        public const int diligence_rank_1_max = 639;
+        public const int diligence_rank_2_max = 1599;
+        public const int diligence_rank_3_max = 3199;
+        public const int diligence_rank_4_max = 5599;
+        public const int diligence_rank_5_max = 5600;
 
         // Expression
         public const int expression_rank_1_min = 0;

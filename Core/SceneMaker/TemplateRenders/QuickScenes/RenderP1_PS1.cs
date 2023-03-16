@@ -25,23 +25,35 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
     public class RenderP1_PS1 : ModuleBase<SocketCommandContext>
     {
-        public static async Task Render_Quick_Scene_P1_PS1(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        int template_width = 320;
+        int template_height = 240;
+
+        public async Task Render_Quick_Scene_P1_PS1(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             try
             {
-                // Create two variables for the command user and the command channel, derived from the message object taken in.
                 SocketUser user = sl_command.User;
                 SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
-                // Get the account information of the command's user.
                 var account = UserInfoClasses.GetAccount(user);
 
-                // Get the data for the chosen bustup.
                 BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
                 // The P1-PS1 template has a unique function where display names are not rendered if the same character is used in succession.
                 // We'll call this "context switch". Get or create an active context switch object that stores data for this.
                 ContextSwitchData active_session = ContextSwitchMethods.Get_Active_Session((SocketGuildUser)user, set_data);
+
+                string display_name = "";
+
+                if (command_data.Base_Sprite == 0)
+                {
+                    display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                    command_data.Base_Sprite = 0;
+                }
+                else
+                {
+                    display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                }
 
                 // Check if the list of active characters contains the current data set.
                 if (active_session.Active_Characters.Contains(set_data))
@@ -50,14 +62,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     if (active_session.Recently_Used_Index != active_session.Active_Characters.IndexOf(set_data))
                     {
                         // Append the character's display name to their dialogue.
-                        command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
+                        command_data.Dialogue = $"{display_name}:  {command_data.Dialogue}";
+                    }
+                    // Append the character's display name if they have Consistent Display Names set to "On".
+                    else if (account.P1_PSX_TS_Consistent_Names == "On")
+                    {
+                        command_data.Dialogue = $"{display_name}:  {command_data.Dialogue}";
                     }
                 }
                 // If not, we'll want to add the set to the list.
                 else
                 {
                     // Append the character's display name to their dialogue.
-                    command_data.Dialogue = $"{bustup_data.Default_Name_EN}: {command_data.Dialogue}";
+                    command_data.Dialogue = $"{display_name}:  {command_data.Dialogue}";
 
                     // Check if the number of active characters in the list is three, which is the max number allowed.
                     if (active_session.Active_Characters.Count == 3)
@@ -75,8 +92,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Create a new int variable that stores the INDEX of the current set data in the session list.
                 int char_index = active_session.Active_Characters.IndexOf(set_data);
 
-                // Parse the dialogue into lines that'll fit on the template and store it in a string array list.
-                List<string>[] dialogue_lines = Line_Parser(sl_command, bustup_data, command_data.Dialogue);
+                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PS1", command_data.Dialogue, 4, 240);
 
                 // The string array list typically has a constant number of indicies when created, so get the number of lines that'll actually be rendered. 
                 int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
@@ -136,118 +152,35 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             {
                 Console.WriteLine(e);
             }
-
-
         }
 
-        public static async Task Render_Offload(SocialLinkerCommand sl_command, UserInfoFields account, ContextSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
+        public async Task Render_Offload(SocialLinkerCommand sl_command, UserInfoFields account, ContextSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 320;
-            int template_height = 240;
-
-            // Create two variables for the command user and the command channel, derived from the message object taken in.
-            SocketUser user = sl_command.User;
-            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
-
-            // Create a starting base bitmap to render all graphics on.
+            // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
-
-            // Create another bitmap the same size.
-            // In case the user has set a colored bitmap in their settings, we'll need to use this to render it.
-            Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
-
-            // Here, we want to grab any images attached to the message to use it as a background.
-            // Create a variable for the message attachment.
-            var attachments = sl_command.Attachments;
-
-            // Create an empty string variable to hold the URL of the attachment.
-            string url = "";
-
-            // If there are no attachments on the message, set the URL string to "None".
-            if (attachments == default || attachments.LongCount() == 0)
-            {
-                url = "None";
-            }
-            // Else, assign the URL of the attachment to the URL string.
-            else
-            {
-                url = attachments.ElementAt(0).Url;
-            }
-
-            // Initialize a bitmap object for the user's background. It's small now because we'll reassign it depending on our circumstances.
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
             Bitmap background = new Bitmap(2, 2);
+            Bitmap bg_shadow = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//shadow.png");
 
-            // If a URL for a message attachment exists, download it and copy its contents to the bitmap variable we just created.
-            if (url != "None")
+            try
             {
-                // Here, we'll want to try and retrieve the user's input image.
-                try
-                {
-                    // Declare variables for a web request to retrieve the image.
-                    System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
-                    webRequest.AllowWriteStreamBuffering = true;
-                    webRequest.Timeout = 30000;
-
-                    // Create a stream and download the image to it.
-                    System.Net.WebResponse webResponse = webRequest.GetResponse();
-                    System.IO.Stream stream = webResponse.GetResponseStream();
-
-                    // Copy the stream's contents to the background bitmap variable.
-                    background = (Bitmap)System.Drawing.Image.FromStream(stream);
-
-                    webResponse.Close();
-                }
-                // If an exception occurs here, the filetype is likely incompatible.
-                // Send an error message, delete the loading message, and return.
-                catch (System.ArgumentException e)
-                {
-                    Console.WriteLine(e);
-                    await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
-                    return;
-                }
+                background = OfficialSetMethods.Render_Background(sl_command, template_width, template_height);
+            }
+            catch (System.ArgumentException e)
+            {
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
             }
 
-            // Render the uploaded image based on the user's background settings.
-            switch (account.Setting_BG_Upload)
-            {
-                case "Maintain Aspect Ratio":
-                    background = Center_Image(background);
-                    break;
-
-                case "Stretch to Fit":
-                    background = Stretch_To_Fit(background);
-                    break;
-            }
-
-            // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
-            // Check if the user's background color setting is set to something other than "Transparent".
-            // If so, we have a color to render for the background!
-            if (account.Setting_BG_Color != "Transparent")
-            {
-                // Convert the user's HTML color setting to one we can use and assign it to a color variable.
-                System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
-
-                // Color the entirety of the background bitmap the user's selected color.
-                using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
-                {
-                    graphics.Clear(user_background_color);
-                }
-            }
-
-            // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
             Bitmap bustup = new Bitmap(2, 2);
 
-            // Check if the base sprite number is something other than zero.
-            // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
             if (command_data.Base_Sprite != 0)
             {
                 bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
             }
 
-            // If the bustup returns as null, however, something went wrong with rendering the animation frames.
-            // An error message has already been sent in the frame rendering method, so delete the loading message and return.
             if (bustup == null)
             {
                 await loader.DeleteAsync();
@@ -257,120 +190,187 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Time to put it all together!
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                // Draw the layer with the user's colored default background if it exists.
                 graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
-
-                // Draw the user's background to the base template.
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
 
-                // Get the chosen bustup, placed in the correct spot.
-                Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session, set_data);
+                if (account.P1_PSX_TS_BG_Darken == "On")
+                {
+                    graphics.DrawImage(bg_shadow, 0, 0, template_width, template_height);
+                }
 
-                // Draw the bustup to the template.
-                graphics.DrawImage(placed_bustup, 0, 0, placed_bustup.Width, placed_bustup.Height);
-
-                // Draw the message window to the template.
+                if (command_data.Base_Sprite != 0)
+                {
+                    Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session, set_data);
+                    graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
+                }
+                
                 graphics.DrawImage(Generate_Message_Window(account), 0, 0, template_width, template_height);
 
-                // If the user has it enabled, draw the moon HUD to the template.
-                if (account.P1_PSP_TS_Moon_HUD == "On")
+                if (account.P1_PSX_TS_Moon_HUD == "On")
                 {
                     graphics.DrawImage(Generate_Moon_HUD(account), 0, 0, template_width, template_height);
                 }
 
-                // Render the input dialogue to a bitmap.
                 Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
-
-                // Draw the input dialogue to the template.
                 graphics.DrawImage(rendered_dialogue, 0, 0, template_width, template_height);
+
+                Random rnd = new Random();
+                Bitmap cursor = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//Cursor//{rnd.Next(1, 16)}.png");
+                graphics.DrawImage(cursor, 0, 0, template_width, template_height);
             }
 
-            // The user could choose to output the image at different resolutions, so let's handle that point now.
-            // If the user's output setting is at the default resolution, do nothing.
-            if (account.P1_PSX_Resolution == "320 × 240")
-            {
-                // Do nothing
-            }
-            // If the user's output setting is NOT at the default resolution, however, we need to do some work.
-            else if (account.P1_PSX_Resolution == "1440 × 1080")
-            {
-                // Change the template width and height variables based on the user's output settings.
-                template_width = 1440;
-                template_height = 1080;
+            base_template = Scale_Template(account, base_template);
 
-                // Now, we'll want to make a new bitmap that matches these sizes.
-                // Create a copy of the template so far.
-                var copied_source = new Bitmap(base_template);
-
-                // Create a new empty bitmap with the adjusted dimensions.
-                var scaled_bitmap = new Bitmap(template_width, template_height);
-
-                // Create a new graphics object so we can render on the empty bitmap.
-                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
-                {
-                    // Set the scaling method to the user's choice of Bicubic and Nearest Neighbor.
-                    switch (account.P1_PSX_Scale)
-                    {
-                        case "Bicubic":
-                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            break;
-
-                        case "Nearest Neighbor":
-                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                            break;
-                    }
-
-                    // Set the rendering quality to high.
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-                    // Draw the copy of the template to the empty bitmap while fitting to size.
-                    graphics.DrawImage(copied_source, 0, 0, template_width, template_height);
-                }
-
-                // Copy the contents of the new bitmap to the base template variable.
-                base_template = scaled_bitmap;
-            }
-
-            // Save the entire base template to a data stream.
             MemoryStream memoryStream = new MemoryStream();
             base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             try
             {
-                // Send the image.
                 await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-
-                // Send an error message to the user if the image upload fails.
                 _ = ErrorHandling.Image_Upload_Failed(sl_command);
 
-                // Clean up resources used by the stream, delete the loading message, and return.
                 memoryStream.Dispose();
                 await loader.DeleteAsync();
                 return;
             }
 
-            // Clean up resources used by the stream and delete the loading message.
             memoryStream.Dispose();
             await loader.DeleteAsync();
 
-            // If the user has auto-delete for their commands set to on, delete their command as well.
             if (account.Auto_Delete_Commands == "On")
             {
                 await sl_command.Message.DeleteAsync();
             }
         }
 
-        public static Bitmap Set_Bustup_Placement(UserInfoFields account, Bitmap bustup, BustupData bustup_data, ContextSwitchData active_session, OfficialSetData set_data)
+        public async Task Render_System_Message(SocialLinkerCommand sl_command,  MakerCommandData command_data)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 320;
-            int template_height = 240;
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
+            var account = UserInfoClasses.GetAccount(user);
+
+            List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PS1", command_data.Dialogue, 4, 240);
+
+            // The string array list typically has a constant number of indicies when created, so get the number of lines that'll actually be rendered. 
+            int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
+
+            // Check if the number of rendered lines is greater than three.
+            // If so, we'll have to send two images to simulate text scrolling for this template.
+            if (number_of_rendered_lines > 3)
+            {
+                // Isolate the first three lines of dialogue into a new string array list.
+                List<string>[] dialogue_lines_pt_1 = new List<string>[] { dialogue_lines[0], dialogue_lines[1], dialogue_lines[2] };
+
+                // Send a loading message for the first image.
+                RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(1, 2).Build());
+
+                // Render the first image.
+                await Render_System_Message_Offload(sl_command, account, command_data, dialogue_lines_pt_1, loader);
+
+                // Move down one line and isolate another three lines of dialogue into a new string array list. This will imitate the text scrolling.
+                List<string>[] dialogue_lines_pt_2 = new List<string>[] { dialogue_lines[1], dialogue_lines[2], dialogue_lines[3] };
+
+                // Send a loading message for the second image.
+                loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(2, 2).Build());
+
+                // Render the second image.
+                await Render_System_Message_Offload(sl_command, account, command_data, dialogue_lines_pt_2, loader);
+            }
+            // If the number of rendered lines is exactly three or less, we'll only need to send one image.
+            else
+            {
+                // Send a loading message.
+                RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Loading_Message().Build());
+
+                // Render the image.
+                await Render_System_Message_Offload(sl_command, account, command_data, dialogue_lines, loader);
+            }
+
+        }
+
+        public async Task Render_System_Message_Offload(SocialLinkerCommand sl_command, UserInfoFields account, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
+        {
+            // Background rendering
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
+            Bitmap background = new Bitmap(2, 2);
+            Bitmap bg_shadow = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//shadow.png");
+
+            try
+            {
+                background = OfficialSetMethods.Render_Background(sl_command, template_width, template_height);
+            }
+            catch (System.ArgumentException e)
+            {
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
+            }
+
+            // Time to put it all together!
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
+                graphics.DrawImage(background, 0, 0, template_width, template_height);
+
+                if (account.P1_PSX_TS_BG_Darken == "On")
+                {
+                    graphics.DrawImage(bg_shadow, 0, 0, template_width, template_height);
+                }
+
+                graphics.DrawImage(Generate_Message_Window(account), 0, 0, template_width, template_height);
+
+                if (account.P1_PSX_TS_Moon_HUD == "On")
+                {
+                    graphics.DrawImage(Generate_Moon_HUD(account), 0, 0, template_width, template_height);
+                }
+
+                Bitmap rendered_dialogue = Render_Dialogue(dialogue_lines);
+                graphics.DrawImage(rendered_dialogue, 0, 0, template_width, template_height);
+
+                Random rnd = new Random();
+                Bitmap cursor = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//Cursor//{rnd.Next(1, 16)}.png");
+                graphics.DrawImage(cursor, 0, 0, template_width, template_height);
+            }
+
+            base_template = Scale_Template(account, base_template);
+
+            MemoryStream memoryStream = new MemoryStream();
+            base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
+
+            if (account.Auto_Delete_Commands == "On")
+            {
+                await sl_command.Message.DeleteAsync();
+            }
+        }
+
+        public Bitmap Set_Bustup_Placement(UserInfoFields account, Bitmap bustup, BustupData bustup_data, ContextSwitchData active_session, OfficialSetData set_data)
+        {
             // Create a starting base bitmap to render all graphics on.
             Bitmap base_template = new Bitmap(template_width, template_height);
 
@@ -413,19 +413,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static Bitmap Generate_Message_Window(UserInfoFields account)
+        public Bitmap Generate_Message_Window(UserInfoFields account)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 320;
-            int template_height = 240;
-
-            // Create an empty string to store the wallpaper type in.
+            Bitmap base_template = new Bitmap(template_width, template_height);
             string wallpaper_type = "";
 
-            // Create a starting base bitmap to render all graphics on.
-            Bitmap base_template = new Bitmap(template_width, template_height);
-
-            // Set the wallpaper type based on the user's account settings.
             switch (account.P1_PSX_TS_Wallpaper)
             {
                 case "Type 1":
@@ -461,13 +453,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     break;
             }
 
-            // Get the appropriate wallpaper bitmap alongside the message window.
             Bitmap wallpaper = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//Wallpaper//{wallpaper_type}.png");
             Bitmap message_window = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//message_window.png");
 
-            // Now, time to put the template together!
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
+                wallpaper = SetImageOpacity(wallpaper, (float)0.5);
+
                 graphics.DrawImage(wallpaper, 0, 0, template_width, template_height);
                 graphics.DrawImage(message_window, 0, 0, template_width, template_height);
             }
@@ -476,12 +468,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Text rendering tools
-        public static Bitmap Render_Dialogue(List<string>[] dialogue_lines)
+        public Bitmap Render_Dialogue(List<string>[] dialogue_lines)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 320;
-            int template_height = 240;
-
             // Create a starting base bitmap to render all graphics on.
             Bitmap bitmap = new Bitmap(template_width, template_height);
 
@@ -532,208 +520,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             return bitmap;
-        }
-
-        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, BustupData bustup_data, string dialogue)
-        {
-            // First, let's establish some values.
-            // The max pixel length of a line.
-            int max_line_length = 232;
-
-            // The number of pixels in a line remaining. This will gradually decrease as the pixel length of characters are subtracted from it.
-            int line_length_remaining = max_line_length;
-
-            // The maximum number of lines on the template. 
-            int max_lines = 4;
-
-            // Completed word string. Characters will be added to this string one-by-one until a space, line break, or end-of-input is encountered.
-            string completed_word = "";
-
-            // Create an array of string lists and initialize them.
-            // These are where our dialogue input will be organized.
-            List<string>[] dialogue_list = new List<string>[max_lines];
-
-            // Initialize each index of the string array list.
-            for (int i = 0; i < max_lines; i++)
-            {
-                dialogue_list[i] = new List<string>();
-            }
-
-            // Now that we have our string lists created, we need a variable to dynamically change which line we're currently on.
-            // For that, create an int variable and initialize it to zero for starting on the first line.
-            int current_line = 0;
-
-            // Take the input dialogue and convert it into a char array. This is how we'll iterate through the dialogue character-by-character.
-            char[] dialogue_array = dialogue.ToCharArray();
-
-            // Create a for loop meant to iterate through the dialogue array.
-            for (int i = 0; i < dialogue_array.Length; i++)
-            {
-                // Check if the completed word string is empty, the remaining pixel length of the current line is at the max value, and if the current iterated character is a space.
-                if ((completed_word == "") && (line_length_remaining == max_line_length) && (dialogue_array[i] == ' '))
-                {
-                    // We want to skip any spaces that appear at the start of a line, so do nothing here.
-                }
-                // Check if the contents of the current index is not a space, not a line break, and not the end of the array.
-                else if ((dialogue_array[i] != ' ') && (dialogue_array[i] != '\u000a') && (i != dialogue_array.Length - 1))
-                {
-                    // If so, add the currently iterated char to the completed word string.
-                    completed_word += dialogue_array[i];
-                }
-                // Next, check if the contents of the current index IS a space, IS a line break, or IS the end of the array.
-                else if ((dialogue_array[i] == ' ') || (dialogue_array[i] == '\u000a') || (i == dialogue_array.Length - 1))
-                {
-                    // If so, add the currently iterated char to the completed word string.
-                    completed_word += dialogue_array[i];
-
-                    // Now that we have our word, measure the pixel length of the completed string.
-                    int completed_word_length = Measure_String_Pixel_Length(sl_command, completed_word);
-
-                    // Check if the completed word is under the current line's allowed length.
-                    // This is done by subtracting the completed word string's length from the remaining length of the line.
-                    // If the result is greater than zero, it's a perfect fit.
-                    if ((line_length_remaining - completed_word_length > 0) && (dialogue_array[i] != '\u000a'))
-                    {
-                        // Subtract the completed word's pixel length from the remaining pixel length of the current line.
-                        line_length_remaining = line_length_remaining - completed_word_length;
-
-                        // Add the completed word to the current line.
-                        dialogue_list[current_line].Add(completed_word);
-
-                        // Reset the completed word variable to an empty string.
-                        completed_word = "";
-                    }
-
-                    // Else, check if all three of the following conditions are met:
-                    // If there is no more room to add the completed word to the current line.
-                    // The completed word's length is less than or equal to a line itself.
-                    // The current iterated character is NOT a line break.
-                    else if ((line_length_remaining - completed_word_length < 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] != '\u000a'))
-                    {
-                        // Check if the current line number is less than the max number of lines available.
-                        if (current_line < max_lines - 1)
-                        {
-                            // Increase the current line number.
-                            current_line++;
-
-                            // Add the completed word string to the current line.
-                            dialogue_list[current_line].Add(completed_word);
-
-                            // Reset the remaining pixel length variable to the start and subtract the pixel length of the completed word string.
-                            // This is done because we moved to a new line.
-                            line_length_remaining = max_line_length - completed_word_length;
-
-                            // Reset the completed word variable to an empty string.
-                            completed_word = "";
-                        }
-                        // Else, check if the current line number is greater than or equal to the max number of lines available.
-                        else if (current_line >= max_lines - 1)
-                        {
-                            // If so, there is no more room to render text.
-                            // Break from the for loop.
-                            break;
-                        }
-                    }
-
-                    // Else, check if all three of the following conditions are met:
-                    // If there IS room to add the completed word to the current line.
-                    // The completed word's length is less than or equal to the length of a line itself.
-                    // The current iterated character IS a line break.
-                    else if ((line_length_remaining - completed_word_length >= 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] == '\u000a'))
-                    {
-                        // Check if the current line number is less than the max number of lines available.
-                        if (current_line < max_lines - 1)
-                        {
-                            // Since there is room, add the completed word string to the current line.
-                            dialogue_list[current_line].Add(completed_word);
-
-                            // Increase the current line number.
-                            current_line++;
-
-                            // Reset the remaining pixel length variable to the max value.
-                            // This is done because we moved to a new line.
-                            line_length_remaining = max_line_length;
-
-                            // Reset the completed word variable to an empty string.
-                            completed_word = "";
-                        }
-                        // Else, check if the current line number is greater than to the max number of lines available.
-                        else if (current_line > max_lines - 1)
-                        {
-                            // If so, there is no more room to render text.
-                            // Break from the for loop.
-                            break;
-                        }
-                    }
-
-                    // Else, check if there is no more room to add the completed word to the current line AND the completed word's length is greater than the length of a line itself.
-                    // This means that we'll need to split the string up on different lines.
-                    else if (line_length_remaining - completed_word_length < 0 && completed_word_length > max_line_length)
-                    {
-                        // Take the completed word and turn it into a char array.
-                        // We'll use this to iterate through the word character-by-character to decide where to split the string.
-                        char[] completed_word_array = completed_word.ToCharArray();
-
-                        // Create a new string variable and initialize it to an empty string.
-                        // Similar to the completed word variable, this string will contain characters that will fit on a single line.
-                        // Because we know the word will be split into multiple lines, this will only contain part of the full string at any given time, hence "substring".
-                        string substring = "";
-
-                        // Create an int variable and initialize it to zero.
-                        // This will contain the pixel length of our substring variable once we measure it.
-                        int substring_length = 0;
-
-                        // Create a for loop to iterate through the completed word array.
-                        for (int j = 0; j < completed_word_array.Length; j++)
-                        {
-                            // Add the currently iterated character to the substring.
-                            substring += completed_word_array[j];
-
-                            // Measure the pixel length of the substring so far.
-                            substring_length = Measure_String_Pixel_Length(sl_command, substring);
-
-                            // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
-                            // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
-                            if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a')) // || (completed_word_array[j] == '\u000a')
-                            {
-                                // Check if the current line number is less than the max number of lines available.
-                                if (current_line < max_lines)
-                                {
-                                    // Add the substring to the current line.
-                                    dialogue_list[current_line].Add(substring);
-
-                                    // Since there is absolutely no more room on the current line left, increase the current line value.
-                                    current_line++;
-
-                                    // Reset the remaining pixel length variable to the max value.
-                                    // This is done because we moved to a new line.
-                                    line_length_remaining = max_line_length;
-
-                                    // Reset the substring variable to an empty string.
-                                    substring = "";
-                                }
-                            }
-                            // Else, check if the last index of the completed word array has been reached.
-                            else if (j == completed_word_array.Length - 1)
-                            {
-                                // Add the substring to the current line.
-                                dialogue_list[current_line].Add(substring);
-
-                                // Subtract the completed word's pixel length from the remaining pixel length of the current line.
-                                line_length_remaining = line_length_remaining - substring_length;
-
-                                // Reset the substring variable to an empty string.
-                                substring = "";
-                            }
-                        }
-
-                        // Reset the completed word string to an empty string.
-                        completed_word = "";
-                    }
-                }
-            }
-
-            return dialogue_list;
         }
 
         public static int Measure_String_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
@@ -802,70 +588,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return output_string;
         }
 
-        // Background rendering
-        public static Bitmap Center_Image(Bitmap input_bitmap)
-        {
-            float width = 1920;
-            float height = 1080;
-            var brush = new SolidBrush(System.Drawing.Color.Black);
-
-            var image = new Bitmap(input_bitmap);
-
-            float scale = Math.Min(width / image.Width, height / image.Height);
-
-            var bmp = new Bitmap((int)width, (int)height);
-            var graph = Graphics.FromImage(bmp);
-
-            // uncomment for higher quality output
-            graph.InterpolationMode = InterpolationMode.High;
-            graph.CompositingQuality = CompositingQuality.HighQuality;
-            graph.SmoothingMode = SmoothingMode.AntiAlias;
-
-            bmp.SetResolution(96, 96);
-
-            var scaleWidth = (int)(image.Width * scale);
-            var scaleHeight = (int)(image.Height * scale);
-
-            //graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
-            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
-
-            return bmp;
-        }
-
-        public static Bitmap Stretch_To_Fit(Bitmap input_bitmap)
-        {
-            // Set the width and height of the bitmap to be created
-            float width = 1920;
-            float height = 1080;
-
-            // Copy the input bitmap to a new variable.
-            var bitmap_copy = new Bitmap(input_bitmap);
-
-            // Create a brand new bitmap with the specified dimensions from earlier.
-            var new_bitmap = new Bitmap((int)width, (int)height);
-
-            // Create a graphics object so we can edit this new bitmap.
-            var graphics = Graphics.FromImage(new_bitmap);
-
-            // uncomment for higher quality output
-            graphics.InterpolationMode = InterpolationMode.High;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            new_bitmap.SetResolution(96, 96);
-
-            // Draw the copy of the input bitmap to the new bitmap.
-            graphics.DrawImage(bitmap_copy, 0, 0, width, height);
-
-            return new_bitmap;
-        }
-
         // Getter methods
-        public static Bitmap Generate_Moon_HUD(UserInfoFields account)
+        public Bitmap Generate_Moon_HUD(UserInfoFields account)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 320;
-            int template_height = 240;
-
             // Create a new bitmap with the width and height variables.
             Bitmap base_template = new Bitmap(template_width, template_height);
 
@@ -969,7 +694,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     phase_covering = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//Moon//Phases//Images//Coverings//8_waxing_gibbous.png");
                 }
                 // Full moon
-                else if (illumination == 100)
+                else if (illumination >= 100)
                 {
                     phase_text = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//Moon//Phases//Text//full.png");
                     phase_covering = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//Moon//Phases//Images//Coverings//9_full.png");
@@ -979,7 +704,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             else if (cycle_age > 14.76)
             {
                 // Full moon
-                if (illumination == 100)
+                if (illumination >= 100)
                 {
                     phase_text = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//Moon//Phases//Text//full.png");
                     phase_covering = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PS1//Main//Moon//Phases//Images//Coverings//9_full.png");
@@ -1046,14 +771,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
             }
 
-            //phase_covering = Covering_To_Transparent(phase_covering);
-            //phase_covering = (Bitmap)Set_Image_Opacity(phase_covering, (float)0.9);
-
             // Now, let's use a graphics object to draw to the base template and render them all!
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                graphics.DrawImage(phase_texture, 227, 14, phase_texture.Width, phase_texture.Height);
-                graphics.DrawImage(phase_covering, 227, 14, phase_covering.Width, phase_covering.Height);
+                Bitmap moon_phase = Create_Moon_Shading(phase_texture, phase_covering);
+
+                graphics.DrawImage(moon_phase, 227, 14, moon_phase.Width, moon_phase.Height);
                 graphics.DrawImage(moon_window, 0, 0, template_width, template_height);
                 graphics.DrawImage(phase_text, 0, 0, template_width, template_height);
                 graphics.DrawImage(slash, 0, 0, template_width, template_height);
@@ -1135,48 +858,16 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static Bitmap Covering_To_Transparent(Bitmap input_bitmap)
-        {
-            // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
-            System.Drawing.Color actual_color;
-
-            // Make an empty bitmap the same size as the input bitmap.
-            Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
-
-            // Create a for loop to iterate over the X values of the bitmap to be changed.
-            for (int x = 0; x < input_bitmap.Width; x++)
-            {
-                // Create a nested for loop to iterate over the Y values of the bitmap to be changed.
-                for (int y = 0; y < input_bitmap.Height; y++)
-                {
-                    // Get the current pixel from the input bitmap.
-                    actual_color = input_bitmap.GetPixel(x, y);
-
-                    if (actual_color.R > 5 && actual_color.G > 5 && actual_color.B > 5)
-                    {
-                        // Do nothing
-                    }
-                    else
-                    {
-                        new_bitmap.SetPixel(x, y, actual_color);
-                    }
-                    
-                }
-            }
-
-            return new_bitmap;
-        }
-
         // Method from https://www.codeproject.com/Tips/201129/Change-Opacity-of-Image-in-C
-        public static System.Drawing.Image Set_Image_Opacity(System.Drawing.Image image, float opacity)
+        public static Bitmap SetImageOpacity(Bitmap input_bitmap, float opacity)
         {
             try
             {
                 //create a Bitmap the size of the image provided  
-                Bitmap bmp = new Bitmap(image.Width, image.Height);
+                Bitmap base_template = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
                 //create a graphics object from the image  
-                using (Graphics gfx = Graphics.FromImage(bmp))
+                using (Graphics graphics = Graphics.FromImage(base_template))
                 {
                     //create a color matrix object  
                     ColorMatrix matrix = new ColorMatrix();
@@ -1191,15 +882,99 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
                     //now draw the image  
-                    gfx.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
+                    graphics.DrawImage(input_bitmap, new Rectangle(0, 0, base_template.Width, base_template.Height), 0, 0, input_bitmap.Width, input_bitmap.Height, GraphicsUnit.Pixel, attributes);
                 }
-                return bmp;
+                return base_template;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
-                return null;
+                Console.WriteLine($"Here\n {ex}");
+                return input_bitmap;
             }
+        }
+
+        public Bitmap Scale_Template(UserInfoFields account, Bitmap input_template)
+        {
+            var scaled_bitmap = new Bitmap(2, 2);
+            int scaled_width = template_width;
+            int scaled_height = template_height;
+
+            if (account.P1_PSX_Resolution == "320 × 240")
+            {
+                // Do nothing if setting is at default resolution
+            }
+            else
+            {
+                if (account.P1_PSX_Resolution == "1440 × 1080")
+                {
+                    scaled_width = 1440;
+                    scaled_height = 1080;
+                }
+
+                var copied_input = new Bitmap(input_template);
+                scaled_bitmap = new Bitmap(scaled_width, scaled_height);
+
+                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+                {
+                    switch (account.P1_PSX_Scale)
+                    {
+                        case "Bicubic":
+                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            break;
+
+                        case "Nearest Neighbor":
+                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                            break;
+                    }
+
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                    graphics.DrawImage(copied_input, 0, 0, scaled_width, scaled_height);
+                }
+
+                input_template = scaled_bitmap;
+            }
+
+            return input_template;
+        }
+
+        public Bitmap Create_Moon_Shading(Bitmap moon_phase, Bitmap beige_cover)
+        {
+            Bitmap base_template = new Bitmap(moon_phase.Width, moon_phase.Height);
+            System.Drawing.Color altered_pixel = default;
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                for (int x = 0; x < moon_phase.Width; x++)
+                {
+                    for (int y = 0; y < moon_phase.Height; y++)
+                    {
+                        System.Drawing.Color beige_cover_color = beige_cover.GetPixel(x, y);
+                        System.Drawing.Color moon_phase_color = moon_phase.GetPixel(x, y);
+
+                        int r_value = moon_phase_color.R - beige_cover_color.R;
+                        int g_value = moon_phase_color.G - beige_cover_color.G;
+                        int b_value = moon_phase_color.B - beige_cover_color.B;
+
+                        if (r_value < 0)
+                        {
+                            r_value = 0;
+                        }
+                        if (g_value < 0)
+                        {
+                            g_value = 0;
+                        }
+                        if (b_value < 0)
+                        {
+                            b_value = 0;
+                        }
+
+                        altered_pixel = System.Drawing.Color.FromArgb(moon_phase_color.A, r_value, g_value, b_value);
+                        base_template.SetPixel(x, y, altered_pixel);
+                    }
+                }
+            }
+
+            return base_template;
         }
 
         // Loading messages

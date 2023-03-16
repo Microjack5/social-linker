@@ -42,6 +42,8 @@ namespace SocialLinker.Core.Menus
                         // Do nothing
                     }
 
+                    Console.WriteLine(ex);
+
                     // Exit the loop.
                     break;
                 }

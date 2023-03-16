@@ -147,7 +147,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PSP"));
 
             // Create a description with the list of sprite sets available for the title.
-            embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P2IS-PSP")}");
+            embed.WithDescription($"{OfficialSetMethods.Generate_P2IS_PSP_Set_List()}");
 
             // Create a footer based on the game version the list is from.
             var footer = new EmbedFooterBuilder
@@ -223,7 +223,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PSP"));
 
             // Create a description with the list of sprite sets available for the title.
-            embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P2EP-PSP")}");
+            embed.WithDescription($"{OfficialSetMethods.Generate_P2EP_PSP_Set_List()}");
 
             // Create a footer based on the game version the list is from.
             var footer = new EmbedFooterBuilder

@@ -291,7 +291,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 // Add the footer to the embed.
                 embed.WithFooter(footer);
 
-                embed.WithDescription("You don't have any other décor to set. Visit the Décor Shop with the **`>shop`** command to browse and buy décor for your collection.");
+                embed.WithDescription($"You don't have any other décor to set. Visit the Décor Shop with the **`{BotConfig.bot.cmdPrefix}shop`** command to browse and buy décor for your collection.");
 
                 // Attempt editing the message if it hasn't been deleted by the user yet. If it has, catch the exception, send an error message, and return.
                 try

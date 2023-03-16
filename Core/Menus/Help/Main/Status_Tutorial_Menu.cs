@@ -45,6 +45,8 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             embed.WithDescription("Status screens keep track of your various Discord activities. Depending on which theme you set your profile to, they can take on different appearances.");
 
+            embed.WithImageUrl("https://i.imgur.com/jglT9wW.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -128,6 +130,8 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "**• Diligence:** Increases through daily Discord activity.\n" +
                 "**• Expression:** Increases through usage of social commands by you or by others.");
 
+            embed.WithImageUrl("https://i.imgur.com/roeFJq8.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -206,6 +210,8 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             embed.WithDescription("" +
                 "Levels are gained by earning experience points with messages you send. When you level up, you can obtain P-Medals to spend on unique décor for customizing your status screen.");
+
+            embed.WithImageUrl("https://i.imgur.com/H9WEZnU.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -367,12 +373,14 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "Use the following commands to access these main features:\n");
 
             embed.AddField($"Command List", 
-                "> **`>status`**\n" +
-                "Check your status screen.\n" +
-                "Type `detail` after it to view a detailed breakdown of your profile, or tag a user to view theirs.\n" +
-                "\n" +
-                "> **`>shop`**\n" +
-                "Access the status screen Décor Shop.");
+                $"> **`{BotConfig.bot.cmdPrefix}status`**\n" +
+                $"Check your status screen.\n" +
+                $"Type `detail` after it to view a detailed breakdown of your profile, or tag a user to view theirs.\n" +
+                $"\n" +
+                $"> **`{BotConfig.bot.cmdPrefix}shop`**\n" +
+                $"Access the status screen Décor Shop.");
+
+            embed.WithImageUrl("https://i.imgur.com/kugq33y.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

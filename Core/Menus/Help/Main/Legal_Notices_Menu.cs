@@ -46,7 +46,7 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "\n" +
                 "\"PlayStation\", \"PS\", \"PS2\", \"PS3\", \"PS4\", \"PS5\", \"PSP\", \"PSVITA\", and the \"PS\" Family logos are either registered trademarks or trademarks of Sony Interactive Entertainment Inc.\n" +
                 "\n" +
-                "Xbox 360, Xbox One, Xbox Series XS, and the Xbox logos are either registered trademarks or trademarks of the Microsoft group of companies.\n" +
+                "Xbox 360, Xbox One, Xbox Series X|S, and the Xbox logos are either registered trademarks or trademarks of the Microsoft group of companies.\n" +
                 "\n" +
                 "Wii U and Nintendo Switch are trademarks of Nintendo.\n" +
                 "\n" +

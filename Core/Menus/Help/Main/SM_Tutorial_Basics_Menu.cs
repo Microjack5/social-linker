@@ -34,7 +34,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             {
                 Text = "" +
                 "↩️ Return to Previous Menu | ▶️ Next Page\n" +
-                "Page 1 / 6"
+                "Page 1 / 5"
             };
 
             embed.WithFooter(footer);
@@ -44,9 +44,9 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                "The scene maker lets you generate images resembling screenshots from the Persona series.\n" +
+                "The scene maker lets you create your own realistic screenshots from all across the Persona series!\n" +
                 "\n" +
-                $"Each image is called a “scene” and can be generated with a variety of commands with the prefix **`{BotConfig.bot.cmdPrefix}maker`**.");
+                $"You can make your own \"scenes\" a number of ways using the **`{BotConfig.bot.cmdPrefix}maker`** command, or through various slash commands. Let's learn a few!");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -105,7 +105,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Character Lists and Templates",
+                Name = "Character Lists and Game Styles",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -115,7 +115,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             {
                 Text = "" +
                 "◀️ Previous Page | ▶️ Next Page\n" +
-                "Page 2 / 6"
+                "Page 2 / 5"
             };
 
             embed.WithFooter(footer);
@@ -125,7 +125,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                "There are multiple templates to choose from based on each title:\n" +
+                "There are a few keywords for `game styles` to choose from based on each title:\n" +
                 "\n" +
                 "<:P1:751133115531133112> `P1` - **Persona**\n" +
                 "<:P2IS:788950080396328990> `P2IS` - **Persona 2: Innocent Sin**\n" +
@@ -135,9 +135,14 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "<:P4AU:751133122342420572> `P4AU` - **Persona 4 Arena Ultimax**\n" +
                 "<:P4D:751133120346062859> `P4D` - **Persona 4: Dancing All Night**\n" +
                 "<:P5:751133123861020742> `P5` - **Persona 5**\n" +
+                "<:P5S:852644176188669972> `P5S` - **Persona 5 Strikers**\n" +
                 "<:BBTAG:751133123013771617> `BBTAG` - **BlazBlue: Cross Tag Battle**\n" +
                 "\n" +
-                $"Use the format **`{BotConfig.bot.cmdPrefix}maker [template]`** to view the names of characters with sprites for that title.");
+                $"Use the format **`{BotConfig.bot.cmdPrefix}maker [game style]`** to view the names of characters with sprites for that title." +
+                $"\n" +
+                $"For slash commands, use <:SlashCommand:1032644966851281016>**maker_list** and choose a game style from the list.");
+
+            embed.WithImageUrl("https://i.imgur.com/hhnDVlB.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -206,7 +211,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             {
                 Text = "" +
                 "◀️ Previous Page | ▶️ Next Page\n" +
-                "Page 3 / 6"
+                "Page 3 / 5"
             };
 
             embed.WithFooter(footer);
@@ -216,10 +221,12 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"Once you find a character you want, use the format **`{BotConfig.bot.cmdPrefix}maker [character]`** to display their sprite sheet.\n" +
+                $"When you find a character you want, use the format **`{BotConfig.bot.cmdPrefix}maker [character]`** to bring up their sprite sheet, or <:SlashCommand:1032644966851281016>**maker_sheet** when using slash commands.\n" +
                 "\n" +
-                "If the character appears in more than one title, this will only bring up their sprite sheet from the game they originated from. " +
-                "To specify their sprite sheet from another title, type one of the template keywords after their name.");
+                "If the character appears in more than one title, this will only show their sprite sheet from the first game they appeared in." +
+                "To specify their sprite sheet from another title, type one of the game style keywords after their name.");
+
+            embed.WithImageUrl("https://i.imgur.com/n6U4wUg.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -288,7 +295,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             {
                 Text = "" +
                 "◀️ Previous Page | ▶️ Next Page\n" +
-                "Page 4 / 6"
+                "Page 4 / 5"
             };
 
             embed.WithFooter(footer);
@@ -298,9 +305,12 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                "String together a character keyword, one of their sprite numbers, and the dialogue you want them to say within quotation marks to create a scene.\n" +
+                $"After typing **`{BotConfig.bot.cmdPrefix}maker`**, string together a character keyword, one of their sprite numbers, and the dialogue you want them to say within quotation marks to create a scene.\n" +
+                $"Slash commands can do the same with <:SlashCommand:1032644966851281016>**maker_create**, although quotation marks aren't needed for dialogue.\n" +
                 "\n" +
-                $"The template will form according to your settings, which you can adjust by typing **`{BotConfig.bot.cmdPrefix}settings`** and choosing [Scene Maker Settings].");
+                $"You'll create a scene based on your current scene maker settings, which you can change by typing **`{BotConfig.bot.cmdPrefix}settings`** and choosing [Scene Maker Settings].");
+
+            embed.WithImageUrl("https://i.imgur.com/N3gpE6u.gif");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -450,7 +460,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             {
                 Text = "" +
                 "◀️ Previous Page | 💠 Return to Tutorial Menu\n" +
-                "Page 6 / 6"
+                "Page 5 / 5"
             };
 
             embed.WithFooter(footer);
@@ -463,6 +473,8 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "To use a background, upload an image alongside your command when creating a scene.\n" +
                 "\n" +
                 "You can also delete scenes you’ve already made by reacting to them with the :x: emote.");
+
+            embed.WithImageUrl("https://i.imgur.com/YgYLPXW.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

@@ -31,14 +31,14 @@
     "Row": 0,
     "Column": 3,
     "LeftCut": 0,
-    "RightCut": 8,
+    "RightCut": 9,
     "SupportedChars": "[ '#' ]"
   },
   {
     "Row": 0,
     "Column": 4,
     "LeftCut": 0,
-    "RightCut": 8,
+    "RightCut": 9,
     "SupportedChars": "[ '$' ]"
   },
   {
@@ -52,7 +52,7 @@
     "Row": 0,
     "Column": 6,
     "LeftCut": 0,
-    "RightCut": 8,
+    "RightCut": 9,
     "SupportedChars": "[ '&' ]"
   },
   {
@@ -78,16 +78,9 @@
   },
   {
     "Row": 0,
-    "Column": 10,
-    "LeftCut": 0,
-    "RightCut": 8,
-    "SupportedChars": "[ '*' ]"
-  },
-  {
-    "Row": 0,
     "Column": 11,
     "LeftCut": 0,
-    "RightCut": 8,
+    "RightCut": 9,
     "SupportedChars": "[ '+' ]"
   },
   {
@@ -101,7 +94,7 @@
     "Row": 0,
     "Column": 13,
     "LeftCut": 0,
-    "RightCut": 8,
+    "RightCut": 9,
     "SupportedChars": "[ '-' ]"
   },
   {
@@ -198,22 +191,22 @@
   {
     "Row": 1,
     "Column": 11,
-    "LeftCut": 0,
-    "RightCut": 8,
+    "LeftCut": 1,
+    "RightCut": 5,
     "SupportedChars": "[ ';' ]"
   },
   {
     "Row": 1,
     "Column": 12,
     "LeftCut": 0,
-    "RightCut": 8,
+    "RightCut": 9,
     "SupportedChars": "[ '<' ]"
   },
   {
     "Row": 1,
     "Column": 13,
     "LeftCut": 0,
-    "RightCut": 8,
+    "RightCut": 9,
     "SupportedChars": "[ '=' ]"
   },
   {
@@ -229,13 +222,6 @@
     "LeftCut": 0,
     "RightCut": 8,
     "SupportedChars": "[ '?' ]"
-  },
-  {
-    "Row": 2,
-    "Column": 0,
-    "LeftCut": 0,
-    "RightCut": 8,
-    "SupportedChars": "[ '@' ]"
   },
   {
     "Row": 2,
@@ -423,43 +409,15 @@
     "Row": 3,
     "Column": 11,
     "LeftCut": 0,
-    "RightCut": 8,
+    "RightCut": 7,
     "SupportedChars": "[ '[' ]"
   },
   {
     "Row": 3,
-    "Column": 12,
-    "LeftCut": 0,
-    "RightCut": 8,
-    "SupportedChars": "[ '\\\\' ]"
-  },
-  {
-    "Row": 3,
     "Column": 13,
-    "LeftCut": 0,
-    "RightCut": 8,
+    "LeftCut": 2,
+    "RightCut": 9,
     "SupportedChars": "[ ']' ]"
-  },
-  {
-    "Row": 3,
-    "Column": 14,
-    "LeftCut": 0,
-    "RightCut": 8,
-    "SupportedChars": "[ '^' ]"
-  },
-  {
-    "Row": 3,
-    "Column": 15,
-    "LeftCut": 0,
-    "RightCut": 8,
-    "SupportedChars": "[ '_' ]"
-  },
-  {
-    "Row": 4,
-    "Column": 0,
-    "LeftCut": 0,
-    "RightCut": 8,
-    "SupportedChars": "[ '`' ]"
   },
   {
     "Row": 4,
@@ -642,5 +600,173 @@
     "LeftCut": 0,
     "RightCut": 8,
     "SupportedChars": "[ 'z' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 11,
+    "LeftCut": 0,
+    "RightCut": 7,
+    "SupportedChars": "[ '{' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 13,
+    "LeftCut": 2,
+    "RightCut": 10,
+    "SupportedChars": "[ '}' ]"
+  },
+  {
+    "Row": 6,
+    "Column": 11,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '~' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 12,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '−' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 13,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '±' ]"
+  },
+  {
+    "Row": 7,
+    "Column": 14,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '×' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '÷' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 6,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '♂' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 7,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '♀' ]"
+  },
+  {
+    "Row": 8,
+    "Column": 12,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '¥' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 0,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '♥', '♡', '❣', '❤', '💖', '💝', '💘', '💛', '💚', '💙', '💜', '💗', '💕', '💞', '💓' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 1,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '♠' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 2,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '○' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 3,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '●' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 4,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '□' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 5,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '■' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 6,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '△' ]"
+  },
+  {
+    "Row": 9,
+    "Column": 7,
+    "LeftCut": 0,
+    "RightCut": 9,
+    "SupportedChars": "[ '▲' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 6,
+    "LeftCut": 4,
+    "RightCut": 14,
+    "SupportedChars": "[ 'λ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 7,
+    "LeftCut": 3,
+    "RightCut": 15,
+    "SupportedChars": "[ 'μ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 8,
+    "LeftCut": 4,
+    "RightCut": 13,
+    "SupportedChars": "[ 'ν' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 9,
+    "LeftCut": 4,
+    "RightCut": 13,
+    "SupportedChars": "[ 'ξ' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 10,
+    "LeftCut": 4,
+    "RightCut": 14,
+    "SupportedChars": "[ 'ο' ]"
+  },
+  {
+    "Row": 10,
+    "Column": 11,
+    "LeftCut": 2,
+    "RightCut": 15,
+    "SupportedChars": "[ 'π' ]"
   }
 ]

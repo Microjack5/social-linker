@@ -55,6 +55,28 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 return Task.CompletedTask;
             }
 
+            // Keycap Four
+            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_BG_Darken(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            // Keycap Five
+            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Consistent_Names(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
             return Task.CompletedTask;
         }
 
@@ -383,6 +405,116 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
             return Task.CompletedTask;
         }
 
+        public static Task Nav_Template_Layout_P1_PS1_BG_Darken(SocketReaction reaction, MenuIdStructure menuSession)
+        {
+            if (reaction.Emote.Name == "↩️")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            // Keycap One
+            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
+            {
+                // Get the account information of the user.
+                var account = UserInfoClasses.GetAccount(menuSession.User);
+
+                // Assign the chosen setting to the user's account.
+                account.P1_PSX_TS_BG_Darken = "On";
+
+                //Update the user's account.
+                UserInfoClasses.UpdateAccount(account);
+
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_BG_Darken_Confirm(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            // Keycap Two
+            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
+            {
+                // Get the account information of the user.
+                var account = UserInfoClasses.GetAccount(menuSession.User);
+
+                // Assign the chosen setting to the user's account.
+                account.P1_PSX_TS_BG_Darken = "Off";
+
+                //Update the user's account.
+                UserInfoClasses.UpdateAccount(account);
+
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_BG_Darken_Confirm(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Template_Layout_P1_PS1_Consistent_Names(SocketReaction reaction, MenuIdStructure menuSession)
+        {
+            if (reaction.Emote.Name == "↩️")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            // Keycap One
+            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
+            {
+                // Get the account information of the user.
+                var account = UserInfoClasses.GetAccount(menuSession.User);
+
+                // Assign the chosen setting to the user's account.
+                account.P1_PSX_TS_Consistent_Names = "On";
+
+                //Update the user's account.
+                UserInfoClasses.UpdateAccount(account);
+
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Consistent_Names_Confirm(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            // Keycap Two
+            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
+            {
+                // Get the account information of the user.
+                var account = UserInfoClasses.GetAccount(menuSession.User);
+
+                // Assign the chosen setting to the user's account.
+                account.P1_PSX_TS_Consistent_Names = "Off";
+
+                //Update the user's account.
+                UserInfoClasses.UpdateAccount(account);
+
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Consistent_Names_Confirm(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            return Task.CompletedTask;
+        }
+
         public static Task Nav_Template_Layout_P1_PS1_Wallpaper_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
         {
             if (reaction.Emote.Name == "💠")
@@ -460,6 +592,82 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
         }
 
         public static Task Nav_Template_Layout_P1_PS1_Placement_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        {
+            if (reaction.Emote.Name == "💠")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            else if (reaction.Emote.Name == "❌")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
+                try
+                {
+                    _ = menuSession.MenuMessage.DeleteAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                // If the menu session is not null, remove it from the global list.
+                if (menuSession != null)
+                {
+                    Global.MenuIdList.Remove(menuSession);
+                }
+                return Task.CompletedTask;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Template_Layout_P1_PS1_BG_Darken_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        {
+            if (reaction.Emote.Name == "💠")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            else if (reaction.Emote.Name == "❌")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
+                try
+                {
+                    _ = menuSession.MenuMessage.DeleteAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                // If the menu session is not null, remove it from the global list.
+                if (menuSession != null)
+                {
+                    Global.MenuIdList.Remove(menuSession);
+                }
+                return Task.CompletedTask;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Template_Layout_P1_PS1_Consistent_Names_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
         {
             if (reaction.Emote.Name == "💠")
             {

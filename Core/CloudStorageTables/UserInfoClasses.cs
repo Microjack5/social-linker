@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Discord.WebSocket;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 using SocialLinker.Config;
+using SocialLinker.Core.SceneMaker.Data.Bustup;
 
 namespace SocialLinker.Core.CloudStorageTables
 {
@@ -54,6 +57,21 @@ namespace SocialLinker.Core.CloudStorageTables
             return account;
         }
 
+        public static List<UserInfoFields> GetAllAccounts()
+        {
+            //Specify table information
+            var storageAccount = new CloudStorageAccount(new StorageCredentials(AzureConfig.azureAccount.accountName, AzureConfig.azureAccount.accountKey), true);
+            var tableClient = storageAccount.CreateCloudTableClient();
+            var userInfoTable = tableClient.GetTableReference(accountsTable);
+
+            //Retrieve user information
+            var filter_1 = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Discord");
+            var query = new TableQuery<UserInfoFields>().Where(filter_1);
+            var results_list = userInfoTable.ExecuteQuery(query).ToList();
+
+            return results_list;
+        }
+
         private static UserInfoFields CreateUserAccount(ulong id)
         {
             var newAccount = new UserInfoFields()
@@ -90,47 +108,60 @@ namespace SocialLinker.Core.CloudStorageTables
                 Daily_Diligence_Gained = "Yes",
                 Daily_Expression_Gained = 0,
                 Diligence_Multiplier = 10,
-                P_Medals = 0,
+                P_Medals = 100,
                 City = "Tokyo",
-                Level_Up_Notifications = "On",
-                Rank_Up_Notifications = "On",
+                Level_Up_Notifications = "Off",
+                Rank_Up_Notifications = "Off",
                 Content_Filter = "",
                 VC_P1 = "P1-PSP",
                 VC_P2IS = "P2IS-PSP",
                 VC_P2EP = "P2EP-PSP",
-                VC_P3 = "P3F",
+                VC_P3 = "P3P",
                 VC_P4 = "P4G",
                 VC_P5 = "P5R",
                 CustomSpriteSets = "",
                 P1_PSX_TS_Wallpaper = "Type 1",
                 P1_PSX_TS_Moon_HUD = "On",
                 P1_PSX_TS_Position = "Switch",
+                P1_PSX_TS_BG_Darken = "Off",
+                P1_PSX_TS_Consistent_Names = "On",
                 P1_PSP_TS_Moon_HUD = "On",
                 P1_PSP_TS_Position = "Switch",
+                P1_PSP_TS_BG_Darken = "Off",
                 P2IS_PSX_TS_Wallpaper = "Blue Tone",
                 P2IS_PSX_TS_Invert = "Off",
                 P2IS_PSX_TS_Position = "Default",
+                P2IS_PSX_TS_Sprite_Flip = "Off",
                 P2IS_PSP_TS_Invert = "Off",
                 P2IS_PSP_TS_Position = "Default",
+                P2IS_PSP_TS_Sprite_Flip = "Off",
                 P2EP_PSX_TS_Wallpaper = "Blue Tone",
                 P2EP_PSX_TS_Invert = "Off",
                 P2EP_PSX_TS_Position = "Default",
+                P2EP_PSX_TS_Sprite_Flip = "Off",
+                P2EP_PSP_TS_Window_Color = "Type 1",
                 P2EP_PSP_TS_Invert = "Off",
                 P2EP_PSP_TS_Position = "Default",
+                P2EP_PSP_TS_Sprite_Flip = "Off",
                 P3F_TS_HUD = "Display All",
                 P3F_TS_Nav = "Off",
                 P3P_TS_Color = "Male Protagonist",
                 P3P_TS_HUD = "Display All",
+                P3P_TS_Position = "Center",
                 P3P_TS_Dual = "Normal",
                 P4_PS2_TS_HUD = "Normal",
                 P4G_TS_HUD = "Normal",
                 P4AU_TS_Scene_Type = "Dialogue",
+                P4AU_TS_Auto_Advance = "Off",
+                P4AU_TS_Position = "Right",
                 P4AU_TS_Panel = "PlayStation®️ 3",
                 P4AU_TS_Dual = "Normal",
                 P4AU_TS_Nav_BG = 1,
                 P4AU_TS_Phone_BG = "Junes Food Court",
                 P4AU_TS_Highlight = "On",
                 P4D_TS_Scene_Type = "Dialogue",
+                P4D_TS_Auto_Advance = "Off",
+                P4D_TS_Position = "Center",
                 P4D_TS_Dual = "Normal",
                 P4D_TS_Nav_Call_Location = 1,
                 P5_PS4_TS_HUD = "Normal",
@@ -148,8 +179,10 @@ namespace SocialLinker.Core.CloudStorageTables
                 P5S_TS_Date_Location_Layout = "Display All",
                 P5S_TS_Location_Icon = "RV Travel",
                 P5S_TS_Watermark = "Off",
-                BBTAG_TS_Header = "Episode BlazBlue",
-                BBTAG_TS_BG_Blur = "On",
+                BBTAG_TS_Header = "Episode Extra",
+                BBTAG_TS_Position = "Center",
+                BBTAG_TS_BG_Blur = "Off",
+                Display_Names_Sort = "entry_new_old",
                 Setting_Sheet_Order = "Order by Outfit",
                 Setting_BG_Color = "Transparent",
                 Setting_BG_Upload = "Maintain Aspect Ratio",

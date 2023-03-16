@@ -127,8 +127,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
-            EmbedSettings.Get_Game_Color("P1-PSP", null);
-            EmbedSettings.Get_Game_Logo("P1-PSP");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             // Create an empty string variable.
             string version_title = "";
@@ -227,8 +227,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
-            EmbedSettings.Get_Game_Color("P2IS-PSP", null);
-            EmbedSettings.Get_Game_Logo("P2IS-PSP");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PSP", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PSP"));
 
             // Create an empty string variable.
             string version_title = "";
@@ -327,8 +327,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
-            EmbedSettings.Get_Game_Color("P2EP-PSP", null);
-            EmbedSettings.Get_Game_Logo("P2EP-PSP");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P2EP-PSP", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PSP"));
 
             // Create an empty string variable.
             string version_title = "";
@@ -427,7 +427,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
-            EmbedSettings.Get_Game_Color("P3F", null);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
             embed.WithThumbnailUrl("https://i.imgur.com/trtPflx.png");
 
             // Create an empty string variable.
@@ -527,8 +527,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
-            EmbedSettings.Get_Game_Color("P4-PS2", null);
-            EmbedSettings.Get_Game_Logo("P4-PS2");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             // Create an empty string variable.
             string version_title = "";
@@ -627,8 +627,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color and thumbnail to the embeded message based on the title being edited.
-            EmbedSettings.Get_Game_Color("P5-PS4", null);
-            EmbedSettings.Get_Game_Logo("P5-PS4");
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             // Create an empty string variable.
             string version_title = "";
@@ -727,7 +727,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color to the embeded message based on the title being edited.
-            embed.WithColor(207, 200, 233);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
 
             // Create an empty string variable.
             string version_title = "";
@@ -819,7 +819,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color to the embeded message based on the title being edited.
-            embed.WithColor(237, 28, 37);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PSP", null));
 
             // Create an empty string variable.
             string version_title = "";
@@ -911,7 +911,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color to the embeded message based on the title being edited.
-            embed.WithColor(229, 217, 212);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P2EP-PSP", null));
 
             // Create an empty string variable.
             string version_title = "";
@@ -1003,7 +1003,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color to the embeded message based on the title being edited.
-            embed.WithColor(37, 149, 255);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
 
             // Create an empty string variable.
             string version_title = "";
@@ -1095,7 +1095,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color to the embeded message based on the title being edited.
-            embed.WithColor(255, 229, 49);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P4G", null));
 
             // Create an empty string variable.
             string version_title = "";
@@ -1187,7 +1187,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithFooter(footer);
 
             // Assign a color to the embeded message based on the title being edited.
-            embed.WithColor(213, 27, 4);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
 
             // Create an empty string variable.
             string version_title = "";

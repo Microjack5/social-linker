@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
-using Discord.Commands;
 using Discord.WebSocket;
-using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using System.Drawing.Text;
@@ -86,6 +80,9 @@ namespace SocialLinker.Core.StatusScreens.Decor
 
                 // Copy the plot point overlay to a bitmap
                 Bitmap plot_point_overlay = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Decor//Decor_Kasumi_1//layer_6.png");
+
+                // Petal field
+                Bitmap petal_field = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Decor//Decor_Kasumi_1//layer_7.png");
 
                 // Create a random variable and rotate poster a random amount between -12 and 0 degrees
                 Random rnd = new Random();
@@ -166,6 +163,8 @@ namespace SocialLinker.Core.StatusScreens.Decor
 
                     // Draw the social stat icons to the template
                     Bitmap stat_icons = RenderStatIcons(account.Proficiency_Rank, account.Diligence_Rank, account.Expression_Rank);
+                    Bitmap stat_icons_drop_shadow = BitmapToColor(stat_icons, 0, 0, 0);
+                    graphics.DrawImage(stat_icons_drop_shadow, 5, 5, 1920, 1080);
                     graphics.DrawImage(stat_icons, 0, 0, 1920, 1080);
 
                     // Draw the radar chart to the template
@@ -182,8 +181,10 @@ namespace SocialLinker.Core.StatusScreens.Decor
 
                     // Create a bitmap where the user's three social rank titles are displayed
                     Bitmap rank_titles_layer = RenderAllRankTitles(account.Proficiency_Rank, account.Diligence_Rank, account.Expression_Rank);
+                    Bitmap rank_titles_layer_drop_shadow = BitmapToColor(rank_titles_layer, 0, 0, 0);
 
                     // Draw the rank title bitmap to the template
+                    graphics.DrawImage(rank_titles_layer_drop_shadow, 3, 3, rank_titles_layer.Width, rank_titles_layer.Height);
                     graphics.DrawImage(rank_titles_layer, 0, 0, rank_titles_layer.Width, rank_titles_layer.Height);
 
                     // If the user has ever reset their level, render a prestige counter to the template
@@ -191,6 +192,8 @@ namespace SocialLinker.Core.StatusScreens.Decor
                     {
                         graphics.DrawImage(RenderPrestigeCounter(account.Level_Resets), 0, 0, 1920, 1080);
                     }
+
+                    graphics.DrawImage(petal_field, 0, 0, 1920, 1080);
                 }
 
                 // Save the bitmap to a data stream
@@ -769,131 +772,6 @@ namespace SocialLinker.Core.StatusScreens.Decor
             return new_bitmap;
         }
 
-        public static Bitmap RenderProfilePicture(SocketGuildUser user)
-        {
-            // Make a new bitmap large enough for a working space.
-            Bitmap new_bitmap = new Bitmap(1920, 1080);
-
-            //Create a variable for the user's profile picture
-            string profile_picture_url = user.GetAvatarUrl();
-
-            //If the user doesn't have a profile picture, use a default one
-            if (profile_picture_url == null)
-            {
-                profile_picture_url = "https://i.imgur.com/T0AjCLh.png";
-            }
-
-            //Use a graphics object to edit the new bitmap
-            using (Graphics graphics = Graphics.FromImage(new_bitmap))
-            {
-                //Use a web client to download the user's profile picture and draw it to the template
-                using (var wc = new WebClient())
-                {
-                    using (var imgStream = new MemoryStream(wc.DownloadData(profile_picture_url)))
-                    {
-                        using (var objImage = System.Drawing.Image.FromStream(imgStream))
-                        {
-                            Bitmap profile_picture = (Bitmap)objImage;
-
-                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                            graphics.DrawImage(profile_picture, 100, 100, 400, 400);
-                        }
-                    }
-                }
-            }
-
-            return new_bitmap;
-        }
-
-        public static Bitmap ImageToGrayscale(Bitmap original_image)
-        {
-            //Create a new bitmap the same size as the input image
-            Bitmap grayscaled_image = new Bitmap(original_image.Width, original_image.Height);
-
-            //Using a graphics image, edit the grayscaled_image bitmap
-            using (Graphics graphics = Graphics.FromImage(grayscaled_image))
-            {
-                //Create a nested for loop to get each pixel of the original input image, grayscale them, then copy them to the grayscaled_image bitmap
-                for (int x = 0; x < grayscaled_image.Width; x++)
-                {
-                    for (int y = 0; y < grayscaled_image.Height; y++)
-                    {
-                        System.Drawing.Color pixelColor = original_image.GetPixel(x, y);
-                        int grayScale = (int)((pixelColor.R * 0.3) + (pixelColor.G * 0.59) + (pixelColor.B * 0.11));
-                        System.Drawing.Color newColor = System.Drawing.Color.FromArgb(pixelColor.A, grayScale, grayScale, grayScale);
-                        grayscaled_image.SetPixel(x, y, newColor);
-                    }
-                }
-            }
-
-            //Return the grayscaled bitmap
-            return grayscaled_image;
-        }
-
-        public static Bitmap RenderPosterLabel(string label)
-        {
-            //Create an empty bitmap to store the final rendered label in
-            Bitmap return_label = new Bitmap(2, 2);
-
-            //If the input string is "leader", render the leader label
-            if (label == "leader")
-            {
-                //Copy the leader label to a bitmap
-                Bitmap leader_label = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//UserLabels//leader.png");
-
-                //Reassign the return_label bitmap to a new bitmap the same size as leader_label, plus 4 pixels on the width and height for the upcoming displaced second layer
-                return_label = new Bitmap(leader_label.Width + 4, leader_label.Height + 4);
-
-                //Use a graphics object to edit the return_label bitmap
-                using (Graphics graphics = Graphics.FromImage(return_label))
-                {
-                    //Draw the first layer to the return_bitmap after coloring it to black. The width and height must be set to specific values for resizing the original bitmap.
-                    graphics.DrawImage(BitmapToColor(leader_label, 0, 0, 0), 4, 4, 250, 104);
-
-                    //Draw the second layer to the return_bitmap after coloring it to beige. The width and height must be set to specific values for resizing the original bitmap.
-                    graphics.DrawImage(BitmapToColor(leader_label, 231, 225, 165), 0, 0, 250, 104);
-                }
-            }
-            else if (label == "navigator")
-            {
-                //Copy the navigator label to a bitmap
-                Bitmap navigator_label = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//UserLabels//navigator.png");
-
-                //Reassign the return_label bitmap to a new bitmap the same size as leader_label, plus 4 pixels on the width and height for the upcoming displaced second layer
-                return_label = new Bitmap(navigator_label.Width + 4, navigator_label.Height + 4);
-
-                //Use a graphics object to edit the return_label bitmap
-                using (Graphics graphics = Graphics.FromImage(return_label))
-                {
-                    //Draw the first layer to the return_bitmap after coloring it to black. The width and height must be set to specific values for resizing the original bitmap.
-                    graphics.DrawImage(BitmapToColor(navigator_label, 0, 0, 0), 4, 4, 326, 104);
-
-                    //Draw the second layer to the return_bitmap after coloring it to beige. The width and height must be set to specific values for resizing the original bitmap.
-                    graphics.DrawImage(BitmapToColor(navigator_label, 231, 225, 165), 0, 0, 326, 104);
-                }
-            }
-            else if (label == "party")
-            {
-                //Copy the leader label to a bitmap
-                Bitmap party_label = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//UserLabels//party.png");
-
-                //Reassign the return_label bitmap to a new bitmap the same size as leader_label, plus 4 pixels on the width and height for the upcoming displaced second layer
-                return_label = new Bitmap(party_label.Width + 4, party_label.Height + 4);
-
-                //Use a graphics object to edit the return_label bitmap
-                using (Graphics graphics = Graphics.FromImage(return_label))
-                {
-                    //Draw the first layer to the return_bitmap after coloring it to black. The width and height must be set to specific values for resizing the original bitmap.
-                    graphics.DrawImage(BitmapToColor(party_label, 0, 0, 0), 4, 4, 237, 104);
-
-                    //Draw the second layer to the return_bitmap after coloring it to beige. The width and height must be set to specific values for resizing the original bitmap.
-                    graphics.DrawImage(BitmapToColor(party_label, 231, 225, 165), 0, 0, 237, 104);
-                }
-            }
-
-            return return_label;
-        }
-
         public static string TotalExpToString(int total_exp)
         {
             // Create a string variable that will be the represented output of the user's total EXP
@@ -985,205 +863,6 @@ namespace SocialLinker.Core.StatusScreens.Decor
             }
 
             return total_exp_bitmap;
-        }
-
-        public static Bitmap RenderWantedPoster(SocketGuildUser user, int total_exp)
-        {
-            //Create a variable for the user's profile picture
-            string profile_picture = user.GetAvatarUrl();
-
-            //If the user doesn't have a profile picture, use a default one
-            if (profile_picture == null)
-            {
-                profile_picture = "https://i.imgur.com/T0AjCLh.png";
-            }
-
-            //Copy the wanted poster image to a bitmap
-            var wanted_poster = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//wanted_poster.png");
-
-            //Render the user's total EXP value to the bitmap
-            Bitmap total_exp_bitmap = RenderTotalExpBitmap(TotalExpToString(total_exp), total_exp.ToString().Length);
-
-
-            //Use a graphics object to edit the wanted poster
-            using (Graphics graphics = Graphics.FromImage(wanted_poster))
-            {
-                graphics.DrawImage(total_exp_bitmap, 197, 531, total_exp_bitmap.Width, total_exp_bitmap.Height);
-
-                //Use a web client to download the user's profile picture and draw it to the template
-                using (var wc = new WebClient())
-                {
-                    using (var imgStream = new MemoryStream(wc.DownloadData(profile_picture)))
-                    {
-                        using (var objImage = System.Drawing.Image.FromStream(imgStream))
-                        {
-                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                            graphics.DrawImage(ImageToGrayscale((Bitmap)objImage), 128, 118, 350, 350);
-                        }
-                    }
-                }
-
-                //Render the poster label based on the user's permissions in the server
-                //If the user is the server's owner, render the Leader label
-                if (user == user.Guild.Owner)
-                {
-                    Bitmap leader_label = RenderPosterLabel("leader");
-
-                    leader_label = RotateImage(leader_label, 8);
-
-                    graphics.DrawImage(leader_label, 233, 354, leader_label.Width, leader_label.Height);
-                }
-                //Else, if the user has any moderation permissions, render the Navigator label
-                else if (user.GuildPermissions.ManageGuild == true || user.GuildPermissions.ManageMessages == true || user.GuildPermissions.KickMembers == true || user.GuildPermissions.BanMembers == true)
-                {
-                    Bitmap navigator_label = RenderPosterLabel("navigator");
-
-                    navigator_label = RotateImage(navigator_label, 8);
-
-                    graphics.DrawImage(navigator_label, 149, 354, navigator_label.Width, navigator_label.Height);
-                }
-                //For all other users, render the Party tag
-                else
-                {
-                    Bitmap party_label = RenderPosterLabel("party");
-
-                    party_label = RotateImage(party_label, 8);
-
-                    graphics.DrawImage(party_label, 233, 354, party_label.Width, party_label.Height);
-                }
-            }
-
-            return wanted_poster;
-        }
-
-        public static Bitmap RenderStatsVector()
-        {
-            // Make a new bitmap large enough for a working space.
-            Bitmap new_bitmap = new Bitmap(1920, 1080);
-
-            // Begin editing the new_bitmap with a graphics object.
-            using (Graphics graphics = Graphics.FromImage(new_bitmap))
-            {
-                // Set the graphics rendering to have antialiasing.
-                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-                // Create a brush for the color black.
-                SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
-
-                // Create a brush for the color white.
-                SolidBrush whiteBrush = new SolidBrush(System.Drawing.Color.White);
-
-                // Create a new random variable.
-                Random rnd = new Random();
-
-                // Create multiple variables for the potential min and max values of the four points of the white stats vector box.
-                int white_stats_vector_point_1_x_min = 1543;
-                int white_stats_vector_point_1_x_max = 1567;
-                int white_stats_vector_point_1_y_min = 66;
-                int white_stats_vector_point_1_y_max = 66;
-
-                int white_stats_vector_point_2_x_min = 1833;
-                int white_stats_vector_point_2_x_max = 1851;
-                int white_stats_vector_point_2_y_min = 46;
-                int white_stats_vector_point_2_y_max = 56;
-
-                int white_stats_vector_point_3_x_min = 1837;
-                int white_stats_vector_point_3_x_max = 1849;
-                int white_stats_vector_point_3_y_min = 179;
-                int white_stats_vector_point_3_y_max = 189;
-
-                int white_stats_vector_point_4_x_min = 1548;
-                int white_stats_vector_point_4_x_max = 1564;
-                int white_stats_vector_point_4_y_min = 172;
-                int white_stats_vector_point_4_y_max = 184;
-
-                // Randomly set the X and Y values of the four points of the white stats vector box using the min and max values.
-                int white_stats_vector_point_1_x = rnd.Next(white_stats_vector_point_1_x_min, white_stats_vector_point_1_x_max);
-                int white_stats_vector_point_1_y = rnd.Next(white_stats_vector_point_1_y_min, white_stats_vector_point_1_y_max);
-
-                int white_stats_vector_point_2_x = rnd.Next(white_stats_vector_point_2_x_min, white_stats_vector_point_2_x_max);
-                int white_stats_vector_point_2_y = rnd.Next(white_stats_vector_point_2_y_min, white_stats_vector_point_2_y_max);
-
-                int white_stats_vector_point_3_x = rnd.Next(white_stats_vector_point_3_x_min, white_stats_vector_point_3_x_max);
-                int white_stats_vector_point_3_y = rnd.Next(white_stats_vector_point_3_y_min, white_stats_vector_point_3_y_max);
-
-                int white_stats_vector_point_4_x = rnd.Next(white_stats_vector_point_4_x_min, white_stats_vector_point_4_x_max);
-                int white_stats_vector_point_4_y = rnd.Next(white_stats_vector_point_4_y_min, white_stats_vector_point_4_y_max);
-
-                // Create the four points of the white stats vector box from the randomly chosen values.
-                Point white_stats_vector_point_1 = new Point(white_stats_vector_point_1_x, white_stats_vector_point_1_y);
-                Point white_stats_vector_point_2 = new Point(white_stats_vector_point_2_x, white_stats_vector_point_2_y);
-                Point white_stats_vector_point_3 = new Point(white_stats_vector_point_3_x, white_stats_vector_point_3_y);
-                Point white_stats_vector_point_4 = new Point(white_stats_vector_point_4_x, white_stats_vector_point_4_y);
-
-                // Add all the points for the white stats vector box into a point array.
-                Point[] white_stats_vector_poly_points = { white_stats_vector_point_1, white_stats_vector_point_2, white_stats_vector_point_3, white_stats_vector_point_4 };
-
-                // Let's save rendering this vector box to the bitmap until the end. Next, work on constructing the white tail of the box.
-                // The tail has set placement values, so create points for its white vector box.
-                Point white_tail_vector_point_1 = new Point(1599, 167);
-                Point white_tail_vector_point_2 = new Point(1697, 167);
-                Point white_tail_vector_point_3 = new Point(1673, 184);
-                Point white_tail_vector_point_4 = new Point(1682, 194);
-                Point white_tail_vector_point_5 = new Point(1565, 246);
-                Point white_tail_vector_point_6 = new Point(1614, 197);
-                Point white_tail_vector_point_7 = new Point(1590, 191);
-
-                // Add all the points for the white tail vector box into a point array.
-                Point[] white_tail_vector_poly_points = { white_tail_vector_point_1, white_tail_vector_point_2, white_tail_vector_point_3, white_tail_vector_point_4, white_tail_vector_point_5, white_tail_vector_point_6, white_tail_vector_point_7 };
-
-                // Save rendering this white tail vector box to the bitmap until the end of the function. Next, work on constructing the inner black area of the stats vector box.
-                // Randomly set the X and Y values of the four points of the black stats vector box based on the set white stats vector box X & Y values.
-                int black_stats_vector_point_1_x = rnd.Next(white_stats_vector_point_1_x + 8, white_stats_vector_point_1_x + 20);
-                int black_stats_vector_point_1_y = rnd.Next(white_stats_vector_point_1_y + 8, white_stats_vector_point_1_y + 20);
-
-                int black_stats_vector_point_2_x = rnd.Next(white_stats_vector_point_2_x - 20, white_stats_vector_point_2_x - 8);
-                int black_stats_vector_point_2_y = rnd.Next(white_stats_vector_point_2_y + 8, white_stats_vector_point_2_y + 20);
-
-                int black_stats_vector_point_3_x = rnd.Next(white_stats_vector_point_3_x - 20, white_stats_vector_point_3_x - 8);
-                int black_stats_vector_point_3_y = rnd.Next(white_stats_vector_point_3_y - 20, white_stats_vector_point_3_y - 8);
-
-                int black_stats_vector_point_4_x = rnd.Next(white_stats_vector_point_4_x + 8, white_stats_vector_point_4_x + 20);
-                int black_stats_vector_point_4_y = rnd.Next(white_stats_vector_point_4_y - 20, white_stats_vector_point_4_y - 8);
-
-                // Create the four points of the black stats vector box from the randomly chosen values.
-                Point black_stats_vector_point_1 = new Point(black_stats_vector_point_1_x, black_stats_vector_point_1_y);
-                Point black_stats_vector_point_2 = new Point(black_stats_vector_point_2_x, black_stats_vector_point_2_y);
-                Point black_stats_vector_point_3 = new Point(black_stats_vector_point_3_x, black_stats_vector_point_3_y);
-                Point black_stats_vector_point_4 = new Point(black_stats_vector_point_4_x, black_stats_vector_point_4_y);
-
-                // Add all the points for the black stats vector box into a point array.
-                Point[] black_stats_vector_poly_points = { black_stats_vector_point_1, black_stats_vector_point_2, black_stats_vector_point_3, black_stats_vector_point_4 };
-
-                // Save rendering this black stats vector box to the bitmap until the end of the function. Lastly, work on constructing the inner black area of the tail vector box.
-                // The tail has set placement values, so create points for its black vector box.
-                Point black_tail_vector_point_1 = new Point(1631, 147);
-                Point black_tail_vector_point_2 = new Point(1745, 147);
-                Point black_tail_vector_point_3 = new Point(1657, 180);
-                Point black_tail_vector_point_4 = new Point(1665, 188);
-                Point black_tail_vector_point_5 = new Point(1610, 210);
-                Point black_tail_vector_point_6 = new Point(1628, 188);
-                Point black_tail_vector_point_7 = new Point(1612, 179);
-
-                // Add all the points for the black stats vector box into a point array.
-                Point[] black_tail_vector_poly_points = { black_tail_vector_point_1, black_tail_vector_point_2, black_tail_vector_point_3, black_tail_vector_point_4, black_tail_vector_point_5, black_tail_vector_point_6, black_tail_vector_point_7 };
-
-                //Finally, let's draw the created polygons to the bitmap.
-                // Use the white_stats_vector_poly_points array to create a polygon and fill it with white color.
-                graphics.FillPolygon(whiteBrush, white_stats_vector_poly_points);
-
-                // Use the white_tail_vector_poly_points array to create a polygon and fill it with white color.
-                graphics.FillPolygon(whiteBrush, white_tail_vector_poly_points);
-
-                // Use the black_stats_vector_poly_points array to create a polygon and fill it with black color.
-                graphics.FillPolygon(blackBrush, black_stats_vector_poly_points);
-
-                // Use the black_tail_vector_poly_points array to create a polygon and fill it with black color.
-                graphics.FillPolygon(blackBrush, black_tail_vector_poly_points);
-            }
-
-            // Return the new bitmap.
-            return new_bitmap;
         }
 
         public static Bitmap RenderRadarChart(int proficiency_rank, int diligence_rank, int expression_rank)
@@ -1391,10 +1070,10 @@ namespace SocialLinker.Core.StatusScreens.Decor
         public static Bitmap RenderPrestigeCounter(int level_resets)
         {
             // Copy the prestige counter overlay to a bitmap.
-            Bitmap prestige_overlay = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//prestige_counter.png");
+            Bitmap prestige_overlay = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Decor//Decor_Kasumi_1//prestige_counter.png");
 
             // Copy the star to mark prestige to a bitmap.
-            Bitmap prestige_star = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Default//P5//star.png");
+            Bitmap prestige_star = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Decor//Decor_Kasumi_1//star.png");
 
             // Create a new bitmap.
             Bitmap new_bitmap = new Bitmap(1920, 1080);
@@ -1417,7 +1096,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
                 // Draw as many stars to the prestige overlay as needed.
                 for (int i = 0; i < star_counter; i++)
                 {
-                    graphics.DrawImage(prestige_star, 1697 + (i * 50), 195, 50, 50);
+                    graphics.DrawImage(prestige_star, 1679 + (i * 50), 41, 50, 50);
                 }
             }
 
@@ -1525,18 +1204,6 @@ namespace SocialLinker.Core.StatusScreens.Decor
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
-        }
-    }
-
-    //Class from https://stackoverflow.com/questions/1064901/random-number-between-2-double-numbers
-    public static class RandomExtensions
-    {
-        public static double NextDouble(
-            this Random random,
-            double minValue,
-            double maxValue)
-        {
-            return random.NextDouble() * (maxValue - minValue) + minValue;
         }
     }
 }

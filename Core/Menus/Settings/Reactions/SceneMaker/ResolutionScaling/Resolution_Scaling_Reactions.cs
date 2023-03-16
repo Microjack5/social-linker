@@ -79,16 +79,6 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.ResolutionScalin
                 return Task.CompletedTask;
             }
 
-            else if (reaction.Emote.Name == "P4D")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_P4D_Menu.Resolution_Scaling_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
             return Task.CompletedTask;
         }
     }

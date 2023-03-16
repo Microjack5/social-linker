@@ -94,11 +94,9 @@ namespace SocialLinker.Core.Menus.Settings.Main
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
-            embed.AddField(":one: General Settings",
-                "Set your time zone, weather, notification, and content settings.");
-            embed.AddField(":two: Profile Settings",
-                "Change your profile theme and status screen décor.");
-            embed.AddField(":three: Scene Maker Settings",
+            embed.AddField(":one: Profile Settings",
+                "Configure various profile settings.");
+            embed.AddField(":two: Scene Maker Settings",
                 "Change general scene maker settings.");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
@@ -142,7 +140,6 @@ namespace SocialLinker.Core.Menus.Settings.Main
             // Add needed emote reactions for the menu.
             reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("❌"));
 
             // Add the reactions to the message.

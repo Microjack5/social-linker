@@ -84,7 +84,8 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = SM_Tutorial_Dual_Menu.SM_Tutorial_Dual_Chara_Page_1(menuSession.User, menuSession.MenuMessage);
+                _ = SM_Tutorial_Anime_Frames_Menu.SM_Tutorial_Anime_Frames_Page_1(menuSession.User, menuSession.MenuMessage);
+                //_ = SM_Tutorial_Dual_Menu.SM_Tutorial_Dual_Chara_Page_1(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -95,7 +96,7 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = SM_Tutorial_Anime_Frames_Menu.SM_Tutorial_Anime_Frames_Page_1(menuSession.User, menuSession.MenuMessage);
+                //_ = SM_Tutorial_Anime_Frames_Menu.SM_Tutorial_Anime_Frames_Page_1(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -106,7 +107,7 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = SM_Tutorial_Cutin_Menu.SM_Tutorial_Cutin_Page_1(menuSession.User, menuSession.MenuMessage);
+                //_ = SM_Tutorial_Cutin_Menu.SM_Tutorial_Cutin_Page_1(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 

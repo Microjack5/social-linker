@@ -47,7 +47,7 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = SM_Tutorial_VC_Menu.SM_Tutorial_VC_Cross_Page_1(menuSession.User, menuSession.MenuMessage);
+                _ = SM_Tutorial_VC_Menu.SM_Tutorial_VC_Bypass_Page_1(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -154,6 +154,57 @@ namespace SocialLinker.Core.Menus.Help.Reactions
             return Task.CompletedTask;
         }
 
+        public static Task Nav_SM_Tutorial_VC_Bypass_Page_1(SocketReaction reaction, MenuIdStructure menuSession)
+        {
+            if (reaction.Emote.Name == "↩️")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = SM_Tutorial_VC_Menu.SM_Tutorial_VC_Main(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            else if (reaction.Emote.Name == "▶️")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = SM_Tutorial_VC_Menu.SM_Tutorial_VC_Bypass_Page_2(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_SM_Tutorial_VC_Bypass_Page_2(SocketReaction reaction, MenuIdStructure menuSession)
+        {
+            if (reaction.Emote.Name == "◀️")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = SM_Tutorial_VC_Menu.SM_Tutorial_VC_Bypass_Page_1(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            else if (reaction.Emote.Name == "💠")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = SM_Tutorial_VC_Menu.SM_Tutorial_VC_Main(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        // To be used later
         public static Task Nav_SM_Tutorial_VC_Cross_Page_1(SocketReaction reaction, MenuIdStructure menuSession)
         {
             if (reaction.Emote.Name == "↩️")

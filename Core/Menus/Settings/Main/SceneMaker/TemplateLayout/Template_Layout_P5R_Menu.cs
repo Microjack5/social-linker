@@ -46,8 +46,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 "\n" +
                 ":one: Date & Weather\n" +
                 ":two: Scene Border\n" +
-                ":three: Control Panel & Auto-Advance\n" +
-                ":four: Phone Calls");
+                ":three: Control Panel & Auto-Advance\n"); //":four: Phone Calls"
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -92,7 +91,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
+            //reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);

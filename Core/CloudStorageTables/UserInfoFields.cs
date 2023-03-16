@@ -52,32 +52,45 @@ namespace SocialLinker.Core.CloudStorageTables
         public string P1_PSX_TS_Wallpaper { get; set; }
         public string P1_PSX_TS_Moon_HUD { get; set; }
         public string P1_PSX_TS_Position { get; set; }
+        public string P1_PSX_TS_BG_Darken { get; set; }
+        public string P1_PSX_TS_Consistent_Names { get; set; }
         public string P1_PSP_TS_Moon_HUD { get; set; }
         public string P1_PSP_TS_Position { get; set; }
+        public string P1_PSP_TS_BG_Darken { get; set; }
         public string P2IS_PSX_TS_Wallpaper { get; set; }
         public string P2IS_PSX_TS_Invert { get; set; }
         public string P2IS_PSX_TS_Position { get; set; }
+        public string P2IS_PSX_TS_Sprite_Flip { get; set; }
         public string P2IS_PSP_TS_Invert { get; set; }
         public string P2IS_PSP_TS_Position { get; set; }
+        public string P2IS_PSP_TS_Sprite_Flip { get; set; }
         public string P2EP_PSX_TS_Wallpaper { get; set; }
         public string P2EP_PSX_TS_Invert { get; set; }
         public string P2EP_PSX_TS_Position { get; set; }
+        public string P2EP_PSX_TS_Sprite_Flip { get; set; }
+        public string P2EP_PSP_TS_Window_Color { get; set; }
         public string P2EP_PSP_TS_Invert { get; set; }
         public string P2EP_PSP_TS_Position { get; set; }
+        public string P2EP_PSP_TS_Sprite_Flip { get; set; }
         public string P3F_TS_HUD { get; set; }
         public string P3F_TS_Nav { get; set; }
         public string P3P_TS_Color { get; set; }
         public string P3P_TS_HUD { get; set; }
+        public string P3P_TS_Position { get; set; }
         public string P3P_TS_Dual { get; set; }
         public string P4_PS2_TS_HUD { get; set; }
         public string P4G_TS_HUD { get; set; }
         public string P4AU_TS_Scene_Type { get; set; }
+        public string P4AU_TS_Auto_Advance { get; set; }
         public string P4AU_TS_Panel { get; set; }
+        public string P4AU_TS_Position { get; set; }
         public string P4AU_TS_Dual { get; set; }
         public int P4AU_TS_Nav_BG { get; set; }
         public string P4AU_TS_Phone_BG { get; set; }
         public string P4AU_TS_Highlight { get; set; }
         public string P4D_TS_Scene_Type { get; set; }
+        public string P4D_TS_Auto_Advance { get; set; }
+        public string P4D_TS_Position { get; set; }
         public string P4D_TS_Dual { get; set; }
         public int P4D_TS_Nav_Call_Location { get; set; }
         public string P5_PS4_TS_HUD { get; set; }
@@ -96,7 +109,9 @@ namespace SocialLinker.Core.CloudStorageTables
         public string P5S_TS_Location_Icon { get; set; }
         public string P5S_TS_Watermark { get; set; }
         public string BBTAG_TS_Header { get; set; }
+        public string BBTAG_TS_Position { get; set; }
         public string BBTAG_TS_BG_Blur { get; set; }
+        public string Display_Names_Sort { get; set; }
         public string Setting_Sheet_Order { get; set; }
         public string Setting_BG_Color { get; set; }
         public string Setting_BG_Upload { get; set; }

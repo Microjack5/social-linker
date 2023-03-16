@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.WebSocket;
-using SocialLinker.Core.Menus.Settings.Main.General;
 using SocialLinker.Core.Menus.Settings.Main.Profile;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 
@@ -18,23 +17,12 @@ namespace SocialLinker.Core.Menus.Settings.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = General_Settings_Menu.General_Settings_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
             // Keycap Two
             else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();

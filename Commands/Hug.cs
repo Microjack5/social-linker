@@ -51,19 +51,19 @@ namespace SocialLinker.Commands
             // Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
             {
-                HugError(command.Message);
+                HugError(command);
                 return;
             }
             // If the mentioned user is the command user, send a special message and return.
             else if (mentionedUser == command_user)
             {
-                HugSelf(command.Message);
+                HugSelf(command);
                 return;
             }
             // If the mentioned user is the bot itself, send a special message and return.
             else if (mentionedUser.Id == BotConfig.bot.id)
             {
-                HugBot(command.Message);
+                HugBot(command);
                 return;
             }
 
@@ -119,33 +119,26 @@ namespace SocialLinker.Commands
             // Create a randomized URL based on the command user and command target's content filters.
             string randomized_image = RandomizeHugGif(command_user, command_target);
 
-            // If the command user has a set profile theme and the randomized image URL is empty, OR the command target doesn't have an activated account, add a notification to the embed.
-            if ((command_user_account.Profile_Theme != "" && randomized_image == "") || command_target_account.Account_Activated == "No")
+            if (randomized_image == "")
             {
                 var footer = new EmbedFooterBuilder
                 {
-                    Text = $"{command_user_account.Profile_Theme} images are filtered out for this user."
+                    Text = $"...but there's no hug to show!"
                 };
                 embed.WithFooter(footer);
             }
-            // Else, if the command user has a profile theme set, choose a random GIF to display based on it
-            else if (command_user_account.Profile_Theme != "")
+            else
             {
                 embed.WithImageUrl($"{randomized_image}");
-            }
-            // Else, if the command user doesn't have a profile theme set, add a different notification to the embed instead.
-            else if (command_user_account.Profile_Theme == "")
-            {
-                embed.WithDescription($"You can add GIFs to your social commands by visiting the **`{BotConfig.bot.cmdPrefix}settings`** menu and choosing [Profile Settings] > [Profile Theme].");
             }
 
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async void HugError(SocketMessage message)
+        public static async void HugError(SocialLinkerCommand sl_command)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             //Retrieve the account information of the command's user
             var account = UserInfoClasses.GetAccount(user);
@@ -168,18 +161,18 @@ namespace SocialLinker.Commands
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async void HugSelf(SocketMessage message)
+        public static async void HugSelf(SocialLinkerCommand sl_command)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             await channel.SendMessageAsync($"*Gives {user.Username} a super special hug*");
         }
 
-        public static async void HugBot(SocketMessage message)
+        public static async void HugBot(SocialLinkerCommand sl_command)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             var account = UserInfoClasses.GetAccount(user);
 
@@ -366,13 +359,24 @@ namespace SocialLinker.Commands
             {
                 imgurl = p3_selection_list[r.Next(0, p3_selection_list.Count)];
             }
-            if (command_user_account.Profile_Theme == "P4" && p4_selection_list.Count != 0)
+            else if (command_user_account.Profile_Theme == "P4" && p4_selection_list.Count != 0)
             {
                 imgurl = p4_selection_list[r.Next(0, p4_selection_list.Count)];
             }
-            if (command_user_account.Profile_Theme == "P5" && p5_selection_list.Count != 0)
+            else if (command_user_account.Profile_Theme == "P5" && p5_selection_list.Count != 0)
             {
                 imgurl = p5_selection_list[r.Next(0, p5_selection_list.Count)];
+            }
+            // If the user does not have a profile theme set, take all GIFs and combine them into one list to choose from.
+            else if (command_user_account.Profile_Theme == "")
+            {
+                List<string> all_selection_list = new List<string>();
+
+                all_selection_list.AddRange(p3_selection_list);
+                all_selection_list.AddRange(p4_selection_list);
+                all_selection_list.AddRange(p5_selection_list);
+
+                imgurl = all_selection_list[r.Next(0, all_selection_list.Count)];
             }
 
             return imgurl;

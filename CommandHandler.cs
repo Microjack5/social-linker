@@ -15,6 +15,9 @@ using Newtonsoft.Json;
 using Discord.Net;
 using SocialLinker.Core.SceneMaker;
 using System.Timers;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using System.Windows.Interop;
 
 namespace SocialLinker
 {
@@ -91,7 +94,7 @@ namespace SocialLinker
             return slash_to_command;
         }
 
-        public static SocialLinkerCommand ContextCommandConverter(SocketMessage message)
+        public static SocialLinkerCommand ContextCommandConverter(SocketUserMessage message)
         {
             List<string> input_substring;
 
@@ -101,7 +104,17 @@ namespace SocialLinker
 
             int prefix_length = $"{BotConfig.bot.cmdPrefix}".Length;
 
-            string parsed_command_name = input_substring[0].Substring(prefix_length);
+            string parsed_command_name = "";
+
+            int argPos = 0;
+            if (message.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
+            {
+                parsed_command_name = input_substring[0].Substring(prefix_length);
+            }
+            else
+            {
+                parsed_command_name = "None";
+            }
 
             SocialLinkerCommand context_to_command = new SocialLinkerCommand
             {
@@ -111,7 +124,7 @@ namespace SocialLinker
                 Channel = message.Channel,
                 MentionedUser = message.MentionedUsers.FirstOrDefault(),
                 Attachments = message.Attachments,
-                Message = (SocketUserMessage)message
+                Message = message
             };
 
             return context_to_command;
@@ -149,86 +162,81 @@ namespace SocialLinker
 
         private async Task SlashAnnex(SocketSlashCommand slash_command)
         {
-            try
-            {
-                SocialLinkerCommand sl_command = CommandConverter.SlashCommandConverter(slash_command);
-                await CommandIndex(sl_command);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            SocialLinkerCommand sl_command = CommandConverter.SlashCommandConverter(slash_command);
+
+            SocialStats.AddProficiency(sl_command);
+            SocialStats.AddDiligence(sl_command);
+            Leveling.UserSentMessage(sl_command);
+
+            await CommandIndex(sl_command);
         }
 
-        private async Task HandleCommandAsync(SocketMessage s)
+        private Task HandleCommandAsync(SocketMessage s)
         {
-            var msg = s as SocketUserMessage;
-            if (msg == null) return;
-            var context = new ShardedCommandContext(_client, msg);
-            if (context.User.IsBot) return;
-
-            // If the message is a direct message, return immediately.
-            if (msg.Channel.GetType() == typeof(SocketDMChannel))
+            _ = Task.Run(async () =>
             {
-                return;
-            }
+                var msg = s as SocketUserMessage;
 
-            //If the user is in a time out status, do nothing and return
-            if (TimeOut.TimeOutStatus(msg) == "Yes") return;
+                if (msg == null) return;
+                var context = new ShardedCommandContext(_client, msg);
+                if (context.User.IsBot) return;
 
-            int argPos = 0;
-            if (msg.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
-            {
-                try
+                // If the message is a direct message, return immediately.
+                if (msg.Channel.GetType() == typeof(SocketDMChannel))
                 {
-                    var converted_sl_command = CommandConverter.ContextCommandConverter(msg);
-                    await CommandIndex(converted_sl_command);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
+                    return;
                 }
 
-                //Add Proficiency to the user's account whenever a command is successfully used
-                //SocialStats.AddProficiency(msg);
-            }
+                //If the user is in a time out status, do nothing and return
+                if (TimeOut.TimeOutStatus(msg) == "Yes") return;
 
-            //Calculate if the user gains Diligence for this message
-            //SocialStats.AddDiligence(msg);
+                var converted_sl_command = CommandConverter.ContextCommandConverter(msg);
 
-            //Leveling up manages the user's time caps, so make sure it comes after AddProficiency and AddDiligence have ran
-            //Leveling.UserSentMessage(msg);
+                int argPos = 0;
+                if (msg.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
+                {
+                    try
+                    {
+                        // Process the command if there's actually a prefix. Otherwise, treat it as a normal message.
+                        await CommandIndex(converted_sl_command);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+
+                    //Add Proficiency to the user's account whenever a command is successfully used
+                    SocialStats.AddProficiency(converted_sl_command);
+                }
+
+                //Calculate if the user gains Diligence for this message
+                SocialStats.AddDiligence(converted_sl_command);
+
+                //Leveling up manages the user's time caps, so make sure it comes after AddProficiency and AddDiligence have ran
+                Leveling.UserSentMessage(converted_sl_command);
+            });
+            return Task.CompletedTask;
         }
 
         private async Task CommandIndex(SocialLinkerCommand command)
         {
             var commandChannel = (SocketGuildChannel)command.Channel;
-            ulong[] allowed_servers = new ulong[] { 543226698238394378, 488920941041025025, 981870056688480266 };
+            //ulong[] allowed_servers = new ulong[] { 543226698238394378, 488920941041025025, 981870056688480266, 1085839296688295986 };
 
-            if (allowed_servers.Contains(commandChannel.Guild.Id))
-            {
-                // Do nothing
-            }
-            else
-            {
-                await command.SlashCommand.RespondAsync("Global slash commands are temporarily disabled for this server.", ephemeral: true);
-                return;
-            }
+            //if (allowed_servers.Contains(commandChannel.Guild.Id))
+            //{
+            //    // Do nothing
+            //}
+            //else
+            //{
+            //    await command.SlashCommand.RespondAsync("Global slash commands are temporarily disabled for this server.", ephemeral: true);
+            //    return;
+            //}
 
             if (command.CommandType == "Slash")
             {
-                await command.SlashCommand.RespondAsync(embed: Slash_Command_Response().Build(), ephemeral: false);
-
-                Timer notice_deletion_timer = new Timer()
-                {
-                    // Create a timer that expires as a "time out" duration for the user.
-                    Interval = 5000,
-                    AutoReset = false,
-                    Enabled = true
-                };
-
-                // If the timer runs out, activate a function.
-                notice_deletion_timer.Elapsed += (sender, e) => Timer_Elapsed(sender, e, command);
+                await command.SlashCommand.DeferAsync();
+                await command.SlashCommand.DeleteOriginalResponseAsync();
             }
 
             switch (command.CommandName)
@@ -282,6 +290,10 @@ namespace SocialLinker
                 case "maker_create":
                     command.MakerCommand = SL_To_Maker_Command(command);
                     await Commands.Maker.MakerCommandParser(command);
+                    break;
+
+                case "update":
+                    await Commands.DevCommands.UpdatePreReleaseAccounts(command);
                     break;
             }
         }
@@ -524,7 +536,8 @@ namespace SocialLinker
                 .AddOption("sprite_number", ApplicationCommandOptionType.Integer, "The specific sprite from the character's sprite sheet to use.", isRequired: true)
                 .AddOption("eye_frame", ApplicationCommandOptionType.Integer, "Use an eye frame linked to the character's sprite.", isRequired: false)
                 .AddOption("mouth_frame", ApplicationCommandOptionType.Integer, "Use a mouth frame linked to the character's sprite.", isRequired: false)
-                .AddOption("dialogue", ApplicationCommandOptionType.String, "The character's spoken text.", isRequired: true);
+                .AddOption("dialogue", ApplicationCommandOptionType.String, "The character's spoken text.", isRequired: true)
+                .AddOption("background", ApplicationCommandOptionType.Attachment, "Upload an image to use as a background.", isRequired: false);
 
                 await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
@@ -545,7 +558,8 @@ namespace SocialLinker
                 Base_Sprite = default,
                 Eye_Frame = default,
                 Mouth_Frame = default,
-                Dialogue = ""
+                Dialogue = "",
+                Background = null
             };
 
             List<SocketSlashCommandDataOption> slash_command_data_options_list = sl_command.SlashCommand.Data.Options.ToList();
@@ -580,6 +594,10 @@ namespace SocialLinker
 
                     case "dialogue":
                         maker_command_data.Dialogue = slash_command_data_options_list[i].Value.ToString();
+                        break;
+
+                    case "background":
+                        maker_command_data.Background = slash_command_data_options_list[i].Value as IAttachment;
                         break;
                 } 
             }
@@ -635,29 +653,6 @@ namespace SocialLinker
             }
 
             return template;
-        }
-
-        public static EmbedBuilder Slash_Command_Response()
-        {
-            var embed = new EmbedBuilder();
-
-            embed.WithColor(0, 207, 41);
-            embed.WithDescription("**Slash command processing** <a:Loading:983845611482783814>");
-
-            return embed;
-        }
-
-        public static async void Timer_Elapsed(object sender, ElapsedEventArgs e, SocialLinkerCommand command)
-        {
-            try
-            {
-                await command.SlashCommand.DeleteOriginalResponseAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return;
-            }
         }
 
         private IServiceProvider ConfigureServices()

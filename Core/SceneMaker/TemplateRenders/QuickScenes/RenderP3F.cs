@@ -42,90 +42,21 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
-            // Create a starting base bitmap to render all graphics on.
+            // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
-
-            // Create another bitmap the same size.
-            // In case the user has set a colored bitmap in their settings, we'll need to use this to render it.
-            Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
-
-            // Here, we want to grab any images attached to the message to use it as a background.
-            // Create a variable for the message attachment.
-            var attachments = sl_command.Attachments;
-
-            // Create an empty string variable to hold the URL of the attachment.
-            string url = "";
-
-            // If there are no attachments on the message, set the URL string to "None".
-            if (attachments == default || attachments.LongCount() == 0)
-            {
-                url = "None";
-            }
-            // Else, assign the URL of the attachment to the URL string.
-            else
-            {
-                url = attachments.ElementAt(0).Url;
-            }
-
-            // Initialize a bitmap object for the user's background. It's small now because we'll reassign it depending on our circumstances.
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
             Bitmap background = new Bitmap(2, 2);
 
-            // If a URL for a message attachment exists, download it and copy its contents to the bitmap variable we just created.
-            if (url != "None")
+            try
             {
-                // Here, we'll want to try and retrieve the user's input image.
-                try
-                {
-                    // Declare variables for a web request to retrieve the image.
-                    System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
-                    webRequest.AllowWriteStreamBuffering = true;
-                    webRequest.Timeout = 30000;
-
-                    // Create a stream and download the image to it.
-                    System.Net.WebResponse webResponse = webRequest.GetResponse();
-                    System.IO.Stream stream = webResponse.GetResponseStream();
-
-                    // Copy the stream's contents to the background bitmap variable.
-                    background = (Bitmap)System.Drawing.Image.FromStream(stream);
-
-                    webResponse.Close();
-                }
-                // If an exception occurs here, the filetype is likely incompatible.
-                // Send an error message, delete the loading message, and return.
-                catch (System.ArgumentException e)
-                {
-                    Console.WriteLine(e);
-                    await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
-                    return;
-                }
+                background = OfficialSetMethods.Render_Background(sl_command, template_width, template_height);
             }
-
-            // Render the uploaded image based on the user's background settings.
-            switch (account.Setting_BG_Upload)
+            catch (System.ArgumentException e)
             {
-                case "Maintain Aspect Ratio":
-                    background = Center_Image(background);
-                    break;
-
-                case "Stretch to Fit":
-                    background = Stretch_To_Fit(background);
-                    break;
-            }
-
-            // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
-            // Check if the user's background color setting is set to something other than "Transparent".
-            // If so, we have a color to render for the background!
-            if (account.Setting_BG_Color != "Transparent")
-            {
-                // Convert the user's HTML color setting to one we can use and assign it to a color variable.
-                System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
-
-                // Color the entirety of the background bitmap the user's selected color.
-                using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
-                {
-                    graphics.Clear(user_background_color);
-                }
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
             }
 
             // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
@@ -245,25 +176,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // We'll start rendering our needed text here.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                // Check if the base sprite number is something other than zero. If so, render the display name of the chosen sprite to the template.
-                if (command_data.Base_Sprite != 0)
-                {
-                    graphics.DrawImage(Text_To_Red(Render_Name(bustup_data)), 0, 0, template_width, template_height);
-                }
-                // If the base sprite number IS zero, we need a sprite to actually retrieve a display name from.
-                else
-                {
-                    // Change the base sprite number from the command data to one.
-                    // This way, we can get the bustup data for the first sprite to retrieve its display name.
-                    command_data.Base_Sprite = 1;
+                string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                graphics.DrawImage(Text_To_Red(Render_Name(display_name)), 0, 0, template_width, template_height);
 
-                    // Get the bustup data for the first sprite and render the display name to the template.
-                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
-                    graphics.DrawImage(Text_To_Red(Render_Name(bustup_data)), 0, 0, template_width, template_height);
-                }
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3F", command_data.Dialogue, 3, 510);
 
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Text_To_Gray(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue))), 0, 0, template_width, template_height);
+                graphics.DrawImage(Text_To_Gray(Render_Dialogue(parsed_lines)), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -318,90 +237,21 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
 
-            // Create a starting base bitmap to render all graphics on.
+            // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
-
-            // Create another bitmap the same size.
-            // In case the user has set a colored bitmap in their settings, we'll need to use this to render it.
-            Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
-
-            // Here, we want to grab any images attached to the message to use it as a background.
-            // Create a variable for the message attachment.
-            var attachments = sl_command.Attachments;
-
-            // Create an empty string variable to hold the URL of the attachment.
-            string url = "";
-
-            // If there are no attachments on the message, set the URL string to "None".
-            if (attachments.LongCount() == 0)
-            {
-                url = "None";
-            }
-            // Else, assign the URL of the attachment to the URL string.
-            else
-            {
-                url = attachments.ElementAt(0).Url;
-            }
-
-            // Initialize a bitmap object for the user's background. It's small now because we'll reassign it depending on our circumstances.
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
             Bitmap background = new Bitmap(2, 2);
 
-            // If a URL for a message attachment exists, download it and copy its contents to the bitmap variable we just created.
-            if (url != "None")
+            try
             {
-                // Here, we'll want to try and retrieve the user's input image.
-                try
-                {
-                    // Declare variables for a web request to retrieve the image.
-                    System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
-                    webRequest.AllowWriteStreamBuffering = true;
-                    webRequest.Timeout = 30000;
-
-                    // Create a stream and download the image to it.
-                    System.Net.WebResponse webResponse = webRequest.GetResponse();
-                    System.IO.Stream stream = webResponse.GetResponseStream();
-
-                    // Copy the stream's contents to the background bitmap variable.
-                    background = (Bitmap)System.Drawing.Image.FromStream(stream);
-
-                    webResponse.Close();
-                }
-                // If an exception occurs here, the filetype is likely incompatible.
-                // Send an error message, delete the loading message, and return.
-                catch (System.ArgumentException e)
-                {
-                    Console.WriteLine(e);
-                    await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
-                    return;
-                }
+                background = OfficialSetMethods.Render_Background(sl_command, template_width, template_height);
             }
-
-            // Render the uploaded image based on the user's background settings.
-            switch (account.Setting_BG_Upload)
+            catch (System.ArgumentException e)
             {
-                case "Maintain Aspect Ratio":
-                    background = Center_Image(background);
-                    break;
-
-                case "Stretch to Fit":
-                    background = Stretch_To_Fit(background);
-                    break;
-            }
-
-            // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
-            // Check if the user's background color setting is set to something other than "Transparent".
-            // If so, we have a color to render for the background!
-            if (account.Setting_BG_Color != "Transparent")
-            {
-                // Convert the user's HTML color setting to one we can use and assign it to a color variable.
-                System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
-
-                // Color the entirety of the background bitmap the user's selected color.
-                using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
-                {
-                    graphics.Clear(user_background_color);
-                }
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
             }
 
             // Time to put it all together!
@@ -504,8 +354,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // We'll start rendering our needed text here.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3F", command_data.Dialogue, 3, 510);
+
                 // Draw the input dialogue to the template.
-                graphics.DrawImage(Text_To_Gray(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue))), 0, 0, template_width, template_height);
+                graphics.DrawImage(Text_To_Gray(Render_Dialogue(parsed_lines)), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -526,7 +378,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static Bitmap Render_Name(BustupData bustup_data)
+        public static Bitmap Render_Name(string display_name)
         {
             // Create a 640 x 480 bitmap.
             // This is larger than the template's defauly 640 x 448 size, but P3F's font must be rendered with this 640 x 480 dimension in mind.
@@ -546,7 +398,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int render_position_y = 354;
 
             // Take the sprite's display name and convert it into a char array.
-            char[] char_array = bustup_data.Default_Name_EN.ToCharArray();
+            char[] char_array = display_name.ToCharArray();
 
             // Iterate through each character of the array.
             for (int i = 0; i < char_array.Length; i++)
@@ -713,11 +565,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Create an array of three string lists and initialize them.
             // These are where our dialogue input will be organized.
-            List<string>[] dialogue_list = new List<string>[3];
+            List<string>[] dialogue_list = new List<string>[max_lines];
 
-            dialogue_list[0] = new List<string>();
-            dialogue_list[1] = new List<string>();
-            dialogue_list[2] = new List<string>();
+            for (int i = 0; i < max_lines; i++)
+            {
+                dialogue_list[i] = new List<string>();
+            }
 
             // Now that we have our string lists created, we need a variable to dynamically change which line we're currently on.
             // For that, create an int variable and initialize it to zero for starting on the first line.
@@ -747,7 +600,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     completed_word += dialogue_array[i];
 
                     // Now that we have our word, measure the pixel length of the completed string.
-                    int completed_word_length = Measure_Word_Pixel_Length(completed_word);
+                    int completed_word_length = Measure_Word_Pixel_Length(sl_command, completed_word);
 
                     // Check if the completed word is under the current line's allowed length.
                     // This is done by subtracting the completed word string's length from the remaining length of the line.
@@ -850,14 +703,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                             substring += completed_word_array[j];
 
                             // Measure the pixel length of the substring so far.
-                            substring_length = Measure_Word_Pixel_Length(substring);
+                            substring_length = Measure_Word_Pixel_Length(sl_command, substring);
 
                             // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
                             // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
-                            if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a')) // || (completed_word_array[j] == '\u000a')
+                            if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a'))
                             {
                                 // Check if the current line number is less than the max number of lines available.
-                                if (current_line < max_lines)
+                                if (current_line < max_lines - 1)
                                 {
                                     // Add the substring to the current line.
                                     dialogue_list[current_line].Add(substring);
@@ -896,10 +749,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return dialogue_list;
         }
 
-        public static int Measure_Word_Pixel_Length(string input_word)
+        public static int Measure_Word_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
         {
             // Create an int variable to keep track of the pixel length of a word.
             int pixel_counter = 0;
+
+            // Create another int to count the number of times a character comes up null from the font sheet.
+            // We'll want to keep track of this number so we can ensure there's only one error message sent.
+            int error_counter = 0;
 
             // Take the input string and convert it into a char array.
             char[] char_array = input_word.ToCharArray();
@@ -936,6 +793,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                         // Set the pixel counter to the appropriate width of the string so far.
                         pixel_counter += glyph.RightCut - glyph.LeftCut;
+                    }
+                }
+                // If the character returns null, it's not supported by the template's font set.
+                // Send a warning message to the user.
+                else
+                {
+                    // Increase the error counter by one.
+                    error_counter++;
+
+                    // If the error counter is at exactly 1, send a warning message to the user.
+                    if (error_counter == 1)
+                    {
+                        _ = ErrorHandling.Unsupported_Character(sl_command);
                     }
                 }
             }
@@ -1073,7 +943,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(time_of_day, 0, 0, template_width, template_height);
 
                 // Lastly, render the moon HUD to the template as well.
-                graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
+                if (account.P3F_TS_HUD != "Date Only")
+                {
+                    graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
+                }
             }
 
             return base_template;
@@ -1200,26 +1073,28 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         moon_phase_glow = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Main//Moon//Phases//Glow//8_waxing_gibbous.png");
                     }
                     // Full moon
-                    else if (illumination == 100)
+                    else if (illumination >= 100)
                     {
                         countdown_tens = new Bitmap(template_width, template_height);
                         countdown_ones = new Bitmap(template_width, template_height);
                         moon_phase = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Main//Moon//Phases//9_full.png");
                         moon_phase_glow = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Main//Moon//Phases//Glow//9_full.png");
                         countdown_text_special = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Main//Moon//Countdown//Text//full.png");
+                        countdown_text_main = new Bitmap(template_width, template_height);
                     }
                 }
                 // Waning phases
                 else if (cycle_age > 14.76)
                 {
                     // Full moon
-                    if (illumination == 100)
+                    if (illumination >= 100)
                     {
                         countdown_tens = new Bitmap(template_width, template_height);
                         countdown_ones = new Bitmap(template_width, template_height);
                         moon_phase = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Main//Moon//Phases//9_full.png");
                         moon_phase_glow = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Main//Moon//Phases//Glow//9_full.png");
                         countdown_text_special = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3F//Main//Moon//Countdown//Text//full.png");
+                        countdown_text_main = new Bitmap(template_width, template_height);
                     }
                     // Waning gibbous 1
                     else if ((illumination >= 87.5) && (illumination < 100))
@@ -1300,19 +1175,22 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 moon_phase_glow = (Bitmap)SetImageOpacity(moon_phase_glow, (float)rnd.NextDouble());
 
                 // Draw all the assets to the template.
-                // The main countdown text is drawn in a different position depending on the countdown's value. 
-                if (full_moon_countdown < 10)
+                if (account.P3F_TS_HUD != "Countdown Off")
                 {
-                    graphics.DrawImage(countdown_text_main, 17, 0, template_width, template_height);
-                }
-                else
-                {
-                    graphics.DrawImage(countdown_text_main, 0, 0, template_width, template_height);
-                }
+                    // The main countdown text is drawn in a different position depending on the countdown's value. 
+                    if (full_moon_countdown < 10)
+                    {
+                        graphics.DrawImage(countdown_text_main, 17, 0, template_width, template_height);
+                    }
+                    else
+                    {
+                        graphics.DrawImage(countdown_text_main, 0, 0, template_width, template_height);
+                    }
 
-                graphics.DrawImage(countdown_text_special, 0, 0, template_width, template_height);
-                graphics.DrawImage(countdown_tens, 0, 0, template_width, template_height);
-                graphics.DrawImage(countdown_ones, 0, 0, template_width, template_height);
+                    graphics.DrawImage(countdown_text_special, 0, 0, template_width, template_height);
+                    graphics.DrawImage(countdown_tens, 0, 0, template_width, template_height);
+                    graphics.DrawImage(countdown_ones, 0, 0, template_width, template_height);
+                }
                 graphics.DrawImage(moon_background, 0, 0, template_width, template_height);
                 graphics.DrawImage(moon_phase, 0, 0, template_width, template_height);
                 graphics.DrawImage(moon_phase_glow, 0, 0, template_width, template_height);
@@ -1816,7 +1694,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             try
             {
                 // Establish the directory of the file and then search for all JSON documents that start with "holiday_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\Assets\SceneMaker\Data\Calendar_Data";
+                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
                 string[] file_search = Directory.GetFiles(holiday_calendar_path, $"holiday_calendar_*.json");
 
                 // Read in all the text of the file.
@@ -1848,7 +1726,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             try
             {
                 // Establish the directory of the file and then search for all JSON documents that start with "academic_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"C:\Users\Microjack5\Documents\Social_Linker_Final\SocialLinker\Assets\SceneMaker\Data\Calendar_Data";
+                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
                 string[] file_search = Directory.GetFiles(holiday_calendar_path, $"academic_calendar_*.json");
 
                 // Read in all the text of the file.
@@ -1894,83 +1772,17 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return false;
         }
 
-        public static Bitmap Center_Image(Bitmap input_bitmap)
-        {
-            // Specify the width and height of the template we'll be drawing to.
-            float width = 640;
-            float height = 448;
-
-            // Copy the input bitmap to a new bitmap variable.
-            var image = new Bitmap(input_bitmap);
-
-            // Create a number to scale the image by on the template.
-            float scale = Math.Min(width / image.Width, height / image.Height);
-
-            // Create a new bitmap with the specified width and height variables.
-            var centered_bitmap = new Bitmap((int)width, (int)height);
-
-            // Create a new graphics object so we can render the image to the new bitmap.
-            var graphics = Graphics.FromImage(centered_bitmap);
-
-            // uncomment for higher quality output
-            graphics.InterpolationMode = InterpolationMode.High;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            // Set the pixel density of the image.
-            centered_bitmap.SetResolution(96, 96);
-
-            // Create the new width and height of the image.
-            var scaleWidth = (int)(image.Width * scale);
-            var scaleHeight = (int)(image.Height * scale);
-
-            // Finally, draw the image!
-            graphics.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
-
-            return centered_bitmap;
-        }
-
-        public static Bitmap Stretch_To_Fit(Bitmap input_bitmap)
-        {
-            // Set the width and height of the bitmap to be created
-            float width = 640;
-            float height = 448;
-
-            // Copy the input bitmap to a new variable.
-            var bitmap_copy = new Bitmap(input_bitmap);
-
-            // Create a brand new bitmap with the specified dimensions from earlier.
-            var new_bitmap = new Bitmap((int)width, (int)height);
-
-            // Create a graphics object so we can edit this new bitmap.
-            var graphics = Graphics.FromImage(new_bitmap);
-
-            // uncomment for higher quality output
-            graphics.InterpolationMode = InterpolationMode.High;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            // Set the pixel density of the image.
-            new_bitmap.SetResolution(96, 96);
-
-            // Draw the copy of the input bitmap to the new bitmap.
-            graphics.DrawImage(bitmap_copy, 0, 0, width, height);
-
-            return new_bitmap;
-        }
-
         // Method from https://stackoverflow.com/questions/15408607/adjust-brightness-contrast-and-gamma-of-an-image
         public static Bitmap Increase_Brightness_Contrast(Bitmap input_bitmap)
         {
-            //Bitmap originalImage = new Bitmap(input_bitmap.Width, input_bitmap.Height); ;
             Bitmap adjustedImage = new Bitmap(input_bitmap.Width, input_bitmap.Height);
-            float brightness = 1.0f; // no change in brightness
-            float contrast = 2.0f; // twice the contrast
+            float brightness = 1.2f; // 1.2 times the brightness
+            float contrast = 1.8f; // 1.8 times the contrast
             float gamma = 1.0f; // no change in gamma
 
             float adjustedBrightness = brightness - 1.0f;
             // create matrix that will brighten and contrast the image
-            float[][] ptsArray = 
+            float[][] ptsArray =
             {
                 new float[] {contrast, 0, 0, 0, 0}, // scale red
                 new float[] {0, contrast, 0, 0, 0}, // scale green

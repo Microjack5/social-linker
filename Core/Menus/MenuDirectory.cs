@@ -8,7 +8,6 @@ using SocialLinker.Core.Menus.Help.Reactions;
 using SocialLinker.Core.Menus.Shop.Reactions;
 using SocialLinker.Core.Menus.InitialUsage.Reactions;
 using SocialLinker.Core.Menus.Settings.Reactions;
-using SocialLinker.Core.Menus.Settings.Reactions.General;
 using SocialLinker.Core.Menus.Settings.Reactions.Profile;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout;
@@ -16,6 +15,8 @@ using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.SpriteSheetOrder;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.ResolutionScaling;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.Backgrounds;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.AutoDelete;
+using SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames;
+using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames;
 
 namespace SocialLinker.Core.Menus
 {
@@ -185,6 +186,14 @@ namespace SocialLinker.Core.Menus
                             await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Auto_Page_2(reaction, menuSession);
                             break;
 
+                        case "SM_Tutorial_VC_Bypass_Page_1":
+                            await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Bypass_Page_1(reaction, menuSession);
+                            break;
+
+                        case "SM_Tutorial_VC_Bypass_Page_2":
+                            await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Bypass_Page_2(reaction, menuSession);
+                            break;
+
                         case "SM_Tutorial_VC_Cross_Page_1":
                             await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Cross_Page_1(reaction, menuSession);
                             break;
@@ -285,11 +294,6 @@ namespace SocialLinker.Core.Menus
                         // Namespace: SocialLinker.Core.Menus.Settings
                         case "Settings_Main_Menu":
                             await Settings_Reactions.Nav_Settings_Main_Menu(reaction, menuSession);
-                            break;
-
-                        // Namespace: SocialLinker.Core.Menus.Settings.Main.General
-                        case "General_Settings_Menu":
-                            await General_Settings_Reactions.Nav_General_Settings_Main(reaction, menuSession);
                             break;
 
                         case "Time_Weather_Main":
@@ -498,6 +502,14 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Placement(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P1_PS1_BG_Darken":
+                            await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_BG_Darken(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PS1_Consistent_Names":
+                            await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Consistent_Names(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P1_PS1_Wallpaper_Confirm":
                             await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Wallpaper_Confirm(reaction, menuSession);
                             break;
@@ -508,6 +520,14 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P1_PS1_Placement_Confirm":
                             await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Placement_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PS1_BG_Darken_Confirm":
+                            await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_BG_Darken_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PS1_Consistent_Names_Confirm":
+                            await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Consistent_Names_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P1_PSP_Main":
@@ -522,12 +542,20 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Placement(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P1_PSP_BG_Darken":
+                            await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_BG_Darken(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P1_PSP_Moon_Phases_Confirm":
                             await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Moon_Phases_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P1_PSP_Placement_Confirm":
                             await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Placement_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PSP_BG_Darken_Confirm":
+                            await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_BG_Darken_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P2IS_PS1_Main":
@@ -546,6 +574,10 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P2IS_PS1_Reactions.Nav_Template_Layout_P2IS_PS1_Placement(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P2IS_PS1_Sprite_Flip":
+                            await Template_Layout_P2IS_PS1_Reactions.Nav_Template_Layout_P2IS_PS1_Sprite_Flip(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P2IS_PS1_Wallpaper_Confirm":
                             await Template_Layout_P2IS_PS1_Reactions.Nav_Template_Layout_P2IS_PS1_Wallpaper_Confirm(reaction, menuSession);
                             break;
@@ -556,6 +588,10 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P2IS_PS1_Placement_Confirm":
                             await Template_Layout_P2IS_PS1_Reactions.Nav_Template_Layout_P2IS_PS1_Placement_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P2IS_PS1_Sprite_Flip_Confirm":
+                            await Template_Layout_P2IS_PS1_Reactions.Nav_Template_Layout_P2IS_PS1_Sprite_Flip_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P2IS_PSP_Main":
@@ -570,12 +606,20 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P2IS_PSP_Reactions.Nav_Template_Layout_P2IS_PSP_Placement(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P2IS_PSP_Sprite_Flip":
+                            await Template_Layout_P2IS_PSP_Reactions.Nav_Template_Layout_P2IS_PSP_Sprite_Flip(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P2IS_PSP_Inverted_Filter_Confirm":
                             await Template_Layout_P2IS_PSP_Reactions.Nav_Template_Layout_P2IS_PSP_Inverted_Filter_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P2IS_PSP_Placement_Confirm":
                             await Template_Layout_P2IS_PSP_Reactions.Nav_Template_Layout_P2IS_PSP_Placement_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P2IS_PSP_Sprite_Flip_Confirm":
+                            await Template_Layout_P2IS_PSP_Reactions.Nav_Template_Layout_P2IS_PSP_Sprite_Flip_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P2EP_PS1_Main":
@@ -594,6 +638,10 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P2EP_PS1_Reactions.Nav_Template_Layout_P2EP_PS1_Placement(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P2EP_PS1_Sprite_Flip":
+                            await Template_Layout_P2EP_PS1_Reactions.Nav_Template_Layout_P2EP_PS1_Sprite_Flip(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P2EP_PS1_Wallpaper_Confirm":
                             await Template_Layout_P2EP_PS1_Reactions.Nav_Template_Layout_P2EP_PS1_Wallpaper_Confirm(reaction, menuSession);
                             break;
@@ -606,8 +654,16 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P2EP_PS1_Reactions.Nav_Template_Layout_P2EP_PS1_Placement_Confirm(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P2EP_PS1_Sprite_Flip_Confirm":
+                            await Template_Layout_P2EP_PS1_Reactions.Nav_Template_Layout_P2EP_PS1_Sprite_Flip_Confirm(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P2EP_PSP_Main":
                             await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Main(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Window_Color":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Window_Color(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P2EP_PSP_Inverted_Filter":
@@ -618,12 +674,24 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Placement(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P2EP_PSP_Sprite_Flip":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Window_Color_Confirm":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Window_Color_Confirm(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P2EP_PSP_Inverted_Filter_Confirm":
                             await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Inverted_Filter_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P2EP_PSP_Placement_Confirm":
                             await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Placement_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Sprite_Flip_Confirm":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P3F_Main":
@@ -658,6 +726,10 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Date_Moon(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P3P_Sprite_Placement":
+                            await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Sprite_Placement(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P3P_Dual_Character":
                             await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Dual_Character(reaction, menuSession);
                             break;
@@ -668,6 +740,10 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P3P_Date_Moon_Confirm":
                             await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Date_Moon_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P3P_Sprite_Placement_Confirm":
+                            await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Sprite_Placement_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P3P_Dual_Character_Confirm":
@@ -706,8 +782,16 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Scene_Type(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P4AU_Auto_Advance":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Auto_Advance(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P4AU_Control_Panel":
                             await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Control_Panel(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Sprite_Placement":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Sprite_Placement(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P4AU_Dual_Character":
@@ -730,8 +814,16 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Scene_Type_Confirm(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P4AU_Auto_Advance_Confirm":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Auto_Advance_Confirm(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P4AU_Control_Panel_Confirm":
                             await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Control_Panel_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Sprite_Placement_Confirm":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Sprite_Placement_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P4AU_Dual_Character_Default_Confirm":
@@ -766,6 +858,14 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Scene_Type(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_P4D_Auto_Advance":
+                            await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Auto_Advance(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P4D_Sprite_Placement":
+                            await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Sprite_Placement(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_P4D_Dual_Character":
                             await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Dual_Character(reaction, menuSession);
                             break;
@@ -776,6 +876,14 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P4D_Scene_Type_Confirm":
                             await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Scene_Type_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P4D_Auto_Advance_Confirm":
+                            await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Auto_Advance_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Template_Layout_P4D_Sprite_Placement_Confirm":
+                            await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Sprite_Placement_Confirm(reaction, menuSession);
                             break;
 
                         case "Template_Layout_P4D_Dual_Character_Default_Confirm":
@@ -790,31 +898,31 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Navigator_Caller_Location_Confirm(reaction, menuSession);
                             break;
 
-                        case "Template_Layout_P5_PS4_Main":
+                        case "Template_Layout_P5_PS3_Main":
                             await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Main(reaction, menuSession);
                             break;
 
-                        case "Template_Layout_P5_PS4_Date_Weather":
+                        case "Template_Layout_P5_PS3_Date_Weather":
                             await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Date_Weather(reaction, menuSession);
                             break;
 
-                        case "Template_Layout_P5_PS4_Scene_Border":
+                        case "Template_Layout_P5_PS3_Scene_Border":
                             await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Scene_Border(reaction, menuSession);
                             break;
 
-                        case "Template_Layout_P5_PS4_Panel_Advance":
+                        case "Template_Layout_P5_PS3_Panel_Advance":
                             await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Panel_Advance(reaction, menuSession);
                             break;
 
-                        case "Template_Layout_P5_PS4_Date_Weather_Confirm":
+                        case "Template_Layout_P5_PS3_Date_Weather_Confirm":
                             await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Date_Weather_Confirm(reaction, menuSession);
                             break;
 
-                        case "Template_Layout_P5_PS4_Scene_Border_Confirm":
+                        case "Template_Layout_P5_PS3_Scene_Border_Confirm":
                             await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Scene_Border_Confirm(reaction, menuSession);
                             break;
 
-                        case "Template_Layout_P5_PS4_Panel_Advance_Confirm":
+                        case "Template_Layout_P5_PS3_Panel_Advance_Confirm":
                             await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Panel_Advance_Confirm(reaction, menuSession);
                             break;
 
@@ -934,6 +1042,10 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Header(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_BBTAG_Sprite_Placement":
+                            await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Sprite_Placement(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_BBTAG_Background_Blur":
                             await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Background_Blur(reaction, menuSession);
                             break;
@@ -942,8 +1054,96 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Header_Confirm(reaction, menuSession);
                             break;
 
+                        case "Template_Layout_BBTAG_Sprite_Placement_Confirm":
+                            await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Sprite_Placement_Confirm(reaction, menuSession);
+                            break;
+
                         case "Template_Layout_BBTAG_Background_Blur_Confirm":
                             await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Background_Blur_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Main":
+                            await Display_Names_Reactions.Nav_Display_Names_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P1_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P1_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P2IS_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P2IS_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P2EP_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P2EP_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P3_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P3_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P4_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P4_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P5_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P5_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Character_Select_Main":
+                            await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Character_Select_Error":
+                            await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Error(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Sprite_Select_Main":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Sprite_Select_Error_1":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Error_1(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Sprite_Select_Error_2":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Error_2(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Sprite_Select_Error_3":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Error_3(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Custom_Input_Main":
+                            await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Custom_Input_Error":
+                            await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Error(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Confirm_Main":
+                            await Display_Name_Confirm_Reactions.Nav_Display_Names_Confirm_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Sort":
+                            await Display_Names_Sort_Reactions.Nav_Display_Names_Sort(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Sort_Confirm":
+                            await Display_Names_Sort_Reactions.Nav_Display_Names_Sort_Confirm(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Edit_Main":
+                            await Display_Names_Edit_Reactions.Nav_Display_Names_Edit_Main(reaction, menuSession);
+                            break;
+
+                        case "Display_Names_Delete_Confirmation":
+                            await Display_Names_Edit_Reactions.Nav_Display_Names_Delete_Confirmation(reaction, menuSession);
                             break;
 
                         case "Sheet_Order_Main":
@@ -1198,26 +1398,6 @@ namespace SocialLinker.Core.Menus
                             await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Scaling_Method_Confirm(reaction, menuSession);
                             break;
 
-                        case "Resolution_Scaling_P4D_Main":
-                            await Resolution_Scaling_P4D_Reactions.Nav_Resolution_Scaling_P4D_Main(reaction, menuSession);
-                            break;
-
-                        case "Resolution_Scaling_P4D_Output_Resolution":
-                            await Resolution_Scaling_P4D_Reactions.Nav_Resolution_Scaling_P4D_Output_Resolution(reaction, menuSession);
-                            break;
-
-                        case "Resolution_Scaling_P4D_Scaling_Method":
-                            await Resolution_Scaling_P4D_Reactions.Nav_Resolution_Scaling_P4D_Scaling_Method(reaction, menuSession);
-                            break;
-
-                        case "Resolution_Scaling_P4D_Output_Resolution_Confirm":
-                            await Resolution_Scaling_P4D_Reactions.Nav_Resolution_Scaling_P4D_Output_Resolution_Confirm(reaction, menuSession);
-                            break;
-
-                        case "Resolution_Scaling_P4D_Scaling_Method_Confirm":
-                            await Resolution_Scaling_P4D_Reactions.Nav_Resolution_Scaling_P4D_Scaling_Method_Confirm(reaction, menuSession);
-                            break;
-
                         case "Auto_Delete_Main":
                             await Auto_Delete_Reactions.Nav_Auto_Delete_Main(reaction, menuSession);
                             break;
@@ -1442,6 +1622,18 @@ namespace SocialLinker.Core.Menus
 
                         case "Time_Weather_Main":
                             await Time_Weather_Reactions.Nav_Time_Weather_Main_Received(message, menuSession);
+                            break;
+
+                        case "Display_Names_Character_Select_Main":
+                            await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Main_Received(message, menuSession);
+                            break;
+
+                        case "Display_Names_Sprite_Select_Main":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Main_Received(message, menuSession);
+                            break;
+
+                        case "Display_Names_Custom_Input_Main":
+                            await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Main_Received(message, menuSession);
                             break;
                     }
                 }

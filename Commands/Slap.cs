@@ -16,21 +16,21 @@ namespace SocialLinker.Commands
 {
     public class Slap : ModuleBase<SocketCommandContext>
     {
-        public static async Task SlapCommand(SocialLinkerCommand command)
+        public static async Task SlapCommand(SocialLinkerCommand sl_command)
         {
             // If there is a cooldown session active for the command type "social", return the method immediately.
-            if (await UserCooldownMethods.IsCooldownActive(command, "social") == true)
+            if (await UserCooldownMethods.IsCooldownActive(sl_command, "social") == true)
             {
                 return;
             }
 
             // Get the account information of the command's user.
-            var command_user_account = UserInfoClasses.GetAccount(command.User);
+            var command_user_account = UserInfoClasses.GetAccount(sl_command.User);
 
             // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
             if (command_user_account.Account_Activated == "No")
             {
-                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
+                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)sl_command.Channel, (SocketGuildUser)sl_command.User);
                 return;
             }
 
@@ -41,28 +41,28 @@ namespace SocialLinker.Commands
             SocketUser commandUser = null;
 
             //Retreive the first mentioned user of the message if there is one
-            var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = sl_command.Message.MentionedUsers.FirstOrDefault();
 
             //If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
-            commandTarget = mentionedUser ?? command.User;
-            commandUser = command.User;
+            commandTarget = mentionedUser ?? sl_command.User;
+            commandUser = sl_command.User;
 
             //Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
             {
-                SlapError(command.Message);
+                SlapError(sl_command);
                 return;
             }
             //If the mentioned user is the command user, send a special message and return
             else if (mentionedUser == commandUser)
             {
-                SlapSelf(command.Message);
+                SlapSelf(sl_command);
                 return;
             }
             //If the mentioned user is the bot itself, send a special message and return
             else if (mentionedUser.Id == BotConfig.bot.id)
             {
-                SlapBot(command.Message);
+                SlapBot(sl_command);
                 return;
             }
 
@@ -70,22 +70,22 @@ namespace SocialLinker.Commands
             var account = UserInfoClasses.GetAccount(commandTarget);
 
             //If a user is mentioned and they're not the command user and not a bot, add Expression to both users
-            if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
+            if ((mentionedUser != null) && (mentionedUser != sl_command.User) && (mentionedUser.IsBot == false))
             {
-                Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
-                Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
+                Core.LevelSystem.SocialStats.AddExpression(sl_command, commandUser);
+                Core.LevelSystem.SocialStats.AddExpression(sl_command, commandTarget);
             }
 
             //Send a slap message to the mentioned user
-            SlapUser(command.Message, commandTarget);
+            SlapUser(sl_command, commandTarget);
 
             await Task.CompletedTask;
         }
 
-        public static async void SlapUser(SocketMessage message, SocketUser command_target)
+        public static async void SlapUser(SocialLinkerCommand sl_command, SocketUser command_target)
         {
-            var command_user = message.Author;
-            var channel = message.Channel;
+            var command_user = sl_command.User;
+            var channel = sl_command.Channel;
 
             // Retrieve the account information of both the command's user and the command's target.
             var command_user_account = UserInfoClasses.GetAccount(command_user);
@@ -118,33 +118,26 @@ namespace SocialLinker.Commands
             // Create a randomized URL based on the command user and command target's content filters.
             string randomized_image = RandomizeSlapGif(command_user, command_target);
 
-            // If the command user has a set profile theme and the randomized image URL is empty, OR the command target doesn't have an activated account, add a notification to the embed.
-            if ((command_user_account.Profile_Theme != "" && randomized_image == "") || command_target_account.Account_Activated == "No")
+            if (randomized_image == "")
             {
                 var footer = new EmbedFooterBuilder
                 {
-                    Text = $"{command_user_account.Profile_Theme} images are filtered out for this user."
+                    Text = $"...but there's no slap to show!"
                 };
                 embed.WithFooter(footer);
             }
-            // Else, if the command user has a profile theme set, choose a random GIF to display based on it
-            else if (command_user_account.Profile_Theme != "")
+            else
             {
                 embed.WithImageUrl($"{randomized_image}");
-            }
-            // Else, if the command user doesn't have a profile theme set, add a different notification to the embed instead.
-            else if (command_user_account.Profile_Theme == "")
-            {
-                embed.WithDescription($"You can add GIFs to your social commands by visiting the **`{BotConfig.bot.cmdPrefix}settings`** menu and choosing [Profile Settings] > [Profile Theme].");
             }
 
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async void SlapError(SocketMessage message)
+        public static async void SlapError(SocialLinkerCommand sl_command)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             //Retrieve the account information of the command's user
             var account = UserInfoClasses.GetAccount(user);
@@ -180,10 +173,10 @@ namespace SocialLinker.Commands
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async void SlapSelf(SocketMessage message)
+        public static async void SlapSelf(SocialLinkerCommand sl_command)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             //Retrieve the account information of the command's user
             var account = UserInfoClasses.GetAccount(user);
@@ -220,10 +213,10 @@ namespace SocialLinker.Commands
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static async void SlapBot(SocketMessage message)
+        public static async void SlapBot(SocialLinkerCommand sl_command)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             var account = UserInfoClasses.GetAccount(user);
 
@@ -405,13 +398,24 @@ namespace SocialLinker.Commands
             {
                 imgurl = p3_selection_list[r.Next(0, p3_selection_list.Count)];
             }
-            if (command_user_account.Profile_Theme == "P4" && p4_selection_list.Count != 0)
+            else if (command_user_account.Profile_Theme == "P4" && p4_selection_list.Count != 0)
             {
                 imgurl = p4_selection_list[r.Next(0, p4_selection_list.Count)];
             }
-            if (command_user_account.Profile_Theme == "P5" && p5_selection_list.Count != 0)
+            else if (command_user_account.Profile_Theme == "P5" && p5_selection_list.Count != 0)
             {
                 imgurl = p5_selection_list[r.Next(0, p5_selection_list.Count)];
+            }
+            // If the user does not have a profile theme set, take all GIFs and combine them into one list to choose from.
+            else if (command_user_account.Profile_Theme == "")
+            {
+                List<string> all_selection_list = new List<string>();
+
+                all_selection_list.AddRange(p3_selection_list);
+                all_selection_list.AddRange(p4_selection_list);
+                all_selection_list.AddRange(p5_selection_list);
+
+                imgurl = all_selection_list[r.Next(0, all_selection_list.Count)];
             }
 
             return imgurl;

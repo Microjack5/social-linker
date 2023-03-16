@@ -46,7 +46,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 "\n" +
                 ":one: Color Scheme\n" +
                 ":two: Date & Moon Phases\n" +
-                ":three: Dual Character Scenes\n");
+                ":three: Sprite Placement\n"); //:four: Dual Character Scenes
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -132,6 +132,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":one: Male Protagonist\n" +
                 ":two: Female Protagonist\n");
 
+            embed.WithImageUrl("https://i.imgur.com/M6H08x4.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -216,6 +218,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":two: Countdown Off\n" +
                 ":three: None\n");
 
+            embed.WithImageUrl("https://i.imgur.com/JYVDhCO.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -240,6 +244,93 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P3P_Date_Moon";
+            menuSession.MenuTimer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = MenuConfig.menu.timerDuration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the menu timer runs out, activate a function.
+            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+
+            // Create an empty list for reactions.
+            List<IEmote> reaction_list = new List<IEmote> { };
+
+            // Add needed emote reactions for the menu.
+            reaction_list.Add(new Emoji("↩️"));
+            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
+            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
+            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
+
+            // Add the reactions to the message.
+            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+        }
+
+        public static async Task Template_Layout_P3P_Sprite_Placement(SocketGuildUser user, RestUserMessage message)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            // Find the menu session associated with the current user.
+            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Sprite Placement",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            var footer = new EmbedFooterBuilder
+            {
+                Text = "↩️ Return to P3P Template Settings"
+            };
+
+            embed.WithFooter(footer);
+
+            // Assign a color and thumbnail to the embeded message based on the title being edited.
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
+
+            embed.WithDescription("" +
+                "**Choose the default position character sprites are rendered at.**\n" +
+                "\n" +
+                $"⚙️ **Current setting:** **`{account.P3P_TS_Position}`**\n" +
+                "\n" +
+                ":one: Left\n" +
+                ":two: Center\n" +
+                ":three: Right\n");
+
+            embed.WithImageUrl("https://i.imgur.com/5BoO0yM.png");
+
+            // Attempt editing the message if it hasn't been deleted by the user yet.
+            // If it has, catch the exception, remove the menu entry from the global list, and return.
+            try
+            {
+                // Remove all reactions from the current message.
+                await message.RemoveAllReactionsAsync();
+
+                // Edit the current active message by replacing it with the recently created embed.
+                await message.ModifyAsync(x => {
+                    x.Embed = embed.Build();
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(menuSession);
+
+                return;
+            }
+
+            // Edit the menu session according to the current message.
+            menuSession.CurrentMenu = "Template_Layout_P3P_Sprite_Placement";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -480,6 +571,83 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P3P_Date_Moon_Confirm";
+            menuSession.MenuTimer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = MenuConfig.menu.timerDuration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the menu timer runs out, activate a function.
+            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+
+            // Create an empty list for reactions.
+            List<IEmote> reaction_list = new List<IEmote> { };
+
+            // Add needed emote reactions for the menu.
+            reaction_list.Add(new Emoji("💠"));
+            reaction_list.Add(new Emoji("❌"));
+
+            // Add the reactions to the message.
+            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+        }
+
+        public static async Task Template_Layout_P3P_Sprite_Placement_Confirm(SocketGuildUser user, RestUserMessage message)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            // Find the menu session associated with the current user.
+            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Settings Saved",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            var footer = new EmbedFooterBuilder
+            {
+                Text = "💠 P3P Template Settings | ❌ Close Menu"
+            };
+
+            embed.WithFooter(footer);
+
+            // Assign a color and thumbnail to the embeded message based on the title being edited.
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3P"));
+
+            embed.WithDescription("" +
+                $"Sprite placements have been set to **`{account.P3P_TS_Position}`**.\n");
+
+            // Attempt editing the message if it hasn't been deleted by the user yet.
+            // If it has, catch the exception, remove the menu entry from the global list, and return.
+            try
+            {
+                // Remove all reactions from the current message.
+                await message.RemoveAllReactionsAsync();
+
+                // Edit the current active message by replacing it with the recently created embed.
+                await message.ModifyAsync(x => {
+                    x.Embed = embed.Build();
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(menuSession);
+
+                return;
+            }
+
+            // Edit the menu session according to the current message.
+            menuSession.CurrentMenu = "Template_Layout_P3P_Sprite_Placement_Confirm";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.

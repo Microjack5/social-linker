@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Discord;
 using Discord.WebSocket;
 using SocialLinker.Config;
@@ -8,196 +10,228 @@ namespace SocialLinker.Core.LevelSystem
 {
     internal static class Leveling
     {
-        internal static void UserSentMessage(SocketMessage message)
+        internal static void UserSentMessage(SocialLinkerCommand sl_command)
         {
-            // Get the account information of the message's author.
-            var account = UserInfoClasses.GetAccount(message.Author);
-            DateTime current_time = DateTime.UtcNow;
-
-            // If the user's message cooldown has not passed a minute, ignore their message.
-            TimeSpan time_since_last_message = (TimeSpan)(current_time - account.Last_Message_Cooldown);
-            if (time_since_last_message.TotalSeconds < 60)
+            try
             {
-                //Keep in case of debugging.
-                //Console.WriteLine($"Seconds since last counted message: {time_since_last_message.TotalSeconds}");
+                // Get the account information of the message's author.
+                var account = UserInfoClasses.GetAccount(sl_command.User);
+                DateTime current_time = DateTime.UtcNow;
 
-                return;
-            }
-
-            // If the daily loop point has not passed and the daily EXP cap has been reached, ignore their message.
-            TimeSpan time_since_last_day = (TimeSpan)(current_time - account.Loop_Point_Day);
-            if ((time_since_last_day.TotalHours < 24) && (account.Daily_Exp_Gained >= 24000))
-            {
-                //Keep in case of debugging.
-                //Console.WriteLine($"Daily EXP cap reached.");
-
-                return;
-            }
-
-            // If the hourly loop point has not passed and the hourly EXP cap has already been reached, ignore their message.
-            TimeSpan time_since_last_hour = (TimeSpan)(current_time - account.Loop_Point_Hour);
-            if ((time_since_last_hour.TotalHours < 1) && (account.Hourly_Exp_Gained >= 1200))
-            {
-                //Keep in case of debugging.
-                //Console.WriteLine($"Hourly EXP cap reached.");
-
-                return;
-            }
-            // If the hourly loop point has passed, reset the hourly parameters.
-            else if (time_since_last_hour.TotalHours >= 1)
-            {
-                account.Loop_Point_Hour = current_time;
-                account.Hourly_Exp_Gained = 0;
-            }
-
-            // Determine if the user is currently in a Tired state.
-            // If the Hourly_Cap_Counter is 12 and 8 hours have not passed yet, Tired state is active.
-            if (account.Hourly_Cap_Counter == 12 && time_since_last_day.TotalHours < 8)
-            {
-                // Do nothing
-            }
-            // If the Hourly_Cap_Counter is 12 and 8 hours have passed, reset the counters.
-            else if (account.Hourly_Cap_Counter == 12 && time_since_last_day.TotalHours >= 8)
-            {
-                account.Hourly_Cap_Counter = 0;
-                account.Loop_Point_Day = current_time;
-                account.Daily_Exp_Gained = 0;
-            }
-
-            // Determine if the user is currently in a Sick state.
-            // If the Hourly_Cap_Counter is more than 12 and 24 hours have not passed yet, Sick state is active.
-            if (account.Hourly_Cap_Counter > 12 && time_since_last_day.TotalHours < 24)
-            {
-                // Do nothing
-            }
-            // If the Hourly_Cap_Counter is more than 12 and 24 hours have passed, reset the counters.
-            else if (account.Hourly_Cap_Counter > 12 && time_since_last_day.TotalHours >= 24)
-            {
-                account.Hourly_Cap_Counter = 0;
-                account.Loop_Point_Day = current_time;
-                account.Daily_Exp_Gained = 0;
-            }
-
-            // If the user is in a normal state, reset the counters after a day has passed.
-            if (account.Hourly_Cap_Counter < 12 && time_since_last_day.TotalHours >= 24)
-            {
-                account.Hourly_Cap_Counter = 0;
-                account.Loop_Point_Day = current_time;
-                account.Daily_Exp_Gained = 0;
-            }
-
-            // Calculate the amount of EXP the user should earn from this message.
-            int gained_exp = CalculateExpEarned(message);
-
-            //Before overwriting the user's total EXP value, store the old one
-            int old_exp = account.Total_Exp;
-
-            // Store the new EXP total in both Total_EXP and Hourly_Exp_Gained fields.
-            // If the user has reached Level 99, no more EXP is added to their account and the function returns.
-            if (account.Level == 99)
-            {
-                // Do nothing
-                return;
-            }
-            // If the hourly EXP cap has been reached 12 times, the user earns half EXP.
-            else if (account.Hourly_Cap_Counter == 12)
-            {
-                account.Total_Exp += gained_exp / 2;
-                account.Hourly_Exp_Gained += gained_exp / 2;
-                account.Daily_Exp_Gained += gained_exp / 2;
-            }
-            // If the hourly EXP cap has been reached more than 12 times, the user earns 1 EXP.
-            else if (account.Hourly_Cap_Counter > 12)
-            {
-                account.Total_Exp += 1;
-                account.Hourly_Exp_Gained += 1;
-                account.Daily_Exp_Gained += 1;
-            }
-            else
-            {
-                account.Total_Exp += gained_exp;
-                account.Hourly_Exp_Gained += gained_exp;
-                account.Daily_Exp_Gained += gained_exp;
-            }
-
-            // Determine what level the user is at now.
-            int oldLevel = account.Level;
-            int newLevel = CalculateLevel(account.Total_Exp);
-
-            // Compare oldLevel to newLevel. If the values are different, the user leveled up.
-            if (oldLevel != newLevel)
-            {
-                // If newLevel is less than 10, override previous stored value and cap EXP at the start of the next level.
-                if (newLevel < 10)
+                // If the user's message cooldown has not passed a minute, ignore their message.
+                TimeSpan time_since_last_message = (TimeSpan)(current_time - account.Last_Message_Cooldown);
+                if (time_since_last_message.TotalSeconds < 60)
                 {
-                    newLevel = oldLevel + 1;
-                    account.Total_Exp = CalculateExp(newLevel);
+                    //Keep in case of debugging.
+                    //Console.WriteLine($"Seconds since last counted message: {time_since_last_message.TotalSeconds}");
+
+                    return;
                 }
 
-                // Update the user's level with newLevel.
-                account.Level = newLevel;
-
-                // Calculate the amount of P-Medals the user gains on level up.
-                // Social Bonus is the amount of P-Medals affected by the user's social stats.
-                int social_bonus = (account.Proficiency_Rank - 1) + (account.Diligence_Rank - 1) + (account.Expression_Rank - 1);
-                int gained_pmedals = ((newLevel / 100) * social_bonus) + (social_bonus) + 1;
-
-                // Calculate the amount of P-Medals the user keeps before reaching the P-Medal cap.
-                gained_pmedals = CalculateMedalsKept(message, gained_pmedals);
-                account.P_Medals += gained_pmedals;
-
-                // If the user's account is actiated, has a profile theme set, and has notifications set to on, send a level up message.
-                if (account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Level_Up_Notifications == "On")
+                // If the daily loop point has not passed and the daily EXP cap has been reached, ignore their message.
+                TimeSpan time_since_last_day = (TimeSpan)(current_time - account.Loop_Point_Day);
+                if ((time_since_last_day.TotalHours < 24) && (account.Daily_Exp_Gained >= 24000))
                 {
-                    LevelUpMessage(message, newLevel, gained_pmedals);
+                    //Keep in case of debugging.
+                    //Console.WriteLine($"Daily EXP cap reached.");
 
-                    // If this is the first time the user is receiving a level up message, set the First_Level_Msg_Sent field to "yes" after the message is sent.
-                    if (account.First_Level_Msg_Sent == "No")
+                    return;
+                }
+
+                // If the hourly loop point has not passed and the hourly EXP cap has already been reached, ignore their message.
+                TimeSpan time_since_last_hour = (TimeSpan)(current_time - account.Loop_Point_Hour);
+                if ((time_since_last_hour.TotalHours < 1) && (account.Hourly_Exp_Gained >= 1200))
+                {
+                    //Keep in case of debugging.
+                    //Console.WriteLine($"Hourly EXP cap reached.");
+
+                    return;
+                }
+                // If the hourly loop point has passed, reset the hourly parameters.
+                else if (time_since_last_hour.TotalHours >= 1)
+                {
+                    account.Loop_Point_Hour = current_time;
+                    account.Hourly_Exp_Gained = 0;
+                }
+
+                // Determine if the user is currently in a Tired state.
+                // If the Hourly_Cap_Counter is 12 and 8 hours have not passed yet, Tired state is active.
+                if (account.Hourly_Cap_Counter == 12 && time_since_last_day.TotalHours < 8)
+                {
+                    // Do nothing
+                }
+                // If the Hourly_Cap_Counter is 12 and 8 hours have passed, reset the counters.
+                else if (account.Hourly_Cap_Counter == 12 && time_since_last_day.TotalHours >= 8)
+                {
+                    account.Hourly_Cap_Counter = 0;
+                    account.Loop_Point_Day = current_time;
+                    account.Daily_Exp_Gained = 0;
+                }
+
+                // Determine if the user is currently in a Sick state.
+                // If the Hourly_Cap_Counter is more than 12 and 24 hours have not passed yet, Sick state is active.
+                if (account.Hourly_Cap_Counter > 12 && time_since_last_day.TotalHours < 24)
+                {
+                    // Do nothing
+                }
+                // If the Hourly_Cap_Counter is more than 12 and 24 hours have passed, reset the counters.
+                else if (account.Hourly_Cap_Counter > 12 && time_since_last_day.TotalHours >= 24)
+                {
+                    account.Hourly_Cap_Counter = 0;
+                    account.Loop_Point_Day = current_time;
+                    account.Daily_Exp_Gained = 0;
+                }
+
+                // If the user is in a normal state, reset the counters after a day has passed.
+                if (account.Hourly_Cap_Counter < 12 && time_since_last_day.TotalHours >= 24)
+                {
+                    account.Hourly_Cap_Counter = 0;
+                    account.Loop_Point_Day = current_time;
+                    account.Daily_Exp_Gained = 0;
+                }
+
+                // Calculate the amount of EXP the user should earn from this message.
+                int gained_exp = CalculateExpEarned(sl_command);
+
+                //Before overwriting the user's total EXP value, store the old one
+                int old_exp = account.Total_Exp;
+
+                // Store the new EXP total in both Total_EXP and Hourly_Exp_Gained fields.
+                // If the user has reached Level 99, no more EXP is added to their account and the function returns.
+                if (account.Level == 99)
+                {
+                    // Do nothing
+                    return;
+                }
+                // If the hourly EXP cap has been reached 12 times, the user earns half EXP.
+                else if (account.Hourly_Cap_Counter == 12)
+                {
+                    account.Total_Exp += gained_exp / 2;
+                    account.Hourly_Exp_Gained += gained_exp / 2;
+                    account.Daily_Exp_Gained += gained_exp / 2;
+                }
+                // If the hourly EXP cap has been reached more than 12 times, the user earns 1 EXP.
+                else if (account.Hourly_Cap_Counter > 12)
+                {
+                    account.Total_Exp += 1;
+                    account.Hourly_Exp_Gained += 1;
+                    account.Daily_Exp_Gained += 1;
+                }
+                else
+                {
+                    account.Total_Exp += gained_exp;
+                    account.Hourly_Exp_Gained += gained_exp;
+                    account.Daily_Exp_Gained += gained_exp;
+                }
+
+                // Determine what level the user is at now.
+                int oldLevel = account.Level;
+                int newLevel = CalculateLevel(account.Total_Exp);
+
+                // Compare oldLevel to newLevel. If the values are different, the user leveled up.
+                if (oldLevel != newLevel)
+                {
+                    // If newLevel is less than 10, override previous stored value and cap EXP at the start of the next level.
+                    if (newLevel < 10)
                     {
-                        account.First_Level_Msg_Sent = "Yes";
+                        newLevel = oldLevel + 1;
+                        account.Total_Exp = CalculateExp(newLevel);
+                    }
+
+                    // Update the user's level with newLevel.
+                    account.Level = newLevel;
+
+                    // Calculate the amount of P-Medals the user gains on level up.
+                    // Social Bonus is the amount of P-Medals affected by the user's social stats.
+                    int social_bonus = (account.Proficiency_Rank - 1) + (account.Diligence_Rank - 1) + (account.Expression_Rank - 1);
+                    int gained_pmedals = ((newLevel / 100) * social_bonus) + (social_bonus) + 1;
+
+                    // Calculate the amount of P-Medals the user keeps before reaching the P-Medal cap.
+                    gained_pmedals = CalculateMedalsKept(sl_command, gained_pmedals);
+                    account.P_Medals += gained_pmedals;
+
+                    // If the user's account is actiated, has a profile theme set, and has notifications set to on, send a level up message.
+                    if (account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Level_Up_Notifications == "On")
+                    {
+                        LevelUpMessage(sl_command, newLevel, gained_pmedals);
+
+                        // If this is the first time the user is receiving a level up message, set the First_Level_Msg_Sent field to "yes" after the message is sent.
+                        if (account.First_Level_Msg_Sent == "No")
+                        {
+                            account.First_Level_Msg_Sent = "Yes";
+                        }
+                    }
+
+                    // If the user has leveled up to Level 99 for the first time, activated their account, has a profile theme set, and has notifications set to on, send a notification.
+                    if (newLevel == 99 && account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Level_Up_Notifications == "On")
+                    {
+                        MaxLevelMessage(sl_command);
+                    }
+
+                }
+
+                // Check if 75% of the hourly EXP cap has been reached with this message.
+                if (old_exp < 4500 && account.Hourly_Exp_Gained >= 4500)
+                {
+                    // If old_exp was below the threshhold and EXP gained in the hour is above the threshhold, increase the Hourly_Cap_Counter.
+                    account.Hourly_Cap_Counter += 1;
+
+                    // If Hourly_Cap_Counter has reached 12, set the Loop_Point_Day to the current time. The user has either entered a "Tired" or "Sick" state.
+                    if (account.Hourly_Cap_Counter >= 12)
+                    {
+                        account.Loop_Point_Day = current_time;
                     }
                 }
 
-                // If the user has leveled up to Level 99 for the first time, activated their account, has a profile theme set, and has notifications set to on, send a notification.
-                if (newLevel == 99 && account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Level_Up_Notifications == "On")
-                {
-                    MaxLevelMessage(message);
-                }
+                // Create a new message cooldown from this point.
+                account.Last_Message_Cooldown = current_time;
 
+                // Update user information with new data.
+                UserInfoClasses.UpdateAccount(account);
             }
-
-            // Check if 75% of the hourly EXP cap has been reached with this message.
-            if (old_exp < 4500 && account.Hourly_Exp_Gained >= 4500)
+            catch (Exception ex)
             {
-                // If old_exp was below the threshhold and EXP gained in the hour is above the threshhold, increase the Hourly_Cap_Counter.
-                account.Hourly_Cap_Counter += 1;
-
-                // If Hourly_Cap_Counter has reached 12, set the Loop_Point_Day to the current time. The user has either entered a "Tired" or "Sick" state.
-                if (account.Hourly_Cap_Counter >= 12)
-                {
-                    account.Loop_Point_Day = current_time;
-                }
+                Console.WriteLine(ex.ToString());
             }
-
-            // Create a new message cooldown from this point.
-            account.Last_Message_Cooldown = current_time;
-
-            // Update user information with new data.
-            UserInfoClasses.UpdateAccount(account);
         }
 
-        internal static double CharacterCount(SocketMessage message)
+        internal static double CharacterCount(SocialLinkerCommand sl_command)
         {
+            char[] message_to_char_array = null;
+
+            switch (sl_command.CommandType)
+            {
+                case "Context":
+                    message_to_char_array = sl_command.Message.Content.ToCharArray();
+                    break;
+
+                case "Slash":
+                    List<SocketSlashCommandDataOption> slash_command_data_options_list = sl_command.SlashCommand.Data.Options.ToList();
+
+                    string list_to_string = "";
+
+                    for (int i = 0; i < slash_command_data_options_list.Count; i++)
+                    {
+                        list_to_string += slash_command_data_options_list[i] + " ";
+                    }
+
+                    message_to_char_array = list_to_string.ToCharArray();
+                    break;
+
+                default:
+                    message_to_char_array = sl_command.Message.Content.ToCharArray();
+                    break;
+            }
+
             // Turn the user message into a char array and count its elements.
-            char[] message_to_char_array = message.Content.ToCharArray();
             double character_count = message_to_char_array.Length;
             return character_count;
         }
 
-        internal static int CalculateExpEarned(SocketMessage message)
+        internal static int CalculateExpEarned(SocialLinkerCommand sl_command)
         {
             // Get the account information of the message's author.
-            var account = UserInfoClasses.GetAccount(message.Author);
+            var account = UserInfoClasses.GetAccount(sl_command.User);
 
             // Create an int variable and initialize it to 0. This will represent the user's gained experience points.
             int gained_exp = 0;
@@ -209,55 +243,55 @@ namespace SocialLinker.Core.LevelSystem
             if (account.Level >= 1 && account.Level <= 11)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by ten.
-                gained_exp = (int)Math.Ceiling(CharacterCount(message) / 10);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 10);
             }
             // Check if the user's level is between 12 and 22.
             else if (account.Level >= 12 && account.Level <= 22)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by nine.
-                gained_exp = (int)Math.Ceiling(CharacterCount(message) / 9);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 9);
             }
             // Check if the user's level is between 23 and 33.
             else if (account.Level >= 23 && account.Level <= 33)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by eight.
-                gained_exp = (int)Math.Ceiling(CharacterCount(message) / 8);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 8);
             }
             // Check if the user's level is between 24 and 44.
             else if (account.Level >= 34 && account.Level <= 44)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by seven.
-                gained_exp = (int)Math.Ceiling(CharacterCount(message) / 7);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 7);
             }
             // Check if the user's level is between 45 and 55.
             else if (account.Level >= 45 && account.Level <= 55)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by six.
-                gained_exp = (int)Math.Ceiling(CharacterCount(message) / 6);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 6);
             }
             // Check if the user's level is between 56 and 66.
             else if (account.Level >= 56 && account.Level <= 66)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by five.
-                gained_exp = (int)Math.Ceiling(CharacterCount(message) / 5);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 5);
             }
             // Check if the user's level is between 67 and 77.
             else if (account.Level >= 67 && account.Level <= 77)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by four.
-                gained_exp = (int)Math.Ceiling(CharacterCount(message) / 4);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 4);
             }
             // Check if the user's level is between 78 and 88.
             else if (account.Level >= 78 && account.Level <= 88)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by three.
-                gained_exp = (int)Math.Ceiling(CharacterCount(message) / 3);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 3);
             }
             // Check if the user's level is between 89 and 99.
             else if (account.Level >= 89 && account.Level <= 99)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by two.
-                gained_exp = (int)Math.Ceiling(CharacterCount(message) / 2);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 2);
             }
 
             return gained_exp;
@@ -299,9 +333,9 @@ namespace SocialLinker.Core.LevelSystem
             return current_total_exp;
         }
 
-        internal static int CalculateMedalsKept(SocketMessage message, int gained_pmedals)
+        internal static int CalculateMedalsKept(SocialLinkerCommand sl_command, int gained_pmedals)
         {
-            var account = UserInfoClasses.GetAccount(message.Author);
+            var account = UserInfoClasses.GetAccount(sl_command.User);
             int amount_kept = 0;
 
             // If the amount of P-Medals gained is greater than the max amount the user can hold, return only what will bring the user to the cap.
@@ -318,10 +352,10 @@ namespace SocialLinker.Core.LevelSystem
             return amount_kept;
         }
 
-        internal static async void LevelUpMessage(SocketMessage message, int new_level, int gained_pmedals)
+        internal static async void LevelUpMessage(SocialLinkerCommand sl_command, int new_level, int gained_pmedals)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             var account = UserInfoClasses.GetAccount(user);
 
@@ -395,10 +429,10 @@ namespace SocialLinker.Core.LevelSystem
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        internal static async void MaxLevelMessage(SocketMessage message)
+        internal static async void MaxLevelMessage(SocialLinkerCommand sl_command)
         {
-            var user = message.Author;
-            var channel = message.Channel;
+            var user = sl_command.User;
+            var channel = sl_command.Channel;
 
             var account = UserInfoClasses.GetAccount(user);
 

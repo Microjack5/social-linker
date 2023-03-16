@@ -9,6 +9,7 @@ using SocialLinker.Core.CloudStorageTables;
 using Discord;
 using SocialLinker.Core.LocalStorageTables;
 using SocialLinker.Config;
+using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker
 {
@@ -525,7 +526,10 @@ namespace SocialLinker.Core.SceneMaker
             // Write an appropriate description for the error.
             embed.WithDescription($"There doesn’t seem to be a sprite set with the keyword \"{user_input}\".");
             embed.AddField("Tips", "" +
-                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`{BotConfig.bot.cmdPrefix}settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");
+                $"Make sure the character’s keyword is typed correctly and try again.");
+
+            /*embed.AddField("Tips", "" +
+                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`{BotConfig.bot.cmdPrefix}settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");*/
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -566,7 +570,10 @@ namespace SocialLinker.Core.SceneMaker
             // Write an appropriate description for the error.
             embed.WithDescription($"There doesn’t seem to be a sprite set with the keyword \"{char_keyword}\" in {OfficialSetMethods.AcronymToFullTitle(template)}.");
             embed.AddField("Tips", "" +
-                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`{BotConfig.bot.cmdPrefix}settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");
+                $"Make sure the character’s keyword is typed correctly and try again.");
+
+            /*embed.AddField("Tips", "" +
+                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`{BotConfig.bot.cmdPrefix}settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");*/
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -988,6 +995,47 @@ namespace SocialLinker.Core.SceneMaker
         {
             SocketTextChannel channel = (SocketTextChannel)command.Channel;
             await channel.SendMessageAsync(":warning: One or more of the characters entered is not supported by this template's font set and will not be rendered.");
+        }
+
+        public static async Task Content_Filter_Enabled(SocialLinkerCommand command, string template)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
+
+            // Get the account information of the command's target
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Content Filter Enabled",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            // Determine the color and thumbnail for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Game_Color(template, account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(template));
+
+            // Write an appropriate description for the error.
+            embed.WithDescription($"This command accesses content from {OfficialSetMethods.AcronymToFullTitle(template)}, which you've filtered out in your settings.");
+            embed.AddField("Tips", "" +
+                $"You can change your content filter settings at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Settings] > [Content Filter].");
+
+            var error_message = await channel.SendMessageAsync("", false, embed.Build());
+
+            Timer error_timer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = error_duration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the timer runs out, activate a function.
+            error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
         public static async Task API_Timeout(SocialLinkerCommand command)

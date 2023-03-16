@@ -31,7 +31,7 @@ namespace SocialLinker.Core.Menus.InitialUsage
                 "```Social Linker is not affiliated, associated, authorized, maintained, sponsored, endorsed by, or in any way officially connected with these trademark and copyright holders. Content intended with fair use.```");
 
             embed.WithColor(82, 236, 243);
-            embed.WithImageUrl("https://i.imgur.com/8ybRYB9.png");
+            embed.WithImageUrl("https://i.imgur.com/XpKdixY.png");
 
             await channel.SendMessageAsync("", false, embed.Build());
         }

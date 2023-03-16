@@ -49,6 +49,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.SpriteSheetOrder
                 $":one: Order by Outfit\n" +
                 $":two: Order by Expression\n");
 
+            embed.WithImageUrl("https://i.imgur.com/ZiCkdCc.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try

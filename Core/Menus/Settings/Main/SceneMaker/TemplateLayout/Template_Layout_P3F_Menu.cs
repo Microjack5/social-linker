@@ -45,7 +45,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 "**Select a setting to edit.**\n" +
                 "\n" +
                 ":one: Date & Moon Phases\n" +
-                ":two: Navigator Window\n");
+                //":two: Navigator Window\n" +
+                "");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -88,7 +89,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             // Add needed emote reactions for the menu.
             reaction_list.Add(new Emoji("↩️"));
             reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
+            //reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
@@ -131,6 +132,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":two: Countdown Off\n" +
                 ":three: Date Only\n" +
                 ":four: None");
+
+            embed.WithImageUrl("https://i.imgur.com/eFQ6c8U.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

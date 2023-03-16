@@ -42,11 +42,11 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.AddField("Programming & Design", "" +
-                "[Microjack5](https://twitter.com/Microjack5)\n");
+                "[Microjack5](https://discordapp.com/users/222504679878164481/)\n");
 
             embed.AddField("Quality Assurance Advisors", "" +
                 "[Arkane](https://twitter.com/ArkaneOnline)\n" +
-                "[Ash!!](https://twitter.com/_Amaurot)\n" +
+                "[Ash](https://twitter.com/_Amaurot)\n" +
                 "[Azure](https://twitter.com/Azure_Blazes)\n" +
                 "[Camz](https://twitter.com/Camzcer)\n" +
                 "[Corrin](https://twitter.com/LocalSynth)\n" +
@@ -66,12 +66,14 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "[80constant](https://twitter.com/80constant_)\n" +
                 "[Arkane](https://twitter.com/ArkaneOnline)\n" +
                 "[Canasniimehugh](https://www.vg-resource.com/user-17021.html)\n" +
+                "[Eiowlta](https://discordapp.com/users/126051543794450432/)\n" +
                 "[EsperKnight](https://twitter.com/esperknight)\n" +
-                "[Geordan9](https://github.com/Geordan9)\n");
+                "[Geordan9](https://github.com/Geordan9)\n" +
+                "[Oliviayellowcat](https://discordapp.com/users/366986062599290883/)\n");
 
             embed.AddField("Status Décor Designers", "" +
                 "[poi](https://discordapp.com/users/800614229865922570/)\n" +
-                "[Microjack5](https://twitter.com/Microjack5)\n" +
+                "[Microjack5](https://discordapp.com/users/222504679878164481/)\n" +
                 "[無限 | Nate](https://discordapp.com/users/140846765275348993/)\n" +
                 "[TooBlue!](https://twitter.com/EMOMESSlAH)\n");
 

@@ -129,6 +129,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":two: TV World\n" +
                 ":three: None\n");
 
+            embed.WithImageUrl("https://i.imgur.com/cMZ1CDP.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try

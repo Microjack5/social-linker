@@ -10,6 +10,10 @@ using System;
 using SocialLinker.Config;
 using SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
+using Discord.WebSocket;
+using System.Security.Principal;
+using System.Drawing.Drawing2D;
+using System.Data.SqlClient;
 
 namespace SocialLinker.Core.LocalStorageTables
 {
@@ -397,9 +401,55 @@ namespace SocialLinker.Core.LocalStorageTables
             return "";
         }
 
+        public static string GetDisplayName(UserInfoFields account, MakerCommandData command_data, OfficialSetData set_data, BustupData bustup_data)
+        {
+            ulong user_id = Convert.ToUInt64(account.User_ID);
+            DisplayNameTableData custom_name_data = DisplayNameLogging.GetCustomName(user_id, set_data, bustup_data);
+
+            if (custom_name_data == null)
+            {
+                if (command_data.Base_Sprite == 0)
+                {
+                    command_data.Base_Sprite = 1;
+                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+                    return bustup_data.Default_Name_EN;
+                }
+                else
+                {
+                    return bustup_data.Default_Name_EN;
+                }
+                
+            }
+            else
+            {
+                if (command_data.Base_Sprite == 0)
+                {
+                    if (custom_name_data.Spriteless_Included == "Yes")
+                    {
+                        return custom_name_data.Display_Name;
+                    }
+                    else
+                    {
+                        command_data.Base_Sprite = 1;
+                        bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+                        return bustup_data.Default_Name_EN;
+                    }
+                }
+                else
+                {
+                    return custom_name_data.Display_Name;
+                }
+            }    
+        }
+
         // Main methods to assist the functions of the scene maker.
         public static async Task Set_List_Message_Directory(SocialLinkerCommand sl_command)
         {
+            if (Content_Filter_Pass_Check(sl_command, sl_command.MakerCommand.Template) == false)
+            {
+                return;
+            }
+
             switch (sl_command.MakerCommand.Template)
             {
                 case "P1-PS1":
@@ -472,6 +522,11 @@ namespace SocialLinker.Core.LocalStorageTables
 
         public static async Task Sprite_Sheet_Message_Directory(SocialLinkerCommand sl_command, OfficialSetData sprite_set_info)
         {
+            if (Content_Filter_Pass_Check(sl_command, sprite_set_info.Origin) == false)
+            {
+                return;
+            }
+
             switch (sprite_set_info.Origin)
             {
                 case "P1-PS1":
@@ -566,6 +621,11 @@ namespace SocialLinker.Core.LocalStorageTables
 
         public static async Task Bustup_Frame_Sheet_Message_Directory(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
+            if (Content_Filter_Pass_Check(sl_command, set_data.Origin) == false)
+            {
+                return;
+            }
+
             switch (set_data.Origin)
             {
                 case "P1-PS1":
@@ -581,12 +641,15 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P2IS-PSP":
+                    await BustupFrameSheets.P2IS_PSP_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P2EP-PS1":
+                    await BustupFrameSheets.P2EP_PS1_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P2EP-PSP":
+                    await BustupFrameSheets.P2EP_PSP_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P3F":
@@ -632,6 +695,19 @@ namespace SocialLinker.Core.LocalStorageTables
             return;
         }
 
+        public static OfficialSetData Search_By_Title_And_ID(string title, string id)
+        {
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                if (s.Origin == title && s.ID == id)
+                {
+                    return s;
+                }
+            }
+
+            return null;
+        }
+
         public static string Generate_Normal_Set_List(string title)
         {
             // Create an empty string list.
@@ -665,46 +741,147 @@ namespace SocialLinker.Core.LocalStorageTables
 
         public static string Generate_P1_PS1_Set_List()
         {
-            // Create an empty string list.
             List<string> specified_set_list = new List<string>();
 
-            // Iterate through each entry of the official sprite set list.
             foreach (OfficialSetData s in sprite_set_list)
             {
-                // If the current iterated sprite set comes from the title specified by the user, add it to the string list.
                 if (s.Origin == "P1-PS1" && (s.ID != "B29" && s.ID != "B30" && s.ID != "B31" && s.ID != "B32" && s.ID != "B33"))
                 {
                     specified_set_list.Add(s.Name);
                 }
             }
 
-            // Order the newly formed string list by alphabetical order.
             specified_set_list = specified_set_list.OrderBy(s => s).ToList();
 
-            // Create an empty string variable.
             string sorted_string = "";
 
-            // Iterate through each entry of the string list and add it to the newly created string variable in a format the user can read.
             foreach (string s in specified_set_list)
             {
                 sorted_string += $"- {s}\n";
             }
 
-            // For this list, we want to seperate the listed characters by which franchise they belong to.
             sorted_string += "\n";
             sorted_string += "**__Snow Queen Quest__**\n";
 
-            // Iterate through each entry of the official sprite set list.
+            List<string> secondary_set_list = new List<string>();
+
             foreach (OfficialSetData s in sprite_set_list)
             {
-                // If the current iterated sprite set comes from BBTAG and is a BlazBlue character, add it to the string list.
                 if (s.Origin == "P1-PS1" && (s.ID == "B29" || s.ID == "B30" || s.ID == "B31" || s.ID == "B32" || s.ID == "B33"))
                 {
-                    sorted_string += $"- {s.Name}\n";
+                    secondary_set_list.Add(s.Name);
                 }
             }
 
+            secondary_set_list = secondary_set_list.OrderBy(s => s).ToList();
+
+            foreach (string s in secondary_set_list)
+            {
+                sorted_string += $"- {s}\n";
+            }
+
             // Return the string variable.
+            return sorted_string;
+        }
+
+        public static string Generate_P2IS_PSP_Set_List()
+        {
+            // Create an empty string list.
+            List<string> specified_set_list = new List<string>();
+
+            int current_id = 0;
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                current_id = Int32.Parse(s.ID.Substring(1));
+
+                if (s.Origin == "P2IS-PSP" && (current_id < 74))
+                {
+                    specified_set_list.Add(s.Name);
+                }
+            }
+
+            specified_set_list = specified_set_list.OrderBy(s => s).ToList();
+
+            string sorted_string = "";
+
+            foreach (string s in specified_set_list)
+            {
+                sorted_string += $"- {s}\n";
+            }
+
+            sorted_string += "\n";
+            sorted_string += "**__Climax Theater__**\n";
+
+            List<string> secondary_set_list = new List<string>();
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                current_id = Int32.Parse(s.ID.Substring(1));
+
+                if (s.Origin == "P2IS-PSP" && (current_id >= 74))
+                {
+                    secondary_set_list.Add(s.Name);
+                }
+            }
+
+            secondary_set_list = secondary_set_list.OrderBy(s => s).ToList();
+
+            foreach (string s in secondary_set_list)
+            {
+                sorted_string += $"- {s}\n";
+            }
+
+            return sorted_string;
+        }
+
+        public static string Generate_P2EP_PSP_Set_List()
+        {
+            List<string> specified_set_list = new List<string>();
+
+            int current_id = 0;
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                current_id = Int32.Parse(s.ID.Substring(1));
+
+                if (s.Origin == "P2EP-PSP" && (current_id < 82))
+                {
+                    specified_set_list.Add(s.Name);
+                }
+            }
+
+            specified_set_list = specified_set_list.OrderBy(s => s).ToList();
+
+            string sorted_string = "";
+
+            foreach (string s in specified_set_list)
+            {
+                sorted_string += $"- {s}\n";
+            }
+
+            sorted_string += "\n";
+            sorted_string += "**__Additional Scenario__**\n";
+
+            List<string> secondary_set_list = new List<string>();
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                current_id = Int32.Parse(s.ID.Substring(1));
+
+                if (s.Origin == "P2EP-PSP" && (current_id >= 82))
+                {
+                    secondary_set_list.Add(s.Name);
+                }
+            }
+
+            secondary_set_list = secondary_set_list.OrderBy(s => s).ToList();
+
+            foreach (string s in secondary_set_list)
+            {
+                sorted_string += $"- {s}\n";
+            }
+
             return sorted_string;
         }
 
@@ -818,31 +995,45 @@ namespace SocialLinker.Core.LocalStorageTables
 
         public static async Task Quick_Scene_Directory(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
+            MakerCommandLogging.LogData(sl_command);
+
             if (command_data.Template == "")
             {
+                if (Content_Filter_Pass_Check(sl_command, set_data.Origin) == false)
+                {
+                    return;
+                }
+
                 switch (set_data.Origin)
                 {
                     case "P1-PS1":
-                        await RenderP1_PS1.Render_Quick_Scene_P1_PS1(sl_command, set_data, command_data);
+                        RenderP1_PS1 p1_ps1_render = new RenderP1_PS1();
+                        await p1_ps1_render.Render_Quick_Scene_P1_PS1(sl_command, set_data, command_data);
                         return;
 
                     case "P1-PSP":
+                        RenderP1_PSP p1_psp_render = new RenderP1_PSP();
+                        await p1_psp_render.Render_Quick_Scene_P1_PSP(sl_command, set_data, command_data);
                         return;
 
                     case "P2IS-PS1":
-                        await RenderP2IS_PS1.Render_Quick_Scene_P2IS_PS1(sl_command, set_data, command_data);
+                        RenderP2IS_PS1 p2is_ps1_render = new RenderP2IS_PS1();
+                        await p2is_ps1_render.Render_Quick_Scene_P2IS_PS1(sl_command, set_data, command_data);
                         return;
 
                     case "P2IS-PSP":
-                        RenderP2IS_PSP test_obj = new RenderP2IS_PSP();
-                        await test_obj.Render_Quick_Scene_P2IS_PSP(sl_command, set_data, command_data);
+                        RenderP2IS_PSP p2is_psp_render = new RenderP2IS_PSP();
+                        await p2is_psp_render.Render_Quick_Scene_P2IS_PSP(sl_command, set_data, command_data);
                         return;
 
                     case "P2EP-PS1":
-                        await RenderP2EP_PS1.Render_Quick_Scene_P2EP_PS1(sl_command, set_data, command_data);
+                        RenderP2EP_PS1 p2ep_ps1_render = new RenderP2EP_PS1();
+                        await p2ep_ps1_render.Render_Quick_Scene_P2EP_PS1(sl_command, set_data, command_data);
                         return;
 
                     case "P2EP-PSP":
+                        RenderP2EP_PSP p2ep_psp_render = new RenderP2EP_PSP();
+                        await p2ep_psp_render.Render_Quick_Scene_P2EP_PSP(sl_command, set_data, command_data);
                         return;
 
                     case "P3F":
@@ -850,7 +1041,8 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P3P":
-                        await RenderP3P.Render_Quick_Scene_P3P(sl_command, set_data, command_data);
+                        RenderP3P p3p_render = new RenderP3P();
+                        await p3p_render.Render_Quick_Scene_P3P(sl_command, set_data, command_data);
                         return;
 
                     case "P4-PS2":
@@ -862,10 +1054,13 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P4AU":
+                        RenderP4AU p4au_render = new RenderP4AU();
+                        await p4au_render.Render_Quick_Scene_P4AU(sl_command, set_data, command_data);
                         return;
 
                     case "P4D":
-                        await RenderP4D.Render_Quick_Scene_P4D(sl_command, set_data, command_data);
+                        RenderP4D p4d_render = new RenderP4D();
+                        await p4d_render.Render_Quick_Scene_P4D(sl_command, set_data, command_data);
                         return;
 
                     case "P5-PS4":
@@ -876,10 +1071,13 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P5S":
-                        await RenderP5S.Render_Quick_Scene_P5S(sl_command, set_data, command_data);
+                        RenderP5S p5s_render = new RenderP5S();
+                        await p5s_render.Render_Quick_Scene_P5S(sl_command, set_data, command_data);
                         return;
 
                     case "BBTAG":
+                        RenderBBTAG bbtag_render = new RenderBBTAG();
+                        await bbtag_render.Render_Quick_Scene_BBTAG(sl_command, set_data, command_data);
                         return;
                 }
             }
@@ -887,32 +1085,52 @@ namespace SocialLinker.Core.LocalStorageTables
             return;
         }
 
-        public static async Task System_Message_Directory(SocialLinkerCommand sl_command, MakerCommandData command_data)
+        public static async Task System_Message_Directory(SocialLinkerCommand sl_command)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(sl_command.User);
+            MakerCommandData command_data = sl_command.MakerCommand;
 
             // Convert the user's template input into one usable depending on their version control settings.
             string template = InputToTemplate(account, command_data.Sprite_Set_Version);
 
+            MakerCommandLogging.LogData(sl_command);
+
+            if (Content_Filter_Pass_Check(sl_command, template) == false)
+            {
+                return;
+            }
+
             switch (template)
             {
                 case "P1-PS1":
+                    RenderP1_PS1 p1_ps1_render = new RenderP1_PS1();
+                    await p1_ps1_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P1-PSP":
+                    RenderP1_PSP p1_psp_render = new RenderP1_PSP();
+                    await p1_psp_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P2IS-PS1":
+                    RenderP2IS_PS1 p2is_ps1_render = new RenderP2IS_PS1();
+                    await p2is_ps1_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P2IS-PSP":
+                    RenderP2IS_PSP p2is_psp_render = new RenderP2IS_PSP();
+                    await p2is_psp_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P2EP-PS1":
+                    RenderP2EP_PS1 p2ep_ps1_render = new RenderP2EP_PS1();
+                    await p2ep_ps1_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P2EP-PSP":
+                    RenderP2EP_PSP p2ep_psp_render = new RenderP2EP_PSP();
+                    await p2ep_psp_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P3F":
@@ -931,9 +1149,13 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P4AU":
+                    RenderP4AU p4au_render = new RenderP4AU();
+                    await p4au_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P4D":
+                    RenderP4D p4d_render = new RenderP4D();
+                    await p4d_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P5-PS4":
@@ -943,13 +1165,434 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P5S":
+                    RenderP5S p5s_render = new RenderP5S();
+                    await p5s_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "BBTAG":
+                    RenderBBTAG bbtag_render = new RenderBBTAG();
+                    await bbtag_render.Render_System_Message(sl_command, command_data);
                     return;
             }
 
             return;
+        }
+
+        // Commonly Shared Methods
+        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, string template, string dialogue, int max_line_count, int max_line_length)
+        {
+            // The number of pixels in a line remaining. This will gradually decrease as the pixel length of characters are subtracted from it.
+            int line_length_remaining = max_line_length;
+
+            // Completed word string. Characters will be added to this string one-by-one until a space, line break, or end-of-input is encountered.
+            string completed_word = "";
+
+            // Create an array of string lists and initialize them.
+            // These are where our dialogue input will be organized.
+            List<string>[] dialogue_list = new List<string>[max_line_count];
+
+            for (int i = 0; i < max_line_count; i++)
+            {
+                dialogue_list[i] = new List<string>();
+            }
+
+            // Now that we have our string lists created, we need a variable to dynamically change which line we're currently on.
+            // For that, create an int variable and initialize it to zero for starting on the first line.
+            int current_line = 0;
+
+            // Take the input dialogue and convert it into a char array. This is how we'll iterate through the dialogue character-by-character.
+            char[] dialogue_array = dialogue.ToCharArray();
+
+            bool add_text = true;
+
+            // Create a for loop meant to iterate through the dialogue array.
+            for (int i = 0; i < dialogue_array.Length; i++)
+            {
+                if (add_text == true)
+                {
+                    // Check if the completed word string is empty, the remaining pixel length of the current line is at the max value, and if the current iterated character is a space.
+                    if ((completed_word == "") && (line_length_remaining == max_line_length) && (dialogue_array[i] == ' '))
+                    {
+                        // We want to skip any spaces that appear at the start of a line, so do nothing here.
+                    }
+                    // Check if the contents of the current index is not a space, not a line break, and not the end of the array.
+                    else if ((dialogue_array[i] != ' ') && (dialogue_array[i] != '\u000a') && (i != dialogue_array.Length - 1))
+                    {
+                        // If so, add the currently iterated char to the completed word string.
+                        completed_word += dialogue_array[i];
+                    }
+                    // Next, check if the contents of the current index IS a space, IS a line break, or IS the end of the array.
+                    else if ((dialogue_array[i] == ' ') || (dialogue_array[i] == '\u000a') || (i == dialogue_array.Length - 1))
+                    {
+                        // If so, add the currently iterated char to the completed word string.
+                        completed_word += dialogue_array[i];
+
+                        // Now that we have our word, measure the pixel length of the completed string.
+                        int completed_word_length = Measure_Word_Pixel_Length_Redirect(sl_command, template, completed_word);
+
+                        // Check if the completed word is under the current line's allowed length.
+                        // This is done by subtracting the completed word string's length from the remaining length of the line.
+                        // If the result is greater than zero, it's a perfect fit.
+                        if ((line_length_remaining - completed_word_length >= 0) && (dialogue_array[i] != '\u000a'))
+                        {
+                            // Subtract the completed word's pixel length from the remaining pixel length of the current line.
+                            line_length_remaining = line_length_remaining - completed_word_length;
+
+                            // Add the completed word to the current line.
+                            dialogue_list[current_line].Add(completed_word);
+
+                            // Reset the completed word variable to an empty string.
+                            completed_word = "";
+                        }
+
+                        // Else, check if all three of the following conditions are met:
+                        // If there is no more room to add the completed word to the current line.
+                        // The completed word's length is less than or equal to a line itself.
+                        // The current iterated character is NOT a line break.
+                        else if ((line_length_remaining - completed_word_length < 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] != '\u000a'))
+                        {
+                            // Check if the current line number is less than the max number of lines available.
+                            if (current_line < max_line_count - 1)
+                            {
+                                // Increase the current line number.
+                                current_line++;
+
+                                // Add the completed word string to the current line.
+                                dialogue_list[current_line].Add(completed_word);
+
+                                // Reset the remaining pixel length variable to the start and subtract the pixel length of the completed word string.
+                                // This is done because we moved to a new line.
+                                line_length_remaining = max_line_length - completed_word_length;
+
+                                // Reset the completed word variable to an empty string.
+                                completed_word = "";
+                            }
+                            // Else, check if the current line number is greater than or equal to the max number of lines available.
+                            else if (current_line >= max_line_count - 1)
+                            {
+                                // If so, there is no more room to render text.
+                                // Break from the for loop.
+                                add_text = false;
+                                break;
+                            }
+                        }
+
+                        // Else, check if all three of the following conditions are met:
+                        // If there IS room to add the completed word to the current line.
+                        // The completed word's length is less than or equal to the length of a line itself.
+                        // The current iterated character IS a line break.
+                        else if ((line_length_remaining - completed_word_length >= 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] == '\u000a'))
+                        {
+                            // Check if the current line number is less than the max number of lines available.
+                            if (current_line < max_line_count - 1)
+                            {
+                                // Since there is room, add the completed word string to the current line.
+                                dialogue_list[current_line].Add(completed_word);
+
+                                // Increase the current line number.
+                                current_line++;
+
+                                // Reset the remaining pixel length variable to the max value.
+                                // This is done because we moved to a new line.
+                                line_length_remaining = max_line_length;
+
+                                // Reset the completed word variable to an empty string.
+                                completed_word = "";
+                            }
+                            // Else, check if the current line number is greater than or equal to the max number of lines available.
+                            else if (current_line >= max_line_count - 1)
+                            {
+                                // If so, there is no more room to render text.
+                                // Break from the for loop.
+                                add_text = false;
+                                break;
+                            }
+                        }
+
+                        // Else, check if there is no more room to add the completed word to the current line AND the completed word's length is greater than the length of a line itself.
+                        // This means that we'll need to split the string up on different lines.
+                        else if (line_length_remaining - completed_word_length < 0 && completed_word_length > max_line_length)
+                        {
+                            // Take the completed word and turn it into a char array.
+                            // We'll use this to iterate through the word character-by-character to decide where to split the string.
+                            char[] completed_word_array = completed_word.ToCharArray();
+
+                            // Create a new string variable and initialize it to an empty string.
+                            // Similar to the completed word variable, this string will contain characters that will fit on a single line.
+                            // Because we know the word will be split into multiple lines, this will only contain part of the full string at any given time, hence "substring".
+                            string substring = "";
+
+                            // Create an int variable and initialize it to zero.
+                            // This will contain the pixel length of our substring variable once we measure it.
+                            int substring_length = 0;
+
+                            // Create a for loop to iterate through the completed word array.
+                            for (int j = 0; j < completed_word_array.Length; j++)
+                            {
+                                // Add the currently iterated character to the substring.
+                                substring += completed_word_array[j];
+
+                                // Measure the pixel length of the substring so far.
+                                substring_length = Measure_Word_Pixel_Length_Redirect(sl_command, template, substring);
+
+                                // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
+                                // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
+                                if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a'))
+                                {
+                                    // Check if the current line number is less than the max number of lines available.
+                                    if (current_line < max_line_count - 1)
+                                    {
+                                        // Add the substring to the current line.
+                                        dialogue_list[current_line].Add(substring);
+
+                                        // Since there is absolutely no more room on the current line left, increase the current line value.
+                                        current_line++;
+
+                                        // Reset the remaining pixel length variable to the max value.
+                                        // This is done because we moved to a new line.
+                                        line_length_remaining = max_line_length;
+
+                                        // Reset the substring variable to an empty string.
+                                        substring = "";
+                                    }
+                                }
+                                // Else, check if the last index of the completed word array has been reached.
+                                else if (j == completed_word_array.Length - 1)
+                                {
+                                    // Add the substring to the current line.
+                                    dialogue_list[current_line].Add(substring);
+
+                                    // Subtract the completed word's pixel length from the remaining pixel length of the current line.
+                                    line_length_remaining = line_length_remaining - substring_length;
+
+                                    // Reset the substring variable to an empty string.
+                                    substring = "";
+                                }
+                            }
+
+                            // Reset the completed word string to an empty string.
+                            completed_word = "";
+                        }
+                    }
+                }
+            }
+
+            return dialogue_list;
+        }
+
+        public static int Measure_Word_Pixel_Length_Redirect(SocialLinkerCommand sl_command, string template, string input_word)
+        {
+            switch (template)
+            {
+                case "P1-PS1":
+                    return RenderP1_PS1.Measure_String_Pixel_Length(sl_command, input_word);
+
+                case "P1-PSP":
+                    return RenderP1_PSP.Measure_String_Pixel_Length(sl_command, input_word);
+
+                case "P2IS-PS1":
+                    RenderP2IS_PS1 p2is_ps1_measure = new RenderP2IS_PS1();
+                    return p2is_ps1_measure.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P2IS-PSP":
+                    return RenderP2IS_PSP.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P2EP-PS1":
+                    RenderP2EP_PS1 p2ep_ps1_measure = new RenderP2EP_PS1();
+                    return p2ep_ps1_measure.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P2EP-PSP":
+                    return RenderP2EP_PSP.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P3F":
+                    return RenderP3F.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P3P":
+                    return RenderP3P.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P4-PS2":
+                    return RenderP4_PS2.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P4G":
+                    return RenderP4G.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P4AU":
+                    return RenderP4AU.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P4D":
+                    return RenderP4D.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P5-PS4":
+                    return 0;
+
+                case "P5R":
+                    return RenderP5R.Measure_Word_Pixel_Length(sl_command, input_word);
+
+                case "P5S":
+                    return RenderP5S.Measure_String_Pixel_Length(sl_command, input_word);
+
+                case "BBTAG":
+                    return 0;
+
+                default:
+                    return 0;
+            }
+        }
+
+        public static Bitmap Render_Background(SocialLinkerCommand sl_command, int template_width, int template_height)
+        {
+            var account = UserInfoClasses.GetAccount(sl_command.User);
+            var attachment = sl_command.MakerCommand.Background;
+
+            Bitmap background = new Bitmap(2, 2);
+
+            if (attachment != null)
+            {
+                // Here, we'll want to try and retrieve the user's input image.
+                try
+                {
+                    // Declare variables for a web request to retrieve the image.
+                    System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(attachment.Url);
+                    webRequest.AllowWriteStreamBuffering = true;
+                    webRequest.Timeout = 30000;
+
+                    // Create a stream and download the image to it.
+                    System.Net.WebResponse webResponse = webRequest.GetResponse();
+                    System.IO.Stream stream = webResponse.GetResponseStream();
+
+                    // Copy the stream's contents to the background bitmap variable.
+                    background = (Bitmap)System.Drawing.Image.FromStream(stream);
+
+                    webResponse.Close();
+                }
+                // If an exception occurs here, the filetype is likely incompatible.
+                // Send an error message, delete the loading message, and return.
+                catch (System.ArgumentException e)
+                {
+                    Console.WriteLine(e);
+                    throw new ArgumentException();
+                }
+            }
+
+            // Render the uploaded image based on the user's background settings.
+            switch (account.Setting_BG_Upload)
+            {
+                case "Maintain Aspect Ratio":
+                    background = Center_Image(background, template_width, template_height);
+                    break;
+
+                case "Stretch to Fit":
+                    background = Stretch_To_Fit(background, template_width, template_height);
+                    break;
+            }
+
+            return background;
+        }
+
+        public static Bitmap Render_Colored_Background(UserInfoFields account, int template_width, int template_height)
+        {
+            Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
+
+            // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
+            // Check if the user's background color setting is set to something other than "Transparent".
+            // If so, we have a color to render for the background!
+            if (account.Setting_BG_Color != "Transparent")
+            {
+                // Convert the user's HTML color setting to one we can use and assign it to a color variable.
+                System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
+
+                // Color the entirety of the background bitmap the user's selected color.
+                using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
+                {
+                    graphics.Clear(user_background_color);
+                }
+            }
+
+            return colored_background_bitmap;
+        }
+
+        public static List<string> ParseContentFilter(UserInfoFields account)
+        {
+            //Create a list variable to return
+            List<string> input_substring;
+
+            //Specify the characters to divide the incoming string by
+            char[] delimiterChars = { ';' };
+
+            //Assign the return value to the input account's content filter string with its entries split into a list
+            input_substring = account.Content_Filter.Split(delimiterChars).ToList();
+
+            return input_substring;
+        }
+
+        public static bool Content_Filter_Pass_Check(SocialLinkerCommand sl_command, string template)
+        {
+            var account = UserInfoClasses.GetAccount(sl_command.User);
+            var content_filter = ParseContentFilter(account);
+
+            if (content_filter.Contains(template))
+            {
+                _ = ErrorHandling.Content_Filter_Enabled(sl_command, template);
+                return false;
+            }
+
+            return true;
+        }
+
+        public static Bitmap Center_Image(Bitmap scrBitmap, int template_width, int template_height)
+        {
+            float width = template_width;
+            float height = template_height;
+            var brush = new SolidBrush(System.Drawing.Color.Black);
+
+            var image = new Bitmap(scrBitmap);
+
+            float scale = Math.Min(width / image.Width, height / image.Height);
+
+            var bmp = new Bitmap((int)width, (int)height);
+            var graph = Graphics.FromImage(bmp);
+
+            // uncomment for higher quality output
+            graph.InterpolationMode = InterpolationMode.High;
+            graph.CompositingQuality = CompositingQuality.HighQuality;
+            graph.SmoothingMode = SmoothingMode.AntiAlias;
+
+            bmp.SetResolution(96, 96);
+
+            var scaleWidth = (int)(image.Width * scale);
+            var scaleHeight = (int)(image.Height * scale);
+
+            //graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
+            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
+
+            return bmp;
+        }
+
+        public static Bitmap Stretch_To_Fit(Bitmap input_bitmap, int template_width, int template_height)
+        {
+            // Set the width and height of the bitmap to be created
+            float width = template_width;
+            float height = template_height;
+
+            // Copy the input bitmap to a new variable.
+            var bitmap_copy = new Bitmap(input_bitmap);
+
+            // Create a brand new bitmap with the specified dimensions from earlier.
+            var new_bitmap = new Bitmap((int)width, (int)height);
+
+            // Create a graphics object so we can edit this new bitmap.
+            var graphics = Graphics.FromImage(new_bitmap);
+
+            // uncomment for higher quality output
+            //graph.InterpolationMode = InterpolationMode.High;
+            //graph.CompositingQuality = CompositingQuality.HighQuality;
+            //graph.SmoothingMode = SmoothingMode.AntiAlias;
+            new_bitmap.SetResolution(96, 96);
+
+            // Draw the copy of the input bitmap to the new bitmap.
+            graphics.DrawImage(bitmap_copy, 0, 0, width, height);
+
+            return new_bitmap;
         }
 
         // Bustup construction
@@ -1061,8 +1704,34 @@ namespace SocialLinker.Core.LocalStorageTables
             else
             {
                 Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, command_data, base_sprite);
+                Bitmap bustup_with_frames = Construct_Bustup_With_Frames_Revised(sl_command, set_data, bustup_data, command_data, base_sprite, false);
                 return bustup_with_frames;
+            }
+        }
+
+        public static Bitmap Reverse_Bustup_Selection(SocialLinkerCommand sl_command, OfficialSetData set_data, Bitmap bustup, BustupData bustup_data, MakerCommandData command_data)
+        {
+            string reverse_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Reverse";
+            string base_sprite_filename = $"r{bustup_data.Filename.Substring(1)}";
+
+            if (File.Exists($"{reverse_path}//{base_sprite_filename}"))
+            {
+                Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{reverse_path}//{base_sprite_filename}");
+
+                // Do something
+                if (command_data.Eye_Frame == default && command_data.Mouth_Frame == default)
+                {
+                    return base_sprite;
+                }
+                else
+                {
+                    Bitmap bustup_with_frames = Construct_Bustup_With_Frames_Revised(sl_command, set_data, bustup_data, command_data, base_sprite, true);
+                    return bustup_with_frames;
+                }
+            }
+            else
+            {
+                return bustup;
             }
         }
 
@@ -1129,6 +1798,144 @@ namespace SocialLinker.Core.LocalStorageTables
                     {
                         // Save the mouth frame to a bitmap variable.
                         Bitmap mouth_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{mouth_frame_path}//{mouth_frame_data.Filename}");
+
+                        // Depending on the bustup's game origin, a section of the base bustup may need to be cropped out to make the eye frame properly fit in.
+                        if (set_data.Origin == "P5-PS4" || set_data.Origin == "P5R" || set_data.Origin == "P5S")
+                        {
+                            Rectangle crop_region_mouth = new Rectangle(mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
+                            edited_bustup = Crop_Rectangle_From_Bitmap(edited_bustup, crop_region_mouth);
+                        }
+
+                        // Draw the mouth frame to the base bustup.
+                        using (Graphics graphics = Graphics.FromImage(edited_bustup))
+                        {
+                            graphics.DrawImage(mouth_frame_sprite, mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
+                        }
+                    }
+                }
+                // If the frame data is null, send an error message and return null as well.
+                else
+                {
+                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, command_data, set_data.Name, set_data.Origin);
+                    return null;
+                }
+            }
+
+            // Finally, return the final edited bitmap.
+            return edited_bustup;
+        }
+
+        public static Bitmap Construct_Bustup_With_Frames_Revised(SocialLinkerCommand sl_command, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, Bitmap bustup, bool reverse_file_exists)
+        {
+            // Create a copy of the bitmap taken in.
+            // This is the version we'll be editing and returning.
+            Bitmap edited_bustup = bustup;
+
+            if (command_data.Eye_Frame != default && command_data.Eye_Frame != 0)
+            {
+                // Establish the eye frame directory for the current sprite set.
+                string eye_frame_path = "";
+
+                switch (reverse_file_exists)
+                {
+                    case true:
+                        eye_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Reverse//Eyes";
+                        break;
+
+                    case false:
+                        eye_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Eyes";
+                        break;
+                }
+
+                // Get the eye frame data of the frame specified in the user's command.
+                FrameData eye_frame_data = BustupDataMethods.Get_Eye_Frame_Data(set_data, bustup_data, command_data);
+
+                // Ensure that the returned eye frame data is not null.
+                if (eye_frame_data != null)
+                {
+                    string eye_frame_filename = "";
+
+                    switch (reverse_file_exists)
+                    {
+                        case true:
+                            eye_frame_filename = $"r{eye_frame_data.Filename.Substring(1)}";
+                            break;
+
+                        case false:
+                            eye_frame_filename = eye_frame_data.Filename;
+                            break;
+                    }
+
+                    // Check that the eye frame path exists.
+                    if (File.Exists($"{eye_frame_path}//{eye_frame_filename}"))
+                    {
+                        // Save the eye frame to a bitmap variable.
+                        Bitmap eye_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{eye_frame_path}//{eye_frame_filename}");
+
+                        // Depending on the bustup's game origin, a section of the base bustup may need to be cropped out to make the eye frame properly fit in.
+                        if (set_data.Origin == "P5-PS4" || set_data.Origin == "P5R" || set_data.Origin == "P5S")
+                        {
+                            Rectangle crop_region_eyes = new Rectangle(eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
+                            edited_bustup = Crop_Rectangle_From_Bitmap(edited_bustup, crop_region_eyes);
+                        }
+
+                        // Draw the eye frame to the base bustup.
+                        using (Graphics graphics = Graphics.FromImage(edited_bustup))
+                        {
+                            graphics.DrawImage(eye_frame_sprite, eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
+                        }
+                    }
+                }
+                // If the frame data is null, send an error message and return null as well.
+                else
+                {
+                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, command_data, set_data.Name, set_data.Origin);
+                    return null;
+                }
+            }
+
+            // Check if the user's command specifies a mouth frame as well.
+            // If so, let's work on the mouth frame.
+            if (command_data.Mouth_Frame != default && command_data.Mouth_Frame != 0)
+            {
+                // Establish the mouth frame directory for the current sprite set.
+                string mouth_frame_path = "";
+
+                switch (reverse_file_exists)
+                {
+                    case true:
+                        mouth_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Reverse//Mouth";
+                        break;
+
+                    case false:
+                        mouth_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Mouth";
+                        break;
+                }
+
+                // Get the mouth frame data of the frame specified in the user's command.
+                FrameData mouth_frame_data = BustupDataMethods.Get_Mouth_Frame_Data(set_data, bustup_data, command_data);
+
+                // Ensure that the returned mouth frame data is not null.
+                if (mouth_frame_data != null)
+                {
+                    string mouth_frame_filename = "";
+
+                    switch (reverse_file_exists)
+                    {
+                        case true:
+                            mouth_frame_filename = $"r{mouth_frame_data.Filename.Substring(1)}";
+                            break;
+
+                        case false:
+                            mouth_frame_filename = mouth_frame_data.Filename;
+                            break;
+                    }
+
+                    // Check that the mouth frame path exists.
+                    if (File.Exists($"{mouth_frame_path}//{mouth_frame_filename}"))
+                    {
+                        // Save the mouth frame to a bitmap variable.
+                        Bitmap mouth_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{mouth_frame_path}//{mouth_frame_filename}");
 
                         // Depending on the bustup's game origin, a section of the base bustup may need to be cropped out to make the eye frame properly fit in.
                         if (set_data.Origin == "P5-PS4" || set_data.Origin == "P5R" || set_data.Origin == "P5S")

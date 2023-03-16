@@ -424,7 +424,7 @@ namespace SocialLinker.Core.Menus.Shop.Main
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the thumbnail of the current décor.
-            Bitmap decor_preview = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Decor//{decor_info.Decor_ID}//_Thumbnails//preview_1.png");
+            Bitmap decor_preview = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Decor//{decor_info.Decor_ID}//_Thumbnails//preview_2.png");
 
             // Save the décor preview bitmap to the stream as a PNG.
             decor_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);

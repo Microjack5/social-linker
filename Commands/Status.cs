@@ -140,8 +140,8 @@ namespace SocialLinker.Commands
             //If a user is mentioned and they're not the command user and not a bot, add Expression to both users
             if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
-                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
+                Core.LevelSystem.SocialStats.AddExpression(command, commandUser);
+                Core.LevelSystem.SocialStats.AddExpression(command, commandTarget);
             }
 
             // Call different status screen functions depending on the account's profile theme and decor settings.
@@ -291,8 +291,8 @@ namespace SocialLinker.Commands
             // If a user is mentioned and they're not the command user and not a bot, add Expression to both users.
             if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandUser);
-                //Core.LevelSystem.SocialStats.AddExpression(command.Message, commandTarget);
+                Core.LevelSystem.SocialStats.AddExpression(command, commandUser);
+                Core.LevelSystem.SocialStats.AddExpression(command, commandTarget);
             }
 
             // Construct embeded message.
@@ -372,7 +372,7 @@ namespace SocialLinker.Commands
             // Add the description text to the embed.
             embed.WithDescription(description_text);
 
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+            await command.Channel.SendMessageAsync("", false, embed.Build());
         }
     }
 }

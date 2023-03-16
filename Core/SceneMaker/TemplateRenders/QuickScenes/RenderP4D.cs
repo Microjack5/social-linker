@@ -18,127 +18,52 @@ using System.Collections.Generic;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Globalization;
 using SocialLinker.Core.Menus;
+using System.Drawing.Drawing2D;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
+using System.Security.Principal;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
+using System.Data.SqlClient;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
     public class RenderP4D : ModuleBase<SocketCommandContext>
     {
-        public static async Task Render_Quick_Scene_P4D(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
-        {
-            // Create variables to store the width and height of the template.
-            int template_width = 1920;
-            int template_height = 1080;
+        int template_width = 1920;
+        int template_height = 1080;
+        Random rnd = new Random();
 
-            // Create two variables for the command user and the command channel, derived from the message object taken in.
+        public async Task Render_Quick_Scene_P4D(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        {
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
-
-            // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P4D_Loading_Message().Build());
-
-            // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
-
             BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
-            // Create a starting base bitmap to render all graphics on.
+            // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
-
-            // Create another bitmap the same size.
-            // In case the user has set a colored bitmap in their settings, we'll need to use this to render it.
-            Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
-
-            // Here, we want to grab any images attached to the message to use it as a background.
-            // Create a variable for the message attachment.
-            var attachments = sl_command.Attachments;
-
-            // Create an empty string variable to hold the URL of the attachment.
-            string url = "";
-
-            // If there are no attachments on the message, set the URL string to "None".
-            if (attachments == default || attachments.LongCount() == 0)
-            {
-                url = "None";
-            }
-            // Else, assign the URL of the attachment to the URL string.
-            else
-            {
-                url = attachments.ElementAt(0).Url;
-            }
-
-            // Initialize a bitmap object for the user's background. It's small now because we'll reassign it depending on our circumstances.
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
             Bitmap background = new Bitmap(2, 2);
 
-            // If a URL for a message attachment exists, download it and copy its contents to the bitmap variable we just created.
-            if (url != "None")
+            try
             {
-                // Here, we'll want to try and retrieve the user's input image.
-                try
-                {
-                    // Declare variables for a web request to retrieve the image.
-                    System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
-                    webRequest.AllowWriteStreamBuffering = true;
-                    webRequest.Timeout = 30000;
-
-                    // Create a stream and download the image to it.
-                    System.Net.WebResponse webResponse = webRequest.GetResponse();
-                    System.IO.Stream stream = webResponse.GetResponseStream();
-
-                    // Copy the stream's contents to the background bitmap variable.
-                    background = (Bitmap)System.Drawing.Image.FromStream(stream);
-
-                    webResponse.Close();
-                }
-                // If an exception occurs here, the filetype is likely incompatible.
-                // Send an error message, delete the loading message, and return.
-                catch (System.ArgumentException e)
-                {
-                    Console.WriteLine(e);
-                    await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
-                    return;
-                }
+                background = OfficialSetMethods.Render_Background(sl_command, template_width, template_height);
+            }
+            catch (System.ArgumentException e)
+            {
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
             }
 
-            // Render the uploaded image based on the user's background settings.
-            switch (account.Setting_BG_Upload)
-            {
-                case "Maintain Aspect Ratio":
-                    background = Center_Image(background);
-                    break;
-
-                case "Stretch to Fit":
-                    background = Stretch_To_Fit(background);
-                    break;
-            }
-
-            // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
-            // Check if the user's background color setting is set to something other than "Transparent".
-            // If so, we have a color to render for the background!
-            if (account.Setting_BG_Color != "Transparent")
-            {
-                // Convert the user's HTML color setting to one we can use and assign it to a color variable.
-                System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
-
-                // Color the entirety of the background bitmap the user's selected color.
-                using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
-                {
-                    graphics.Clear(user_background_color);
-                }
-            }
-
-            // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
             Bitmap bustup = new Bitmap(2, 2);
 
-            // Check if the base sprite number is something other than zero.
-            // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
             if (command_data.Base_Sprite != 0)
             {
                 bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
             }
 
-            // If the bustup returns as null, however, something went wrong with rendering the animation frames.
-            // An error message has already been sent in the frame rendering method, so delete the loading message and return.
             if (bustup == null)
             {
                 await loader.DeleteAsync();
@@ -157,30 +82,24 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
                 if (command_data.Base_Sprite != 0)
                 {
-                    graphics.DrawImage(bustup, bustup_data.P4D_Center_Coord_X, bustup_data.P4D_Center_Coord_Y, bustup_data.P4D_Scale_Width, bustup_data.P4D_Scale_Height);
+                    Bitmap placed_bustup = Set_Bustup_Placement(sl_command, account, bustup, bustup_data, set_data, command_data);
+                    graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
                 }
 
-                // Now, it's time to render the text.
-                // Render the character's name to the template.
-                // Check if the base sprite number is something other than zero.
-                if (command_data.Base_Sprite != 0)
+                Bitmap text_overlay = new Bitmap(2, 2);
+
+                switch (account.P4D_TS_Scene_Type)
                 {
-                    //graphics.DrawImage(Text_To_Blue(Render_Name(bustup_data)), 0, 0, template_width, template_height);
-                }
-                // If the base sprite number IS zero, we need a sprite to actually retrieve a display name from.
-                else
-                {
-                    // Change the base sprite number from the command data to one.
-                    // This way, we can get the bustup data for the first sprite to retrieve its display name.
-                    command_data.Base_Sprite = 1;
+                    case "Dialogue":
+                        text_overlay = Render_Dialogue_Overlay(sl_command, account, set_data, command_data, bustup_data);
+                        break;
 
-                    // Get the bustup data for the first sprite and render the display name to the template.
-                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
-                    //graphics.DrawImage(Text_To_Blue(Render_Name(bustup_data)), 0, 0, template_width, template_height);
+                    case "Narration":
+                        text_overlay = Render_Narration_Overlay(sl_command, account, command_data, false);
+                        break;
                 }
 
-                // Draw the input dialogue to the template.
-                //graphics.DrawImage(Render_Dialogue(Line_Parser(sl_command, command_data.Dialogue)), 0, 0, template_width, template_height);
+                graphics.DrawImage(text_overlay, 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -211,99 +130,240 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             await loader.DeleteAsync();
 
             // If the user has auto-delete for their commands set to on, delete their command as well.
-            if (account.Auto_Delete_Commands == "On")
+            if (account.Auto_Delete_Commands == "On" && sl_command.CommandType == "Context")
             {
                 await sl_command.Message.DeleteAsync();
             }
         }
 
-        public static Bitmap Render_Name(BustupData bustup_data)
+        public async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
         {
-            // Create a bitmap as large as the template.
-            Bitmap base_template = new Bitmap(1920, 1080);
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P4D_Loading_Message().Build());
+            var account = UserInfoClasses.GetAccount(user);
 
-            // Establish an int for the width and height glyphs should be rendered at.
-            int multiplier = 64;
+            // Background rendering
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
+            Bitmap background = new Bitmap(2, 2);
 
-            // Load the bitmap font.
-            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4G//Font//p4g_font_sheet.png";
-
-            // Create a variable to iterate through sections of the bitmap font.
-            Bitmap current_glyph;
-
-            // Specify X and Y coordinates for where the glyphs should start rendering on the template.
-            int render_position_x = 102;
-            int render_position_y = 748;
-
-            char[] charArr = bustup_data.Default_Name_EN.ToCharArray();
-
-            for (int i = 0; i < charArr.Length; i++)
+            try
             {
-                // Retrieve glyph information from the JSON file.
-                var glyph = ParsingMethods.Get_P4G_Glyph(charArr[i]);
+                background = OfficialSetMethods.Render_Background(sl_command, template_width, template_height);
+            }
+            catch (System.ArgumentException e)
+            {
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
+            }
 
-                // Check if the character is a line break.
-                if (charArr[i] == '\u000a')
+            // Time to put it all together!
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Draw the layer with the user's colored default background if it exists.
+                graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
+
+                // Draw the user's background to the base template.
+                graphics.DrawImage(background, 0, 0, template_width, template_height);
+
+                Bitmap text_overlay = new Bitmap(2, 2);
+
+                text_overlay = Render_Narration_Overlay(sl_command, account, command_data, true);
+
+                graphics.DrawImage(text_overlay, 0, 0, template_width, template_height);
+            }
+
+            // Save the entire base template to a data stream.
+            MemoryStream memoryStream = new MemoryStream();
+            base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            try
+            {
+                // Send the image.
+                await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
+
+            // If the user has auto-delete for their commands set to on, delete their command as well.
+            if (account.Auto_Delete_Commands == "On" && sl_command.CommandType == "Context")
+            {
+                await sl_command.Message.DeleteAsync();
+            }
+        }
+
+        public Bitmap Set_Bustup_Placement(SocialLinkerCommand sl_command, UserInfoFields account, Bitmap bustup, BustupData bustup_data, OfficialSetData set_data, MakerCommandData command_data)
+        {
+            // Create a starting base bitmap to render all graphics on.
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            // Switch the rendering position of the bustup depending on the user's settings.
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                switch (account.P4D_TS_Position)
                 {
-                    // Set the X coordinate to the start of the row.
-                    render_position_x = 124;
-                    // Move the Y coordinate down to the next line.
-                    render_position_y += 68;
-                }
-                else
-                {
-                    int x = multiplier * glyph.Column;
-                    int y = multiplier * glyph.Row;
+                    case "Left":
+                        bustup = OfficialSetMethods.Reverse_Bustup_Selection(sl_command, set_data, bustup, bustup_data, command_data);
 
-                    using (Graphics graphics = Graphics.FromImage(base_template))
-                    {
-                        using (var originalImage = new Bitmap(font_sheet))
+                        if (bustup_data.P4D_Dual_Flip == true)
                         {
-                            // Copy the section of the bitmap font needed.
-                            Rectangle crop = new Rectangle(x, y, multiplier, multiplier);
-                            current_glyph = originalImage.Clone(crop, originalImage.PixelFormat);
+                            bustup.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        }
 
-                            // Draw the glyph to the base bitmap.
-                            graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, multiplier, multiplier);
-                        }
-                    }
+                        graphics.DrawImage(bustup, bustup_data.P4D_Left_Coord_X, bustup_data.P4D_Left_Coord_Y, bustup_data.P4D_Scale_Width, bustup_data.P4D_Scale_Height);
+                        break;
 
-                    // Set the next X value at the end of the current glyph's right width.
-                    render_position_x += (glyph.RightCut - glyph.LeftCut);
+                    case "Right":
+                        graphics.DrawImage(bustup, bustup_data.P4D_Right_Coord_X, bustup_data.P4D_Right_Coord_Y, bustup_data.P4D_Scale_Width, bustup_data.P4D_Scale_Height);
+                        break;
 
-                    // Check if the current iterated index is less than the number of indicies available.
-                    if (i < charArr.Length - 1)
-                    {
-                        // If so, edit the position of the X coordinate according to specific kerning pairs.
-                        if (charArr[i] == 'Y' && Char.IsLower(charArr[i + 1]))
-                        {
-                            render_position_x += -6;
-                        }
-                        else if (charArr[i] == 'v' && Char.IsLower(charArr[i + 1]))
-                        {
-                            render_position_x += -1;
-                        }
-                        else if (charArr[i] == 'T' && Char.IsLower(charArr[i + 1]) && charArr[i + 1] != 'h')
-                        {
-                            render_position_x += -6;
-                        }
-                    }
+                    case "Center":
+                        graphics.DrawImage(bustup, bustup_data.P4D_Center_Coord_X, bustup_data.P4D_Center_Coord_Y, bustup_data.P4D_Scale_Width, bustup_data.P4D_Scale_Height);
+                        break;
                 }
             }
 
             return base_template;
         }
 
-        public static Bitmap Render_Dialogue(List<string>[] dialogue_lines)
+        public Bitmap Render_Dialogue_Overlay(SocialLinkerCommand sl_command, UserInfoFields account, OfficialSetData set_data, MakerCommandData command_data, BustupData bustup_data)
+        {
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                Bitmap dialogue_layer_1 = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Main//dialogue_layer_1.png");
+                Bitmap dialogue_layer_2 = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Main//dialogue_layer_2.png");
+                Bitmap button_guide = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Main//button_guide.png");
+
+                graphics.DrawImage(dialogue_layer_1, 0, 0, template_width, template_height);
+                graphics.DrawImage(Render_Textbox_Glow(), 0, 0, template_width, template_height);
+                graphics.DrawImage(dialogue_layer_2, 0, 0, template_width, template_height);
+                graphics.DrawImage(button_guide, 0, 0, template_width, template_height);
+
+                string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                Bitmap rendered_name = Render_Name(display_name);
+                Bitmap colored_name = Bitmap_To_Color(rendered_name, System.Drawing.Color.FromArgb(0, 141, 255), new Rectangle(120, 734, 1680, 80));
+                graphics.DrawImage(colored_name, 0, 0, colored_name.Width, colored_name.Height);
+
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P4D", command_data.Dialogue, 3, 785);
+                Bitmap rendered_dialogue = Render_Dialogue(parsed_lines);
+                graphics.DrawImage(rendered_dialogue, 0, 0, rendered_dialogue.Width, rendered_dialogue.Height);
+                graphics.DrawImage(Render_Cursor(account, 0, false), 0, 0, template_width, template_height);
+            }
+
+            return base_template;
+        }
+
+        public Bitmap Render_Narration_Overlay(SocialLinkerCommand sl_command, UserInfoFields account, MakerCommandData command_data, bool system_message)
+        {
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                Bitmap narrative_layer = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Main//narrative_layer.png");
+                Bitmap button_guide = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Main//button_guide.png");
+
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P4D", command_data.Dialogue, 9, 785);
+                int number_of_lines = Get_Number_of_Rendered_Lines(parsed_lines);
+
+                graphics.DrawImage(narrative_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(button_guide, 0, 0, template_width, template_height);
+
+                graphics.DrawImage(Render_Cursor(account, number_of_lines, system_message), 0, 0, template_width, template_height); 
+
+                Bitmap rendered_dialogue = Render_Narration_Dialogue(parsed_lines);
+                graphics.DrawImage(rendered_dialogue, 0, 0, rendered_dialogue.Width, rendered_dialogue.Height);
+            }
+
+            return base_template;
+        }
+
+        public Bitmap Render_Name(string display_name)
         {
             //Create a bitmap as large as the template
-            Bitmap bitmap = new Bitmap(1920, 1080);
-
-            // Create an int to keep track of rendering errors. This is neccessary to inform the user of any potential issues.
-            int error_counter = 0;
+            Bitmap bitmap = new Bitmap(960, 544);
 
             //Establish an int for the width and height glyphs should be rendered at
-            int multiplier = 64;
+            int multiplier = 32;
+
+            //Establish variables for where the glyphs should be rendered on the template
+            int render_position_x = 64;
+            int render_position_y = 373;
+
+            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Font//p4d_font_sheet.png";
+            Bitmap current_glyph;
+
+            char[] char_array = display_name.ToCharArray();
+
+            for (int i = 0; i < char_array.Length; i++)
+            {
+                //Retrieve glyph information from the JSON file
+                var glyph = ParsingMethods.Get_P4D_Glyph(char_array[i]);
+
+                if (glyph != null)
+                {
+                    int x = multiplier * glyph.Column;
+                    int y = multiplier * glyph.Row;
+
+                    using (Graphics graphics = Graphics.FromImage(bitmap))
+                    {
+                        using (var originalImage = new Bitmap(font_sheet))
+                        {
+                            //Copy the section of the bitmap font needed
+                            Rectangle crop = new Rectangle(x, y, multiplier, multiplier);
+                            current_glyph = originalImage.Clone(crop, originalImage.PixelFormat);
+
+                            //Draw the glyph to the base bitmap
+                            graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, 30, 30);
+                        }
+                    }
+
+                    //Set the next X value at the end of the current glyph's right width
+                    render_position_x += (glyph.RightCut - glyph.LeftCut);
+                }
+            }
+
+            // Resize for HD format
+            int rescaled_width = 1920;
+            int rescaled_height = 1088;
+            var rescaled_bitmap = new Bitmap(rescaled_width, rescaled_height);
+
+            using (Graphics graphics = Graphics.FromImage(rescaled_bitmap))
+            {
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.DrawImage(bitmap, 0, 0, rescaled_width, rescaled_height);
+            }
+            bitmap = rescaled_bitmap;
+
+            return bitmap;
+        }
+
+        public Bitmap Render_Dialogue(List<string>[] dialogue_lines)
+        {
+            //Create a bitmap as large as the template
+            Bitmap bitmap = new Bitmap(960, 544);
+
+            //Establish an int for the width and height glyphs should be rendered at
+            int multiplier = 32;
 
             string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Font//p4d_font_sheet.png";
             Bitmap current_glyph;
@@ -311,8 +371,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             for (int i = 0; i < dialogue_lines.Length; i++)
             {
                 //Establish variables for where the glyphs should be rendered on the template
-                int render_position_x = 124;
-                int render_position_y = 836 + (68 * i);
+                int render_position_x = 74;
+                int render_position_y = 407 + (35 * i);
 
                 char[] char_array = String_List_To_String(dialogue_lines[i]).ToCharArray();
 
@@ -320,14 +380,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     //Retrieve glyph information from the JSON file
                     var glyph = ParsingMethods.GetGlyph(char_array[j]);
-
-                    // If the glyph info returns null, we have a rendering error.
-                    // If this occurs and the error counter is at zero, increase the error counter and send a message to the user.
-                    if (glyph == null && error_counter == 0)
-                    {
-                        error_counter++;
-                        //message.Channel.SendMessageAsync(":warning: One or more of the characters entered is not supported by this template's font set and will not be rendered.");
-                    }
 
                     if (glyph != null)
                     {
@@ -343,235 +395,190 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                                 current_glyph = originalImage.Clone(crop, originalImage.PixelFormat);
 
                                 //Draw the glyph to the base bitmap
-                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, multiplier, multiplier);
+                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, 32, 32);
                             }
                         }
 
                         //Set the next X value at the end of the current glyph's right width
                         render_position_x += (glyph.RightCut - glyph.LeftCut);
-
-                        // Check if the current iterated index is less than the number of indicies available.
-                        if (j < char_array.Length - 1)
-                        {
-                            // If so, edit the position of the X coordinate according to specific kerning pairs.
-                            if (char_array[j] == 'Y' && Char.IsLower(char_array[j + 1]))
-                            {
-                                render_position_x += -6;
-                            }
-                            else if (char_array[j] == 'v' && Char.IsLower(char_array[j + 1]))
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'T' && (Char.IsLower(char_array[j + 1]) && char_array[j + 1] != 'h'))
-                            {
-                                render_position_x += -6;
-                            }
-                        }
                     }
                 }
             }
+
+            // Resize for HD format
+            int rescaled_width = 1920;
+            int rescaled_height = 1088;
+            var rescaled_bitmap = new Bitmap(rescaled_width, rescaled_height);
+
+            using (Graphics graphics = Graphics.FromImage(rescaled_bitmap))
+            {
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.DrawImage(bitmap, 0, 0, rescaled_width, rescaled_height);
+            }
+            bitmap = rescaled_bitmap;
 
             return bitmap;
         }
 
-        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, string dialogue)
+        public Bitmap Render_Narration_Dialogue(List<string>[] dialogue_lines)
         {
-            // First, let's establish some values.
-            // The max pixel length of a line.
-            int max_line_length = 1450;
+            //Create a bitmap as large as the template
+            Bitmap bitmap = new Bitmap(960, 544);
 
-            // The number of pixels in a line remaining. This will gradually decrease as the pixel length of characters are subtracted from it.
-            int line_length_remaining = max_line_length;
+            //Establish an int for the width and height glyphs should be rendered at
+            int multiplier = 32;
 
-            // The maximum number of lines on the template. 
-            int max_lines = 3;
+            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Font//p4d_font_sheet.png";
+            Bitmap current_glyph;
 
-            // Completed word string. Characters will be added to this string one-by-one until a space, line break, or end-of-input is encountered.
-            string completed_word = "";
-
-            // Create an array of three string lists and initialize them.
-            // These are where our dialogue input will be organized.
-            List<string>[] dialogue_list = new List<string>[3];
-
-            dialogue_list[0] = new List<string>();
-            dialogue_list[1] = new List<string>();
-            dialogue_list[2] = new List<string>();
-
-            // Now that we have our string lists created, we need a variable to dynamically change which line we're currently on.
-            // For that, create an int variable and initialize it to zero for starting on the first line.
-            int current_line = 0;
-
-            // Take the input dialogue and convert it into a char array. This is how we'll iterate through the dialogue character-by-character.
-            char[] dialogue_array = dialogue.ToCharArray();
-
-            // Create a for loop meant to iterate through the dialogue array.
-            for (int i = 0; i < dialogue_array.Length; i++)
+            for (int i = 0; i < dialogue_lines.Length; i++)
             {
-                // Check if the completed word string is empty, the remaining pixel length of the current line is at the max value, and if the current iterated character is a space.
-                if ((completed_word == "") && (line_length_remaining == max_line_length) && (dialogue_array[i] == ' '))
+                //Establish variables for where the glyphs should be rendered on the template
+                int render_position_x = 88;
+                int render_position_y = 118 + (34 * i);
+
+                char[] char_array = String_List_To_String(dialogue_lines[i]).ToCharArray();
+
+                for (int j = 0; j < char_array.Length; j++)
                 {
-                    // We want to skip any spaces that appear at the start of a line, so do nothing here.
-                }
-                // Check if the contents of the current index is not a space, not a line break, and not the end of the array.
-                else if ((dialogue_array[i] != ' ') && (dialogue_array[i] != '\u000a') && (i != dialogue_array.Length - 1))
-                {
-                    // If so, add the currently iterated char to the completed word string.
-                    completed_word += dialogue_array[i];
-                }
-                // Next, check if the contents of the current index IS a space, IS a line break, or IS the end of the array.
-                else if ((dialogue_array[i] == ' ') || (dialogue_array[i] == '\u000a') || (i == dialogue_array.Length - 1))
-                {
-                    // If so, add the currently iterated char to the completed word string.
-                    completed_word += dialogue_array[i];
+                    //Retrieve glyph information from the JSON file
+                    var glyph = ParsingMethods.GetGlyph(char_array[j]);
 
-                    // Now that we have our word, measure the pixel length of the completed string.
-                    int completed_word_length = Measure_Word_Pixel_Length(sl_command, completed_word);
-
-                    // Check if the completed word is under the current line's allowed length.
-                    // This is done by subtracting the completed word string's length from the remaining length of the line.
-                    // If the result is greater than zero, it's a perfect fit.
-                    if ((line_length_remaining - completed_word_length > 0) && (dialogue_array[i] != '\u000a'))
+                    if (glyph != null)
                     {
-                        // Subtract the completed word's pixel length from the remaining pixel length of the current line.
-                        line_length_remaining = line_length_remaining - completed_word_length;
+                        int x = multiplier * glyph.Column;
+                        int y = multiplier * glyph.Row;
 
-                        // Add the completed word to the current line.
-                        dialogue_list[current_line].Add(completed_word);
-
-                        // Reset the completed word variable to an empty string.
-                        completed_word = "";
-                    }
-
-                    // Else, check if all three of the following conditions are met:
-                    // If there is no more room to add the completed word to the current line.
-                    // The completed word's length is less than or equal to a line itself.
-                    // The current iterated character is NOT a line break.
-                    else if ((line_length_remaining - completed_word_length < 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] != '\u000a'))
-                    {
-                        // Check if the current line number is less than the max number of lines available.
-                        if (current_line < max_lines - 1)
+                        using (Graphics graphics = Graphics.FromImage(bitmap))
                         {
-                            // Increase the current line number.
-                            current_line++;
-
-                            // Add the completed word string to the current line.
-                            dialogue_list[current_line].Add(completed_word);
-
-                            // Reset the remaining pixel length variable to the start and subtract the pixel length of the completed word string.
-                            // This is done because we moved to a new line.
-                            line_length_remaining = max_line_length - completed_word_length;
-
-                            // Reset the completed word variable to an empty string.
-                            completed_word = "";
-                        }
-                        // Else, check if the current line number is greater than or equal to the max number of lines available.
-                        else if (current_line > max_lines - 1)
-                        {
-                            // If so, there is no more room to render text.
-                            // Break from the for loop.
-                            break;
-                        }
-                    }
-
-                    // Else, check if all three of the following conditions are met:
-                    // If there IS room to add the completed word to the current line.
-                    // The completed word's length is less than or equal to the length of a line itself.
-                    // The current iterated character IS a line break.
-                    else if ((line_length_remaining - completed_word_length >= 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] == '\u000a'))
-                    {
-                        // Check if the current line number is less than the max number of lines available.
-                        if (current_line < max_lines - 1)
-                        {
-                            // Since there is room, add the completed word string to the current line.
-                            dialogue_list[current_line].Add(completed_word);
-
-                            // Increase the current line number.
-                            current_line++;
-
-                            // Reset the remaining pixel length variable to the max value.
-                            // This is done because we moved to a new line.
-                            line_length_remaining = max_line_length;
-
-                            // Reset the completed word variable to an empty string.
-                            completed_word = "";
-                        }
-                        // Else, check if the current line number is greater than or equal to the max number of lines available.
-                        else if (current_line >= max_lines - 1)
-                        {
-                            // If so, there is no more room to render text.
-                            // Break from the for loop.
-                            break;
-                        }
-                    }
-
-                    // Else, check if there is no more room to add the completed word to the current line AND the completed word's length is greater than the length of a line itself.
-                    // This means that we'll need to split the string up on different lines.
-                    else if (line_length_remaining - completed_word_length < 0 && completed_word_length > max_line_length)
-                    {
-                        // Take the completed word and turn it into a char array.
-                        // We'll use this to iterate through the word character-by-character to decide where to split the string.
-                        char[] completed_word_array = completed_word.ToCharArray();
-
-                        // Create a new string variable and initialize it to an empty string.
-                        // Similar to the completed word variable, this string will contain characters that will fit on a single line.
-                        // Because we know the word will be split into multiple lines, this will only contain part of the full string at any given time, hence "substring".
-                        string substring = "";
-
-                        // Create an int variable and initialize it to zero.
-                        // This will contain the pixel length of our substring variable once we measure it.
-                        int substring_length = 0;
-
-                        // Create a for loop to iterate through the completed word array.
-                        for (int j = 0; j < completed_word_array.Length; j++)
-                        {
-                            // Add the currently iterated character to the substring.
-                            substring += completed_word_array[j];
-
-                            // Measure the pixel length of the substring so far.
-                            substring_length = Measure_Word_Pixel_Length(sl_command, substring);
-
-                            // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
-                            // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
-                            if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a')) // || (completed_word_array[j] == '\u000a')
+                            using (var originalImage = new Bitmap(font_sheet))
                             {
-                                // Check if the current line number is less than the max number of lines available.
-                                if (current_line < max_lines)
-                                {
-                                    // Add the substring to the current line.
-                                    dialogue_list[current_line].Add(substring);
+                                //Copy the section of the bitmap font needed
+                                Rectangle crop = new Rectangle(x, y, multiplier, multiplier);
+                                current_glyph = originalImage.Clone(crop, originalImage.PixelFormat);
 
-                                    // Since there is absolutely no more room on the current line left, increase the current line value.
-                                    current_line++;
-
-                                    // Reset the remaining pixel length variable to the max value.
-                                    // This is done because we moved to a new line.
-                                    line_length_remaining = max_line_length;
-
-                                    // Reset the substring variable to an empty string.
-                                    substring = "";
-                                }
-                            }
-                            // Else, check if the last index of the completed word array has been reached.
-                            else if (j == completed_word_array.Length - 1)
-                            {
-                                // Add the substring to the current line.
-                                dialogue_list[current_line].Add(substring);
-
-                                // Subtract the completed word's pixel length from the remaining pixel length of the current line.
-                                line_length_remaining = line_length_remaining - substring_length;
-
-                                // Reset the substring variable to an empty string.
-                                substring = "";
+                                //Draw the glyph to the base bitmap
+                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, 32, 32);
                             }
                         }
 
-                        // Reset the completed word string to an empty string.
-                        completed_word = "";
+                        //Set the next X value at the end of the current glyph's right width
+                        render_position_x += (glyph.RightCut - glyph.LeftCut);
                     }
                 }
             }
 
-            return dialogue_list;
+            // Resize for HD format
+            int rescaled_width = 1920;
+            int rescaled_height = 1088;
+            var rescaled_bitmap = new Bitmap(rescaled_width, rescaled_height);
+
+            using (Graphics graphics = Graphics.FromImage(rescaled_bitmap))
+            {
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.DrawImage(bitmap, 0, 0, rescaled_width, rescaled_height);
+            }
+            bitmap = rescaled_bitmap;
+
+            return bitmap;
+        }
+
+        public Bitmap Render_Textbox_Glow()
+        {
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap dialogue_layer_1 = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Main//dialogue_layer_1.png");
+            Bitmap gradient_1 = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Main//gradient_1.png");
+            Bitmap gradient_2 = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Main//gradient_2.png");
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                int x_min_1 = -1921;
+                int y_min_1 = -136;
+                int x_max_1 = 1803;
+                int y_max_1 = 884;
+
+                int random_x_1 = rnd.Next(x_min_1, x_max_1);
+                int random_y_1 = rnd.Next(y_min_1, y_max_1);
+
+                int x_min_2 = -1411;
+                int y_min_2 = -134;
+                int x_max_2 = 1803;
+                int y_max_2 = 884;
+
+                int random_x_2 = rnd.Next(x_min_2, x_max_2);
+                int random_y_2 = rnd.Next(y_min_2, y_max_2);
+
+                graphics.DrawImage(gradient_1, random_x_1, random_y_1, gradient_1.Width, gradient_1.Height);
+                graphics.DrawImage(gradient_2, random_x_2, random_y_2, gradient_2.Width, gradient_2.Height);
+            }
+
+            base_template = Keep_Pixel_Overlap(dialogue_layer_1, base_template, false);
+
+            return base_template;
+        }
+
+        public Bitmap Render_Cursor(UserInfoFields account, int number_of_lines, bool system_message)
+        {
+            Bitmap base_template = new Bitmap(960, 544);
+            Bitmap cursor = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Main//continue_mark_narration.png");
+
+            System.Drawing.Color cursor_color = default;
+
+            switch (account.P4D_TS_Auto_Advance)
+            {
+                case "On":
+                    cursor_color = System.Drawing.Color.FromArgb(255, 39, 239);
+                    break;
+
+                case "Off":
+                    cursor_color = System.Drawing.Color.FromArgb(72, 105, 218);
+                    break;
+            }
+
+            cursor = Bitmap_To_Color(cursor, cursor_color, new Rectangle(0, 0, cursor.Width, cursor.Height));
+
+            int render_position_x = 0;
+            int render_position_y = 0;
+
+            if (system_message == true)
+            {
+                render_position_x = 869;
+                render_position_y = 118 + (34 * (number_of_lines)) - 3;
+            }
+            else
+            {
+                switch (account.P4D_TS_Scene_Type)
+                {
+                    case "Dialogue":
+                        render_position_x = 869;
+                        render_position_y = 470;
+                        break;
+
+                    case "Narration":
+                        render_position_x = 869;
+                        render_position_y = 118 + (34 * (number_of_lines)) - 3;
+                        break;
+                }
+            }
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.DrawImage(cursor, render_position_x, render_position_y, 32, 32);
+            }
+
+            // Resize for HD format
+            int rescaled_width = 1920;
+            int rescaled_height = 1088;
+            var rescaled_bitmap = new Bitmap(rescaled_width, rescaled_height);
+
+            using (Graphics graphics = Graphics.FromImage(rescaled_bitmap))
+            {
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.DrawImage(base_template, 0, 0, rescaled_width, rescaled_height);
+            }
+            base_template = rescaled_bitmap;
+
+            return base_template;
         }
 
         public static int Measure_Word_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
@@ -590,7 +597,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             for (int i = 0; i < char_array.Length; i++)
             {
                 // Retrieve glyph information for the current character from the JSON file.
-                var glyph = ParsingMethods.Get_P4G_Glyph(char_array[i]);
+                var glyph = ParsingMethods.Get_P4D_Glyph(char_array[i]);
 
                 // Make sure that the glyph info doesn't return null.
                 if (glyph != null)
@@ -658,88 +665,75 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return output_string;
         }
 
-        // Coloring bitmaps
-        public static Bitmap Text_To_Blue(Bitmap input_bitmap)
+        public static int Get_Number_of_Rendered_Lines(List<string>[] input_list_array)
         {
-            // Create a color variable to store the color value of a pixel on the input bitmap later.
-            System.Drawing.Color actual_color;
+            // Initialize an int variable to hold the number of rendered lines.
+            int number_of_lines = 0;
 
-            // Make an empty bitmap the same size as the input bitmap.
-            Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+            // Take each index of the string list array, convert the list to a string, then analyze the string to determine if it's empty or not.
+            // If it IS empty, that line won't be rendered.
+            // Count the number of lines that will actually be rendered to the screen.
 
-            // Create a for loop to iterate over the X values where the name could be rendered.
-            for (int x = 117; x < 1803; x++)
+            for (int i = 0; i < input_list_array.Length; i++)
             {
-                // Create a nested for loop to iterate over the Y values where the name could be rendered.
-                for (int y = 731; y < 820; y++)
+                if (String_List_To_String(input_list_array[i]) != "")
                 {
-                    // Get the current pixel from the input bitmap.
-                    actual_color = input_bitmap.GetPixel(x, y);
-
-                    // Color in the pixel with the new color while keeping its current alpha value.
-                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(actual_color.A, 0, 138, 255);
-                    new_bitmap.SetPixel(x, y, new_color);
+                    number_of_lines++;
                 }
             }
 
-            return new_bitmap;
+            return number_of_lines;
         }
 
-        // Background rendering
-        public static Bitmap Center_Image(Bitmap scrBitmap)
+        // Coloring bitmaps
+        public static Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
         {
-            float width = 1920;
-            float height = 1080;
-            var brush = new SolidBrush(System.Drawing.Color.Black);
+            Bitmap base_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
-            var image = new Bitmap(scrBitmap);
+            for (int x = edit_area.X; x < edit_area.Right; x++)
+            {
+                for (int y = edit_area.Y; y < edit_area.Bottom; y++)
+                {
+                    System.Drawing.Color original_color = input_bitmap.GetPixel(x, y);
+                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(original_color.A, input_color.R, input_color.G, input_color.B);
 
-            float scale = Math.Min(width / image.Width, height / image.Height);
+                    base_bitmap.SetPixel(x, y, new_color);
+                }
+            }
 
-            var bmp = new Bitmap((int)width, (int)height);
-            var graph = Graphics.FromImage(bmp);
-
-            // uncomment for higher quality output
-            //graph.InterpolationMode = InterpolationMode.High;
-            //graph.CompositingQuality = CompositingQuality.HighQuality;
-            //graph.SmoothingMode = SmoothingMode.AntiAlias;
-
-            bmp.SetResolution(96, 96);
-
-            var scaleWidth = (int)(image.Width * scale);
-            var scaleHeight = (int)(image.Height * scale);
-
-            //graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
-            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
-
-            return bmp;
+            return base_bitmap;
         }
 
-        public static Bitmap Stretch_To_Fit(Bitmap input_bitmap)
+        public static Bitmap Keep_Pixel_Overlap(Bitmap bottom_bitmap, Bitmap top_bitmap, bool transfer_bottom_alpha)
         {
-            // Set the width and height of the bitmap to be created
-            float width = 1920;
-            float height = 1080;
+            System.Drawing.Color bottom_pixel_color;
+            System.Drawing.Color top_pixel_color;
+            
+            Bitmap newBitmap = new Bitmap(bottom_bitmap.Width, bottom_bitmap.Height);
+            for (int x = 0; x < top_bitmap.Width; x++)
+            {
+                for (int y = 0; y < top_bitmap.Height; y++)
+                {
+                    //Get the pixel from the scrBitmap image
+                    bottom_pixel_color = bottom_bitmap.GetPixel(x, y);
+                    top_pixel_color = top_bitmap.GetPixel(x, y);
 
-            // Copy the input bitmap to a new variable.
-            var bitmap_copy = new Bitmap(input_bitmap);
+                    if (bottom_pixel_color.A > 0 && top_pixel_color.A > 0)
+                    {
+                        if (transfer_bottom_alpha == true)
+                        {
+                            newBitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(bottom_pixel_color.A, top_pixel_color.R, top_pixel_color.G, top_pixel_color.B));
+                        }
+                        else
+                        {
+                            newBitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(top_pixel_color.A, top_pixel_color.R, top_pixel_color.G, top_pixel_color.B));
+                        }
+                        
+                    }
+                }
+            }
 
-            // Create a brand new bitmap with the specified dimensions from earlier.
-            var new_bitmap = new Bitmap((int)width, (int)height);
-
-            // Create a graphics object so we can edit this new bitmap.
-            var graphics = Graphics.FromImage(new_bitmap);
-
-            // uncomment for higher quality output
-            //graph.InterpolationMode = InterpolationMode.High;
-            //graph.CompositingQuality = CompositingQuality.HighQuality;
-            //graph.SmoothingMode = SmoothingMode.AntiAlias;
-            new_bitmap.SetResolution(96, 96);
-
-            // Draw the copy of the input bitmap to the new bitmap.
-            graphics.DrawImage(bitmap_copy, 0, 0, width, height);
-
-            return new_bitmap;
+            return newBitmap;
         }
 
         // Loading message

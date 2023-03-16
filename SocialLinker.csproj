@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,6 +35,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Azure.Core, Version=1.24.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
@@ -198,6 +200,7 @@
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Commands\Calculator.cs" />
+    <Compile Include="Commands\DevCommands.cs" />
     <Compile Include="Commands\Help.cs" />
     <Compile Include="Commands\Hug.cs" />
     <Compile Include="Commands\Maker.cs" />
@@ -215,6 +218,8 @@
     <Compile Include="Config\WeatherAPIConfig.cs" />
     <Compile Include="Cooldown\UserCooldownFields.cs" />
     <Compile Include="Cooldown\UserCooldownMethods.cs" />
+    <Compile Include="Core\CloudStorageTables\DisplayNameLogging.cs" />
+    <Compile Include="Core\CloudStorageTables\MakerCommandLogging.cs" />
     <Compile Include="Core\CloudStorageTables\UserInfoClasses.cs" />
     <Compile Include="Core\CloudStorageTables\UserInfoFields.cs" />
     <Compile Include="Core\LevelSystem\Leveling.cs" />
@@ -258,17 +263,24 @@
     <Compile Include="Core\Menus\MenuDirectory.cs" />
     <Compile Include="Core\Menus\MenuIdStructure.cs" />
     <Compile Include="Core\Menus\ReactionHandling.cs" />
-    <Compile Include="Core\Menus\Settings\Main\General\Content_Filter_Menu.cs" />
-    <Compile Include="Core\Menus\Settings\Main\General\General_Settings_Menu.cs" />
-    <Compile Include="Core\Menus\Settings\Main\General\Level_Up_Notifications_Menu.cs" />
-    <Compile Include="Core\Menus\Settings\Main\General\Rank_Up_Notifications_Menu.cs" />
-    <Compile Include="Core\Menus\Settings\Main\General\Time_Weather_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Profile\Content_Filter_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Profile\Profile_Settings_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Profile\Level_Up_Notifications_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Profile\Rank_Up_Notifications_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\Profile\Time_Weather_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\Profile\Star_Level_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\Profile\Status_Decor_Menu.cs" />
-    <Compile Include="Core\Menus\Settings\Main\Profile\Profile_Settings_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\Profile\Profile_Theme_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\AutoDelete\Auto_Delete_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\Backgrounds\Backgrounds_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Character_Select_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Custom_Input_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Edit_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Sort_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Sprite_Select_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Title_Select_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Confirm_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P1_PS1_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P1_PSP_Menu.cs" />
@@ -279,7 +291,6 @@
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P3F_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P3P_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P4AU_Menu.cs" />
-    <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P4D_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_P4_PS2_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\ResolutionScaling\Resolution_Scaling_VC_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\SM_Settings_Menu.cs" />
@@ -304,17 +315,24 @@
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_VC_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\VersionControl\Version_Control_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\Settings_Menu.cs" />
-    <Compile Include="Core\Menus\Settings\Reactions\General\Content_Filter_Reactions.cs" />
-    <Compile Include="Core\Menus\Settings\Reactions\General\General_Settings_Reactions.cs" />
-    <Compile Include="Core\Menus\Settings\Reactions\General\Level_Up_Notifications_Reactions.cs" />
-    <Compile Include="Core\Menus\Settings\Reactions\General\Rank_Up_Notifications_Reactions.cs" />
-    <Compile Include="Core\Menus\Settings\Reactions\General\Time_Weather_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\Profile\Content_Filter_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\Profile\Profile_Settings_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\Profile\Level_Up_Notifications_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\Profile\Rank_Up_Notifications_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\Profile\Time_Weather_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\Profile\Profile_Theme_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\Profile\Star_Level_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\Profile\Status_Decor_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\AutoDelete\Auto_Delete_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\Backgrounds\Backgrounds_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Character_Select_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Custom_Input_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Edit_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Sort_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Sprite_Select_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Title_Select_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Name_Confirm_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P1_PS1_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P1_PSP_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P2EP_PS1_Reactions.cs" />
@@ -324,7 +342,6 @@
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P3F_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P3P_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P4AU_Reactions.cs" />
-    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P4D_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_P4_PS2_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\ResolutionScaling\Resolution_Scaling_VC_Reactions.cs" />
@@ -378,6 +395,7 @@
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5R.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5S.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5_PS4.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_Akechi_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_Kasumi_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_P3P_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_TMS_Barry_1.cs" />

@@ -11,7 +11,6 @@ using SocialLinker.Core.LocalStorageTables;
 using Discord;
 using Discord.Rest;
 using SocialLinker.Core.CloudStorageTables;
-using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -24,12 +23,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
     public class RenderP5S : ModuleBase<SocketCommandContext>
     {
-        public static async Task Render_Quick_Scene_P5S(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
-        {
-            // Create variables to store the width and height of the template.
-            int template_width = 1920;
-            int template_height = 1080;
+        int template_width = 1920;
+        int template_height = 1080;
 
+        public async Task Render_Quick_Scene_P5S(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
@@ -42,90 +40,21 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
-            // Create a starting base bitmap to render all graphics on.
+            // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
-
-            // Create another bitmap the same size.
-            // In case the user has set a colored bitmap in their settings, we'll need to use this to render it.
-            Bitmap colored_background_bitmap = new Bitmap(template_width, template_height);
-
-            // Here, we want to grab any images attached to the message to use it as a background.
-            // Create a variable for the message attachment.
-            var attachments = sl_command.Attachments;
-
-            // Create an empty string variable to hold the URL of the attachment.
-            string url = "";
-
-            // If there are no attachments on the message, set the URL string to "None".
-            if (attachments == default || attachments.LongCount() == 0)
-            {
-                url = "None";
-            }
-            // Else, assign the URL of the attachment to the URL string.
-            else
-            {
-                url = attachments.ElementAt(0).Url;
-            }
-
-            // Initialize a bitmap object for the user's background. It's small now because we'll reassign it depending on our circumstances.
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
             Bitmap background = new Bitmap(2, 2);
 
-            // If a URL for a message attachment exists, download it and copy its contents to the bitmap variable we just created.
-            if (url != "None")
+            try
             {
-                // Here, we'll want to try and retrieve the user's input image.
-                try
-                {
-                    // Declare variables for a web request to retrieve the image.
-                    System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
-                    webRequest.AllowWriteStreamBuffering = true;
-                    webRequest.Timeout = 30000;
-
-                    // Create a stream and download the image to it.
-                    System.Net.WebResponse webResponse = webRequest.GetResponse();
-                    System.IO.Stream stream = webResponse.GetResponseStream();
-
-                    // Copy the stream's contents to the background bitmap variable.
-                    background = (Bitmap)System.Drawing.Image.FromStream(stream);
-
-                    webResponse.Close();
-                }
-                // If an exception occurs here, the filetype is likely incompatible.
-                // Send an error message, delete the loading message, and return.
-                catch (System.ArgumentException e)
-                {
-                    Console.WriteLine(e);
-                    await loader.DeleteAsync();
-                    _ = ErrorHandling.Incompatible_File_Type(sl_command);
-                    return;
-                }
+                background = OfficialSetMethods.Render_Background(sl_command, template_width, template_height);
             }
-
-            // Render the uploaded image based on the user's background settings.
-            switch (account.Setting_BG_Upload)
+            catch (System.ArgumentException e)
             {
-                case "Maintain Aspect Ratio":
-                    background = Center_Image(background);
-                    break;
-
-                case "Stretch to Fit":
-                    background = Stretch_To_Fit(background);
-                    break;
-            }
-
-            // The user may have a custom mono-colored background designated in their settings. Let's handle that now.
-            // Check if the user's background color setting is set to something other than "Transparent".
-            // If so, we have a color to render for the background!
-            if (account.Setting_BG_Color != "Transparent")
-            {
-                // Convert the user's HTML color setting to one we can use and assign it to a color variable.
-                System.Drawing.Color user_background_color = System.Drawing.ColorTranslator.FromHtml(account.Setting_BG_Color);
-
-                // Color the entirety of the background bitmap the user's selected color.
-                using (Graphics graphics = Graphics.FromImage(colored_background_bitmap))
-                {
-                    graphics.Clear(user_background_color);
-                }
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
             }
 
             // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
@@ -199,15 +128,33 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 // Here's an important step: Rendering all the text and vectors to the template.
                 // First, let's established a needed variable: The lines of dialogue needed to be rendered, parsed into an array of string lists.
-                List<string>[] dialogue_lines = Line_Parser(sl_command, command_data.Dialogue);
+                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P5S", command_data.Dialogue, 3, 750);
 
                 // Using that string array list, let's generate all the vectors and text in one go!
-                Bitmap merged_vectors_bitmap = Combine_Vector_Bitmaps(account, dialogue_lines);
-                Bitmap merged_text_bitmap = Combine_Text_Bitmaps(bustup_data, dialogue_lines);
+                Bitmap merged_vectors_bitmap = new Bitmap(template_width, template_height);
+
+                if (command_data.Base_Sprite != 0)
+                {
+                    merged_vectors_bitmap = Combine_Vector_Bitmaps(account, dialogue_lines, false, false);
+                }
+                else
+                {
+                    merged_vectors_bitmap = Combine_Vector_Bitmaps(account, dialogue_lines, false, true);
+                }
+
+                string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+
+                Bitmap merged_text_bitmap = Combine_Text_Bitmaps(display_name, dialogue_lines);
 
                 // Draw the vectors and text to the template.
                 graphics.DrawImage(merged_vectors_bitmap, 0, 0, template_width, template_height);
                 graphics.DrawImage(merged_text_bitmap, 0, 0, template_width, template_height);
+
+                if (account.P5S_TS_Watermark == "On")
+                {
+                    Bitmap watermark = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5S//Main//copyright.png");
+                    graphics.DrawImage(watermark, 0, 0, template_width, template_height);
+                }
             }
 
             // Save the entire base template to a data stream.
@@ -217,7 +164,127 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             try
             {
-                // Send the image.
+                await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
+
+            // If the user has auto-delete for their commands set to on, delete their command as well.
+            if (account.Auto_Delete_Commands == "On")
+            {
+                await sl_command.Message.DeleteAsync();
+            }
+        }
+
+        public async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            // Send a loading message to the channel while the sprite sheet is being made.
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P5S_Loading_Message().Build());
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            // Background rendering
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
+            Bitmap background = new Bitmap(2, 2);
+
+            try
+            {
+                background = OfficialSetMethods.Render_Background(sl_command, template_width, template_height);
+            }
+            catch (System.ArgumentException e)
+            {
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
+            }
+
+            // Time to put it all together!
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Draw the layer with the user's colored default background if it exists.
+                graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
+
+                // Draw the user's background to the base template.
+                graphics.DrawImage(background, 0, 0, template_width, template_height);
+
+                // If the user has scene borders enabled, render it to the template.
+                if (account.P5S_TS_Scene_Border != "Off")
+                {
+                    Bitmap border = Render_Scene_Border();
+
+                    graphics.DrawImage(border, 0, 0, template_width, template_height);
+                    graphics.DrawImage(Render_Border_Squares(border), 0, 0, template_width, template_height);
+                }
+
+                // If the user has the control panel enabled, render it to the template.
+                if (account.P5S_TS_Controller_Type != "None")
+                {
+                    graphics.DrawImage(Render_Control_Panel(account), 0, 0, template_width, template_height);
+                }
+
+                // If the user has the HUD enabled, render it to the template as well.
+                if (account.P5S_TS_Date_Location_Layout != "None")
+                {
+                    switch (account.P5S_TS_Date_Location_Layout)
+                    {
+                        case "Display All":
+                            graphics.DrawImage(Render_Location_Icon(sl_command, account), 0, 0, template_width, template_height);
+                            graphics.DrawImage(Render_Calendar_HUD(sl_command, account), 0, 0, template_width, template_height);
+                            break;
+
+                        case "Date Only":
+                            graphics.DrawImage(Render_Calendar_HUD(sl_command, account), -100, 0, template_width, template_height);
+                            break;
+                    }
+                }
+
+                // Here's an important step: Rendering all the text and vectors to the template.
+                // First, let's established a needed variable: The lines of dialogue needed to be rendered, parsed into an array of string lists.
+                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P5S", command_data.Dialogue, 3, 750);
+
+                // Using that string array list, let's generate all the vectors and text in one go!
+                Bitmap merged_vectors_bitmap = Combine_Vector_Bitmaps(account, dialogue_lines, true, false);
+                Bitmap merged_text_bitmap = Combine_Text_Bitmaps(null, dialogue_lines);
+
+                // Draw the vectors and text to the template.
+                graphics.DrawImage(merged_vectors_bitmap, 0, 0, template_width, template_height);
+                graphics.DrawImage(merged_text_bitmap, 0, 0, template_width, template_height);
+
+                if (account.P5S_TS_Watermark == "On")
+                {
+                    Bitmap watermark = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5S//Main//copyright.png");
+                    graphics.DrawImage(watermark, 0, 0, template_width, template_height);
+                }
+            }
+
+            // Save the entire base template to a data stream.
+            MemoryStream memoryStream = new MemoryStream();
+            base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            try
+            {
                 await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
             }
             catch (Exception e)
@@ -245,12 +312,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Vector rendering
-        public static Bitmap Combine_Vector_Bitmaps(UserInfoFields account, List<string>[] dialogue_lines)
+        public Bitmap Combine_Vector_Bitmaps(UserInfoFields account, List<string>[] dialogue_lines, bool system_message_check, bool spriteless_message_check)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 1920;
-            int template_height = 1080;
-
             // Create a starting base bitmap to render all graphics on.
             Bitmap base_template = new Bitmap(template_width, template_height);
 
@@ -264,9 +327,24 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Next, let's create bitmaps for each of the assets we need.
             // The manual advance tick is the only setting that's optional, so hold off on calling that method for now to save resources.
-            Bitmap message_window = Render_Message_Window(number_of_lines, max_line_length);
-            Bitmap nametag_window = Render_Nametag_Window();
+            Bitmap message_window = new Bitmap(template_width, template_height);
+            Bitmap nametag_window = new Bitmap(template_width, template_height);
             Bitmap manual_advance;
+
+            if (system_message_check)
+            {
+                message_window = Render_System_Message_Window(number_of_lines, max_line_length);
+            }
+            else if (spriteless_message_check)
+            {
+                nametag_window = Render_Nametag_Window();
+                message_window = Render_System_Message_Window(number_of_lines, max_line_length);
+            }
+            else
+            {
+                nametag_window = Render_Nametag_Window();
+                message_window = Render_Message_Window(number_of_lines, max_line_length);
+            }
 
             // Depending on how many line of dialogue there are, we may need to move the nametag window up a bit.
             // The X coordinates should remain the same, but the Y ones will change.
@@ -317,12 +395,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static Bitmap Render_Message_Window(int number_of_lines, int max_line_length)
+        public Bitmap Render_Message_Window(int number_of_lines, int max_line_length)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 1920;
-            int template_height = 1080;
-
             // How the vectors are rendered is strongly determined
             int default_line_length = 536;
             int starting_dialogue_position = 672;
@@ -742,6 +816,296 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
+        public Bitmap Render_System_Message_Window(int number_of_lines, int max_line_length)
+        {
+            // How the vectors are rendered is strongly determined
+            int default_line_length = 536;
+            int starting_dialogue_position = 672;
+
+            int end_of_line = 0;
+
+            if (max_line_length > default_line_length)
+            {
+                end_of_line = starting_dialogue_position + max_line_length;
+            }
+            else
+            {
+                end_of_line = starting_dialogue_position + default_line_length;
+            }
+
+            // We'll need to create four layers:
+            // - Base layer
+            // - Outer black vector layer
+            // - White vector layer
+            // - A layer for merging the black and white vectors
+            // - Inner transparent black layer (We'll call this one a 'void layer' for short)
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap black_layer = new Bitmap(template_width, template_height);
+            Bitmap white_layer = new Bitmap(template_width, template_height);
+            Bitmap black_white_layer = new Bitmap(template_width, template_height);
+            Bitmap void_layer = new Bitmap(template_width, template_height);
+
+            // Create a brush for the color white.
+            SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
+
+            // Create a brush for the color white.
+            SolidBrush whiteBrush = new SolidBrush(System.Drawing.Color.White);
+
+            // Create a new random variable.
+            Random rnd = new Random();
+
+            // Create multiple variables for the potential min and max values of the thirteen black outer points of the message window.
+            int black_point_6_x_min = 666;
+            int black_point_6_x_max = 671;
+            int black_point_6_y_min = 1040;
+            int black_point_6_y_max = 1044;
+
+            int black_point_7_x_min = end_of_line + 51; // 1259
+            int black_point_7_x_max = end_of_line + 52; // 1260
+            int black_point_7_y_min = 1024;
+            int black_point_7_y_max = 1026;
+
+            int black_point_8_x_min = end_of_line + 151; // 1359
+            int black_point_8_x_max = end_of_line + 152; // 1361
+            int black_point_8_y_min = 891;
+            int black_point_8_y_max = 892;
+
+            int black_point_9_x_min = end_of_line + 26; // 1234
+            int black_point_9_x_max = end_of_line + 35; // 1243
+            int black_point_9_y_min = 779;
+            int black_point_9_y_max = 784;
+
+            int black_point_10_x_min = 612;
+            int black_point_10_x_max = 617;
+            int black_point_10_y_min = 838;
+            int black_point_10_y_max = 843;
+
+            int black_point_11_x_min = 568;
+            int black_point_11_x_max = 577;
+            int black_point_11_y_min = 967;
+            int black_point_11_y_max = 972;
+
+            switch (number_of_lines)
+            {
+                case 2:
+                    black_point_6_y_min = black_point_6_y_min + 19;
+                    black_point_6_y_max = black_point_6_y_max + 19;
+
+                    black_point_7_y_min = black_point_7_y_min + 19;
+                    black_point_7_y_max = black_point_7_y_max + 19;
+
+                    black_point_8_y_min = black_point_8_y_min - 8;
+                    black_point_8_y_max = black_point_8_y_max - 8;
+
+                    black_point_9_y_min = black_point_9_y_min - 22;
+                    black_point_9_y_max = black_point_9_y_max - 22;
+
+                    black_point_10_y_min = black_point_10_y_min - 22;
+                    black_point_10_y_max = black_point_10_y_max - 22;
+                    break;
+
+                case 3:
+                    black_point_6_y_min = black_point_6_y_min + 38;
+                    black_point_6_y_max = black_point_6_y_max + 38;
+
+                    black_point_7_y_min = black_point_7_y_min + 38;
+                    black_point_7_y_max = black_point_7_y_max + 38;
+
+                    black_point_8_y_min = black_point_8_y_min - 16;
+                    black_point_8_y_max = black_point_8_y_max - 16;
+
+                    black_point_9_y_min = black_point_9_y_min - 44;
+                    black_point_9_y_max = black_point_9_y_max - 44;
+
+                    black_point_10_y_min = black_point_10_y_min - 44;
+                    black_point_10_y_max = black_point_10_y_max - 44;
+                    break;
+
+                default:
+                    // Do nothing
+                    break;
+            }
+
+            // Randomly set the X and Y values of the outer thirteen points of the vector using the min and max values.
+            int black_point_6_x = rnd.Next(black_point_6_x_min, black_point_6_x_max + 1);
+            int black_point_6_y = rnd.Next(black_point_6_y_min, black_point_6_y_max + 1);
+
+            int black_point_7_x = rnd.Next(black_point_7_x_min, black_point_7_x_max + 1);
+            int black_point_7_y = rnd.Next(black_point_7_y_min, black_point_7_y_max + 1);
+
+            int black_point_8_x = rnd.Next(black_point_8_x_min, black_point_8_x_max + 1);
+            int black_point_8_y = rnd.Next(black_point_8_y_min, black_point_8_y_max + 1);
+
+            int black_point_9_x = rnd.Next(black_point_9_x_min, black_point_9_x_max + 1);
+            int black_point_9_y = rnd.Next(black_point_9_y_min, black_point_9_y_max + 1);
+
+            int black_point_10_x = rnd.Next(black_point_10_x_min, black_point_10_x_max + 1);
+            int black_point_10_y = rnd.Next(black_point_10_y_min, black_point_10_y_max + 1);
+
+            int black_point_11_x = rnd.Next(black_point_11_x_min, black_point_11_x_max + 1);
+            int black_point_11_y = rnd.Next(black_point_11_y_min, black_point_11_y_max + 1);
+
+            // Randomly set the X and Y values of the thirteen points of the inner white vector based on the set black point X & Y values.
+            int white_point_6_x = rnd.Next(black_point_6_x + 2, black_point_6_x + 8);
+            int white_point_6_y = rnd.Next(black_point_6_y - 18, black_point_6_y - 15);
+
+            int white_point_7_x = rnd.Next(black_point_7_x - 8, black_point_7_x - 5);
+            int white_point_7_y = rnd.Next(black_point_7_y - 17, black_point_7_y - 13);
+
+            int white_point_8_x = rnd.Next(black_point_8_x - 17, black_point_8_x - 14);
+            int white_point_8_y = rnd.Next(black_point_8_y + 4, black_point_8_y + 7);
+
+            int white_point_9_x = rnd.Next(black_point_9_x - 10, black_point_9_x - 3);
+            int white_point_9_y = rnd.Next(black_point_9_y + 14, black_point_9_y + 19);
+
+            int white_point_10_x = rnd.Next(black_point_10_x + 14, black_point_10_x + 20);
+            int white_point_10_y = rnd.Next(black_point_10_y + 13, black_point_10_y + 19);
+
+            // white_point_11_x & white_point_11_y need the data of points 10 and 12 first
+
+            int white_point_12_x = rnd.Next(black_point_11_x + 19, black_point_11_x + 23);
+            int white_point_12_y = rnd.Next(black_point_11_y - 6, black_point_11_y - 1);
+
+            // Here are white_point_11_x & white_point_11_y
+            int white_point_11_x_midpoint = (white_point_10_x + white_point_12_x) / 2;
+            int white_point_11_x = rnd.Next(white_point_11_x_midpoint, white_point_11_x_midpoint + 8);
+            int white_point_11_y = (white_point_10_y + white_point_12_y) / 2;
+
+            // Randomly set the X and Y values of the thirteen points of the innermost black vector (we'll call it 'void' here) based on the set white point X & Y values.
+            int void_point_6_x = rnd.Next(white_point_6_x + 5, white_point_6_x + 12);
+            int void_point_6_y = rnd.Next(white_point_6_y - 14, white_point_6_y - 8);
+
+            int void_point_7_x = rnd.Next(white_point_7_x - 15, white_point_7_x - 4);
+            int void_point_7_y = rnd.Next(white_point_7_y - 10, white_point_7_y - 7);
+
+            int void_point_8_x = rnd.Next(white_point_8_x - 19, white_point_8_x - 16);
+            int void_point_8_y = rnd.Next(white_point_8_y - 1, white_point_8_y + 5);
+
+            int void_point_9_x = rnd.Next(white_point_9_x - 6, white_point_9_x + 4);
+            int void_point_9_y = rnd.Next(white_point_9_y + 15, white_point_9_y + 19);
+
+            int void_point_10_x = rnd.Next(white_point_10_x + 14, white_point_10_x + 18);
+            int void_point_10_y = rnd.Next(white_point_10_y + 10, white_point_10_y + 16);
+
+            int void_point_11_x = rnd.Next(white_point_12_x + 17, white_point_12_x + 24);
+            int void_point_11_y = rnd.Next(white_point_12_y - 4, white_point_12_y - 1);
+
+            // Create the thirteen points of the black vector from the randomly chosen values.
+            Point black_point_6 = new Point(black_point_6_x, black_point_6_y);
+            Point black_point_7 = new Point(black_point_7_x, black_point_7_y);
+            Point black_point_8 = new Point(black_point_8_x, black_point_8_y);
+            Point black_point_9 = new Point(black_point_9_x, black_point_9_y);
+            Point black_point_10 = new Point(black_point_10_x, black_point_10_y);
+            Point black_point_11 = new Point(black_point_11_x, black_point_11_y);
+
+            // Create the thirteen points of the white vector from the randomly chosen values.
+            Point white_point_6 = new Point(white_point_6_x, white_point_6_y);
+            Point white_point_7 = new Point(white_point_7_x, white_point_7_y);
+            Point white_point_8 = new Point(white_point_8_x, white_point_8_y);
+            Point white_point_9 = new Point(white_point_9_x, white_point_9_y);
+            Point white_point_10 = new Point(white_point_10_x, white_point_10_y);
+            Point white_point_11 = new Point(white_point_11_x, white_point_11_y);
+            Point white_point_12 = new Point(white_point_12_x, white_point_12_y);
+
+            // Create the thirteen points of the void vector from the randomly chosen values.
+            Point void_point_6 = new Point(void_point_6_x, void_point_6_y);
+            Point void_point_7 = new Point(void_point_7_x, void_point_7_y);
+            Point void_point_8 = new Point(void_point_8_x, void_point_8_y);
+            Point void_point_9 = new Point(void_point_9_x, void_point_9_y);
+            Point void_point_10 = new Point(void_point_10_x, void_point_10_y);
+            Point void_point_11 = new Point(void_point_11_x, void_point_11_y);
+
+            // Add all the points for the outer black vector into a point array.
+            Point[] black_poly_points = {
+                    black_point_6,
+                    black_point_7,
+                    black_point_8,
+                    black_point_9,
+                    black_point_10,
+                    black_point_11};
+
+            // Add all the points for the inner white vector into a point array.
+            Point[] white_poly_points = {
+                    white_point_6,
+                    white_point_7,
+                    white_point_8,
+                    white_point_9,
+                    white_point_10,
+                    white_point_11,
+                    white_point_12 };
+
+            // Add all the points for the innermost void vector into a point array.
+            Point[] void_poly_points = {
+                    void_point_6,
+                    void_point_7,
+                    void_point_8,
+                    void_point_9,
+                    void_point_10,
+                    void_point_11 };
+
+            // First, put together the black layer.
+            using (Graphics graphics = Graphics.FromImage(black_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Use the black_poly_points array to create a polygon and fill it with black color.
+                graphics.FillPolygon(blackBrush, black_poly_points);
+            }
+
+            // Next, put together the white layer.
+            using (Graphics graphics = Graphics.FromImage(white_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Use the white_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(whiteBrush, white_poly_points);
+            }
+
+            // Void layer next...
+            using (Graphics graphics = Graphics.FromImage(void_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Use the white_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(blackBrush, white_poly_points);
+            }
+
+            // Let's merge the black and white layers into one bitmap.
+            using (Graphics graphics = Graphics.FromImage(black_white_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Draw the two layers to the template.
+                graphics.DrawImage(black_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(white_layer, 0, 0, template_width, template_height);
+            }
+
+            // Now, using the merged layer, let's cut out a section for the transparent void layer to appear in.
+            // We'll use a custom function for this to get proper antiailiasing.
+            black_white_layer = Custom_Antiailiasing(black_white_layer, void_poly_points);
+
+            // Lastly, let's put the merged and void layers together!
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Before we draw the void layer here, lower its opacity.
+                void_layer = (Bitmap)Set_Image_Opacity(void_layer, (float)0.85);
+
+                // Draw the two layers to the template.
+                graphics.DrawImage(void_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(black_white_layer, 0, 0, template_width, template_height);
+            }
+
+            // Return the base template.
+            return base_template;
+        }
+
         public static Bitmap Render_Nametag_Window()
         {
             // Create variables to store the width and height of the template.
@@ -1076,12 +1440,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Dialogue rendering
-        public static Bitmap Combine_Text_Bitmaps(BustupData bustup_data, List<string>[] dialogue_lines)
+        public Bitmap Combine_Text_Bitmaps(string display_name, List<string>[] dialogue_lines)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 1920;
-            int template_height = 1080;
-
             // Create a starting base bitmap to render all graphics on.
             Bitmap base_template = new Bitmap(template_width, template_height);
 
@@ -1091,8 +1451,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Now, let's get the text!
             // We'll need the dialogue and the character's name, but also another bitmap where the character name is rotated.
             Bitmap dialogue = Render_Dialogue(dialogue_lines);
-            Bitmap nametag = Render_Nametag(bustup_data);
-            Bitmap rotated_nametag = Render_Rotated_Nametag(nametag, number_of_lines);
+            Bitmap rotated_nametag = new Bitmap(template_width, template_height);
+
+            if (display_name != null)
+            {
+                Bitmap nametag = Render_Nametag(display_name);
+                rotated_nametag = Render_Rotated_Nametag(nametag, number_of_lines);
+            }
 
             // Let's put all the layers together!
             using (Graphics graphics = Graphics.FromImage(base_template))
@@ -1208,7 +1573,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static Bitmap Render_Nametag(BustupData bustup_data)
+        public static Bitmap Render_Nametag(string display_name)
         {
             // Establish an int for the width and height glyphs should be rendered at.
             // Glyphs are rendered in squares, so the width and height will be the same number.
@@ -1224,11 +1589,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5S//Font//p5s_font_sheet.png";
 
             // Now, let's separate the character's display name into a char array to make it easier to iterate over.
-            char[] char_array = bustup_data.Default_Name_EN.ToCharArray();
+            char[] char_array = display_name.ToCharArray();
 
             // Since we want the display name to be centered, we need to figure out where to start rendering it on the base template.
             // First, determine the pixel length of the display name.
-            int name_length = Measure_String_Pixel_Length(null, bustup_data.Default_Name_EN);
+            int name_length = Measure_String_Pixel_Length(null, display_name);
 
             // Then, we'll want to subtract the display name's pixel length from the max length of the nametag region.
             // This will give us how many pixels of blank space are left width-wise after the name is rendered.
@@ -1323,206 +1688,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Text rendering tools
-        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, string dialogue)
-        {
-            // First, let's establish some values.
-            // The max pixel length of a line.
-            int max_line_length = 750;
-
-            // The number of pixels in a line remaining. This will gradually decrease as the pixel length of characters are subtracted from it.
-            int line_length_remaining = max_line_length;
-
-            // The maximum number of lines on the template. 
-            int max_lines = 3;
-
-            // Completed word string. Characters will be added to this string one-by-one until a space, line break, or end-of-input is encountered.
-            string completed_word = "";
-
-            // Create an array of three string lists and initialize them.
-            // These are where our dialogue input will be organized.
-            List<string>[] dialogue_list = new List<string>[3];
-
-            dialogue_list[0] = new List<string>();
-            dialogue_list[1] = new List<string>();
-            dialogue_list[2] = new List<string>();
-
-            // Now that we have our string lists created, we need a variable to dynamically change which line we're currently on.
-            // For that, create an int variable and initialize it to zero for starting on the first line.
-            int current_line = 0;
-
-            // Take the input dialogue and convert it into a char array. This is how we'll iterate through the dialogue character-by-character.
-            char[] dialogue_array = dialogue.ToCharArray();
-
-            // Create a for loop meant to iterate through the dialogue array.
-            for (int i = 0; i < dialogue_array.Length; i++)
-            {
-                // Check if the completed word string is empty, the remaining pixel length of the current line is at the max value, and if the current iterated character is a space.
-                if ((completed_word == "") && (line_length_remaining == max_line_length) && (dialogue_array[i] == ' '))
-                {
-                    // We want to skip any spaces that appear at the start of a line, so do nothing here.
-                }
-                // Check if the contents of the current index is not a space, not a line break, and not the end of the array.
-                else if ((dialogue_array[i] != ' ') && (dialogue_array[i] != '\u000a') && (i != dialogue_array.Length - 1))
-                {
-                    // If so, add the currently iterated char to the completed word string.
-                    completed_word += dialogue_array[i];
-                }
-                // Next, check if the contents of the current index IS a space, IS a line break, or IS the end of the array.
-                else if ((dialogue_array[i] == ' ') || (dialogue_array[i] == '\u000a') || (i == dialogue_array.Length - 1))
-                {
-                    // If so, add the currently iterated char to the completed word string.
-                    completed_word += dialogue_array[i];
-
-                    // Now that we have our word, measure the pixel length of the completed string.
-                    int completed_word_length = Measure_String_Pixel_Length(sl_command, completed_word);
-
-                    // Check if the completed word is under the current line's allowed length.
-                    // This is done by subtracting the completed word string's length from the remaining length of the line.
-                    // If the result is greater than zero, it's a perfect fit.
-                    if ((line_length_remaining - completed_word_length > 0) && (dialogue_array[i] != '\u000a'))
-                    {
-                        // Subtract the completed word's pixel length from the remaining pixel length of the current line.
-                        line_length_remaining = line_length_remaining - completed_word_length;
-
-                        // Add the completed word to the current line.
-                        dialogue_list[current_line].Add(completed_word);
-
-                        // Reset the completed word variable to an empty string.
-                        completed_word = "";
-                    }
-
-                    // Else, check if all three of the following conditions are met:
-                    // If there is no more room to add the completed word to the current line.
-                    // The completed word's length is less than or equal to a line itself.
-                    // The current iterated character is NOT a line break.
-                    else if ((line_length_remaining - completed_word_length < 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] != '\u000a'))
-                    {
-                        // Check if the current line number is less than the max number of lines available.
-                        if (current_line < max_lines - 1)
-                        {
-                            // Increase the current line number.
-                            current_line++;
-
-                            // Add the completed word string to the current line.
-                            dialogue_list[current_line].Add(completed_word);
-
-                            // Reset the remaining pixel length variable to the start and subtract the pixel length of the completed word string.
-                            // This is done because we moved to a new line.
-                            line_length_remaining = max_line_length - completed_word_length;
-
-                            // Reset the completed word variable to an empty string.
-                            completed_word = "";
-                        }
-                        // Else, check if the current line number is greater than or equal to the max number of lines available.
-                        else if (current_line >= max_lines - 1)
-                        {
-                            // If so, there is no more room to render text.
-                            // Break from the for loop.
-                            break;
-                        }
-                    }
-
-                    // Else, check if all three of the following conditions are met:
-                    // If there IS room to add the completed word to the current line.
-                    // The completed word's length is less than or equal to the length of a line itself.
-                    // The current iterated character IS a line break.
-                    else if ((line_length_remaining - completed_word_length >= 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] == '\u000a'))
-                    {
-                        // Check if the current line number is less than the max number of lines available.
-                        if (current_line < max_lines - 1)
-                        {
-                            // Since there is room, add the completed word string to the current line.
-                            dialogue_list[current_line].Add(completed_word);
-
-                            // Increase the current line number.
-                            current_line++;
-
-                            // Reset the remaining pixel length variable to the max value.
-                            // This is done because we moved to a new line.
-                            line_length_remaining = max_line_length;
-
-                            // Reset the completed word variable to an empty string.
-                            completed_word = "";
-                        }
-                        // Else, check if the current line number is greater than to the max number of lines available.
-                        else if (current_line > max_lines - 1)
-                        {
-                            // If so, there is no more room to render text.
-                            // Break from the for loop.
-                            break;
-                        }
-                    }
-
-                    // Else, check if there is no more room to add the completed word to the current line AND the completed word's length is greater than the length of a line itself.
-                    // This means that we'll need to split the string up on different lines.
-                    else if (line_length_remaining - completed_word_length < 0 && completed_word_length > max_line_length)
-                    {
-                        // Take the completed word and turn it into a char array.
-                        // We'll use this to iterate through the word character-by-character to decide where to split the string.
-                        char[] completed_word_array = completed_word.ToCharArray();
-
-                        // Create a new string variable and initialize it to an empty string.
-                        // Similar to the completed word variable, this string will contain characters that will fit on a single line.
-                        // Because we know the word will be split into multiple lines, this will only contain part of the full string at any given time, hence "substring".
-                        string substring = "";
-
-                        // Create an int variable and initialize it to zero.
-                        // This will contain the pixel length of our substring variable once we measure it.
-                        int substring_length = 0;
-
-                        // Create a for loop to iterate through the completed word array.
-                        for (int j = 0; j < completed_word_array.Length; j++)
-                        {
-                            // Add the currently iterated character to the substring.
-                            substring += completed_word_array[j];
-
-                            // Measure the pixel length of the substring so far.
-                            substring_length = Measure_String_Pixel_Length(sl_command, substring);
-
-                            // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
-                            // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
-                            if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a')) // || (completed_word_array[j] == '\u000a')
-                            {
-                                // Check if the current line number is less than the max number of lines available.
-                                if (current_line < max_lines)
-                                {
-                                    // Add the substring to the current line.
-                                    dialogue_list[current_line].Add(substring);
-
-                                    // Since there is absolutely no more room on the current line left, increase the current line value.
-                                    current_line++;
-
-                                    // Reset the remaining pixel length variable to the max value.
-                                    // This is done because we moved to a new line.
-                                    line_length_remaining = max_line_length;
-
-                                    // Reset the substring variable to an empty string.
-                                    substring = "";
-                                }
-                            }
-                            // Else, check if the last index of the completed word array has been reached.
-                            else if (j == completed_word_array.Length - 1)
-                            {
-                                // Add the substring to the current line.
-                                dialogue_list[current_line].Add(substring);
-
-                                // Subtract the completed word's pixel length from the remaining pixel length of the current line.
-                                line_length_remaining = line_length_remaining - substring_length;
-
-                                // Reset the substring variable to an empty string.
-                                substring = "";
-                            }
-                        }
-
-                        // Reset the completed word string to an empty string.
-                        completed_word = "";
-                    }
-                }
-            }
-
-            return dialogue_list;
-        }
-
         public static int Measure_String_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
         {
             // Create an int to keep track of how many pixels a glyph is wide in.
@@ -1700,10 +1865,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             else if (char_array[current_index] == 'v' && char_array[current_index + 1] == 'e')
             {
                 render_position_x += -3;
-            }
-            else if (char_array[current_index] == '-')
-            {
-                render_position_x += 12;
             }
             /*else if (char_array[current_index] == 'l' && char_array[current_index + 1] == '!')
             {

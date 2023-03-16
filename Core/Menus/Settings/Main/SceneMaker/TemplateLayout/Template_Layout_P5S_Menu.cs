@@ -142,6 +142,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":three: Xbox One\n" +
                 ":four: Keyboard\n");
 
+            embed.WithImageUrl("https://i.imgur.com/NvXYNq0.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -227,6 +229,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":one: On\n" +
                 ":two: Off\n");
 
+            embed.WithImageUrl("https://i.imgur.com/8hTZlYS.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -285,7 +289,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Auto-Advance",
+                Name = "Auto Advance",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -303,7 +307,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
-                "**Toggle the auto-advance icon of the control panel on and off.**\n" +
+                "**Toggle the auto advance icon of the control panel on and off.**\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P5S_TS_Auto_Advance}`**\n" +
                 "\n" +
@@ -393,6 +397,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":one: On\n" +
                 ":two: Off\n");
 
+            embed.WithImageUrl("https://i.imgur.com/9GbmoSC.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -476,6 +482,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":one: Display All\n" +
                 ":two: Date Only\n" +
                 ":three: None");
+
+            embed.WithImageUrl("https://i.imgur.com/eLBUlGC.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -569,6 +577,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":nine: Yokohama\n" +
                 ":keycap_ten: Shiba Park\n" +
                 ":blue_car: RV Travel");
+
+            embed.WithImageUrl("https://i.imgur.com/GRFozcV.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -892,7 +902,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5S"));
 
             embed.WithDescription("" +
-                $"The auto-advance icon has been set to **`{account.P5S_TS_Auto_Advance}`**.\n");
+                $"The auto advance icon has been set to **`{account.P5S_TS_Auto_Advance}`**.\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

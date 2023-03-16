@@ -110,11 +110,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 {
                     return null;
                 }
-
-                //Create_Eye_Frame_Data_List(set_data);
-                //return Get_Eye_Frame_Data(set_data, bustup_data, command_data);
             } 
-            //return null;
         }
 
         public static FrameData Get_Mouth_Frame_Data(OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data)
@@ -177,18 +173,28 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                         var new_bustup_data = new BustupData()
                         {
                             Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
-                            Default_Name_EN = "Mitsugi, the Theater Guide",
-                            Default_Name_JPN = "ミツギモトコ",
-                            P2IS_PSP_Scale_Width = 256,
-                            P2IS_PSP_Scale_Height = 256,
-                            P2IS_PSP_Left_Coord_X = 0, 
-                            P2IS_PSP_Left_Coord_Y = 0,
-                            P2IS_PSP_Center_Coord_X = 144,
-                            P2IS_PSP_Center_Coord_Y = 0,
-                            P2IS_PSP_Right_Coord_X = 288,
-                            P2IS_PSP_Right_Coord_Y = 0,
-                            P2IS_PSP_Default_Position = "Left",
+                            Default_Name_EN = "Saleslady",
+                            Default_Name_JPN = "---",
+                            P2IS_PSX_Scale_Width = 96,
+                            P2IS_PSX_Scale_Height = 96,
+                            P2IS_PSX_Left_Coord_X = 18,
+                            P2IS_PSX_Left_Coord_Y = 70,
+                            P2IS_PSX_Center_Coord_X = 112,
+                            P2IS_PSX_Center_Coord_Y = 70,
+                            P2IS_PSX_Right_Coord_X = 208,
+                            P2IS_PSX_Right_Coord_Y = 70,
+                            P2IS_PSX_Default_Position = "Right",
+                            P2EP_PSX_Scale_Width = 96,
+                            P2EP_PSX_Scale_Height = 96,
+                            P2EP_PSX_Left_Coord_X = 16,
+                            P2EP_PSX_Left_Coord_Y = 70,
+                            P2EP_PSX_Center_Coord_X = 112,
+                            P2EP_PSX_Center_Coord_Y = 70,
+                            P2EP_PSX_Right_Coord_X = 208,
+                            P2EP_PSX_Right_Coord_Y = 70,
+                            P2EP_PSX_Default_Position = "Right",
                         };
+
                         new_list.Add(new_bustup_data);
                     }
                 }
@@ -259,16 +265,44 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                         // Check if the created file path string exists.
                         if (File.Exists($"{frame_path}//{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png"))
                         {
-                            // If so, generate a new frame data object for the frame.
-                            var new_frame_data = new FrameData()
+                            // EXPERIMENT START
+                            FrameData new_frame_data = new FrameData();
+
+                            if (outfit == 1)
                             {
-                                Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png",
-                                Scale_Width = 188,
-                                Scale_Height = 80,
-                                Coord_X = 298,
-                                Coord_Y = 406
-                            };
+                                new_frame_data = new FrameData()
+                                {
+                                    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png",
+                                    Scale_Width = 256,
+                                    Scale_Height = 256,
+                                    Coord_X = 338,
+                                    Coord_Y = 116
+                                };
+                            }
+                            else if (outfit == 2 || outfit == 3)
+                            {
+                                new_frame_data = new FrameData()
+                                {
+                                    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png",
+                                    Scale_Width = 256,
+                                    Scale_Height = 256,
+                                    Coord_X = 376,
+                                    Coord_Y = 192
+                                };
+                            }
                             new_list.Add(new_frame_data);
+                            // EXPERIMENT END
+
+                            // If so, generate a new frame data object for the frame.
+                            //var new_frame_data = new FrameData()
+                            //{
+                            //    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png",
+                            //    Scale_Width = 256,
+                            //    Scale_Height = 256,
+                            //    Coord_X = 426,
+                            //    Coord_Y = 168
+                            //};
+                            //new_list.Add(new_frame_data);
                         }
                     }
                 }
@@ -340,15 +374,42 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                         // Check if the created file path string exists.
                         if (File.Exists($"{frame_path}//{set_data.ID.ToLower()}_{expression}_{outfit}_m{i}.png"))
                         {
-                            // If so, generate a new frame data object for the frame.
-                            var new_frame_data = new FrameData()
+                            // EXPERIMENT START
+                            FrameData new_frame_data = new FrameData();
+
+                            if (outfit == 1)
                             {
-                                Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_m{i}.png",
-                                Scale_Width = 176,
-                                Scale_Height = 100,
-                                Coord_X = 268,
-                                Coord_Y = 537
-                            };
+                                new_frame_data = new FrameData()
+                                {
+                                    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_m{i}.png",
+                                    Scale_Width = 256,
+                                    Scale_Height = 256,
+                                    Coord_X = 338,
+                                    Coord_Y = 116
+                                };
+                            }
+                            else if (outfit == 2 || outfit == 3)
+                            {
+                                new_frame_data = new FrameData()
+                                {
+                                    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_m{i}.png",
+                                    Scale_Width = 256,
+                                    Scale_Height = 256,
+                                    Coord_X = 376,
+                                    Coord_Y = 192
+                                };
+                            }
+                            // EXPERIMENT END
+
+                            // If so, generate a new frame data object for the frame.
+                            //var new_frame_data = new FrameData()
+                            //{
+                            //    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_m{i}.png",
+                            //    Scale_Width = 256,
+                            //    Scale_Height = 256,
+                            //    Coord_X = 426,
+                            //    Coord_Y = 168
+                            //};
                             new_list.Add(new_frame_data);
                         }
                     }

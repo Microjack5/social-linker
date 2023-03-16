@@ -4,6 +4,7 @@ using SocialLinker.Core.Menus.Settings.Main;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.AutoDelete;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.Backgrounds;
+using SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.SpriteSheetOrder;
 
@@ -46,29 +47,29 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
             }
 
             // Keycap Three
+            /*else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                // [Insert method here]
+                return Task.CompletedTask;
+            } */
+
+            // Keycap Four
             else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                // [Insert method here]
-                return Task.CompletedTask;
-            }
-
-            // Keycap Four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                // [Insert method here]
+                _ = Display_Names_Menu.Display_Names_Start(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
             // Keycap Five
-            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
+            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -79,7 +80,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
             }
 
             // Keycap Six
-            else if (reaction.Emote.Name == "\u0036\ufe0f\u20e3")
+            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -90,7 +91,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
             }
 
             // Keycap Seven
-            else if (reaction.Emote.Name == "\u0037\ufe0f\u20e3")
+            else if (reaction.Emote.Name == "\u0036\ufe0f\u20e3")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -101,7 +102,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
             }
 
             // Keycap Eight
-            else if (reaction.Emote.Name == "\u0038\ufe0f\u20e3")
+            else if (reaction.Emote.Name == "\u0037\ufe0f\u20e3")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
