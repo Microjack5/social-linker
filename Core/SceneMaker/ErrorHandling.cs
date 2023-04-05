@@ -15,10 +15,6 @@ namespace SocialLinker.Core.SceneMaker
 {
     class ErrorHandling : ModuleBase<SocketCommandContext>
     {
-        // Create a global variable for the class that contains the desired duration for error messages.
-        // In this case, 60000 milliseconds equates to 1 minute.
-        public static double error_duration = 60000;
-
         public static async Task Char_Keyword_Not_Found(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
@@ -38,7 +34,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -50,7 +46,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -78,7 +74,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -90,7 +86,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -118,7 +114,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -130,7 +126,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -158,7 +154,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -171,7 +167,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -199,7 +195,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -212,7 +208,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -240,7 +236,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -252,7 +248,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -280,7 +276,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -291,7 +287,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -319,7 +315,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -330,7 +326,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -358,7 +354,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -370,7 +366,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -398,7 +394,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -412,7 +408,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -440,7 +436,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -452,7 +448,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -480,7 +476,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -492,7 +488,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -520,7 +516,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -536,7 +532,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -564,7 +560,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -580,7 +576,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -608,7 +604,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -621,7 +617,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -649,7 +645,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -662,7 +658,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -690,7 +686,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -701,7 +697,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -729,7 +725,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -741,7 +737,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -769,7 +765,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -781,7 +777,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -809,7 +805,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -821,7 +817,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -849,7 +845,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -860,7 +856,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -888,7 +884,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -899,7 +895,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -927,7 +923,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -941,7 +937,7 @@ namespace SocialLinker.Core.SceneMaker
             // Create a timer that expires as a "time out" duration for the user.
             Timer error_timer = new Timer()
             {
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -969,7 +965,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription($"That mouth frame doesn’t seem to be part of {character_name}'s {command_data.Base_Sprite}{Number_Suffix(command_data.Base_Sprite)} {game_version} sprite.");
@@ -981,7 +977,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -1029,7 +1025,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -1064,7 +1060,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -1075,7 +1071,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -1103,7 +1099,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -1114,7 +1110,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -1142,7 +1138,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -1153,7 +1149,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -1181,7 +1177,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -1192,7 +1188,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -1220,7 +1216,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -1231,7 +1227,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -1259,7 +1255,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -1270,7 +1266,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -1298,7 +1294,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
@@ -1309,7 +1305,7 @@ namespace SocialLinker.Core.SceneMaker
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -1371,25 +1367,6 @@ namespace SocialLinker.Core.SceneMaker
             }
 
             return suffix;
-        }
-
-        public static Color Get_Profile_Embed_Color(UserInfoFields account)
-        {
-            // Based on the account's settings, return a color to be used on embedded menu messages.
-            switch (account.Profile_Theme)
-            {
-                case "P3":
-                    return new Color(37, 149, 255);
-
-                case "P4":
-                    return new Color(255, 229, 49);
-
-                case "P5":
-                    return new Color(213, 27, 4);
-
-                default:
-                    return new Color(0, 0, 0);
-            }
         }
 
         public static string Get_Profile_Help_Thumbnail(UserInfoFields account)

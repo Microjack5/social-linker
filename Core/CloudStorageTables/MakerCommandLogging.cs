@@ -26,7 +26,6 @@ namespace SocialLinker.Core.CloudStorageTables
         public static void LogData(SocialLinkerCommand sl_command_data)
         {
             MakerCommandData maker_command_data = sl_command_data.MakerCommand;
-            ulong guild_id = ((SocketGuildChannel)sl_command_data.Channel).Guild.Id;
             bool bg_bool = false;
 
             if (maker_command_data.Background != default)
@@ -43,7 +42,8 @@ namespace SocialLinker.Core.CloudStorageTables
             {
                 PartitionKey = sl_command_data.User.Id.ToString(),
                 RowKey = string.Format("{0:D19}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks),
-                Guild_ID = guild_id.ToString(),
+                Guild_ID = ((SocketGuildChannel)sl_command_data.Channel).Guild.Id.ToString(),
+                Channel_ID = sl_command_data.Channel.Id.ToString(),
                 Template = maker_command_data.Template,
                 Character_Keyword = maker_command_data.Character_Keyword,
                 Sprite_Set_Version = maker_command_data.Sprite_Set_Version,
@@ -56,7 +56,7 @@ namespace SocialLinker.Core.CloudStorageTables
 
             var storageAccount = new CloudStorageAccount(new StorageCredentials(AzureConfig.azureAccount.accountName, AzureConfig.azureAccount.accountKey), true);
             var tableClient = storageAccount.CreateCloudTableClient();
-            var commandLogTable = tableClient.GetTableReference("MakerCommandLogs");
+            var commandLogTable = tableClient.GetTableReference(logging_table);
 
             commandLogTable.Execute(TableOperation.InsertOrReplace(table_submission));
         }
@@ -67,6 +67,7 @@ namespace SocialLinker.Core.CloudStorageTables
         public string User_ID => PartitionKey;
         public string Time_Created => RowKey; // Reverse ticks, solved by: return new DateTime(DateTime.MaxValue.Ticks - long.Parse(timestamp), DateTimeKind.Utc);
         public string Guild_ID { get; set; }
+        public string Channel_ID { get; set; }
         public string Template { get; set; }
         public string Character_Keyword { get; set; }
         public string Sprite_Set_Version { get; set; }

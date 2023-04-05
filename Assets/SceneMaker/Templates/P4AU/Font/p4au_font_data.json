@@ -25,7 +25,7 @@
     "Column": 2,
     "LeftCut": 19,
     "RightCut": 29,
-    "SupportedChars": "[ '\"' ]"
+    "SupportedChars": "[ '\"', '”' ]"
   },
   {
     "Row": 0,
@@ -53,7 +53,7 @@
     "Column": 7,
     "LeftCut": 23,
     "RightCut": 27,
-    "SupportedChars": "[ '\\'' ]"
+    "SupportedChars": "[ '\\'', '‘', '’' ]"
   },
   {
     "Row": 0,
@@ -574,8 +574,8 @@
     "SupportedChars": "[ 'z' ]"
   },
   {
-    "Row": 4,
-    "Column": 13,
+    "Row": 5,
+    "Column": 11,
     "LeftCut": 11,
     "RightCut": 37,
     "SupportedChars": "[ '~' ]"

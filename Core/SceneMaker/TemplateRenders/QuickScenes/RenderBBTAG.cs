@@ -531,7 +531,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Make an API request with the account key and user input as parameters.
                 using (WebClient client = new WebClient())
                 {
-                    json_location = new TimedWebClient { Timeout = 5000 }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
+                    json_location = new TimedWebClient { Timeout = Global.API_Timeout }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
                 }
 
                 // Deserialize the JSON object and store it in a variable.

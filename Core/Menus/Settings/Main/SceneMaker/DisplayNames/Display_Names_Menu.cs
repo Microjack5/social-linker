@@ -9,8 +9,6 @@ using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using Discord.Rest;
 using SocialLinker.Core.LocalStorageTables;
-using System.Drawing;
-using System.IO;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames;
 
 namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
@@ -61,8 +59,15 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                 // Add the item entry to the global list.
                 Global.ItemIdList.Add(itemSession);
 
+                var naming_session = Global.DisplayNameTempList.SingleOrDefault(x => x.User_ID == $"{menuSession.User.Id}");
+
+                if (naming_session != null)
+                {
+                    Global.DisplayNameTempList.Remove(naming_session);
+                }
+
                 // Create a new naming session identifier entry for this current session and user to keep track of the overall status.
-                var naming_session = new DisplayNameTempData()
+                naming_session = new DisplayNameTempData()
                 {
                     User_ID = $"{user.Id}",
                 };

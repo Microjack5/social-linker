@@ -25,7 +25,7 @@
     "Column": 2,
     "LeftCut": 8,
     "RightCut": 23,
-    "SupportedChars": "[ '\"' ]"
+    "SupportedChars": "[ '\"', '”' ]"
   },
   {
     "Row": 0,
@@ -60,7 +60,7 @@
     "Column": 7,
     "LeftCut": 11,
     "RightCut": 20,
-    "SupportedChars": "[ '\\'' ]"
+    "SupportedChars": "[ '\\'', '’' ]"
   },
   {
     "Row": 0,
@@ -459,7 +459,7 @@
     "Column": 0,
     "LeftCut": 13,
     "RightCut": 22,
-    "SupportedChars": "[ '`' ]"
+    "SupportedChars": "[ '‘' ]"
   },
   {
     "Row": 4,
@@ -1894,14 +1894,14 @@
     "Column": 13,
     "LeftCut": 10,
     "RightCut": 22,
-    "SupportedChars": "[ '\u0000' ]"
+    "SupportedChars": "[ '´' ]"
   },
   {
     "Row": 16,
     "Column": 14,
     "LeftCut": 10,
     "RightCut": 22,
-    "SupportedChars": "[ '\u0000' ]"
+    "SupportedChars": "[ '`' ]"
   },
   {
     "Row": 16,

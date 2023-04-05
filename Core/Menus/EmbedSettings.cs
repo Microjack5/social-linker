@@ -21,7 +21,7 @@ namespace SocialLinker.Core.Menus
                     return new Color(213, 27, 4);
 
                 default:
-                    return new Color(0, 0, 0);
+                    return new Color(30, 31, 34);
             }
         }
 

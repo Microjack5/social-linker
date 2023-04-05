@@ -5,6 +5,7 @@
         public string Filename { get; set; }
         public string Default_Name_EN { get; set; }
         public string Default_Name_JPN { get; set; }
+        public string Revelations_Char_Original_Name_EN { get; set; }
         public int P1_PSX_Scale_Width { get; set; }
         public int P1_PSX_Scale_Height { get; set; }
         public int P1_PSX_Left_Coord_X { get; set; }

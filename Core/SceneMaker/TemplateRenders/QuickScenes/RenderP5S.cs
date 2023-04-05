@@ -2663,63 +2663,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         } 
 
-        // Background rendering
-        public static Bitmap Center_Image(Bitmap input_bitmap)
-        {
-            float width = 1920;
-            float height = 1080;
-            var brush = new SolidBrush(System.Drawing.Color.Black);
-
-            var image = new Bitmap(input_bitmap);
-
-            float scale = Math.Min(width / image.Width, height / image.Height);
-
-            var bmp = new Bitmap((int)width, (int)height);
-            var graph = Graphics.FromImage(bmp);
-
-            // uncomment for higher quality output
-            graph.InterpolationMode = InterpolationMode.High;
-            graph.CompositingQuality = CompositingQuality.HighQuality;
-            graph.SmoothingMode = SmoothingMode.AntiAlias;
-
-            bmp.SetResolution(96, 96);
-
-            var scaleWidth = (int)(image.Width * scale);
-            var scaleHeight = (int)(image.Height * scale);
-
-            //graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
-            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
-
-            return bmp;
-        }
-
-        public static Bitmap Stretch_To_Fit(Bitmap input_bitmap)
-        {
-            // Set the width and height of the bitmap to be created
-            float width = 1920;
-            float height = 1080;
-
-            // Copy the input bitmap to a new variable.
-            var bitmap_copy = new Bitmap(input_bitmap);
-
-            // Create a brand new bitmap with the specified dimensions from earlier.
-            var new_bitmap = new Bitmap((int)width, (int)height);
-
-            // Create a graphics object so we can edit this new bitmap.
-            var graphics = Graphics.FromImage(new_bitmap);
-
-            // uncomment for higher quality output
-            graphics.InterpolationMode = InterpolationMode.High;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            new_bitmap.SetResolution(96, 96);
-
-            // Draw the copy of the input bitmap to the new bitmap.
-            graphics.DrawImage(bitmap_copy, 0, 0, width, height);
-
-            return new_bitmap;
-        }
-
         // Getter methods
         public static int Get_Number_of_Rendered_Lines(List<string>[] input_list_array)
         {
@@ -2783,7 +2726,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Make an API request with the account key and user input as parameters.
                 using (WebClient client = new WebClient())
                 {
-                    json_location = new TimedWebClient { Timeout = 5000 }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
+                    json_location = new TimedWebClient { Timeout = Global.API_Timeout }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
                 }
 
                 // Deserialize the JSON object and store it in a variable.

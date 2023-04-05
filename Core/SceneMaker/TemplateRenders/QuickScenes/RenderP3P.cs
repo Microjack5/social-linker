@@ -9,7 +9,6 @@ using SocialLinker.Core.LocalStorageTables;
 using Discord;
 using Discord.Rest;
 using SocialLinker.Core.CloudStorageTables;
-using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -17,7 +16,6 @@ using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
@@ -46,6 +44,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         System.Drawing.Color color_sunday_red = System.Drawing.Color.FromArgb(123, 27, 55);
 
         System.Drawing.Color color_moon_yellow = System.Drawing.Color.FromArgb(183, 150, 81);
+
+        int max_line_length = 360; // 510
+        int error_counter = 0;
 
         public async Task Render_Quick_Scene_P3P(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
@@ -145,7 +146,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 System.Drawing.Color dialogue_gray = System.Drawing.Color.FromArgb(72, 72, 72);
                 Rectangle dialogue_area = new Rectangle(0, 190, 480, 82);
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3P", command_data.Dialogue, 3, 510);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3P", command_data.Dialogue, 3, max_line_length);
                 Bitmap rendered_dialogue = Render_Dialogue(parsed_lines);
                 Bitmap colored_dialogue = Bitmap_To_Color(rendered_dialogue, dialogue_gray, dialogue_area);
 
@@ -153,51 +154,130 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(colored_dialogue, 0, 0, template_width, template_height);
             }
 
-            // The user could choose to output the image at different resolutions, so let's handle that point now.
-            // If the user's output setting is at the default resolution, do nothing.
-            if (account.P3P_Resolution == "480 × 272")
+            base_template = Scale_Template(account, base_template);
+
+            if (error_counter > 0)
             {
-                // Do nothing
+                _ = ErrorHandling.API_Timeout(sl_command);
             }
-            // If the user's output setting is NOT at the default resolution, however, we need to do some work.
-            else if (account.P3P_Resolution == "1920 × 1088")
+
+            // Save the entire base template to a data stream.
+            MemoryStream memoryStream = new MemoryStream();
+            base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            try
             {
-                // Change the template width and height variables based on the user's output settings.
-                template_width = 1920;
-                template_height = 1088;
+                // Send the image.
+                await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-                // Now, we'll want to make a new bitmap that matches these sizes.
-                // Create a copy of the template so far.
-                var copied_source = new Bitmap(base_template);
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
 
-                // Create a new empty bitmap with the adjusted dimensions.
-                var scaled_bitmap = new Bitmap(template_width, template_height);
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
 
-                // Create a new graphics object so we can render on the empty bitmap.
-                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
+
+            // If the user has auto-delete for their commands set to on, delete their command as well.
+            if (account.Auto_Delete_Commands == "On")
+            {
+                await sl_command.Message.DeleteAsync();
+            }
+        }
+
+        public async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            // Send a loading message to the channel while the sprite sheet is being made.
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P3P_Loading_Message(account).Build());
+
+            // Background rendering
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
+            Bitmap background = new Bitmap(2, 2);
+
+            try
+            {
+                background = OfficialSetMethods.Render_Background(sl_command, template_width, template_height);
+            }
+            catch (System.ArgumentException e)
+            {
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
+            }
+
+            // Time to put it all together!
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                try
                 {
-                    // Set the scaling method to the user's choice of Bicubic and Nearest Neighbor.
-                    switch (account.P3P_Scale)
+                    // Create and assign bitmap variables for the assets needed.
+                    Bitmap message_window = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3P//Main//message_window.png");
+                    Bitmap cursor = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3P//Main//cursor.png");
+
+                    // Draw the layer with the user's colored default background if it exists.
+                    graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
+
+                    // Draw the user's background to the base template.
+                    graphics.DrawImage(background, 0, 0, template_width, template_height);
+
+                    // Draw the message window layer to the base template.
+                    message_window = Tint_Message_Window(message_window);
+                    graphics.DrawImage(message_window, 0, 0, template_width, template_height);
+
+                    // Draw the cursor layer to the base template.
+                    cursor = Color_Cursor(cursor, account.P3P_TS_Color);
+                    graphics.DrawImage(cursor, 0, 0, template_width, template_height);
+
+                    // If the user has the HUD enabled, render it to the template as well.
+                    if (account.P3P_TS_HUD != "None")
                     {
-                        case "Bicubic":
-                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            break;
-
-                        case "Nearest Neighbor":
-                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                            break;
+                        graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
+                        graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
                     }
-
-                    // Set the rendering quality to high.
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-                    // Draw the copy of the template to the empty bitmap while fitting to size.
-                    graphics.DrawImage(copied_source, 0, 0, template_width, template_height);
                 }
-
-                // Copy the contents of the new bitmap to the base template variable.
-                base_template = scaled_bitmap;
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
+
+            // Create another graphics object for the base template.
+            // We'll start rendering our needed text here.
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                System.Drawing.Color name_dark_blue = System.Drawing.Color.FromArgb(29, 0, 92);
+                Rectangle name_area = new Rectangle(0, 190, 480, 30);
+
+                System.Drawing.Color dialogue_gray = System.Drawing.Color.FromArgb(72, 72, 72);
+                Rectangle dialogue_area = new Rectangle(0, 190, 480, 82);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3P", command_data.Dialogue, 3, max_line_length);
+                Bitmap rendered_dialogue = Render_Dialogue(parsed_lines);
+                Bitmap colored_dialogue = Bitmap_To_Color(rendered_dialogue, dialogue_gray, dialogue_area);
+
+                // Draw the input dialogue to the template.
+                graphics.DrawImage(colored_dialogue, 0, 0, template_width, template_height);
+            }
+
+            base_template = Scale_Template(account, base_template);
 
             // Save the entire base template to a data stream.
             MemoryStream memoryStream = new MemoryStream();
@@ -320,10 +400,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         {
                             render_position_x += -2;
                         }
-                        /*else if (char_array[i] == 'T' && Char.IsLower(char_array[i + 1]) && char_array[i + 1] != 'h')
-                        {
-                            render_position_x += -2;
-                        } */
                     }
                 }
             }
@@ -384,20 +460,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                         //Set the next X value at the end of the current glyph's right width
                         render_position_x += (glyph.RightCut - glyph.LeftCut);
-
-                        // Check if the current iterated index is less than the number of indicies available.
-                        if (j < char_array.Length - 1)
-                        {
-                            // If so, edit the position of the X coordinate according to specific kerning pairs.
-                            /*if (char_array[j] == 'Y' && Char.IsLower(char_array[j + 1]))
-                            {
-                                render_position_x += -2;
-                            }
-                            else if (char_array[j] == 'T' && Char.IsLower(char_array[j + 1]) && char_array[j + 1] != 'h')
-                            {
-                                render_position_x += -3;
-                            } */
-                        }
                     }
                 }
             }
@@ -421,7 +483,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             for (int i = 0; i < char_array.Length; i++)
             {
                 // Retrieve glyph information from the P3F JSON file.
-                var glyph = ParsingMethods.Get_P3F_Glyph(char_array[i]);
+                var glyph = ParsingMethods.Get_P3P_Glyph(char_array[i]);
 
                 // Confirm that the glyph taken in is catologued in the JSON. If not, the character is unsupported.
                 if (glyph != null)
@@ -1311,7 +1373,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return new_bitmap;
         }
 
-        public static DateTime Get_Date(UserInfoFields account)
+        public DateTime Get_Date(UserInfoFields account)
         {
             // Create an empty string variable. This is where the API request will be stored.
             string json_result = "";
@@ -1322,7 +1384,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Make an API request with the account key and user input as parameters.
                 using (WebClient client = new WebClient())
                 {
-                    json_result = client.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
+                    json_result = new TimedWebClient { Timeout = Global.API_Timeout }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
                 }
 
                 // Deserialize the JSON object and store it in a variable.
@@ -1338,11 +1400,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                error_counter++;
                 return DateTime.UtcNow;
             }
         }
 
-        public static string Get_Hemisphere(UserInfoFields account)
+        public string Get_Hemisphere(UserInfoFields account)
         {
             // Create an empty string variable. This is where the API request will be stored.
             string json_result = "";
@@ -1353,7 +1416,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Make an API request with the account key and user input as parameters.
                 using (WebClient client = new WebClient())
                 {
-                    json_result = client.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
+                    json_result = new TimedWebClient { Timeout = Global.API_Timeout }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
                 }
 
                 // Deserialize the JSON object and store it in a variable.
@@ -1381,6 +1444,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                error_counter++;
                 return "Northern";
             }
         }
@@ -1615,35 +1679,72 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public static Bitmap SetImageOpacity(Bitmap input_bitmap, float opacity)
         {
-            try
-            {
-                //create a Bitmap the size of the image provided  
-                Bitmap base_template = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+            //create a Bitmap the size of the image provided  
+            Bitmap base_template = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
-                //create a graphics object from the image  
-                using (Graphics graphics = Graphics.FromImage(base_template))
+            //create a graphics object from the image  
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                //create a color matrix object  
+                ColorMatrix matrix = new ColorMatrix();
+
+                //set the opacity  
+                matrix.Matrix33 = opacity;
+
+                //create image attributes  
+                ImageAttributes attributes = new ImageAttributes();
+
+                //set the color(opacity) of the image  
+                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                //now draw the image  
+                graphics.DrawImage(input_bitmap, new Rectangle(0, 0, base_template.Width, base_template.Height), 0, 0, input_bitmap.Width, input_bitmap.Height, GraphicsUnit.Pixel, attributes);
+            }
+            return base_template;
+        }
+
+        public Bitmap Scale_Template(UserInfoFields account, Bitmap input_template)
+        {
+            var scaled_bitmap = new Bitmap(2, 2);
+            int scaled_width = template_width;
+            int scaled_height = template_height;
+
+            if (account.P3P_Resolution == "320 × 240")
+            {
+                // Do nothing if setting is at default resolution
+            }
+            else
+            {
+                if (account.P3P_Resolution == "1440 × 1088")
                 {
-                    //create a color matrix object  
-                    ColorMatrix matrix = new ColorMatrix();
-
-                    //set the opacity  
-                    matrix.Matrix33 = opacity;
-
-                    //create image attributes  
-                    ImageAttributes attributes = new ImageAttributes();
-
-                    //set the color(opacity) of the image  
-                    attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-                    //now draw the image  
-                    graphics.DrawImage(input_bitmap, new Rectangle(0, 0, base_template.Width, base_template.Height), 0, 0, input_bitmap.Width, input_bitmap.Height, GraphicsUnit.Pixel, attributes);
+                    scaled_width = 1440;
+                    scaled_height = 1088;
                 }
-                return base_template;
+
+                var copied_input = new Bitmap(input_template);
+                scaled_bitmap = new Bitmap(scaled_width, scaled_height);
+
+                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+                {
+                    switch (account.P3P_Scale)
+                    {
+                        case "Bicubic":
+                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            break;
+
+                        case "Nearest Neighbor":
+                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                            break;
+                    }
+
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                    graphics.DrawImage(copied_input, 0, 0, scaled_width, scaled_height);
+                }
+
+                input_template = scaled_bitmap;
             }
-            catch (Exception ex)
-            {
-                return input_bitmap;
-            }
+
+            return input_template;
         }
 
         public static EmbedBuilder P3P_Loading_Message(UserInfoFields account)

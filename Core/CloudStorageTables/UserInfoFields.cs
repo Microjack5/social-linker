@@ -53,6 +53,7 @@ namespace SocialLinker.Core.CloudStorageTables
         public string P1_PSX_TS_Moon_HUD { get; set; }
         public string P1_PSX_TS_Position { get; set; }
         public string P1_PSX_TS_BG_Darken { get; set; }
+        public string P1_PSX_TS_Localized_Revelations_Names { get; set; }
         public string P1_PSX_TS_Consistent_Names { get; set; }
         public string P1_PSP_TS_Moon_HUD { get; set; }
         public string P1_PSP_TS_Position { get; set; }
@@ -61,6 +62,7 @@ namespace SocialLinker.Core.CloudStorageTables
         public string P2IS_PSX_TS_Invert { get; set; }
         public string P2IS_PSX_TS_Position { get; set; }
         public string P2IS_PSX_TS_Sprite_Flip { get; set; }
+        public string P2IS_PSX_TS_Localized_Revelations_Names { get; set; }
         public string P2IS_PSP_TS_Invert { get; set; }
         public string P2IS_PSP_TS_Position { get; set; }
         public string P2IS_PSP_TS_Sprite_Flip { get; set; }
@@ -68,6 +70,7 @@ namespace SocialLinker.Core.CloudStorageTables
         public string P2EP_PSX_TS_Invert { get; set; }
         public string P2EP_PSX_TS_Position { get; set; }
         public string P2EP_PSX_TS_Sprite_Flip { get; set; }
+        public string P2EP_PSX_TS_Localized_Revelations_Names { get; set; }
         public string P2EP_PSP_TS_Window_Color { get; set; }
         public string P2EP_PSP_TS_Invert { get; set; }
         public string P2EP_PSP_TS_Position { get; set; }

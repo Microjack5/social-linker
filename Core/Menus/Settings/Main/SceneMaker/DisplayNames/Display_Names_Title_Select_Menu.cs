@@ -8,14 +8,11 @@ using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using Discord.Rest;
-using SocialLinker.Core.LocalStorageTables;
 
 namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 {
     internal class Display_Names_Title_Select_Menu
     {
-        DisplayNameTableData new_name_data = new DisplayNameTableData();
-
         public static async Task Display_Names_Title_Select(SocketGuildUser user, RestUserMessage message)
         {
             // Get the account information of the command's user.
@@ -147,6 +144,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                 ":one: Revelations: Persona\n" +
                 ":two: Persona (Remake)");
 
+            embed.WithImageUrl("https://i.imgur.com/t4YH4rN.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -227,6 +226,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                 "\n" +
                 ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
                 ":two: Persona 2: Innocent Sin (Remake)");
+
+            embed.WithImageUrl("https://i.imgur.com/7oh20qY.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -310,6 +311,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
                 ":two: Persona 2: Eternal Punishment (Remake)");
 
+            embed.WithImageUrl("https://i.imgur.com/QPpK2TO.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -390,6 +393,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                 "\n" +
                 ":one: Persona 3 FES\n" +
                 ":two: Persona 3 Portable");
+
+            embed.WithImageUrl("https://i.imgur.com/hZJTcx4.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -472,6 +477,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                 ":one: Persona 4 (PlayStation®️ 2)\n" +
                 ":two: Persona 4 Golden");
 
+            embed.WithImageUrl("https://i.imgur.com/ZVldBKO.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -553,6 +560,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                 ":one: Persona 5 (PlayStation®️ 4)\n" +
                 ":two: Persona 5 Royal");
 
+            embed.WithImageUrl("https://i.imgur.com/7PMim5v.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -624,7 +633,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 
                 // Remove the menu entry from the global list.
                 Global.MenuIdList.Remove(menuSession);
-
                 return;
             }
 

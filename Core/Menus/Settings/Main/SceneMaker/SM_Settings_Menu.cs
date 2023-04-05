@@ -50,7 +50,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.AddField(":three: Display Names",
                 "Change the displayed names of various characters and sprite sets.");
             embed.AddField(":four: Sprite Sheet Order",
-                "Change whether sprite sets are ordered by costume or by expression.");
+                "Change whether sprite sets are ordered by outfit or by expression.");
             embed.AddField(":five: Backgrounds",
                 "Determine how background images are rendered within the scene maker.");
             embed.AddField(":six: Resolution & Scaling",

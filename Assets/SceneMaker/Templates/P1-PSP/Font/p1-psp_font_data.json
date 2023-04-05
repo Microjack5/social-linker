@@ -200,7 +200,7 @@
     "Column": 6,
     "LeftCut": 5,
     "RightCut": 8,
-    "SupportedChars": "[ '’', '\\'' ]"
+    "SupportedChars": "[ '\\'', '’' ]"
   },
   {
     "Row": 2,
@@ -214,7 +214,7 @@
     "Column": 8,
     "LeftCut": 5,
     "RightCut": 11,
-    "SupportedChars": "[ '”', '\"' ]"
+    "SupportedChars": "[ '\"', '”' ]"
   },
   {
     "Row": 2,

@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
-using Discord.Commands;
 using Discord.WebSocket;
-using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using System.Drawing.Text;
@@ -196,7 +190,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             }
             catch (Exception ex)
             {
-                _ = ErrorHandling.Scene_Upload_Failed(user, channel);
+                _ = ErrorHandling.Image_Upload_Failed(user, channel);
                 Console.WriteLine(ex);
 
                 //Delete the loading message

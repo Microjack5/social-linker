@@ -47,6 +47,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
                 ":one: Revelations: Persona\n" +
                 ":two: Persona (Remake)");
 
+            embed.WithImageUrl("https://i.imgur.com/t4YH4rN.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -127,6 +129,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
                 "\n" +
                 ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
                 ":two: Persona 2: Innocent Sin (Remake)");
+
+            embed.WithImageUrl("https://i.imgur.com/7oh20qY.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -209,6 +213,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
                 ":two: Persona 2: Eternal Punishment (Remake)");
 
+            embed.WithImageUrl("https://i.imgur.com/QPpK2TO.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -289,6 +295,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
                 "\n" +
                 ":one: Persona 3 FES\n" +
                 ":two: Persona 3 Portable");
+
+            embed.WithImageUrl("https://i.imgur.com/hZJTcx4.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

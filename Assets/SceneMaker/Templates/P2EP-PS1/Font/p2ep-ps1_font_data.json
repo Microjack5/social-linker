@@ -25,7 +25,7 @@
     "Column": 2,
     "LeftCut": 1,
     "RightCut": 6,
-    "SupportedChars": "[ '\"' ]"
+    "SupportedChars": "[ '\"', '”' ]"
   },
   {
     "Row": 0,
@@ -60,7 +60,7 @@
     "Column": 7,
     "LeftCut": 3,
     "RightCut": 5,
-    "SupportedChars": "[ '\\'' ]"
+    "SupportedChars": "[ '\\'', '‘', '’' ]"
   },
   {
     "Row": 0,

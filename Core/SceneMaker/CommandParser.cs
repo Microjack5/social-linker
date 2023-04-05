@@ -6,12 +6,45 @@ using System.Collections.Immutable;
 using SocialLinker.Core.LocalStorageTables;
 using SocialLinker.Core.CloudStorageTables;
 using Discord;
+using SocialLinker.Config;
+using SocialLinker.Core.Menus.InitialUsage.Main;
+using SocialLinker.Commands;
 
 namespace SocialLinker.Core.SceneMaker
 {
     public class CommandParser
     {
-        public static async Task Type_Directory(SocialLinkerCommand sl_command)
+        List<string> generic_keywords = new List<string>();
+        List<string> version_keywords = new List<string>();
+
+        public CommandParser()
+        {
+            generic_keywords.AddRange(Global.p1_generic_keywords);
+            generic_keywords.AddRange(Global.p2is_generic_keywords);
+            generic_keywords.AddRange(Global.p2ep_generic_keywords);
+            generic_keywords.AddRange(Global.p3_generic_keywords);
+            generic_keywords.AddRange(Global.p4_generic_keywords);
+            generic_keywords.AddRange(Global.p4au_generic_keywords);
+            generic_keywords.AddRange(Global.p4d_generic_keywords);
+            generic_keywords.AddRange(Global.p5_generic_keywords);
+            generic_keywords.AddRange(Global.p5s_generic_keywords);
+            generic_keywords.AddRange(Global.bbtag_generic_keywords);
+
+            version_keywords.AddRange(Global.p1_ps1_version_keywords);
+            version_keywords.AddRange(Global.p1_psp_version_keywords);
+            version_keywords.AddRange(Global.p2is_ps1_version_keywords);
+            version_keywords.AddRange(Global.p2is_psp_version_keywords);
+            version_keywords.AddRange(Global.p2ep_ps1_version_keywords);
+            version_keywords.AddRange(Global.p2ep_psp_version_keywords);
+            version_keywords.AddRange(Global.p3f_version_keywords);
+            version_keywords.AddRange(Global.p3p_version_keywords);
+            version_keywords.AddRange(Global.p4_ps2_version_keywords);
+            version_keywords.AddRange(Global.p4g_version_keywords);
+            version_keywords.AddRange(Global.p5_ps4_version_keywords);
+            version_keywords.AddRange(Global.p5r_version_keywords);
+        }
+
+        public async Task Type_Directory(SocialLinkerCommand sl_command)
         {
             switch (sl_command.CommandType)
             {
@@ -28,7 +61,7 @@ namespace SocialLinker.Core.SceneMaker
 
                     string message_content = String_List_To_String(input_substring);
 
-                    await CommandParser.Parser(sl_command, message_content);
+                    await Parser(sl_command, message_content);
                     break;
 
                 case "Slash":
@@ -65,7 +98,10 @@ namespace SocialLinker.Core.SceneMaker
                                 // The first step of this is checking the validity of the user's inputted base sprite in relation to the chosen set.
                                 if (sprite_set_info != null)
                                 {
-                                    OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, maker_command);
+                                    if (OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, maker_command) == true)
+                                    {
+                                        await OfficialSetMethods.Bustup_Frame_Sheet_Message_Directory(sl_command, sprite_set_info, maker_command);
+                                    }
                                     return;
                                 }
                                 // If the sprite set info is null, send an error message. The sprite set doesn't exist.
@@ -178,7 +214,7 @@ namespace SocialLinker.Core.SceneMaker
             }
         }
 
-        public static async Task Parser(SocialLinkerCommand sl_command, string message_content)
+        public async Task Parser(SocialLinkerCommand sl_command, string message_content)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(sl_command.User);
@@ -206,6 +242,7 @@ namespace SocialLinker.Core.SceneMaker
             // Declare other variables that will be needed throughout the method.
             int iterator = 0;
             string current_string = "";
+            char[] quotation_check = { '\u0022', '\u201C', '\u201D', '\u201E' };
 
             // Create an empty string list. This is where the user's input will go.
             List<string> input_substring;
@@ -227,15 +264,11 @@ namespace SocialLinker.Core.SceneMaker
             }
 
             // If there are no indicies in the input_substring string list, we have a successful command! Generate a tutorial menu and return.
-            if (input_substring.Count == 0)
+            if (input_substring.Count == 1 && input_substring[0] == $"{BotConfig.bot.cmdPrefix}maker")
             {
-                await sl_command.Channel.SendMessageAsync(":white_check_mark: **Parsing successful.** A tutorial menu for the scene maker will be displayed.");
+                await Help.HelpMenu(sl_command);
                 return;
             }
-
-            // Create two individual string arrays for template keywords: One containing generic keywords, and one containing version keywords.
-            string[] generic_keywords = { "p1", "p2", "p2is", "p2ep", "p3", "p4", "p4a", "p4au", "p4u", "p4u2", "p4d", "p5", "p5s", "bbtag" };
-            string[] version_keywords = { "p1-ps1", "p1-psx", "p1-psp", "p1p", "p2is-ps1", "p2is-psx", "p2is-psp", "p2isp", "p2ep-ps1", "p2ep-psx", "p2ep-psp", "p2epp", "p3f", "fes", "p3fes", "p3-ps2", "p3f-ps2", "fes-ps2", "p3fes-ps2", "p3p", "p3-psp", "p4-ps2", "p4g", "p4a", "p4au", "p4u", "p4u2", "p4d", "p5-ps3", "p5-ps4", "p5r", "p5r-ps4", "p5s", "bbtag" };
 
             // Assign the first word of the user's input after the "maker" prefix to the empty "current_string" variable.
             // The int variable "iterator" is currently set at 0, so this will retrieve the first index of the string list containing the user's processed input.
@@ -243,11 +276,11 @@ namespace SocialLinker.Core.SceneMaker
 
             // First, let's assume we're looking for a generic theme keyword.
             // Iterate through every index in the generic_keywords array to check if the current string is a match.
-            for (int i = 0; i < generic_keywords.Length; i++)
+            for (int i = 0; i < generic_keywords.Count; i++)
             {
                 // If a match is found, the user specified a template! Assign the current string to the empty "template" string variable.
                 // Revome the current string from the input substring list afterwards, bringing the next string to index 0.
-                if (current_string.ToLower() == generic_keywords[i])
+                if (current_string.ToUpper() == generic_keywords[i])
                 {
                     sl_command.MakerCommand.Template = current_string;
                     input_substring.RemoveAt(iterator);
@@ -260,11 +293,11 @@ namespace SocialLinker.Core.SceneMaker
             if (sl_command.MakerCommand.Template == "")
             {
                 // Iterate through every index in the version_keywords array to check if the current string is a match.
-                for (int i = 0; i < version_keywords.Length; i++)
+                for (int i = 0; i < version_keywords.Count; i++)
                 {
                     // If a match is found, the user specified a template! Assign the current string to the empty "template" string variable.
                     // Revome the current string from the input substring list afterwards, bringing the next string to index 0.
-                    if (current_string.ToLower() == version_keywords[i])
+                    if (current_string.ToUpper() == version_keywords[i])
                     {
                         sl_command.MakerCommand.Template = current_string;
                         input_substring.RemoveAt(iterator);
@@ -321,7 +354,7 @@ namespace SocialLinker.Core.SceneMaker
                         // If we've reached the end of the user input OR the next index in the substring array contains a quotation mark,
                         // assign the "iterator" variable to the index stopped at and break the loop.
                         // We have likely encountered the start of the sprite number.
-                        if (i == input_substring.Count - 1 || input_substring[i + 1].Contains("\""))
+                        if (i == input_substring.Count - 1 || input_substring[i + 1].IndexOfAny(quotation_check) != -1) // Check by https://stackoverflow.com/questions/1390749/check-if-a-string-contains-one-of-10-characters
                         {
                             iterator = i;
                             break;
@@ -354,10 +387,10 @@ namespace SocialLinker.Core.SceneMaker
             if (char_temp.Count > 1)
             {
                 // If so, start iterating through the generic_keywords string list. There may be a template keyword present at the end of the character keyword.
-                for (int i = 0; i < generic_keywords.Length; i++)
+                for (int i = 0; i < generic_keywords.Count; i++)
                 {
                     // Take the last index of the char_temp list and compare it against the current generic_keywords index iteration.
-                    if (char_temp[char_temp.Count - 1].ToLower() == generic_keywords[i])
+                    if (char_temp[char_temp.Count - 1].ToUpper() == generic_keywords[i])
                     {
                         // If they match, a generic keyword specifying which game to pull the character's sprites from is present.
                         // Assign the last index of the char_temp list to the "character_sheet" string variable.
@@ -373,10 +406,10 @@ namespace SocialLinker.Core.SceneMaker
                 {
                     // Next, let's start checking for version keywords.
                     // Start iterating through the version_keywords string list. There may be a template keyword present at the end of the character keyword.
-                    for (int i = 0; i < version_keywords.Length; i++)
+                    for (int i = 0; i < version_keywords.Count; i++)
                     {
                         // Take the last index of the char_temp list and compare it against the current version_keywords index iteration.
-                        if (char_temp[char_temp.Count - 1].ToLower() == version_keywords[i])
+                        if (char_temp[char_temp.Count - 1].ToUpper() == version_keywords[i])
                         {
                             // If they match, a version keyword specifying which game to pull the character's sprites from is present.
                             // Assign the last index of the char_temp list to the "Sprite_Set_Version" string variable.
@@ -412,10 +445,10 @@ namespace SocialLinker.Core.SceneMaker
 
             // At this point, we want to ensure the character keyword is not a template keyword we accidentally took in.
             // First, iterate through the generic_keywords string list.
-            for (int i = 0; i < generic_keywords.Length; i++)
+            for (int i = 0; i < generic_keywords.Count; i++)
             {
                 // Take the character_keyword variable and compare it against the current generic_keywords index iteration.
-                if (sl_command.MakerCommand.Character_Keyword.ToLower() == generic_keywords[i])
+                if (sl_command.MakerCommand.Character_Keyword.ToUpper() == generic_keywords[i])
                 {
                     // If a match is found, send an error message. The command was improperly input.
                     await ErrorHandling.Char_Keyword_Not_Found(sl_command);
@@ -424,10 +457,10 @@ namespace SocialLinker.Core.SceneMaker
             }
 
             // Next, check the version keywords by iterating through the version_keywords string list.
-            for (int i = 0; i < version_keywords.Length; i++)
+            for (int i = 0; i < version_keywords.Count; i++)
             {
                 // Take the character_keyword variable and compare it against the current version_keywords index iteration.
-                if (sl_command.MakerCommand.Character_Keyword.ToLower() == version_keywords[i])
+                if (sl_command.MakerCommand.Character_Keyword.ToUpper() == version_keywords[i])
                 {
                     // If a match is found, send an error message. The command was improperly input.
                     await ErrorHandling.Char_Keyword_Not_Found(sl_command);
@@ -440,10 +473,6 @@ namespace SocialLinker.Core.SceneMaker
             // If a sprite number is present, this is expected to return true. If not, this is expected to return false.
             if (Char.IsDigit(input_substring[iterator], 0) == false)
             {
-                // Decide the case that the user accidentally forgot to enter a sprite number.
-                // Create a char array for different types of quotation marks.
-                char[] quotation_check = { '\u0022', '\u201C', '\u201D' };
-
                 // Iterate through the quotation_check char array.
                 for (int i = 0; i < quotation_check.Length; i++)
                 {
@@ -638,7 +667,10 @@ namespace SocialLinker.Core.SceneMaker
                     // The first step of this is checking the validity of the user's inputted base sprite in relation to the chosen set.
                     if (sprite_set_info != null)
                     {
-                        OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, sl_command.MakerCommand);
+                        if (OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, sl_command.MakerCommand) == true)
+                        {
+                            await OfficialSetMethods.Bustup_Frame_Sheet_Message_Directory(sl_command, sprite_set_info, sl_command.MakerCommand);
+                        }
                     }
                     // If the sprite set info is null, send an error message. The sprite set doesn't exist.
                     else
@@ -670,7 +702,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Ensure that the first index and the last index of the dialogue_temp char array contain quotation marks.
             // If they do, remove the first and last indices from the list.
-            if ((dialogue_temp[0] == '\u0022' || dialogue_temp[0] == '\u201C') && (dialogue_temp[dialogue_temp.Count - 1] == '\u0022' || dialogue_temp[dialogue_temp.Count - 1] == '\u201D' || dialogue_temp[dialogue_temp.Count - 1] == '\u201E'))
+            if (quotation_check.Contains(dialogue_temp[0]) && quotation_check.Contains(dialogue_temp[dialogue_temp.Count - 1]))
             {
                 dialogue_temp.RemoveAt(0);
                 dialogue_temp.RemoveAt(dialogue_temp.Count - 1);
@@ -709,6 +741,14 @@ namespace SocialLinker.Core.SceneMaker
             // Get the information of the chosen sprite set.
             sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, sl_command.MakerCommand);
 
+            if (sprite_set_info != null)
+            {
+                if (OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, sl_command.MakerCommand) == false)
+                {
+                    return;
+                }
+            }
+
             // If the sprite set's info returns null, it means the character keyword the user typed doesn't exist in the files.
             // If this happens and the user didn't specify a template, send a generic "set not found" error message.
             if (sprite_set_info == null && sl_command.MakerCommand.Sprite_Set_Version == "")
@@ -730,7 +770,7 @@ namespace SocialLinker.Core.SceneMaker
             }
         }
 
-        public static async Task System_Message_Parser(SocialLinkerCommand sl_command, string message_content)
+        public async Task System_Message_Parser(SocialLinkerCommand sl_command, string message_content)
         {
             try
             {
@@ -758,6 +798,7 @@ namespace SocialLinker.Core.SceneMaker
                 // Declare other variables that will be needed throughout the method.
                 int iterator = 0;
                 string current_string = "";
+                char[] quotation_check = { '\u0022', '\u201C', '\u201D', '\u201E' };
 
                 // Create an empty string list. This is where the user's input will go.
                 List<string> input_substring;
@@ -779,15 +820,11 @@ namespace SocialLinker.Core.SceneMaker
                 }
 
                 // If there are no indicies in the input_substring string list, we have a successful command! Generate a tutorial menu and return.
-                if (input_substring.Count == 0)
+                if (input_substring.Count == 1 && input_substring[0] == $"{BotConfig.bot.cmdPrefix}maker")
                 {
-                    await sl_command.Channel.SendMessageAsync(":white_check_mark: **Parsing successful.** A tutorial menu for the scene maker will be displayed.");
+                    await Help.HelpMenu(sl_command);
                     return;
                 }
-
-                // Create two individual string arrays for template keywords: One containing generic keywords, and one containing version keywords.
-                string[] generic_keywords = { "p1", "p2", "p2is", "p2ep", "p3", "p4", "p4a", "p4au", "p4u", "p4u2", "p4d", "p5", "p5s", "bbtag" };
-                string[] version_keywords = { "p1-ps1", "p1-psx", "p1-psp", "p1p", "p2is-ps1", "p2is-psx", "p2is-psp", "p2isp", "p2ep-ps1", "p2ep-psx", "p2ep-psp", "p2epp", "p3f", "fes", "p3fes", "p3-ps2", "p3f-ps2", "fes-ps2", "p3fes-ps2", "p3p", "p3-psp", "p4-ps2", "p4g", "p4a", "p4au", "p4u", "p4u2", "p4d", "p5-ps3", "p5-ps4", "p5r", "p5r-ps4", "p5s", "bbtag" };
 
                 // Assign the first word of the user's input after the "maker" prefix to the empty "current_string" variable.
                 // The int variable "iterator" is currently set at 0, so this will retrieve the first index of the string list containing the user's processed input.
@@ -795,10 +832,10 @@ namespace SocialLinker.Core.SceneMaker
 
                 // First, let's assume we're looking for a generic theme keyword.
                 // Iterate through every index in the generic_keywords array to check if the current string is a match.
-                for (int i = 0; i < generic_keywords.Length; i++)
+                for (int i = 0; i < generic_keywords.Count; i++)
                 {
                     // If a match is found, the user specified a template first before the "System" keyword. Send an error message and return.
-                    if (current_string.ToLower() == generic_keywords[i])
+                    if (current_string.ToUpper() == generic_keywords[i])
                     {
                         await ErrorHandling.Template_Specified_First_On_System_Message(sl_command);
                         return;
@@ -810,10 +847,10 @@ namespace SocialLinker.Core.SceneMaker
                 if (sl_command.MakerCommand.Template == "")
                 {
                     // Iterate through every index in the version_keywords array to check if the current string is a match.
-                    for (int i = 0; i < version_keywords.Length; i++)
+                    for (int i = 0; i < version_keywords.Count; i++)
                     {
                         // If a match is found, the user specified a template first before the "System" keyword. Send an error message and return.
-                        if (current_string.ToLower() == version_keywords[i])
+                        if (current_string.ToUpper() == version_keywords[i])
                         {
                             await ErrorHandling.Template_Specified_First_On_System_Message(sl_command);
                             return;
@@ -853,7 +890,7 @@ namespace SocialLinker.Core.SceneMaker
                             // If we've reached the end of the user input OR the next index in the substring array contains a quotation mark,
                             // assign the "iterator" variable to the index stopped at and break the loop.
                             // We have likely encountered the start of the sprite number.
-                            if (i == input_substring.Count - 1 || input_substring[i + 1].Contains("\""))
+                            if (i == input_substring.Count - 1 || input_substring[i + 1].IndexOfAny(quotation_check) != -1) // Check by https://stackoverflow.com/questions/1390749/check-if-a-string-contains-one-of-10-characters
                             {
                                 iterator = i;
                                 break;
@@ -886,10 +923,10 @@ namespace SocialLinker.Core.SceneMaker
                 if (char_temp.Count > 1)
                 {
                     // If so, start iterating through the generic_keywords string list. There may be a template keyword present at the end of the character keyword.
-                    for (int i = 0; i < generic_keywords.Length; i++)
+                    for (int i = 0; i < generic_keywords.Count; i++)
                     {
                         // Take the last index of the char_temp list and compare it against the current generic_keywords index iteration.
-                        if (char_temp[char_temp.Count - 1].ToLower() == generic_keywords[i])
+                        if (char_temp[char_temp.Count - 1].ToUpper() == generic_keywords[i])
                         {
                             // If they match, a generic keyword specifying which game to pull the character's sprites from is present.
                             // Assign the last index of the char_temp list to the "character_sheet" string variable.
@@ -905,10 +942,10 @@ namespace SocialLinker.Core.SceneMaker
                     {
                         // Next, let's start checking for version keywords.
                         // Start iterating through the version_keywords string list. There may be a template keyword present at the end of the character keyword.
-                        for (int i = 0; i < version_keywords.Length; i++)
+                        for (int i = 0; i < version_keywords.Count; i++)
                         {
                             // Take the last index of the char_temp list and compare it against the current version_keywords index iteration.
-                            if (char_temp[char_temp.Count - 1].ToLower() == version_keywords[i])
+                            if (char_temp[char_temp.Count - 1].ToUpper() == version_keywords[i])
                             {
                                 // If they match, a version keyword specifying which game to pull the character's sprites from is present.
                                 // Assign the last index of the char_temp list to the "Sprite_Set_Version" string variable.
@@ -937,9 +974,6 @@ namespace SocialLinker.Core.SceneMaker
                 if (Char.IsDigit(input_substring[iterator], 0) == false)
                 {
                     // Decide the case that the user accidentally forgot to enter a sprite number.
-                    // Create a char array for different types of quotation marks.
-                    char[] quotation_check = { '\u0022', '\u201C', '\u201D' };
-
                     // Iterate through the quotation_check char array.
                     for (int i = 0; i < quotation_check.Length; i++)
                     {

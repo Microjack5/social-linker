@@ -9,14 +9,13 @@ using SocialLinker.Core.CloudStorageTables;
 using Discord;
 using SocialLinker.Core.LocalStorageTables;
 using SocialLinker.Config;
+using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.StatusScreens
 {
     class ErrorHandling : ModuleBase<SocketCommandContext>
     {
-        public static double error_duration = 60000;
-
-        public static async Task Scene_Upload_Failed(SocketUser user, ISocketMessageChannel channel)
+        public static async Task Image_Upload_Failed(SocketUser user, ISocketMessageChannel channel)
         {
             // Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -31,8 +30,8 @@ namespace SocialLinker.Core.StatusScreens
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message.
-            embed.WithColor(Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
             embed.WithDescription("Something went wrong while trying to upload the image. Try again soon.");
@@ -42,7 +41,7 @@ namespace SocialLinker.Core.StatusScreens
             Timer error_timer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
-                Interval = error_duration,
+                Interval = Global.error_duration,
                 AutoReset = false,
                 Enabled = true
             };
@@ -69,46 +68,5 @@ namespace SocialLinker.Core.StatusScreens
                 }
             }
         }
-
-        //Misc
-        public static Color Get_Profile_Embed_Color(UserInfoFields account)
-        {
-            // Based on the account's settings, return a color to be used on embedded menu messages.
-            switch (account.Profile_Theme)
-            {
-                case "P3":
-                    return new Color(37, 149, 255);
-
-                case "P4":
-                    return new Color(255, 229, 49);
-
-                case "P5":
-                    return new Color(213, 27, 4);
-
-                default:
-                    return new Color(0, 0, 0);
-            }
-        }
-
-        public static string Get_Profile_Help_Thumbnail(UserInfoFields account)
-        {
-            // Based on the account's settings, return a thumbnail to be used on embedded menu messages.
-            switch (account.Profile_Theme)
-            {
-                case "P3":
-                    return "https://i.imgur.com/CguM1ql.png";
-
-                case "P4":
-                    return "https://i.imgur.com/PW7VtuB.png";
-
-                case "P5":
-                    return "https://i.imgur.com/tubdL8K.png";
-
-                default:
-                    return "";
-            }
-        }
-
-
     }
 }

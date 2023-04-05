@@ -13,7 +13,84 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
 {
     class First_Use_Content_Filter_Menu
     {
-        public static async Task First_Use_Content_Filter_Start(SocketTextChannel channel, SocketGuildUser user)
+        public static async Task First_Use_Content_Filter_Initialize(SocialLinkerCommand command)
+        {
+            // Create two variables to check if there is a menu list entry with either the current channel ID or current user ID.
+            var channelSearch = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Channel.Id == command.Channel.Id);
+            var userSearch = Global.MenuIdList.SingleOrDefault(x => x.User.Id == command.User.Id);
+            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == command.User.Id);
+
+            // If the channel entry exists and the user is not the same, create a new menu.
+            if (channelSearch != null && channelSearch.User.Id != command.User.Id)
+            {
+                // Case 1: Search by channel successful, user ID does not match. Create new entry for new user.
+                // Create a new menu in the current channel.
+                await First_Use_Content_Filter_Load((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
+                return;
+            }
+            // Else, if the channel entry exists and the user is the same, assume they want to reset the menu and delete the previous entry.
+            else if (channelSearch != null && channelSearch.User.Id == command.User.Id)
+            {
+                // Case 2: Search by channel successful, user ID matches. Resetting menu in same channel.
+                // Attempt deleting the message if it hasn't been deleted by the user yet.
+                try
+                {
+                    // Delete the currently active menu.
+                    await channelSearch.MenuMessage.DeleteAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                // Stop the timeout timer associated with the menu.
+                channelSearch.MenuTimer.Stop();
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(channelSearch);
+                Global.ContentFilterList.Remove(filterSession);
+
+                // Create a new menu in the current channel.
+                await First_Use_Content_Filter_Load((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
+                return;
+            }
+            // Else, if an entry exists where the user is found but they're in a different channel now, delete previous entry and reset the menu.
+            else if (userSearch != null && userSearch.MenuMessage.Channel.Id != command.Channel.Id)
+            {
+                // Case 3: Search by user successful, channel ID does not match. Resetting menu in new channel.
+                // Attempt deleting the message if it hasn't been deleted by the user yet.
+                try
+                {
+                    // Delete the currently active menu.
+                    await userSearch.MenuMessage.DeleteAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                // Stop the timeout timer associated with the menu.
+                userSearch.MenuTimer.Stop();
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(userSearch);
+                Global.ContentFilterList.Remove(filterSession);
+
+                // Create a new menu in the current channel.
+                await First_Use_Content_Filter_Load((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
+                return;
+            }
+            // For any other condition (if one should exist and not be handled here), create a new menu entry.
+            else
+            {
+                // Case 4: No previous entry found. Create new entry.
+                // Create a new menu in the current channel.
+                await First_Use_Content_Filter_Load((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
+                return;
+            }
+        }
+
+        public static async Task First_Use_Content_Filter_Load(SocketTextChannel channel, SocketGuildUser user)
         {
             //Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(user);
@@ -46,7 +123,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             {
                 User = user,
                 MenuMessage = message,
-                CurrentMenu = "First_Use_Content_Filter_Main",
+                CurrentMenu = "First_Use_Content_Filter_Load",
                 MenuTimer = new Timer()
                 {
                     // Create a timer that expires as a "time out" duration for the user.
@@ -116,7 +193,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithDescription("" +
                 "Social Linker contains content from all across the Persona series, so it might be easy to spoil yourself if you’re actively avoiding certain titles.\n" +
                 "\n" +
-                "Select the games you want to avoid spoilers for by reacting with their icons below. " +
+                ":warning: **Select the games you want to __avoid spoilers__ for by reacting with their icons below. __DO NOT SELECT TITLES YOU WANT TO USE!__**\n" +
                 "You’ll receive a warning message whenever related content is accessed to prevent you from accidentally viewing it. " +
                 "This won’t prevent other users around you from accessing such content, however.\n" +
                 "\n" +
@@ -475,7 +552,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                 ":one: Persona 3 FES\n" +
                 ":two: Persona 3 Portable");
 
-            embed.WithThumbnailUrl("https://i.imgur.com/trtPflx.png");
+            embed.WithImageUrl("https://i.imgur.com/hZJTcx4.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

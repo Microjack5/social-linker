@@ -16,5 +16,34 @@ namespace SocialLinker
         internal static List<DisplayNameTempData> DisplayNameTempList { get; set; } = new List<DisplayNameTempData>();
         internal static List<ContextSwitchData> P1_PS1_Usage_List { get; set; } = new List<ContextSwitchData>();
         internal static List<PlacementSwitchData> P1_PSP_Usage_List { get; set; } = new List<PlacementSwitchData>();
+
+        internal static string[] p1_ps1_version_keywords = { "P1-PS1", "P1-PSX", "P1PS1", "P1PSX" };
+        internal static string[] p1_psp_version_keywords = { "P1-PSP", "P1P", "P1PSP" };
+        internal static string[] p2is_ps1_version_keywords = { "P2IS-PS1", "P2IS-PSX", "P2ISPS1", "P2ISPSX", "P2-PS1", "P2-PSX", "P2PS1", "P2PSX", "ISPS1", "ISPSX" };
+        internal static string[] p2is_psp_version_keywords = { "P2IS-PSP", "P2ISPSP", "P2ISP", "ISPSP", "ISP" };
+        internal static string[] p2ep_ps1_version_keywords = { "P2EP-PS1", "P2EP-PSX", "P2EPPS1", "P2EPPSX", "EPPS1", "EPPSX" };
+        internal static string[] p2ep_psp_version_keywords = { "P2EP-PSP", "P2EPPSP", "P2EPP", "EPPSP", "EPP" };
+        internal static string[] p3f_version_keywords = { "P3F", "FES", "P3FES", "P3-PS2", "P3F-PS2", "FES-PS2", "P3FES-PS2", "P3-FES", "P3PS2", "P3FPS2", "FESPS2", "P3FESPS2" };
+        internal static string[] p3p_version_keywords = { "P3P", "P3-PSP", "P3PSP" };
+        internal static string[] p4_ps2_version_keywords = { "P4-PS2", "P4PS2" };
+        internal static string[] p4g_version_keywords = { "P4G" };
+        internal static string[] p5_ps4_version_keywords = { "P5-PS3", "P5-PS4", "P5PS3", "P5PS4" };
+        internal static string[] p5r_version_keywords = { "P5R", "P5R-PS4", "P5RPS4" };
+
+        internal static string[] p1_generic_keywords = { "P1" };
+        internal static string[] p2is_generic_keywords = { "P2IS", "P2", "IS" };
+        internal static string[] p2ep_generic_keywords = { "P2EP", "EP" };
+        internal static string[] p3_generic_keywords = { "P3" };
+        internal static string[] p4_generic_keywords = { "P4" };
+        internal static string[] p4au_generic_keywords = { "P4A", "P4AU", "P4U", "P4U2" };
+        internal static string[] p4d_generic_keywords = { "P4D" };
+        internal static string[] p5_generic_keywords = { "P5" };
+        internal static string[] p5s_generic_keywords = { "P5S" };
+        internal static string[] bbtag_generic_keywords = { "BBTAG" };
+
+        internal static int error_duration = 60000;
+        internal static int API_Timeout = 5000;
+        internal static int Max_PMedals = 999;
+        internal static int Max_Level = 99;
     }
 }

@@ -28,23 +28,6 @@ namespace SocialLinker.Core.StatusScreens.Decor
             {
                 var account = UserInfoClasses.GetAccount(user);
 
-                string username = Shorten_Long_Strings(user.Username, 32);
-
-                //Establish other variables of the user's data
-                string level = $"{account.Level}";
-                int total_exp = account.Total_Exp;
-                string pmedals = $"{account.P_Medals}";
-                string proficiency_title = Core.LevelSystem.SocialStats.ProficiencyRankTitle(account.Proficiency_Rank);
-                string diligence_title = Core.LevelSystem.SocialStats.DiligenceRankTitle(account.Diligence_Rank);
-                string expression_title = Core.LevelSystem.SocialStats.ExpressionRankTitle(account.Expression_Rank);
-
-                //Determine the Next Exp value
-                int next_exp = 0;
-                if (account.Level != 99)
-                {
-                    next_exp = Core.LevelSystem.Leveling.CalculateExp(account.Level + 1) - account.Total_Exp;
-                }
-
                 Bitmap base_template = new Bitmap(template_width, template_height);
 
                 Bitmap chara_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//Profile//StatusScreens//Decor//Decor_TMS_Kiria_1//chara_bg.png");
@@ -77,7 +60,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             }
             catch (Exception ex)
             {
-                _ = ErrorHandling.Scene_Upload_Failed(user, channel);
+                _ = ErrorHandling.Image_Upload_Failed(user, channel);
                 Console.WriteLine(ex);
 
                 await loader.DeleteAsync();
@@ -735,35 +718,6 @@ namespace SocialLinker.Core.StatusScreens.Decor
             return required_points;
         }
 
-        public static Bitmap KeepPixelOverlap(Bitmap bottom_bitmap, Bitmap top_bitmap, Rectangle area)
-        {
-            System.Drawing.Color bottom_pixel_color;
-            System.Drawing.Color top_pixel_color;
-
-            // Make an empty bitmap the same size as scrBitmap
-            Bitmap newBitmap = new Bitmap(bottom_bitmap.Width, bottom_bitmap.Height);
-
-            // Establish a nested loop that iterates on the X and Y axis of the image within a region
-            for (int i = area.X; i < area.Right; i++)
-            {
-                for (int j = area.Y; j < area.Bottom; j++)
-                {
-                    // Get a pixel from the same position on both bitmaps
-                    bottom_pixel_color = bottom_bitmap.GetPixel(i, j);
-                    top_pixel_color = top_bitmap.GetPixel(i, j);
-
-                    // If both pixels have an alpha value above 0 and overlap, draw the top pixel to the new bitmap
-                    if (bottom_pixel_color.A > 0 && top_pixel_color.A > 0)
-                    {
-                        newBitmap.SetPixel(i, j, top_pixel_color);
-                    }
-
-                }
-            }
-
-            return newBitmap;
-        }
-
         public static Bitmap KeepOverlapWithMatchedColor(Bitmap bottom_bitmap, Bitmap top_bitmap, System.Drawing.Color matching_color, int x_start, int x_end, int y_start, int y_end)
         {
             System.Drawing.Color bottom_pixel_color;
@@ -791,15 +745,6 @@ namespace SocialLinker.Core.StatusScreens.Decor
             }
 
             return newBitmap;
-        }
-
-        public static string Shorten_Long_Strings(string input_string, int max_string_length)
-        {
-            if (input_string.Length > max_string_length)
-            {
-                input_string = $"{input_string.Substring(0, max_string_length)}...";
-            }
-            return input_string;
         }
 
         public static Bitmap RenderPrestigeCounter(int level_resets)

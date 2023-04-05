@@ -102,6 +102,11 @@ namespace SocialLinker.Core.CloudStorageTables
             var query = new TableQuery<DisplayNameTableData>().Where(name_filter_2);
             var existing_result = customNameTable.ExecuteQuery(query).FirstOrDefault();
 
+            if (existing_result == null)
+            {
+                return false;
+            }
+
             List<string> existing_sprite_list = String_To_String_List(existing_result.Sprites_Affected);
             List<string> new_sprite_list = String_To_String_List(new_name_data.Sprites_Affected);
 

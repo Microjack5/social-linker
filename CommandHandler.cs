@@ -18,6 +18,7 @@ using System.Timers;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using SocialLinker.Core.CloudStorageTables;
 
 namespace SocialLinker
 {
@@ -173,48 +174,56 @@ namespace SocialLinker
 
         private Task HandleCommandAsync(SocketMessage s)
         {
-            _ = Task.Run(async () =>
+            try
             {
-                var msg = s as SocketUserMessage;
-
-                if (msg == null) return;
-                var context = new ShardedCommandContext(_client, msg);
-                if (context.User.IsBot) return;
-
-                // If the message is a direct message, return immediately.
-                if (msg.Channel.GetType() == typeof(SocketDMChannel))
+                _ = Task.Run(async () =>
                 {
-                    return;
-                }
+                    var msg = s as SocketUserMessage;
 
-                //If the user is in a time out status, do nothing and return
-                if (TimeOut.TimeOutStatus(msg) == "Yes") return;
+                    if (msg == null) return;
+                    var context = new ShardedCommandContext(_client, msg);
+                    if (context.User.IsBot) return;
 
-                var converted_sl_command = CommandConverter.ContextCommandConverter(msg);
-
-                int argPos = 0;
-                if (msg.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
-                {
-                    try
+                    // If the message is a direct message, return immediately.
+                    if (msg.Channel.GetType() == typeof(SocketDMChannel))
                     {
-                        // Process the command if there's actually a prefix. Otherwise, treat it as a normal message.
-                        await CommandIndex(converted_sl_command);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
+                        return;
                     }
 
-                    //Add Proficiency to the user's account whenever a command is successfully used
-                    SocialStats.AddProficiency(converted_sl_command);
-                }
+                    //If the user is in a time out status, do nothing and return
+                    if (TimeOut.TimeOutStatus(msg) == "Yes") return;
 
-                //Calculate if the user gains Diligence for this message
-                SocialStats.AddDiligence(converted_sl_command);
+                    var converted_sl_command = CommandConverter.ContextCommandConverter(msg);
 
-                //Leveling up manages the user's time caps, so make sure it comes after AddProficiency and AddDiligence have ran
-                Leveling.UserSentMessage(converted_sl_command);
-            });
+                    int argPos = 0;
+                    if (msg.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
+                    {
+                        try
+                        {
+                            // Process the command if there's actually a prefix. Otherwise, treat it as a normal message.
+                            await CommandIndex(converted_sl_command);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+
+                        //Add Proficiency to the user's account whenever a command is successfully used
+                        SocialStats.AddProficiency(converted_sl_command);
+                    }
+
+                    //Calculate if the user gains Diligence for this message
+                    SocialStats.AddDiligence(converted_sl_command);
+
+                    //Leveling up manages the user's time caps, so make sure it comes after AddProficiency and AddDiligence have ran
+                    Leveling.UserSentMessage(converted_sl_command);
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            
             return Task.CompletedTask;
         }
 
@@ -239,57 +248,81 @@ namespace SocialLinker
                 await command.SlashCommand.DeleteOriginalResponseAsync();
             }
 
-            switch (command.CommandName)
+            switch (command.CommandName.ToLower())
             {
+                // "status" and "profile" lead to the same command
                 case "status":
                     await Commands.Status.ContentCheck(command);
-                    break; 
+                    SocialLinkerCommandLogging.LogData(command);
+                    break;
+
+                case "profile":
+                    await Commands.Status.ContentCheck(command);
+                    SocialLinkerCommandLogging.LogData(command);
+                    break;
 
                 case "shop":
                     await Commands.Shop.StartShop(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
+                // "settings" and "setting" lead to the same command
                 case "settings":
                     await Commands.Settings.SettingsMenu(command);
+                    SocialLinkerCommandLogging.LogData(command);
+                    break;
+
+                case "setting":
+                    await Commands.Settings.SettingsMenu(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "help":
                     await Commands.Help.HelpMenu(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "hug":
                     await Commands.Hug.HugCommand(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "pat":
                     await Commands.Pat.PatCommand(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "punch":
                     await Commands.Punch.PunchCommand(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "slap":
                     await Commands.Slap.SlapCommand(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "maker":
                     await Commands.Maker.MakerCommandParser(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "maker_list":
                     command.MakerCommand = SL_To_Maker_Command(command);
                     await Commands.Maker.MakerCommandParser(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "maker_sheet":
                     command.MakerCommand = SL_To_Maker_Command(command);
                     await Commands.Maker.MakerCommandParser(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "maker_create":
                     command.MakerCommand = SL_To_Maker_Command(command);
                     await Commands.Maker.MakerCommandParser(command);
+                    SocialLinkerCommandLogging.LogData(command);
                     break;
 
                 case "update":

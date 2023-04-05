@@ -249,94 +249,94 @@ namespace SocialLinker.Core.LocalStorageTables
             input_template = input_template.ToUpper();
 
             // Use if statements to handle version-specific keywords.
-            if (input_template == "P1-PS1" || input_template == "P1-PSX")
+            if (Global.p1_ps1_version_keywords.Contains(input_template))
             {
                 return "P1-PS1";
             }
-            else if (input_template == "P1-PSP" || input_template == "P1P")
+            else if (Global.p1_psp_version_keywords.Contains(input_template))
             {
                 return "P1-PSP";
             }
-            else if (input_template == "P2IS-PS1" || input_template == "P2IS-PSX")
+            else if (Global.p2is_ps1_version_keywords.Contains(input_template))
             {
                 return "P2IS-PS1";
             }
-            else if (input_template == "P2IS-PSP" || input_template == "P2ISP")
+            else if (Global.p2is_psp_version_keywords.Contains(input_template))
             {
                 return "P2IS-PSP";
             }
-            else if (input_template == "P2EP-PS1" || input_template == "P2EP-PSX")
+            else if (Global.p2ep_ps1_version_keywords.Contains(input_template))
             {
                 return "P2EP-PS1";
             }
-            else if (input_template == "P2EP-PSP" || input_template == "P2EPP")
+            else if (Global.p2ep_psp_version_keywords.Contains(input_template))
             {
                 return "P2EP-PSP";
             }
-            else if (input_template == "P3F" || input_template == "FES" || input_template == "P3FES" || input_template == "P3-PS2" || input_template == "P3F-PS2" || input_template == "FES-PS2" || input_template == "P3FES-PS2")
+            else if (Global.p3f_version_keywords.Contains(input_template))
             {
                 return "P3F";
             }
-            else if (input_template == "P3P" || input_template == "P3-PSP")
+            else if (Global.p3p_version_keywords.Contains(input_template))
             {
                 return "P3P";
             }
-            else if (input_template == "P4-PS2")
+            else if (Global.p4_ps2_version_keywords.Contains(input_template))
             {
                 return "P4-PS2";
             }
-            else if (input_template == "P4G")
+            else if (Global.p4g_version_keywords.Contains(input_template))
             {
                 return "P4G";
             }
-            else if (input_template == "P5-PS3" || input_template == "P5-PS4")
+            else if (Global.p5_ps4_version_keywords.Contains(input_template))
             {
                 return "P5-PS4";
             }
-            else if (input_template == "P5R" || input_template == "P5R-PS4")
+            else if (Global.p5r_version_keywords.Contains(input_template))
             {
                 return "P5R";
             }
 
             // Generic template keywords are handled by the user's version control settings.
             // Since there are multiple inputs that can lead to the desired template, if statements are used to decide the proper abbreviation to return.
-            if (input_template == "P1")
+            if (Global.p1_generic_keywords.Contains(input_template))
             {
                 return account.VC_P1;
             }
-            else if (input_template == "P2" || input_template == "P2IS")
+            else if (Global.p2is_generic_keywords.Contains(input_template))
             {
                 return account.VC_P2IS;
             }
-            else if (input_template == "P2EP")
+            else if (Global.p2ep_generic_keywords.Contains(input_template))
             {
                 return account.VC_P2EP;
             }
-            else if (input_template == "P3")
+            else if (Global.p3_generic_keywords.Contains(input_template))
             {
                 return account.VC_P3;
             }
-            else if (input_template == "P4")
+            else if (Global.p4_generic_keywords.Contains(input_template))
             {
                 return account.VC_P4;
             }
-            else if (input_template == "P4A" || input_template == "P4AU" || input_template == "P4U" || input_template == "P4U2")
+            else if (Global.p4au_generic_keywords.Contains(input_template))
             {
                 return "P4AU";
             }
-            else if (input_template == "P4D")
+            else if (Global.p4d_generic_keywords.Contains(input_template))
             {
                 return "P4D";
             }
-            else if (input_template == "P5")
+            else if (Global.p5_generic_keywords.Contains(input_template))
             {
                 return account.VC_P5;
             }
-            else if (input_template == "P5S")
+            else if (Global.p5s_generic_keywords.Contains(input_template))
             {
                 return "P5S";
             }
-            else if (input_template == "BBTAG")
+            else if (Global.bbtag_generic_keywords.Contains(input_template))
             {
                 return "BBTAG";
             }
@@ -404,6 +404,36 @@ namespace SocialLinker.Core.LocalStorageTables
         public static string GetDisplayName(UserInfoFields account, MakerCommandData command_data, OfficialSetData set_data, BustupData bustup_data)
         {
             ulong user_id = Convert.ToUInt64(account.User_ID);
+            string default_name = bustup_data.Default_Name_EN;
+
+            switch (set_data.Origin)
+            {
+                case "P1-PS1":
+                    if (account.P1_PSX_TS_Localized_Revelations_Names == "Off" && bustup_data.Revelations_Char_Original_Name_EN != default)
+                    {
+                        default_name = bustup_data.Revelations_Char_Original_Name_EN;
+                    }
+                    break;
+
+                case "P2IS-PS1":
+                    if (account.P2IS_PSX_TS_Localized_Revelations_Names == "Off" && bustup_data.Revelations_Char_Original_Name_EN != default)
+                    {
+                        default_name = bustup_data.Revelations_Char_Original_Name_EN;
+                    }
+                    break;
+
+                case "P2EP-PS1":
+                    if (account.P2EP_PSX_TS_Localized_Revelations_Names == "Off" && bustup_data.Revelations_Char_Original_Name_EN != default)
+                    {
+                        default_name = bustup_data.Revelations_Char_Original_Name_EN;
+                    }
+                    break;
+
+                default:
+                    // Do nothing
+                    break;
+            }
+
             DisplayNameTableData custom_name_data = DisplayNameLogging.GetCustomName(user_id, set_data, bustup_data);
 
             if (custom_name_data == null)
@@ -412,11 +442,11 @@ namespace SocialLinker.Core.LocalStorageTables
                 {
                     command_data.Base_Sprite = 1;
                     bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
-                    return bustup_data.Default_Name_EN;
+                    return default_name;
                 }
                 else
                 {
-                    return bustup_data.Default_Name_EN;
+                    return default_name;
                 }
                 
             }
@@ -432,7 +462,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     {
                         command_data.Base_Sprite = 1;
                         bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
-                        return bustup_data.Default_Name_EN;
+                        return default_name;
                     }
                 }
                 else
@@ -445,6 +475,8 @@ namespace SocialLinker.Core.LocalStorageTables
         // Main methods to assist the functions of the scene maker.
         public static async Task Set_List_Message_Directory(SocialLinkerCommand sl_command)
         {
+            MakerCommandLogging.LogData(sl_command);
+
             if (Content_Filter_Pass_Check(sl_command, sl_command.MakerCommand.Template) == false)
             {
                 return;
@@ -522,6 +554,8 @@ namespace SocialLinker.Core.LocalStorageTables
 
         public static async Task Sprite_Sheet_Message_Directory(SocialLinkerCommand sl_command, OfficialSetData sprite_set_info)
         {
+            MakerCommandLogging.LogData(sl_command);
+
             if (Content_Filter_Pass_Check(sl_command, sprite_set_info.Origin) == false)
             {
                 return;
@@ -596,7 +630,7 @@ namespace SocialLinker.Core.LocalStorageTables
             return;
         }
 
-        public static async void Base_Sprite_Validity_Check(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static bool Base_Sprite_Validity_Check(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -609,18 +643,16 @@ namespace SocialLinker.Core.LocalStorageTables
             if (command_data.Base_Sprite > filecount)
             {
                 _ = ErrorHandling.Sprite_Number_Not_Found(sl_command, set_data.Name, set_data.Origin);
-            }
-            // If so, continue with creating the frame sheet!
-            else
-            {
-                await Bustup_Frame_Sheet_Message_Directory(sl_command, set_data, command_data);
+                return false;
             }
 
-            return;
+            return true;
         }
 
         public static async Task Bustup_Frame_Sheet_Message_Directory(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
+            MakerCommandLogging.LogData(sl_command);
+
             if (Content_Filter_Pass_Check(sl_command, set_data.Origin) == false)
             {
                 return;
@@ -1064,10 +1096,27 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P5-PS4":
+                        if (sl_command.User.Id == 222504679878164481 || sl_command.User.Id == 981191816412028930)
+                        {
+                            RenderP5R p5r_render = new RenderP5R();
+                            await p5r_render.Render_Quick_Scene_P5R(sl_command, set_data, command_data);
+                        }
+                        else
+                        {
+                            await sl_command.Channel.SendMessageAsync("The P5 scene maker is not available for use at the moment.");
+                        }
                         return;
 
                     case "P5R":
-                        await RenderP5R.Render_Quick_Scene_P5R(sl_command, set_data, command_data);
+                        if (sl_command.User.Id == 222504679878164481 || sl_command.User.Id == 981191816412028930)
+                        {
+                            RenderP5R p5r_render = new RenderP5R();
+                            await p5r_render.Render_Quick_Scene_P5R(sl_command, set_data, command_data);
+                        }
+                        else
+                        {
+                            await sl_command.Channel.SendMessageAsync("The P5R scene maker is not available for use at the moment.");
+                        }
                         return;
 
                     case "P5S":
@@ -1138,6 +1187,8 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P3P":
+                    RenderP3P p3p_render = new RenderP3P();
+                    await p3p_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P4-PS2":
@@ -1159,9 +1210,11 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P5-PS4":
+                    await sl_command.Channel.SendMessageAsync("The P5 scene maker is not available for use at the moment.");
                     return;
 
                 case "P5R":
+                    await sl_command.Channel.SendMessageAsync("The P5R scene maker is not available for use at the moment.");
                     return;
 
                 case "P5S":
@@ -1313,6 +1366,7 @@ namespace SocialLinker.Core.LocalStorageTables
                         // This means that we'll need to split the string up on different lines.
                         else if (line_length_remaining - completed_word_length < 0 && completed_word_length > max_line_length)
                         {
+                            Console.WriteLine("Here!");
                             // Take the completed word and turn it into a char array.
                             // We'll use this to iterate through the word character-by-character to decide where to split the string.
                             char[] completed_word_array = completed_word.ToCharArray();
@@ -1329,24 +1383,30 @@ namespace SocialLinker.Core.LocalStorageTables
                             // Create a for loop to iterate through the completed word array.
                             for (int j = 0; j < completed_word_array.Length; j++)
                             {
+                                //Console.WriteLine($"Current char: {completed_word_array[j]}");
+
                                 // Add the currently iterated character to the substring.
                                 substring += completed_word_array[j];
 
                                 // Measure the pixel length of the substring so far.
                                 substring_length = Measure_Word_Pixel_Length_Redirect(sl_command, template, substring);
 
+                                Console.WriteLine($"Current char: {completed_word_array[j]}, length remaining: {line_length_remaining - substring_length}");
+
                                 // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
                                 // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
                                 if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a'))
                                 {
                                     // Check if the current line number is less than the max number of lines available.
-                                    if (current_line < max_line_count - 1)
+                                    if (current_line <= max_line_count - 1)
                                     {
+                                        Console.WriteLine($"(1) Adding on line {current_line}...");
                                         // Add the substring to the current line.
                                         dialogue_list[current_line].Add(substring);
 
                                         // Since there is absolutely no more room on the current line left, increase the current line value.
                                         current_line++;
+                                        Console.WriteLine($"\nNEW LINE!!!!!!!! Line is now {current_line}-------");
 
                                         // Reset the remaining pixel length variable to the max value.
                                         // This is done because we moved to a new line.
@@ -1359,6 +1419,7 @@ namespace SocialLinker.Core.LocalStorageTables
                                 // Else, check if the last index of the completed word array has been reached.
                                 else if (j == completed_word_array.Length - 1)
                                 {
+                                    Console.WriteLine($"(2) Adding on line {current_line}...");
                                     // Add the substring to the current line.
                                     dialogue_list[current_line].Add(substring);
 
@@ -1376,6 +1437,13 @@ namespace SocialLinker.Core.LocalStorageTables
                     }
                 }
             }
+
+            Console.WriteLine($"Current line: {current_line}");
+
+            Console.WriteLine($"Line 0: {RenderP5R.String_List_To_String(dialogue_list[0])}");
+            Console.WriteLine($"Line 1: {RenderP5R.String_List_To_String(dialogue_list[1])}");
+            Console.WriteLine($"Line 2: {RenderP5R.String_List_To_String(dialogue_list[2])}");
+
 
             return dialogue_list;
         }

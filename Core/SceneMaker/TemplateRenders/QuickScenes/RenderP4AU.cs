@@ -540,8 +540,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 center_point_y = 16;
             }
 
-            Console.WriteLine("Rotation: " + rotation_angle);
-
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 graphics.DrawImage(cursor_inner, 8, 12, cursor_inner.Width, cursor_inner.Height);

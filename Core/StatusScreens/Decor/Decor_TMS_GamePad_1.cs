@@ -28,23 +28,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             {
                 var account = UserInfoClasses.GetAccount(user);
 
-                string username = Shorten_Long_Strings(user.Username, 24);
-
-                //Establish other variables of the user's data
-                string level = $"{account.Level}";
-                int total_exp = account.Total_Exp;
                 string profile_picture = user.GetAvatarUrl();
-                string pmedals = $"{account.P_Medals}";
-                string proficiency_title = Core.LevelSystem.SocialStats.ProficiencyRankTitle(account.Proficiency_Rank);
-                string diligence_title = Core.LevelSystem.SocialStats.DiligenceRankTitle(account.Diligence_Rank);
-                string expression_title = Core.LevelSystem.SocialStats.ExpressionRankTitle(account.Expression_Rank);
-
-                //Determine the Next Exp value
-                int next_exp = 0;
-                if (account.Level != 99)
-                {
-                    next_exp = Core.LevelSystem.Leveling.CalculateExp(account.Level + 1) - account.Total_Exp;
-                }
 
                 //If the user doesn't have a profile picture, use a default one
                 if (profile_picture == null)
@@ -119,7 +103,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             }
             catch (Exception ex)
             {
-                _ = ErrorHandling.Scene_Upload_Failed(user, channel);
+                _ = ErrorHandling.Image_Upload_Failed(user, channel);
                 Console.WriteLine(ex);
 
                 //Delete the loading message
@@ -170,7 +154,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
                 using (Font neology_deco = new Font("NeologyDecoW03-Regular", 40))
                 {
                     stringFormat.Alignment = StringAlignment.Far;
-                    graphics.DrawString(user.Username, neology_deco, Brushes.White, username_window, stringFormat);
+                    graphics.DrawString(Shorten_Long_Strings(user.Username, 24), neology_deco, Brushes.White, username_window, stringFormat);
                 }
 
                 using (Font neology_deco = new Font("NeologyDecoW03-Regular", 31))
@@ -189,7 +173,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
                     }
                     else
                     {
-                        graphics.DrawString(role_name, neology_deco, Brushes.White, role_name_window, stringFormat);
+                        graphics.DrawString(Shorten_Long_Strings(role_name, 20), neology_deco, Brushes.White, role_name_window, stringFormat);
                     }
                 }
 
@@ -330,7 +314,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
                 using (Font neology_deco = new Font("NeologyDecoW03-Regular", 29))
                 {
                     stringFormat.Alignment = StringAlignment.Near;
-                    graphics.DrawString(Shorten_Long_Strings(server_name, 25), neology_deco, Brushes.White, server_name_window, stringFormat);
+                    graphics.DrawString(Shorten_Long_Strings(server_name, 20), neology_deco, Brushes.White, server_name_window, stringFormat);
                 }
             }
 

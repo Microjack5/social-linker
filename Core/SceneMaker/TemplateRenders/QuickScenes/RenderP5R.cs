@@ -20,6 +20,7 @@ using System.Globalization;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using SocialLinker.Core.Menus;
+using Newtonsoft.Json.Linq;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -27,8 +28,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     {
         public const int template_width = 1920;
         public const int template_height = 1080;
+        public char[] forbidden_chars = { ' ', '.', '-', '\'' };
+        Random rnd = new Random();
 
-        public static async Task Render_Quick_Scene_P5R(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public async Task Render_Quick_Scene_P5R(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
             try
             {
@@ -79,6 +82,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     return;
                 }
 
+                string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+
                 // Time to put it all together!
                 using (Graphics graphics = Graphics.FromImage(base_template))
                 {
@@ -116,8 +121,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
 
                     // Draw the input dialogue to the template.
-                    List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5R", command_data.Dialogue, 3, 660);
-                    graphics.DrawImage(Render_Dialogue(parsed_lines), 0, 0, template_width, template_height);
+                    List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5R", command_data.Dialogue, 3, 800); //660
+                    graphics.DrawImage(Render_Dialogue(parsed_lines, 680, 914), 0, 0, template_width, template_height);
+
+                    graphics.DrawImage(Render_Name(display_name), 0, 0, template_width, template_height);
                 }
 
                 // Save the entire base template to a data stream.
@@ -129,7 +136,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 try
                 {
                     // Send the image.
-                    await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
+                    await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png", $"Display name: {display_name}");
                 }
                 catch (Exception e)
                 {
@@ -160,13 +167,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static Bitmap Render_Dialogue(List<string>[] dialogue_lines)
+        public static Bitmap Render_Dialogue(List<string>[] dialogue_lines, int start_point_x, int start_point_y)
         {
             //Create a bitmap as large as the template
             Bitmap bitmap = new Bitmap(template_width, template_height);
-
-            // Create an int to keep track of rendering errors. This is neccessary to inform the user of any potential issues.
-            int error_counter = 0;
 
             //Establish an int for the width and height glyphs should be rendered at
             int multiplier = 48;
@@ -177,8 +181,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             for (int i = 0; i < dialogue_lines.Length; i++)
             {
                 //Establish variables for where the glyphs should be rendered on the template
-                int render_position_x = 680;
-                int render_position_y = 914 + (68 * i);
+                int render_position_x = start_point_x;
+                int render_position_y = start_point_y + (45 * i);
 
                 char[] char_array = String_List_To_String(dialogue_lines[i]).ToCharArray();
 
@@ -186,14 +190,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     //Retrieve glyph information from the JSON file
                     var glyph = ParsingMethods.GetGlyph(char_array[j]);
-
-                    // If the glyph info returns null, we have a rendering error.
-                    // If this occurs and the error counter is at zero, increase the error counter and send a message to the user.
-                    if (glyph == null && error_counter == 0)
-                    {
-                        error_counter++;
-                        //message.Channel.SendMessageAsync(":warning: One or more of the characters entered is not supported by this template's font set and will not be rendered.");
-                    }
 
                     if (glyph != null)
                     {
@@ -221,234 +217,68 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         {
                             // If so, edit the position of the X coordinate according to specific kerning pairs.
 
-                            /*if (char_array[j] == 'w')
-                            {
-                                render_position_x += -1;
-                            } */
-
                             render_position_x += -1;
 
-                            if (char_array[j] == 'h' && char_array[j + 1] == 'i')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 't' && char_array[j + 1] == 'h')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'o' && char_array[j + 1] == 'm')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'l' && char_array[j + 1] == 'i')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'r' && char_array[j + 1] == '!')
-                            {
-                                render_position_x += +2;
-                            }
-                            // Next
-                            else if (char_array[j] == 'D' && char_array[j + 1] == 'o')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 's' && char_array[j + 1] == 'o')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'm' && char_array[j + 1] == 'e')
-                            {
-                                render_position_x += -1;
-                            }
-                            // Next
-                            else if (char_array[j] == 't' && char_array[j + 1] == 'o')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'f' && char_array[j + 1] == 'i')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'c' && char_array[j + 1] == 'i')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'W' && char_array[j + 1] == 'e')
+                            if (char_array[j] == 'i')
                             {
                                 render_position_x += -2;
                             }
-                            else if (char_array[j] == 't' && char_array[j + 1] == 'e')
+
+                            if (char_array[j] == 't')
                             {
-                                render_position_x += +1;
+                                render_position_x += 1;
                             }
-                            // Next
-                            else if (char_array[j] == 'H' && char_array[j + 1] == 'e')
+
+                            if (char_array[j] == '.')
+                            {
+                                render_position_x += 1;
+                            }
+
+                            if (char_array[j + 1] == '!')
+                            {
+                                render_position_x += 2;
+                            }
+                            if (char_array[j] == '!')
+                            {
+                                render_position_x += 3;
+                            }
+
+                            if (char_array[j] == 'B')
+                            {
+                                render_position_x += 1;
+                            }
+
+                            if (char_array[j] == 'H')
                             {
                                 render_position_x += -1;
                             }
-                            else if (char_array[j] == 'e' && char_array[j + 1] == 'h')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'h' && char_array[j + 1] == 'e')
+
+                            if (char_array[j + 1] == 'w')
                             {
                                 render_position_x += -1;
                             }
-                            else if (char_array[j] == 'e' && char_array[j + 1] == ',')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'l' && char_array[j + 1] == 'l')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'm' && char_array[j + 1] == 'e')
+                            if (char_array[j] == 'w')
                             {
                                 render_position_x += -1;
                             }
-                            else if (char_array[j] == 'y' && char_array[j + 1] == '.')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == '.' && char_array[j + 1] == '\"')
-                            {
-                                render_position_x += +1;
-                            }
-                            // Next
-                            else if (char_array[j] == 'l' && char_array[j + 1] == 'o')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'd' && char_array[j + 1] == 'e')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'r' && char_array[j + 1] == 'd')
+
+                            if (char_array[j + 1] == 'g')
                             {
                                 render_position_x += -1;
                             }
-                            else if (char_array[j] == '.' && char_array[j + 1] == '.')
-                            {
-                                render_position_x += +1;
-                            }
-                            // Next
-                            else if (char_array[j] == 'w' && char_array[j + 1] == 'h')
+
+                            if (char_array[j + 1] == 'm')
                             {
                                 render_position_x += -1;
                             }
-                            else if (char_array[j] == 'h' && char_array[j + 1] == 'i')
+
+                            if (char_array[j + 1] == 'j')
                             {
-                                render_position_x += +1;
+                                render_position_x += 1;
                             }
-                            else if (char_array[j] == 'i' && char_array[j + 1] == 'l')
+                            if (char_array[j] == 'j')
                             {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 't' && char_array[j + 1] == 'u')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'y' && char_array[j + 1] == 'i')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'n' && char_array[j + 1] == 'i')
-                            {
-                                render_position_x += +1;
-                            }
-                            /*else if (char_array[j] == 'g' && char_array[j + 1] == 'h')
-                            {
-                                render_position_x += +1;
-                            } */
-                            else if (char_array[j] == 't' && char_array[j + 1] == '.')
-                            {
-                                render_position_x += +1;
-                            }
-                            // Next
-                            else if (char_array[j] == 'M' && char_array[j + 1] == 'y')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'a' && char_array[j + 1] == 'm')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'm' && char_array[j + 1] == 'e')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'W' && char_array[j + 1] == 'i')
-                            {
-                                render_position_x += -1;
-                            }
-                            // Next
-                            else if (char_array[j] == 'H' && char_array[j + 1] == 'o')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'o' && char_array[j + 1] == 'w')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'm' && char_array[j + 1] == 'a')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'f' && char_array[j + 1] == 'l')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'w' && char_array[j + 1] == 'n')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'i' && char_array[j + 1] == 's')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 'p' && char_array[j + 1] == 'l')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'g' && char_array[j + 1] == 'o')
-                            {
-                                render_position_x += -1;
-                            }
-                            // Next
-                            else if (char_array[j] == 'm' && char_array[j + 1] == 'u')
-                            {
-                                render_position_x += -1;
-                            }
-                            // Next
-                            else if (char_array[j] == 't' && char_array[j + 1] == 'h')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'l' && char_array[j + 1] == 'i')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'i' && char_array[j + 1] == 'k')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'i' && char_array[j + 1] == 's')
-                            {
-                                render_position_x += +1;
-                            }
-                            // Next
-                            else if (char_array[j] == 't' && char_array[j + 1] == ',')
-                            {
-                                render_position_x += +1;
-                            }
-                            else if (char_array[j] == 'w' && char_array[j + 1] == 'a')
-                            {
-                                render_position_x += -1;
-                            }
-                            else if (char_array[j] == 't' && char_array[j + 1] == 'e')
-                            {
-                                render_position_x += +1;
+                                render_position_x += 1;
                             }
                         }
                     }
@@ -456,6 +286,137 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             return bitmap;
+        }
+
+        public Bitmap Render_Name(string display_name)
+        {
+            display_name = "Unknown Voice";
+
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            int index_counter = -1;
+            int boxed_char_count = 0;
+            List<char> edited_display_name_list = display_name.ToCharArray().ToList();
+
+            edited_display_name_list.RemoveAll(character => forbidden_chars.Contains(character) == true);
+
+            string edited_display_name = Char_List_To_String(edited_display_name_list);
+
+            List<string>[] display_name_list = new List<string>[] { new List<string> { display_name } };
+
+            //Establish an int for the width and height glyphs should be rendered at
+            int multiplier = 48;
+
+            string font_sheet = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Font//p5r_font_sheet.png";
+            Bitmap current_glyph;
+
+            for (int i = 0; i < display_name_list.Length; i++)
+            {
+                //Establish variables for where the glyphs should be rendered on the template
+                int render_position_x = 700;
+                int render_position_y = 500 + (68 * i);
+
+                char[] char_array = String_List_To_String(display_name_list[i]).ToCharArray();
+
+                for (int j = 0; j < char_array.Length; j++)
+                {
+                    //Retrieve glyph information from the JSON file
+                    var glyph = ParsingMethods.GetGlyph(char_array[j]);
+
+                    if (glyph != null)
+                    {
+                        int x = multiplier * glyph.Column;
+                        int y = multiplier * glyph.Row;
+
+                        using (Graphics graphics = Graphics.FromImage(base_template))
+                        {
+                            using (var originalImage = new Bitmap(font_sheet))
+                            {
+                                //Copy the section of the bitmap font needed
+                                Rectangle crop = new Rectangle(x, y, multiplier, multiplier);
+                                current_glyph = originalImage.Clone(crop, originalImage.PixelFormat);
+
+                                if (!forbidden_chars.Contains(char_array[j]))
+                                {
+                                    index_counter++;
+                                }
+
+                                //if (Is_Boxed_Letter(edited_display_name.Length, index_counter))
+                                //{
+                                //    boxed_char_count++;
+
+                                //    var tilt_degree_values = new[] { -2, 2 };
+                                //    int random_tilt_degree = tilt_degree_values[rnd.Next(tilt_degree_values.Length)];
+
+                                //    current_glyph = Render_Boxed_Letter(current_glyph, glyph, boxed_char_count);
+                                //    current_glyph = Rotate_Image_On_Point(current_glyph, random_tilt_degree, 24, 24);
+                                //    graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, 42, 42);
+                                //}
+                                //else
+                                //{
+                                //    Bitmap black_glyph = Bitmap_To_Color(current_glyph, System.Drawing.Color.Black, new Rectangle(0, 0, current_glyph.Width, current_glyph.Height));
+                                //    graphics.DrawImage(black_glyph, (render_position_x - glyph.LeftCut), render_position_y, 42, 42);
+                                //}
+
+                                graphics.DrawImage(current_glyph, (render_position_x - glyph.LeftCut), render_position_y, 42, 42);
+                            }
+                        }
+
+                        //Set the next X value at the end of the current glyph's right width
+                        render_position_x += (glyph.RightCut - glyph.LeftCut);
+
+                        // Check if the current iterated index is less than the number of indicies available.
+                        if (j < char_array.Length - 1)
+                        {
+                            // If so, edit the position of the X coordinate according to specific kerning pairs.
+
+                            if (char_array[j] == 'i')
+                            {
+                                render_position_x += -2;
+                            }
+
+                            if (char_array[j] == 't')
+                            {
+                                render_position_x += 1;
+                            }
+
+                            if (char_array[j] == '.')
+                            {
+                                render_position_x += 1;
+                            }
+
+                            if (char_array[j + 1] == '!')
+                            {
+                                render_position_x += 2;
+                            }
+                            if (char_array[j] == '!')
+                            {
+                                render_position_x += 3;
+                            }
+
+                            if (char_array[j] == 'B')
+                            {
+                                render_position_x += 1;
+                            }
+
+                            if (char_array[j] == 'H')
+                            {
+                                render_position_x += -1;
+                            }
+
+                            if (char_array[j + 1] == 'w')
+                            {
+                                render_position_x += -1;
+                            }
+                            if (char_array[j] == 'w')
+                            {
+                                render_position_x += -1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return base_template;
         }
 
         public static int Measure_Word_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
@@ -542,6 +503,21 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return output_string;
         }
 
+        public static string Char_List_To_String(List<char> input_list)
+        {
+            // Create an empty string variable.
+            string output_string = "";
+
+            // Iterate through each index of the list and add it to the string variable.
+            for (int i = 0; i < input_list.Count; i++)
+            {
+                output_string += input_list[i];
+            }
+
+            // Return the string variable.
+            return output_string;
+        }
+
         public static Bitmap Render_Screen_Border(SocialLinkerCommand sl_command, UserInfoFields account)
         {
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -573,10 +549,270 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Vector rendering
+        public static Bitmap Render_Nametag_Window(string display_name)
+        {
+            // We'll need to create three layers: A base one, a layer for the white vector, and a layer for the black vector.
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap white_layer = new Bitmap(template_width, template_height);
+            Bitmap black_layer = new Bitmap(template_width, template_height);
+
+            // Create a brush for the color white.
+            SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
+
+            // Create a brush for the color white.
+            SolidBrush whiteBrush = new SolidBrush(System.Drawing.Color.White);
+
+            // Create a new random variable. We'll use this to randomize the vector points within a certain range later.
+            Random rnd = new Random();
+
+            // Create multiple variables for the potential min and max values of the five white outer points of the nametag.
+            int white_point_1_x_min = 962;
+            int white_point_1_x_max = 963;
+            int white_point_1_y_min = 853;
+            int white_point_1_y_max = 854;
+
+            int white_point_2_x_min = 1033;
+            int white_point_2_x_max = 1044;
+            int white_point_2_y_min = 743;
+            int white_point_2_y_max = 757;
+
+            int white_point_3_x_min = 598;
+            int white_point_3_x_max = 614;
+            int white_point_3_y_min = 806;
+            int white_point_3_y_max = 812;
+
+            int white_point_4_x_min = 574;
+            int white_point_4_x_max = 579;
+            int white_point_4_y_min = 841;
+            int white_point_4_y_max = 847;
+
+            int white_point_5_x_min = 596;
+            int white_point_5_x_max = 602;
+            int white_point_5_y_min = 873;
+            int white_point_5_y_max = 879;
+
+            // Randomly set the X and Y values of the outer five points of the nametag using the min and max values.
+            int white_point_1_x = rnd.Next(white_point_1_x_min, white_point_1_x_max);
+            int white_point_1_y = rnd.Next(white_point_1_y_min, white_point_1_y_max);
+
+            int white_point_2_x = rnd.Next(white_point_2_x_min, white_point_2_x_max);
+            int white_point_2_y = rnd.Next(white_point_2_y_min, white_point_2_y_max);
+
+            int white_point_3_x = rnd.Next(white_point_3_x_min, white_point_3_x_max);
+            int white_point_3_y = rnd.Next(white_point_3_y_min, white_point_3_y_max);
+
+            int white_point_4_x = rnd.Next(white_point_4_x_min, white_point_4_x_max);
+            int white_point_4_y = rnd.Next(white_point_4_y_min, white_point_4_y_max);
+
+            int white_point_5_x = rnd.Next(white_point_5_x_min, white_point_5_x_max);
+            int white_point_5_y = rnd.Next(white_point_5_y_min, white_point_5_y_max);
+
+            // Now, let's focus on the black vector.
+            // Randomly set the X and Y values of the five points of the outer black vector based on the set white point X & Y values.
+            int black_point_1_x = rnd.Next(white_point_1_x - 2, white_point_1_x + 7);
+            int black_point_1_y = rnd.Next(white_point_1_y + 12, white_point_1_y + 23);
+
+            int black_point_2_x = rnd.Next(white_point_2_x + 28, white_point_2_x + 46);
+            int black_point_2_y = rnd.Next(white_point_2_y - 25, white_point_2_y - 16);
+
+            int black_point_3_x = rnd.Next(white_point_3_x - 12, white_point_3_x - 6);
+            int black_point_3_y = rnd.Next(white_point_3_y - 12, white_point_3_y - 8);
+
+            int black_point_4_x = rnd.Next(white_point_4_x - 19, white_point_4_x - 13);
+            int black_point_4_y = rnd.Next(white_point_4_y - 4, white_point_4_y + 2);
+
+            int black_point_5_x = rnd.Next(white_point_5_x - 13, white_point_5_x + 0);
+            int black_point_5_y = rnd.Next(white_point_5_y + 6, white_point_5_y + 13);
+
+            // Create the five points of the black vector from the randomly chosen values.
+            Point black_point_1 = new Point(black_point_1_x, black_point_1_y);
+            Point black_point_2 = new Point(black_point_2_x, black_point_2_y);
+            Point black_point_3 = new Point(black_point_3_x, black_point_3_y);
+            Point black_point_4 = new Point(black_point_4_x, black_point_4_y);
+            Point black_point_5 = new Point(black_point_5_x, black_point_5_y);
+
+            // Create the five points of the white vector from the randomly chosen values.
+            Point white_point_1 = new Point(white_point_1_x, white_point_1_y);
+            Point white_point_2 = new Point(white_point_2_x, white_point_2_y);
+            Point white_point_3 = new Point(white_point_3_x, white_point_3_y);
+            Point white_point_4 = new Point(white_point_4_x, white_point_4_y);
+            Point white_point_5 = new Point(white_point_5_x, white_point_5_y);
+
+            // Add all the points for the outer black vector into a point array.
+            Point[] black_poly_points = {
+                    black_point_1,
+                    black_point_2,
+                    black_point_3,
+                    black_point_4,
+                    black_point_5 };
+
+            // Add all the points for the inner white vector into a point array.
+            Point[] white_poly_points = {
+                    white_point_1,
+                    white_point_2,
+                    white_point_3,
+                    white_point_4,
+                    white_point_5 };
+
+            // Now, let's put all the points together and make polygons!
+            // We'll need to make three graphics objects:
+            // - One for the black layer
+            // - One for the white layer
+            // - And one for putting the two layers together
+
+            // First, put together the black layer.
+            using (Graphics graphics = Graphics.FromImage(black_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Use the black_poly_points array to create a polygon and fill it with black color.
+                graphics.FillPolygon(blackBrush, black_poly_points);
+            }
+
+            // Next, put together the white layer.
+            using (Graphics graphics = Graphics.FromImage(white_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Use the white_poly_points array to create a polygon and fill it with white color.
+                graphics.FillPolygon(whiteBrush, white_poly_points);
+            }
+
+            // Lastly, let's merge the black and white layers into one bitmap.
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Before we draw the black layer here, lower its opacity.
+                black_layer = (Bitmap)Set_Image_Opacity(black_layer, (float)0.7);
+
+                // Draw the two layers to the template.
+                graphics.DrawImage(black_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(white_layer, 0, 0, template_width, template_height);
+            }
+
+            // While we're done with the nametag vector's structure overall, there's a gray vector moving within it we need to add.
+            // Create one more bitmap for the gray layer.
+            Bitmap gray_layer = new Bitmap(template_width, template_height);
+
+            // Create a unique brush for the light gray color.
+            SolidBrush gray_brush = new SolidBrush(System.Drawing.Color.FromArgb(218, 218, 218));
+
+            // Create multiple variables for the potential min and max values of the gray vector.
+            // While there'll be five points to the vector in total, two of the points will be fixed and invisible outside of the nametag vector.
+            int inner_arrow_point_1_x_min = 853;
+            int inner_arrow_point_1_x_max = 854;
+            int inner_arrow_point_1_y_min = 747;
+            int inner_arrow_point_1_y_max = 761;
+
+            int inner_arrow_point_2_x_min = 921;
+            int inner_arrow_point_2_x_max = 942;
+            int inner_arrow_point_2_y_min = 808;
+            int inner_arrow_point_2_y_max = 823;
+
+            int inner_arrow_point_3_x_min = 853;
+            int inner_arrow_point_3_x_max = 854;
+            int inner_arrow_point_3_y_min = 864;
+            int inner_arrow_point_3_y_max = 878;
+
+            // Randomly set the X and Y values of the three points of the gray vector.
+            // Again, this is just for the first three points of the vector.
+            int inner_arrow_point_1_x = rnd.Next(inner_arrow_point_1_x_min, inner_arrow_point_1_x_max);
+            int inner_arrow_point_1_y = rnd.Next(inner_arrow_point_1_y_min, inner_arrow_point_1_y_max);
+
+            int inner_arrow_point_2_x = rnd.Next(inner_arrow_point_2_x_min, inner_arrow_point_2_x_max);
+            int inner_arrow_point_2_y = rnd.Next(inner_arrow_point_2_y_min, inner_arrow_point_2_y_max);
+
+            int inner_arrow_point_3_x = rnd.Next(inner_arrow_point_3_x_min, inner_arrow_point_3_x_max);
+            int inner_arrow_point_3_y = rnd.Next(inner_arrow_point_3_y_min, inner_arrow_point_3_y_max);
+
+            // Solidify the five points of the gray vector. The last two points have fixed values.
+            Point inner_arrow_point_1 = new Point(inner_arrow_point_1_x, inner_arrow_point_1_y);
+            Point inner_arrow_point_2 = new Point(inner_arrow_point_2_x, inner_arrow_point_2_y);
+            Point inner_arrow_point_3 = new Point(inner_arrow_point_3_x, inner_arrow_point_3_y);
+            Point inner_arrow_point_4 = new Point(1052, 895);
+            Point inner_arrow_point_5 = new Point(1052, 696);
+
+            // Add all the points for the gray vector into a point array.
+            Point[] inner_arrow_poly_points = {
+                    inner_arrow_point_1,
+                    inner_arrow_point_2,
+                    inner_arrow_point_3,
+                    inner_arrow_point_4,
+                    inner_arrow_point_5 };
+
+            // Now, let's draw the gray vector to a bitmap.
+            using (Graphics graphics = Graphics.FromImage(gray_layer))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Use the inner_arrow_poly_points array to create a polygon and fill it with gray color.
+                graphics.FillPolygon(gray_brush, inner_arrow_poly_points);
+            }
+
+            // Lastly, merge the gray layer with the base template while only displaying the portion that overlaps with the white layer of the nametag vector.
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Set the graphics rendering to have antialiasing.
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Alter the gray layer bitmap so only pixels that overlap with the white layer created earlier remain.
+                //gray_layer = Keep_Pixel_Overlap(white_layer, gray_layer, 852, 1052, 650, 895);
+
+                // Draw the new gray layer to the base template.
+                graphics.DrawImage(gray_layer, 0, 0, template_width, template_height);
+            }
+
+            // Return the new bitmap.
+            return base_template;
+        }
+
+        public static Bitmap Render_Boxed_Letter(Bitmap glyph, ParsingFields glyph_info, int boxed_char_count)
+        {
+            Bitmap base_template = new Bitmap(48, 48);
+
+            System.Drawing.Color box_bg_color = default;
+            
+            if (boxed_char_count == 2)
+            {
+                box_bg_color = System.Drawing.Color.FromArgb(51, 51, 51);
+            }
+            else
+            {
+                box_bg_color = System.Drawing.Color.Black;
+            }
+
+            SolidBrush box_brush = new SolidBrush(box_bg_color);
+
+            Point box_point_1 = new Point(glyph_info.LeftCut - 1, 0);
+            Point box_point_2 = new Point(glyph_info.RightCut + 1, 0);
+            Point box_point_3 = new Point(glyph_info.RightCut + 1, 48);
+            Point box_point_4 = new Point(glyph_info.LeftCut - 1, 48);
+
+            Point[] box_poly_points = {
+                    box_point_1,
+                    box_point_2,
+                    box_point_3,
+                    box_point_4 };
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                graphics.FillPolygon(box_brush, box_poly_points);
+
+                graphics.DrawImage(glyph, 0, 3, 48, 48);
+            }
+
+            return base_template;
+        }
+
         public static Bitmap Render_Message_Window(int number_of_lines, int max_line_length)
         {
-            
-
             // We'll need to create four layers:
             // - Base layer
             // - Outer black vector layer
@@ -1155,6 +1391,219 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Return the new bitmap.
             return new_bitmap;
+        }
+
+        public static bool Is_Boxed_Letter(int name_length, int current_index)
+        {
+            switch (name_length)
+            {
+                case 0:
+                    return false;
+
+                case 1:
+                    return false;
+
+                case 2:
+                    if (current_index == 1)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 3:
+                    if (current_index == 1)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 4:
+                    if (current_index == 1)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 5:
+                    if (current_index == 1)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 6:
+                    if (current_index == 1)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 7:
+                    if (current_index == 2)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 8:
+                    if (current_index == 2 || current_index == 7)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 9:
+                    if (current_index == 2 || current_index == 7)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 10:
+                    if (current_index == 2 || current_index == 7)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 11:
+                    if (current_index == 0 || current_index == 5)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 12:
+                    if (current_index == 0 || current_index == 5)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 13:
+                    if (current_index == 0 || current_index == 5)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 14:
+                    if (current_index == 0 || current_index == 5 || current_index == 13)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 15:
+                    if (current_index == 0 || current_index == 5 || current_index == 13)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 16:
+                    if (current_index == 0 || current_index == 5 || current_index == 13)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 17:
+                    if (current_index == 0 || current_index == 5 || current_index == 13)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 18:
+                    if (current_index == 0 || current_index == 5 || current_index == 13)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 19:
+                    if (current_index == 0 || current_index == 5 || current_index == 13)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 20:
+                    if (current_index == 0 || current_index == 5 || current_index == 13 || current_index == 19)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 21:
+                    if (current_index == 1 || current_index == 9)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 22:
+                    if (current_index == 1 || current_index == 9)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 23:
+                    if (current_index == 1 || current_index == 9)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 24:
+                    if (current_index == 1 || current_index == 9 || current_index == 23)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 25:
+                    if (current_index == 1 || current_index == 9 || current_index == 23)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 26:
+                    if (current_index == 1 || current_index == 9 || current_index == 23)
+                    {
+                        return true;
+                    }
+                    break;
+
+                default:
+                    if (current_index == 1 || current_index == 9 || current_index == 23)
+                    {
+                        return true;
+                    }
+                    break;
+            }
+
+            return false;
+        }
+
+        // Method from https://stackoverflow.com/questions/58086523/rotate-bitmap-around-point-and-make-that-point-the-new-center
+        Bitmap Rotate_Image_On_Point(Bitmap img, float angle, int cx, int cy)
+        {
+            Bitmap result = new Bitmap(img.Width, img.Height);
+            int mx = img.Width / 2,
+                my = img.Height / 2;
+            using (Graphics g = Graphics.FromImage(result))
+            {
+                g.TranslateTransform(cx, cy);
+                g.RotateTransform(angle);
+                g.TranslateTransform(-cx, -cy);
+                g.TranslateTransform(mx - cx, my - cy, MatrixOrder.Append);
+                g.DrawImage(img, new Point(0, 0));
+            }
+            return result;
         }
 
         // Border rendering
@@ -3166,7 +3615,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Make an API request with the account key and user input as parameters.
                 using (WebClient client = new WebClient())
                 {
-                    json_location = new TimedWebClient { Timeout = 5000 }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
+                    json_location = new TimedWebClient { Timeout = Global.API_Timeout }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
                 }
 
                 // Deserialize the JSON object and store it in a variable.
@@ -3201,7 +3650,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Make an API request with the account key and user input as parameters.
                 using (WebClient client = new WebClient())
                 {
-                    json_location = new TimedWebClient { Timeout = 5000 }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
+                    json_location = new TimedWebClient { Timeout = Global.API_Timeout }.DownloadString($"http://api.weatherapi.com/v1/current.json?key={WeatherAPIConfig.weather_api_account.accountKey}&q={account.City}");
                 }
 
                 // Deserialize the JSON object and store it in a variable.
@@ -3586,6 +4035,24 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return newBitmap;
         }
 
+        public static Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
+        {
+            Bitmap base_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            for (int x = edit_area.X; x < edit_area.Right; x++)
+            {
+                for (int y = edit_area.Y; y < edit_area.Bottom; y++)
+                {
+                    System.Drawing.Color original_color = input_bitmap.GetPixel(x, y);
+                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(original_color.A, input_color.R, input_color.G, input_color.B);
+
+                    base_bitmap.SetPixel(x, y, new_color);
+                }
+            }
+
+            return base_bitmap;
+        }
+
         // Calendar checks
         public static bool Holiday_Check(DateTime user_time)
         {
@@ -3668,63 +4135,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             return false;
-        }
-
-        // Background rendering
-        public static Bitmap Center_Image(Bitmap input_bitmap)
-        {
-            float width = 1920;
-            float height = 1080;
-            var brush = new SolidBrush(System.Drawing.Color.Black);
-
-            var image = new Bitmap(input_bitmap);
-
-            float scale = Math.Min(width / image.Width, height / image.Height);
-
-            var bmp = new Bitmap((int)width, (int)height);
-            var graph = Graphics.FromImage(bmp);
-
-            // uncomment for higher quality output
-            graph.InterpolationMode = InterpolationMode.High;
-            graph.CompositingQuality = CompositingQuality.HighQuality;
-            graph.SmoothingMode = SmoothingMode.AntiAlias;
-
-            bmp.SetResolution(96, 96);
-
-            var scaleWidth = (int)(image.Width * scale);
-            var scaleHeight = (int)(image.Height * scale);
-
-            //graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
-            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
-
-            return bmp;
-        }
-
-        public static Bitmap Stretch_To_Fit(Bitmap input_bitmap)
-        {
-            // Set the width and height of the bitmap to be created
-            float width = 1920;
-            float height = 1080;
-
-            // Copy the input bitmap to a new variable.
-            var bitmap_copy = new Bitmap(input_bitmap);
-
-            // Create a brand new bitmap with the specified dimensions from earlier.
-            var new_bitmap = new Bitmap((int)width, (int)height);
-
-            // Create a graphics object so we can edit this new bitmap.
-            var graphics = Graphics.FromImage(new_bitmap);
-
-            // uncomment for higher quality output
-            graphics.InterpolationMode = InterpolationMode.High;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            new_bitmap.SetResolution(96, 96);
-
-            // Draw the copy of the input bitmap to the new bitmap.
-            graphics.DrawImage(bitmap_copy, 0, 0, width, height);
-
-            return new_bitmap;
         }
 
         // Method from https://www.codeproject.com/Tips/201129/Change-Opacity-of-Image-in-C

@@ -74,6 +74,12 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                 filterSession.P5_Select = true;
                 return Task.CompletedTask;
             }
+            else if (reaction.Emote.Name == "P5S")
+            {
+                // If this option is selected, change the value to true in the filter list.
+                filterSession.P5S_Select = true;
+                return Task.CompletedTask;
+            }
             else if (reaction.Emote.Name == "BBTAG")
             {
                 // If this option is selected, change the value to true in the filter list.
@@ -792,6 +798,12 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                 user_filter += "P5R;";
             }
 
+            // Persona 5 Strikers
+            if (filterSession.P5S_Select == true)
+            {
+                user_filter += "P5S;";
+            }
+
             // BlazBlue: Cross Tag Battle
             if (filterSession.BBTAG_Select == true)
             {
@@ -809,6 +821,8 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                 account.Profile_Theme = "";
             }
 
+            account = Change_Version_Control_Based_On_Content_Filter(account, user_filter);
+
             // Update the user's account with new data.
             UserInfoClasses.UpdateAccount(account);
 
@@ -816,6 +830,133 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
             _ = Content_Filter_Menu.Content_Filter_Confirm(menuSession.User, menuSession.MenuMessage);
 
             return Task.CompletedTask;
+        }
+
+        public static UserInfoFields Change_Version_Control_Based_On_Content_Filter(UserInfoFields account, string user_filter)
+        {
+            List<string> user_filter_list = String_To_String_List(user_filter);
+
+            if (account.VC_P1 == "P1-PS1" || account.VC_P1 == "P1-PSP")
+            {
+                if (user_filter_list.Contains("P1-PS1") && !user_filter_list.Contains("P1-PSP"))
+                {
+                    account.VC_P1 = "P1-PSP";
+                }
+                else if (!user_filter_list.Contains("P1-PS1") && user_filter_list.Contains("P1-PSP"))
+                {
+                    account.VC_P1 = "P1-PS1";
+                }
+                else if (user_filter_list.Contains("P1-PS1") && user_filter_list.Contains("P1-PSP"))
+                {
+                    // If both are in the content filter, do nothing and keep the settings the same. They will be blocked no matter what is currently set.
+                }
+                else
+                {
+                    // If neither are in the content filter, do nothing and keep the settings the same.
+                }
+            }
+
+            if (account.VC_P2IS == "P2IS-PS1" || account.VC_P2IS == "P2IS-PSP")
+            {
+                if (user_filter_list.Contains("P2IS-PS1") && !user_filter_list.Contains("P2IS-PSP"))
+                {
+                    account.VC_P2IS = "P2IS-PSP";
+                }
+                else if (!user_filter_list.Contains("P2IS-PS1") && user_filter_list.Contains("P2IS-PSP"))
+                {
+                    account.VC_P2IS = "P2IS-PS1";
+                }
+                else if (user_filter_list.Contains("P2IS-PS1") && user_filter_list.Contains("P2IS-PSP"))
+                {
+                    // If both are in the content filter, do nothing and keep the settings the same. They will be blocked no matter what is currently set.
+                }
+                else
+                {
+                    // If neither are in the content filter, do nothing and keep the settings the same.
+                }
+            }
+
+            if (account.VC_P2EP == "P2EP-PS1" || account.VC_P2EP == "P2EP-PSP")
+            {
+                if (user_filter_list.Contains("P2EP-PS1") && !user_filter_list.Contains("P2EP-PSP"))
+                {
+                    account.VC_P2EP = "P2EP-PSP";
+                }
+                else if (!user_filter_list.Contains("P2EP-PS1") && user_filter_list.Contains("P2EP-PSP"))
+                {
+                    account.VC_P2EP = "P2EP-PS1";
+                }
+                else if (user_filter_list.Contains("P2EP-PS1") && user_filter_list.Contains("P2EP-PSP"))
+                {
+                    // If both are in the content filter, do nothing and keep the settings the same. They will be blocked no matter what is currently set.
+                }
+                else
+                {
+                    // If neither are in the content filter, do nothing and keep the settings the same.
+                }
+            }
+
+            if (account.VC_P3 == "P3F" || account.VC_P3 == "P3P")
+            {
+                if (user_filter_list.Contains("P3F") && !user_filter_list.Contains("P3P"))
+                {
+                    account.VC_P3 = "P3P";
+                }
+                else if (!user_filter_list.Contains("P3F") && user_filter_list.Contains("P3P"))
+                {
+                    account.VC_P3 = "P3F";
+                }
+                else if (user_filter_list.Contains("P3F") && user_filter_list.Contains("P3P"))
+                {
+                    // If both are in the content filter, do nothing and keep the settings the same. They will be blocked no matter what is currently set.
+                }
+                else
+                {
+                    // If neither are in the content filter, do nothing and keep the settings the same.
+                }
+            }
+
+            if (account.VC_P4 == "P4-PS2" || account.VC_P4 == "P4G")
+            {
+                if (user_filter_list.Contains("P4-PS2") && !user_filter_list.Contains("P4G"))
+                {
+                    account.VC_P4 = "P4G";
+                }
+                else if (!user_filter_list.Contains("P4-PS2") && user_filter_list.Contains("P4G"))
+                {
+                    account.VC_P4 = "P4-PS2";
+                }
+                else if (user_filter_list.Contains("P4-PS2") && user_filter_list.Contains("P4G"))
+                {
+                    // If both are in the content filter, do nothing and keep the settings the same. They will be blocked no matter what is currently set.
+                }
+                else
+                {
+                    // If neither are in the content filter, do nothing and keep the settings the same.
+                }
+            }
+
+            if (account.VC_P5 == "P5-PS4" || account.VC_P5 == "P5R")
+            {
+                if (user_filter_list.Contains("P5-PS4") && !user_filter_list.Contains("P5R"))
+                {
+                    account.VC_P5 = "P5R";
+                }
+                else if (!user_filter_list.Contains("P5-PS4") && user_filter_list.Contains("P5R"))
+                {
+                    account.VC_P5 = "P5-PS4";
+                }
+                else if (user_filter_list.Contains("P5-PS4") && user_filter_list.Contains("P5R"))
+                {
+                    // If both are in the content filter, do nothing and keep the settings the same. They will be blocked no matter what is currently set.
+                }
+                else
+                {
+                    // If neither are in the content filter, do nothing and keep the settings the same.
+                }
+            }
+
+            return account;
         }
 
         public void ReturnToPreviousMenu(SocketReaction reaction, MenuIdStructure menuSession)
@@ -900,6 +1041,14 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
             menu_list.Add("Content_Filter_Confirm");
 
             return menu_list;
+        }
+
+        public static List<string> String_To_String_List(string input_string)
+        {
+            char[] delimiterChars = { ';' };
+            List<string> string_list = input_string.Split(delimiterChars).ToList();
+            string_list.RemoveAll(x => x.Length == 0); // Get rid of empty spaces in created list
+            return string_list;
         }
     }
 }

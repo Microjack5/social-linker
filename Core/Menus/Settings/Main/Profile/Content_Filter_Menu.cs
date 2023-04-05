@@ -107,6 +107,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 "<:P4AU:751133122342420572> **Persona 4 Arena Ultimax**\n" +
                 "<:P4D:751133120346062859> **Persona 4: Dancing All Night**\n" +
                 "<:P5:751133123861020742> **Persona 5**\n" +
+                "<:P5S:852644176188669972> **Persona 5 Strikers**\n" +
                 "<:BBTAG:751133123013771617> **BlazBlue: Cross Tag Battle**\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
@@ -157,6 +158,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             reaction_list.Add(Emote.Parse("<:P4AU:751133122342420572>"));
             reaction_list.Add(Emote.Parse("<:P4D:751133120346062859>"));
             reaction_list.Add(Emote.Parse("<:P5:751133123861020742>"));
+            reaction_list.Add(Emote.Parse("<:P5S:852644176188669972>"));
             reaction_list.Add(Emote.Parse("<:BBTAG:751133123013771617>"));
             reaction_list.Add(new Emoji("✅"));
 
@@ -197,6 +199,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 "\n" +
                 ":one: Revelations: Persona\n" +
                 ":two: Persona (Remake)");
+
+            embed.WithImageUrl("https://i.imgur.com/t4YH4rN.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -280,6 +284,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
                 ":two: Persona 2: Innocent Sin (Remake)");
 
+            embed.WithImageUrl("https://i.imgur.com/7oh20qY.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -361,6 +367,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 "\n" +
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
                 ":two: Persona 2: Eternal Punishment (Remake)");
+
+            embed.WithImageUrl("https://i.imgur.com/QPpK2TO.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -444,6 +452,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 ":one: Persona 3 FES\n" +
                 ":two: Persona 3 Portable");
 
+            embed.WithImageUrl("https://i.imgur.com/hZJTcx4.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -526,6 +536,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 ":one: Persona 4 (PlayStation®️ 2)\n" +
                 ":two: Persona 4 Golden");
 
+            embed.WithImageUrl("https://i.imgur.com/ZVldBKO.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -605,8 +617,10 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithDescription("" +
                 "**Which version of Persona 5 would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
-                ":one: Persona 5 (PlayStation®️ 3)\n" +
+                ":one: Persona 5 (PlayStation®️ 4)\n" +
                 ":two: Persona 5 Royal");
+
+            embed.WithImageUrl("https://i.imgur.com/7PMim5v.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

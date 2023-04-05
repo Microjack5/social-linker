@@ -4,13 +4,11 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Fergun.Interactive;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.StatusScreens;
 using System.Reflection;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.Menus.InitialUsage.Main;
-using System.Collections.Generic;
 
 namespace SocialLinker.Commands
 {
@@ -30,7 +28,7 @@ namespace SocialLinker.Commands
             // Check if the user's account has been activated. If not, send them to the initial usage setup menu.
             if (command_user_account.Account_Activated == "No")
             {
-                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Start((SocketTextChannel)command.Channel, (SocketGuildUser)command.User);
+                await First_Use_Content_Filter_Menu.First_Use_Content_Filter_Initialize(command);
                 return;
             }
 
@@ -183,7 +181,11 @@ namespace SocialLinker.Commands
             {
                 StatusScreenP5.RenderImage(commandTarget, command.Channel);
             }
-            else if (account.Profile_Theme == "")
+            else if ((account.Profile_Theme == "") && (commandUser != commandTarget))
+            {
+                await StatusDetails(command);
+            }
+            else if ((account.Profile_Theme == "") && (commandUser == commandTarget))
             {
                 // If the user doesn't have a profile theme set, send a message to do so.
                 _ = StartThemeMenu(command);

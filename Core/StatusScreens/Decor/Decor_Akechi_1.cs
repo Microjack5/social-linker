@@ -210,7 +210,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             }
             catch (Exception ex)
             {
-                _ = ErrorHandling.Scene_Upload_Failed(user, channel);
+                _ = ErrorHandling.Image_Upload_Failed(user, channel);
                 Console.WriteLine(ex);
 
                 //Delete the loading message

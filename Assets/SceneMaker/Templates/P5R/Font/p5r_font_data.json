@@ -25,7 +25,7 @@
     "Column": 2,
     "LeftCut": 16,
     "RightCut": 30,
-    "SupportedChars": "[ '\"' ]"
+    "SupportedChars": "[ '\"', '”' ]"
   },
   {
     "Row": 0,
@@ -60,7 +60,7 @@
     "Column": 7,
     "LeftCut": 21,
     "RightCut": 29,
-    "SupportedChars": "[ '\\'' ]"
+    "SupportedChars": "[ '\\'', '’' ]"
   },
   {
     "Row": 0,
@@ -102,7 +102,7 @@
     "Column": 13,
     "LeftCut": 18,
     "RightCut": 31,
-    "SupportedChars": "[ '-' ]"
+    "SupportedChars": "[ '—' ]"
   },
   {
     "Row": 0,
@@ -459,7 +459,7 @@
     "Column": 0,
     "LeftCut": 21,
     "RightCut": 29,
-    "SupportedChars": "[ '`' ]"
+    "SupportedChars": "[ '‘' ]"
   },
   {
     "Row": 4,
@@ -520,8 +520,8 @@
   {
     "Row": 4,
     "Column": 9,
-    "LeftCut": 19,
-    "RightCut": 27,
+    "LeftCut": 18,
+    "RightCut": 29,
     "SupportedChars": "[ 'i' ]"
   },
   {
@@ -1894,14 +1894,14 @@
     "Column": 13,
     "LeftCut": 19,
     "RightCut": 28,
-    "SupportedChars": "[ '\u0000' ]"
+    "SupportedChars": "[ '´' ]"
   },
   {
     "Row": 16,
     "Column": 14,
     "LeftCut": 20,
     "RightCut": 29,
-    "SupportedChars": "[ '\u0000' ]"
+    "SupportedChars": "[ '`' ]"
   },
   {
     "Row": 16,
@@ -1950,7 +1950,7 @@
     "Column": 5,
     "LeftCut": 8,
     "RightCut": 39,
-    "SupportedChars": "[ '仝' ]"
+    "SupportedChars": "[ '♥', '♡', '❣', '❤' ]"
   },
   {
     "Row": 17,
@@ -1978,14 +1978,14 @@
     "Column": 9,
     "LeftCut": 19,
     "RightCut": 32,
-    "SupportedChars": "[ '\u0000' ]"
+    "SupportedChars": "[ '-' ]"
   },
   {
     "Row": 17,
     "Column": 10,
     "LeftCut": 18,
     "RightCut": 31,
-    "SupportedChars": "[ '\u0000' ]"
+    "SupportedChars": "[ '–' ]"
   },
   {
     "Row": 17,
