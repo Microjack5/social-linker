@@ -9,7 +9,6 @@ using SocialLinker.Core.LocalStorageTables;
 using Discord;
 using Discord.Rest;
 using SocialLinker.Core.CloudStorageTables;
-using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -22,14 +21,18 @@ using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
-    public static class RenderP3F
+    public class RenderP3F
     {
-        public static async Task Render_Quick_Scene_P3F(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
-        {
-            // Create variables to store the width and height of the template.
-            int template_width = 640;
-            int template_height = 448;
+        public int template_width = 640;
+        public int template_height = 448;
 
+        public int working_template_width = 640;
+        public int working_template_height = 480;
+
+        public int max_line_length = 480;
+
+        public async Task Render_Quick_Scene_P3F(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
@@ -109,77 +112,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
             }
 
-            // The user could choose to output the image at different resolutions, so let's handle that point now.
-            // This is done before the text is rendered to the template.
-            // If the user's output setting is at the default resolution, do nothing.
-            if (account.P3F_Resolution == "640 × 448")
-            {
-                // Do nothing
-            }
-            // If the user's output setting is NOT at the default resolution, however, we need to do some work.
-            else
-            {
-                // Change the template width and height variables based on the user's output settings.
-                if (account.P3F_Resolution == "640 × 480")
-                {
-                    template_width = 640;
-                    template_height = 480;
-                }
-                else if (account.P3F_Resolution == "1440 × 1080")
-                {
-                    template_width = 1440;
-                    template_height = 1080;
-                }
-
-                // Now, we'll want to make a new bitmap that matches these sizes.
-                // Create a copy of the template so far.
-                var image = new Bitmap(base_template);
-
-                // Create a new empty bitmap with the adjusted dimensions.
-                var scaled_bitmap = new Bitmap(template_width, template_height);
-
-                // Create a new graphics object so we can render on the empty bitmap.
-                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
-                {
-                    // If the user's setting is at Full HD, set the scaling method to their choice of Bicubic and Nearest Neighbor.
-                    if (account.P3F_Resolution == "1440 × 1080")
-                    {
-                        switch (account.P3F_Scale)
-                        {
-                            case "Bicubic":
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                break;
-
-                            case "Nearest Neighbor":
-                                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                                break;
-                        }
-                    }
-                    // Otherwise, set the method to Bicubic.
-                    else
-                    {
-                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    }
-                    
-                    // Set the rendering quality to high.
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-                    // Draw the copy of the template to the empty bitmap while fitting to size.
-                    graphics.DrawImage(image, 0, 0, template_width, template_height);
-                }
-
-                // Copy the contents of the new bitmap to the base template variable.
-                base_template = scaled_bitmap;
-            }
+            base_template = Scale_Template(account, base_template);
 
             // Create another graphics object for the base template.
             // We'll start rendering our needed text here.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                display_name = OfficialSetMethods.Validate_Input(sl_command, "P3F", "Name", display_name);
+
                 graphics.DrawImage(Text_To_Red(Render_Name(display_name)), 0, 0, template_width, template_height);
 
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3F", command_data.Dialogue, 3, 510);
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P3F", "Dialogue", command_data.Dialogue);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3F", command_data.Dialogue, 3, max_line_length);
 
                 // Draw the input dialogue to the template.
                 graphics.DrawImage(Text_To_Gray(Render_Dialogue(parsed_lines)), 0, 0, template_width, template_height);
@@ -218,15 +163,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
+        public async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 640;
-            int template_height = 448;
-
-            // Before any rendering occurs, amend the dialogue so that an arrow is placed in front of it.
-            command_data.Dialogue = $"> {command_data.Dialogue}";
-
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
@@ -287,74 +225,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
             }
 
-            // The user could choose to output the image at different resolutions, so let's handle that point now.
-            // This is done before the text is rendered to the template.
-            // If the user's output setting is at the default resolution, do nothing.
-            if (account.P3F_Resolution == "640 × 448")
-            {
-                // Do nothing
-            }
-            // If the user's output setting is NOT at the default resolution, however, we need to do some work.
-            else
-            {
-                // Change the template width and height variables based on the user's output settings.
-                if (account.P3F_Resolution == "640 × 480")
-                {
-                    template_width = 640;
-                    template_height = 480;
-                }
-                else if (account.P3F_Resolution == "1440 × 1080")
-                {
-                    template_width = 1440;
-                    template_height = 1080;
-                }
-
-                // Now, we'll want to make a new bitmap that matches these sizes.
-                // Create a copy of the template so far.
-                var image = new Bitmap(base_template);
-
-                // Create a new empty bitmap with the adjusted dimensions.
-                var scaled_bitmap = new Bitmap(template_width, template_height);
-
-                // Create a new graphics object so we can render on the empty bitmap.
-                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
-                {
-                    // If the user's setting is at Full HD, set the scaling method to their choice of Bicubic and Nearest Neighbor.
-                    if (account.P3F_Resolution == "1440 × 1080")
-                    {
-                        switch (account.P3F_Scale)
-                        {
-                            case "Bicubic":
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                break;
-
-                            case "Nearest Neighbor":
-                                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                                break;
-                        }
-                    }
-                    // Otherwise, set the method to Bicubic.
-                    else
-                    {
-                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    }
-
-                    // Set the rendering quality to high.
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-                    // Draw the copy of the template to the empty bitmap while fitting to size.
-                    graphics.DrawImage(image, 0, 0, template_width, template_height);
-                }
-
-                // Copy the contents of the new bitmap to the base template variable.
-                base_template = scaled_bitmap;
-            }
+            base_template = Scale_Template(account, base_template);
 
             // Create another graphics object for the base template.
             // We'll start rendering our needed text here.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3F", command_data.Dialogue, 3, 510);
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P3F", "Dialogue", command_data.Dialogue);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3F", command_data.Dialogue, 3, max_line_length);
 
                 // Draw the input dialogue to the template.
                 graphics.DrawImage(Text_To_Gray(Render_Dialogue(parsed_lines)), 0, 0, template_width, template_height);
@@ -378,7 +256,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static Bitmap Render_Name(string display_name)
+        public Bitmap Render_Name(string display_name)
         {
             // Create a 640 x 480 bitmap.
             // This is larger than the template's defauly 640 x 448 size, but P3F's font must be rendered with this 640 x 480 dimension in mind.
@@ -461,7 +339,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static Bitmap Render_Dialogue(List<string>[] dialogue_lines)
+        public Bitmap Render_Dialogue(List<string>[] dialogue_lines)
         {
             // Create a 640 x 480 bitmap.
             // This is larger than the template's defauly 640 x 448 size, but P3F's font must be rendered with this 640 x 480 dimension in mind.
@@ -548,215 +426,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return bitmap;
         }
 
-        public static List<string>[] Line_Parser(SocialLinkerCommand sl_command, string dialogue)
-        {
-            // First, let's establish some values.
-            // The max pixel length of a line.
-            int max_line_length = 510;
-
-            // The number of pixels in a line remaining. This will gradually decrease as the pixel length of characters are subtracted from it.
-            int line_length_remaining = max_line_length;
-
-            // The maximum number of lines on the template. 
-            int max_lines = 3;
-
-            // Completed word string. Characters will be added to this string one-by-one until a space, line break, or end-of-input is encountered.
-            string completed_word = "";
-
-            // Create an array of three string lists and initialize them.
-            // These are where our dialogue input will be organized.
-            List<string>[] dialogue_list = new List<string>[max_lines];
-
-            for (int i = 0; i < max_lines; i++)
-            {
-                dialogue_list[i] = new List<string>();
-            }
-
-            // Now that we have our string lists created, we need a variable to dynamically change which line we're currently on.
-            // For that, create an int variable and initialize it to zero for starting on the first line.
-            int current_line = 0;
-
-            // Take the input dialogue and convert it into a char array. This is how we'll iterate through the dialogue character-by-character.
-            char[] dialogue_array = dialogue.ToCharArray();
-
-            // Create a for loop meant to iterate through the dialogue array.
-            for (int i = 0; i < dialogue_array.Length; i++)
-            {
-                // Check if the completed word string is empty, the remaining pixel length of the current line is at the max value, and if the current iterated character is a space.
-                if ((completed_word == "") && (line_length_remaining == max_line_length) && (dialogue_array[i] == ' '))
-                {
-                    // We want to skip any spaces that appear at the start of a line, so do nothing here.
-                }
-                // Check if the contents of the current index is not a space, not a line break, and not the end of the array.
-                else if ((dialogue_array[i] != ' ') && (dialogue_array[i] != '\u000a') && (i != dialogue_array.Length - 1))
-                {
-                    // If so, add the currently iterated char to the completed word string.
-                    completed_word += dialogue_array[i];
-                }
-                // Next, check if the contents of the current index IS a space, IS a line break, or IS the end of the array.
-                else if ((dialogue_array[i] == ' ') || (dialogue_array[i] == '\u000a') || (i == dialogue_array.Length - 1))
-                {
-                    // If so, add the currently iterated char to the completed word string.
-                    completed_word += dialogue_array[i];
-
-                    // Now that we have our word, measure the pixel length of the completed string.
-                    int completed_word_length = Measure_Word_Pixel_Length(sl_command, completed_word);
-
-                    // Check if the completed word is under the current line's allowed length.
-                    // This is done by subtracting the completed word string's length from the remaining length of the line.
-                    // If the result is greater than zero, it's a perfect fit.
-                    if ((line_length_remaining - completed_word_length > 0) && (dialogue_array[i] != '\u000a'))
-                    {
-                        // Subtract the completed word's pixel length from the remaining pixel length of the current line.
-                        line_length_remaining = line_length_remaining - completed_word_length;
-
-                        // Add the completed word to the current line.
-                        dialogue_list[current_line].Add(completed_word);
-
-                        // Reset the completed word variable to an empty string.
-                        completed_word = "";
-                    }
-
-                    // Else, check if all three of the following conditions are met:
-                    // If there is no more room to add the completed word to the current line.
-                    // The completed word's length is less than or equal to a line itself.
-                    // The current iterated character is NOT a line break.
-                    else if ((line_length_remaining - completed_word_length < 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] != '\u000a'))
-                    {
-                        // Check if the current line number is less than the max number of lines available.
-                        if (current_line < max_lines - 1)
-                        {
-                            // Increase the current line number.
-                            current_line++;
-
-                            // Add the completed word string to the current line.
-                            dialogue_list[current_line].Add(completed_word);
-
-                            // Reset the remaining pixel length variable to the start and subtract the pixel length of the completed word string.
-                            // This is done because we moved to a new line.
-                            line_length_remaining = max_line_length - completed_word_length;
-
-                            // Reset the completed word variable to an empty string.
-                            completed_word = "";
-                        }
-                        // Else, check if the current line number is greater than or equal to the max number of lines available.
-                        else if (current_line >= max_lines - 1)
-                        {
-                            // If so, there is no more room to render text.
-                            // Break from the for loop.
-                            break;
-                        }
-                    }
-
-                    // Else, check if all three of the following conditions are met:
-                    // If there IS room to add the completed word to the current line.
-                    // The completed word's length is less than or equal to the length of a line itself.
-                    // The current iterated character IS a line break.
-                    else if ((line_length_remaining - completed_word_length >= 0) && (completed_word_length <= max_line_length) && (dialogue_array[i] == '\u000a'))
-                    {
-                        // Check if the current line number is less than the max number of lines available.
-                        if (current_line < max_lines - 1)
-                        {
-                            // Since there is room, add the completed word string to the current line.
-                            dialogue_list[current_line].Add(completed_word);
-
-                            // Increase the current line number.
-                            current_line++;
-
-                            // Reset the remaining pixel length variable to the max value.
-                            // This is done because we moved to a new line.
-                            line_length_remaining = max_line_length;
-
-                            // Reset the completed word variable to an empty string.
-                            completed_word = "";
-                        }
-                        // Else, check if the current line number is greater than to the max number of lines available.
-                        else if (current_line > max_lines - 1)
-                        {
-                            // If so, there is no more room to render text.
-                            // Break from the for loop.
-                            break;
-                        }
-                    }
-
-                    // Else, check if there is no more room to add the completed word to the current line AND the completed word's length is greater than the length of a line itself.
-                    // This means that we'll need to split the string up on different lines.
-                    else if (line_length_remaining - completed_word_length < 0 && completed_word_length > max_line_length)
-                    {
-                        // Take the completed word and turn it into a char array.
-                        // We'll use this to iterate through the word character-by-character to decide where to split the string.
-                        char[] completed_word_array = completed_word.ToCharArray();
-
-                        // Create a new string variable and initialize it to an empty string.
-                        // Similar to the completed word variable, this string will contain characters that will fit on a single line.
-                        // Because we know the word will be split into multiple lines, this will only contain part of the full string at any given time, hence "substring".
-                        string substring = "";
-
-                        // Create an int variable and initialize it to zero.
-                        // This will contain the pixel length of our substring variable once we measure it.
-                        int substring_length = 0;
-
-                        // Create a for loop to iterate through the completed word array.
-                        for (int j = 0; j < completed_word_array.Length; j++)
-                        {
-                            // Add the currently iterated character to the substring.
-                            substring += completed_word_array[j];
-
-                            // Measure the pixel length of the substring so far.
-                            substring_length = Measure_Word_Pixel_Length(sl_command, substring);
-
-                            // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
-                            // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
-                            if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a'))
-                            {
-                                // Check if the current line number is less than the max number of lines available.
-                                if (current_line < max_lines - 1)
-                                {
-                                    // Add the substring to the current line.
-                                    dialogue_list[current_line].Add(substring);
-
-                                    // Since there is absolutely no more room on the current line left, increase the current line value.
-                                    current_line++;
-
-                                    // Reset the remaining pixel length variable to the max value.
-                                    // This is done because we moved to a new line.
-                                    line_length_remaining = max_line_length;
-
-                                    // Reset the substring variable to an empty string.
-                                    substring = "";
-                                }
-                            }
-                            // Else, check if the last index of the completed word array has been reached.
-                            else if (j == completed_word_array.Length - 1)
-                            {
-                                // Add the substring to the current line.
-                                dialogue_list[current_line].Add(substring);
-
-                                // Subtract the completed word's pixel length from the remaining pixel length of the current line.
-                                line_length_remaining = line_length_remaining - substring_length;
-
-                                // Reset the substring variable to an empty string.
-                                substring = "";
-                            }
-                        }
-
-                        // Reset the completed word string to an empty string.
-                        completed_word = "";
-                    }
-                }
-            }
-
-            return dialogue_list;
-        }
-
         public static int Measure_Word_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
         {
             // Create an int variable to keep track of the pixel length of a word.
             int pixel_counter = 0;
-
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
 
             // Take the input string and convert it into a char array.
             char[] char_array = input_word.ToCharArray();
@@ -796,17 +469,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
                 }
                 // If the character returns null, it's not supported by the template's font set.
-                // Send a warning message to the user.
                 else
                 {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
-                    }
+                    sl_command.MakerCommand.Dialogue_Has_Invalid_Char = true;
                 }
             }
 
@@ -828,12 +493,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return output_string;
         }
 
-        public static Bitmap Render_Calendar_HUD(UserInfoFields account)
+        public Bitmap Render_Calendar_HUD(UserInfoFields account)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 640;
-            int template_height = 448;
-
             // Get the user's current time and store it in a variable.
             DateTime user_time = Get_Date(account);
 
@@ -952,12 +613,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static Bitmap Render_Moon_HUD(UserInfoFields account)
+        public Bitmap Render_Moon_HUD(UserInfoFields account)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 640;
-            int template_height = 448;
-
             // Create new bitmap variables for the assets we'll need throughout the method.
             // We'll assign them proper values soon depending on the moon phase.
             // For the countdown text, create and initialize two. One will be a mainstay while the other only appears during new and half moons.
@@ -1439,13 +1096,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return new_bitmap;
         }
 
-        public static Bitmap Text_To_Red(Bitmap input_bitmap) // Display names
+        public Bitmap Text_To_Red(Bitmap input_bitmap) // Display names
         {
-            // Establish the width and height of the template you want to render to.
-            // In the case of P3 FES, font is made to be rendered on a 640 x 480 bitmap.
-            int template_width = 640;
-            int template_height = 480;
-
             // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
             System.Drawing.Color actual_color;
 
@@ -1453,10 +1105,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
             // Create a for loop to iterate over the X values of the bitmap to be changed.
-            for (int x = 0; x < template_width; x++)
+            for (int x = 0; x < working_template_width; x++)
             {
                 // Create a nested for loop to iterate over the Y values of the bitmap to be changed.
-                for (int y = 0; y < template_height; y++)
+                for (int y = 0; y < working_template_height; y++)
                 {
                     // Get the current pixel from the input bitmap.
                     actual_color = input_bitmap.GetPixel(x, y);
@@ -1470,13 +1122,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return new_bitmap;
         }
 
-        public static Bitmap Text_To_Gray(Bitmap input_bitmap) // Dialogue
+        public Bitmap Text_To_Gray(Bitmap input_bitmap) // Dialogue
         {
-            // Establish the width and height of the template you want to render to.
-            // In the case of P3 FES, font is made to be rendered on a 640 x 480 bitmap.
-            int template_width = 640;
-            int template_height = 480;
-
             // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
             System.Drawing.Color actual_color;
 
@@ -1484,10 +1131,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
             // Create a for loop to iterate over the X values of the bitmap to be changed.
-            for (int x = 0; x < template_width; x++)
+            for (int x = 0; x < working_template_width; x++)
             {
                 // Create a nested for loop to iterate over the Y values of the bitmap to be changed.
-                for (int y = 0; y < template_height; y++)
+                for (int y = 0; y < working_template_height; y++)
                 {
                     // Get the current pixel from the input bitmap.
                     actual_color = input_bitmap.GetPixel(x, y);
@@ -1839,114 +1486,60 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        // Methods from https://softwarebydefault.com/2013/03/03/colomatrix-image-filters/
-        private static Bitmap GetArgbCopy(System.Drawing.Image sourceImage)
+        public Bitmap Scale_Template(UserInfoFields account, Bitmap input_template)
         {
-            Bitmap bmpNew = new Bitmap(sourceImage.Width, sourceImage.Height, PixelFormat.Format32bppArgb);
+            var scaled_bitmap = new Bitmap(2, 2);
 
-            using (Graphics graphics = Graphics.FromImage(bmpNew))
+            if (account.P3F_Resolution == "640 × 448")
             {
-                graphics.DrawImage(sourceImage, new Rectangle(0, 0, bmpNew.Width, bmpNew.Height), new Rectangle(0, 0, bmpNew.Width, bmpNew.Height), GraphicsUnit.Pixel);
-                graphics.Flush();
+                // Do nothing if setting is at default resolution
+            }
+            else
+            {
+                if (account.P3F_Resolution == "640 × 480")
+                {
+                    template_width = 640;
+                    template_height = 480;
+                }
+                else if (account.P3F_Resolution == "1440 × 1080")
+                {
+                    template_width = 1440;
+                    template_height = 1080;
+                }
+
+                var copied_input = new Bitmap(input_template);
+                scaled_bitmap = new Bitmap(template_width, template_height);
+
+                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+                {
+                    // If the user's setting is at Full HD, set the scaling method to their choice of Bicubic and Nearest Neighbor.
+                    if (account.P3F_Resolution == "1440 × 1080")
+                    {
+                        switch (account.P3F_Scale)
+                        {
+                            case "Bicubic":
+                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                break;
+
+                            case "Nearest Neighbor":
+                                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                                break;
+                        }
+                    }
+                    // Otherwise, set the method to Bicubic.
+                    else
+                    {
+                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    }
+
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                    graphics.DrawImage(copied_input, 0, 0, template_width, template_height);
+                }
+
+                input_template = scaled_bitmap;
             }
 
-            return bmpNew;
-        }
-
-        private static Bitmap ApplyColorMatrix(System.Drawing.Image sourceImage, ColorMatrix colorMatrix)
-        {
-            Bitmap bmp32BppSource = GetArgbCopy(sourceImage);
-            Bitmap bmp32BppDest = new Bitmap(bmp32BppSource.Width, bmp32BppSource.Height, PixelFormat.Format32bppArgb);
-
-            using (Graphics graphics = Graphics.FromImage(bmp32BppDest))
-            {
-                ImageAttributes bmpAttributes = new ImageAttributes();
-                bmpAttributes.SetColorMatrix(colorMatrix);
-
-                graphics.DrawImage(bmp32BppSource, new Rectangle(0, 0, bmp32BppSource.Width, bmp32BppSource.Height),
-                                    0, 0, bmp32BppSource.Width, bmp32BppSource.Height, GraphicsUnit.Pixel, bmpAttributes);
-            }
-
-            bmp32BppSource.Dispose();
-
-            return bmp32BppDest;
-        }
-
-        public static Bitmap DrawAsNegative(this System.Drawing.Image sourceImage)
-        {
-            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
-            {
-                new float[]{-1, 0, 0, 0, 0},
-                new float[]{0, -1, 0, 0, 0},
-                new float[]{0, 0, -1, 0, 0},
-                new float[]{0, 0, 0, 1, 0},
-                new float[]{1, 1, 1, 1, 1}
-            });
-
-            return ApplyColorMatrix(sourceImage, colorMatrix);
-        }
-
-        public static Bitmap ColorTint(this Bitmap sourceBitmap, float blueTint, float greenTint, float redTint)
-        {
-            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0,
-                                    sourceBitmap.Width, sourceBitmap.Height),
-                                    ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-
-
-            byte[] pixelBuffer = new byte[sourceData.Stride * sourceData.Height];
-
-
-            Marshal.Copy(sourceData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
-
-
-            sourceBitmap.UnlockBits(sourceData);
-
-
-            float blue = 0;
-            float green = 0;
-            float red = 0;
-
-
-            for (int k = 0; k + 4 < pixelBuffer.Length; k += 4)
-            {
-                blue = pixelBuffer[k] + (255 - pixelBuffer[k]) * blueTint;
-                green = pixelBuffer[k + 1] + (255 - pixelBuffer[k + 1]) * greenTint;
-                red = pixelBuffer[k + 2] + (255 - pixelBuffer[k + 2]) * redTint;
-
-
-                if (blue > 255)
-                { blue = 255; }
-
-
-                if (green > 255)
-                { green = 255; }
-
-
-                if (red > 255)
-                { red = 255; }
-
-
-                pixelBuffer[k] = (byte)blue;
-                pixelBuffer[k + 1] = (byte)green;
-                pixelBuffer[k + 2] = (byte)red;
-
-
-            }
-
-
-            Bitmap resultBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height);
-
-
-            BitmapData resultData = resultBitmap.LockBits(new Rectangle(0, 0,
-                                    resultBitmap.Width, resultBitmap.Height),
-                                    ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-
-
-            Marshal.Copy(pixelBuffer, 0, resultData.Scan0, pixelBuffer.Length);
-            resultBitmap.UnlockBits(resultData);
-
-
-            return resultBitmap;
+            return input_template;
         }
 
         public static EmbedBuilder P3F_Loading_Message()

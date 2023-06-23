@@ -95,7 +95,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             System.Drawing.Color display_name_color = System.Drawing.Color.FromArgb(166, 222, 69);
+
             string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+            display_name = OfficialSetMethods.Validate_Input(sl_command, "P2IS-PSP", "Name", display_name);
+
             Bitmap display_name_layer = Render_Name(display_name);
             Rectangle display_name_area = new Rectangle(25, 200, 455, 16);
 
@@ -121,6 +124,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Draw the input dialogue to the template.
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P2IS-PSP", "Dialogue", command_data.Dialogue);
                 List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P2IS-PSP", command_data.Dialogue, 3, 370);
                 graphics.DrawImage(Render_Dialogue(dialogue_lines, false), 0, 0, template_width, template_height);
 
@@ -490,10 +494,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
 
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
-
             // Take the input string and turn it into a char array.
             char[] char_array = input_word.ToCharArray();
 
@@ -519,17 +519,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
                 }
                 // If the character returns null, it's not supported by the template's font set.
-                // Send a warning message to the user.
                 else
                 {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
-                    }
+                    sl_command.MakerCommand.Dialogue_Has_Invalid_Char = true;
                 }
             }
 

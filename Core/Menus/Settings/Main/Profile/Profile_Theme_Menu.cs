@@ -129,7 +129,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                     "The appearance of your commands will change based on each one, and you can switch to a different profile theme at any time.\n" +
                     "\n" +
                     ":warning: No profile themes can be chosen due to your content filter. " +
-                    $"You can edit your content filter at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [General Settings] > [Content Filter].";
+                    $"You can edit your content filter at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Settings] > [Content Filter].";
             }
 
             // Add the description text to the embeded message.

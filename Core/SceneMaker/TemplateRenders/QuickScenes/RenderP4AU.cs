@@ -83,6 +83,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 Bitmap text_overlay = new Bitmap(2, 2);
 
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P4AU", "Dialogue", command_data.Dialogue);
+
                 switch (account.P4AU_TS_Scene_Type)
                 {
                     case "Dialogue":
@@ -100,6 +102,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 graphics.DrawImage(control_guide, 0, 0, control_guide.Width, control_guide.Height);
             }
+
+            base_template = Scale_Template(account, base_template);
 
             // Save the entire base template to a data stream.
             MemoryStream memoryStream = new MemoryStream();
@@ -280,6 +284,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(Render_Dialogue(parsed_lines, 149, 529, account), 0, 0, template_width, template_height);
 
                 string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                display_name = OfficialSetMethods.Validate_Input(sl_command, "P4AU", "Name", display_name);
+
                 Bitmap rendered_display_name = Bitmap_To_Color(Render_Name(display_name), System.Drawing.Color.Black, new Rectangle(142, 478, 600, 49));
                 graphics.DrawImage(rendered_display_name, 0, 0, template_width, template_height);
 
@@ -430,10 +436,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
 
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
-
             // Take the input string and turn it into a char array.
             char[] char_array = input_word.ToCharArray();
 
@@ -456,19 +458,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     {
                         // Set the pixel counter to the appropriate width of the string so far.
                         pixel_counter += glyph.RightCut - glyph.LeftCut;
-                    }
-                }
-                // If the character returns null, it's not supported by the template's font set.
-                // Send a warning message to the user.
-                else
-                {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
                     }
                 }
             }
@@ -722,6 +711,50 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 g.DrawImage(img, new Point(0, 0));
             }
             return result;
+        }
+
+        public Bitmap Scale_Template(UserInfoFields account, Bitmap input_template)
+        {
+            var scaled_bitmap = new Bitmap(2, 2);
+            int scaled_width = template_width;
+            int scaled_height = template_height;
+
+            if (account.P4AU_Resolution == "1280 × 720")
+            {
+                // Do nothing if setting is at default resolution
+            }
+            else
+            {
+                if (account.P4AU_Resolution == "1920 × 1080")
+                {
+                    scaled_width = 1920;
+                    scaled_height = 1080;
+                }
+
+                var copied_input = new Bitmap(input_template);
+                scaled_bitmap = new Bitmap(scaled_width, scaled_height);
+
+                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+                {
+                    switch (account.P4AU_Scale)
+                    {
+                        case "Bicubic":
+                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            break;
+
+                        case "Nearest Neighbor":
+                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                            break;
+                    }
+
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                    graphics.DrawImage(copied_input, 0, 0, scaled_width, scaled_height);
+                }
+
+                input_template = scaled_bitmap;
+            }
+
+            return input_template;
         }
 
         public static EmbedBuilder P4AU_Loading_Message()

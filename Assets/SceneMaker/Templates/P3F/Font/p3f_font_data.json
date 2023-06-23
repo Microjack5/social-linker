@@ -2004,8 +2004,8 @@
   {
     "Row": 17,
     "Column": 13,
-    "LeftCut": 4,
-    "RightCut": 27,
+    "LeftCut": 3,
+    "RightCut": 30,
     "SupportedChars": "[ '…' ]"
   },
   {
@@ -2389,9 +2389,9 @@
   {
     "Row": 21,
     "Column": 4,
-    "LeftCut": 0,
-    "RightCut": 0,
-    "SupportedChars": "[ '〓' ]"
+    "LeftCut": 3,
+    "RightCut": 30,
+    "SupportedChars": "[ '…' ]"
   },
   {
     "Row": 21,

@@ -80,6 +80,16 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 return Task.CompletedTask;
             }
 
+            else if (reaction.Emote.Name == "⏭️")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = SM_Tutorial_Spriteless_Menu.SM_Tutorial_Spriteless_System_Page_1(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
             else if (reaction.Emote.Name == "💠")
             {
                 // Stop the timeout timer associated with the menu.

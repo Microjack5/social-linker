@@ -209,7 +209,7 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             embed.WithDescription("" +
                 "If the sprite only has eye animations, just linking together the base sprite and eye frame numbers will work as well. " +
-                "You can also type '0' for either frame if the sprite doesn't have one to choose or you don't want to use one.");
+                "You can also type `0` for either frame if the sprite doesn't have one to choose or you don't want to use one.");
 
             embed.WithImageUrl("https://i.imgur.com/wQ72B6I.png");
 

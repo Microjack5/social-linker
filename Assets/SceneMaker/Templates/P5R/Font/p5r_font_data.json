@@ -1950,7 +1950,7 @@
     "Column": 5,
     "LeftCut": 8,
     "RightCut": 39,
-    "SupportedChars": "[ '♥', '♡', '❣', '❤' ]"
+    "SupportedChars": "[ '♥', '❣', '❤' ]"
   },
   {
     "Row": 17,
@@ -2391,798 +2391,798 @@
     "Column": 4,
     "LeftCut": 9,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Α' ]"
   },
   {
     "Row": 21,
     "Column": 5,
     "LeftCut": 12,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Β' ]"
   },
   {
     "Row": 21,
     "Column": 6,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Γ' ]"
   },
   {
     "Row": 21,
     "Column": 7,
     "LeftCut": 9,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Δ' ]"
   },
   {
     "Row": 21,
     "Column": 8,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ε' ]"
   },
   {
     "Row": 21,
     "Column": 9,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ζ' ]"
   },
   {
     "Row": 21,
     "Column": 10,
     "LeftCut": 11,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Η' ]"
   },
   {
     "Row": 21,
     "Column": 11,
     "LeftCut": 9,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Θ' ]"
   },
   {
     "Row": 21,
     "Column": 12,
     "LeftCut": 20,
     "RightCut": 27,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ι' ]"
   },
   {
     "Row": 21,
     "Column": 13,
     "LeftCut": 11,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Κ' ]"
   },
   {
     "Row": 21,
     "Column": 14,
     "LeftCut": 9,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Λ' ]"
   },
   {
     "Row": 21,
     "Column": 15,
     "LeftCut": 9,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Μ' ]"
   },
   {
     "Row": 22,
     "Column": 0,
     "LeftCut": 11,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ν' ]"
   },
   {
     "Row": 22,
     "Column": 1,
     "LeftCut": 11,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ξ' ]"
   },
   {
     "Row": 22,
     "Column": 2,
     "LeftCut": 9,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ο' ]"
   },
   {
     "Row": 22,
     "Column": 3,
     "LeftCut": 10,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Π' ]"
   },
   {
     "Row": 22,
     "Column": 4,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ρ' ]"
   },
   {
     "Row": 22,
     "Column": 5,
     "LeftCut": 11,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Σ' ]"
   },
   {
     "Row": 22,
     "Column": 6,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Τ' ]"
   },
   {
     "Row": 22,
     "Column": 7,
     "LeftCut": 8,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Υ' ]"
   },
   {
     "Row": 22,
     "Column": 8,
     "LeftCut": 9,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Φ' ]"
   },
   {
     "Row": 22,
     "Column": 9,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Χ' ]"
   },
   {
     "Row": 22,
     "Column": 10,
     "LeftCut": 11,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ψ' ]"
   },
   {
     "Row": 22,
     "Column": 11,
     "LeftCut": 10,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ω' ]"
   },
   {
     "Row": 22,
     "Column": 12,
     "LeftCut": 12,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'α' ]"
   },
   {
     "Row": 22,
     "Column": 13,
     "LeftCut": 12,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'β' ]"
   },
   {
     "Row": 22,
     "Column": 14,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'γ' ]"
   },
   {
     "Row": 22,
     "Column": 15,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'δ' ]"
   },
   {
     "Row": 23,
     "Column": 0,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ε' ]"
   },
   {
     "Row": 23,
     "Column": 1,
     "LeftCut": 15,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ζ' ]"
   },
   {
     "Row": 23,
     "Column": 2,
     "LeftCut": 13,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'η' ]"
   },
   {
     "Row": 23,
     "Column": 3,
     "LeftCut": 14,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'θ' ]"
   },
   {
     "Row": 23,
     "Column": 4,
     "LeftCut": 19,
     "RightCut": 27,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ι' ]"
   },
   {
     "Row": 23,
     "Column": 5,
     "LeftCut": 13,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'κ' ]"
   },
   {
     "Row": 23,
     "Column": 6,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'λ' ]"
   },
   {
     "Row": 23,
     "Column": 7,
     "LeftCut": 12,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'μ' ]"
   },
   {
     "Row": 23,
     "Column": 8,
     "LeftCut": 14,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ν' ]"
   },
   {
     "Row": 23,
     "Column": 9,
     "LeftCut": 14,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ξ' ]"
   },
   {
     "Row": 23,
     "Column": 10,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ο' ]"
   },
   {
     "Row": 23,
     "Column": 11,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'π' ]"
   },
   {
     "Row": 23,
     "Column": 12,
     "LeftCut": 11,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ρ' ]"
   },
   {
     "Row": 23,
     "Column": 13,
     "LeftCut": 12,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'σ' ]"
   },
   {
     "Row": 23,
     "Column": 14,
     "LeftCut": 15,
     "RightCut": 31,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'τ' ]"
   },
   {
     "Row": 23,
     "Column": 15,
     "LeftCut": 14,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'υ' ]"
   },
   {
     "Row": 24,
     "Column": 0,
     "LeftCut": 11,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'φ' ]"
   },
   {
     "Row": 24,
     "Column": 1,
     "LeftCut": 12,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'χ' ]"
   },
   {
     "Row": 24,
     "Column": 2,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ψ' ]"
   },
   {
     "Row": 24,
     "Column": 3,
     "LeftCut": 10,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ω' ]"
   },
   {
     "Row": 24,
     "Column": 4,
     "LeftCut": 9,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'А' ]"
   },
   {
     "Row": 24,
     "Column": 5,
     "LeftCut": 13,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Б' ]"
   },
   {
     "Row": 24,
     "Column": 6,
     "LeftCut": 12,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'В' ]"
   },
   {
     "Row": 24,
     "Column": 7,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Г' ]"
   },
   {
     "Row": 24,
     "Column": 8,
     "LeftCut": 10,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Д' ]"
   },
   {
     "Row": 24,
     "Column": 9,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Е' ]"
   },
   {
     "Row": 24,
     "Column": 10,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ё' ]"
   },
   {
     "Row": 24,
     "Column": 11,
     "LeftCut": 7,
     "RightCut": 40,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ж' ]"
   },
   {
     "Row": 24,
     "Column": 12,
     "LeftCut": 11,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'З' ]"
   },
   {
     "Row": 24,
     "Column": 13,
     "LeftCut": 11,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'И' ]"
   },
   {
     "Row": 24,
     "Column": 14,
     "LeftCut": 11,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Й' ]"
   },
   {
     "Row": 24,
     "Column": 15,
     "LeftCut": 13,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'К' ]"
   },
   {
     "Row": 25,
     "Column": 0,
     "LeftCut": 10,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Л' ]"
   },
   {
     "Row": 25,
     "Column": 1,
     "LeftCut": 9,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'М' ]"
   },
   {
     "Row": 25,
     "Column": 2,
     "LeftCut": 11,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Н' ]"
   },
   {
     "Row": 25,
     "Column": 3,
     "LeftCut": 9,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'О' ]"
   },
   {
     "Row": 25,
     "Column": 4,
     "LeftCut": 11,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'П' ]"
   },
   {
     "Row": 25,
     "Column": 5,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Р' ]"
   },
   {
     "Row": 25,
     "Column": 6,
     "LeftCut": 10,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'С' ]"
   },
   {
     "Row": 25,
     "Column": 7,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Т' ]"
   },
   {
     "Row": 25,
     "Column": 8,
     "LeftCut": 12,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'У' ]"
   },
   {
     "Row": 25,
     "Column": 9,
     "LeftCut": 9,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ф' ]"
   },
   {
     "Row": 25,
     "Column": 10,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Х' ]"
   },
   {
     "Row": 25,
     "Column": 11,
     "LeftCut": 12,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ц' ]"
   },
   {
     "Row": 25,
     "Column": 12,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ч' ]"
   },
   {
     "Row": 25,
     "Column": 13,
     "LeftCut": 9,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ш' ]"
   },
   {
     "Row": 25,
     "Column": 14,
     "LeftCut": 9,
     "RightCut": 40,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Щ' ]"
   },
   {
     "Row": 25,
     "Column": 15,
     "LeftCut": 9,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ъ' ]"
   },
   {
     "Row": 26,
     "Column": 0,
     "LeftCut": 10,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ы' ]"
   },
   {
     "Row": 26,
     "Column": 1,
     "LeftCut": 14,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ь' ]"
   },
   {
     "Row": 26,
     "Column": 2,
     "LeftCut": 11,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Э' ]"
   },
   {
     "Row": 26,
     "Column": 3,
     "LeftCut": 7,
     "RightCut": 39,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ю' ]"
   },
   {
     "Row": 26,
     "Column": 4,
     "LeftCut": 11,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Я' ]"
   },
   {
     "Row": 26,
     "Column": 5,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'а' ]"
   },
   {
     "Row": 26,
     "Column": 6,
     "LeftCut": 14,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'б' ]"
   },
   {
     "Row": 26,
     "Column": 7,
     "LeftCut": 14,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'в' ]"
   },
   {
     "Row": 26,
     "Column": 8,
     "LeftCut": 15,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'г' ]"
   },
   {
     "Row": 26,
     "Column": 9,
     "LeftCut": 12,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'д' ]"
   },
   {
     "Row": 26,
     "Column": 10,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'е' ]"
   },
   {
     "Row": 26,
     "Column": 11,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ё' ]"
   },
   {
     "Row": 26,
     "Column": 12,
     "LeftCut": 10,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ж' ]"
   },
   {
     "Row": 26,
     "Column": 13,
     "LeftCut": 13,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'з' ]"
   },
   {
     "Row": 26,
     "Column": 14,
     "LeftCut": 14,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'и' ]"
   },
   {
     "Row": 26,
     "Column": 15,
     "LeftCut": 14,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'й' ]"
   },
   {
     "Row": 27,
     "Column": 0,
     "LeftCut": 15,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'к' ]"
   },
   {
     "Row": 27,
     "Column": 1,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'л' ]"
   },
   {
     "Row": 27,
     "Column": 2,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'м' ]"
   },
   {
     "Row": 27,
     "Column": 3,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'н' ]"
   },
   {
     "Row": 27,
     "Column": 4,
     "LeftCut": 12,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'о' ]"
   },
   {
     "Row": 27,
     "Column": 5,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'п' ]"
   },
   {
     "Row": 27,
     "Column": 6,
     "LeftCut": 13,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'р' ]"
   },
   {
     "Row": 27,
     "Column": 7,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'с' ]"
   },
   {
     "Row": 27,
     "Column": 8,
     "LeftCut": 14,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'т' ]"
   },
   {
     "Row": 27,
     "Column": 9,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'у' ]"
   },
   {
     "Row": 27,
     "Column": 10,
     "LeftCut": 9,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ф' ]"
   },
   {
     "Row": 27,
     "Column": 11,
     "LeftCut": 14,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'х' ]"
   },
   {
     "Row": 27,
     "Column": 12,
     "LeftCut": 14,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ц' ]"
   },
   {
     "Row": 27,
     "Column": 13,
     "LeftCut": 14,
     "RightCut": 31,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ч' ]"
   },
   {
     "Row": 27,
     "Column": 14,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ш' ]"
   },
   {
     "Row": 27,
     "Column": 15,
     "LeftCut": 12,
     "RightCut": 38,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'щ' ]"
   },
   {
     "Row": 28,
     "Column": 0,
     "LeftCut": 11,
     "RightCut": 34,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ъ' ]"
   },
   {
     "Row": 28,
     "Column": 1,
     "LeftCut": 12,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ы' ]"
   },
   {
     "Row": 28,
     "Column": 2,
     "LeftCut": 15,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ь' ]"
   },
   {
     "Row": 28,
     "Column": 3,
     "LeftCut": 14,
     "RightCut": 31,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'э' ]"
   },
   {
     "Row": 28,
     "Column": 4,
     "LeftCut": 11,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'ю' ]"
   },
   {
     "Row": 28,
     "Column": 5,
     "LeftCut": 13,
     "RightCut": 33,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'я' ]"
   },
   {
     "Row": 28,
@@ -3287,7 +3287,7 @@
     "Column": 4,
     "LeftCut": 8,
     "RightCut": 35,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ '™' ]"
   },
   {
     "Row": 29,
@@ -3336,21 +3336,21 @@
     "Column": 11,
     "LeftCut": 20,
     "RightCut": 29,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ '¡' ]"
   },
   {
     "Row": 29,
     "Column": 12,
     "LeftCut": 13,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ '¢' ]"
   },
   {
     "Row": 29,
     "Column": 13,
     "LeftCut": 15,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ '£' ]"
   },
   {
     "Row": 29,
@@ -3364,7 +3364,7 @@
     "Column": 15,
     "LeftCut": 12,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ '¥' ]"
   },
   {
     "Row": 30,
@@ -3385,7 +3385,7 @@
     "Column": 2,
     "LeftCut": 9,
     "RightCut": 40,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ '©' ]"
   },
   {
     "Row": 30,
@@ -3420,7 +3420,7 @@
     "Column": 7,
     "LeftCut": 14,
     "RightCut": 29,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ '®' ]"
   },
   {
     "Row": 30,
@@ -3525,69 +3525,461 @@
     "Column": 6,
     "LeftCut": 9,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'À' ]"
   },
   {
     "Row": 31,
     "Column": 7,
     "LeftCut": 9,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Á' ]"
   },
   {
     "Row": 31,
     "Column": 8,
     "LeftCut": 9,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Â' ]"
   },
   {
     "Row": 31,
     "Column": 9,
     "LeftCut": 9,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ã' ]"
   },
   {
     "Row": 31,
     "Column": 10,
     "LeftCut": 9,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ä' ]"
   },
   {
     "Row": 31,
     "Column": 11,
     "LeftCut": 10,
     "RightCut": 37,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Å' ]"
   },
   {
     "Row": 31,
     "Column": 12,
     "LeftCut": 6,
     "RightCut": 39,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Æ' ]"
   },
   {
     "Row": 31,
     "Column": 13,
     "LeftCut": 10,
     "RightCut": 36,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'Ç' ]"
   },
   {
     "Row": 31,
     "Column": 14,
     "LeftCut": 16,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
+    "SupportedChars": "[ 'È' ]"
   },
   {
     "Row": 31,
     "Column": 15,
     "LeftCut": 16,
     "RightCut": 32,
-    "SupportedChars": "[ '〓' ]"
-  }
+    "SupportedChars": "[ 'É' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 0,
+    "LeftCut": 15,
+    "RightCut": 31,
+    "SupportedChars": "[ 'Ê' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 1,
+    "LeftCut": 17,
+    "RightCut": 33,
+    "SupportedChars": "[ 'Ë' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 2,
+    "LeftCut": 17,
+    "RightCut": 28,
+    "SupportedChars": "[ 'Ì' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 3,
+    "LeftCut": 17,
+    "RightCut": 26,
+    "SupportedChars": "[ 'Í' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 4,
+    "LeftCut": 17,
+    "RightCut": 30,
+    "SupportedChars": "[ 'Î' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 5,
+    "LeftCut": 14,
+    "RightCut": 29,
+    "SupportedChars": "[ 'Ï' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 6,
+    "LeftCut": 7,
+    "RightCut": 37,
+    "SupportedChars": "[ 'Ð' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 7,
+    "LeftCut": 10,
+    "RightCut": 34,
+    "SupportedChars": "[ 'Ñ' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 8,
+    "LeftCut": 7,
+    "RightCut": 37,
+    "SupportedChars": "[ 'Ò' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 9,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ 'Ó' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 10,
+    "LeftCut": 9,
+    "RightCut": 39,
+    "SupportedChars": "[ 'Ô' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 11,
+    "LeftCut": 10,
+    "RightCut": 40,
+    "SupportedChars": "[ 'Õ' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 12,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ 'Ö' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 13,
+    "LeftCut": 9,
+    "RightCut": 39,
+    "SupportedChars": "[ 'Ø' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 14,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ 'Ù' ]"
+  },
+  {
+    "Row": 32,
+    "Column": 15,
+    "LeftCut": 9,
+    "RightCut": 34,
+    "SupportedChars": "[ 'Ú' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 0,
+    "LeftCut": 12,
+    "RightCut": 37,
+    "SupportedChars": "[ 'Û' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 1,
+    "LeftCut": 12,
+    "RightCut": 37,
+    "SupportedChars": "[ 'Ü' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 2,
+    "LeftCut": 11,
+    "RightCut": 36,
+    "SupportedChars": "[ 'Ý' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 3,
+    "LeftCut": 17,
+    "RightCut": 37,
+    "SupportedChars": "[ 'Þ' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 4,
+    "LeftCut": 14,
+    "RightCut": 37,
+    "SupportedChars": "[ 'ß' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 5,
+    "LeftCut": 12,
+    "RightCut": 32,
+    "SupportedChars": "[ 'à' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 6,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ 'á' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 7,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ 'â' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 8,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ã' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 9,
+    "LeftCut": 15,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ä' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 10,
+    "LeftCut": 15,
+    "RightCut": 35,
+    "SupportedChars": "[ 'å' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 11,
+    "LeftCut": 10,
+    "RightCut": 39,
+    "SupportedChars": "[ 'æ' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 12,
+    "LeftCut": 14,
+    "RightCut": 32,
+    "SupportedChars": "[ 'ç' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 13,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ 'è' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 14,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ 'é' ]"
+  },
+  {
+    "Row": 33,
+    "Column": 15,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ 'ê' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 0,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ë' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 1,
+    "LeftCut": 19,
+    "RightCut": 28,
+    "SupportedChars": "[ 'ì' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 2,
+    "LeftCut": 20,
+    "RightCut": 29,
+    "SupportedChars": "[ 'í' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 3,
+    "LeftCut": 17,
+    "RightCut": 31,
+    "SupportedChars": "[ 'î' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 4,
+    "LeftCut": 16,
+    "RightCut": 30,
+    "SupportedChars": "[ 'ï' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 5,
+    "LeftCut": 13,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ð' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 6,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ñ' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 7,
+    "LeftCut": 13,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ò' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 8,
+    "LeftCut": 13,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ó' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 9,
+    "LeftCut": 12,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ô' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 10,
+    "LeftCut": 12,
+    "RightCut": 34,
+    "SupportedChars": "[ 'õ' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 11,
+    "LeftCut": 13,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ö' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 12,
+    "LeftCut": 12,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ø' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 13,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ù' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 14,
+    "LeftCut": 14,
+    "RightCut": 34,
+    "SupportedChars": "[ 'ú' ]"
+  },
+  {
+    "Row": 34,
+    "Column": 15,
+    "LeftCut": 12,
+    "RightCut": 32,
+    "SupportedChars": "[ 'û' ]"
+  },
+  {
+    "Row": 35,
+    "Column": 0,
+    "LeftCut": 15,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ü' ]"
+  },
+  {
+    "Row": 35,
+    "Column": 1,
+    "LeftCut": 14,
+    "RightCut": 35,
+    "SupportedChars": "[ 'ý' ]"
+  },
+  {
+    "Row": 35,
+    "Column": 2,
+    "LeftCut": 15,
+    "RightCut": 36,
+    "SupportedChars": "[ 'þ' ]"
+  },
+  {
+    "Row": 35,
+    "Column": 3,
+    "LeftCut": 12,
+    "RightCut": 33,
+    "SupportedChars": "[ 'ÿ' ]"
+  },
+  {
+    "Row": 36,
+    "Column": 0,
+    "LeftCut": 13,
+    "RightCut": 33,
+    "SupportedChars": "[ '♪', '♬', '♫', '♩' ]"
+  },
+  {
+    "Row": 36,
+    "Column": 1,
+    "LeftCut": 9,
+    "RightCut": 40,
+    "SupportedChars": "[ '♥', '❣', '❤' ]"
+  },
+  {
+    "Row": 36,
+    "Column": 2,
+    "LeftCut": 8,
+    "RightCut": 39,
+    "SupportedChars": "[ '♡' ]"
+  },
+  {
+    "Row": 36,
+    "Column": 11,
+    "LeftCut": 8,
+    "RightCut": 38,
+    "SupportedChars": "[ '✨' ]"
+  },
 ]

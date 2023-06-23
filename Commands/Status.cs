@@ -9,6 +9,7 @@ using SocialLinker.Core.StatusScreens;
 using System.Reflection;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.Menus.InitialUsage.Main;
+using SocialLinker.Core.LevelSystem;
 
 namespace SocialLinker.Commands
 {
@@ -340,15 +341,19 @@ namespace SocialLinker.Commands
             decimal represented_diligence = decimal.Round((decimal)account.Diligence / 10, 2, MidpointRounding.AwayFromZero);
             decimal represented_expression = decimal.Round((decimal)account.Expression / 10, 2, MidpointRounding.AwayFromZero);
 
+            decimal max_proficiency = decimal.Round((decimal)SocialStatRanks.proficiency_rank_5_max / 10, 2, MidpointRounding.AwayFromZero);
+            decimal max_diligence = decimal.Round((decimal)SocialStatRanks.diligence_rank_5_max / 10, 2, MidpointRounding.AwayFromZero);
+            decimal max_expression = decimal.Round((decimal)SocialStatRanks.expression_rank_5_max / 10, 2, MidpointRounding.AwayFromZero);
+
             // Create a string variable for the embed's description.
             string description_text = "" +
                 $"**Level:** {account.Level}\n" +
                 $"**Total Exp:** {account.Total_Exp}\n" +
                 $"**Next Exp:** {next_exp}\n" +
                 $"\n" +
-                $"**Proficiency:** Rank {account.Proficiency_Rank} - *({represented_proficiency}/173)*\n" +
-                $"**Diligence:** Rank {account.Diligence_Rank} - *({represented_diligence}/280)*\n" +
-                $"**Expression:** Rank {account.Expression_Rank} - *({represented_expression}/170)*\n" +
+                $"**Proficiency:** Rank {account.Proficiency_Rank} - *({represented_proficiency}/{max_proficiency})*\n" +
+                $"**Diligence:** Rank {account.Diligence_Rank} - *({represented_diligence}/{max_diligence})*\n" +
+                $"**Expression:** Rank {account.Expression_Rank} - *({represented_expression}/{max_expression})*\n" +
                 $"\n" +
                 $"**Theme:** {userProfileTheme}\n" +
                 $"**P-Medals:** {account.P_Medals}\n";

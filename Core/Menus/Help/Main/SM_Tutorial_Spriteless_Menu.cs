@@ -195,7 +195,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             var footer = new EmbedFooterBuilder
             {
                 Text = "" +
-                "◀️ Previous Page | 💠 Return to Spriteless Scenes Menu\n" +
+                "◀️ Previous Page | ⏭️ Next Tutorial | 💠 Return to Spriteless Scenes Menu\n" +
                 "Page 2 / 2"
             };
 
@@ -250,6 +250,7 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             // Add needed emote reactions for the menu.
             reaction_list.Add(new Emoji("◀️"));
+            reaction_list.Add(new Emoji("⏭️"));
             reaction_list.Add(new Emoji("💠"));
 
             // Add the reactions to the message.

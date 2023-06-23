@@ -49,7 +49,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Panel_Advance(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Cursor_Panel(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -186,7 +186,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5_PS3_Panel_Advance(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5_PS3_Cursor_Panel(SocketReaction reaction, MenuIdStructure menuSession)
         {
             if (reaction.Emote.Name == "↩️")
             {
@@ -205,7 +205,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen setting to the user's account.
-                account.P5_PS4_TS_Panel = "Manual";
+                account.P5_PS4_TS_Panel = "Manual (with Control Panel)";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -214,7 +214,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Panel_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Cursor_Panel_Confirm(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -225,7 +225,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen setting to the user's account.
-                account.P5_PS4_TS_Panel = "Auto-advance";
+                account.P5_PS4_TS_Panel = "Manual (without Control Panel)";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -234,7 +234,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Panel_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Cursor_Panel_Confirm(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -245,7 +245,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen setting to the user's account.
-                account.P5_PS4_TS_Panel = "None";
+                account.P5_PS4_TS_Panel = "Auto-Advance";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -254,7 +254,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Panel_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Cursor_Panel_Confirm(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -337,7 +337,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5_PS3_Panel_Advance_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5_PS3_Cursor_Panel_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
         {
             if (reaction.Emote.Name == "💠")
             {

@@ -45,7 +45,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         System.Drawing.Color color_moon_yellow = System.Drawing.Color.FromArgb(183, 150, 81);
 
-        int max_line_length = 360; // 510
+        int max_line_length = 360;
         int error_counter = 0;
 
         public async Task Render_Quick_Scene_P3P(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
@@ -86,7 +86,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
             if (command_data.Base_Sprite != 0)
             {
-                bustup = Bustup_Selection(account, set_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
+            }
+
+            if (bustup == null)
+            {
+                await loader.DeleteAsync();
+                return;
             }
 
             // Time to put it all together!
@@ -140,13 +146,18 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Rectangle name_area = new Rectangle(0, 190, 480, 30);
 
                 string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                display_name = OfficialSetMethods.Validate_Input(sl_command, "P3P", "Name", display_name);
+
                 Bitmap rendered_name = Render_Name(display_name);
                 Bitmap colored_rendered_name = Bitmap_To_Color(rendered_name, name_dark_blue, name_area);
                 graphics.DrawImage(colored_rendered_name, 0, 0, template_width, template_height);
 
                 System.Drawing.Color dialogue_gray = System.Drawing.Color.FromArgb(72, 72, 72);
                 Rectangle dialogue_area = new Rectangle(0, 190, 480, 82);
+
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P3P", "Dialogue", command_data.Dialogue);
                 List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3P", command_data.Dialogue, 3, max_line_length);
+
                 Bitmap rendered_dialogue = Render_Dialogue(parsed_lines);
                 Bitmap colored_dialogue = Bitmap_To_Color(rendered_dialogue, dialogue_gray, dialogue_area);
 
@@ -269,7 +280,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 System.Drawing.Color dialogue_gray = System.Drawing.Color.FromArgb(72, 72, 72);
                 Rectangle dialogue_area = new Rectangle(0, 190, 480, 82);
+
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P3P", "Dialogue", command_data.Dialogue);
                 List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3P", command_data.Dialogue, 3, max_line_length);
+
                 Bitmap rendered_dialogue = Render_Dialogue(parsed_lines);
                 Bitmap colored_dialogue = Bitmap_To_Color(rendered_dialogue, dialogue_gray, dialogue_area);
 
@@ -472,10 +486,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create an int variable to keep track of the pixel length of a word.
             int pixel_counter = 0;
 
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
-
             // Take the input string and convert it into a char array.
             char[] char_array = input_word.ToCharArray();
 
@@ -514,17 +524,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
                 }
                 // If the character returns null, it's not supported by the template's font set.
-                // Send a warning message to the user.
                 else
                 {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
-                    }
+                    sl_command.MakerCommand.Dialogue_Has_Invalid_Char = true;
                 }
             }
 

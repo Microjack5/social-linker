@@ -27,6 +27,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     {
         int template_width = 320;
         int template_height = 240;
+        int max_line_length = 232;
 
         public async Task Render_Quick_Scene_P1_PS1(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
@@ -39,6 +40,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
 
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Dialogue", command_data.Dialogue);
+
                 // The P1-PS1 template has a unique function where display names are not rendered if the same character is used in succession.
                 // We'll call this "context switch". Get or create an active context switch object that stores data for this.
                 ContextSwitchData active_session = ContextSwitchMethods.Get_Active_Session((SocketGuildUser)user, set_data);
@@ -48,11 +51,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 if (command_data.Base_Sprite == 0)
                 {
                     display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                    display_name = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Name", display_name);
                     command_data.Base_Sprite = 0;
                 }
                 else
                 {
                     display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                    display_name = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Name", display_name);
                 }
 
                 // Check if the list of active characters contains the current data set.
@@ -92,7 +97,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Create a new int variable that stores the INDEX of the current set data in the session list.
                 int char_index = active_session.Active_Characters.IndexOf(set_data);
 
-                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PS1", command_data.Dialogue, 4, 240);
+                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PS1", command_data.Dialogue, 4, max_line_length);
 
                 // The string array list typically has a constant number of indicies when created, so get the number of lines that'll actually be rendered. 
                 int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
@@ -255,7 +260,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             var account = UserInfoClasses.GetAccount(user);
 
-            List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PS1", command_data.Dialogue, 4, 240);
+            command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Dialogue", command_data.Dialogue);
+            List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PS1", command_data.Dialogue, 4, max_line_length);
 
             // The string array list typically has a constant number of indicies when created, so get the number of lines that'll actually be rendered. 
             int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
@@ -527,10 +533,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
 
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
-
             // Take the input string and turn it into a char array.
             char[] char_array = input_word.ToCharArray();
 
@@ -553,19 +555,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     {
                         // Set the pixel counter to the appropriate width of the string so far.
                         pixel_counter += glyph.RightCut - glyph.LeftCut;
-                    }
-                }
-                // If the character returns null, it's not supported by the template's font set.
-                // Send a warning message to the user.
-                else
-                {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
                     }
                 }
             }

@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.LocalStorageTables;
-using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames;
-using SocialLinker.Core.SceneMaker;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
 {
@@ -124,6 +120,8 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                 string input_string = message.Content;
 
                 List<int> int_range = Input_Range_To_List(input_string);
+
+                Console.WriteLine($"Int range: {int_range}");
 
                 // Check if reading sprite input failed
                 if (int_range.Count == 0 && new_name_data.Spriteless_Included == "No")
@@ -287,7 +285,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
             return sprite_range;
         }
 
-        public static List<int> Spriteless_Check(List<int> int_range, DisplayNameTempData new_name_data)
+        public static List<int> Spriteless_Check(List<int> int_range, DisplayNameInternalData new_name_data)
         {
             if (int_range.Contains(0))
             {
@@ -433,7 +431,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
             return true;
         }
 
-        public static List<int> Select_Entire_Sprite_Range(DisplayNameTempData new_name_data)
+        public static List<int> Select_Entire_Sprite_Range(DisplayNameInternalData new_name_data)
         {
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{new_name_data.Sprite_Set.Origin}//Bustup//{new_name_data.Sprite_Set.ID}";

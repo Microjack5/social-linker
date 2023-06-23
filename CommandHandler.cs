@@ -328,6 +328,18 @@ namespace SocialLinker
                 case "update":
                     await Commands.DevCommands.UpdatePreReleaseAccounts(command);
                     break;
+
+                case "calcexp":
+                    await Commands.DevCommands.ExpCalculator(command);
+                    break;
+
+                case "calclevel":
+                    await Commands.DevCommands.LevelCalculator(command);
+                    break;
+
+                case "fix":
+                    Commands.DevCommands.CorrectMouthFrames(command);
+                    break;
             }
         }
 

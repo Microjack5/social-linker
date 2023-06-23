@@ -271,7 +271,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
             reaction_list.Add(new Emoji("↩️"));
             reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("✅"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
@@ -604,7 +603,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
             reaction_list.Add(new Emoji("↩️"));
             reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("✅"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);

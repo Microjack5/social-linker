@@ -6,7 +6,6 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 using SocialLinker.Config;
-using SocialLinker.Core.SceneMaker.Data.Bustup;
 
 namespace SocialLinker.Core.CloudStorageTables
 {
@@ -169,12 +168,12 @@ namespace SocialLinker.Core.CloudStorageTables
                 P4D_TS_Nav_Call_Location = 1,
                 P5_PS4_TS_HUD = "Normal",
                 P5_PS4_TS_Border = "Event",
-                P5_PS4_TS_Panel = "Manual",
+                P5_PS4_TS_Panel = "Manual (with Control Panel)",
                 P5R_TS_HUD = "Normal",
                 P5R_TS_Border = "Event",
-                P5R_TS_Panel = "Manual",
+                P5R_TS_Panel = "Manual (with Control Panel)",
                 P5R_TS_Caller_Toggle = "Off",
-                P5R_TS_Caller_Location = "Normal",
+                P5R_TS_Caller_Location = "Dynamic",
                 P5S_TS_Controller_Type = "PlayStation® 4",
                 P5S_TS_Skip_Button = "On",
                 P5S_TS_Auto_Advance = "Off",
@@ -188,7 +187,7 @@ namespace SocialLinker.Core.CloudStorageTables
                 Display_Names_Sort = "entry_new_old",
                 Setting_Sheet_Order = "Order by Outfit",
                 Setting_BG_Color = "Transparent",
-                Setting_BG_Upload = "Maintain Aspect Ratio",
+                Setting_BG_Upload = "Scale to Fit",
                 P1_PSX_Resolution = "320 × 240",
                 P1_PSX_Scale = "Nearest Neighbor",
                 P1_PSP_Resolution = "480 × 272",

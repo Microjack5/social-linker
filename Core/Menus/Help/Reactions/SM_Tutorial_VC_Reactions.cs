@@ -91,6 +91,16 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 return Task.CompletedTask;
             }
 
+            else if (reaction.Emote.Name == "⏭️")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = SM_Tutorial_VC_Menu.SM_Tutorial_VC_Auto_Page_1(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
             else if (reaction.Emote.Name == "💠")
             {
                 // Stop the timeout timer associated with the menu.
@@ -138,6 +148,16 @@ namespace SocialLinker.Core.Menus.Help.Reactions
 
                 // Go to a new menu.
                 _ = SM_Tutorial_VC_Menu.SM_Tutorial_VC_Auto_Page_1(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            else if (reaction.Emote.Name == "⏭️")
+            {
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = SM_Tutorial_VC_Menu.SM_Tutorial_VC_Bypass_Page_1(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 

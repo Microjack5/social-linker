@@ -21,14 +21,18 @@ using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
-    public static class RenderP4_PS2
+    public class RenderP4_PS2
     {
-        public static async Task Render_Quick_Scene_P4_PS2(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
-        {
-            // Create variables to store the width and height of the template.
-            int template_width = 640;
-            int template_height = 448;
+        public int template_width = 640;
+        public int template_height = 448;
 
+        public int working_template_width = 640;
+        public int working_template_height = 448;
+
+        public int max_line_length = 500;
+
+        public async Task Render_Quick_Scene_P4_PS2(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
@@ -115,77 +119,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
             }
 
-            // The user could choose to output the image at different resolutions, so let's handle that point now.
-            // This is done before the text is rendered to the template.
-            // If the user's output setting is at the default resolution, do nothing.
-            if (account.P4_PS2_Resolution == "640 × 448")
-            {
-                // Do nothing
-            }
-            // If the user's output setting is NOT at the default resolution, however, we need to do some work.
-            else
-            {
-                // Change the template width and height variables based on the user's output settings.
-                if (account.P4_PS2_Resolution == "640 × 480")
-                {
-                    template_width = 640;
-                    template_height = 480;
-                }
-                else if (account.P4_PS2_Resolution == "1440 × 1080")
-                {
-                    template_width = 1440;
-                    template_height = 1080;
-                }
-
-                // Now, we'll want to make a new bitmap that matches these sizes.
-                // Create a copy of the template so far.
-                var image = new Bitmap(base_template);
-
-                // Create a new empty bitmap with the adjusted dimensions.
-                var scaled_bitmap = new Bitmap(template_width, template_height);
-
-                // Create a new graphics object so we can render on the empty bitmap.
-                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
-                {
-                    // If the user's setting is at Full HD, set the scaling method to their choice of Bicubic and Nearest Neighbor.
-                    if (account.P4_PS2_Resolution == "1440 × 1080")
-                    {
-                        switch (account.P4_PS2_Scale)
-                        {
-                            case "Bicubic":
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                break;
-
-                            case "Nearest Neighbor":
-                                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                                break;
-                        }
-                    }
-                    // Otherwise, set the method to Bicubic.
-                    else
-                    {
-                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    }
-
-                    // Set the rendering quality to high.
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-                    // Draw the copy of the template to the empty bitmap while fitting to size.
-                    graphics.DrawImage(image, 0, 0, template_width, template_height);
-                }
-
-                // Copy the contents of the new bitmap to the base template variable.
-                base_template = scaled_bitmap;
-            }
+            base_template = Scale_Template(account, base_template);
 
             // Create another graphics object for the base template.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 // Render the character's name to the template first.
                 string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                display_name = OfficialSetMethods.Validate_Input(sl_command, "P4-PS2", "Name", display_name);
+
                 graphics.DrawImage(Text_To_Brown(Render_Name(display_name)), 0, 0, template_width, template_height);
 
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P4-PS2", command_data.Dialogue, 3, 555);
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P4-PS2", "Dialogue", command_data.Dialogue);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P4-PS2", command_data.Dialogue, 3, max_line_length);
 
                 // Draw the input dialogue to the template.
                 graphics.DrawImage(Render_Dialogue(parsed_lines), 0, 0, template_width, template_height);
@@ -225,12 +171,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
+        public async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 640;
-            int template_height = 448;
-
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
@@ -240,9 +182,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
-
-            // Before any rendering occurs, amend the dialogue so that an arrow is placed in front of it.
-            command_data.Dialogue = $"> {command_data.Dialogue}";
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -294,74 +233,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
             }
 
-            // The user could choose to output the image at different resolutions, so let's handle that point now.
-            // This is done before the text is rendered to the template.
-            // If the user's output setting is at the default resolution, do nothing.
-            if (account.P4_PS2_Resolution == "640 × 448")
-            {
-                // Do nothing
-            }
-            // If the user's output setting is NOT at the default resolution, however, we need to do some work.
-            else
-            {
-                // Change the template width and height variables based on the user's output settings.
-                if (account.P4_PS2_Resolution == "640 × 480")
-                {
-                    template_width = 640;
-                    template_height = 480;
-                }
-                else if (account.P4_PS2_Resolution == "1440 × 1080")
-                {
-                    template_width = 1440;
-                    template_height = 1080;
-                }
-
-                // Now, we'll want to make a new bitmap that matches these sizes.
-                // Create a copy of the template so far.
-                var image = new Bitmap(base_template);
-
-                // Create a new empty bitmap with the adjusted dimensions.
-                var scaled_bitmap = new Bitmap(template_width, template_height);
-
-                // Create a new graphics object so we can render on the empty bitmap.
-                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
-                {
-                    // If the user's setting is at Full HD, set the scaling method to their choice of Bicubic and Nearest Neighbor.
-                    if (account.P4_PS2_Resolution == "1440 × 1080")
-                    {
-                        switch (account.P4_PS2_Scale)
-                        {
-                            case "Bicubic":
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                break;
-
-                            case "Nearest Neighbor":
-                                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                                break;
-                        }
-                    }
-                    // Otherwise, set the method to Bicubic.
-                    else
-                    {
-                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    }
-
-                    // Set the rendering quality to high.
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-                    // Draw the copy of the template to the empty bitmap while fitting to size.
-                    graphics.DrawImage(image, 0, 0, template_width, template_height);
-                }
-
-                // Copy the contents of the new bitmap to the base template variable.
-                base_template = scaled_bitmap;
-            }
+            base_template = Scale_Template(account, base_template);
 
             // Create another graphics object for the base template.
             // We'll start rendering our needed text here.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P4-PS2", command_data.Dialogue, 3, 555);
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P4-PS2", "Dialogue", command_data.Dialogue);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P4-PS2", command_data.Dialogue, 3, max_line_length);
 
                 // Draw the input dialogue to the template.
                 graphics.DrawImage(Render_Dialogue(parsed_lines), 0, 0, template_width, template_height);
@@ -385,7 +264,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static Bitmap Render_Name(string display_name)
+        public Bitmap Render_Name(string display_name)
         {
             // Create a 640 x 448 bitmap.
             Bitmap base_template = new Bitmap(640, 448);
@@ -473,10 +352,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static Bitmap Render_Dialogue(List<string>[] dialogue_lines)
+        public Bitmap Render_Dialogue(List<string>[] dialogue_lines)
         {
             // Create a 640 x 448 bitmap.
-            Bitmap bitmap = new Bitmap(640, 448);
+            Bitmap bitmap = new Bitmap(working_template_width, working_template_height);
 
             // Create an int to keep track of rendering errors. This is neccessary to inform the user of any potential issues.
             int error_counter = 0;
@@ -570,10 +449,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
 
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
-
             // Take the input string and turn it into a char array.
             char[] char_array = input_word.ToCharArray();
 
@@ -619,17 +494,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
                 }
                 // If the character returns null, it's not supported by the template's font set.
-                // Send a warning message to the user.
                 else
                 {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
-                    }
+                    sl_command.MakerCommand.Dialogue_Has_Invalid_Char = true;
                 }
             }
 
@@ -651,12 +518,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return output_string;
         }
 
-        public static Bitmap Render_Calendar_HUD(SocialLinkerCommand sl_command, UserInfoFields account)
+        public Bitmap Render_Calendar_HUD(SocialLinkerCommand sl_command, UserInfoFields account)
         {
-            // Create variables to store the width and height of the template.
-            int template_width = 640;
-            int template_height = 448;
-
             // Establish needed bitmap variables for the assets.
             Bitmap date_container = new Bitmap(2, 2);
             Bitmap weather_container = new Bitmap(2, 2);
@@ -664,7 +527,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap corner_glow = new Bitmap(2, 2);
 
             // Create a new bitmap with the width and height values specified earlier.
-            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap base_template = new Bitmap(working_template_width, working_template_height);
 
             // Now, time to put the template together!
             using (Graphics graphics = Graphics.FromImage(base_template))
@@ -726,7 +589,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         time_of_day = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4-PS2//Main//Calendar//Time_of_Day//Normal//{tod_string}.png");
 
                         // Take the time of day bitmap and invert the colors by making it negative.
-                        time_of_day = DrawAsNegative(time_of_day);
+                        time_of_day = Invert_Bitmap(time_of_day);
                     }
 
                     // Assign the TV World HUD to a bitmap variable.
@@ -1215,6 +1078,62 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return false;
         }
 
+        public Bitmap Scale_Template(UserInfoFields account, Bitmap input_template)
+        {
+            var scaled_bitmap = new Bitmap(2, 2);
+
+            if (account.P4_PS2_Resolution == "640 × 448")
+            {
+                // Do nothing if setting is at default resolution
+            }
+            else
+            {
+                if (account.P4_PS2_Resolution == "640 × 480")
+                {
+                    template_width = 640;
+                    template_height = 480;
+                }
+                else if (account.P4_PS2_Resolution == "1440 × 1080")
+                {
+                    template_width = 1440;
+                    template_height = 1080;
+                }
+
+                var copied_input = new Bitmap(input_template);
+                scaled_bitmap = new Bitmap(template_width, template_height);
+
+                using (Graphics graphics = Graphics.FromImage(scaled_bitmap))
+                {
+                    // If the user's setting is at Full HD, set the scaling method to their choice of Bicubic and Nearest Neighbor.
+                    if (account.P4_PS2_Resolution == "1440 × 1080")
+                    {
+                        switch (account.P3F_Scale)
+                        {
+                            case "Bicubic":
+                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                break;
+
+                            case "Nearest Neighbor":
+                                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                                break;
+                        }
+                    }
+                    // Otherwise, set the method to Bicubic.
+                    else
+                    {
+                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    }
+
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                    graphics.DrawImage(copied_input, 0, 0, template_width, template_height);
+                }
+
+                input_template = scaled_bitmap;
+            }
+
+            return input_template;
+        }
+
         // Loading message
         public static EmbedBuilder P4_PS2_Loading_Message()
         {
@@ -1266,18 +1185,39 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return bmp32BppDest;
         }
 
-        public static Bitmap DrawAsNegative(this System.Drawing.Image sourceImage)
+        // Method from https://stackoverflow.com/questions/33024881/invert-image-faster-in-c-sharp
+        public static Bitmap Invert_Bitmap(Bitmap input_bitmap)
         {
-            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
-            {
-                new float[]{-1, 0, 0, 0, 0},
-                new float[]{0, -1, 0, 0, 0},
-                new float[]{0, 0, -1, 0, 0},
-                new float[]{0, 0, 0, 1, 0},
-                new float[]{1, 1, 1, 0, 1}
-            });
+            Bitmap base_template = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
-            return ApplyColorMatrix(sourceImage, colorMatrix);
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                for (int y = 0; (y <= (input_bitmap.Height - 1)); y++)
+                {
+                    for (int x = 0; (x <= (input_bitmap.Width - 1)); x++)
+                    {
+                        System.Drawing.Color inv = input_bitmap.GetPixel(x, y);
+                        inv = System.Drawing.Color.FromArgb(inv.A, (255 - inv.R), (255 - inv.G), (255 - inv.B));
+                        base_template.SetPixel(x, y, inv);
+                    }
+                }
+            }
+
+            return base_template;
         }
+
+        //public static Bitmap DrawAsNegative(this System.Drawing.Image sourceImage)
+        //{
+        //    ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+        //    {
+        //        new float[]{-1, 0, 0, 0, 0},
+        //        new float[]{0, -1, 0, 0, 0},
+        //        new float[]{0, 0, -1, 0, 0},
+        //        new float[]{0, 0, 0, 1, 0},
+        //        new float[]{1, 1, 1, 0, 1}
+        //    });
+
+        //    return ApplyColorMatrix(sourceImage, colorMatrix);
+        //}
     }
 }

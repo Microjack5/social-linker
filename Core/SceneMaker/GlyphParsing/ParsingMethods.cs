@@ -288,6 +288,31 @@ namespace SocialLinker.Core.SceneMaker.GlyphParsing
             return null;
         }
 
+        public static ParsingFields Get_P5_PS4_Glyph(char character_to_render)
+        {
+            string font_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Font";
+            string font_data = "p5-ps4_font_data.json";
+
+            // If the file folder doesn't exist, create it.
+            if (!Directory.Exists(font_folder))
+            {
+                Directory.CreateDirectory(font_folder);
+            }
+
+            // If the file exists, load its contents.
+            if (File.Exists(font_folder + "/" + font_data))
+            {
+                glyphs = LoadGlyphList(font_folder + "/" + font_data).ToList();
+                return GetGlyph(character_to_render);
+            }
+            else
+            {
+                Create_Font_Data_Sheet();
+            }
+
+            return null;
+        }
+
         public static ParsingFields Get_P5R_Glyph(char character_to_render)
         {
             string font_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Font";
@@ -369,9 +394,9 @@ namespace SocialLinker.Core.SceneMaker.GlyphParsing
 
             try
             {
-                string converted_xml_to_json = $@"C://Users//Microjack5//Downloads//converted_p4d_xml.json";
-                string base_data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4G//Font//p4g_font_data.json";
-                string new_data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P4D//Font//p4d_font_data.json";
+                string converted_xml_to_json = $@"C:\Users\Alice\Desktop\Public Test Build\SocialLinker\Assets\SceneMaker\Templates\P5-PS4\Font\convertjson.json";
+                string base_data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Font//p5r_font_data.json";
+                string new_data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Font//p5-ps4_font_data.json";
 
                 string current_line = "";
                 string current_glyph = "";
@@ -386,7 +411,7 @@ namespace SocialLinker.Core.SceneMaker.GlyphParsing
 
                 var glyphs = LoadGlyphList(base_data_path).ToList();
 
-                for (int line_count = 1; line_count <= 32; line_count++)
+                for (int line_count = 1; line_count <= 29; line_count++)
                 {
                     current_line = $"Line_{line_count}";
 

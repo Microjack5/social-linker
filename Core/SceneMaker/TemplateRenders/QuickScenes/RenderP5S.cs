@@ -128,6 +128,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 // Here's an important step: Rendering all the text and vectors to the template.
                 // First, let's established a needed variable: The lines of dialogue needed to be rendered, parsed into an array of string lists.
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P5S", "Dialogue", command_data.Dialogue);
                 List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P5S", command_data.Dialogue, 3, 750);
 
                 // Using that string array list, let's generate all the vectors and text in one go!
@@ -143,6 +144,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                display_name = OfficialSetMethods.Validate_Input(sl_command, "P5S", "Name", display_name);
 
                 Bitmap merged_text_bitmap = Combine_Text_Bitmaps(display_name, dialogue_lines);
 
@@ -261,6 +263,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 // Here's an important step: Rendering all the text and vectors to the template.
                 // First, let's established a needed variable: The lines of dialogue needed to be rendered, parsed into an array of string lists.
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P5S", "Dialogue", command_data.Dialogue);
                 List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P5S", command_data.Dialogue, 3, 750);
 
                 // Using that string array list, let's generate all the vectors and text in one go!
@@ -1473,10 +1476,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static Bitmap Render_Dialogue(List<string>[] dialogue_lines)
+        public Bitmap Render_Dialogue(List<string>[] dialogue_lines)
         {
             // Create a working space bitmap.
-            Bitmap base_template = new Bitmap(1920, 1080);
+            Bitmap base_template = new Bitmap(template_width, template_height);
 
             // Create an int to keep track of rendering errors. This is neccessary to inform the user of any potential issues.
             int error_counter = 0;
@@ -1693,10 +1696,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
 
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
-
             // Take the input string and turn it into a char array.
             char[] char_array = input_word.ToCharArray();
 
@@ -1728,18 +1727,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         pixel_counter += glyph.RightCut - glyph.LeftCut;
                     }
                 }
-                // If the character returns null, it's not supported by the template's font set.
-                // Send a warning message to the user.
-                else
+                else if (char_array[i] == '\ufe0f')
                 {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
-                    }
+                    // Do nothing, emoji variation selector
+                }
+                // If the character returns null, it's not supported by the template's font set.
+                else if (sl_command != null) // This is a possibility
+                {
+                    sl_command.MakerCommand.Dialogue_Has_Invalid_Char = true;
                 }
             }
 

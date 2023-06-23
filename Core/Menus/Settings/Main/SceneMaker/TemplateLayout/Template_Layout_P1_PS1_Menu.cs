@@ -579,7 +579,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":one: On\n" +
                 ":two: Off\n");
 
-            //embed.WithImageUrl("https://i.imgur.com/1v4HjkQ.png");
+            embed.WithImageUrl("https://i.imgur.com/opEvVqv.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

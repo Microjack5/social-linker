@@ -81,6 +81,50 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithDescription("A quotation mark was found earlier than expected. There might be a sprite number missing.");
             embed.AddField("Tips", "When creating a scene, make sure to include a sprite number after the character keyword.");
 
+            embed.WithImageUrl("https://i.imgur.com/qGWGAAG.png");
+
+            var error_message = await channel.SendMessageAsync("", false, embed.Build());
+
+            Timer error_timer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = Global.error_duration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the timer runs out, activate a function.
+            error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
+        }
+
+        public static async Task Sprite_Number_Missing_With_Game_Keyword(SocialLinkerCommand command)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
+
+            // Get the account information of the command's target
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Incorrect Syntax",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            // Determine the color and thumbnail for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
+
+            // Write an appropriate description for the error.
+            embed.WithDescription("A quotation mark was found earlier than expected. There might be a sprite number missing or misplaced.");
+            embed.AddField("Tips", "When creating a scene, make sure to include a sprite number after the game keyword.");
+
+            embed.WithImageUrl("https://i.imgur.com/Yu6fAAu.png");
+
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
             Timer error_timer = new Timer()
@@ -118,8 +162,134 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
-            embed.WithDescription("Template and character keywords seem to be there, but the sprite number and dialogue are missing.");
+            embed.WithDescription("Cross-compatibility and character keywords seem to be there, but the sprite number and dialogue are missing.");
             embed.AddField("Tips", "Make sure to include a sprite number after the character keyword and check that the input dialogue is placed within quotation marks.");
+
+            var error_message = await channel.SendMessageAsync("", false, embed.Build());
+
+            Timer error_timer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = Global.error_duration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the timer runs out, activate a function.
+            error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
+        }
+
+        public static async Task Pre_Cross_Sprite_Sheet_Syntax(SocialLinkerCommand command) // Temp error before cross-compatibility
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
+
+            // Get the account information of the command's target
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Incorrect Syntax",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            // Determine the color and thumbnail for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
+
+            // Write an appropriate description for the error.
+            embed.WithDescription("A character keyword was found after a game keyword."); // A character keyword was found after a game keyword with no sprite number or dialogue afterwards.
+            embed.AddField("Tips", "When creating a game-specific sprite sheet, make sure the game keyword comes after the character keyword.");
+
+            embed.WithImageUrl("https://i.imgur.com/n6U4wUg.png");
+
+            var error_message = await channel.SendMessageAsync("", false, embed.Build());
+
+            Timer error_timer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = Global.error_duration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the timer runs out, activate a function.
+            error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
+        }
+
+        public static async Task Pre_Cross_Anime_Frames_Syntax(SocialLinkerCommand command) // Temp error before cross-compatibility
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
+
+            // Get the account information of the command's target
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Incorrect Syntax",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            // Determine the color and thumbnail for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
+
+            // Write an appropriate description for the error.
+            embed.WithDescription("A character keyword was found after a game keyword."); // A character keyword was found after a game keyword with no sprite number or dialogue afterwards.
+            embed.AddField("Tips", "When viewing a character's animation frames, make sure the game keyword comes after the character keyword.");
+
+            embed.WithImageUrl("https://i.imgur.com/n6U4wUg.png");
+
+            var error_message = await channel.SendMessageAsync("", false, embed.Build());
+
+            Timer error_timer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = Global.error_duration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the timer runs out, activate a function.
+            error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
+        }
+
+        public static async Task Pre_Cross_Full_Scene_Syntax(SocialLinkerCommand command) // Temp error before cross-compatibility
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = command.User;
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
+
+            // Get the account information of the command's target
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Incorrect Syntax",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            // Determine the color and thumbnail for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
+
+            // Write an appropriate description for the error.
+            embed.WithDescription("A character keyword was found after a game keyword.");
+            embed.AddField("Tips", "When creating a scene, make sure the game keyword only comes after the character keyword.");
+
+            embed.WithImageUrl("https://i.imgur.com/Yu6fAAu.png");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -162,6 +332,8 @@ namespace SocialLinker.Core.SceneMaker
             embed.AddField("Tips", "" +
                 "Start with the base sprite number first, then connect an eye frame number to it with a hyphen. If the character sprite also has mouth frames, connect it after the eye frame number with a hyphen, too.");
 
+            embed.WithImageUrl("https://i.imgur.com/wQ72B6I.png");
+
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
             Timer error_timer = new Timer()
@@ -202,6 +374,8 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithDescription("A non-digit was found when specifying the animation frames.");
             embed.AddField("Tips", "" +
                 "Start with the base sprite number first, then connect an eye frame number to it with a hyphen. If the character sprite also has mouth frames, connect it after the eye frame number with a hyphen, too.");
+
+            embed.WithImageUrl("https://i.imgur.com/wQ72B6I.png");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -987,7 +1161,13 @@ namespace SocialLinker.Core.SceneMaker
         }
 
         // Warnings
-        public static async Task Unsupported_Character(SocialLinkerCommand command)
+        public static async Task Unsupported_Character_In_Display_Name(SocialLinkerCommand command)
+        {
+            SocketTextChannel channel = (SocketTextChannel)command.Channel;
+            await channel.SendMessageAsync(":warning: One or more of the characters in the display name is not supported by this template's font set and will not be rendered.");
+        }
+
+        public static async Task Unsupported_Character_In_Dialogue(SocialLinkerCommand command)
         {
             SocketTextChannel channel = (SocketTextChannel)command.Channel;
             await channel.SendMessageAsync(":warning: One or more of the characters entered is not supported by this template's font set and will not be rendered.");
@@ -1158,7 +1338,7 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Incorrect_Sprite_Number_On_System_Message(SocialLinkerCommand command)
+        public static async Task Sprite_Number_Missing_On_System_Message(SocialLinkerCommand command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = command.User;
@@ -1170,7 +1350,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Input Error",
+                Name = "Incorrect Syntax",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -1181,7 +1361,8 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
-            embed.WithDescription("System messages for this template can only be called with the sprite number `0`.");
+            embed.WithDescription("A quotation mark was found earlier than expected. There might be a sprite number missing.");
+            embed.AddField("Tips", "When creating a scene, make sure to include a sprite number after the character keyword.");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 

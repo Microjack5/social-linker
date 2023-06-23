@@ -1196,7 +1196,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             if (account.VC_P5 == "P5-PS4")
             {
                 version_title = "Persona 5 (PlayStation®️ 4)";
-                embed.WithThumbnailUrl("https://i.imgur.com/orRgZcx.jpg");
+                embed.WithThumbnailUrl("https://i.imgur.com/K78my5p.jpg");
             }
             else if (account.VC_P5 == "P5R")
             {

@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Fergun.Interactive;
 using SocialLinker.Core.SceneMaker.GlyphParsing;
 using System.IO;
 using Discord.WebSocket;
@@ -11,18 +10,10 @@ using SocialLinker.Core.LocalStorageTables;
 using Discord;
 using Discord.Rest;
 using SocialLinker.Core.CloudStorageTables;
-using System.Linq;
-using System.Net;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
-using System.Globalization;
 using SocialLinker.Core.Menus;
 using System.Drawing.Drawing2D;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
-using System.Security.Principal;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
-using System.Data.SqlClient;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -87,6 +78,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 Bitmap text_overlay = new Bitmap(2, 2);
+
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P4D", "Dialogue", command_data.Dialogue);
 
                 switch (account.P4D_TS_Scene_Type)
                 {
@@ -260,6 +253,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(button_guide, 0, 0, template_width, template_height);
 
                 string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                display_name = OfficialSetMethods.Validate_Input(sl_command, "P4D", "Name", display_name);
+
                 Bitmap rendered_name = Render_Name(display_name);
                 Bitmap colored_name = Bitmap_To_Color(rendered_name, System.Drawing.Color.FromArgb(0, 141, 255), new Rectangle(120, 734, 1680, 80));
                 graphics.DrawImage(colored_name, 0, 0, colored_name.Width, colored_name.Height);
@@ -586,10 +581,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
 
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
-
             // Take the input string and turn it into a char array.
             char[] char_array = input_word.ToCharArray();
 
@@ -633,17 +624,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
                 }
                 // If the character returns null, it's not supported by the template's font set.
-                // Send a warning message to the user.
                 else
                 {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
-                    }
+                    sl_command.MakerCommand.Dialogue_Has_Invalid_Char = true;
                 }
             }
 

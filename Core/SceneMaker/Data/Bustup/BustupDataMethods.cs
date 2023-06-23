@@ -34,29 +34,33 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 bustup_data_list = Load_Bustup_Data_List(data_folder + "/" + data_sheet).ToList();
 
                 // START
-                /* Console.WriteLine("Copying data...");
+                //Console.WriteLine("Copying data...");
 
-                string data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}//bustup_data.json";
+                //string data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}//bustup_data.json";
 
-                foreach (BustupData s in bustup_data_list)
-                {
-                    s.P5S_Coord_X = s.P5R_Coord_X;
-                    s.P5S_Coord_Y = s.P5R_Coord_Y;
-                    s.P5S_Scale_Width = s.P5R_Scale_Width;
-                    s.P5S_Scale_Height = s.P5R_Scale_Height;
-                }
+                //foreach (BustupData s in bustup_data_list)
+                //{
+                //    s.P1_PSP_Scale_Width = 104;
+                //    s.P1_PSP_Scale_Height = 112;
+                //    s.P1_PSP_Left_Coord_X = 39;
+                //    s.P1_PSP_Left_Coord_Y = 84;
+                //    s.P1_PSP_Center_Coord_X = 184;
+                //    s.P1_PSP_Center_Coord_Y = 84;
+                //    s.P1_PSP_Right_Coord_X = 329;
+                //    s.P1_PSP_Right_Coord_Y = 84;
+                //}
 
-                try
-                {
-                    string json = JsonConvert.SerializeObject(bustup_data_list, Formatting.Indented);
-                    File.WriteAllText(data_path, json);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"'{e}'");
-                }
+                //try
+                //{
+                //    string json = JsonConvert.SerializeObject(bustup_data_list, Formatting.Indented);
+                //    File.WriteAllText(data_path, json);
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine($"'{e}'");
+                //}
 
-                Console.WriteLine("Copy complete!"); */
+                //Console.WriteLine("Copy complete!");
                 // END
 
                 string bustup_filename = "";
@@ -152,10 +156,13 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 return Frame_Data_From_Filename(frame_filename);
             }
             // If the file doesn't exist, create it.
+            if (Create_Mouth_Frame_Data_List(set_data) != default)
+            {
+                return Get_Mouth_Frame_Data(set_data, bustup_data, command_data);
+            }
             else
             {
-                Create_Mouth_Frame_Data_List(set_data);
-                return Get_Mouth_Frame_Data(set_data, bustup_data, command_data);
+                return null;
             }
         }
 
@@ -181,22 +188,49 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                     // Check if the created file path string exists.
                     if (File.Exists($"{bustup_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png"))
                     {
-                        var new_bustup_data = new BustupData()
+                        if (expression <= 8)
                         {
-                            Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
-                            Default_Name_EN = "Yu",
-                            Default_Name_JPN = "---",
-                            P4G_Scale_Width = 1024,
-                            P4G_Scale_Height = 1024,
-                            P4G_Coord_X = 1040,
-                            P4G_Coord_Y = 64,
-                            //P5R_Scale_Width = 768,
-                            //P5R_Scale_Height = 768,
-                            //P5R_Coord_X = 30,
-                            //P5R_Coord_Y = 334,
-                        };
+                            var new_bustup_data = new BustupData()
+                            {
+                                Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
+                                Default_Name_EN = "Shido",
+                                Default_Name_JPN = "---",
+                                P5_PS4_Scale_Width = 768,
+                                P5_PS4_Scale_Height = 768,
+                                P5_PS4_Coord_X = -27,
+                                P5_PS4_Coord_Y = 327,
+                            };
 
-                        new_list.Add(new_bustup_data);
+                            new_list.Add(new_bustup_data);
+                        }
+                        else
+                        {
+                            var new_bustup_data = new BustupData()
+                            {
+                                Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
+                                Default_Name_EN = "Shadow Shido",
+                                Default_Name_JPN = "---",
+                                P5_PS4_Scale_Width = 768,
+                                P5_PS4_Scale_Height = 768,
+                                P5_PS4_Coord_X = -48,
+                                P5_PS4_Coord_Y = 327,
+                            };
+
+                            new_list.Add(new_bustup_data);
+                        }
+
+                        //var new_bustup_data = new BustupData()
+                        //{
+                        //    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}.png",
+                        //    Default_Name_EN = "Igor",
+                        //    Default_Name_JPN = "---",
+                        //    P5_PS4_Scale_Width = 768,
+                        //    P5_PS4_Scale_Height = 768,
+                        //    P5_PS4_Coord_X = -10,
+                        //    P5_PS4_Coord_Y = 349,
+                        //};
+
+                        //new_list.Add(new_bustup_data);
                     }
                 }
             }
@@ -269,26 +303,37 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             // EXPERIMENT START
                             FrameData new_frame_data = new FrameData();
 
-                            if (expression == 2 || expression == 8)
+                            if (outfit == 6)
                             {
                                 new_frame_data = new FrameData()
                                 {
                                     Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png",
-                                    Scale_Width = 208,
-                                    Scale_Height = 144,
-                                    Coord_X = 371,
-                                    Coord_Y = 259
+                                    Scale_Width = 192,
+                                    Scale_Height = 96,
+                                    Coord_X = 345,
+                                    Coord_Y = 397
                                 };
                             }
-                            else if (expression == 5 || expression == 11)
+                            else if (expression <= 8)
                             {
                                 new_frame_data = new FrameData()
                                 {
                                     Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png",
-                                    Scale_Width = 208,
-                                    Scale_Height = 96,
-                                    Coord_X = 354,
-                                    Coord_Y = 358
+                                    Scale_Width = 384,
+                                    Scale_Height = 192,
+                                    Coord_X = 171,
+                                    Coord_Y = 252
+                                };
+                            }
+                            else if (expression == 15)
+                            {
+                                new_frame_data = new FrameData()
+                                {
+                                    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png",
+                                    Scale_Width = 192,
+                                    Scale_Height = 192,
+                                    Coord_X = 366,
+                                    Coord_Y = 240
                                 };
                             }
                             else
@@ -297,11 +342,12 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                                 {
                                     Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png",
                                     Scale_Width = 192,
-                                    Scale_Height = 96,
-                                    Coord_X = 369,
-                                    Coord_Y = 358
+                                    Scale_Height = 192,
+                                    Coord_X = 360,
+                                    Coord_Y = 237
                                 };
                             }
+
                             new_list.Add(new_frame_data);
                             // EXPERIMENT END
 
@@ -309,10 +355,10 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             //var new_frame_data = new FrameData()
                             //{
                             //    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_e{i}.png",
-                            //    Scale_Width = 200,
-                            //    Scale_Height = 116,
-                            //    Coord_X = 206,
-                            //    Coord_Y = 351
+                            //    Scale_Width = 384,
+                            //    Scale_Height = 192,
+                            //    Coord_X = 9,
+                            //    Coord_Y = 249
                             //};
                             //new_list.Add(new_frame_data);
                         }
@@ -389,26 +435,26 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             // EXPERIMENT START
                             FrameData new_frame_data = new FrameData();
 
-                            if (expression == 2 || expression == 8)
+                            if (outfit == 6)
                             {
                                 new_frame_data = new FrameData()
                                 {
                                     Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_m{i}.png",
-                                    Scale_Width = 208,
-                                    Scale_Height = 144,
-                                    Coord_X = 344,
-                                    Coord_Y = 421
+                                    Scale_Width = 192,
+                                    Scale_Height = 192,
+                                    Coord_X = 300,
+                                    Coord_Y = 496
                                 };
                             }
-                            else if (expression == 5 || expression == 11)
+                            else if (expression <= 8)
                             {
                                 new_frame_data = new FrameData()
                                 {
                                     Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_m{i}.png",
-                                    Scale_Width = 208,
-                                    Scale_Height = 144,
-                                    Coord_X = 329,
-                                    Coord_Y = 456
+                                    Scale_Width = 384,
+                                    Scale_Height = 192,
+                                    Coord_X = 171,
+                                    Coord_Y = 454
                                 };
                             }
                             else
@@ -417,23 +463,25 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                                 {
                                     Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_m{i}.png",
                                     Scale_Width = 192,
-                                    Scale_Height = 96,
-                                    Coord_X = 338,
-                                    Coord_Y = 503
+                                    Scale_Height = 192,
+                                    Coord_X = 300,
+                                    Coord_Y = 429
                                 };
                             }
+
+                            new_list.Add(new_frame_data);
                             // EXPERIMENT END
 
                             // If so, generate a new frame data object for the frame.
                             //var new_frame_data = new FrameData()
                             //{
                             //    Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}_m{i}.png",
-                            //    Scale_Width = 196,
-                            //    Scale_Height = 100,
-                            //    Coord_X = 238,
-                            //    Coord_Y = 498
+                            //    Scale_Width = 384,
+                            //    Scale_Height = 192,
+                            //    Coord_X = 214,
+                            //    Coord_Y = 387
                             //};
-                            new_list.Add(new_frame_data);
+                            //new_list.Add(new_frame_data);
                         }
                     }
                 }

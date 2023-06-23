@@ -46,7 +46,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 "\n" +
                 ":one: Date & Weather\n" +
                 ":two: Scene Border\n" +
-                ":three: Control Panel & Auto-Advance\n"); //":four: Phone Calls"
+                ":three: Cursor & Control Panel\n" +
+                ":four: Phone Calls");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -91,7 +92,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
-            //reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
+            reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
@@ -133,6 +134,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":one: Normal\n" +
                 ":two: Inverted\n" +
                 ":three: None\n");
+
+            embed.WithImageUrl("https://i.imgur.com/SC29WmH.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -219,6 +222,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":two: Interaction\n" +
                 ":three: None");
 
+            embed.WithImageUrl("https://i.imgur.com/ppcK1C8.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -267,7 +272,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P5R_Panel_Advance(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P5R_Cursor_Panel(SocketGuildUser user, RestUserMessage message)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -278,7 +283,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Control Panel & Auto-Advance",
+                Name = "Cursor & Control Panel",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -296,13 +301,15 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
-                "**Change how the message window and control panel are displayed.**\n" +
+                "**Change how the message window's cursor and control panel are displayed.**\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P5R_TS_Panel}`**\n" +
                 "\n" +
-                ":one: Manual\n" +
-                ":two: Auto-advance\n" +
-                ":three: None");
+                ":one: Manual (with Control Panel)\n" +
+                ":two: Manual (without Control Panel)\n" +
+                ":three: Auto-Advance");
+
+            embed.WithImageUrl("https://i.imgur.com/GgGyvo7.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -327,7 +334,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "Template_Layout_P5R_Panel_Advance";
+            menuSession.CurrentMenu = "Template_Layout_P5R_Cursor_Panel";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -549,8 +556,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P5R_TS_Caller_Location}`**\n" +
                 "\n" +
-                ":one: Normal\n" +
-                ":two: Velvet Room\n");
+                ":one: Dynamic - *Dynamically change the background depending on time of day and characters.*\n" +
+                ":two: Dynamic (Normals Only) - *Dynamically change the background depending on time of day. Velvet Room background excluded.*\n" +
+                ":three: Velvet Room - *Statically set the background to Velvet Room for all characters.*");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -594,6 +602,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             reaction_list.Add(new Emoji("↩️"));
             reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
+            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
@@ -753,7 +762,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P5R_Panel_Advance_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P5R_Cursor_Panel_Confirm(SocketGuildUser user, RestUserMessage message)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -782,7 +791,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
-                $"The control panel has been set to **`{account.P5R_TS_Panel}`**.\n");
+                $"The cursor & control panel have been set to **`{account.P5R_TS_Panel}`**.\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -807,7 +816,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "Template_Layout_P5R_Panel_Advance_Confirm";
+            menuSession.CurrentMenu = "Template_Layout_P5R_Cursor_Panel_Confirm";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.

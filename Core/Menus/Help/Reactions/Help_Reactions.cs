@@ -45,7 +45,7 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Credits_Menu.Credits_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Credits_Menu.Credits_Page_1(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 

@@ -46,7 +46,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 "\n" +
                 ":one: Date & Weather\n" +
                 ":two: Scene Border\n" +
-                ":three: Control Panel & Auto-Advance\n");
+                ":three: Cursor & Control Panel\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -132,6 +132,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":one: On\n" +
                 ":two: Off\n");
 
+            embed.WithImageUrl("https://i.imgur.com/Bqd0Cxv.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -216,6 +218,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":two: Interaction\n" +
                 ":three: None");
 
+            embed.WithImageUrl("https://i.imgur.com/9zAoeTL.png");
+
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
@@ -264,7 +268,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P5_PS3_Panel_Advance(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P5_PS3_Cursor_Panel(SocketGuildUser user, RestUserMessage message)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -275,7 +279,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Control Panel & Auto-Advance",
+                Name = "Cursor & Control Panel",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -293,13 +297,15 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
-                "**Change how the message window and control panel are displayed.**\n" +
+                "**Change how the message window's cursor and control panel are displayed.**\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P5_PS4_TS_Panel}`**\n" +
                 "\n" +
-                ":one: Manual\n" +
-                ":two: Auto-advance\n" +
-                ":three: None");
+                ":one: Manual (with Control Panel)\n" +
+                ":two: Manual (without Control Panel)\n" +
+                ":three: Auto-Advance");
+
+            embed.WithImageUrl("https://i.imgur.com/tPUsAWH.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -324,7 +330,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "Template_Layout_P5_PS3_Panel_Advance";
+            menuSession.CurrentMenu = "Template_Layout_P5_PS3_Cursor_Panel";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -503,7 +509,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P5_PS3_Panel_Advance_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P5_PS3_Cursor_Panel_Confirm(SocketGuildUser user, RestUserMessage message)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -532,7 +538,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
-                $"The control panel has been set to **`{account.P5_PS4_TS_Panel}`**.\n");
+                $"The cursor & control panel have been set to **`{account.P5_PS4_TS_Panel}`**.\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -557,7 +563,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "Template_Layout_P5_PS3_Panel_Advance_Confirm";
+            menuSession.CurrentMenu = "Template_Layout_P5_PS3_Cursor_Panel_Confirm";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.

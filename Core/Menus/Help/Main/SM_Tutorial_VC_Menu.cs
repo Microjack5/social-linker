@@ -202,7 +202,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             var footer = new EmbedFooterBuilder
             {
                 Text = "" +
-                "◀️ Previous Page | 💠 Return to Version Control Tutorials\n" +
+                "◀️ Previous Page | ⏭️ Next Tutorial | 💠 Return to Version Control Tutorials\n" +
                 "Page 2 / 2"
             };
 
@@ -257,8 +257,9 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             // Add needed emote reactions for the menu.
             reaction_list.Add(new Emoji("◀️"));
+            reaction_list.Add(new Emoji("⏭️"));
             reaction_list.Add(new Emoji("💠"));
-
+            
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
@@ -366,7 +367,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             var footer = new EmbedFooterBuilder
             {
                 Text = "" +
-                "◀️ Previous Page | 💠 Return to Version Control Tutorials\n" +
+                "◀️ Previous Page | ⏭️ Next Tutorial | 💠 Return to Version Control Tutorials\n" +
                 "Page 2 / 2"
             };
 
@@ -421,6 +422,7 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             // Add needed emote reactions for the menu.
             reaction_list.Add(new Emoji("◀️"));
+            reaction_list.Add(new Emoji("⏭️"));
             reaction_list.Add(new Emoji("💠"));
 
             // Add the reactions to the message.
@@ -473,8 +475,8 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "<:P2EP:788950163363463172> `P2EP-PSP` - **Persona 2: Eternal Punishment (Remake)**");
 
             embed.AddField("Persona 3 Keywords", "" +
-                "<:P3F:788949741681115187> `P3F` - **Persona 3 FES**\n" +
-                "<:P3P:751133116533309441> `P3P` - **Persona 3 Portable**");
+                "<:P3F:1096338540369039413> `P3F` - **Persona 3 FES**\n" +
+                "<:P3P:1096338602046267392> `P3P` - **Persona 3 Portable**");
 
             embed.AddField("Persona 4 Keywords", "" +
                 "<:P4:751133120530612274> `P4-PS2` - **Persona 4 (PlayStation®️ 2)**\n" +
@@ -746,8 +748,8 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "<:P2EP:788950163363463172> `P2EP-PSP` - **Persona 2: Eternal Punishment (Remake)**");
 
             embed.AddField("Persona 3 Keywords", "" +
-                "<:P3F:788949741681115187> `P3F` - **Persona 3 FES**\n" +
-                "<:P3P:751133116533309441> `P3P` - **Persona 3 Portable**");
+                "<:P3F:1096338540369039413> `P3F` - **Persona 3 FES**\n" +
+                "<:P3P:1096338602046267392> `P3P` - **Persona 3 Portable**");
 
             embed.AddField("Persona 4 Keywords", "" +
                 "<:P4:751133120530612274> `P4-PS2` - **Persona 4 (PlayStation®️ 2)**\n" +

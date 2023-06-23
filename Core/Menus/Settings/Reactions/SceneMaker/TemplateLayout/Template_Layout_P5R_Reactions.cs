@@ -49,7 +49,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Panel_Advance(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Cursor_Panel(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -217,7 +217,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5R_Panel_Advance(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5R_Cursor_Panel(SocketReaction reaction, MenuIdStructure menuSession)
         {
             if (reaction.Emote.Name == "↩️")
             {
@@ -236,7 +236,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen setting to the user's account.
-                account.P5R_TS_Panel = "Manual";
+                account.P5R_TS_Panel = "Manual (with Control Panel)";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -245,7 +245,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Panel_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Cursor_Panel_Confirm(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -256,7 +256,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen setting to the user's account.
-                account.P5R_TS_Panel = "Auto-advance";
+                account.P5R_TS_Panel = "Manual (without Control Panel)";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -265,7 +265,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Panel_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Cursor_Panel_Confirm(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -276,7 +276,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen setting to the user's account.
-                account.P5R_TS_Panel = "None";
+                account.P5R_TS_Panel = "Auto-Advance";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -285,7 +285,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Panel_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Cursor_Panel_Confirm(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -402,7 +402,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen setting to the user's account.
-                account.P5R_TS_Caller_Location = "Normal";
+                account.P5R_TS_Caller_Location = "Dynamic";
 
                 //Update the user's account.
                 UserInfoClasses.UpdateAccount(account);
@@ -417,6 +417,25 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
 
             // Keycap Two
             else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
+            {
+                // Get the account information of the user.
+                var account = UserInfoClasses.GetAccount(menuSession.User);
+
+                // Assign the chosen setting to the user's account.
+                account.P5R_TS_Caller_Location = "Dynamic (Normals Only)";
+
+                //Update the user's account.
+                UserInfoClasses.UpdateAccount(account);
+
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Phone_Calls_Location_Confirm(menuSession.User, menuSession.MenuMessage);
+            }
+
+            // Keycap Three
+            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
             {
                 // Get the account information of the user.
                 var account = UserInfoClasses.GetAccount(menuSession.User);
@@ -513,7 +532,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5R_Panel_Advance_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5R_Cursor_Panel_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
         {
             if (reaction.Emote.Name == "💠")
             {

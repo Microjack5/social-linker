@@ -2004,8 +2004,8 @@
   {
     "Row": 17,
     "Column": 13,
-    "LeftCut": 9,
-    "RightCut": 23,
+    "LeftCut": 10,
+    "RightCut": 22,
     "SupportedChars": "[ '…' ]"
   },
   {

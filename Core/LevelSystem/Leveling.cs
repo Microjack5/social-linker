@@ -98,7 +98,7 @@ namespace SocialLinker.Core.LevelSystem
 
                 // Store the new EXP total in both Total_EXP and Hourly_Exp_Gained fields.
                 // If the user has reached Level 99, no more EXP is added to their account and the function returns.
-                if (account.Level == 99)
+                if (account.Level == Global.Max_Level)
                 {
                     // Do nothing
                     return;
@@ -144,7 +144,7 @@ namespace SocialLinker.Core.LevelSystem
                     // Calculate the amount of P-Medals the user gains on level up.
                     // Social Bonus is the amount of P-Medals affected by the user's social stats.
                     int social_bonus = (account.Proficiency_Rank - 1) + (account.Diligence_Rank - 1) + (account.Expression_Rank - 1);
-                    int gained_pmedals = ((newLevel / 100) * social_bonus) + (social_bonus) + 1;
+                    int gained_pmedals = (social_bonus * 2) + 1;
 
                     // Calculate the amount of P-Medals the user keeps before reaching the P-Medal cap.
                     gained_pmedals = CalculateMedalsKept(sl_command, gained_pmedals);
@@ -163,11 +163,10 @@ namespace SocialLinker.Core.LevelSystem
                     }
 
                     // If the user has leveled up to Level 99 for the first time, activated their account, has a profile theme set, and has notifications set to on, send a notification.
-                    if (newLevel == 99 && account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Level_Up_Notifications == "On")
+                    if (newLevel == Global.Max_Level && account.Account_Activated == "Yes" && account.Profile_Theme != "" && account.Level_Up_Notifications == "On")
                     {
                         MaxLevelMessage(sl_command);
                     }
-
                 }
 
                 // Check if 75% of the hourly EXP cap has been reached with this message.
@@ -249,49 +248,49 @@ namespace SocialLinker.Core.LevelSystem
             else if (account.Level >= 12 && account.Level <= 22)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by nine.
-                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 9);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 8);
             }
             // Check if the user's level is between 23 and 33.
             else if (account.Level >= 23 && account.Level <= 33)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by eight.
-                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 8);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 7);
             }
-            // Check if the user's level is between 24 and 44.
+            // Check if the user's level is between 34 and 44.
             else if (account.Level >= 34 && account.Level <= 44)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by seven.
-                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 7);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 6);
             }
             // Check if the user's level is between 45 and 55.
             else if (account.Level >= 45 && account.Level <= 55)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by six.
-                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 6);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 5);
             }
             // Check if the user's level is between 56 and 66.
             else if (account.Level >= 56 && account.Level <= 66)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by five.
-                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 5);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 4);
             }
             // Check if the user's level is between 67 and 77.
             else if (account.Level >= 67 && account.Level <= 77)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by four.
-                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 4);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 3);
             }
             // Check if the user's level is between 78 and 88.
             else if (account.Level >= 78 && account.Level <= 88)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by three.
-                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 3);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 2);
             }
             // Check if the user's level is between 89 and 99.
             else if (account.Level >= 89 && account.Level <= 99)
             {
                 // If so, earned EXP equals the ceiling of message's character count divided by two.
-                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 2);
+                gained_exp = (int)Math.Ceiling(CharacterCount(sl_command) / 1);
             }
 
             return gained_exp;
@@ -339,9 +338,9 @@ namespace SocialLinker.Core.LevelSystem
             int amount_kept = 0;
 
             // If the amount of P-Medals gained is greater than the max amount the user can hold, return only what will bring the user to the cap.
-            if (gained_pmedals > (999 - account.P_Medals))
+            if (gained_pmedals > (Global.Max_PMedals - account.P_Medals))
             {
-                amount_kept = 999 - account.P_Medals;
+                amount_kept = Global.Max_PMedals - account.P_Medals;
             }
             // If not, return all the P-Medals gained.
             else
@@ -371,7 +370,7 @@ namespace SocialLinker.Core.LevelSystem
             {
                 var footer = new EmbedFooterBuilder
                 {
-                    Text = $"You can disable level up messages like these from the {BotConfig.bot.cmdPrefix}settings menu by choosing [General Settings]."
+                    Text = $"You can disable level up messages like these from the {BotConfig.bot.cmdPrefix}settings menu by choosing [Profile Settings]."
                 };
 
                 embed.WithFooter(footer);

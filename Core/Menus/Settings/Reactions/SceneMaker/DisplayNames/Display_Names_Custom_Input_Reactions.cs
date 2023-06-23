@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using Microsoft.WindowsAzure.Storage.Auth;
@@ -10,11 +7,8 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.WindowsAzure.Storage;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
-using SocialLinker.Core.LocalStorageTables;
-using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames;
-using SocialLinker.Core.SceneMaker;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
 {
@@ -72,14 +66,27 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
 
             try
             {
+                var existing_name_list = DisplayNameLogging.GetCustomNameList(Convert.ToUInt64(naming_session.User_ID));
+                existing_name_list = existing_name_list.OrderBy(s => s.Entry_ID).ToList();
+                int new_id = 1;
+
+                if (existing_name_list.Count > 0)
+                {
+                    char[] delimiterChars = { '_' };
+                    List<string> latest_name_entry = existing_name_list[existing_name_list.Count - 1].Entry_ID.Split(delimiterChars).ToList();
+
+                    new_id = Int32.Parse(latest_name_entry[1]) + 1;
+                }
+
                 // Save to temp for results screen
                 naming_session.Display_Name = input_string;
 
                 DisplayNameTableData table_submission = new DisplayNameTableData()
                 {
                     PartitionKey = naming_session.User_ID,
+                    RowKey = $"{naming_session.User_ID}_{new_id}",
                     Display_Name = input_string,
-                    RowKey = naming_session.Game,
+                    Game = naming_session.Game,
                     Character_ID = naming_session.Sprite_Set.ID,
                     Sprites_Affected = naming_session.Sprites_Affected,
                     Spriteless_Included = naming_session.Spriteless_Included,

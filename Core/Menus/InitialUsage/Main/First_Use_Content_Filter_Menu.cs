@@ -191,9 +191,11 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl("https://i.imgur.com/L0K5pNh.png");
 
             embed.WithDescription("" +
+                ":warning: **__PLEASE READ CAREFULLY BEFORE CONTINUING!__** :warning:\n" +
+                "\n" +
                 "Social Linker contains content from all across the Persona series, so it might be easy to spoil yourself if you’re actively avoiding certain titles.\n" +
                 "\n" +
-                ":warning: **Select the games you want to __avoid spoilers__ for by reacting with their icons below. __DO NOT SELECT TITLES YOU WANT TO USE!__**\n" +
+                "**Select the games you want to __avoid spoilers for__ by reacting with their icons below.**\n" +
                 "You’ll receive a warning message whenever related content is accessed to prevent you from accidentally viewing it. " +
                 "This won’t prevent other users around you from accessing such content, however.\n" +
                 "\n" +
@@ -295,7 +297,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
-                "**Which version of Persona would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Revelations: Persona\n" +
                 ":two: Persona (Remake)");
@@ -379,7 +381,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PSP"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 2: Innocent Sin would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 2: Innocent Sin would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
                 ":two: Persona 2: Innocent Sin (Remake)");
@@ -463,7 +465,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PSP"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 2: Eternal Punishment would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 2: Eternal Punishment would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
                 ":two: Persona 2: Eternal Punishment (Remake)");
@@ -547,7 +549,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl("https://i.imgur.com/trtPflx.png");
 
             embed.WithDescription("" +
-                "**Which version of Persona 3 would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 3 would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 3 FES\n" +
                 ":two: Persona 3 Portable");
@@ -631,7 +633,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 4 would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 4 would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 4 (PlayStation®️ 2)\n" +
                 ":two: Persona 4 Golden");
@@ -715,7 +717,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 5 would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 5 would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 5 (PlayStation®️ 4)\n" +
                 ":two: Persona 5 Royal");
@@ -794,7 +796,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl("https://i.imgur.com/L0K5pNh.png");
 
             embed.WithDescription($"" +
-                $"You can adjust your content filter settings at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [General Settings] > [Content Filter].");
+                $"You can adjust your content filter settings at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Settings] > [Content Filter].");
 
             embed.AddField("Getting Started", "" +
                 $"Type **`{BotConfig.bot.cmdPrefix}help`** to view various commands and tutorials showing how to use Social Linker.");

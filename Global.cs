@@ -13,7 +13,7 @@ namespace SocialLinker
         internal static List<UserCooldownFields> CooldownList { get; set; } = new List<UserCooldownFields>();
         internal static List<ContentFilter> ContentFilterList { get; set; } = new List<ContentFilter>();
         internal static List<DisplayNameTableData> DisplayNameTableList { get; set; } = new List<DisplayNameTableData>();
-        internal static List<DisplayNameTempData> DisplayNameTempList { get; set; } = new List<DisplayNameTempData>();
+        internal static List<DisplayNameInternalData> DisplayNameTempList { get; set; } = new List<DisplayNameInternalData>();
         internal static List<ContextSwitchData> P1_PS1_Usage_List { get; set; } = new List<ContextSwitchData>();
         internal static List<PlacementSwitchData> P1_PSP_Usage_List { get; set; } = new List<PlacementSwitchData>();
 

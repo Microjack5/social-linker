@@ -27,12 +27,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     {
         int template_width = 480;
         int template_height = 272;
+        int max_line_length = 320;
 
         public async Task Render_Quick_Scene_P1_PSP(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
-            // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
-            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -88,7 +87,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public async Task Render_Offload(SocialLinkerCommand sl_command, UserInfoFields account, PlacementSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data)
         {
-            SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
             RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PSP_Loading_Message().Build());
 
@@ -157,11 +155,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+            display_name = OfficialSetMethods.Validate_Input(sl_command, "P1-PSP", "Name", display_name);
             Bitmap display_name_layer = Render_Name(display_name);
             
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PSP", command_data.Dialogue, 2, 320);
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P1-PSP", "Dialogue", command_data.Dialogue);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PSP", command_data.Dialogue, 2, max_line_length);
                 graphics.DrawImage(display_name_layer, 0, 0, template_width, template_height);
                 graphics.DrawImage(Render_Dialogue(parsed_lines, false), 0, 0, template_width, template_height);
             }
@@ -230,7 +230,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 Random rnd = new Random();
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PSP", command_data.Dialogue, 3, 320);
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P1-PSP", "Dialogue", command_data.Dialogue);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PSP", command_data.Dialogue, 3, max_line_length);
                 Bitmap message_window = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PSP//Main//message_window.png");
                 Bitmap cursor = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PSP//Main//cursor.png");
                 Bitmap bg_shadow = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P1-PSP//Main//shadow.png");
@@ -674,10 +675,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
 
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
-
             // Take the input string and turn it into a char array.
             char[] char_array = input_word.ToCharArray();
 
@@ -706,14 +703,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Send a warning message to the user.
                 else
                 {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
-                    }
+                    sl_command.MakerCommand.Dialogue_Has_Invalid_Char = true;
                 }
             }
 

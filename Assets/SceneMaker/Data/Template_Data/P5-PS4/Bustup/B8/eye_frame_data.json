@@ -1,0 +1,576 @@
+[
+  {
+    "Filename": "b8_1_1_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_1_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_2_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_2_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_4_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_4_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_5_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_5_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_7_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_7_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_8_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_8_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_10_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_1_10_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_1_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_1_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_2_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_2_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_4_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_4_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_5_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_5_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_7_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_7_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_8_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_2_8_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_3_1_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_3_1_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_3_2_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_3_2_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_1_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_1_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_2_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_2_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_4_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_4_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_5_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_5_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_7_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_7_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_8_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_4_8_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_1_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_1_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_2_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_2_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_4_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_4_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_5_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_5_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_6_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_6_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_7_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_7_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_8_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_8_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_9_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_5_9_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_6_1_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_6_1_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_6_2_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_6_2_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_1_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_1_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_2_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_2_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_4_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_4_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_5_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_5_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_6_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_6_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_7_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_7_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_8_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_8_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_9_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_7_9_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_8_1_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_8_1_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_8_2_e1.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  },
+  {
+    "Filename": "b8_8_2_e2.png",
+    "Scale_Width": 384,
+    "Scale_Height": 192,
+    "Coord_X": 337,
+    "Coord_Y": 327
+  }
+]

@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Fergun.Interactive;
 using SocialLinker.Core.SceneMaker.GlyphParsing;
 using System.IO;
 using Discord.WebSocket;
@@ -11,7 +10,6 @@ using SocialLinker.Core.LocalStorageTables;
 using Discord;
 using Discord.Rest;
 using SocialLinker.Core.CloudStorageTables;
-using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -112,7 +110,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Now, it's time to render the text.
                 // Render the character's name to the template first.
                 string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                display_name = OfficialSetMethods.Validate_Input(sl_command, "P4G", "Name", display_name);
                 graphics.DrawImage(Text_To_Brown(Render_Name(display_name)), 0, 0, template_width, template_height);
+
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P4G", "Dialogue", command_data.Dialogue);
 
                 List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P4G", command_data.Dialogue, 3, 1450);
 
@@ -212,6 +213,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 // Now, it's time to render the text.
                 // Draw the input dialogue to the template.
+                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P4G", "Dialogue", command_data.Dialogue);
                 List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P4G", command_data.Dialogue, 3, 1450);
                 graphics.DrawImage(Render_Dialogue(parsed_lines), 0, 0, template_width, template_height);
             }
@@ -396,10 +398,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Create an int to keep track of how many pixels a glyph is wide in.
             int pixel_counter = 0;
 
-            // Create another int to count the number of times a character comes up null from the font sheet.
-            // We'll want to keep track of this number so we can ensure there's only one error message sent.
-            int error_counter = 0;
-
             // Take the input string and turn it into a char array.
             char[] char_array = input_word.ToCharArray();
 
@@ -440,19 +438,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                         // Set the pixel counter to the appropriate width of the string so far.
                         pixel_counter += glyph.RightCut - glyph.LeftCut;
-                    }
-                }
-                // If the character returns null, it's not supported by the template's font set.
-                // Send a warning message to the user.
-                else
-                {
-                    // Increase the error counter by one.
-                    error_counter++;
-
-                    // If the error counter is at exactly 1, send a warning message to the user.
-                    if (error_counter == 1)
-                    {
-                        _ = ErrorHandling.Unsupported_Character(sl_command);
                     }
                 }
             }

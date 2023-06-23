@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
-using Fergun.Interactive;
 using SocialLinker.Core.CloudStorageTables;
-using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Commands
 {
@@ -34,13 +30,17 @@ namespace SocialLinker.Commands
                     Console.WriteLine($"Updating account {counter} out of {accounts.Count}\n" +
                         $"ID: {account.RowKey}\n");
 
-                    if (account.RowKey != "680794250371530758")
-                    {
-                        account.P1_PSX_TS_Localized_Revelations_Names = "On";
-                        account.P2IS_PSX_TS_Localized_Revelations_Names = "On";
-                        account.P2IS_PSX_TS_Localized_Revelations_Names = "On";
-                    }
-                    
+                    account.P5R_TS_Caller_Location = "Dynamic";
+
+                    //if (account.P5_PS4_TS_Panel == "Manual (with Control Panel)")
+                    //{
+                    //    account.Setting_BG_Upload = "Scale to Fit";
+                    //}
+                    //else if (account.Setting_BG_Upload == "Stretch to Fit")
+                    //{
+                    //    account.Setting_BG_Upload = "Stretch to Fill";
+                    //}
+
                     UserInfoClasses.UpdateAccount(account);
                     counter++;
                 }
@@ -164,6 +164,134 @@ namespace SocialLinker.Commands
             }
 
             await Task.CompletedTask;
+        }
+
+        public static async Task ExpCalculator(SocialLinkerCommand command)
+        {
+            if (command.User.Id != 222504679878164481)
+            {
+                return;
+            }
+
+            char[] delimiters = { ' ' };
+            List<string> temp = command.Message.Content.Split(delimiters).ToList();
+            int n = Int32.Parse(temp[1]);
+
+            //Total Exp for Level n = 1/12 (n^4 + 4n^3 + 53n^2 - 58n)
+            int current_total_exp = (((int)Math.Pow(n, 4)) + (4 * ((int)Math.Pow(n, 3))) + (53 * ((int)Math.Pow(n, 2))) - (58 * n)) / 12;
+
+            //Next Exp for Level n = 1/6 (2n^3 + 9n^2 + 61n)
+            int next_exp = ((2 * ((int)Math.Pow(n, 3))) + (9 * ((int)Math.Pow(n, 2))) + (61 * n)) / 6;
+
+            if (n >= Global.Max_Level)
+            {
+                next_exp = 0;
+            }
+
+            await command.Message.Channel.SendMessageAsync($"" +
+                $"Total Exp at Level {n}: {current_total_exp}\n" +
+                $"Next Exp for Level {n + 1}: {next_exp}");
+        }
+
+        public static async Task LevelCalculator(SocialLinkerCommand command)
+        {
+            if (command.User.Id != 222504679878164481)
+            {
+                return;
+            }
+
+            char[] delimiters = { ' ' };
+            List<string> temp = command.Message.Content.Split(delimiters).ToList();
+            int input_exp = Int32.Parse(temp[1]);
+
+            //Create variables
+            int answer = 0;
+            int next_exp = 0;
+            int level_to_exp = 0;
+
+            for (int i = 1; i <= Global.Max_Level; i++)
+            {
+                //Total Exp for Level i = 1/12 (n^4 + 4n^3 + 53n^2 - 58n)
+                level_to_exp = (((int)Math.Pow(i, 4)) + (4 * ((int)Math.Pow(i, 3))) + (53 * ((int)Math.Pow(i, 2))) - (58 * i)) / 12;
+
+                if (input_exp < level_to_exp)
+                {
+                    //If the input EXP is less than the equation's answer, it belongs to the previous level
+                    answer = i - 1;
+                    break;
+                }
+                else if (input_exp == level_to_exp)
+                {
+                    //If the input EXP is equal to the equation's answer, they are at the same level
+                    answer = i;
+                    break;
+                }
+            }
+
+            //Next, calculate how much EXP is needed to level up
+            int nextLevelBase = (((int)Math.Pow((answer + 1), 4)) + (4 * ((int)Math.Pow((answer + 1), 3))) + (53 * ((int)Math.Pow((answer + 1), 2))) - (58 * (answer + 1))) / 12;
+            next_exp = nextLevelBase - input_exp;
+
+            await command.Message.Channel.SendMessageAsync($"" +
+                $"{input_exp} EXP is in the range of Level {answer}\n" +
+                $"Remaining EXP until the next level: {next_exp}");
+        }
+
+        public static void CorrectMouthFrames(SocialLinkerCommand command)
+        {
+            if (command.User.Id != 222504679878164481)
+            {
+                return;
+            }
+
+            string framepath = $@"C:\Users\Alice\Desktop\New folder (4)";
+
+            string[] allFiles = Directory.GetFiles(framepath, $"*.png");
+
+            int filecount = allFiles.Length;
+
+            for ( int i = 0; i < filecount; i++ )
+            {
+                Console.WriteLine($"Fixing {allFiles[i]}...");
+
+                Bitmap current_frame = (Bitmap)System.Drawing.Image.FromFile($@"{allFiles[i]}");
+
+                Bitmap new_bitmap = new Bitmap(2, 2);
+
+                //if (allFiles[i].Contains("b3")) // Mona
+                //{
+                //    new_bitmap = new Bitmap(current_frame.Width - 2, current_frame.Height);
+                //}
+                //if (allFiles[i].Contains("b11")) // Lavenza
+                //{
+                //    new_bitmap = new Bitmap(current_frame.Width, current_frame.Height - 2);
+                //}
+                if (allFiles[i].Contains("b39")) // Maruki
+                {
+                    new_bitmap = new Bitmap(current_frame.Width, current_frame.Height - 2);
+                }
+                //if (allFiles[i].Contains("b45")) // Rumi
+                //{
+                //    new_bitmap = new Bitmap(current_frame.Width - 2, current_frame.Height);
+                //}
+                //if (allFiles[i].Contains("b47")) // Inui
+                //{
+                //    new_bitmap = new Bitmap(current_frame.Width, current_frame.Height - 3);
+                //}
+                //if (allFiles[i].Contains("b49")) // Chouno
+                //{
+                //    new_bitmap = new Bitmap(current_frame.Width, current_frame.Height - 3);
+                //}
+
+                using (Graphics graphics = Graphics.FromImage(new_bitmap))
+                {
+                    graphics.DrawImage(current_frame, 0, 0, current_frame.Width, current_frame.Height);
+                }
+
+                new_bitmap.Save($@"C:\Users\Alice\Desktop\New folder (4)\Fixed\{Path.GetFileName(allFiles[i])}", System.Drawing.Imaging.ImageFormat.Png);
+
+                Console.WriteLine($"{allFiles[i]} saved!");
+            }
         }
     }
 }

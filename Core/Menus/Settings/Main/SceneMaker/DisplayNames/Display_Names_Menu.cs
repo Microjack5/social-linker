@@ -67,7 +67,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                 }
 
                 // Create a new naming session identifier entry for this current session and user to keep track of the overall status.
-                naming_session = new DisplayNameTempData()
+                naming_session = new DisplayNameInternalData()
                 {
                     User_ID = $"{user.Id}",
                 };

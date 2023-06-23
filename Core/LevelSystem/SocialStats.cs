@@ -427,7 +427,7 @@ namespace SocialLinker.Core.LevelSystem
             {
                 var footer = new EmbedFooterBuilder
                 {
-                    Text = $"You can disable rank up messages like these from the {BotConfig.bot.cmdPrefix}settings menu by choosing [General Settings]."
+                    Text = $"You can disable rank up messages like these from the {BotConfig.bot.cmdPrefix}settings menu by choosing [Profile Settings]."
                 };
 
                 embed.WithFooter(footer);
@@ -540,7 +540,7 @@ namespace SocialLinker.Core.LevelSystem
             {
                 var footer = new EmbedFooterBuilder
                 {
-                    Text = $"You can disable rank up messages like these from the {BotConfig.bot.cmdPrefix}settings menu by choosing [General Settings]."
+                    Text = $"You can disable rank up messages like these from the {BotConfig.bot.cmdPrefix}settings menu by choosing [Profile Settings]."
                 };
 
                 embed.WithFooter(footer);
@@ -653,7 +653,7 @@ namespace SocialLinker.Core.LevelSystem
             {
                 var footer = new EmbedFooterBuilder
                 {
-                    Text = $"You can disable rank up messages like these from the {BotConfig.bot.cmdPrefix}settings menu by choosing [General Settings]."
+                    Text = $"You can disable rank up messages like these from the {BotConfig.bot.cmdPrefix}settings menu by choosing [Profile Settings]."
                 };
 
                 embed.WithFooter(footer);

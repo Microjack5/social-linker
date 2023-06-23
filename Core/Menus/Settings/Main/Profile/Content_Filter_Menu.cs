@@ -93,7 +93,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription("" +
-                "Choose to hide content related to certain titles. Select any titles you wish to filter out (or select nothing), then react with ✅ to continue.\n" +
+                "Choose to hide content related to certain titles. Select any titles you wish to block (or select nothing), then react with ✅ to continue.\n" +
                 "\n" +
                 $"⚙️ **Currently Filtered Titles:**\n" +
                 $"\n" +
@@ -195,7 +195,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
-                "**Which version of Persona would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Revelations: Persona\n" +
                 ":two: Persona (Remake)");
@@ -279,7 +279,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PSP"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 2: Innocent Sin would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 2: Innocent Sin would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
                 ":two: Persona 2: Innocent Sin (Remake)");
@@ -363,7 +363,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PSP"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 2: Eternal Punishment would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 2: Eternal Punishment would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
                 ":two: Persona 2: Eternal Punishment (Remake)");
@@ -447,7 +447,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithThumbnailUrl("https://i.imgur.com/trtPflx.png");
 
             embed.WithDescription("" +
-                "**Which version of Persona 3 would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 3 would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 3 FES\n" +
                 ":two: Persona 3 Portable");
@@ -531,7 +531,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 4 would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 4 would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 4 (PlayStation®️ 2)\n" +
                 ":two: Persona 4 Golden");
@@ -615,7 +615,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 5 would you like to filter out? Select all that apply, then react with ✅ to continue.**\n" +
+                "**Which version of Persona 5 would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 5 (PlayStation®️ 4)\n" +
                 ":two: Persona 5 Royal");

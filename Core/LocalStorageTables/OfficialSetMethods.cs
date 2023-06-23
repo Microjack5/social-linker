@@ -14,6 +14,8 @@ using Discord.WebSocket;
 using System.Security.Principal;
 using System.Drawing.Drawing2D;
 using System.Data.SqlClient;
+using SocialLinker.Core.SceneMaker.GlyphParsing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 namespace SocialLinker.Core.LocalStorageTables
 {
@@ -62,7 +64,7 @@ namespace SocialLinker.Core.LocalStorageTables
             return JsonConvert.DeserializeObject<List<OfficialSetData>>(json);
         }
 
-        public static OfficialSetData GetSpriteSetInfo(UserInfoFields account, MakerCommandData command_data)
+        public static OfficialSetData GetSpriteSetInfoOld(UserInfoFields account, MakerCommandData command_data)
         {
             // To get the proper sprite set data, we have to take the user's account settings and parsed command into consideration.
             // First, let's analyze the official sprite set list.
@@ -126,6 +128,108 @@ namespace SocialLinker.Core.LocalStorageTables
                         }
                     }
                 }
+            }
+
+            return null;
+        }
+
+        public static OfficialSetData GetSpriteSetInfo(UserInfoFields account, MakerCommandData command_data)
+        {
+            OfficialSetData last_matching_set = null;
+
+            // To get the proper sprite set data, we have to take the user's account settings and parsed command into consideration.
+            // First, let's analyze the official sprite set list.
+            // Iterate through each entry of the official sprite set list.
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                // Deserialize the Set_Keywords field of the current iterated object into a string array.
+                string[] generic_char_keywords = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(s.Keywords);
+
+                // Iterate over each index of the string array.
+                for (int i = 0; i < generic_char_keywords.Length; i++)
+                {
+                    // If the contents of the current index match the lowercase form of the user's input, we found a potential candidate!
+                    if (generic_char_keywords[i] == command_data.Character_Keyword.ToLower())
+                    {
+                        // Check to see if the user specified a sprite set version in their command.
+                        // First, let's process the case that they didn't.
+                        // We'll want to return a sprite set from the character's debut title that matches the user's desired version.
+                        if (command_data.Sprite_Set_Version == "")
+                        {
+                            // Check if the current set is from a title that has multiple versions to it.
+                            // If so, the Version_Control_Check method will not return empty and instead return the user's version control settings for that title.
+                            if (Version_Control_Check(account, s) != "")
+                            {
+                                // If the title does have multiple versions, check if the character itself the set contains appears in all versions of the title.
+                                if (Appears_In_All_Versions_Check(s) == true)
+                                {
+                                    // Also check if the sprite set is from the character's debut title and the set's origin matches the user's version control settings.
+                                    if (s.Character_Debut == "Yes" && s.Origin == Version_Control_Check(account, s))
+                                    {
+                                        // If we made it this far, all our checks are complete! Return the current set if it passes the user's content filter.
+                                        if (Passes_Content_Filter(account, s.Origin))
+                                        {
+                                            return s;
+                                        }
+                                        // If not, mark it as the last matched set.
+                                        else
+                                        {
+                                            last_matching_set = s;
+                                        }
+                                    }
+                                }
+                                // If the character doesn't appear in multiple versions and the set is from their debut title...
+                                if (Appears_In_All_Versions_Check(s) == false && s.Character_Debut == "Yes")
+                                {
+                                    // All our checks are complete! Return the current set if it passes the user's content filter.
+                                    if (Passes_Content_Filter(account, s.Origin))
+                                    {
+                                        return s;
+                                    }
+                                    // If not, mark it as the last matched set.
+                                    else
+                                    {
+                                        last_matching_set = s;
+                                    }
+                                }
+                            }
+                            // If not, check if the sprite set is from the character's debut title.
+                            else if (s.Character_Debut == "Yes")
+                            {
+                                // If we made it this far, all our checks are complete! Return the current set if it passes the user's content filter.
+                                if (Passes_Content_Filter(account, s.Origin))
+                                {
+                                    return s;
+                                }
+                                // If not, mark it as the last matched set.
+                                else
+                                {
+                                    last_matching_set = s;
+                                }
+                            }
+                        }
+                        // If the user did specify a sprite set version in their command, let's make sure we get the right set!
+                        else if (command_data.Sprite_Set_Version != "")
+                        {
+                            // First, convert the user's input title into one we can use.
+                            string input_template = InputToTemplate(account, command_data.Sprite_Set_Version);
+
+                            // Check if the set's origin matches the user's input template.
+                            if (s.Origin == input_template)
+                            {
+                                // If we made it this far, all our checks are complete! Return the current set.
+                                return s;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // If the last matched set is not null, return it.
+            // This set is likely blocked by the user.
+            if (last_matching_set != null)
+            {
+                return last_matching_set;
             }
 
             return null;
@@ -448,7 +552,6 @@ namespace SocialLinker.Core.LocalStorageTables
                 {
                     return default_name;
                 }
-                
             }
             else
             {
@@ -477,7 +580,7 @@ namespace SocialLinker.Core.LocalStorageTables
         {
             MakerCommandLogging.LogData(sl_command);
 
-            if (Content_Filter_Pass_Check(sl_command, sl_command.MakerCommand.Template) == false)
+            if (Passes_Content_Filter_With_Fail_Error(sl_command, sl_command.MakerCommand.Template) == false)
             {
                 return;
             }
@@ -556,7 +659,7 @@ namespace SocialLinker.Core.LocalStorageTables
         {
             MakerCommandLogging.LogData(sl_command);
 
-            if (Content_Filter_Pass_Check(sl_command, sprite_set_info.Origin) == false)
+            if (Passes_Content_Filter_With_Fail_Error(sl_command, sprite_set_info.Origin) == false)
             {
                 return;
             }
@@ -642,7 +745,7 @@ namespace SocialLinker.Core.LocalStorageTables
             // If not, send an error message and cancel the request.
             if (command_data.Base_Sprite > filecount)
             {
-                _ = ErrorHandling.Sprite_Number_Not_Found(sl_command, set_data.Name, set_data.Origin);
+                _ = ErrorHandling.Sprite_Number_Not_Found(sl_command, set_data.Name, AcronymToFullTitle(set_data.Origin));
                 return false;
             }
 
@@ -653,7 +756,7 @@ namespace SocialLinker.Core.LocalStorageTables
         {
             MakerCommandLogging.LogData(sl_command);
 
-            if (Content_Filter_Pass_Check(sl_command, set_data.Origin) == false)
+            if (Passes_Content_Filter_With_Fail_Error(sl_command, set_data.Origin) == false)
             {
                 return;
             }
@@ -1031,7 +1134,7 @@ namespace SocialLinker.Core.LocalStorageTables
 
             if (command_data.Template == "")
             {
-                if (Content_Filter_Pass_Check(sl_command, set_data.Origin) == false)
+                if (Passes_Content_Filter_With_Fail_Error(sl_command, set_data.Origin) == false)
                 {
                     return;
                 }
@@ -1069,7 +1172,8 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P3F":
-                        await RenderP3F.Render_Quick_Scene_P3F(sl_command, set_data, command_data);
+                        RenderP3F p3f_render = new RenderP3F();
+                        await p3f_render.Render_Quick_Scene_P3F(sl_command, set_data, command_data);
                         return;
 
                     case "P3P":
@@ -1078,7 +1182,8 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P4-PS2":
-                        await RenderP4_PS2.Render_Quick_Scene_P4_PS2(sl_command, set_data, command_data);
+                        RenderP4_PS2 p4_ps2_render = new RenderP4_PS2();
+                        await p4_ps2_render.Render_Quick_Scene_P4_PS2(sl_command, set_data, command_data);
                         return;
 
                     case "P4G":
@@ -1098,8 +1203,8 @@ namespace SocialLinker.Core.LocalStorageTables
                     case "P5-PS4":
                         if (sl_command.User.Id == 222504679878164481 || sl_command.User.Id == 981191816412028930)
                         {
-                            RenderP5R p5r_render = new RenderP5R();
-                            await p5r_render.Render_Quick_Scene_P5R(sl_command, set_data, command_data);
+                            RenderP5_PS4 p5_ps4_render = new RenderP5_PS4();
+                            await p5_ps4_render.Render_Quick_Scene_P5_PS4(sl_command, set_data, command_data);
                         }
                         else
                         {
@@ -1145,7 +1250,7 @@ namespace SocialLinker.Core.LocalStorageTables
 
             MakerCommandLogging.LogData(sl_command);
 
-            if (Content_Filter_Pass_Check(sl_command, template) == false)
+            if (Passes_Content_Filter_With_Fail_Error(sl_command, template) == false)
             {
                 return;
             }
@@ -1183,7 +1288,8 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P3F":
-                    await RenderP3F.Render_System_Message(sl_command, command_data);
+                    RenderP3F p3f_render = new RenderP3F();
+                    await p3f_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P3P":
@@ -1192,7 +1298,8 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P4-PS2":
-                    await RenderP4_PS2.Render_System_Message(sl_command, command_data);
+                    RenderP4_PS2 p4_ps2_render = new RenderP4_PS2();
+                    await p4_ps2_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P4G":
@@ -1210,11 +1317,27 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P5-PS4":
-                    await sl_command.Channel.SendMessageAsync("The P5 scene maker is not available for use at the moment.");
+                    if (sl_command.User.Id == 222504679878164481 || sl_command.User.Id == 981191816412028930)
+                    {
+                        RenderP5_PS4 p5_ps4_render = new RenderP5_PS4();
+                        await p5_ps4_render.Render_System_Message(sl_command, command_data);
+                    }
+                    else
+                    {
+                        await sl_command.Channel.SendMessageAsync("The P5 scene maker is not available for use at the moment.");
+                    }
                     return;
 
                 case "P5R":
-                    await sl_command.Channel.SendMessageAsync("The P5R scene maker is not available for use at the moment.");
+                    if (sl_command.User.Id == 222504679878164481 || sl_command.User.Id == 981191816412028930)
+                    {
+                        RenderP5R p5r_render = new RenderP5R();
+                        await p5r_render.Render_System_Message(sl_command, command_data);
+                    }
+                    else
+                    {
+                        await sl_command.Channel.SendMessageAsync("The P5R scene maker is not available for use at the moment.");
+                    }
                     return;
 
                 case "P5S":
@@ -1366,7 +1489,6 @@ namespace SocialLinker.Core.LocalStorageTables
                         // This means that we'll need to split the string up on different lines.
                         else if (line_length_remaining - completed_word_length < 0 && completed_word_length > max_line_length)
                         {
-                            Console.WriteLine("Here!");
                             // Take the completed word and turn it into a char array.
                             // We'll use this to iterate through the word character-by-character to decide where to split the string.
                             char[] completed_word_array = completed_word.ToCharArray();
@@ -1391,22 +1513,23 @@ namespace SocialLinker.Core.LocalStorageTables
                                 // Measure the pixel length of the substring so far.
                                 substring_length = Measure_Word_Pixel_Length_Redirect(sl_command, template, substring);
 
-                                Console.WriteLine($"Current char: {completed_word_array[j]}, length remaining: {line_length_remaining - substring_length}");
-
+                                if (current_line > max_line_count - 1)
+                                {
+                                    add_text = false;
+                                    break;
+                                }
                                 // Check if there is no more room to add another character to the current line, OR if the current character is a line break.
                                 // Since we are iterating through the string character-by-character, this should trigger the moment the length hits the line boundary.
-                                if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a'))
+                                else if ((line_length_remaining - substring_length <= 0) || (completed_word_array[j] == '\u000a'))
                                 {
                                     // Check if the current line number is less than the max number of lines available.
                                     if (current_line <= max_line_count - 1)
                                     {
-                                        Console.WriteLine($"(1) Adding on line {current_line}...");
                                         // Add the substring to the current line.
                                         dialogue_list[current_line].Add(substring);
 
                                         // Since there is absolutely no more room on the current line left, increase the current line value.
                                         current_line++;
-                                        Console.WriteLine($"\nNEW LINE!!!!!!!! Line is now {current_line}-------");
 
                                         // Reset the remaining pixel length variable to the max value.
                                         // This is done because we moved to a new line.
@@ -1419,7 +1542,6 @@ namespace SocialLinker.Core.LocalStorageTables
                                 // Else, check if the last index of the completed word array has been reached.
                                 else if (j == completed_word_array.Length - 1)
                                 {
-                                    Console.WriteLine($"(2) Adding on line {current_line}...");
                                     // Add the substring to the current line.
                                     dialogue_list[current_line].Add(substring);
 
@@ -1438,14 +1560,175 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
             }
 
-            Console.WriteLine($"Current line: {current_line}");
-
-            Console.WriteLine($"Line 0: {RenderP5R.String_List_To_String(dialogue_list[0])}");
-            Console.WriteLine($"Line 1: {RenderP5R.String_List_To_String(dialogue_list[1])}");
-            Console.WriteLine($"Line 2: {RenderP5R.String_List_To_String(dialogue_list[2])}");
-
-
             return dialogue_list;
+        }
+
+        public static string Validate_Input(SocialLinkerCommand sl_command, string title, string input_type, string input)
+        {
+            List<char> char_array = input.ToCharArray().ToList();
+            string return_value = "";
+            ParsingFields glyph_info;
+
+            char[] hearts = { '♥', '♡', '❣', '❤' };
+            char[] ba_gua = { '☰', '☱', '☲', '☳', '☴', '☵', '☶', '☷' };
+
+            for (int i = 0; i < char_array.Count; i++)
+            {
+                switch (title)
+                {
+                    case "P1-PS1":
+                        glyph_info = ParsingMethods.Get_P1_PS1_Glyph(char_array[i]);
+                        break;
+
+                    case "P1-PSP":
+                        glyph_info = ParsingMethods.Get_P1_PSP_Glyph(char_array[i]);
+                        break;
+
+                    case "P2IS-PS1":
+                        glyph_info = ParsingMethods.Get_P2IS_PS1_Glyph(char_array[i]);
+
+                        if (glyph_info == null && hearts.Contains(char_array[i]))
+                        {
+                            glyph_info = new ParsingFields();
+                        }
+                        else if (glyph_info == null && ba_gua.Contains(char_array[i]))
+                        {
+                            glyph_info = new ParsingFields();
+                        }
+                        break;
+
+                    case "P2IS-PSP":
+                        glyph_info = ParsingMethods.Get_P2IS_PSP_Glyph(char_array[i]);
+                        break;
+
+                    case "P2EP-PS1":
+                        glyph_info = ParsingMethods.Get_P2EP_PS1_Glyph(char_array[i]);
+
+                        if (glyph_info == null && hearts.Contains(char_array[i]))
+                        {
+                            glyph_info = new ParsingFields();
+                        }
+                        else if (glyph_info == null && ba_gua.Contains(char_array[i]))
+                        {
+                            glyph_info = new ParsingFields();
+                        }
+                        break;
+
+                    case "P2EP-PSP":
+                        glyph_info = ParsingMethods.Get_P2EP_PSP_Glyph(char_array[i]);
+                        break;
+
+                    case "P3F":
+                        glyph_info = ParsingMethods.Get_P3F_Glyph(char_array[i]);
+                        break;
+
+                    case "P3P":
+                        glyph_info = ParsingMethods.Get_P3P_Glyph(char_array[i]);
+                        break;
+
+                    case "P4-PS2":
+                        glyph_info = ParsingMethods.Get_P4_PS2_Glyph(char_array[i]);
+                        break;
+
+                    case "P4G":
+                        glyph_info = ParsingMethods.Get_P4G_Glyph(char_array[i]);
+                        break;
+
+                    case "P4AU":
+                        glyph_info = ParsingMethods.Get_P4AU_Glyph(char_array[i]);
+                        break;
+
+                    case "P4D":
+                        glyph_info = ParsingMethods.Get_P4D_Glyph(char_array[i]);
+                        break;
+
+                    case "P5-PS4":
+                        glyph_info = ParsingMethods.Get_P5_PS4_Glyph(char_array[i]);
+
+                        if (glyph_info == null && hearts.Contains(char_array[i]))
+                        {
+                            glyph_info = new ParsingFields();
+                        }
+                        break;
+
+                    case "P5R":
+                        glyph_info = ParsingMethods.Get_P5R_Glyph(char_array[i]);
+
+                        if (glyph_info == null && hearts.Contains(char_array[i]))
+                        {
+                            glyph_info = new ParsingFields();
+                        }
+                        break;
+
+                    case "P5S":
+                        glyph_info = ParsingMethods.Get_P5S_Glyph(char_array[i]);
+
+                        if (glyph_info == null && hearts.Contains(char_array[i]))
+                        {
+                            glyph_info = new ParsingFields();
+                        }
+                        break;
+
+                    case "BBTAG":
+                        glyph_info = null;
+                        break;
+
+                    default:
+                        glyph_info = null;
+                        break;
+                }
+
+                if (glyph_info != null)
+                {
+                    return_value += char_array[i];
+                }
+                else if (char_array[i] == '\ufe0f')
+                {
+                    // Do nothing, emoji variation selector
+                }
+                else
+                {
+                    switch (input_type)
+                    {
+                        case "Dialogue":
+                            sl_command.MakerCommand.Dialogue_Has_Invalid_Char = true;
+                            break;
+
+                        case "Name":
+                            sl_command.MakerCommand.Display_Name_Has_Invalid_Char = true;
+                            break;
+                    }
+                }
+            }
+
+            switch (input_type)
+            {
+                case "Dialogue":
+                    if (return_value == "")
+                    {
+                        return_value = "......";
+                    }
+
+                    if (sl_command.MakerCommand.Dialogue_Has_Invalid_Char)
+                    {
+                        _ = ErrorHandling.Unsupported_Character_In_Dialogue(sl_command);
+                    }
+                    break;
+
+                case "Name":
+                    if (return_value == "")
+                    {
+                        return_value = "???";
+                    }
+
+                    if (sl_command.MakerCommand.Display_Name_Has_Invalid_Char)
+                    {
+                        _ = ErrorHandling.Unsupported_Character_In_Display_Name(sl_command);
+                    }
+                    break;
+            }
+
+            return return_value;
         }
 
         public static int Measure_Word_Pixel_Length_Redirect(SocialLinkerCommand sl_command, string template, string input_word)
@@ -1491,7 +1774,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     return RenderP4D.Measure_Word_Pixel_Length(sl_command, input_word);
 
                 case "P5-PS4":
-                    return 0;
+                    return RenderP5_PS4.Measure_Word_Pixel_Length(sl_command, input_word);
 
                 case "P5R":
                     return RenderP5R.Measure_Word_Pixel_Length(sl_command, input_word);
@@ -1543,14 +1826,33 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             // Render the uploaded image based on the user's background settings.
+            //switch (account.Setting_BG_Upload)
+            //{
+            //    case "Maintain Aspect Ratio": // Scale to Height
+            //        background = Scale_To_Fill(background, template_width, template_height);
+            //        break;
+
+            //    case "Stretch to Fit": // Stretch to Fill
+            //        background = Stretch_To_Fill(background, template_width, template_height);
+            //        break;
+            //}
+
             switch (account.Setting_BG_Upload)
             {
-                case "Maintain Aspect Ratio":
-                    background = Center_Image(background, template_width, template_height);
+                case "Scale to Width":
+                    background = Scale_To_Width(background, template_width, template_height);
                     break;
 
-                case "Stretch to Fit":
-                    background = Stretch_To_Fit(background, template_width, template_height);
+                case "Scale to Height":
+                    background = Scale_To_Height(background, template_width, template_height);
+                    break;
+
+                case "Scale to Fit":
+                    background = Scale_To_Fit(background, template_width, template_height);
+                    break;
+
+                case "Stretch to Fill":
+                    background = Stretch_To_Fill(background, template_width, template_height);
                     break;
             }
 
@@ -1593,12 +1895,23 @@ namespace SocialLinker.Core.LocalStorageTables
             return input_substring;
         }
 
-        public static bool Content_Filter_Pass_Check(SocialLinkerCommand sl_command, string template)
+        public static bool Passes_Content_Filter(UserInfoFields account, string template)
         {
-            var account = UserInfoClasses.GetAccount(sl_command.User);
             var content_filter = ParseContentFilter(account);
 
             if (content_filter.Contains(template))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool Passes_Content_Filter_With_Fail_Error(SocialLinkerCommand sl_command, string template)
+        {
+            var account = UserInfoClasses.GetAccount(sl_command.User);
+
+            if (!Passes_Content_Filter(account, template))
             {
                 _ = ErrorHandling.Content_Filter_Enabled(sl_command, template);
                 return false;
@@ -1607,11 +1920,64 @@ namespace SocialLinker.Core.LocalStorageTables
             return true;
         }
 
-        public static Bitmap Center_Image(Bitmap scrBitmap, int template_width, int template_height)
+        public static Bitmap Scale_To_Width(Bitmap scrBitmap, int template_width, int template_height)
         {
             float width = template_width;
             float height = template_height;
-            var brush = new SolidBrush(System.Drawing.Color.Black);
+
+            var image = new Bitmap(scrBitmap);
+
+            float scale = width / image.Width;
+
+            var bmp = new Bitmap((int)width, (int)height);
+            var graph = Graphics.FromImage(bmp);
+
+            // uncomment for higher quality output
+            graph.InterpolationMode = InterpolationMode.High;
+            graph.CompositingQuality = CompositingQuality.HighQuality;
+            graph.SmoothingMode = SmoothingMode.AntiAlias;
+
+            bmp.SetResolution(96, 96);
+
+            var scaleWidth = (int)(image.Width * scale);
+            var scaleHeight = (int)(image.Height * scale);
+
+            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
+
+            return bmp;
+        }
+
+        public static Bitmap Scale_To_Height(Bitmap scrBitmap, int template_width, int template_height)
+        {
+            float width = template_width;
+            float height = template_height;
+
+            var image = new Bitmap(scrBitmap);
+
+            float scale = height / image.Height;
+
+            var bmp = new Bitmap((int)width, (int)height);
+            var graph = Graphics.FromImage(bmp);
+
+            // uncomment for higher quality output
+            graph.InterpolationMode = InterpolationMode.High;
+            graph.CompositingQuality = CompositingQuality.HighQuality;
+            graph.SmoothingMode = SmoothingMode.AntiAlias;
+
+            bmp.SetResolution(96, 96);
+
+            var scaleWidth = (int)(image.Width * scale);
+            var scaleHeight = (int)(image.Height * scale);
+
+            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
+
+            return bmp;
+        }
+
+        public static Bitmap Scale_To_Fit(Bitmap scrBitmap, int template_width, int template_height)
+        {
+            float width = template_width;
+            float height = template_height;
 
             var image = new Bitmap(scrBitmap);
 
@@ -1630,13 +1996,12 @@ namespace SocialLinker.Core.LocalStorageTables
             var scaleWidth = (int)(image.Width * scale);
             var scaleHeight = (int)(image.Height * scale);
 
-            //graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
             graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
 
             return bmp;
         }
 
-        public static Bitmap Stretch_To_Fit(Bitmap input_bitmap, int template_width, int template_height)
+        public static Bitmap Stretch_To_Fill(Bitmap input_bitmap, int template_width, int template_height)
         {
             // Set the width and height of the bitmap to be created
             float width = template_width;
@@ -1772,7 +2137,7 @@ namespace SocialLinker.Core.LocalStorageTables
             else
             {
                 Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-                Bitmap bustup_with_frames = Construct_Bustup_With_Frames_Revised(sl_command, set_data, bustup_data, command_data, base_sprite, false);
+                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, command_data, base_sprite, false);
                 return bustup_with_frames;
             }
         }
@@ -1793,7 +2158,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
                 else
                 {
-                    Bitmap bustup_with_frames = Construct_Bustup_With_Frames_Revised(sl_command, set_data, bustup_data, command_data, base_sprite, true);
+                    Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, command_data, base_sprite, true);
                     return bustup_with_frames;
                 }
             }
@@ -1803,101 +2168,14 @@ namespace SocialLinker.Core.LocalStorageTables
             }
         }
 
-        public static Bitmap Construct_Bustup_With_Frames(SocialLinkerCommand sl_command, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, Bitmap bustup)
+        public static Bitmap Construct_Bustup_With_Frames(SocialLinkerCommand sl_command, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, Bitmap bustup, bool reverse_file_exists)
         {
-            // Create a copy of the bitmap taken in.
-            // This is the version we'll be editing and returning.
             Bitmap edited_bustup = bustup;
 
-            if (command_data.Eye_Frame != default && command_data.Eye_Frame != 0)
-            {
-                // Establish the eye frame directory for the current sprite set.
-                string eye_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Eyes";
-
-                // Get the eye frame data of the frame specified in the user's command.
-                FrameData eye_frame_data = BustupDataMethods.Get_Eye_Frame_Data(set_data, bustup_data, command_data);
-
-                // Ensure that the returned eye frame data is not null.
-                if (eye_frame_data != null)
-                {
-                    // Check that the eye frame path exists.
-                    if (File.Exists($"{eye_frame_path}//{eye_frame_data.Filename}"))
-                    {
-                        // Save the eye frame to a bitmap variable.
-                        Bitmap eye_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{eye_frame_path}//{eye_frame_data.Filename}");
-
-                        // Depending on the bustup's game origin, a section of the base bustup may need to be cropped out to make the eye frame properly fit in.
-                        if (set_data.Origin == "P5-PS4" || set_data.Origin == "P5R" || set_data.Origin == "P5S")
-                        {
-                            Rectangle crop_region_eyes = new Rectangle(eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
-                            edited_bustup = Crop_Rectangle_From_Bitmap(edited_bustup, crop_region_eyes);
-                        }
-
-                        // Draw the eye frame to the base bustup.
-                        using (Graphics graphics = Graphics.FromImage(edited_bustup))
-                        {
-                            graphics.DrawImage(eye_frame_sprite, eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
-                        }
-                    }
-                }
-                // If the frame data is null, send an error message and return null as well.
-                else
-                {
-                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, command_data, set_data.Name, set_data.Origin);
-                    return null;
-                }
-            }
-
-            // Check if the user's command specifies a mouth frame as well.
-            // If so, let's work on the mouth frame.
-            if (command_data.Mouth_Frame != default && command_data.Mouth_Frame != 0)
-            {
-                // Establish the mouth frame directory for the current sprite set.
-                string mouth_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Mouth";
-
-                // Get the mouth frame data of the frame specified in the user's command.
-                FrameData mouth_frame_data = BustupDataMethods.Get_Mouth_Frame_Data(set_data, bustup_data, command_data);
-
-                // Ensure that the returned mouth frame data is not null.
-                if (mouth_frame_data != null)
-                {
-                    // Check that the mouth frame path exists.
-                    if (File.Exists($"{mouth_frame_path}//{mouth_frame_data.Filename}"))
-                    {
-                        // Save the mouth frame to a bitmap variable.
-                        Bitmap mouth_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{mouth_frame_path}//{mouth_frame_data.Filename}");
-
-                        // Depending on the bustup's game origin, a section of the base bustup may need to be cropped out to make the eye frame properly fit in.
-                        if (set_data.Origin == "P5-PS4" || set_data.Origin == "P5R" || set_data.Origin == "P5S")
-                        {
-                            Rectangle crop_region_mouth = new Rectangle(mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
-                            edited_bustup = Crop_Rectangle_From_Bitmap(edited_bustup, crop_region_mouth);
-                        }
-
-                        // Draw the mouth frame to the base bustup.
-                        using (Graphics graphics = Graphics.FromImage(edited_bustup))
-                        {
-                            graphics.DrawImage(mouth_frame_sprite, mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
-                        }
-                    }
-                }
-                // If the frame data is null, send an error message and return null as well.
-                else
-                {
-                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, command_data, set_data.Name, set_data.Origin);
-                    return null;
-                }
-            }
-
-            // Finally, return the final edited bitmap.
-            return edited_bustup;
-        }
-
-        public static Bitmap Construct_Bustup_With_Frames_Revised(SocialLinkerCommand sl_command, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, Bitmap bustup, bool reverse_file_exists)
-        {
-            // Create a copy of the bitmap taken in.
-            // This is the version we'll be editing and returning.
-            Bitmap edited_bustup = bustup;
+            FrameData eye_frame_data = default;
+            FrameData mouth_frame_data = default;
+            Bitmap eye_frame_sprite = default;
+            Bitmap mouth_frame_sprite = default;
 
             if (command_data.Eye_Frame != default && command_data.Eye_Frame != 0)
             {
@@ -1916,7 +2194,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
 
                 // Get the eye frame data of the frame specified in the user's command.
-                FrameData eye_frame_data = BustupDataMethods.Get_Eye_Frame_Data(set_data, bustup_data, command_data);
+                eye_frame_data = BustupDataMethods.Get_Eye_Frame_Data(set_data, bustup_data, command_data);
 
                 // Ensure that the returned eye frame data is not null.
                 if (eye_frame_data != null)
@@ -1938,32 +2216,25 @@ namespace SocialLinker.Core.LocalStorageTables
                     if (File.Exists($"{eye_frame_path}//{eye_frame_filename}"))
                     {
                         // Save the eye frame to a bitmap variable.
-                        Bitmap eye_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{eye_frame_path}//{eye_frame_filename}");
+                        eye_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{eye_frame_path}//{eye_frame_filename}");
 
                         // Depending on the bustup's game origin, a section of the base bustup may need to be cropped out to make the eye frame properly fit in.
                         if (set_data.Origin == "P5-PS4" || set_data.Origin == "P5R" || set_data.Origin == "P5S")
                         {
                             Rectangle crop_region_eyes = new Rectangle(eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
-                            edited_bustup = Crop_Rectangle_From_Bitmap(edited_bustup, crop_region_eyes);
-                        }
 
-                        // Draw the eye frame to the base bustup.
-                        using (Graphics graphics = Graphics.FromImage(edited_bustup))
-                        {
-                            graphics.DrawImage(eye_frame_sprite, eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
+                            edited_bustup = Crop_Rectangle_From_Bitmap(edited_bustup, crop_region_eyes);
                         }
                     }
                 }
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, command_data, set_data.Name, set_data.Origin);
+                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, command_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
                     return null;
                 }
             }
 
-            // Check if the user's command specifies a mouth frame as well.
-            // If so, let's work on the mouth frame.
             if (command_data.Mouth_Frame != default && command_data.Mouth_Frame != 0)
             {
                 // Establish the mouth frame directory for the current sprite set.
@@ -1981,7 +2252,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
 
                 // Get the mouth frame data of the frame specified in the user's command.
-                FrameData mouth_frame_data = BustupDataMethods.Get_Mouth_Frame_Data(set_data, bustup_data, command_data);
+                mouth_frame_data = BustupDataMethods.Get_Mouth_Frame_Data(set_data, bustup_data, command_data);
 
                 // Ensure that the returned mouth frame data is not null.
                 if (mouth_frame_data != null)
@@ -2003,31 +2274,39 @@ namespace SocialLinker.Core.LocalStorageTables
                     if (File.Exists($"{mouth_frame_path}//{mouth_frame_filename}"))
                     {
                         // Save the mouth frame to a bitmap variable.
-                        Bitmap mouth_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{mouth_frame_path}//{mouth_frame_filename}");
+                        mouth_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{mouth_frame_path}//{mouth_frame_filename}");
 
                         // Depending on the bustup's game origin, a section of the base bustup may need to be cropped out to make the eye frame properly fit in.
                         if (set_data.Origin == "P5-PS4" || set_data.Origin == "P5R" || set_data.Origin == "P5S")
                         {
                             Rectangle crop_region_mouth = new Rectangle(mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
-                            edited_bustup = Crop_Rectangle_From_Bitmap(edited_bustup, crop_region_mouth);
-                        }
 
-                        // Draw the mouth frame to the base bustup.
-                        using (Graphics graphics = Graphics.FromImage(edited_bustup))
-                        {
-                            graphics.DrawImage(mouth_frame_sprite, mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
+                            edited_bustup = Crop_Rectangle_From_Bitmap(edited_bustup, crop_region_mouth);
                         }
                     }
                 }
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, command_data, set_data.Name, set_data.Origin);
+                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, command_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
                     return null;
                 }
             }
 
-            // Finally, return the final edited bitmap.
+            // Draw the frames to the cropped bustup.
+            using (Graphics graphics = Graphics.FromImage(edited_bustup))
+            {
+                if (mouth_frame_sprite != default && mouth_frame_data != default)
+                {
+                    graphics.DrawImage(mouth_frame_sprite, mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
+                }
+                
+                if (eye_frame_sprite != default && eye_frame_data != default)
+                {
+                    graphics.DrawImage(eye_frame_sprite, eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
+                }
+            }
+
             return edited_bustup;
         }
 

@@ -7,7 +7,6 @@ using SocialLinker.Core.LocalStorageTables;
 using SocialLinker.Core.CloudStorageTables;
 using Discord;
 using SocialLinker.Config;
-using SocialLinker.Core.Menus.InitialUsage.Main;
 using SocialLinker.Commands;
 
 namespace SocialLinker.Core.SceneMaker
@@ -206,7 +205,10 @@ namespace SocialLinker.Core.SceneMaker
                             // If the sprite set did not return null, the command was successful!
                             else if (sprite_set_info != null)
                             {
-                                await OfficialSetMethods.Quick_Scene_Directory(sl_command, sprite_set_info, maker_command);
+                                if (OfficialSetMethods.Base_Sprite_Validity_Check(sl_command, sprite_set_info, maker_command) == true)
+                                {
+                                    await OfficialSetMethods.Quick_Scene_Directory(sl_command, sprite_set_info, maker_command);
+                                }
                             }
                             break;
                     }
@@ -476,9 +478,13 @@ namespace SocialLinker.Core.SceneMaker
                 // Iterate through the quotation_check char array.
                 for (int i = 0; i < quotation_check.Length; i++)
                 {
-                    // Compare the entirety of the character_keyword string against the current iteration of the quotation_check char array to check if a match exists.
-                    // If so, the user entered a quotation mark prematurely. Quotation marks only come after a sprite number, so output an error message and return.
-                    if (sl_command.MakerCommand.Character_Keyword.Contains(quotation_check[i]))
+                    if (sl_command.MakerCommand.Character_Keyword.Contains(quotation_check[i]) && 
+                        (generic_keywords.Any(sl_command.MakerCommand.Character_Keyword.Contains) || version_keywords.Any(sl_command.MakerCommand.Character_Keyword.Contains)))
+                    {
+                        await ErrorHandling.Sprite_Number_Missing_With_Game_Keyword(sl_command);
+                        return;
+                    }
+                    else if (sl_command.MakerCommand.Character_Keyword.Contains(quotation_check[i]))
                     {
                         await ErrorHandling.Sprite_Number_Missing(sl_command);
                         return;
@@ -490,7 +496,8 @@ namespace SocialLinker.Core.SceneMaker
                 // If both the template keyword and character keyword are not empty, send an error message. A template keyword without sprite number and dialogue is incorrect syntax.
                 if (sl_command.MakerCommand.Template != "" && sl_command.MakerCommand.Character_Keyword != "")
                 {
-                    await ErrorHandling.Sprite_Number_And_Dialogue_Missing(sl_command);
+                    await ErrorHandling.Pre_Cross_Sprite_Sheet_Syntax(sl_command);
+                    //await ErrorHandling.Sprite_Number_And_Dialogue_Missing(sl_command);
                 }
                 // If the template keyword is not empty and the character keyword is empty, we have a successful command! Generate a character list from the specified title.
                 else if (sl_command.MakerCommand.Template != "" && sl_command.MakerCommand.Character_Keyword == "")
@@ -749,6 +756,12 @@ namespace SocialLinker.Core.SceneMaker
                 }
             }
 
+            if (sl_command.MakerCommand.Template != "")
+            {
+                await ErrorHandling.Pre_Cross_Full_Scene_Syntax(sl_command);
+                return;
+            }
+
             // If the sprite set's info returns null, it means the character keyword the user typed doesn't exist in the files.
             // If this happens and the user didn't specify a template, send a generic "set not found" error message.
             if (sprite_set_info == null && sl_command.MakerCommand.Sprite_Set_Version == "")
@@ -979,7 +992,13 @@ namespace SocialLinker.Core.SceneMaker
                     {
                         // Compare the entirety of the character_keyword string against the current iteration of the quotation_check char array to check if a match exists.
                         // If so, the user entered a quotation mark prematurely. Quotation marks only come after a sprite number, so output an error message and return.
-                        if (sl_command.MakerCommand.Character_Keyword.Contains(quotation_check[i]))
+                        if (sl_command.MakerCommand.Character_Keyword.Contains(quotation_check[i]) &&
+                        (generic_keywords.Any(sl_command.MakerCommand.Character_Keyword.Contains) || version_keywords.Any(sl_command.MakerCommand.Character_Keyword.Contains)))
+                        {
+                            await ErrorHandling.Sprite_Number_Missing_With_Game_Keyword(sl_command);
+                            return;
+                        }
+                        else if (sl_command.MakerCommand.Character_Keyword.Contains(quotation_check[i]))
                         {
                             await ErrorHandling.Sprite_Number_Missing(sl_command);
                             return;
@@ -1163,5 +1182,7 @@ namespace SocialLinker.Core.SceneMaker
         public int Mouth_Frame { get; set; }
         public string Dialogue { get; set; }
         public IAttachment Background { get; set; }
+        public bool Display_Name_Has_Invalid_Char { get; set; }
+        public bool Dialogue_Has_Invalid_Char { get; set; }
     }
 }

@@ -113,8 +113,12 @@ namespace SocialLinker.Core.Menus
                                 await Legal_Notices_Reactions.Nav_Legal_Notices_Main(reaction, menuSession);
                                 break;
 
-                            case "Credits_Main":
-                                await Credits_Reactions.Nav_Credits_Main(reaction, menuSession);
+                            case "Credits_Page_1":
+                                await Credits_Reactions.Nav_Credits_Page_1(reaction, menuSession);
+                                break;
+
+                            case "Credits_Page_2":
+                                await Credits_Reactions.Nav_Credits_Page_2(reaction, menuSession);
                                 break;
 
                             case "Status_Tutorial_Page_1":
@@ -937,8 +941,8 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Scene_Border(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P5_PS3_Panel_Advance":
-                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Panel_Advance(reaction, menuSession);
+                            case "Template_Layout_P5_PS3_Cursor_Panel":
+                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Cursor_Panel(reaction, menuSession);
                                 break;
 
                             case "Template_Layout_P5_PS3_Date_Weather_Confirm":
@@ -949,8 +953,8 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Scene_Border_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P5_PS3_Panel_Advance_Confirm":
-                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Panel_Advance_Confirm(reaction, menuSession);
+                            case "Template_Layout_P5_PS3_Cursor_Panel_Confirm":
+                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Cursor_Panel_Confirm(reaction, menuSession);
                                 break;
 
                             case "Template_Layout_P5R_Main":
@@ -965,8 +969,8 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Scene_Border(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P5R_Panel_Advance":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Panel_Advance(reaction, menuSession);
+                            case "Template_Layout_P5R_Cursor_Panel":
+                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Cursor_Panel(reaction, menuSession);
                                 break;
 
                             case "Template_Layout_P5R_Phone_Calls_Main":
@@ -989,8 +993,8 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Scene_Border_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P5R_Panel_Advance_Confirm":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Panel_Advance_Confirm(reaction, menuSession);
+                            case "Template_Layout_P5R_Cursor_Panel_Confirm":
+                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Cursor_Panel_Confirm(reaction, menuSession);
                                 break;
 
                             case "Template_Layout_P5R_Phone_Calls_Toggle_Confirm":

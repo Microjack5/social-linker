@@ -12,7 +12,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SocialLinker.Core.SceneMaker
@@ -383,7 +382,7 @@ namespace SocialLinker.Core.SceneMaker
             var graph = Graphics.FromImage(bmp);
 
             if (set_data.Origin == "P1-PS1" ||
-                set_data.Origin == "P1-PS2" ||
+                set_data.Origin == "P1-PSP" ||
                 set_data.Origin == "P2IS-PS1" ||
                 set_data.Origin == "P2IS-PSP" ||
                 set_data.Origin == "P2EP-PS1" ||
@@ -423,13 +422,13 @@ namespace SocialLinker.Core.SceneMaker
                 // First, let's determine the width of a single sub-panel so we can have equal spacing. We can do this by dividing the base template's width by the amount of frames we need to render.
                 int sub_panel_width = width / frame_array.Length;
 
-                // Create the sub-panel bitmap with the dimensions we now have.
-                Bitmap sub_panel = new Bitmap(sub_panel_width, height);
-
                 // Next, time for a loop!
                 // For as many entries are in the frame array, we'll want to create a sub-panel for each one and center the frame within it.
                 for (int i = 0; i < frame_array.Length; i++)
                 {
+                    // Create the sub-panel bitmap with the dimensions we now have.
+                    Bitmap sub_panel = new Bitmap(sub_panel_width, height);
+
                     // Since we want the frame to fit nicely in the sub-panel, we should check whether the frame is too small or too large for the space.
                     // First, check if the frame is too small to view in the sub-panel.
                     if (frame_array[i].Height < (height / 4))

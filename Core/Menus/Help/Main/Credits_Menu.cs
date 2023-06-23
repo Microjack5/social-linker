@@ -13,7 +13,7 @@ namespace SocialLinker.Core.Menus.Help.Main
 {
     class Credits_Menu
     {
-        public static async Task Credits_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Credits_Page_1(SocketGuildUser user, RestUserMessage message)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -32,7 +32,8 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ Return to Help Menu"
+                Text = "↩️ Return to Help Menu | ▶️ Next Page\n" +
+                "Page 1 / 2"
             };
 
             embed.WithFooter(footer);
@@ -42,40 +43,115 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.AddField("Programming & Design", "" +
-                "[Microjack5](https://discordapp.com/users/222504679878164481/)\n");
+                "[Microjack5](https://discord.com/users/222504679878164481/)\n");
 
             embed.AddField("Quality Assurance Advisors", "" +
-                "[Arkane](https://twitter.com/ArkaneOnline)\n" +
-                "[Ash](https://twitter.com/_Amaurot)\n" +
-                "[Azure](https://twitter.com/Azure_Blazes)\n" +
-                "[Camz](https://twitter.com/Camzcer)\n" +
-                "[Corrin](https://twitter.com/LocalSynth)\n" +
-                "[Kara](https://discordapp.com/users/707398527575130162/)\n" +
-                "[Mel](https://twitter.com/skyseekingdream)\n" +
-                "[Naanos](https://www.youtube.com/channel/UCiUR9b-ptxqSbKw0vIaDklg)\n" +
-                "[無限 | Nate](https://twitter.com/CrestofDog)\n" +
-                "[RomIsALemon](https://twitter.com/phighters_rom)\n" +
-                "[A Teacher](https://discordapp.com/users/210080634498973696/)\n" +
-                "[SlimePupAribaba](https://twitter.com/SlimePupAribaba)\n" +
-                "[Squishy](https://twitter.com/Squishy_Mona)\n" +
-                "[Thena](https://twitter.com/ThenaIsLost)\n" +
-                "[TooBlue!](https://twitter.com/EMOMESSlAH)\n" +
-                "[WaffleBandito](https://twitter.com/WaffIeBandito)\n");
+                "[Arkane](https://discord.com/users/208779984276291585/)\n" +
+                "[Ash!!](https://discord.com/users/442253411077849100/)\n" +
+                "[astronights](https://discord.com/users/315671417679118337/)\n" +
+                "[Azure](https://discord.com/users/328963190966714369/)\n" +
+                "[Camz](https://discord.com/users/345577063295614977/)\n" +
+                "[genesisdreams](https://discord.com/users/349683994222395393/)\n" +
+                "[Naanos](https://discord.com/users/690720929214496819/)\n" +
+                "[無限 | Nate](https://discord.com/users/140846765275348993/)\n" +
+                "[poi](https://discord.com/users/800614229865922570/)\n" +
+                "[quiche](https://discord.com/users/707398527575130162/)\n" +
+                "[RomIsALemon](https://discord.com/users/239519485822894080/)\n" +
+                "[Shadow Kawa](https://discord.com/users/210080634498973696/)\n" +
+                "[SlimePupAribaba](https://discord.com/users/418035664085450755/)\n" +
+                "[Squishy](https://discord.com/users/284351113984081922/)\n" +
+                "[tairitsu](https://discord.com/users/560255071749668867/)\n" +
+                "[Thena](https://discord.com/users/434019013572427778/)\n" +
+                "[WaffleBandito](https://discord.com/users/407300235065425921/)\n");
 
             embed.AddField("Asset Advisors", "" +
-                "[80constant](https://twitter.com/80constant_)\n" +
-                "[Arkane](https://twitter.com/ArkaneOnline)\n" +
+                "[80constant](https://discord.com/users/593323748883562496/)\n" +
+                "[Arkane](https://discord.com/users/208779984276291585/)\n" +
                 "[Canasniimehugh](https://www.vg-resource.com/user-17021.html)\n" +
-                "[Eiowlta](https://discordapp.com/users/126051543794450432/)\n" +
+                "[Eiowlta](https://discord.com/users/126051543794450432/)\n" +
                 "[EsperKnight](https://twitter.com/esperknight)\n" +
                 "[Geordan9](https://github.com/Geordan9)\n" +
-                "[Oliviayellowcat](https://discordapp.com/users/366986062599290883/)\n");
+                "[Oliviayellowcat](https://discord.com/users/366986062599290883/)\n");
 
             embed.AddField("Status Décor Designers", "" +
-                "[poi](https://discordapp.com/users/800614229865922570/)\n" +
-                "[Microjack5](https://discordapp.com/users/222504679878164481/)\n" +
-                "[無限 | Nate](https://discordapp.com/users/140846765275348993/)\n" +
-                "[TooBlue!](https://twitter.com/EMOMESSlAH)\n");
+                "[Microjack5](https://discord.com/users/222504679878164481/)\n" +
+                "[無限 | Nate](https://discord.com/users/140846765275348993/)\n");
+
+            // Attempt editing the message if it hasn't been deleted by the user yet.
+            // If it has, catch the exception, remove the menu entry from the global list, and return.
+            try
+            {
+                // Remove all reactions from the current message.
+                await message.RemoveAllReactionsAsync();
+
+                // Edit the current active message by replacing it with the recently created embed.
+                await message.ModifyAsync(x => {
+                    x.Embed = embed.Build();
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(menuSession);
+
+                return;
+            }
+
+            // Edit the menu session according to the current message.
+            menuSession.CurrentMenu = "Credits_Page_1";
+            menuSession.MenuTimer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = MenuConfig.menu.timerDuration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the menu timer runs out, activate a function.
+            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+
+            // Create an empty list for reactions.
+            List<IEmote> reaction_list = new List<IEmote> { };
+
+            // Add needed emote reactions for the menu.
+            reaction_list.Add(new Emoji("↩️"));
+            reaction_list.Add(new Emoji("▶️"));
+
+            // Add the reactions to the message.
+            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+        }
+
+        public static async Task Credits_Page_2(SocketGuildUser user, RestUserMessage message)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            // Find the menu session associated with the current user.
+            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Credits",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            var footer = new EmbedFooterBuilder
+            {
+                Text = "" +
+                "◀️ Previous Page | 💠 Return to Help Menu\n" +
+                "Page 2 / 2"
+            };
+
+            embed.WithFooter(footer);
+
+            // Determine the color and thumbnail for the embeded message
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.AddField("Gameplay Footage", "" +
                 "[BuffMaister](https://www.youtube.com/channel/UCks_VIIleZT2iDWNipPglUg)\n" +
@@ -89,6 +165,7 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "[Shirrako](https://www.youtube.com/channel/UC7eAfUjR9gdIjoaoQaS0W-A)\n");
 
             embed.AddField("Services", "" +
+                "[Amazon Web Services](https://aws.amazon.com/)\n" +
                 "[Microsoft Azure](https://azure.microsoft.com/)\n" +
                 "[Weather API](https://www.weatherapi.com/)\n");
 
@@ -121,7 +198,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "Credits_Main";
+            menuSession.CurrentMenu = "Credits_Page_2";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -137,7 +214,8 @@ namespace SocialLinker.Core.Menus.Help.Main
             List<IEmote> reaction_list = new List<IEmote> { };
 
             // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
+            reaction_list.Add(new Emoji("◀️"));
+            reaction_list.Add(new Emoji("💠"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);

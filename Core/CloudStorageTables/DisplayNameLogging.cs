@@ -33,13 +33,11 @@ namespace SocialLinker.Core.CloudStorageTables
             var customNameTable = tableClient.GetTableReference(logging_table);
 
             var filter_1 = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, id.ToString()); // Match User ID
-            var filter_2 = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, set_data.Origin);
-            var filter_3 = TableQuery.GenerateFilterCondition("Character_ID", QueryComparisons.Equal, set_data.ID);
+            var filter_2 = TableQuery.GenerateFilterCondition("Game", QueryComparisons.Equal, set_data.Origin);
 
-            var name_filter_1 = TableQuery.CombineFilters(filter_1, TableOperators.And, filter_2);
-            var name_filter_2 = TableQuery.CombineFilters(name_filter_1, TableOperators.And, filter_3);
+            var name_filter = TableQuery.CombineFilters(filter_1, TableOperators.And, filter_2);
 
-            var query = new TableQuery<DisplayNameTableData>().Where(name_filter_2);
+            var query = new TableQuery<DisplayNameTableData>().Where(name_filter);
             var results_list = customNameTable.ExecuteQuery(query).ToList();
 
             for (int i = 0; i < results_list.Count; i++)
@@ -72,28 +70,24 @@ namespace SocialLinker.Core.CloudStorageTables
             var customNameTable = tableClient.GetTableReference(logging_table);
 
             var filter_1 = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, custom_name.PartitionKey); // Match User ID
-            var filter_2 = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, custom_name.RowKey);
-            var filter_3 = TableQuery.GenerateFilterCondition("Character_ID", QueryComparisons.Equal, custom_name.Character_ID);
-            var filter_4 = TableQuery.GenerateFilterCondition("Display_Name", QueryComparisons.Equal, custom_name.Display_Name);
+            var filter_2 = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, $"{custom_name.Entry_ID}");
 
             var name_filter_1 = TableQuery.CombineFilters(filter_1, TableOperators.And, filter_2);
-            var name_filter_2 = TableQuery.CombineFilters(name_filter_1, TableOperators.And, filter_3);
-            var name_filter_3 = TableQuery.CombineFilters(name_filter_2, TableOperators.And, filter_4);
 
-            var query = new TableQuery<DisplayNameTableData>().Where(name_filter_3);
+            var query = new TableQuery<DisplayNameTableData>().Where(name_filter_1);
             var result = customNameTable.ExecuteQuery(query).FirstOrDefault();
 
             customNameTable.Execute(TableOperation.Delete(result));
         }
 
-        public static bool Check_If_Sprites_Overlap(DisplayNameTempData new_name_data)
+        public static bool Check_If_Sprites_Overlap(DisplayNameInternalData new_name_data)
         {
             var storageAccount = new CloudStorageAccount(new StorageCredentials(AzureConfig.azureAccount.accountName, AzureConfig.azureAccount.accountKey), true);
             var tableClient = storageAccount.CreateCloudTableClient();
             var customNameTable = tableClient.GetTableReference(logging_table);
 
             var filter_1 = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, new_name_data.User_ID); // Match User ID
-            var filter_2 = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, new_name_data.Game);
+            var filter_2 = TableQuery.GenerateFilterCondition("Game", QueryComparisons.Equal, new_name_data.Game);
             var filter_3 = TableQuery.GenerateFilterCondition("Character_ID", QueryComparisons.Equal, new_name_data.Sprite_Set.ID);
 
             var name_filter_1 = TableQuery.CombineFilters(filter_1, TableOperators.And, filter_2);
@@ -150,14 +144,11 @@ namespace SocialLinker.Core.CloudStorageTables
         }
 
         // Display Name Temp Data
-        public static string String_Range_To_Int_Range(UserInfoFields account, OfficialSetData set_data, List<string> string_range, DisplayNameTempData new_name_data)
+        public static string String_Range_To_Int_Range(UserInfoFields account, OfficialSetData set_data, List<string> string_range, DisplayNameInternalData new_name_data)
         {
             string bustup_string = "";
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{new_name_data.Sprite_Set.Origin}//Bustup//{new_name_data.Sprite_Set.ID}";
             int filecount = AttachmentCountItemDirectory(set_path);
-
-            Console.WriteLine($"\n" +
-                $"stringe_range count is {string_range.Count}");
 
             if (string_range.Count == filecount)
             {
@@ -295,14 +286,15 @@ namespace SocialLinker.Core.CloudStorageTables
     public class DisplayNameTableData : TableEntity
     {
         public string User_ID => PartitionKey;
+        public string Entry_ID => RowKey;
         public string Display_Name { get; set; }
-        public string Game => RowKey;
+        public string Game { get; set; }
         public string Character_ID { get; set; }
         public string Sprites_Affected { get; set; }
         public string Spriteless_Included { get; set; }
     }
 
-    public class DisplayNameTempData
+    public class DisplayNameInternalData
     {
         public string User_ID { get; set; }
         public string Display_Name { get; set; }
