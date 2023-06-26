@@ -579,5 +579,12 @@
     "LeftCut": 11,
     "RightCut": 37,
     "SupportedChars": "[ '~' ]"
+  },
+  {
+    "Row": 5,
+    "Column": 12,
+    "LeftCut": 15,
+    "RightCut": 34,
+    "SupportedChars": "[ '…' ]"
   }
 ]

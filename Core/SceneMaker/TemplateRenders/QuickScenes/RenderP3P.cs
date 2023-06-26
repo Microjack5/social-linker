@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Globalization;
 using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
@@ -548,115 +547,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return output_string;
         }
 
-        public static Bitmap Bustup_Selection(UserInfoFields account, OfficialSetData set_data, MakerCommandData command_data)
-        {
-            // Establish the directory of the specified sprite set.
-            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
-
-            // Get a count of how many files are in the sprite set's directory.
-            int filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path);
-
-            // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
-            string base_sprite_filename = "";
-
-            // Check if the sprite set's directory exists.
-            if (Directory.Exists(set_path))
-            {
-                // If so, it's time to find the filename for the user's selected sprite so we can retrieve the frames associated with it.
-                // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
-                // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
-                int counter = 0;
-                int base_sprite_number = command_data.Base_Sprite;
-
-                // The manner of iteration will change based on the user's settings.
-                // First, Order by Outfit.
-                if (account.Setting_Sheet_Order == "Order by Outfit")
-                {
-                    // Create a loop starting at 1 meant to iterate though every file in the directory.
-                    // Outfit numbers always start at 1, so we'll begin there.
-                    for (int outfit = 1; outfit <= filecount; outfit++)
-                    {
-                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
-                        // This loop is searching for expressions, which start at 1.
-                        for (int expression = 1; expression <= filecount; expression++)
-                        {
-                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
-                            // Check if the created file path string exists.
-                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png"))
-                            {
-                                // If the file does exist, increment the counter by one.
-                                counter++;
-
-                                // Check if the counter matches the same number of the chosen sprite number.
-                                if (counter == base_sprite_number)
-                                {
-                                    // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
-                                    base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}";
-
-                                    // Break out of the current loop.
-                                    break;
-                                }
-                            }
-                        }
-
-                        // Check if the filename variable for the base sprite is not empty.
-                        if (base_sprite_filename != "")
-                        {
-                            // If so, we already found our filename! Break out of the outer loop.
-                            break;
-                        }
-                    }
-                }
-                // Second case, Order by Expression.
-                else if (account.Setting_Sheet_Order == "Order by Expression")
-                {
-                    // Create a loop starting at 1 meant to iterate though every file in the directory.
-                    // Expression numbers always start at 1, so we'll begin there.
-                    for (int expression = 1; expression <= filecount; expression++)
-                    {
-                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
-                        // This loop is searching for outfits, which start at 1.
-                        for (int outfit = 1; outfit <= filecount; outfit++)
-                        {
-                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
-                            // Check if the created file path string exists.
-                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png"))
-                            {
-                                // If the file does exist, increment the counter by one.
-                                counter++;
-
-                                // Check if the counter matches the same number of the chosen sprite number.
-                                if (counter == base_sprite_number)
-                                {
-                                    // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
-                                    base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}";
-
-                                    // Break out of the current loop.
-                                    break;
-                                }
-                            }
-                        }
-
-                        // Check if the filename variable for the base sprite is not empty.
-                        if (base_sprite_filename != "")
-                        {
-                            // If so, we already found our filename! Break out of the outer loop.
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // If eye frames and mouth frames were not specified, return the base sprite.
-            if (command_data.Eye_Frame == default && command_data.Mouth_Frame == default)
-            {
-                Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-                return base_sprite;
-            }
-
-            return null;
-        }
-
         public Bitmap Render_Calendar_HUD(UserInfoFields account)
         {
             // Get the user's current time and store it in a variable.
@@ -748,11 +638,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                             date_dot = Bitmap_To_Color(date_dot, color_date_blue, calendar_area);
                             time_of_day_shadow = Bitmap_To_Color(time_of_day, color_tod_blue, calendar_area);
 
-                            if (Holiday_Check(user_time) == true)
+                            if (OfficialSetMethods.Is_Holiday(user_time))
                             {
                                 day_of_week = Bitmap_To_Color(day_of_week, color_date_blue, calendar_area);
                             }
-                            if (user_time.ToString("dddd").ToLower() == "saturday")
+                            else if (user_time.ToString("dddd").ToLower() == "saturday")
                             {
                                 day_of_week = Bitmap_To_Color(day_of_week, color_saturday_blue, calendar_area);
                             }
@@ -777,11 +667,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                             time_of_day_shadow = Bitmap_To_Color(time_of_day, color_tod_pink, calendar_area);
 
                             // Color the day of week bitmap depending on what day it currently is.
-                            if (Holiday_Check(user_time) == true)
+                            if (OfficialSetMethods.Is_Holiday(user_time))
                             {
                                 day_of_week = Bitmap_To_Color(day_of_week, color_date_pink, calendar_area);
                             }
-                            if (user_time.ToString("dddd").ToLower() == "saturday")
+                            else if (user_time.ToString("dddd").ToLower() == "saturday")
                             {
                                 day_of_week = Bitmap_To_Color(day_of_week, color_date_pink, calendar_area);
                             }
@@ -805,7 +695,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                             date_dot = Bitmap_To_Color(date_dot, color_date_blue, calendar_area);
 
                             // Color the day of week bitmap depending on what day it currently is.
-                            if (Holiday_Check(user_time) == true)
+                            if (OfficialSetMethods.Is_Holiday(user_time))
                             {
                                 day_of_week = Bitmap_To_Color(day_of_week, color_date_blue, calendar_area);
                             }
@@ -1245,42 +1135,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_bitmap;
         }
 
-        public static Bitmap Tint_Message_Windowa(Bitmap input_bitmap)
-        {
-            // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
-            System.Drawing.Color actual_color;
-
-            // Make an empty bitmap the same size as the input bitmap.
-            Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
-
-            // Create a for loop to iterate over the X values of the bitmap to be changed.
-            for (int i = 0; i < 480; i++)
-            {
-                // Create a nested for loop to iterate over the Y values of the bitmap to be changed.
-                for (int j = 190; j < 272; j++)
-                {
-                    // Get the current pixel from the input bitmap.
-                    actual_color = input_bitmap.GetPixel(i, j);
-
-                    /*if (actual_color.R <= 5 && actual_color.G <= 5 && actual_color.B <= 5) //actual_color != System.Drawing.Color.FromArgb(198, 207, 223)
-                    {
-                        new_bitmap.SetPixel(i, j, actual_color);
-                    }
-                    else
-                    {
-                        // Color in the pixel with the new color while keeping its current alpha value.
-                        System.Drawing.Color new_color = System.Drawing.Color.FromArgb(actual_color.A, 198, 207, 195);
-                        new_bitmap.SetPixel(i, j, new_color);
-                    } */
-
-                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(actual_color.A, 198, 207, 195);
-                    new_bitmap.SetPixel(i, j, new_color);
-                }
-            }
-
-            return new_bitmap;
-        }
-
         public static Bitmap Tint_Message_Window(Bitmap input_bitmap)
         {
             // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
@@ -1343,32 +1197,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
 
                     new_bitmap.SetPixel(i, j, new_color);
-                }
-            }
-
-            return new_bitmap;
-        }
-
-        public static Bitmap Text_To_Gray(Bitmap input_bitmap) // Dialogue
-        {
-            // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
-            System.Drawing.Color actual_color;
-
-            // Make an empty bitmap the same size as the input bitmap.
-            Bitmap new_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
-
-            // Create a for loop to iterate over the X values of the bitmap to be changed.
-            for (int x = 0; x < 480; x++)
-            {
-                // Create a nested for loop to iterate over the Y values of the bitmap to be changed.
-                for (int y = 190; y < 272; y++)
-                {
-                    // Get the current pixel from the input bitmap.
-                    actual_color = input_bitmap.GetPixel(x, y);
-
-                    // Color in the pixel with the new color while keeping its current alpha value.
-                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(actual_color.A, 72, 72, 72);
-                    new_bitmap.SetPixel(x, y, new_color);
                 }
             }
 
@@ -1488,11 +1316,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 time_of_day = "evening";
             }
             // If the current hour is before 6PM and after or on 3PM, set the time depending on the day.
+            // If it's a Sunday or outside of a school term, set it to Daytime.
             // If it's a weekday, set it to After School.
-            // If it's a Sunday or during school vacation, set it to Daytime.
             else if (current_hour < evening && current_hour >= after_school)
             {
-                if (DateTime.Now.ToString("ddd") == "Sun" || School_Vacation_Check(input_time) == true)
+                if (DateTime.Now.ToString("ddd") == "Sun" || !OfficialSetMethods.Is_School_Term(input_time))
                 {
                     time_of_day = "daytime";
                 }
@@ -1507,11 +1335,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 time_of_day = "afternoon";
             }
             // If the current hour is before 1PM and after or on 12PM, set the time depending on the day.
+            // If it's a Sunday or outside of a school term, set it to Daytime.
             // If it's a weekday, set it to Lunchtime.
-            // If it's a Sunday or during school vacation, set it to Daytime.
             else if (current_hour < afternoon && current_hour >= lunchtime)
             {
-                if ((DateTime.Now.ToString("ddd") == "Sun") || (School_Vacation_Check(input_time) == true))
+                if ((DateTime.Now.ToString("ddd") == "Sun") || !OfficialSetMethods.Is_School_Term(input_time))
                 {
                     time_of_day = "daytime";
                 }
@@ -1563,89 +1391,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             countdownInt = (int)Math.Round(age);
 
             return countdownInt;
-        }
-
-        public static bool Holiday_Check(DateTime user_time)
-        {
-            try
-            {
-                // Establish the directory of the file and then search for all JSON documents that start with "holiday_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
-                string[] file_search = Directory.GetFiles(holiday_calendar_path, $"holiday_calendar_*.json");
-
-                // Read in all the text of the file.
-                string json_text = File.ReadAllText(file_search[0]);
-
-                // Deserialize the JSON object and store it in a variable.
-                var dataObject = JsonConvert.DeserializeObject<dynamic>(json_text);
-
-                // Iterate through each item of the JSON object.
-                foreach (var item in dataObject)
-                {
-                    // If the JSON contains an entry with the same month and day as the user's current time, return true.
-                    if (item.Month == user_time.ToString("MMMM") && item.Day == user_time.ToString("dd"))
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return false;
-        }
-
-        public static bool School_Vacation_Check(DateTime user_time)
-        {
-            try
-            {
-                // Establish the directory of the file and then search for all JSON documents that start with "academic_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
-                string[] file_search = Directory.GetFiles(holiday_calendar_path, $"academic_calendar_*.json");
-
-                // Read in all the text of the file.
-                string json_text = File.ReadAllText(file_search[0]);
-
-                // Deserialize the JSON object and store it in a variable.
-                var dataObject = JsonConvert.DeserializeObject<dynamic>(json_text);
-
-                string stored_condition = "";
-
-                // Iterate through each item of the JSON object.
-                foreach (var item in dataObject)
-                {
-                    // Get the info of the current item and create a DateTime object from it. We'll use this to compare to the user's current time.
-                    DateTime current_item = new DateTime(Int32.Parse(item.Year.ToString()), DateTime.ParseExact(item.Month.ToString(), "MMMM", CultureInfo.InvariantCulture).Month, Int32.Parse(item.Day.ToString()), 0, 0, 0);
-
-                    // If the user's time is after the current item's time, store the condition of the current item in the stored condition variable.
-                    if (user_time >= current_item)
-                    {
-                        stored_condition = item.Condition;
-                    }
-                    // If the user's time is BEFORE the current item's time, we stop here and compare!
-                    // Take a look at the stored condition's value.
-                    // Since the item values alternate between opening and closing days, the user's time will be between these periods.
-                    else
-                    {
-                        if (stored_condition == "First Day of School" && item.Condition == "Closing Ceremony")
-                        {
-                            return false;
-                        }
-                        else if (stored_condition == "Closing Ceremony" && item.Condition == "First Day of School")
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return false;
         }
 
         // Method from https://stackoverflow.com/questions/15408607/adjust-brightness-contrast-and-gamma-of-an-image

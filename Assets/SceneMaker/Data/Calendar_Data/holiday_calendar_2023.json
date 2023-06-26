@@ -1,0 +1,47 @@
+[
+  {
+    "Holiday": "Marine Day",
+    "Month": "July",
+    "Day": 17
+  },
+  {
+    "Holiday": "Mountain Day",
+    "Month": "August",
+    "Day": 11
+  },
+  {
+    "Holiday": "Respect for the Aged Day",
+    "Month": "September",
+    "Day": 18
+  },
+  {
+    "Holiday": "Autumnal Equinox Day",
+    "Month": "September",
+    "Day": 23
+  },
+  {
+    "Holiday": "Health and Sports Day",
+    "Month": "October",
+    "Day": 9
+  },
+  {
+    "Holiday": "Culture Day",
+    "Month": "November",
+    "Day": 3
+  },
+  {
+    "Holiday": "Labor Thanksgiving Day",
+    "Month": "November",
+    "Day": 23
+  },
+  {
+    "Holiday": "Christmas",
+    "Month": "December",
+    "Day": 25
+  },
+  {
+    "Holiday": "New Year’s Eve",
+    "Month": "December",
+    "Day": 31
+  }
+]

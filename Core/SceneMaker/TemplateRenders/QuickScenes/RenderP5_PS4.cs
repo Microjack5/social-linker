@@ -2479,7 +2479,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(shading, 0, 0, template_width, template_height);
             }
 
-            star_layer = Keep_Pixel_Overlap_Stars(border_main, star_layer, new Rectangle(0, 0, template_width, template_height));
+            star_layer = Keep_Pixel_Overlap_General(star_layer, border_main, new Rectangle(0, 0, template_width, template_height));
 
 
             // Now, time to put the template together!
@@ -2631,7 +2631,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             Bitmap star_base = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//star_base.png");
 
-            new_bitmap = Keep_Pixel_Overlap_Stars(star_base, new_bitmap, new Rectangle(0, 0, star_base.Width, star_base.Height));
+            new_bitmap = Keep_Pixel_Overlap_General(new_bitmap, star_base, new Rectangle(0, 0, star_base.Width, star_base.Height));
 
             // Return the new bitmap.
             return new_bitmap;
@@ -2879,15 +2879,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     weekdayTop = Weekday_To_No_Alpha((Bitmap)weekdayTop);
                     timeOfDay = Weekday_To_No_Alpha((Bitmap)timeOfDay);
 
-                    // If the day is a Saturday, color the white pixels on the weekday to blue.
-                    if (user_time.DayOfWeek.ToString().ToLower() == "saturday")
-                    {
-                        weekdayTop = White_To_Blue((Bitmap)weekdayTop);
-                    }
-                    // If the day is a Sunday, color the white pixels on the weekday to red.
-                    else if (user_time.DayOfWeek.ToString().ToLower() == "sunday")
+                    // If the day is a Sunday or holiday, color the white pixels on the weekday to red.
+                    if (user_time.DayOfWeek.ToString().ToLower() == "sunday" || OfficialSetMethods.Is_Holiday(user_time))
                     {
                         weekdayTop = White_To_Red((Bitmap)weekdayTop);
+                    }
+                    // If the day is a plain Saturday, color the white pixels on the weekday to blue.
+                    else if (user_time.DayOfWeek.ToString().ToLower() == "saturday")
+                    {
+                        weekdayTop = White_To_Blue((Bitmap)weekdayTop);
                     }
 
                     // Draw them to the merged layer.
@@ -2905,10 +2905,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return bitmap;
         }
 
-        public static Bitmap Keep_Pixel_Overlap_Stars(Bitmap bitmap_to_keep, Bitmap bitmap_to_compare, Rectangle affected_area)
+        public static Bitmap Keep_Pixel_Overlap_General(Bitmap bitmap_to_keep, Bitmap bitmap_to_compare, Rectangle affected_area)
         {
-            System.Drawing.Color pixel_to_compare;
             System.Drawing.Color pixel_to_keep;
+            System.Drawing.Color pixel_to_compare;
 
             Bitmap base_template = new Bitmap(bitmap_to_keep.Width, bitmap_to_keep.Height);
 
@@ -2916,10 +2916,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             {
                 for (int j = affected_area.Y; j < (affected_area.Y + affected_area.Height); j++)
                 {
-                    pixel_to_compare = bitmap_to_keep.GetPixel(i, j);
-                    pixel_to_keep = bitmap_to_compare.GetPixel(i, j);
+                    pixel_to_keep = bitmap_to_keep.GetPixel(i, j);
+                    pixel_to_compare = bitmap_to_compare.GetPixel(i, j);
 
-                    if (pixel_to_compare.A > 0 && pixel_to_keep.A > 0)
+                    if (pixel_to_keep.A > 0 && pixel_to_compare.A > 0)
                     {
                         base_template.SetPixel(i, j, System.Drawing.Color.FromArgb(pixel_to_compare.A, pixel_to_keep.R, pixel_to_keep.G, pixel_to_keep.B));
                     }
@@ -3126,11 +3126,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 tod = "evening";
             }
             // If the current hour is before 6PM and after or on 3PM, set the time depending on the day.
+            // If it's a Sunday or outside of a school term, set it to Daytime.
             // If it's a weekday, set it to After School.
-            // If it's a Sunday or during school vacation, set it to Daytime.
             else if (hour < evening && hour >= after_school)
             {
-                if (DateTime.Now.ToString("ddd") == "Sun")
+                if (DateTime.Now.ToString("ddd") == "Sun" || !OfficialSetMethods.Is_School_Term(input_time))
                 {
                     tod = "daytime";
                 }
@@ -3140,11 +3140,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
             }
             // If the current hour is before 1PM and after or on 12PM, set the time depending on the day.
+            // If it's a Sunday or outside of a school term, set it to Daytime.
             // If it's a weekday, set it to Lunchtime.
-            // If it's a Sunday or during school vacation, set it to Daytime.
             else if (hour < after_school && hour >= lunchtime)
             {
-                if (DateTime.Now.ToString("ddd") == "Sun")
+                if (DateTime.Now.ToString("ddd") == "Sun" || !OfficialSetMethods.Is_School_Term(input_time))
                 {
                     tod = "daytime";
                 }
@@ -3383,90 +3383,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             return base_bitmap;
-        }
-
-        // Calendar Checks
-        public static bool Holiday_Check(DateTime user_time)
-        {
-            try
-            {
-                // Establish the directory of the file and then search for all JSON documents that start with "holiday_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
-                string[] file_search = Directory.GetFiles(holiday_calendar_path, $"holiday_calendar_*.json");
-
-                // Read in all the text of the file.
-                string json_text = File.ReadAllText(file_search[0]);
-
-                // Deserialize the JSON object and store it in a variable.
-                var dataObject = JsonConvert.DeserializeObject<dynamic>(json_text);
-
-                // Iterate through each item of the JSON object.
-                foreach (var item in dataObject)
-                {
-                    // If the JSON contains an entry with the same month and day as the user's current time, return true.
-                    if (item.Month == user_time.ToString("MMMM") && item.Day == user_time.ToString("dd"))
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return false;
-        }
-
-        public static bool School_Vacation_Check(DateTime user_time)
-        {
-            try
-            {
-                // Establish the directory of the file and then search for all JSON documents that start with "academic_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
-                string[] file_search = Directory.GetFiles(holiday_calendar_path, $"academic_calendar_*.json");
-
-                // Read in all the text of the file.
-                string json_text = File.ReadAllText(file_search[0]);
-
-                // Deserialize the JSON object and store it in a variable.
-                var dataObject = JsonConvert.DeserializeObject<dynamic>(json_text);
-
-                string stored_condition = "";
-
-                // Iterate through each item of the JSON object.
-                foreach (var item in dataObject)
-                {
-                    // Get the info of the current item and create a DateTime object from it. We'll use this to compare to the user's current time.
-                    DateTime current_item = new DateTime(Int32.Parse(item.Year.ToString()), DateTime.ParseExact(item.Month.ToString(), "MMMM", CultureInfo.InvariantCulture).Month, Int32.Parse(item.Day.ToString()), 0, 0, 0);
-
-                    // If the user's time is after the current item's time, store the condition of the current item in the stored condition variable.
-                    if (user_time >= current_item)
-                    {
-                        stored_condition = item.Condition;
-                    }
-                    // If the user's time is BEFORE the current item's time, we stop here and compare!
-                    // Take a look at the stored condition's value.
-                    // Since the item values alternate between opening and closing days, the user's time will be between these periods.
-                    else
-                    {
-                        if (stored_condition == "First Day of School" && item.Condition == "Closing Ceremony")
-                        {
-                            return false;
-                        }
-                        else if (stored_condition == "Closing Ceremony" && item.Condition == "First Day of School")
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return false;
         }
 
         // Method from https://www.codeproject.com/Tips/201129/Change-Opacity-of-Image-in-C

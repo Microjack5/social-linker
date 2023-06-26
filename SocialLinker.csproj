@@ -372,6 +372,10 @@
     <Compile Include="Core\SceneMaker\BustupFrameSheets.cs" />
     <Compile Include="Core\SceneMaker\Data\Bustup\BustupData.cs" />
     <Compile Include="Core\SceneMaker\Data\Bustup\BustupDataMethods.cs" />
+    <Compile Include="Core\SceneMaker\Data\Calendar\AcademicData.cs" />
+    <Compile Include="Core\SceneMaker\Data\Calendar\AcademicDataMethods.cs" />
+    <Compile Include="Core\SceneMaker\Data\Calendar\HolidayData.cs" />
+    <Compile Include="Core\SceneMaker\Data\Calendar\HolidayDataMethods.cs" />
     <Compile Include="Core\SceneMaker\ErrorHandling.cs" />
     <Compile Include="Core\SceneMaker\CommandParser.cs" />
     <Compile Include="Core\SceneMaker\GlyphParsing\ParsingFields.cs" />
@@ -462,7 +466,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\SceneMaker\Data\Assist\" />
-    <Folder Include="Core\SceneMaker\Data\Calendar\" />
     <Folder Include="Core\SceneMaker\Data\Cutin\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

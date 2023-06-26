@@ -670,5 +670,12 @@
     "LeftCut": 1,
     "RightCut": 6,
     "SupportedChars": "[ '×' ]"
-  }
+  },
+  {
+    "Row": 5,
+    "Column": 15,
+    "LeftCut": 1,
+    "RightCut": 6,
+    "SupportedChars": "[ '…' ]"
+  },
 ]

@@ -1,0 +1,30 @@
+[
+  {
+    "Term": 2,
+    "Condition": "First Day of School",
+    "Month": "January",
+    "Day": 9,
+    "Year": 2024
+  },
+  {
+    "Term": 2,
+    "Condition": "Closing Ceremony",
+    "Month": "March",
+    "Day": 28,
+    "Year": 2024
+  },
+  {
+    "Term": 3,
+    "Condition": "First Day of School",
+    "Month": "April",
+    "Day": 15,
+    "Year": 2024
+  },
+  {
+    "Term": 3,
+    "Condition": "Closing Ceremony",
+    "Month": "June",
+    "Day": 28,
+    "Year": 2024
+  }
+]

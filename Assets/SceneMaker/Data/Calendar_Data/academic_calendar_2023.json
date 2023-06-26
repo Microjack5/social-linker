@@ -1,0 +1,30 @@
+[
+  {
+    "Term": 3,
+    "Condition": "First Day of School",
+    "Month": "April",
+    "Day": 18,
+    "Year": 2023
+  },
+  {
+    "Term": 3,
+    "Condition": "Closing Ceremony",
+    "Month": "June",
+    "Day": 30,
+    "Year": 2023
+  },
+  {
+    "Term": 1,
+    "Condition": "First Day of School",
+    "Month": "August",
+    "Day": 28,
+    "Year": 2023
+  },
+  {
+    "Term": 1,
+    "Condition": "Closing Ceremony",
+    "Month": "December",
+    "Day": 15,
+    "Year": 2023
+  },
+]

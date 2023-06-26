@@ -623,6 +623,13 @@
     "SupportedChars": "[ '~' ]"
   },
   {
+    "Row": 6,
+    "Column": 12,
+    "LeftCut": 1,
+    "RightCut": 11,
+    "SupportedChars": "[ '…' ]"
+  },
+  {
     "Row": 7,
     "Column": 12,
     "LeftCut": 0,

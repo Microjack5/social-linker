@@ -15,12 +15,9 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
-using System.Globalization;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using SocialLinker.Core.Menus;
-using System.Data.SqlClient;
-using System.Security.Principal;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -266,6 +263,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public Bitmap Render_Bustup(UserInfoFields account, DateTime user_time, OfficialSetData set_data, BustupData bustup_data, Bitmap bustup)
         {
             Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap character_with_background = new Bitmap(template_width, template_height);
             Bitmap drop_shadow = new Bitmap(2, 2);
 
             using (Graphics graphics = Graphics.FromImage(base_template))
@@ -276,12 +274,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 switch (account.P5R_TS_Caller_Toggle)
                 {
                     case "On":
-                        Bitmap phone_bg = Get_Phone_Background(account, set_data, user_time);
-                        graphics.DrawImage(phone_bg, -6, 410, 768, 768);
+                        string phone_time_of_day = Get_Phone_Time_Of_Day(account, set_data, user_time);
+                        Bitmap phone_bg = Get_Phone_Background(account, set_data, phone_time_of_day);
 
-                        graphics.DrawImage(drop_shadow, bustup_data.P5R_Phone_Coord_X - 30, bustup_data.P5R_Phone_Coord_Y + 30, bustup_data.P5R_Phone_Scale_Width, bustup_data.P5R_Phone_Scale_Height);
-                        graphics.DrawImage(bustup, bustup_data.P5R_Phone_Coord_X, bustup_data.P5R_Phone_Coord_Y, bustup_data.P5R_Phone_Scale_Width, bustup_data.P5R_Phone_Scale_Height);
-                        graphics.DrawImage(Render_Phone_Call(), 0, 0, template_width, template_height);
+                        using (Graphics char_and_bg = Graphics.FromImage(character_with_background))
+                        {
+                            char_and_bg.DrawImage(phone_bg, -6, 410, 768, 768);
+                            char_and_bg.DrawImage(drop_shadow, bustup_data.P5R_Phone_Coord_X - 30, bustup_data.P5R_Phone_Coord_Y + 30, bustup_data.P5R_Phone_Scale_Width, bustup_data.P5R_Phone_Scale_Height);
+                            char_and_bg.DrawImage(bustup, bustup_data.P5R_Phone_Coord_X, bustup_data.P5R_Phone_Coord_Y, bustup_data.P5R_Phone_Scale_Width, bustup_data.P5R_Phone_Scale_Height);
+                        }
+
+                        Bitmap phone_tint = Get_Phone_Tint(character_with_background, phone_time_of_day);
+
+                        graphics.DrawImage(Render_Phone_Call(phone_tint), 0, 0, template_width, template_height);
                         break;
 
                     case "Off":
@@ -2181,20 +2186,16 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public Bitmap Render_Phone_Call() // Working!
+        // Phone Call Rendering
+        public Bitmap Render_Phone_Call(Bitmap char_and_bg) // Working!
         {
-            // We'll need to create three layers: A base one, a layer for the white vector, and a layer for the black vector.
             Bitmap base_template = new Bitmap(template_width, template_height);
             Bitmap white_layer = new Bitmap(template_width, template_height);
             Bitmap black_outer_layer = new Bitmap(template_width, template_height);
-            Bitmap merged_layer = new Bitmap(template_width, template_height);
             Bitmap black_inner_layer = new Bitmap(template_width, template_height);
             Bitmap void_layer = new Bitmap(template_width, template_height);
 
-            // Create a brush for the color white.
             SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
-
-            // Create a brush for the color white.
             SolidBrush whiteBrush = new SolidBrush(System.Drawing.Color.White);
 
             int black_point_1_x_min = -17;
@@ -2227,8 +2228,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int black_point_6_y_min = 1017;
             int black_point_6_y_max = 1022;
 
-            // Part 2
-
             int black_point_1_x = rnd.Next(black_point_1_x_min, black_point_1_x_max + 1);
             int black_point_1_y = rnd.Next(black_point_1_y_min, black_point_1_y_max + 1);
 
@@ -2247,7 +2246,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int black_point_6_x = rnd.Next(black_point_6_x_min, black_point_6_x_max + 1);
             int black_point_6_y = rnd.Next(black_point_6_y_min, black_point_6_y_max + 1);
 
-            // Create the four points of the black vector from the randomly chosen values.
             Point black_point_1 = new Point(black_point_1_x, black_point_1_y);
             Point black_point_2 = new Point(black_point_2_x, black_point_2_y);
             Point black_point_3 = new Point(black_point_3_x, black_point_3_y);
@@ -2255,7 +2253,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Point black_point_5 = new Point(black_point_5_x, black_point_5_y);
             Point black_point_6 = new Point(black_point_6_x, black_point_6_y);
 
-            // Create the four points of the white vector from the randomly chosen values.
             Point white_point_1 = new Point(black_point_1_x + 48, black_point_1_y + 4);
             Point white_point_2 = new Point(black_point_2_x - 3, black_point_2_y + 10);
             Point white_point_3 = new Point(black_point_3_x - 7, black_point_3_y + 9);
@@ -2263,21 +2260,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Point white_point_5 = new Point(black_point_5_x + 5, black_point_5_y - 37);
             Point white_point_6 = new Point(black_point_6_x + 13, black_point_6_y - 15);
 
-            Point black_inner_point_1 = new Point(0, 0);
-            Point black_inner_point_2 = new Point(0, 0);
-            Point black_inner_point_3 = new Point(0, 0);
-            Point black_inner_point_4 = new Point(0, 0);
-            Point black_inner_point_5 = new Point(0, 0);
-            Point black_inner_point_6 = new Point(0, 0);
+            Point black_inner_point_1 = new Point(white_point_1.X + 17, white_point_1.Y + 10);
+            Point black_inner_point_2 = new Point(white_point_2.X - 5, white_point_2.Y + 6);
+            Point black_inner_point_3 = new Point(white_point_3.X - 14, white_point_3.Y - 1);
+            Point black_inner_point_4 = new Point(white_point_4.X - 13, white_point_4.Y - 1);
+            Point black_inner_point_5 = new Point(white_point_5.X + 4, white_point_5.Y - 15);
+            Point black_inner_point_6 = new Point(white_point_6.X + 26, white_point_6.Y - 20);
 
-            Point void_point_1 = new Point(0, 0);
-            Point void_point_2 = new Point(0, 0);
-            Point void_point_3 = new Point(0, 0);
-            Point void_point_4 = new Point(0, 0);
-            Point void_point_5 = new Point(0, 0);
-            Point void_point_6 = new Point(0, 0);
+            Point void_point_1 = new Point(black_inner_point_1.X + 14, black_inner_point_1.Y + 5);
+            Point void_point_2 = new Point(black_inner_point_2.X - 6, black_inner_point_2.Y + 15);
+            Point void_point_3 = new Point(black_inner_point_3.X - 11, black_inner_point_3.Y - 1);
+            Point void_point_4 = new Point(black_inner_point_4.X - 8, black_inner_point_4.Y - 3);
+            Point void_point_5 = new Point(black_inner_point_5.X - 3, black_inner_point_5.Y - 16);
+            Point void_point_6 = new Point(black_inner_point_6.X + 6, black_inner_point_6.Y - 5);
 
-            // Add all the points for the outer black vector into a point array.
             Point[] black_poly_points = {
                     black_point_1,
                     black_point_2,
@@ -2286,7 +2282,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     black_point_5,
                     black_point_6 };
 
-            // Add all the points for the inner white vector into a point array.
             Point[] white_poly_points = {
                     white_point_1,
                     white_point_2,
@@ -2295,114 +2290,199 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     white_point_5, 
                     white_point_6 };
 
-            // Now, let's put all the points together and make polygons!
-            // We'll need to make three graphics objects:
-            // - One for the black layer
-            // - One for the white layer
-            // - And one for putting the two layers together
+            Point[] black_inner_poly_points = {
+                    black_inner_point_1,
+                    black_inner_point_2,
+                    black_inner_point_3,
+                    black_inner_point_4,
+                    black_inner_point_5,
+                    black_inner_point_6 };
 
-            // First, put together the black layer.
+            Point[] void_poly_points = {
+                    void_point_1,
+                    void_point_2,
+                    void_point_3,
+                    void_point_4,
+                    void_point_5,
+                    void_point_6 };
+
             using (Graphics graphics = Graphics.FromImage(black_outer_layer))
             {
-                // Set the graphics rendering to have antialiasing.
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-                // Use the black_poly_points array to create a polygon and fill it with black color.
                 graphics.FillPolygon(blackBrush, black_poly_points);
             }
 
-            // Next, put together the white layer.
             using (Graphics graphics = Graphics.FromImage(white_layer))
             {
-                // Set the graphics rendering to have antialiasing.
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-                // Use the white_poly_points array to create a polygon and fill it with white color.
                 graphics.FillPolygon(whiteBrush, white_poly_points);
             }
 
-            // Lastly, let's merge the black and white layers into one bitmap.
-            using (Graphics graphics = Graphics.FromImage(merged_layer))
+            using (Graphics graphics = Graphics.FromImage(black_inner_layer))
             {
-                // Set the graphics rendering to have antialiasing.
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-                // Draw the two layers to the template.
-                graphics.DrawImage(black_outer_layer, 0, 0, template_width, template_height);
-                graphics.DrawImage(white_layer, 0, 0, template_width, template_height);
+                graphics.FillPolygon(blackBrush, black_inner_poly_points);
             }
+
+            using (Graphics graphics = Graphics.FromImage(void_layer))
+            {
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                graphics.FillPolygon(whiteBrush, void_poly_points);
+            }
+
+            char_and_bg = Keep_Pixel_Overlap_General(char_and_bg, void_layer, new Rectangle(0, 0, template_width, template_height));
 
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                graphics.DrawImage(merged_layer, 0, 0, template_width, template_height);
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                graphics.DrawImage(black_outer_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(white_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(black_inner_layer, 0, 0, template_width, template_height);
+                graphics.DrawImage(char_and_bg, 0, 0, template_width, template_height);
             }
 
-            // Return the new bitmap.
             return base_template;
         }
 
-        public Bitmap Get_Phone_Background(UserInfoFields account, OfficialSetData set_data, DateTime user_time)
+        public string Get_Phone_Time_Of_Day(UserInfoFields account, OfficialSetData set_data, DateTime user_time)
         {
-            int choice = 0;
-            string bg_variant = "";
+            string time_of_day = "";
             string[] p5r_vr_resident_id = new string[] { "B11", "B12", "B13", "B25" };
 
             if (account.P5R_TS_Caller_Location == "Dynamic" || account.P5R_TS_Caller_Location == "Dynamic (Normals Only)")
             {
-                if (account.P5R_TS_Caller_Location == "Dynamic (Normals Only)")
+                switch (Get_Time_of_Day(user_time))
+                {
+                    case "early_morning":
+                        time_of_day = "day";
+                        break;
+
+                    case "morning":
+                        time_of_day = "day";
+                        break;
+
+                    case "daytime":
+                        time_of_day = "after";
+                        break;
+
+                    case "lunchtime":
+                        time_of_day = "after";
+                        break;
+
+                    case "after_school":
+                        time_of_day = "after";
+                        break;
+
+                    case "evening":
+                        time_of_day = "night";
+                        break;
+                }
+
+                if (account.P5R_TS_Caller_Location == "Dynamic")
                 {
                     if (set_data.Origin == "P5R" && p5r_vr_resident_id.Contains(set_data.ID))
                     {
-                        bg_variant = "vr";
-                        choice = 1;
-                    }
-                }
-                else
-                {
-                    switch (Get_Time_of_Day(user_time))
-                    {
-                        case "early_morning":
-                            bg_variant = "day";
-                            break;
-
-                        case "morning":
-                            bg_variant = "day";
-                            break;
-
-                        case "daytime":
-                            bg_variant = "after";
-                            break;
-
-                        case "lunchtime":
-                            bg_variant = "after";
-                            break;
-
-                        case "after_school":
-                            bg_variant = "after";
-                            break;
-
-                        case "evening":
-                            bg_variant = "night";
-                            break;
-                    }
-
-                    choice = user_time.Day % 5;
-
-                    if (choice == 0)
-                    {
-                        choice = 5;
+                        time_of_day = "vr";
                     }
                 }
             }
-            else if (account.P5R_TS_Caller_Location == "Velvet Room") 
+            else if (account.P5R_TS_Caller_Location == "Velvet Room")
             {
-                bg_variant = "vr";
-                choice = 1;
+                time_of_day = "vr";
             }
 
-            return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Phone_BG//mw_{bg_variant}_0{choice}.png");
+            return time_of_day;
         }
 
+        public Bitmap Get_Phone_Background(UserInfoFields account, OfficialSetData set_data, string phone_time_of_day)
+        {
+            int choice = 0;
+
+            if (phone_time_of_day == "vr")
+            {
+                choice = 1;
+            }
+            else
+            {
+                choice = user_time.Day % 5;
+
+                if (choice == 0)
+                {
+                    choice = 5;
+                }
+            }
+
+            return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Phone_BG//mw_{phone_time_of_day}_0{choice}.png");
+        }
+
+        public Bitmap Get_Phone_Tint(Bitmap input_bitmap, string phone_time_of_day)
+        {
+            int added_red_value = 0;
+            int added_green_value = 0;
+            int added_blue_value = 0;
+            Bitmap tint_layer = new Bitmap(template_width, template_height);
+
+            switch (phone_time_of_day)
+            {
+                case "day":
+                    added_red_value = 0;
+                    added_green_value = 0;
+                    added_blue_value = 0;
+                    break;
+
+                case "after":
+                    added_red_value = 20;
+                    added_green_value = 10;
+                    added_blue_value = 5;
+                    break;
+
+                case "night":
+                    added_red_value = 0;
+                    added_green_value = 10;
+                    added_blue_value = 20;
+                    break;
+
+                case "vr":
+                    added_red_value = 0;
+                    added_green_value = 0;
+                    added_blue_value = 50;
+                    break;
+            }
+
+            for (int x = 0; x < 764; x++)
+            {
+                for (int y = 408; y < 1080; y++)
+                {
+                    System.Drawing.Color original_pixel_color = input_bitmap.GetPixel(x, y);
+
+                    int new_red_value = original_pixel_color.R + added_red_value;
+                    int new_green_value = original_pixel_color.G + added_green_value;
+                    int new_blue_value = original_pixel_color.B + added_blue_value;
+
+                    if (new_red_value > 255)
+                    {
+                        new_red_value = 255;
+                    }
+                    if (new_green_value > 255)
+                    {
+                        new_green_value = 255;
+                    }
+                    if (new_blue_value > 255)
+                    {
+                        new_blue_value = 255;
+                    }
+
+                    System.Drawing.Color tint_color = System.Drawing.Color.FromArgb(new_red_value, new_green_value, new_blue_value);
+
+                    tint_layer.SetPixel(x, y, tint_color);
+                }
+            }
+
+            return tint_layer;
+        }
+
+        // Rotate Methods
         public Bitmap Rotate_And_Place_Nametag(Bitmap window_layer, Point point_of_rotation)
         {
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -2733,8 +2813,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(shading, 0, 0, template_width, template_height);
             }
 
-            star_layer = Keep_Pixel_Overlap_Stars(border_main, star_layer, new Rectangle(0, 0, template_width, template_height));
-
+            star_layer = Keep_Pixel_Overlap_General(star_layer, border_main, new Rectangle(0, 0, template_width, template_height));
 
             // Now, time to put the template together!
             using (Graphics graphics = Graphics.FromImage(base_template))
@@ -2885,7 +2964,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             Bitmap star_base = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Border//star_base.png");
 
-            new_bitmap = Keep_Pixel_Overlap_Stars(star_base, new_bitmap, new Rectangle(0, 0, star_base.Width, star_base.Height));
+            new_bitmap = Keep_Pixel_Overlap_General(new_bitmap, star_base, new Rectangle(0, 0, star_base.Width, star_base.Height));
 
             // Return the new bitmap.
             return new_bitmap;
@@ -3228,15 +3307,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         weekdayTop = Weekday_To_No_Alpha((Bitmap)weekdayTop);
                         timeOfDay = Weekday_To_No_Alpha((Bitmap)timeOfDay);
 
-                        // If the day is a Saturday, color the white pixels on the weekday to blue.
-                        if (user_time.DayOfWeek.ToString().ToLower() == "saturday")
-                        {
-                            weekdayTop = White_To_Blue((Bitmap)weekdayTop);
-                        }
-                        // If the day is a Sunday, color the white pixels on the weekday to red.
-                        else if (user_time.DayOfWeek.ToString().ToLower() == "sunday")
+                        // If the day is a Sunday or holiday, color the white pixels on the weekday to red.
+                        if (user_time.DayOfWeek.ToString().ToLower() == "sunday" || OfficialSetMethods.Is_Holiday(user_time))
                         {
                             weekdayTop = White_To_Red((Bitmap)weekdayTop);
+                        }
+                        // If the day is a plain Saturday, color the white pixels on the weekday to blue.
+                        else if (user_time.DayOfWeek.ToString().ToLower() == "saturday")
+                        {
+                            weekdayTop = White_To_Blue((Bitmap)weekdayTop);
                         }
 
                         // Draw them to the merged layer.
@@ -4803,10 +4882,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return newBitmap;
         }
 
-        public static Bitmap Keep_Pixel_Overlap_Stars(Bitmap bitmap_to_keep, Bitmap bitmap_to_compare, Rectangle affected_area)
+        public static Bitmap Keep_Pixel_Overlap_General(Bitmap bitmap_to_keep, Bitmap bitmap_to_compare, Rectangle affected_area)
         {
-            System.Drawing.Color pixel_to_compare;
             System.Drawing.Color pixel_to_keep;
+            System.Drawing.Color pixel_to_compare;
 
             Bitmap base_template = new Bitmap(bitmap_to_keep.Width, bitmap_to_keep.Height);
 
@@ -4814,10 +4893,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             {
                 for (int j = affected_area.Y; j < (affected_area.Y + affected_area.Height); j++)
                 {
-                    pixel_to_compare = bitmap_to_keep.GetPixel(i, j);
-                    pixel_to_keep = bitmap_to_compare.GetPixel(i, j);
+                    pixel_to_keep = bitmap_to_keep.GetPixel(i, j);
+                    pixel_to_compare = bitmap_to_compare.GetPixel(i, j);
 
-                    if (pixel_to_compare.A > 0 && pixel_to_keep.A > 0)
+                    if (pixel_to_keep.A > 0 && pixel_to_compare.A > 0)
                     {
                         base_template.SetPixel(i, j, System.Drawing.Color.FromArgb(pixel_to_compare.A, pixel_to_keep.R, pixel_to_keep.G, pixel_to_keep.B));
                     }
@@ -5101,11 +5180,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 tod = "evening";
             }
             // If the current hour is before 6PM and after or on 3PM, set the time depending on the day.
+            // If it's a Sunday or outside of a school term, set it to Daytime.
             // If it's a weekday, set it to After School.
-            // If it's a Sunday or during school vacation, set it to Daytime.
             else if (hour < evening && hour >= after_school)
             {
-                if (DateTime.Now.ToString("ddd") == "Sun")
+                if (DateTime.Now.ToString("ddd") == "Sun" || !OfficialSetMethods.Is_School_Term(input_time))
                 {
                     tod = "daytime";
                 }
@@ -5115,11 +5194,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
             }
             // If the current hour is before 1PM and after or on 12PM, set the time depending on the day.
+            // If it's a Sunday or outside of a school term, set it to Daytime.
             // If it's a weekday, set it to Lunchtime.
-            // If it's a Sunday or during school vacation, set it to Daytime.
             else if (hour < after_school && hour >= lunchtime)
             {
-                if (DateTime.Now.ToString("ddd") == "Sun")
+                if (DateTime.Now.ToString("ddd") == "Sun" || !OfficialSetMethods.Is_School_Term(input_time))
                 {
                     tod = "daytime";
                 }
@@ -5385,90 +5464,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             return base_bitmap;
-        }
-
-        // Calendar Checks
-        public static bool Holiday_Check(DateTime user_time)
-        {
-            try
-            {
-                // Establish the directory of the file and then search for all JSON documents that start with "holiday_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
-                string[] file_search = Directory.GetFiles(holiday_calendar_path, $"holiday_calendar_*.json");
-
-                // Read in all the text of the file.
-                string json_text = File.ReadAllText(file_search[0]);
-
-                // Deserialize the JSON object and store it in a variable.
-                var dataObject = JsonConvert.DeserializeObject<dynamic>(json_text);
-
-                // Iterate through each item of the JSON object.
-                foreach (var item in dataObject)
-                {
-                    // If the JSON contains an entry with the same month and day as the user's current time, return true.
-                    if (item.Month == user_time.ToString("MMMM") && item.Day == user_time.ToString("dd"))
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return false;
-        }
-
-        public static bool School_Vacation_Check(DateTime user_time)
-        {
-            try
-            {
-                // Establish the directory of the file and then search for all JSON documents that start with "academic_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
-                string[] file_search = Directory.GetFiles(holiday_calendar_path, $"academic_calendar_*.json");
-
-                // Read in all the text of the file.
-                string json_text = File.ReadAllText(file_search[0]);
-
-                // Deserialize the JSON object and store it in a variable.
-                var dataObject = JsonConvert.DeserializeObject<dynamic>(json_text);
-
-                string stored_condition = "";
-
-                // Iterate through each item of the JSON object.
-                foreach (var item in dataObject)
-                {
-                    // Get the info of the current item and create a DateTime object from it. We'll use this to compare to the user's current time.
-                    DateTime current_item = new DateTime(Int32.Parse(item.Year.ToString()), DateTime.ParseExact(item.Month.ToString(), "MMMM", CultureInfo.InvariantCulture).Month, Int32.Parse(item.Day.ToString()), 0, 0, 0);
-
-                    // If the user's time is after the current item's time, store the condition of the current item in the stored condition variable.
-                    if (user_time >= current_item)
-                    {
-                        stored_condition = item.Condition;
-                    }
-                    // If the user's time is BEFORE the current item's time, we stop here and compare!
-                    // Take a look at the stored condition's value.
-                    // Since the item values alternate between opening and closing days, the user's time will be between these periods.
-                    else
-                    {
-                        if (stored_condition == "First Day of School" && item.Condition == "Closing Ceremony")
-                        {
-                            return false;
-                        }
-                        else if (stored_condition == "Closing Ceremony" && item.Condition == "First Day of School")
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return false;
         }
 
         // Method from https://www.codeproject.com/Tips/201129/Change-Opacity-of-Image-in-C

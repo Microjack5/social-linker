@@ -61,6 +61,40 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 //}
 
                 //Console.WriteLine("Copy complete!");
+
+                // ====================================
+
+                //Console.WriteLine("Copying data...");
+
+                //string data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}//bustup_data.json";
+
+                //foreach (BustupData s in bustup_data_list)
+                //{
+                //    if (set_data.Origin == "P5R" &&
+                //        (s.Filename.Contains("_1.png")))
+                //    {
+                //        s.P5R_Phone_Coord_X = -12;
+                //        s.P5R_Phone_Coord_Y = 347;
+                //    }
+                //    else if (set_data.Origin == "P5R" &&
+                //        (s.Filename.Contains("_2.png")))
+                //    {
+                //        s.P5R_Phone_Coord_X = 48;
+                //        s.P5R_Phone_Coord_Y = 407;
+                //    }
+                //}
+
+                //try
+                //{
+                //    string json = JsonConvert.SerializeObject(bustup_data_list, Formatting.Indented);
+                //    File.WriteAllText(data_path, json);
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine($"'{e}'");
+                //}
+
+                //Console.WriteLine("Copy complete!");
                 // END
 
                 string bustup_filename = "";

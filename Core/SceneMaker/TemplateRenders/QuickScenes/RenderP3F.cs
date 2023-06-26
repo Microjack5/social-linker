@@ -15,8 +15,6 @@ using System.Collections.Generic;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Globalization;
-using System.Runtime.InteropServices;
 using SocialLinker.Core.Menus;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
@@ -573,17 +571,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Color the day of week bitmap depending on what day it currently is.
-                if (Holiday_Check(user_time) == true)
+                if (user_time.ToString("dddd").ToLower() == "sunday" || OfficialSetMethods.Is_Holiday(user_time))
                 {
                     day_of_week = Day_Of_Week_To_Off_Day_Color_Scheme(day_of_week);
                 }
-                if (user_time.ToString("dddd").ToLower() == "saturday")
+                else if (user_time.ToString("dddd").ToLower() == "saturday")
                 {
                     day_of_week = Day_Of_Week_To_Saturday_Color_Scheme(day_of_week);
-                }
-                else if (user_time.ToString("dddd").ToLower() == "sunday")
-                {
-                    day_of_week = Day_Of_Week_To_Off_Day_Color_Scheme(day_of_week);
                 }
                 else 
                 {
@@ -1259,11 +1253,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 time_of_day = "evening";
             }
             // If the current hour is before 6PM and after or on 3PM, set the time depending on the day.
+            // If it's a Sunday or outside of a school term, set it to Daytime.
             // If it's a weekday, set it to After School.
-            // If it's a Sunday or during school vacation, set it to Daytime.
             else if (current_hour < evening && current_hour >= after_school)
             {
-                if (DateTime.Now.ToString("ddd") == "Sun" || School_Vacation_Check(input_time) == true)
+                if (DateTime.Now.ToString("ddd") == "Sun" || !OfficialSetMethods.Is_School_Term(input_time))
                 {
                     time_of_day = "daytime";
                 }
@@ -1278,11 +1272,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 time_of_day = "afternoon";
             }
             // If the current hour is before 1PM and after or on 12PM, set the time depending on the day.
+            // If it's a Sunday or outside of a school term, set it to Daytime.
             // If it's a weekday, set it to Lunchtime.
-            // If it's a Sunday or during school vacation, set it to Daytime.
             else if (current_hour < afternoon && current_hour >= lunchtime)
             {
-                if ((DateTime.Now.ToString("ddd") == "Sun") || (School_Vacation_Check(input_time) == true))
+                if ((DateTime.Now.ToString("ddd") == "Sun") || !OfficialSetMethods.Is_School_Term(input_time))
                 {
                     time_of_day = "daytime";
                 }
@@ -1334,89 +1328,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             countdownInt = (int)Math.Round(age);
 
             return countdownInt;
-        }
-
-        public static bool Holiday_Check(DateTime user_time)
-        {
-            try
-            {
-                // Establish the directory of the file and then search for all JSON documents that start with "holiday_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
-                string[] file_search = Directory.GetFiles(holiday_calendar_path, $"holiday_calendar_*.json");
-
-                // Read in all the text of the file.
-                string json_text = File.ReadAllText(file_search[0]);
-
-                // Deserialize the JSON object and store it in a variable.
-                var dataObject = JsonConvert.DeserializeObject<dynamic>(json_text);
-
-                // Iterate through each item of the JSON object.
-                foreach (var item in dataObject)
-                {
-                    // If the JSON contains an entry with the same month and day as the user's current time, return true.
-                    if (item.Month == user_time.ToString("MMMM") && item.Day == user_time.ToString("dd"))
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return false;
-        }
-
-        public static bool School_Vacation_Check(DateTime user_time)
-        {
-            try
-            {
-                // Establish the directory of the file and then search for all JSON documents that start with "academic_calendar_". This should only bring in one result.
-                string holiday_calendar_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}\SceneMaker\Data\Calendar_Data";
-                string[] file_search = Directory.GetFiles(holiday_calendar_path, $"academic_calendar_*.json");
-
-                // Read in all the text of the file.
-                string json_text = File.ReadAllText(file_search[0]);
-
-                // Deserialize the JSON object and store it in a variable.
-                var dataObject = JsonConvert.DeserializeObject<dynamic>(json_text);
-
-                string stored_condition = "";
-
-                // Iterate through each item of the JSON object.
-                foreach (var item in dataObject)
-                {
-                    // Get the info of the current item and create a DateTime object from it. We'll use this to compare to the user's current time.
-                    DateTime current_item = new DateTime(Int32.Parse(item.Year.ToString()), DateTime.ParseExact(item.Month.ToString(), "MMMM", CultureInfo.InvariantCulture).Month, Int32.Parse(item.Day.ToString()), 0, 0, 0);
-
-                    // If the user's time is after the current item's time, store the condition of the current item in the stored condition variable.
-                    if (user_time >= current_item)
-                    {
-                        stored_condition = item.Condition;
-                    }
-                    // If the user's time is BEFORE the current item's time, we stop here and compare!
-                    // Take a look at the stored condition's value.
-                    // Since the item values alternate between opening and closing days, the user's time will be between these periods.
-                    else
-                    {
-                        if (stored_condition == "First Day of School" && item.Condition == "Closing Ceremony")
-                        {
-                            return false;
-                        }
-                        else if (stored_condition == "Closing Ceremony" && item.Condition == "First Day of School")
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return false;
         }
 
         // Method from https://stackoverflow.com/questions/15408607/adjust-brightness-contrast-and-gamma-of-an-image

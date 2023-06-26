@@ -10,12 +10,9 @@ using System;
 using SocialLinker.Config;
 using SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
-using Discord.WebSocket;
-using System.Security.Principal;
 using System.Drawing.Drawing2D;
-using System.Data.SqlClient;
 using SocialLinker.Core.SceneMaker.GlyphParsing;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
+using SocialLinker.Core.SceneMaker.Data.Calendar;
 
 namespace SocialLinker.Core.LocalStorageTables
 {
@@ -62,75 +59,6 @@ namespace SocialLinker.Core.LocalStorageTables
             if (!File.Exists(filePath)) return null;
             string json = File.ReadAllText(filePath);
             return JsonConvert.DeserializeObject<List<OfficialSetData>>(json);
-        }
-
-        public static OfficialSetData GetSpriteSetInfoOld(UserInfoFields account, MakerCommandData command_data)
-        {
-            // To get the proper sprite set data, we have to take the user's account settings and parsed command into consideration.
-            // First, let's analyze the official sprite set list.
-            // Iterate through each entry of the official sprite set list.
-            foreach (OfficialSetData s in sprite_set_list)
-            {
-                // Deserialize the Set_Keywords field of the current iterated object into a string array.
-                string[] generic_char_keywords = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(s.Keywords);
-
-                // Iterate over each index of the string array.
-                for (int i = 0; i < generic_char_keywords.Length; i++)
-                {
-                    // If the contents of the current index match the lowercase form of the user's input, we found a potential candidate!
-                    if (generic_char_keywords[i] == command_data.Character_Keyword.ToLower())
-                    {
-                        // Check to see if the user specified a sprite set version in their command.
-                        // First, let's process the case that they didn't.
-                        // We'll want to return a sprite set from the character's debut title that matches the user's desired version.
-                        if (command_data.Sprite_Set_Version == "")
-                        {
-                            // Check if the current set is from a title that has multiple versions to it.
-                            // If so, the Version_Control_Check method will not return empty and instead return the user's version control settings for that title.
-                            if (Version_Control_Check(account, s) != "")
-                            {
-                                // If the title does have multiple versions, check if the character itself the set contains appears in all versions of the title.
-                                if (Appears_In_All_Versions_Check(s) == true)
-                                {
-                                    // Also check if the sprite set is from the character's debut title and the set's origin matches the user's version control settings.
-                                    if (s.Character_Debut == "Yes" && s.Origin == Version_Control_Check(account, s))
-                                    {
-                                        // If we made it this far, all our checks are complete! Return the current set.
-                                        return s;
-                                    }
-                                }
-                                // If the character doesn't appear in multiple versions and the set is from their debut title...
-                                if (Appears_In_All_Versions_Check(s) == false && s.Character_Debut == "Yes")
-                                {
-                                    // All our checks are complete! Return the current set.
-                                    return s;
-                                }
-                            }
-                            // If not, check if the sprite set is from the character's debut title.
-                            else if (s.Character_Debut == "Yes")
-                            {
-                                // If we made it this far, all our checks are complete! Return the current set.
-                                return s;
-                            }
-                        }
-                        // If the user did specify a sprite set version in their command, let's make sure we get the right set!
-                        else if (command_data.Sprite_Set_Version != "")
-                        {
-                            // First, convert the user's input title into one we can use.
-                            string input_template = InputToTemplate(account, command_data.Sprite_Set_Version);
-
-                            // Check if the set's origin matches the user's input template.
-                            if (s.Origin == input_template)
-                            {
-                                // If we made it this far, all our checks are complete! Return the current set.
-                                return s;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return null;
         }
 
         public static OfficialSetData GetSpriteSetInfo(UserInfoFields account, MakerCommandData command_data)
@@ -2026,6 +1954,30 @@ namespace SocialLinker.Core.LocalStorageTables
             graphics.DrawImage(bitmap_copy, 0, 0, width, height);
 
             return new_bitmap;
+        }
+
+        public static bool Is_Holiday(DateTime user_time)
+        {
+            HolidayDataMethods holiday_methods = new HolidayDataMethods(user_time);
+
+            if (holiday_methods.Is_Holiday(user_time))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool Is_School_Term(DateTime user_time)
+        {
+            AcademicDataMethods academic_methods = new AcademicDataMethods(user_time);
+
+            if (academic_methods.Is_School_Term(user_time))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         // Bustup construction

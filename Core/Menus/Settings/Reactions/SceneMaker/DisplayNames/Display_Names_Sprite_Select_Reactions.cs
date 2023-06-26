@@ -121,10 +121,8 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
 
                 List<int> int_range = Input_Range_To_List(input_string);
 
-                Console.WriteLine($"Int range: {int_range}");
-
                 // Check if reading sprite input failed
-                if (int_range.Count == 0 && new_name_data.Spriteless_Included == "No")
+                if (int_range.Count == 0)
                 {
                     // Send error message
                     menuSession.MenuTimer.Stop();
