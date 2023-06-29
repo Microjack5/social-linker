@@ -83,7 +83,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ Cancel | ✅ Confirm"
+                Text = "↩️ Cancel | ✅ Continue"
             };
 
             embed.WithFooter(footer);
@@ -93,7 +93,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription("" +
-                "Choose to hide content related to certain titles. Select any titles you wish to block (or select nothing), then react with ✅ to continue.\n" +
+                "Choose to hide content related to certain titles. Select any titles you wish to block (or select nothing to reset), then react with ✅ to continue.\n" +
                 "\n" +
                 $"⚙️ **Currently Filtered Titles:**\n" +
                 $"\n" +
