@@ -15,7 +15,6 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
-using System.Globalization;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using SocialLinker.Core.Menus;
@@ -43,6 +42,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         Bitmap rotated_void_layer = new Bitmap(2, 2);
         Bitmap scene_border = new Bitmap(2, 2);
         bool is_spriteless = false;
+        int max_line_length = 810;
+        int max_line_length_before_box_stagnates = 700;
 
         public async Task Render_Quick_Scene_P5_PS4(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
@@ -100,7 +101,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap calendar = new Bitmap(2, 2);
 
             command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P5-PS4", "Dialogue", command_data.Dialogue);
-            List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5-PS4", command_data.Dialogue, 3, 820);
+            List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5-PS4", command_data.Dialogue, 3, max_line_length);
 
             // Textbox layers MUST be rendered here
             Bitmap dialogue_layers = new Bitmap(2, 2);
@@ -203,7 +204,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap calendar = new Bitmap(2, 2);
 
             command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P5-PS4", "Dialogue", command_data.Dialogue);
-            List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5-PS4", command_data.Dialogue, 3, 820);
+            List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5-PS4", command_data.Dialogue, 3, max_line_length);
 
             // Textbox layers MUST be rendered here
             Bitmap dialogue_layers = Combine_System_Textbox_Layers(account, parsed_lines);
@@ -313,9 +314,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Cursor
-                if (length_of_longest_line >= 750)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
-                    cursor_x_coord -= 43;
+                    //cursor_x_coord -= 43;
                 }
 
                 graphics.DrawImage(Render_Dialogue(parsed_dialogue), 0, 0, template_width, template_height);
@@ -365,9 +366,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Cursor
-                if (length_of_longest_line >= 750)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
-                    cursor_x_coord -= 43;
+                    //cursor_x_coord -= 43;
                 }
 
                 graphics.DrawImage(Render_Dialogue(parsed_dialogue), -84, 1, template_width, template_height);
@@ -402,9 +403,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(message_window, 0, 0, template_width, template_height);
 
                 // Cursor
-                if (length_of_longest_line >= 750)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
-                    cursor_x_coord -= 43;
+                    //cursor_x_coord -= 43;
                 }
 
                 graphics.DrawImage(Render_Dialogue(parsed_dialogue), -84, 1, template_width, template_height);
@@ -1083,7 +1084,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 double[] gap_factors = { 0.3, 0.35, 0.4, 0.45, 0.5 };
                 double gap_multiplier = gap_factors[rnd.Next(0, gap_factors.Length)];
 
-                if (length_of_longest_line >= 700)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
                     gap_multiplier = 0.5;
                 }
@@ -1786,7 +1787,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 double[] gap_factors = { 0.3, 0.35, 0.4, 0.45, 0.5 };
                 double gap_multiplier = gap_factors[rnd.Next(0, gap_factors.Length)];
 
-                if (length_of_longest_line >= 700)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
                     gap_multiplier = 0.5;
                 }
@@ -2472,7 +2473,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             Bitmap shading = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//border_shading.png");
-            Bitmap star_layer = Render_Star_Layer();
+
+            var prerendered_star_layers_path = Directory.GetFiles($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//Prerendered", "*.png");
+            var chosen_star_layer_path = prerendered_star_layers_path[rnd.Next(prerendered_star_layers_path.Length)];
+
+            Bitmap star_layer = (Bitmap)System.Drawing.Image.FromFile(chosen_star_layer_path);
 
             using (Graphics graphics = Graphics.FromImage(star_layer))
             {
@@ -2480,7 +2485,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             star_layer = Keep_Pixel_Overlap_General(star_layer, border_main, new Rectangle(0, 0, template_width, template_height));
-
 
             // Now, time to put the template together!
             using (Graphics graphics = Graphics.FromImage(base_template))
@@ -2546,95 +2550,103 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public Bitmap Render_Recursive_Star()
         {
-            int template_width = 8000;
-            int template_height = 8000;
-
-            double start_size = rnd.NextDouble(19.0, 22.0);
-
-            // Make a new bitmap large enough for a working space.
-            Bitmap new_bitmap = new Bitmap(template_width, template_height);
-
-            // Use a graphics object to edit the bitmap.
-            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            try
             {
-                // Create another graphics object. This will establish a cropping region in the shape of a star (for the star itself) to give a greater visual effect.
-                using (Graphics region_crop = Graphics.FromImage(new_bitmap))
+                int template_width = 8000;
+                int template_height = 8000;
+
+                double start_size = rnd.NextDouble(19.0, 21.0);
+
+                // Make a new bitmap large enough for a working space.
+                Bitmap new_bitmap = new Bitmap(template_width, template_height);
+
+                // Use a graphics object to edit the bitmap.
+                using (Graphics graphics = Graphics.FromImage(new_bitmap))
                 {
-                    int alter = 15;
-
-                    // Establish the center point of the star.
-                    Point center_point = new Point(template_width / 2, template_height / 2);
-
-                    // Create an array of ints that will establish the X and Y values of each angle of the star. Even array indexes are X values, odd indexes are Y values.
-                    int[] star_points = new int[] { 0, -227, 58 + alter, -80 - alter, 216, -70, 95 + alter, 32 + alter, 134, 184, 0, 100 + alter, -132, 184, -94 - alter, 32 + alter, -216, -70, -58 - alter, -80 - alter };
-                    //int[] star_points = new int[] { 0, -227, 58, -80, 216, -70, 95, 32, 134, 184, 0, 100, -132, 184, -94, 32, -216, -70, -58, -80 };
-
-                    // Edit each array index by multiplying them by 24. Again, 24 must be the lowest point to get eight layers of stars minimum since the stars will be made in decrements of three. 24 divided by 3 is eight.
-                    for (int i = 0; i < star_points.Length; i++)
+                    // Create another graphics object. This will establish a cropping region in the shape of a star (for the star itself) to give a greater visual effect.
+                    using (Graphics region_crop = Graphics.FromImage(new_bitmap))
                     {
-                        star_points[i] = (int)(star_points[i] * start_size);
-                    }
+                        int alter = 15;
 
-                    // Create points for the star by adding on the star_point indexes to the center_point coordinates.
-                    Point point_1 = new Point(center_point.X + star_points[0], center_point.Y + star_points[1]);
-                    Point point_2 = new Point(center_point.X + star_points[2], center_point.Y + star_points[3]);
-                    Point point_3 = new Point(center_point.X + star_points[4], center_point.Y + star_points[5]);
-                    Point point_4 = new Point(center_point.X + star_points[6], center_point.Y + star_points[7]);
-                    Point point_5 = new Point(center_point.X + star_points[8], center_point.Y + star_points[9]);
-                    Point point_6 = new Point(center_point.X + star_points[10], center_point.Y + star_points[11]);
-                    Point point_7 = new Point(center_point.X + star_points[12], center_point.Y + star_points[13]);
-                    Point point_8 = new Point(center_point.X + star_points[14], center_point.Y + star_points[15]);
-                    Point point_9 = new Point(center_point.X + star_points[16], center_point.Y + star_points[17]);
-                    Point point_10 = new Point(center_point.X + star_points[18], center_point.Y + star_points[19]);
+                        // Establish the center point of the star.
+                        Point center_point = new Point(template_width / 2, template_height / 2);
 
-                    // Add all the points into a point array.
-                    Point[] polyPoints = { point_1, point_2, point_3, point_4, point_5, point_6, point_7, point_8, point_9, point_10 };
+                        // Create an array of ints that will establish the X and Y values of each angle of the star. Even array indexes are X values, odd indexes are Y values.
+                        int[] star_points = new int[] { 0, -227, 58 + alter, -80 - alter, 216, -70, 95 + alter, 32 + alter, 134, 184, 0, 100 + alter, -132, 184, -94 - alter, 32 + alter, -216, -70, -58 - alter, -80 - alter };
+                        //int[] star_points = new int[] { 0, -227, 58, -80, 216, -70, 95, 32, 134, 184, 0, 100, -132, 184, -94, 32, -216, -70, -58, -80 };
 
-                    // Use the point array to create a path and connect the points together
-                    GraphicsPath path = new GraphicsPath();
-                    path.AddPolygon(polyPoints);
-
-                    // Construct a region based on the path
-                    Region region = new Region(path);
-
-                    // Set the clipping region of the Graphics object
-                    region_crop.SetClip(region, CombineMode.Replace);
-
-                    // Now, we start creating the layers of the star itself. 
-                    // Based on the random size determined earlier, create stars of alternating colors while decrementing in size.
-                    for (double i = start_size; i > 0; i = i - 3) //3
-                    {
-                        // start_point_int casts the current double to an int for rounding purposes.
-                        double start_point_int = i;
-
-                        // If the double is even, color the star either black or gray depinding on the star type specified. If it's odd, color it white.
-                        if ((int)start_point_int % 2 == 0)
+                        // Edit each array index by multiplying them by 24. Again, 24 must be the lowest point to get eight layers of stars minimum since the stars will be made in decrements of three. 24 divided by 3 is eight.
+                        for (int i = 0; i < star_points.Length; i++)
                         {
-                            region_crop.DrawImage(Render_Star(i, System.Drawing.Color.Black), 0, 0, template_width, template_height);
+                            star_points[i] = (int)(star_points[i] * start_size);
                         }
-                        else
+
+                        // Create points for the star by adding on the star_point indexes to the center_point coordinates.
+                        Point point_1 = new Point(center_point.X + star_points[0], center_point.Y + star_points[1]);
+                        Point point_2 = new Point(center_point.X + star_points[2], center_point.Y + star_points[3]);
+                        Point point_3 = new Point(center_point.X + star_points[4], center_point.Y + star_points[5]);
+                        Point point_4 = new Point(center_point.X + star_points[6], center_point.Y + star_points[7]);
+                        Point point_5 = new Point(center_point.X + star_points[8], center_point.Y + star_points[9]);
+                        Point point_6 = new Point(center_point.X + star_points[10], center_point.Y + star_points[11]);
+                        Point point_7 = new Point(center_point.X + star_points[12], center_point.Y + star_points[13]);
+                        Point point_8 = new Point(center_point.X + star_points[14], center_point.Y + star_points[15]);
+                        Point point_9 = new Point(center_point.X + star_points[16], center_point.Y + star_points[17]);
+                        Point point_10 = new Point(center_point.X + star_points[18], center_point.Y + star_points[19]);
+
+                        // Add all the points into a point array.
+                        Point[] polyPoints = { point_1, point_2, point_3, point_4, point_5, point_6, point_7, point_8, point_9, point_10 };
+
+                        // Use the point array to create a path and connect the points together
+                        GraphicsPath path = new GraphicsPath();
+                        path.AddPolygon(polyPoints);
+
+                        // Construct a region based on the path
+                        Region region = new Region(path);
+
+                        // Set the clipping region of the Graphics object
+                        region_crop.SetClip(region, CombineMode.Replace);
+
+                        // Now, we start creating the layers of the star itself. 
+                        // Based on the random size determined earlier, create stars of alternating colors while decrementing in size.
+                        for (double i = start_size; i > 0; i = i - 3) //3
                         {
-                            region_crop.DrawImage(Render_Star(i, System.Drawing.Color.FromArgb(16, 16, 16)), 0, 0, template_width, template_height);
+                            // start_point_int casts the current double to an int for rounding purposes.
+                            double start_point_int = i;
+
+                            // If the double is even, color the star either black or gray depinding on the star type specified. If it's odd, color it white.
+                            if ((int)start_point_int % 2 == 0)
+                            {
+                                region_crop.DrawImage(Render_Star(i, System.Drawing.Color.Black), 0, 0, template_width, template_height);
+                            }
+                            else
+                            {
+                                region_crop.DrawImage(Render_Star(i, System.Drawing.Color.FromArgb(16, 16, 16)), 0, 0, template_width, template_height);
+                            }
                         }
                     }
                 }
+
+                Bitmap smaller_template = new Bitmap(600, 600);
+
+                using (Graphics graphics = Graphics.FromImage(smaller_template))
+                {
+                    graphics.DrawImage(new_bitmap, 0, 0, smaller_template.Width, smaller_template.Height);
+                }
+
+                new_bitmap = smaller_template;
+
+                Bitmap star_base = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//star_base.png");
+
+                new_bitmap = Keep_Pixel_Overlap_General(new_bitmap, star_base, new Rectangle(0, 0, star_base.Width, star_base.Height));
+
+                // Return the new bitmap.
+                return new_bitmap;
             }
-
-            Bitmap smaller_template = new Bitmap(600, 600);
-
-            using (Graphics graphics = Graphics.FromImage(smaller_template))
+            catch (Exception ex)
             {
-                graphics.DrawImage(new_bitmap, 0, 0, smaller_template.Width, smaller_template.Height);
+                Console.WriteLine(ex.Message);
+                return new Bitmap(2, 2);
             }
-
-            new_bitmap = smaller_template;
-
-            Bitmap star_base = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//star_base.png");
-
-            new_bitmap = Keep_Pixel_Overlap_General(new_bitmap, star_base, new Rectangle(0, 0, star_base.Width, star_base.Height));
-
-            // Return the new bitmap.
-            return new_bitmap;
         }
 
         public Bitmap Render_Star_Layer()

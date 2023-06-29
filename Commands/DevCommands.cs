@@ -30,7 +30,7 @@ namespace SocialLinker.Commands
                     Console.WriteLine($"Updating account {counter} out of {accounts.Count}\n" +
                         $"ID: {account.RowKey}\n");
 
-                    account.P5R_TS_Caller_Location = "Dynamic";
+                    account.Setting_BG_Upload = "Scale to Fill";
 
                     //if (account.P5_PS4_TS_Panel == "Manual (with Control Panel)")
                     //{

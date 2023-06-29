@@ -177,7 +177,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
             reaction_list.Add(new Emoji("↩️"));
             reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);

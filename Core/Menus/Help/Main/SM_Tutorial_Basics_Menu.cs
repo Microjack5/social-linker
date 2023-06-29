@@ -223,7 +223,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithDescription("" +
                 $"When you find a character you want, use the format **`{BotConfig.bot.cmdPrefix}maker [character]`** to bring up their sprite sheet, or <:SlashCommand:1032644966851281016>**maker_sheet** when using slash commands.\n" +
                 "\n" +
-                "If the character appears in more than one title, this will only show their sprite sheet from the first game they appeared in." +
+                "If the character appears in more than one title, this will only show their sprite sheet from the first game they appeared in.\n" +
                 "To specify their sprite sheet from another title, type one of the game style keywords after their name.");
 
             embed.WithImageUrl("https://i.imgur.com/n6U4wUg.png");

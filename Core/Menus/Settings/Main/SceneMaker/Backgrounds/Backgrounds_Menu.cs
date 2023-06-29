@@ -208,10 +208,11 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.Backgrounds
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.Setting_BG_Upload}`**\n" +
                 "\n" +
-                ":one: Scale to Width\n" +
-                ":two: Scale to Height\n" +
-                ":three: Scale to Fit\n" +
-                ":four: Stretch to Fill\n");
+                ":one: Scale to Width - *Scale backgrounds to span from the left side of a scene to the right side.*\n" +
+                ":two: Scale to Height - *Scale backgrounds to span from the top of a scene to the bottom.*\n" +
+                ":three: Scale to Fit - *Scale backgrounds to view their entirety within a scene.*\n" +
+                ":four: Scale to Fill - *Scale backgrounds to fill the entire scene, maintaining aspect ratio.*\n" +
+                ":five: Stretch to Fill - *Stretch backgrounds to fill the entire scene, disregarding aspect ratio.*\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -257,6 +258,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.Backgrounds
             reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
+            reaction_list.Add(new Emoji("\u0035\ufe0f\u20e3"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);

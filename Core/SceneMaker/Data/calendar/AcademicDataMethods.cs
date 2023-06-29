@@ -72,15 +72,12 @@ namespace SocialLinker.Core.SceneMaker.Data.Calendar
             switch (last_term_notification)
             {
                 case "First Day of School":
-                    Console.WriteLine("In school term! Time to study!");
                     return true;
 
                 case "Closing Ceremony":
-                    Console.WriteLine("Out of school term! Vacation!");
                     return false;
 
                 default:
-                    Console.WriteLine("Hmmm...");
                     return true;
             }
         }

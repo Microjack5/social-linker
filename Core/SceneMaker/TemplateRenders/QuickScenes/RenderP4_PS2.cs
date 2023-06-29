@@ -1019,7 +1019,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     // If the user's setting is at Full HD, set the scaling method to their choice of Bicubic and Nearest Neighbor.
                     if (account.P4_PS2_Resolution == "1440 × 1080")
                     {
-                        switch (account.P3F_Scale)
+                        switch (account.P4_PS2_Scale)
                         {
                             case "Bicubic":
                                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -1037,7 +1037,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
 
                     graphics.CompositingQuality = CompositingQuality.HighQuality;
-                    graphics.DrawImage(copied_input, 0, 0, template_width, template_height);
+                    graphics.DrawImage(copied_input, 0, 0, template_width + 1, template_height + 1);
                 }
 
                 input_template = scaled_bitmap;

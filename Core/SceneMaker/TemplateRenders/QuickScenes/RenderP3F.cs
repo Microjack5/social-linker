@@ -1444,7 +1444,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
 
                     graphics.CompositingQuality = CompositingQuality.HighQuality;
-                    graphics.DrawImage(copied_input, 0, 0, template_width, template_height);
+                    graphics.DrawImage(copied_input, 0, 0, template_width + 1, template_height + 1);
                 }
 
                 input_template = scaled_bitmap;

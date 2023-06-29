@@ -466,7 +466,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     break;
             }
 
-            DisplayNameTableData custom_name_data = DisplayNameLogging.GetCustomName(user_id, set_data, bustup_data);
+            DisplayNameTableData custom_name_data = DisplayNameLogging.GetCustomName(user_id, command_data, set_data, bustup_data);
 
             if (custom_name_data == null)
             {
@@ -1129,27 +1129,13 @@ namespace SocialLinker.Core.LocalStorageTables
                         return;
 
                     case "P5-PS4":
-                        if (sl_command.User.Id == 222504679878164481 || sl_command.User.Id == 981191816412028930)
-                        {
-                            RenderP5_PS4 p5_ps4_render = new RenderP5_PS4();
-                            await p5_ps4_render.Render_Quick_Scene_P5_PS4(sl_command, set_data, command_data);
-                        }
-                        else
-                        {
-                            await sl_command.Channel.SendMessageAsync("The P5 scene maker is not available for use at the moment.");
-                        }
+                        RenderP5_PS4 p5_ps4_render = new RenderP5_PS4();
+                        await p5_ps4_render.Render_Quick_Scene_P5_PS4(sl_command, set_data, command_data);
                         return;
 
                     case "P5R":
-                        if (sl_command.User.Id == 222504679878164481 || sl_command.User.Id == 981191816412028930)
-                        {
-                            RenderP5R p5r_render = new RenderP5R();
-                            await p5r_render.Render_Quick_Scene_P5R(sl_command, set_data, command_data);
-                        }
-                        else
-                        {
-                            await sl_command.Channel.SendMessageAsync("The P5R scene maker is not available for use at the moment.");
-                        }
+                        RenderP5R p5r_render = new RenderP5R();
+                        await p5r_render.Render_Quick_Scene_P5R(sl_command, set_data, command_data);
                         return;
 
                     case "P5S":
@@ -1753,18 +1739,6 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
             }
 
-            // Render the uploaded image based on the user's background settings.
-            //switch (account.Setting_BG_Upload)
-            //{
-            //    case "Maintain Aspect Ratio": // Scale to Height
-            //        background = Scale_To_Fill(background, template_width, template_height);
-            //        break;
-
-            //    case "Stretch to Fit": // Stretch to Fill
-            //        background = Stretch_To_Fill(background, template_width, template_height);
-            //        break;
-            //}
-
             switch (account.Setting_BG_Upload)
             {
                 case "Scale to Width":
@@ -1777,6 +1751,10 @@ namespace SocialLinker.Core.LocalStorageTables
 
                 case "Scale to Fit":
                     background = Scale_To_Fit(background, template_width, template_height);
+                    break;
+
+                case "Scale to Fill":
+                    background = Scale_To_Fill(background, template_width, template_height);
                     break;
 
                 case "Stretch to Fill":
@@ -1910,6 +1888,42 @@ namespace SocialLinker.Core.LocalStorageTables
             var image = new Bitmap(scrBitmap);
 
             float scale = Math.Min(width / image.Width, height / image.Height);
+
+            var bmp = new Bitmap((int)width, (int)height);
+            var graph = Graphics.FromImage(bmp);
+
+            // uncomment for higher quality output
+            graph.InterpolationMode = InterpolationMode.High;
+            graph.CompositingQuality = CompositingQuality.HighQuality;
+            graph.SmoothingMode = SmoothingMode.AntiAlias;
+
+            bmp.SetResolution(96, 96);
+
+            var scaleWidth = (int)(image.Width * scale);
+            var scaleHeight = (int)(image.Height * scale);
+
+            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
+
+            return bmp;
+        }
+
+        public static Bitmap Scale_To_Fill(Bitmap scrBitmap, int template_width, int template_height)
+        {
+            float width = template_width;
+            float height = template_height;
+
+            var image = new Bitmap(scrBitmap);
+
+            float scale = 0;
+
+            if (scrBitmap.Width <= scrBitmap.Height)
+            {
+                scale = width / image.Width;
+            }
+            else
+            {
+                scale = height / image.Height;
+            }
 
             var bmp = new Bitmap((int)width, (int)height);
             var graph = Graphics.FromImage(bmp);

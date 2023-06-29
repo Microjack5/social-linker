@@ -18,6 +18,7 @@ using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using SocialLinker.Core.Menus;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -43,6 +44,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         Bitmap scene_border = new Bitmap(2, 2);
         bool is_spriteless = false;
         DateTime user_time = default;
+        int max_line_length = 810;
+        int max_line_length_before_box_stagnates = 700;
 
         public async Task Render_Quick_Scene_P5R(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
@@ -101,7 +104,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap calendar = new Bitmap(2, 2);
 
             command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P5R", "Dialogue", command_data.Dialogue);
-            List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5R", command_data.Dialogue, 3, 820);
+            List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5R", command_data.Dialogue, 3, max_line_length);
 
             // Textbox layers MUST be rendered here
             Bitmap dialogue_layers = new Bitmap(2, 2);
@@ -205,7 +208,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap calendar = new Bitmap(2, 2);
 
             command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P5R", "Dialogue", command_data.Dialogue);
-            List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5R", command_data.Dialogue, 3, 820);
+            List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P5R", command_data.Dialogue, 3, max_line_length);
 
             // Textbox layers MUST be rendered here
             Bitmap dialogue_layers = Combine_System_Textbox_Layers(account, parsed_lines);
@@ -304,6 +307,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         {
             int number_of_lines = Get_Number_Of_Lines(parsed_dialogue);
             int length_of_longest_line = Get_Max_Line_Length(parsed_dialogue);
+
             Bitmap base_template = new Bitmap(template_width, template_height);
 
             Bitmap nametag = Render_Nametag_Window(display_name);
@@ -338,9 +342,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Cursor
-                if (length_of_longest_line >= 750)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
-                    cursor_x_coord -= 43;
+                    //cursor_x_coord -= 43;
                 }
 
                 graphics.DrawImage(Render_Dialogue(parsed_dialogue), 0, 0, template_width, template_height);
@@ -390,9 +394,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Cursor
-                if (length_of_longest_line >= 750)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
-                    cursor_x_coord -= 43;
+                    //cursor_x_coord -= 43;
                 }
 
                 graphics.DrawImage(Render_Dialogue(parsed_dialogue), -84, 1, template_width, template_height);
@@ -427,9 +431,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(message_window, 0, 0, template_width, template_height);
 
                 // Cursor
-                if (length_of_longest_line >= 750)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
-                    cursor_x_coord -= 43;
+                    //cursor_x_coord -= 43;
                 }
 
                 graphics.DrawImage(Render_Dialogue(parsed_dialogue), -84, 1, template_width, template_height);
@@ -764,6 +768,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     sl_command.MakerCommand.Dialogue_Has_Invalid_Char = true;
                 }
             }
+
+            //pixel_counter = (int)(pixel_counter * 0.875);
 
             return pixel_counter;
         }
@@ -1120,7 +1126,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 double[] gap_factors = { 0.3, 0.35, 0.4, 0.45, 0.5 };
                 double gap_multiplier = gap_factors[rnd.Next(0, gap_factors.Length)];
 
-                if (length_of_longest_line >= 700)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
                     gap_multiplier = 0.5;
                 }
@@ -1823,7 +1829,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 double[] gap_factors = { 0.3, 0.35, 0.4, 0.45, 0.5 };
                 double gap_multiplier = gap_factors[rnd.Next(0, gap_factors.Length)];
 
-                if (length_of_longest_line >= 700)
+                if (length_of_longest_line >= max_line_length_before_box_stagnates)
                 {
                     gap_multiplier = 0.5;
                 }
@@ -2287,7 +2293,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     white_point_2,
                     white_point_3,
                     white_point_4,
-                    white_point_5, 
+                    white_point_5,
                     white_point_6 };
 
             Point[] black_inner_poly_points = {
@@ -2340,6 +2346,303 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(white_layer, 0, 0, template_width, template_height);
                 graphics.DrawImage(black_inner_layer, 0, 0, template_width, template_height);
                 graphics.DrawImage(char_and_bg, 0, 0, template_width, template_height);
+            }
+
+            return base_template;
+        }
+
+        public Bitmap Render_Phone_Call_alt(Bitmap char_and_bg) // Alternate method for generating phone call animations
+        {
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap white_layer = new Bitmap(template_width, template_height);
+            Bitmap black_outer_layer = new Bitmap(template_width, template_height);
+            Bitmap black_inner_layer = new Bitmap(template_width, template_height);
+            Bitmap void_layer = new Bitmap(template_width, template_height);
+
+            SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
+            SolidBrush whiteBrush = new SolidBrush(System.Drawing.Color.White);
+
+            int black_point_1_x_min = -17;
+            int black_point_1_x_max = -13;
+            int black_point_1_y_min = 640;
+            int black_point_1_y_max = 648;
+
+            int black_point_2_x_min = 518;
+            int black_point_2_x_max = 524;
+            int black_point_2_y_min = 531;
+            int black_point_2_y_max = 536;
+
+            int black_point_3_x_min = 676;
+            int black_point_3_x_max = 680;
+            int black_point_3_y_min = 721;
+            int black_point_3_y_max = 732;
+
+            int black_point_4_x_min = 664;
+            int black_point_4_x_max = 671;
+            int black_point_4_y_min = 872;
+            int black_point_4_y_max = 879;
+
+            int black_point_5_x_min = 324;
+            int black_point_5_x_max = 331;
+            int black_point_5_y_min = 1088;
+            int black_point_5_y_max = 1096;
+
+            int black_point_6_x_min = 104;
+            int black_point_6_x_max = 111;
+            int black_point_6_y_min = 1017;
+            int black_point_6_y_max = 1022;
+
+            int black_point_1_x = rnd.Next(black_point_1_x_min, black_point_1_x_max + 1);
+            int black_point_1_y = rnd.Next(black_point_1_y_min, black_point_1_y_max + 1);
+
+            int black_point_2_x = rnd.Next(black_point_2_x_min, black_point_2_x_max + 1);
+            int black_point_2_y = rnd.Next(black_point_2_y_min, black_point_2_y_max + 1);
+
+            int black_point_3_x = rnd.Next(black_point_3_x_min, black_point_3_x_max + 1);
+            int black_point_3_y = rnd.Next(black_point_3_y_min, black_point_3_y_max + 1);
+
+            int black_point_4_x = rnd.Next(black_point_4_x_min, black_point_4_x_max + 1);
+            int black_point_4_y = rnd.Next(black_point_4_y_min, black_point_4_y_max + 1);
+
+            int black_point_5_x = rnd.Next(black_point_5_x_min, black_point_5_x_max + 1);
+            int black_point_5_y = rnd.Next(black_point_5_y_min, black_point_5_y_max + 1);
+
+            int black_point_6_x = rnd.Next(black_point_6_x_min, black_point_6_x_max + 1);
+            int black_point_6_y = rnd.Next(black_point_6_y_min, black_point_6_y_max + 1);
+
+            Point black_point_1 = new Point(black_point_1_x, black_point_1_y);
+            Point black_point_2 = new Point(black_point_2_x, black_point_2_y);
+            Point black_point_3 = new Point(black_point_3_x, black_point_3_y);
+            Point black_point_4 = new Point(black_point_4_x, black_point_4_y);
+            Point black_point_5 = new Point(black_point_5_x, black_point_5_y);
+            Point black_point_6 = new Point(black_point_6_x, black_point_6_y);
+
+            Point white_point_1 = new Point(black_point_1_x + 48, black_point_1_y + 4);
+            Point white_point_2 = new Point(black_point_2_x - 3, black_point_2_y + 10);
+            Point white_point_3 = new Point(black_point_3_x - 7, black_point_3_y + 9);
+            Point white_point_4 = new Point(black_point_4_x - 15, black_point_4_y - 19);
+            Point white_point_5 = new Point(black_point_5_x + 5, black_point_5_y - 37);
+            Point white_point_6 = new Point(black_point_6_x + 13, black_point_6_y - 15);
+
+            Point black_inner_point_1 = new Point(white_point_1.X + 17, white_point_1.Y + 10);
+            Point black_inner_point_2 = new Point(white_point_2.X - 5, white_point_2.Y + 6);
+            Point black_inner_point_3 = new Point(white_point_3.X - 14, white_point_3.Y - 1);
+            Point black_inner_point_4 = new Point(white_point_4.X - 13, white_point_4.Y - 1);
+            Point black_inner_point_5 = new Point(white_point_5.X + 4, white_point_5.Y - 15);
+            Point black_inner_point_6 = new Point(white_point_6.X + 26, white_point_6.Y - 20);
+
+            Point void_point_1 = new Point(black_inner_point_1.X + 14, black_inner_point_1.Y + 5);
+            Point void_point_2 = new Point(black_inner_point_2.X - 6, black_inner_point_2.Y + 15);
+            Point void_point_3 = new Point(black_inner_point_3.X - 11, black_inner_point_3.Y - 1);
+            Point void_point_4 = new Point(black_inner_point_4.X - 8, black_inner_point_4.Y - 3);
+            Point void_point_5 = new Point(black_inner_point_5.X - 3, black_inner_point_5.Y - 16);
+            Point void_point_6 = new Point(black_inner_point_6.X + 6, black_inner_point_6.Y - 5);
+
+            Point[] black_poly_points = {
+                    black_point_1,
+                    black_point_2,
+                    black_point_3,
+                    black_point_4,
+                    black_point_5,
+                    black_point_6 };
+
+            Point[] white_poly_points = {
+                    white_point_1,
+                    white_point_2,
+                    white_point_3,
+                    white_point_4,
+                    white_point_5,
+                    white_point_6 };
+
+            Point[] black_inner_poly_points = {
+                    black_inner_point_1,
+                    black_inner_point_2,
+                    black_inner_point_3,
+                    black_inner_point_4,
+                    black_inner_point_5,
+                    black_inner_point_6 };
+
+            Point[] void_poly_points = {
+                    void_point_1,
+                    void_point_2,
+                    void_point_3,
+                    void_point_4,
+                    void_point_5,
+                    void_point_6 };
+
+            // Lines
+            var black_inner_poly_1_line_1 = new Line(black_point_1, black_point_2);
+            var black_inner_poly_1_line_2 = new Line(black_point_2, black_point_3);
+            var black_inner_poly_1_line_3 = new Line(black_point_3, black_point_4);
+            var black_inner_poly_1_line_4 = new Line(black_point_4, black_point_5);
+            var black_inner_poly_1_line_5 = new Line(black_point_5, black_point_6);
+            var black_inner_poly_1_line_6 = new Line(black_point_6, black_point_1);
+
+            var white_inner_poly_1_line_1 = new Line(white_point_1, white_point_2);
+            var white_inner_poly_1_line_2 = new Line(white_point_2, white_point_3);
+            var white_inner_poly_1_line_3 = new Line(white_point_3, white_point_4);
+            var white_inner_poly_1_line_4 = new Line(white_point_4, white_point_5);
+            var white_inner_poly_1_line_5 = new Line(white_point_5, white_point_6);
+            var white_inner_poly_1_line_6 = new Line(white_point_6, white_point_1);
+
+            var black_inner_poly_2_line_1 = new Line(black_inner_point_1, black_inner_point_2);
+            var black_inner_poly_2_line_2 = new Line(black_inner_point_2, black_inner_point_3);
+            var black_inner_poly_2_line_3 = new Line(black_inner_point_3, black_inner_point_4);
+            var black_inner_poly_2_line_4 = new Line(black_inner_point_4, black_inner_point_5);
+            var black_inner_poly_2_line_5 = new Line(black_inner_point_5, black_inner_point_6);
+            var black_inner_poly_2_line_6 = new Line(black_inner_point_6, black_inner_point_1);
+
+            var void_poly_line_1 = new Line(void_point_1, void_point_2);
+            var void_poly_line_2 = new Line(void_point_2, void_point_3);
+            var void_poly_line_3 = new Line(void_point_3, void_point_4);
+            var void_poly_line_4 = new Line(void_point_4, void_point_5);
+            var void_poly_line_5 = new Line(void_point_5, void_point_6);
+            var void_poly_line_6 = new Line(void_point_6, void_point_1);
+
+            // Points
+            int number_of_points = 40;
+
+            var black_inner_poly_1_line_1_points = black_inner_poly_1_line_1.getPoints(number_of_points);
+            var black_inner_poly_1_line_2_points = black_inner_poly_1_line_2.getPoints(number_of_points);
+            var black_inner_poly_1_line_3_points = black_inner_poly_1_line_3.getPoints(number_of_points);
+            var black_inner_poly_1_line_4_points = black_inner_poly_1_line_4.getPoints(number_of_points);
+            var black_inner_poly_1_line_5_points = black_inner_poly_1_line_5.getPoints(number_of_points);
+            var black_inner_poly_1_line_6_points = black_inner_poly_1_line_6.getPoints(number_of_points);
+
+            black_inner_poly_1_line_1_points[10] = new Point(black_inner_poly_1_line_1_points[10].X, black_inner_poly_1_line_1_points[10].Y - 50);
+            black_inner_poly_1_line_1_points[11] = new Point(black_inner_poly_1_line_1_points[11].X, black_inner_poly_1_line_1_points[11].Y + 25);
+
+            var white_inner_poly_1_line_1_points = new Point[number_of_points];
+            var white_inner_poly_1_line_2_points = new Point[number_of_points];
+            var white_inner_poly_1_line_3_points = new Point[number_of_points];
+            var white_inner_poly_1_line_4_points = new Point[number_of_points];
+            var white_inner_poly_1_line_5_points = new Point[number_of_points];
+            var white_inner_poly_1_line_6_points = new Point[number_of_points];
+
+            for (int i = 0; i < number_of_points; i++)
+            {
+                white_inner_poly_1_line_1_points[i] = new Point(black_inner_poly_1_line_1_points[i].X + 48, black_inner_poly_1_line_1_points[i].Y + 4);
+                white_inner_poly_1_line_2_points[i] = new Point(black_inner_poly_1_line_2_points[i].X - 3, black_inner_poly_1_line_2_points[i].Y + 10);
+                white_inner_poly_1_line_3_points[i] = new Point(black_inner_poly_1_line_3_points[i].X - 7, black_inner_poly_1_line_3_points[i].Y + 9);
+                white_inner_poly_1_line_4_points[i] = new Point(black_inner_poly_1_line_4_points[i].X - 15, black_inner_poly_1_line_4_points[i].Y - 19);
+                white_inner_poly_1_line_5_points[i] = new Point(black_inner_poly_1_line_5_points[i].X + 5, black_inner_poly_1_line_5_points[i].Y - 37);
+                white_inner_poly_1_line_6_points[i] = new Point(black_inner_poly_1_line_6_points[i].X + 13, black_inner_poly_1_line_6_points[i].Y - 15);
+            }
+
+            var black_inner_poly_2_line_1_points = new Point[number_of_points];
+            var black_inner_poly_2_line_2_points = new Point[number_of_points];
+            var black_inner_poly_2_line_3_points = new Point[number_of_points];
+            var black_inner_poly_2_line_4_points = new Point[number_of_points];
+            var black_inner_poly_2_line_5_points = new Point[number_of_points];
+            var black_inner_poly_2_line_6_points = new Point[number_of_points];
+
+            for (int i = 0; i < number_of_points; i++)
+            {
+                black_inner_poly_2_line_1_points[i] = new Point(white_inner_poly_1_line_1_points[i].X + 17, white_inner_poly_1_line_1_points[i].Y + 10);
+                black_inner_poly_2_line_2_points[i] = new Point(white_inner_poly_1_line_2_points[i].X - 5, white_inner_poly_1_line_2_points[i].Y + 6);
+                black_inner_poly_2_line_3_points[i] = new Point(white_inner_poly_1_line_3_points[i].X - 14, white_inner_poly_1_line_3_points[i].Y - 1);
+                black_inner_poly_2_line_4_points[i] = new Point(white_inner_poly_1_line_4_points[i].X - 13, white_inner_poly_1_line_4_points[i].Y - 1);
+                black_inner_poly_2_line_5_points[i] = new Point(white_inner_poly_1_line_5_points[i].X + 4, white_inner_poly_1_line_5_points[i].Y - 15);
+                black_inner_poly_2_line_6_points[i] = new Point(white_inner_poly_1_line_6_points[i].X + 26, white_inner_poly_1_line_6_points[i].Y - 20);
+            }
+
+            //var void_poly_line_1_points = new Point[20];
+            //var void_poly_line_2_points = new Point[20];
+            //var void_poly_line_3_points = new Point[20];
+            //var void_poly_line_4_points = new Point[20];
+            //var void_poly_line_5_points = new Point[20];
+            //var void_poly_line_6_points = new Point[20];
+
+            //for (int i = 0; i < number_of_points; i++)
+            //{
+            //    void_poly_line_1_points[i] = new Point(black_inner_poly_2_line_1_points[i].X + 14, black_inner_poly_2_line_1_points[i].Y + 5);
+            //    void_poly_line_2_points[i] = new Point(black_inner_poly_2_line_2_points[i].X - 6, black_inner_poly_2_line_2_points[i].Y + 15);
+            //    void_poly_line_3_points[i] = new Point(black_inner_poly_2_line_3_points[i].X - 11, black_inner_poly_2_line_3_points[i].Y - 1);
+            //    void_poly_line_4_points[i] = new Point(black_inner_poly_2_line_4_points[i].X - 8, black_inner_poly_2_line_4_points[i].Y - 3);
+            //    void_poly_line_5_points[i] = new Point(black_inner_poly_2_line_5_points[i].X - 3, black_inner_poly_2_line_5_points[i].Y - 16);
+            //    void_poly_line_6_points[i] = new Point(black_inner_poly_2_line_6_points[i].X + 6, black_inner_poly_2_line_6_points[i].Y - 5);
+            //}
+
+            Point[] black_inner_poly_1 =
+                black_inner_poly_1_line_1_points
+                .Concat(black_inner_poly_1_line_2_points)
+                .Concat(black_inner_poly_1_line_3_points)
+                .Concat(black_inner_poly_1_line_4_points)
+                .Concat(black_inner_poly_1_line_5_points)
+                .Concat(black_inner_poly_1_line_6_points).ToArray();
+
+            Point[] white_inner_poly_1 =
+                white_inner_poly_1_line_1_points
+                .Concat(white_inner_poly_1_line_2_points)
+                .Concat(white_inner_poly_1_line_3_points)
+                .Concat(white_inner_poly_1_line_4_points)
+                .Concat(white_inner_poly_1_line_5_points)
+                .Concat(white_inner_poly_1_line_6_points).ToArray();
+
+            Point[] black_inner_poly_2 =
+                black_inner_poly_2_line_1_points
+                .Concat(black_inner_poly_2_line_2_points)
+                .Concat(black_inner_poly_2_line_3_points)
+                .Concat(black_inner_poly_2_line_4_points)
+                .Concat(black_inner_poly_2_line_5_points)
+                .Concat(black_inner_poly_2_line_6_points).ToArray();
+
+            //Point[] void_poly_1 =
+            //    void_poly_line_1_points
+            //    .Concat(void_poly_line_2_points)
+            //    .Concat(void_poly_line_3_points)
+            //    .Concat(void_poly_line_4_points)
+            //    .Concat(void_poly_line_5_points)
+            //    .Concat(void_poly_line_6_points).ToArray();
+
+            Bitmap test_bitmap = new Bitmap(template_width, template_height);
+
+            using (Graphics graphics = Graphics.FromImage(test_bitmap))
+            {
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                graphics.FillPolygon(blackBrush, black_inner_poly_1);
+                graphics.FillPolygon(whiteBrush, white_inner_poly_1);
+                graphics.FillPolygon(blackBrush, black_inner_poly_2);
+                //graphics.FillPolygon(whiteBrush, void_poly_1);
+            }
+
+            // =================================
+
+            //using (Graphics graphics = Graphics.FromImage(black_outer_layer))
+            //{
+            //    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //    graphics.FillPolygon(blackBrush, black_poly_points);
+            //}
+
+            //using (Graphics graphics = Graphics.FromImage(white_layer))
+            //{
+            //    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //    graphics.FillPolygon(whiteBrush, white_poly_points);
+            //}
+
+            //using (Graphics graphics = Graphics.FromImage(black_inner_layer))
+            //{
+            //    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //    graphics.FillPolygon(blackBrush, black_inner_poly_points);
+            //}
+
+            //using (Graphics graphics = Graphics.FromImage(void_layer))
+            //{
+            //    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //    graphics.FillPolygon(whiteBrush, void_poly_points);
+            //}
+
+            //char_and_bg = Keep_Pixel_Overlap_General(char_and_bg, void_layer, new Rectangle(0, 0, template_width, template_height));
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                //graphics.DrawImage(black_outer_layer, 0, 0, template_width, template_height);
+                //graphics.DrawImage(white_layer, 0, 0, template_width, template_height);
+                //graphics.DrawImage(black_inner_layer, 0, 0, template_width, template_height);
+                //graphics.DrawImage(char_and_bg, 0, 0, template_width, template_height);
+                graphics.DrawImage(test_bitmap, 0, 0, template_width, template_height);
             }
 
             return base_template;
@@ -2806,7 +3109,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
 
             Bitmap shading = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Border//border_shading.png");
-            Bitmap star_layer = Render_Star_Layer();
+            
+            var prerendered_star_layers_path = Directory.GetFiles($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Border//Prerendered", "*.png");
+            var chosen_star_layer_path = prerendered_star_layers_path[rnd.Next(prerendered_star_layers_path.Length)];
+
+            Bitmap star_layer = (Bitmap)System.Drawing.Image.FromFile(chosen_star_layer_path);
 
             using (Graphics graphics = Graphics.FromImage(star_layer))
             {
@@ -2879,95 +3186,103 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public Bitmap Render_Recursive_Star()
         {
-            int template_width = 8000;
-            int template_height = 8000;
-
-            double start_size = rnd.NextDouble(19.0, 22.0);
-
-            // Make a new bitmap large enough for a working space.
-            Bitmap new_bitmap = new Bitmap(template_width, template_height);
-
-            // Use a graphics object to edit the bitmap.
-            using (Graphics graphics = Graphics.FromImage(new_bitmap))
+            try
             {
-                // Create another graphics object. This will establish a cropping region in the shape of a star (for the star itself) to give a greater visual effect.
-                using (Graphics region_crop = Graphics.FromImage(new_bitmap))
+                int template_width = 8000;
+                int template_height = 8000;
+
+                double start_size = rnd.NextDouble(19.0, 21.0);
+
+                // Make a new bitmap large enough for a working space.
+                Bitmap new_bitmap = new Bitmap(template_width, template_height);
+
+                // Use a graphics object to edit the bitmap.
+                using (Graphics graphics = Graphics.FromImage(new_bitmap))
                 {
-                    int alter = 15;
-
-                    // Establish the center point of the star.
-                    Point center_point = new Point(template_width / 2, template_height / 2);
-
-                    // Create an array of ints that will establish the X and Y values of each angle of the star. Even array indexes are X values, odd indexes are Y values.
-                    int[] star_points = new int[] { 0, -227, 58 + alter, -80 - alter, 216, -70, 95 + alter, 32 + alter, 134, 184, 0, 100 + alter, -132, 184, -94 - alter, 32 + alter, -216, -70, -58 - alter, -80 - alter };
-                    //int[] star_points = new int[] { 0, -227, 58, -80, 216, -70, 95, 32, 134, 184, 0, 100, -132, 184, -94, 32, -216, -70, -58, -80 };
-
-                    // Edit each array index by multiplying them by 24. Again, 24 must be the lowest point to get eight layers of stars minimum since the stars will be made in decrements of three. 24 divided by 3 is eight.
-                    for (int i = 0; i < star_points.Length; i++)
+                    // Create another graphics object. This will establish a cropping region in the shape of a star (for the star itself) to give a greater visual effect.
+                    using (Graphics region_crop = Graphics.FromImage(new_bitmap))
                     {
-                        star_points[i] = (int)(star_points[i] * start_size);
-                    }
+                        int alter = 15;
 
-                    // Create points for the star by adding on the star_point indexes to the center_point coordinates.
-                    Point point_1 = new Point(center_point.X + star_points[0], center_point.Y + star_points[1]);
-                    Point point_2 = new Point(center_point.X + star_points[2], center_point.Y + star_points[3]);
-                    Point point_3 = new Point(center_point.X + star_points[4], center_point.Y + star_points[5]);
-                    Point point_4 = new Point(center_point.X + star_points[6], center_point.Y + star_points[7]);
-                    Point point_5 = new Point(center_point.X + star_points[8], center_point.Y + star_points[9]);
-                    Point point_6 = new Point(center_point.X + star_points[10], center_point.Y + star_points[11]);
-                    Point point_7 = new Point(center_point.X + star_points[12], center_point.Y + star_points[13]);
-                    Point point_8 = new Point(center_point.X + star_points[14], center_point.Y + star_points[15]);
-                    Point point_9 = new Point(center_point.X + star_points[16], center_point.Y + star_points[17]);
-                    Point point_10 = new Point(center_point.X + star_points[18], center_point.Y + star_points[19]);
+                        // Establish the center point of the star.
+                        Point center_point = new Point(template_width / 2, template_height / 2);
 
-                    // Add all the points into a point array.
-                    Point[] polyPoints = { point_1, point_2, point_3, point_4, point_5, point_6, point_7, point_8, point_9, point_10 };
+                        // Create an array of ints that will establish the X and Y values of each angle of the star. Even array indexes are X values, odd indexes are Y values.
+                        int[] star_points = new int[] { 0, -227, 58 + alter, -80 - alter, 216, -70, 95 + alter, 32 + alter, 134, 184, 0, 100 + alter, -132, 184, -94 - alter, 32 + alter, -216, -70, -58 - alter, -80 - alter };
+                        //int[] star_points = new int[] { 0, -227, 58, -80, 216, -70, 95, 32, 134, 184, 0, 100, -132, 184, -94, 32, -216, -70, -58, -80 };
 
-                    // Use the point array to create a path and connect the points together
-                    GraphicsPath path = new GraphicsPath();
-                    path.AddPolygon(polyPoints);
-
-                    // Construct a region based on the path
-                    Region region = new Region(path);
-
-                    // Set the clipping region of the Graphics object
-                    region_crop.SetClip(region, CombineMode.Replace);
-
-                    // Now, we start creating the layers of the star itself. 
-                    // Based on the random size determined earlier, create stars of alternating colors while decrementing in size.
-                    for (double i = start_size; i > 0; i = i - 3) //3
-                    {
-                        // start_point_int casts the current double to an int for rounding purposes.
-                        double start_point_int = i;
-
-                        // If the double is even, color the star either black or gray depinding on the star type specified. If it's odd, color it white.
-                        if ((int)start_point_int % 2 == 0)
+                        // Edit each array index by multiplying them by 24. Again, 24 must be the lowest point to get eight layers of stars minimum since the stars will be made in decrements of three. 24 divided by 3 is eight.
+                        for (int i = 0; i < star_points.Length; i++)
                         {
-                            region_crop.DrawImage(Render_Star(i, System.Drawing.Color.Black), 0, 0, template_width, template_height);
+                            star_points[i] = (int)(star_points[i] * start_size);
                         }
-                        else
+
+                        // Create points for the star by adding on the star_point indexes to the center_point coordinates.
+                        Point point_1 = new Point(center_point.X + star_points[0], center_point.Y + star_points[1]);
+                        Point point_2 = new Point(center_point.X + star_points[2], center_point.Y + star_points[3]);
+                        Point point_3 = new Point(center_point.X + star_points[4], center_point.Y + star_points[5]);
+                        Point point_4 = new Point(center_point.X + star_points[6], center_point.Y + star_points[7]);
+                        Point point_5 = new Point(center_point.X + star_points[8], center_point.Y + star_points[9]);
+                        Point point_6 = new Point(center_point.X + star_points[10], center_point.Y + star_points[11]);
+                        Point point_7 = new Point(center_point.X + star_points[12], center_point.Y + star_points[13]);
+                        Point point_8 = new Point(center_point.X + star_points[14], center_point.Y + star_points[15]);
+                        Point point_9 = new Point(center_point.X + star_points[16], center_point.Y + star_points[17]);
+                        Point point_10 = new Point(center_point.X + star_points[18], center_point.Y + star_points[19]);
+
+                        // Add all the points into a point array.
+                        Point[] polyPoints = { point_1, point_2, point_3, point_4, point_5, point_6, point_7, point_8, point_9, point_10 };
+
+                        // Use the point array to create a path and connect the points together
+                        GraphicsPath path = new GraphicsPath();
+                        path.AddPolygon(polyPoints);
+
+                        // Construct a region based on the path
+                        Region region = new Region(path);
+
+                        // Set the clipping region of the Graphics object
+                        region_crop.SetClip(region, CombineMode.Replace);
+
+                        // Now, we start creating the layers of the star itself. 
+                        // Based on the random size determined earlier, create stars of alternating colors while decrementing in size.
+                        for (double i = start_size; i > 0; i = i - 3) //3
                         {
-                            region_crop.DrawImage(Render_Star(i, System.Drawing.Color.FromArgb(16, 16, 16)), 0, 0, template_width, template_height);
+                            // start_point_int casts the current double to an int for rounding purposes.
+                            double start_point_int = i;
+
+                            // If the double is even, color the star either black or gray depinding on the star type specified. If it's odd, color it white.
+                            if ((int)start_point_int % 2 == 0)
+                            {
+                                region_crop.DrawImage(Render_Star(i, System.Drawing.Color.Black), 0, 0, template_width, template_height);
+                            }
+                            else
+                            {
+                                region_crop.DrawImage(Render_Star(i, System.Drawing.Color.FromArgb(16, 16, 16)), 0, 0, template_width, template_height);
+                            }
                         }
                     }
                 }
+
+                Bitmap smaller_template = new Bitmap(600, 600);
+
+                using (Graphics graphics = Graphics.FromImage(smaller_template))
+                {
+                    graphics.DrawImage(new_bitmap, 0, 0, smaller_template.Width, smaller_template.Height);
+                }
+
+                new_bitmap = smaller_template;
+
+                Bitmap star_base = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Border//star_base.png");
+
+                new_bitmap = Keep_Pixel_Overlap_General(new_bitmap, star_base, new Rectangle(0, 0, star_base.Width, star_base.Height));
+
+                // Return the new bitmap.
+                return new_bitmap;
             }
-
-            Bitmap smaller_template = new Bitmap(600, 600);
-
-            using (Graphics graphics = Graphics.FromImage(smaller_template))
+            catch (Exception ex)
             {
-                graphics.DrawImage(new_bitmap, 0, 0, smaller_template.Width, smaller_template.Height);
+                Console.WriteLine(ex.Message);
+                return new Bitmap(2, 2);
             }
-
-            new_bitmap = smaller_template;
-
-            Bitmap star_base = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Border//star_base.png");
-
-            new_bitmap = Keep_Pixel_Overlap_General(new_bitmap, star_base, new Rectangle(0, 0, star_base.Width, star_base.Height));
-
-            // Return the new bitmap.
-            return new_bitmap;
         }
 
         public Bitmap Render_Star_Layer()
@@ -5582,6 +5897,38 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             double maxValue)
         {
             return random.NextDouble() * (maxValue - minValue) + minValue;
+        }
+    }
+
+    // Class from https://stackoverflow.com/questions/16028752/how-do-i-get-all-the-points-between-two-point-objects
+    public class Line
+    {
+        public Point p1, p2;
+
+        public Line(Point p1, Point p2)
+        {
+            this.p1 = p1;
+            this.p2 = p2;
+        }
+
+        public Point[] getPoints(int quantity)
+        {
+            var points = new Point[quantity];
+            int ydiff = p2.Y - p1.Y, xdiff = p2.X - p1.X;
+            double slope = (double)(p2.Y - p1.Y) / (p2.X - p1.X);
+            double x, y;
+
+            --quantity;
+
+            for (double i = 0; i < quantity; i++)
+            {
+                y = slope == 0 ? 0 : ydiff * (i / quantity);
+                x = slope == 0 ? xdiff * (i / quantity) : y / slope;
+                points[(int)i] = new Point((int)Math.Round(x) + p1.X, (int)Math.Round(y) + p1.Y);
+            }
+
+            points[quantity] = p2;
+            return points;
         }
     }
 }

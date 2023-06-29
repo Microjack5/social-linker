@@ -161,6 +161,26 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.Backgrounds
                 var account = UserInfoClasses.GetAccount(menuSession.User);
 
                 // Assign the chosen setting to the user's account.
+                account.Setting_BG_Upload = "Scale to Fill";
+
+                //Update the user's account.
+                UserInfoClasses.UpdateAccount(account);
+
+                // Stop the timeout timer associated with the menu.
+                menuSession.MenuTimer.Stop();
+
+                // Go to a new menu.
+                _ = Backgrounds_Menu.Backgrounds_Upload_Settings_Confirm(menuSession.User, menuSession.MenuMessage);
+                return Task.CompletedTask;
+            }
+
+            // Keycap Five
+            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
+            {
+                // Get the account information of the user.
+                var account = UserInfoClasses.GetAccount(menuSession.User);
+
+                // Assign the chosen setting to the user's account.
                 account.Setting_BG_Upload = "Stretch to Fill";
 
                 //Update the user's account.

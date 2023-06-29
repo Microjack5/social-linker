@@ -97,43 +97,36 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Time to put it all together!
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                try
+                // Create and assign bitmap variables for the assets needed.
+                Bitmap message_window = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3P//Main//message_window.png");
+                Bitmap cursor = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3P//Main//cursor.png");
+
+                // Draw the layer with the user's colored default background if it exists.
+                graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
+
+                // Draw the user's background to the base template.
+                graphics.DrawImage(background, 0, 0, template_width, template_height);
+
+                // Draw the character bust-up to the template if the base sprite number is not '0'.
+                if (command_data.Base_Sprite != 0)
                 {
-                    // Create and assign bitmap variables for the assets needed.
-                    Bitmap message_window = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3P//Main//message_window.png");
-                    Bitmap cursor = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3P//Main//cursor.png");
-
-                    // Draw the layer with the user's colored default background if it exists.
-                    graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
-
-                    // Draw the user's background to the base template.
-                    graphics.DrawImage(background, 0, 0, template_width, template_height);
-
-                    // Draw the character bust-up to the template if the base sprite number is not '0'.
-                    if (command_data.Base_Sprite != 0)
-                    {
-                        Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, set_data);
-                        graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
-                    }
-
-                    // Draw the message window layer to the base template.
-                    message_window = Tint_Message_Window(message_window);
-                    graphics.DrawImage(message_window, 0, 0, template_width, template_height);
-
-                    // Draw the cursor layer to the base template.
-                    cursor = Color_Cursor(cursor, account.P3P_TS_Color);
-                    graphics.DrawImage(cursor, 0, 0, template_width, template_height);
-
-                    // If the user has the HUD enabled, render it to the template as well.
-                    if (account.P3P_TS_HUD != "None")
-                    {
-                        graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
-                        graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
-                    }
+                    Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, set_data);
+                    graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
                 }
-                catch (Exception e)
+
+                // Draw the message window layer to the base template.
+                message_window = Tint_Message_Window(message_window);
+                graphics.DrawImage(message_window, 0, 0, template_width, template_height);
+
+                // Draw the cursor layer to the base template.
+                cursor = Color_Cursor(cursor, account.P3P_TS_Color);
+                graphics.DrawImage(cursor, 0, 0, template_width, template_height);
+
+                // If the user has the HUD enabled, render it to the template as well.
+                if (account.P3P_TS_HUD != "None")
                 {
-                    Console.WriteLine(e);
+                    graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
+                    graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
                 }
             }
 
@@ -1456,15 +1449,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int scaled_width = template_width;
             int scaled_height = template_height;
 
-            if (account.P3P_Resolution == "320 × 240")
+            if (account.P3P_Resolution == "480 × 272")
             {
                 // Do nothing if setting is at default resolution
             }
             else
             {
-                if (account.P3P_Resolution == "1440 × 1088")
+                if (account.P3P_Resolution == "1920 × 1088")
                 {
-                    scaled_width = 1440;
+                    scaled_width = 1920;
                     scaled_height = 1088;
                 }
 
@@ -1485,7 +1478,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
 
                     graphics.CompositingQuality = CompositingQuality.HighQuality;
-                    graphics.DrawImage(copied_input, 0, 0, scaled_width, scaled_height);
+                    graphics.DrawImage(copied_input, 0, 0, scaled_width + 2, scaled_height + 2);
                 }
 
                 input_template = scaled_bitmap;

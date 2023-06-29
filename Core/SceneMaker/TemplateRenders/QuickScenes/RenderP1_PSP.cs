@@ -822,7 +822,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     }
 
                     graphics.CompositingQuality = CompositingQuality.HighQuality;
-                    graphics.DrawImage(copied_input, 0, 0, 1920, 1088);
+                    graphics.DrawImage(copied_input, 0, 0, scaled_width + 2, scaled_height + 2);
                 }
 
                 input_template = scaled_bitmap;
