@@ -29,7 +29,7 @@ namespace SocialLinker
             _client.JoinedGuild += Core.Menus.InitialUsage.InviteMessage.SendInviteMessage;
             await _client.LoginAsync(TokenType.Bot, BotConfig.bot.token);
             await _client.StartAsync();
-            await _client.SetGameAsync("......");
+            //await _client.SetGameAsync("......");
             _handler = new CommandHandler();
             await _handler.InitializeAsync(_client);
             await Task.Delay(-1);
