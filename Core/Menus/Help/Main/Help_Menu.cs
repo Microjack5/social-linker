@@ -112,7 +112,6 @@ namespace SocialLinker.Core.Menus.Help.Main
                 $"`{BotConfig.bot.cmdPrefix}punch [user]`\n");
             embed.AddField("Links",
                 "[Social Linker Support](https://discord.gg/ZbEeZRjVvU)\n" +
-                "[Add Social Linker to your Server](https://discord.gg/ZbEeZRjVvU)\n" +
                 "");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.

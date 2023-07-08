@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Cooldown;
@@ -36,16 +34,12 @@ namespace SocialLinker.Commands
 
             // End of initial usage and cooldown checks.
 
-            //Establish variables for both the user of the command and the user who is pinged
-            SocketUser commandTarget = null;
-            SocketUser commandUser = null;
-
             //Retreive the first mentioned user of the message if there is one
             var mentionedUser = sl_command.Message.MentionedUsers.FirstOrDefault();
 
             //If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
-            commandTarget = mentionedUser ?? sl_command.User;
-            commandUser = sl_command.User;
+            SocketGuildUser commandTarget = mentionedUser as SocketGuildUser ?? sl_command.User as SocketGuildUser;
+            SocketGuildUser commandUser = sl_command.User as SocketGuildUser;
 
             //Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
@@ -66,9 +60,6 @@ namespace SocialLinker.Commands
                 return;
             }
 
-            //If the previous conditions are false, get the command user's account information
-            var account = UserInfoClasses.GetAccount(commandTarget);
-
             //If a user is mentioned and they're not the command user and not a bot, add Expression to both users
             if ((mentionedUser != null) && (mentionedUser != sl_command.User) && (mentionedUser.IsBot == false))
             {
@@ -82,20 +73,19 @@ namespace SocialLinker.Commands
             await Task.CompletedTask;
         }
 
-        public static async void SlapUser(SocialLinkerCommand sl_command, SocketUser command_target)
+        public static async void SlapUser(SocialLinkerCommand sl_command, SocketGuildUser command_target)
         {
-            var command_user = sl_command.User;
+            var command_user = sl_command.User as SocketGuildUser;
             var channel = sl_command.Channel;
 
             // Retrieve the account information of both the command's user and the command's target.
             var command_user_account = UserInfoClasses.GetAccount(command_user);
-            var command_target_account = UserInfoClasses.GetAccount(command_target);
 
             // Create an embeded message.
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{command_user.Username} slapped {command_target.Username} in the face!",
+                Name = $"{command_user.Nickname ?? command_user.Username} slapped {command_target.Nickname ?? command_target.Username} in the face!",
                 IconUrl = command_user.GetAvatarUrl()
             };
 
@@ -175,7 +165,7 @@ namespace SocialLinker.Commands
 
         public static async void SlapSelf(SocialLinkerCommand sl_command)
         {
-            var user = sl_command.User;
+            var user = sl_command.User as SocketGuildUser;
             var channel = sl_command.Channel;
 
             //Retrieve the account information of the command's user
@@ -185,7 +175,7 @@ namespace SocialLinker.Commands
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"Oh no! Social Linker gave {user.Username} a hug instead.",
+                Name = $"Oh no! Social Linker gave {user.Nickname ?? user.Username} a hug instead.",
                 IconUrl = user.GetAvatarUrl()
             };
 

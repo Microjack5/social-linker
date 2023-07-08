@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Cooldown;
@@ -36,24 +34,20 @@ namespace SocialLinker.Commands
 
             // End of initial usage and cooldown checks.
 
-            //Establish variables for both the user of the command and the user who is pinged
-            SocketUser commandTarget = null;
-            SocketUser commandUser = null;
-
-            //Retreive the first mentioned user of the message if there is one
+            // Retreive the first mentioned user of the message if there is one
             var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
 
-            //If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
-            commandTarget = mentionedUser ?? command.User;
-            commandUser = command.User;
+            // If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
+            SocketGuildUser commandTarget = mentionedUser as SocketGuildUser ?? command.User as SocketGuildUser;
+            SocketGuildUser commandUser = command.User as SocketGuildUser;
 
-            //Check if the mentioned user is null. If so, send an error-tutorial message.
+            // Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
             {
                 PatError(command);
                 return;
             }
-            //If the mentioned user is the command user, send a special message and return
+            // If the mentioned user is the command user, send a special message and return
             else if (mentionedUser == commandUser)
             {
                 PatSelf(command);
@@ -66,9 +60,6 @@ namespace SocialLinker.Commands
                 return;
             }
 
-            //If the previous conditions are false, get the command user's account information
-            var account = UserInfoClasses.GetAccount(commandTarget);
-
             //If a user is mentioned and they're not the command user and not a bot, add Expression to both users
             if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
@@ -76,26 +67,25 @@ namespace SocialLinker.Commands
                 Core.LevelSystem.SocialStats.AddExpression(command, commandTarget);
             }
 
-            //Send a hug message to the mentioned user
+            // Send a hug message to the mentioned user
             PatUser(command, commandTarget);
 
             await Task.CompletedTask;
         }
 
-        public static async void PatUser(SocialLinkerCommand sl_command, SocketUser command_target)
+        public static async void PatUser(SocialLinkerCommand sl_command, SocketGuildUser command_target)
         {
-            var command_user = sl_command.User;
+            var command_user = sl_command.User as SocketGuildUser;
             var channel = sl_command.Channel;
 
             // Retrieve the account information of both the command's user and the command's target.
             var command_user_account = UserInfoClasses.GetAccount(command_user);
-            var command_target_account = UserInfoClasses.GetAccount(command_target);
 
             // Create an embeded message.
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{command_user.Username} makes headpat time for {command_target.Username}! Pat pat!",
+                Name = $"{command_user.Nickname ?? command_user.Username} makes headpat time for {command_target.Nickname ?? command_target.Username}! Pat pat!",
                 IconUrl = command_user.GetAvatarUrl()
             };
 

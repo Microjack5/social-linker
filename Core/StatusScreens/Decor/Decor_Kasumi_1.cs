@@ -14,7 +14,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
 {
     public class Decor_Kasumi_1
     {
-        public static async void RenderImage(SocketUser user, ISocketMessageChannel channel)
+        public static async void RenderImage(SocketGuildUser user, ISocketMessageChannel channel)
         {
             // Send a loading message while the status screen gets made
             RestUserMessage loader = await channel.SendMessageAsync("", false, LoadingMessage().Build());
@@ -22,20 +22,17 @@ namespace SocialLinker.Core.StatusScreens.Decor
             // Place the bulk of the function in a try-catch block in case something fails and an error message needs to be sent
             try
             {
-                // Grab the user's account information
                 var account = UserInfoClasses.GetAccount(user);
+                string username = user.Nickname ?? user.Username;
 
-                // Establish variables to write on the template
-                string username = "";
-
-                // If the username is over 16 characters, replace the last parts with an ellipsis
-                if (user.Username.Length > 20)
+                // If the username is over 20 characters, replace the last parts with an ellipsis.
+                if (username.Length > 20)
                 {
                     username = $"{username.Substring(0, 20)}...";
                 }
                 else
                 {
-                    username = $"{user.Username}";
+                    username = $"{username}";
                 }
 
                 // Establish other variables of the user's data

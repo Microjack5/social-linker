@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Cooldown;
@@ -37,16 +35,12 @@ namespace SocialLinker.Commands
 
             // End of initial usage and cooldown checks.
 
-            // Establish variables for both the user of the command and the user who is pinged.
-            SocketUser command_target = null;
-            SocketUser command_user = null;
-
             // Retreive the first mentioned user of the message if there is one.
             var mentionedUser = command.MentionedUser;
 
             // If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
-            command_target = mentionedUser ?? command.User;
-            command_user = command.User;
+            SocketGuildUser command_target = mentionedUser as SocketGuildUser ?? command.User as SocketGuildUser;
+            SocketGuildUser command_user = command.User as SocketGuildUser;
 
             // Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
@@ -67,14 +61,11 @@ namespace SocialLinker.Commands
                 return;
             }
 
-            // If the previous conditions are false, get the command user's account information.
-            var account = UserInfoClasses.GetAccount(command_target);
-
             // If a user is mentioned and they're not the command user and not a bot, add Expression to both users.
             if ((mentionedUser != null) && (mentionedUser != command.User) && (mentionedUser.IsBot == false))
             {
-                //Core.LevelSystem.SocialStats.AddExpression(command.Message, command_user);
-                //Core.LevelSystem.SocialStats.AddExpression(command.Message, command_target);
+                Core.LevelSystem.SocialStats.AddExpression(command, command_user);
+                Core.LevelSystem.SocialStats.AddExpression(command, command_target);
             }
 
             // Send a hug message to the mentioned user.
@@ -83,20 +74,19 @@ namespace SocialLinker.Commands
             await Task.CompletedTask;
         }
 
-        public static async void HugUser(SocialLinkerCommand command, SocketUser command_target)
+        public static async void HugUser(SocialLinkerCommand command, SocketGuildUser command_target)
         {
-            var command_user = command.User;
+            var command_user = command.User as SocketGuildUser;
             var channel = command.Channel;
 
             // Retrieve the account information of both the command's user and the command's target.
             var command_user_account = UserInfoClasses.GetAccount(command_user);
-            var command_target_account = UserInfoClasses.GetAccount(command_target);
 
             // Create an embeded message.
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{command_user.Username} gave {command_target.Username} a hug!",
+                Name = $"{command_user.Nickname ?? command_user.Username} gave {command_target.Nickname ?? command_target.Username} a hug!",
                 IconUrl = command_user.GetAvatarUrl()
             };
 
@@ -163,10 +153,10 @@ namespace SocialLinker.Commands
 
         public static async void HugSelf(SocialLinkerCommand sl_command)
         {
-            var user = sl_command.User;
+            var user = sl_command.User as SocketGuildUser;
             var channel = sl_command.Channel;
 
-            await channel.SendMessageAsync($"*Gives {user.Username} a super special hug*");
+            await channel.SendMessageAsync($"*Gives {user.Nickname ?? user.Username} a super special hug*");
         }
 
         public static async void HugBot(SocialLinkerCommand sl_command)
@@ -192,7 +182,7 @@ namespace SocialLinker.Commands
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static string RandomizeHugGif(SocketUser command_user, SocketUser command_target)
+        public static string RandomizeHugGif(SocketGuildUser command_user, SocketGuildUser command_target)
         {
             // Retrieve the account information of the both the command's user and the command's target.
             // These two may be the same account in some cases.

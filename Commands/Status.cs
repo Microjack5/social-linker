@@ -123,15 +123,15 @@ namespace SocialLinker.Commands
         public async Task StatusScreen(SocialLinkerCommand command)
         {
             //Establish variables for the command user and the command's target
-            SocketUser commandTarget = null;
-            SocketUser commandUser = null;
+            SocketGuildUser commandTarget = null;
+            SocketGuildUser commandUser = null;
 
             //Create a variable for a potential mentioned user
-            var mentionedUser = command.MentionedUser;
+            var mentionedUser = command.MentionedUser as SocketGuildUser;
 
             //If there is a mentioned user, they become the command's target. If not, the command's user is also the target.
-            commandTarget = mentionedUser ?? command.User;
-            commandUser = command.User;
+            commandTarget = (mentionedUser as SocketGuildUser) ?? (command.User as SocketGuildUser);
+            commandUser = command.User as SocketGuildUser;
 
             //Get the account information of the command's target
             var account = UserInfoClasses.GetAccount(commandTarget);
@@ -278,15 +278,15 @@ namespace SocialLinker.Commands
         public async Task StatusDetails(SocialLinkerCommand command)
         {
             // Establish variables for the command user and the command's target.
-            SocketUser commandTarget = null;
-            SocketUser commandUser = null;
+            SocketGuildUser commandTarget = null;
+            SocketGuildUser commandUser = null;
 
             // Create a variable for a potential mentioned user.
             var mentionedUser = command.MentionedUser;
 
             // If there is a mentioned user, they become the command's target. If not, the command's user is also the target.
-            commandTarget = mentionedUser ?? command.User;
-            commandUser = command.User;
+            commandTarget = mentionedUser as SocketGuildUser ?? command.User as SocketGuildUser;
+            commandUser = command.User as SocketGuildUser;
 
             // Get the account information of the command's target.
             var account = UserInfoClasses.GetAccount(commandTarget);
@@ -333,7 +333,7 @@ namespace SocialLinker.Commands
                 next_exp = Core.LevelSystem.Leveling.CalculateExp(account.Level + 1) - account.Total_Exp;
             }
 
-            embed.WithTitle($"__{commandTarget.Username}'s Status__");
+            embed.WithTitle($"__{commandTarget.Nickname ?? commandTarget.Username}'s Status__");
             embed.WithThumbnailUrl($"{commandTarget.GetAvatarUrl()}");
 
             // Divide the actual stats by 10 for the user view.

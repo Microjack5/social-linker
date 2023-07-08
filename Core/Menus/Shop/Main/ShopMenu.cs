@@ -614,7 +614,7 @@ namespace SocialLinker.Core.Menus.Shop.Main
             embed.WithFooter(footer);
 
             embed.WithDescription($"" +
-                $"You can access your new décor at any time by using the **`>status`** command." +
+                $"You can access your new décor at any time by using the **`{BotConfig.bot.cmdPrefix}status`** command." +
                 $"\n" +
                 $"To change décor, visit the **`{BotConfig.bot.cmdPrefix}settings`** menu and choose [Profile Settings] > [Status Screen Décor].");
 

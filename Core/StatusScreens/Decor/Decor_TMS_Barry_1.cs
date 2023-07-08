@@ -9,8 +9,6 @@ using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using System.Drawing.Text;
-using System.Net;
-using System.Drawing.Drawing2D;
 
 namespace SocialLinker.Core.StatusScreens.Decor
 {
@@ -19,7 +17,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
         public const int template_width = 1920;
         public const int template_height = 1080;
 
-        public static async void RenderImage(SocketUser user, ISocketMessageChannel channel)
+        public static async void RenderImage(SocketGuildUser user, ISocketMessageChannel channel)
         {
             RestUserMessage loader = await channel.SendMessageAsync("", false, LoadingMessage().Build());
 
@@ -70,7 +68,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             await loader.DeleteAsync();
         }
 
-        public static Bitmap RenderFont(SocketUser user, UserInfoFields account)
+        public static Bitmap RenderFont(SocketGuildUser user, UserInfoFields account)
         {
             Bitmap base_bitmap = new Bitmap(template_width, template_height);
             System.Drawing.Color tms_text_green = System.Drawing.Color.FromArgb(152, 254, 30);
@@ -107,7 +105,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
                 using (Font neology_deco = new Font("NeologyDecoW03-Regular", 23))
                 {
                     stringFormat.Alignment = StringAlignment.Near;
-                    graphics.DrawString($"{user.Username}'s status.", neology_deco, Brushes.White, username_window, stringFormat);
+                    graphics.DrawString($"{user.Nickname ?? user.Username}'s status.", neology_deco, Brushes.White, username_window, stringFormat);
                 }
 
                 Font arial_bold = new Font("Arial", 64, FontStyle.Bold);
