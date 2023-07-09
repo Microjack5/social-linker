@@ -228,9 +228,12 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
 
-                // Remove the menu entry from the global list.
+                // Remove the menu and filter entries from the global list.
                 Global.MenuIdList.Remove(menuSession);
+                Global.ContentFilterList.Remove(filterSession);
 
                 return;
             }

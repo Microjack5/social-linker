@@ -1907,23 +1907,14 @@ namespace SocialLinker.Core.LocalStorageTables
             return bmp;
         }
 
-        public static Bitmap Scale_To_Fill(Bitmap scrBitmap, int template_width, int template_height)
+        public static Bitmap Scale_To_Fill(Bitmap input_bitmap, int template_width, int template_height)
         {
             float width = template_width;
             float height = template_height;
 
-            var image = new Bitmap(scrBitmap);
+            var image = new Bitmap(input_bitmap);
 
-            float scale = 0;
-
-            if (scrBitmap.Width <= scrBitmap.Height)
-            {
-                scale = width / image.Width;
-            }
-            else
-            {
-                scale = height / image.Height;
-            }
+            float scale = Math.Max(width / image.Width, height / image.Height);
 
             var bmp = new Bitmap((int)width, (int)height);
             var graph = Graphics.FromImage(bmp);

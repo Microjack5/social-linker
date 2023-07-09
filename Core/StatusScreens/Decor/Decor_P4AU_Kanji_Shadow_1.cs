@@ -17,7 +17,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
         public const int template_height = 720;
         public const string decor_id = "Decor_P4AU_Kanji_Shadow_1";
 
-        public static async void RenderImage(SocketGuildUser user, ISocketMessageChannel channel)
+        public static async void RenderImage(SocketUser user, ISocketMessageChannel channel)
         {
             // Send a loading message while the status screen gets made
             RestUserMessage loader = await channel.SendMessageAsync("", false, LoadingMessage().Build());
@@ -37,7 +37,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
 
                 Bitmap text_layer = RotateImage(RenderNextExpAndPMedalStats(account), -4);
 
-                Bitmap username_layer = RenderUsername(user.Nickname ?? user.Username);
+                Bitmap username_layer = RenderUsername(user.Username);
 
                 Bitmap level_layer = RenderLevel(account);
 

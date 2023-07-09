@@ -23,6 +23,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     {
         int template_width = 1920;
         int template_height = 1080;
+        bool is_spriteless = false;
 
         public async Task Render_Quick_Scene_BBTAG(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
         {
@@ -33,6 +34,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             var account = UserInfoClasses.GetAccount(user);
             BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+
+            if (command_data.Base_Sprite == 0)
+            {
+                is_spriteless = true;
+            }
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -54,7 +60,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
             Bitmap bustup = new Bitmap(2, 2);
 
-            if (command_data.Base_Sprite != 0)
+            if (is_spriteless == false)
             {
                 bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
             }
@@ -84,7 +90,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(chapter_banner, 704, 33, 512, 128);
 
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (command_data.Base_Sprite != 0)
+                if (is_spriteless == false)
                 {
                     textbox = Get_Message_Window(account);
                     Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, set_data);

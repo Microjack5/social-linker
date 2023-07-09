@@ -276,8 +276,13 @@ namespace SocialLinker.Core.Menus.Shop.Main
             }
             catch (Exception ex)
             {
-                await ErrorHandling.AttachFilesError((SocketTextChannel)message.Channel);
                 Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(menuSession);
+
                 return;
             }
 

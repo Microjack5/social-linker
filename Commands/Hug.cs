@@ -39,8 +39,8 @@ namespace SocialLinker.Commands
             var mentionedUser = command.MentionedUser;
 
             // If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
-            SocketGuildUser command_target = mentionedUser as SocketGuildUser ?? command.User as SocketGuildUser;
-            SocketGuildUser command_user = command.User as SocketGuildUser;
+            SocketUser command_target = mentionedUser ?? command.User;
+            SocketUser command_user = command.User;
 
             // Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
@@ -74,7 +74,7 @@ namespace SocialLinker.Commands
             await Task.CompletedTask;
         }
 
-        public static async void HugUser(SocialLinkerCommand command, SocketGuildUser command_target)
+        public static async void HugUser(SocialLinkerCommand command, SocketUser command_target)
         {
             var command_user = command.User as SocketGuildUser;
             var channel = command.Channel;
@@ -86,7 +86,7 @@ namespace SocialLinker.Commands
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{command_user.Nickname ?? command_user.Username} gave {command_target.Nickname ?? command_target.Username} a hug!",
+                Name = $"{command_user.Username} gave {command_target.Username} a hug!",
                 IconUrl = command_user.GetAvatarUrl()
             };
 
@@ -182,7 +182,7 @@ namespace SocialLinker.Commands
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public static string RandomizeHugGif(SocketGuildUser command_user, SocketGuildUser command_target)
+        public static string RandomizeHugGif(SocketGuildUser command_user, SocketUser command_target)
         {
             // Retrieve the account information of the both the command's user and the command's target.
             // These two may be the same account in some cases.

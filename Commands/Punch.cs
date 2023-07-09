@@ -38,8 +38,10 @@ namespace SocialLinker.Commands
             var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
 
             //If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
-            SocketGuildUser commandTarget = mentionedUser as SocketGuildUser ?? command.User as SocketGuildUser;
-            SocketGuildUser commandUser = command.User as SocketGuildUser;
+            SocketUser commandTarget = mentionedUser ?? command.User;
+            SocketUser commandUser = command.User;
+
+            //Console.WriteLine($"User: {commandUser.Username}, target: {command.Message.MentionedUsers.FirstOrDefault().Username}");
 
             //Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
@@ -73,9 +75,9 @@ namespace SocialLinker.Commands
             await Task.CompletedTask;
         }
 
-        public static async void PunchUser(SocialLinkerCommand sl_command, SocketGuildUser command_target)
+        public static async void PunchUser(SocialLinkerCommand sl_command, SocketUser command_target)
         {
-            var command_user = sl_command.User as SocketGuildUser;
+            var command_user = sl_command.User;
             var channel = sl_command.Channel;
 
             // Retrieve the account information of both the command's user and the command's target.
@@ -85,7 +87,7 @@ namespace SocialLinker.Commands
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{command_user.Nickname ?? command_user.Username} punched {command_target.Nickname ?? command_target.Username}!",
+                Name = $"{command_user.Username} punched {command_target.Username}!",
                 IconUrl = command_user.GetAvatarUrl()
             };
 

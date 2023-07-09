@@ -14,7 +14,7 @@ namespace SocialLinker.Core.StatusScreens
 {
     internal static class StatusScreenP4
     {
-        internal static async void RenderImage(SocketGuildUser user, ISocketMessageChannel channel)
+        internal static async void RenderImage(SocketUser user, ISocketMessageChannel channel)
         {
             RestUserMessage loader = await channel.SendMessageAsync("", false, LoadingMessage().Build());
 
@@ -22,7 +22,7 @@ namespace SocialLinker.Core.StatusScreens
             try
             {
                 var account = UserInfoClasses.GetAccount(user);
-                string username = user.Nickname ?? user.Username;
+                string username = user.Username;
 
                 // If the username is over 12 characters, replace the last parts with an ellipsis.
                 if (username.Length > 12)

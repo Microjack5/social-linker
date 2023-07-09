@@ -38,8 +38,8 @@ namespace SocialLinker.Commands
             var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
 
             // If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
-            SocketGuildUser commandTarget = mentionedUser as SocketGuildUser ?? command.User as SocketGuildUser;
-            SocketGuildUser commandUser = command.User as SocketGuildUser;
+            SocketUser commandTarget = mentionedUser ?? command.User;
+            SocketUser commandUser = command.User;
 
             // Check if the mentioned user is null. If so, send an error-tutorial message.
             if (mentionedUser == null)
@@ -73,7 +73,7 @@ namespace SocialLinker.Commands
             await Task.CompletedTask;
         }
 
-        public static async void PatUser(SocialLinkerCommand sl_command, SocketGuildUser command_target)
+        public static async void PatUser(SocialLinkerCommand sl_command, SocketUser command_target)
         {
             var command_user = sl_command.User as SocketGuildUser;
             var channel = sl_command.Channel;
@@ -85,7 +85,7 @@ namespace SocialLinker.Commands
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{command_user.Nickname ?? command_user.Username} makes headpat time for {command_target.Nickname ?? command_target.Username}! Pat pat!",
+                Name = $"{command_user.Username} makes headpat time for {command_target.Username}! Pat pat!",
                 IconUrl = command_user.GetAvatarUrl()
             };
 

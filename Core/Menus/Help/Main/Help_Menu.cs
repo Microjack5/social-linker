@@ -4,9 +4,7 @@ using System.Linq;
 using System.Timers;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
 using Discord.WebSocket;
-using Fergun.Interactive;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using Discord.Rest;
@@ -129,6 +127,8 @@ namespace SocialLinker.Core.Menus.Help.Main
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
 
                 // Remove the menu entry from the global list.
                 Global.MenuIdList.Remove(menuSession);

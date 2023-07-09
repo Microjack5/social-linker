@@ -14,7 +14,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
 {
     public static class Decor_P3P_1
     {
-        public static async void RenderImage(SocketGuildUser user, ISocketMessageChannel channel)
+        public static async void RenderImage(SocketUser user, ISocketMessageChannel channel)
         {
             // Send a loading message while the status screen gets made
             RestUserMessage loader = await channel.SendMessageAsync("", false, LoadingMessage().Build());
@@ -23,7 +23,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             try
             {
                 var account = UserInfoClasses.GetAccount(user);
-                string username = user.Nickname ?? user.Username;
+                string username = user.Username;
 
                 // If the username is over 12 characters, replace the last parts with an ellipsis.
                 if (username.Length > 12)

@@ -19,7 +19,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
         public const int template_width = 1920;
         public const int template_height = 1080;
 
-        public static async void RenderImage(SocketGuildUser user, ISocketMessageChannel channel)
+        public static async void RenderImage(SocketUser user, ISocketMessageChannel channel)
         {
             // Send a loading message while the status screen gets made
             RestUserMessage loader = await channel.SendMessageAsync("", false, LoadingMessage().Build());
@@ -113,7 +113,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
             }
         }
 
-        public static Bitmap RenderFont(SocketGuildUser user, ISocketMessageChannel channel, UserInfoFields account)
+        public static Bitmap RenderFont(SocketUser user, ISocketMessageChannel channel, UserInfoFields account)
         {
             Bitmap base_bitmap = new Bitmap(template_width, template_height);
             System.Drawing.Color tms_text_green = System.Drawing.Color.FromArgb(152, 254, 30);
@@ -128,7 +128,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
 
                 StringFormat stringFormat = new StringFormat();
 
-                string role_name = (user as SocketGuildUser).Roles.Last().Name;
+                string role_name = (user as SocketGuildUser).Roles.Last().Name ?? "-----";
 
                 Rectangle username_window = new Rectangle(822, 8, 775, 71);
 
@@ -154,7 +154,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
                 using (Font neology_deco = new Font("NeologyDecoW03-Regular", 40))
                 {
                     stringFormat.Alignment = StringAlignment.Far;
-                    graphics.DrawString(Shorten_Long_Strings(user.Nickname ?? user.Username, 24), neology_deco, Brushes.White, username_window, stringFormat);
+                    graphics.DrawString(Shorten_Long_Strings(user.Username, 24), neology_deco, Brushes.White, username_window, stringFormat);
                 }
 
                 using (Font neology_deco = new Font("NeologyDecoW03-Regular", 31))

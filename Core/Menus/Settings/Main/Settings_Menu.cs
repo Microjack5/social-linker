@@ -114,6 +114,8 @@ namespace SocialLinker.Core.Menus.Settings.Main
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
 
                 // Remove the menu entry from the global list.
                 Global.MenuIdList.Remove(menuSession);

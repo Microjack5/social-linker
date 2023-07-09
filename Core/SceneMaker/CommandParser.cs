@@ -73,6 +73,7 @@ namespace SocialLinker.Core.SceneMaker
                         case "maker_list":
                             if (maker_command.Template != "" && maker_command.Character_Keyword == "")
                             {
+                                sl_command.MakerCommand.Template = OfficialSetMethods.InputToTemplate(account, sl_command.MakerCommand.Template);
                                 await OfficialSetMethods.Set_List_Message_Directory(sl_command);
                             }
                             break;

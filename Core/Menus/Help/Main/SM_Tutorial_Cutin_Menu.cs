@@ -61,6 +61,8 @@ namespace SocialLinker.Core.Menus.Help.Main
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
 
                 // Remove the menu entry from the global list.
                 Global.MenuIdList.Remove(menuSession);
@@ -140,6 +142,8 @@ namespace SocialLinker.Core.Menus.Help.Main
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
 
                 // Remove the menu entry from the global list.
                 Global.MenuIdList.Remove(menuSession);
@@ -221,6 +225,8 @@ namespace SocialLinker.Core.Menus.Help.Main
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
 
                 // Remove the menu entry from the global list.
                 Global.MenuIdList.Remove(menuSession);
@@ -300,6 +306,8 @@ namespace SocialLinker.Core.Menus.Help.Main
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
 
                 // Remove the menu entry from the global list.
                 Global.MenuIdList.Remove(menuSession);
