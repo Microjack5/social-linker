@@ -2454,47 +2454,22 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         // Border Rendering
         public Bitmap Render_Screen_Border(UserInfoFields account)
         {
-            Bitmap base_template = new Bitmap(template_width, template_height);
-
-            Bitmap border_main = new Bitmap(2, 2);
-            Bitmap border_secondary = new Bitmap(2, 2);
+            string[] prerendered_star_layers_path = Directory.GetFiles($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//Prerendered//Event", "*.png");
 
             switch (account.P5_PS4_TS_Border)
             {
                 case "Event":
-                    border_main = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//event_main.png");
-                    border_secondary = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//event_secondary.png");
+                    prerendered_star_layers_path = Directory.GetFiles($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//Prerendered//Event", "*.png");
                     break;
 
                 case "Interaction":
-                    border_main = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//interaction_main.png");
-                    border_secondary = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//interaction_secondary.png");
+                    prerendered_star_layers_path = Directory.GetFiles($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//Prerendered//Interaction", "*.png");
                     break;
             }
 
-            Bitmap shading = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//border_shading.png");
-
-            var prerendered_star_layers_path = Directory.GetFiles($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5-PS4//Border//Prerendered", "*.png");
             var chosen_star_layer_path = prerendered_star_layers_path[rnd.Next(prerendered_star_layers_path.Length)];
 
-            Bitmap star_layer = (Bitmap)System.Drawing.Image.FromFile(chosen_star_layer_path);
-
-            using (Graphics graphics = Graphics.FromImage(star_layer))
-            {
-                graphics.DrawImage(shading, 0, 0, template_width, template_height);
-            }
-
-            star_layer = Keep_Pixel_Overlap_General(star_layer, border_main, new Rectangle(0, 0, template_width, template_height));
-
-            // Now, time to put the template together!
-            using (Graphics graphics = Graphics.FromImage(base_template))
-            {
-                graphics.DrawImage(border_main, 0, 0, template_width, template_height);
-                graphics.DrawImage(star_layer, 0, 0, template_width, template_height);
-                graphics.DrawImage(border_secondary, 0, 0, template_width, template_height);
-            }
-
-            return base_template;
+            return (Bitmap)System.Drawing.Image.FromFile(chosen_star_layer_path);
         }
 
         public static Bitmap Render_Star(double scale_factor, System.Drawing.Color star_color)
