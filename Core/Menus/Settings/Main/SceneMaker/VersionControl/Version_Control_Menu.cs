@@ -1002,9 +1002,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
 
             embed.WithFooter(footer);
 
-            // Assign a color to the embeded message based on the title being edited.
-            embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
-
             // Create an empty string variable.
             string version_title = "";
 
@@ -1013,11 +1010,13 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             {
                 version_title = "Persona 3 FES";
                 embed.WithThumbnailUrl("https://i.imgur.com/LX1PSeP.jpg");
+                embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
             }
             else if (account.VC_P3 == "P3P")
             {
                 version_title = "Persona 3 Portable";
                 embed.WithThumbnailUrl("https://i.imgur.com/sNrtgFX.jpg");
+                embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
             }
 
             // Use the version_title string in the embed's description.
