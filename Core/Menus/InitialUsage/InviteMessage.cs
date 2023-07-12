@@ -20,7 +20,7 @@ namespace SocialLinker.Core.Menus.InitialUsage
             embed.Author = author;
 
             embed.WithDescription("" +
-                "Social Linker is a fan project in the works since 2019 based on the Persona franchise by Atlus Co., Ltd.! " +
+                "Social Linker is a fan project in the works since 2019 based on the Persona franchise from Atlus Co., Ltd.! " +
                 "Track your Discord activity with social stats and create realistic screenshots from various games across the series.\n" +
                 "\n" +
                 "If you’ve used Social Linker in another server, you can pick up your progress right from where you left off.\n" +

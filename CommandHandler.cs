@@ -277,7 +277,17 @@ namespace SocialLinker
                     SocialLinkerCommandLogging.LogData(command);
                     break;
 
+                case "config":
+                    await Commands.Settings.SettingsMenu(command);
+                    SocialLinkerCommandLogging.LogData(command);
+                    break;
+
                 case "help":
+                    await Commands.Help.HelpMenu(command);
+                    SocialLinkerCommandLogging.LogData(command);
+                    break;
+
+                case "menu":
                     await Commands.Help.HelpMenu(command);
                     SocialLinkerCommandLogging.LogData(command);
                     break;

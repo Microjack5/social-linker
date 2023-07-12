@@ -214,7 +214,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
 
             SolidBrush white_brush = new SolidBrush(System.Drawing.Color.White);
 
-            Rectangle level_box = new Rectangle(805, 509, 280, 211);
+            Rectangle level_box = new Rectangle(785, 509, 320, 211);
 
             using (Graphics graphics = Graphics.FromImage(base_template))
             {

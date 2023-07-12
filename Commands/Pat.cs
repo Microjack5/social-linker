@@ -35,7 +35,7 @@ namespace SocialLinker.Commands
             // End of initial usage and cooldown checks.
 
             // Retreive the first mentioned user of the message if there is one
-            var mentionedUser = command.Message.MentionedUsers.FirstOrDefault();
+            var mentionedUser = command.MentionedUser;
 
             // If a mentioned user exists, assign them to commandTarget. If not, set commandTarget to the command user.
             SocketUser commandTarget = mentionedUser ?? command.User;
