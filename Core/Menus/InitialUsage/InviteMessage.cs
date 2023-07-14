@@ -28,7 +28,7 @@ namespace SocialLinker.Core.Menus.InitialUsage
                 $"Type **`{BotConfig.bot.cmdPrefix}help`** or use a slash command to get started.\n" +
                 "\n" +
                 "**Content: :copyright: ATLUS / SEGA / KOEI TECMO GAMES / ARC SYSTEM WORKS / FRENCH-BREAD / Rooster Teeth Productions, LLC. / Team ARCANA / Marvelous, Inc. / SUBTLE STYLE**\n" +
-                "```Social Linker is not affiliated, associated, authorized, maintained, sponsored, endorsed by, or in any way officially connected with these trademark and copyright holders. Content intended with fair use.```");
+                "```Social Linker is not affiliated, associated, authorized, maintained, sponsored, endorsed by, or in any way officially connected with these trademark and copyright holders. All content present is intended to fall under fair use.```");
 
             embed.WithColor(82, 236, 243);
             embed.WithImageUrl("https://i.imgur.com/XpKdixY.png");

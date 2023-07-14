@@ -109,6 +109,8 @@ namespace SocialLinker.Core.Menus.Help.Main
                 $"`{BotConfig.bot.cmdPrefix}slap [user]`\n" +
                 $"`{BotConfig.bot.cmdPrefix}punch [user]`\n");
             embed.AddField("Links",
+                "[Terms of Use](https://sites.google.com/view/social-linker-docs/terms-of-service)\n" +
+                "[Privacy Policy](https://sites.google.com/view/social-linker-docs/privacy-policy)\n" +
                 "[Social Linker Support](https://discord.gg/ZbEeZRjVvU)\n" +
                 "");
 

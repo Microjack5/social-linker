@@ -54,7 +54,7 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "\n" +
                 "All other trademarks are property of their respective owners.\n" +
                 "\n" +
-                "```Social Linker is not affiliated, associated, authorized, maintained, sponsored, endorsed by, or in any way officially connected with these trademark and copyright holders. Content intended with fair use.```");
+                "```Social Linker is not affiliated, associated, authorized, maintained, sponsored, endorsed by, or in any way officially connected with these trademark and copyright holders. All content present is intended to fall under fair use.```");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

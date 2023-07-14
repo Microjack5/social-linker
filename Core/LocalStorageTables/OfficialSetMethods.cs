@@ -1231,27 +1231,13 @@ namespace SocialLinker.Core.LocalStorageTables
                     return;
 
                 case "P5-PS4":
-                    if (sl_command.User.Id == 222504679878164481 || sl_command.User.Id == 981191816412028930)
-                    {
-                        RenderP5_PS4 p5_ps4_render = new RenderP5_PS4();
-                        await p5_ps4_render.Render_System_Message(sl_command, command_data);
-                    }
-                    else
-                    {
-                        await sl_command.Channel.SendMessageAsync("The P5 scene maker is not available for use at the moment.");
-                    }
+                    RenderP5_PS4 p5_ps4_render = new RenderP5_PS4();
+                    await p5_ps4_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P5R":
-                    if (sl_command.User.Id == 222504679878164481 || sl_command.User.Id == 981191816412028930)
-                    {
-                        RenderP5R p5r_render = new RenderP5R();
-                        await p5r_render.Render_System_Message(sl_command, command_data);
-                    }
-                    else
-                    {
-                        await sl_command.Channel.SendMessageAsync("The P5R scene maker is not available for use at the moment.");
-                    }
+                    RenderP5R p5r_render = new RenderP5R();
+                    await p5r_render.Render_System_Message(sl_command, command_data);
                     return;
 
                 case "P5S":
