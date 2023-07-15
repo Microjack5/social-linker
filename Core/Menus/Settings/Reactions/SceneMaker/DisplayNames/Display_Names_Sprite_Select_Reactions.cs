@@ -215,6 +215,13 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                                 sprite_range.Add(range_start);
                                 current_string = "";
                             }
+                            else if (current_string == "" && sprite_range.Count > 0)
+                            {
+                                range_start = sprite_range[sprite_range.Count - 1];
+                                range_in_progress = true;
+                                sprite_range.Add(range_start);
+                                current_string = "";
+                            }
                             break;
 
                         case ' ':
@@ -224,7 +231,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                                 {
                                     range_end = int.Parse(current_string);
 
-                                    for (int j = range_start; j < range_end; j++)
+                                    for (int j = range_start; j <= range_end; j++)
                                     {
                                         sprite_range.Add(j);
                                     }
@@ -247,7 +254,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                             {
                                 range_end = int.Parse(current_string);
 
-                                for (int j = range_start; j < range_end; j++)
+                                for (int j = range_start; j <= range_end; j++)
                                 {
                                     sprite_range.Add(j);
                                 }
@@ -274,7 +281,24 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
             // Empty last of the input
             if (current_string != "")
             {
-                sprite_range.Add(int.Parse(current_string));
+                if (range_in_progress == true)
+                {
+                    range_end = int.Parse(current_string);
+
+                    for (int j = range_start; j <= range_end; j++)
+                    {
+                        sprite_range.Add(j);
+                    }
+
+                    current_string = "";
+                    range_start = 0;
+                    range_end = 0;
+                    range_in_progress = false;
+                }
+                else
+                {
+                    sprite_range.Add(int.Parse(current_string));
+                }
             }
 
             sprite_range = sprite_range.Distinct().ToList();

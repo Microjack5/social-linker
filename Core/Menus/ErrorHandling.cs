@@ -34,7 +34,7 @@ namespace SocialLinker.Core.Menus
             // Else, the failure must have come from the message being deleted.
             else
             {
-                await MissingMessageError((SocketTextChannel)message.Channel);
+                //await MissingMessageError((SocketTextChannel)message.Channel);
             }
         }
 
