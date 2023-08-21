@@ -85,6 +85,8 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
             // Store the text of the message in a string and convert all letters to uppercase.
             string input_string = message.Content.ToUpper();
 
+            input_string = Global.RemoveBotMention(input_string).Trim();
+
             // Create an empty string variable. This is where the API request will be stored.
             string json_location = "";
 

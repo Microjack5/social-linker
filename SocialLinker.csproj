@@ -239,6 +239,7 @@
     <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Basics_Menu.cs" />
     <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Cutin_Menu.cs" />
     <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Dual_Menu.cs" />
+    <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Line_Breaks_Menu.cs" />
     <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Select_Menu.cs" />
     <Compile Include="Core\Menus\Help\Main\SM_Tutorial_Spriteless_Menu.cs" />
     <Compile Include="Core\Menus\Help\Main\SM_Tutorial_VC_Menu.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Basics_Reactions.cs" />
     <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Cutin_Reactions.cs" />
     <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Dual_Reactions.cs" />
+    <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Line_Breaks_Reactions.cs" />
     <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Select_Reactions.cs" />
     <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_Spriteless_Reactions.cs" />
     <Compile Include="Core\Menus\Help\Reactions\SM_Tutorial_VC_Reactions.cs" />

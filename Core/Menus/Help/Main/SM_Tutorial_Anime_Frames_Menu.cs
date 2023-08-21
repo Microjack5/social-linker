@@ -45,9 +45,13 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             embed.WithDescription("" +
                 "Some sprites come with animation frames you can use to make their expressions more dynamic! " +
-                $"Use the format **`{BotConfig.bot.cmdPrefix}maker [character] [sprite number]`** to view the animation frames for that character, or with the slash command <:SlashCommand:1032644966851281016>**maker_sheet** via the sprite_number option.");
+                "To view the animation frames for a character:\n" +
+                "\n" +
+                $"{Global.SlashCommandEmote} **Slash Commands:** Use **`maker_sheet`** and select the `sprite_number` option after choosing a character.\n" +
+                $"\n" +
+                $"{Global.MessageCommandEmote} **Message Commands:** Use the command format **`maker [character] [sprite number]`**.");
 
-            embed.WithImageUrl("https://i.imgur.com/hGo6t0z.png");
+            embed.WithImageUrl("https://i.imgur.com/C80ESvK.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -128,10 +132,13 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                "To use these animation frames in a scene, link together the sprite, eye frame, and mouth frame numbers you want to use with hyphens. " +
-                "Slash commands can do this with <:SlashCommand:1032644966851281016>**maker_create** and specifying eye_frame and mouth_frame options.");
+                "To use these animation frames in a scene: \n" +
+                "\n" +
+                $"{Global.SlashCommandEmote} **Slash Commands:** Use **`maker_create`** and specify the `eye_frame` and `mouth_frame` options.\n" +
+                $"\n" +
+                $"{Global.MessageCommandEmote} **Message Commands:** Link together the sprite, eye frame, and mouth frame numbers you want to use with hyphens.");
 
-            embed.WithImageUrl("https://i.imgur.com/3mLOu6O.png");
+            embed.WithImageUrl("https://i.imgur.com/pmrYI4b.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -212,10 +219,10 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                "If the sprite only has eye animations, just linking together the base sprite and eye frame numbers will work as well. " +
+                "If the sprite only has eye animations, just specifying the base sprite and eye frame numbers will work as well. " +
                 "You can also type `0` for either frame if the sprite doesn't have one to choose or you don't want to use one.");
 
-            embed.WithImageUrl("https://i.imgur.com/wQ72B6I.png");
+            embed.WithImageUrl("https://i.imgur.com/HrLAzlx.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

@@ -46,7 +46,11 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithDescription("" +
                 "The scene maker lets you create your own realistic screenshots from all across the Persona series!\n" +
                 "\n" +
-                $"You can make your own \"scenes\" a number of ways using the **`{BotConfig.bot.cmdPrefix}maker`** command, or through various slash commands. Let's learn a few!");
+                $"You can make your own \"scenes\" a number of ways using either {Global.SlashCommandEmote}slash commands or {Global.MessageCommandEmote}message-based commands, depending on your preferred method. Let's learn a few!\n" +
+                $"\n" +
+                $":information_source: **For Social Linker to read message-based commands, always prefix your messages by mentioning the bot.**");
+
+            embed.WithImageUrl("https://i.imgur.com/03maXp5.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -140,9 +144,11 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "<:P5S:852644176188669972> `P5S` - **Persona 5 Strikers**\n" +
                 "<:BBTAG:751133123013771617> `BBTAG` - **BlazBlue: Cross Tag Battle**\n" +
                 "\n" +
-                $"Use the format **`{BotConfig.bot.cmdPrefix}maker [game style]`** to view the names of characters with sprites for that title." +
+                "To view the names of characters with sprites for a title:\n" +
+                "\n" +
+                $"{Global.SlashCommandEmote} **Slash Commands:** Use **`maker_list`** and choose a game style from the list.\n" +
                 $"\n" +
-                $"For slash commands, use <:SlashCommand:1032644966851281016>**maker_list** and choose a game style from the list.");
+                $"{Global.MessageCommandEmote} **Message Commands:** Use the command format **`maker [game style]`**.");
 
             embed.WithImageUrl("https://i.imgur.com/hhnDVlB.png");
 
@@ -225,12 +231,20 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"When you find a character you want, use the format **`{BotConfig.bot.cmdPrefix}maker [character]`** to bring up their sprite sheet, or <:SlashCommand:1032644966851281016>**maker_sheet** when using slash commands.\n" +
-                "\n" +
-                "If the character appears in more than one title, this will only show their sprite sheet from the first game they appeared in.\n" +
-                "To specify their sprite sheet from another title, type one of the game style keywords after their name.");
+                $"When you find a character you want, use your preferred method to view their sprite sheet:\n" +
+                $"\n" +
+                $"{Global.SlashCommandEmote} **Slash Commands:** Use **`maker_sheet`** and type the character's name.\n" +
+                $"\n" +
+                $"{Global.MessageCommandEmote} **Message Commands:** Use the command format **`maker [character]`**.\n" +
+                $"\n" +
+                $"If the character appears in more than one title, this will only show their sprite sheet from the first game they appeared in.\n" +
+                $"To specify their sprite sheet from another title:\n" +
+                $"\n" +
+                $"{Global.SlashCommandEmote} **Slash Commands:** Use the **`character_version`** option and select one of the game styles from the list.\n" +
+                $"\n" +
+                $"{Global.MessageCommandEmote} **Message Commands:** Type a game style keyword after their name.");
 
-            embed.WithImageUrl("https://i.imgur.com/n6U4wUg.png");
+            embed.WithImageUrl("https://i.imgur.com/Z0L6z5x.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -311,12 +325,15 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"After typing **`{BotConfig.bot.cmdPrefix}maker`**, string together a character keyword, one of their sprite numbers, and the dialogue you want them to say within quotation marks to create a scene.\n" +
-                $"Slash commands can do the same with <:SlashCommand:1032644966851281016>**maker_create**, although quotation marks aren't needed for dialogue.\n" +
+                $"To create a scene...\n" +
+                $"\n" +
+                $"{Global.SlashCommandEmote} **Slash Commands:** Use **`maker_create`** to type in a character's name, one of their sprite numbers, and the dialogue you want them to say.\n" +
+                $"\n" +
+                $"{Global.MessageCommandEmote} **Message Commands:** After typing **`maker`**, string together a character keyword, one of their sprite numbers, and the dialogue you want them to say within quotation marks.\n" +
                 "\n" +
-                $"You'll create a scene based on your current scene maker settings, which you can change by typing **`{BotConfig.bot.cmdPrefix}settings`** and choosing [Scene Maker Settings].");
+                $"You'll create a scene based on your current scene maker settings, which you can change by using the **`settings`** command and choosing [Scene Maker Settings].");
 
-            embed.WithImageUrl("https://i.imgur.com/N3gpE6u.gif");
+            embed.WithImageUrl("https://i.imgur.com/qIaEJeK.gif");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

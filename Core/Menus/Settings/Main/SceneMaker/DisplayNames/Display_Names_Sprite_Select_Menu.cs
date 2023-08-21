@@ -9,7 +9,6 @@ using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using Discord.Rest;
 using SocialLinker.Core.LocalStorageTables;
-using System.IO;
 
 namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 {
@@ -48,7 +47,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
             embed.WithDescription("" +
                 $"Specify the sprite numbers of {set_data.Name}'s sprite set you'd like to change the display names for.\n" +
                 $"\n" +
-                $"You can type in individual numbers separated by a comma or space, select a range by placing a hyphen between two numbers, or react with 🔄 to select the entire set.");
+                $"You can type in individual numbers separated by a comma or space, select a range by placing a hyphen between two numbers, or react with 🔄 to select the entire set.\n" +
+                $"\n" +
+                $"{Global.MentionNotice}");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

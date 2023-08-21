@@ -118,6 +118,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
 
                 var account = UserInfoClasses.GetAccount(message.Author);
                 string input_string = message.Content;
+                input_string = Global.RemoveBotMention(input_string).Trim();
 
                 List<int> int_range = Input_Range_To_List(input_string);
 

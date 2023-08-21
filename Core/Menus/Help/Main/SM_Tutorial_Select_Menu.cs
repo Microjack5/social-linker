@@ -133,6 +133,8 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "Place two characters in a single scene."); */
             embed.AddField(":three: Animation Frames",
                 "Use eye and mouth animation frames on character sprites.");
+            embed.AddField(":four: Line Breaks",
+                "Insert manual line breaks at any time.");
             /*embed.AddField(":five: Cut-ins",
                 "Use unique character sprites in certain templates."); */
 
@@ -181,8 +183,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3")); // Keycap One
             reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3")); // Keycap Two
             reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3")); // Keycap Three
-            //reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3")); // Keycap Four
-            //reaction_list.Add(new Emoji("\u0035\ufe0f\u20e3")); // Keycap Five
+            reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3")); // Keycap Four
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);

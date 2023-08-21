@@ -53,8 +53,9 @@ namespace SocialLinker.Core.SceneMaker
                     char[] delimiterChars = { ' ' };
                     input_substring = sl_command.Message.Content.Split(delimiterChars).ToList();
 
-                    if (input_substring.Count > 1)
+                    if (input_substring.Count > 2)
                     {
+                        input_substring.RemoveAt(0);
                         input_substring.RemoveAt(0);
                     }
 
@@ -145,7 +146,7 @@ namespace SocialLinker.Core.SceneMaker
                                 // If the sprite set info is null, send an error message. The sprite set doesn't exist.
                                 else
                                 {
-                                    await ErrorHandling.Sprite_Set_Not_Found_Generic(sl_command, maker_command.Character_Keyword);
+                                    await ErrorHandling.Sprite_Set_Not_Found_In_Template(sl_command, maker_command.Character_Keyword, OfficialSetMethods.InputToTemplate(account, maker_command.Sprite_Set_Version));
                                     return;
                                 }
                             }

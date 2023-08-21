@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus;
@@ -18,11 +19,11 @@ namespace SocialLinker
         internal static List<PlacementSwitchData> P1_PSP_Usage_List { get; set; } = new List<PlacementSwitchData>();
 
         internal static string[] p1_ps1_version_keywords = { "P1-PS1", "P1-PSX", "P1PS1", "P1PSX" };
-        internal static string[] p1_psp_version_keywords = { "P1-PSP", "P1P", "P1PSP" };
-        internal static string[] p2is_ps1_version_keywords = { "P2IS-PS1", "P2IS-PSX", "P2ISPS1", "P2ISPSX", "P2-PS1", "P2-PSX", "P2PS1", "P2PSX", "ISPS1", "ISPSX" };
-        internal static string[] p2is_psp_version_keywords = { "P2IS-PSP", "P2ISPSP", "P2ISP", "ISPSP", "ISP" };
-        internal static string[] p2ep_ps1_version_keywords = { "P2EP-PS1", "P2EP-PSX", "P2EPPS1", "P2EPPSX", "EPPS1", "EPPSX" };
-        internal static string[] p2ep_psp_version_keywords = { "P2EP-PSP", "P2EPPSP", "P2EPP", "EPPSP", "EPP" };
+        internal static string[] p1_psp_version_keywords = { "P1-PSP", "P1PSP", "P1-P", "P1P" };
+        internal static string[] p2is_ps1_version_keywords = { "P2IS-PS1", "P2IS-PSX", "P2ISPS1", "P2ISPSX", "P2-PS1", "P2-PSX", "P2PS1", "P2PSX", "IS-PS1", "IS-PSX", "ISPS1", "ISPSX" };
+        internal static string[] p2is_psp_version_keywords = { "P2IS-PSP", "P2ISPSP", "P2IS-P", "IS-PSP", "IS-P", "P2ISP", "ISPSP", "ISP" };
+        internal static string[] p2ep_ps1_version_keywords = { "P2EP-PS1", "P2EP-PSX", "P2EPPS1", "P2EPPSX", "EP-PS1", "EP-PSX", "EPPS1", "EPPSX" };
+        internal static string[] p2ep_psp_version_keywords = { "P2EP-PSP", "P2EPPSP", "P2EP-P", "EP-PSP", "EP-P", "P2EPP", "EPPSP", "EPP" };
         internal static string[] p3f_version_keywords = { "P3F", "FES", "P3FES", "P3-PS2", "P3F-PS2", "FES-PS2", "P3FES-PS2", "P3-FES", "P3PS2", "P3FPS2", "FESPS2", "P3FESPS2" };
         internal static string[] p3p_version_keywords = { "P3P", "P3-PSP", "P3PSP" };
         internal static string[] p4_ps2_version_keywords = { "P4-PS2", "P4PS2" };
@@ -45,5 +46,41 @@ namespace SocialLinker
         internal static int API_Timeout = 5000;
         internal static int Max_PMedals = 999;
         internal static int Max_Level = 99;
+
+        internal static string SlashCommandEmote = "<:SlashCommand:1032644966851281016>";
+        internal static string MessageCommandEmote = "<:MessageCommand:1141804603906736271>";
+        internal static string MentionNotice = ":information_source: **For Social Linker to read your message, prefix the message by mentioning the bot.**";
+
+        public static string RemoveBotMention(string message_command)
+        {
+            string altered_command = "";
+
+            List<string> listed_string;
+
+            char[] delimiterChars = { ' ' };
+
+            listed_string = message_command.Split(delimiterChars).ToList();
+
+            listed_string.RemoveAt(0);
+
+            altered_command = String_List_To_String(listed_string);
+
+            return altered_command;
+        }
+
+        public static string String_List_To_String(List<string> input_list)
+        {
+            // Create an empty string variable.
+            string output_string = "";
+
+            // Iterate through each index of the list and add it to the string variable.
+            for (int i = 0; i < input_list.Count; i++)
+            {
+                output_string += input_list[i] + " ";
+            }
+
+            // Return the string variable.
+            return output_string;
+        }
     }
 }
