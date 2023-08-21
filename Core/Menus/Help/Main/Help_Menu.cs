@@ -100,14 +100,14 @@ namespace SocialLinker.Core.Menus.Help.Main
                 ":orange_circle: **`Scene Maker`**\n" +
                 "\n" +
                 "> **General Commands**\n" +
-                $"`{BotConfig.bot.cmdPrefix}help`\n" +
-                $"`{BotConfig.bot.cmdPrefix}settings`\n" +
+                $"`help`\n" +
+                $"`settings`\n" +
                 "\n" +
                 "> **Social Commands**\n" +
-                $"`{BotConfig.bot.cmdPrefix}hug [user]`\n" +
-                $"`{BotConfig.bot.cmdPrefix}pat [user]`\n" +
-                $"`{BotConfig.bot.cmdPrefix}slap [user]`\n" +
-                $"`{BotConfig.bot.cmdPrefix}punch [user]`\n");
+                $"`hug [user]`\n" +
+                $"`pat [user]`\n" +
+                $"`slap [user]`\n" +
+                $"`punch [user]`\n");
             embed.AddField("Links",
                 "[Terms of Use](https://sites.google.com/view/social-linker-docs/terms-of-service)\n" +
                 "[Privacy Policy](https://sites.google.com/view/social-linker-docs/privacy-policy)\n" +

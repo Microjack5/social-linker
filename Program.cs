@@ -16,6 +16,15 @@ namespace SocialLinker
 
         public async Task StartAsync()
         {
+            await InitializeClient();
+
+            _handler = new CommandHandler();
+            await _handler.InitializeAsync(_client);
+            await Task.Delay(-1);
+        }
+
+        public async Task InitializeClient()
+        {
             if (BotConfig.bot.token == "" || BotConfig.bot.token == null) return;
             _client = new DiscordShardedClient(new DiscordSocketConfig
             {
@@ -25,20 +34,25 @@ namespace SocialLinker
             _client.Log += Log;
             _client.ReactionAdded += Core.Menus.MenuDirectory.ReactionAddedIndex;
             _client.ReactionRemoved += Core.Menus.MenuDirectory.ReactionRemovedIndex;
-            _client.MessageReceived += Core.Menus.MenuDirectory.MessageReceivedIndex;
+            _client.MessageReceived += async (message) =>
+            {
+                await Core.Menus.MenuDirectory.MessageReceivedIndex(_client, message);
+            };
             _client.JoinedGuild += Core.Menus.InitialUsage.InviteMessage.SendInviteMessage;
             await _client.LoginAsync(TokenType.Bot, BotConfig.bot.token);
             await _client.StartAsync();
             //await _client.SetGameAsync("......");
-            _handler = new CommandHandler();
-            await _handler.InitializeAsync(_client);
-            await Task.Delay(-1);
         }
 
         private async Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.Message);
             await Task.CompletedTask;
+        }
+
+        public DiscordShardedClient GetClient()
+        {
+            return _client;
         }
     }
 }

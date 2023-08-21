@@ -15,9 +15,10 @@ using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.SpriteSheetOrder;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.ResolutionScaling;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.Backgrounds;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.AutoDelete;
-using SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames;
 using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames;
 using System;
+using Discord.Commands;
+using SocialLinker.Core.Menus.Help.Main;
 
 namespace SocialLinker.Core.Menus
 {
@@ -251,6 +252,10 @@ namespace SocialLinker.Core.Menus
 
                             case "SM_Tutorial_Anime_Frames_Page_3":
                                 await SM_Tutorial_Anime_Frames_Reactions.Nav_SM_Tutorial_Anime_Frames_Page_3(reaction, menuSession);
+                                break;
+
+                            case "SM_Tutorial_Line_Breaks_Page_1":
+                                await SM_Tutorial_Line_Breaks_Reactions.Nav_SM_Tutorial_Line_Breaks_Page_1(reaction, menuSession);
                                 break;
 
                             case "SM_Tutorial_Cutin_Page_1":
@@ -1638,8 +1643,23 @@ namespace SocialLinker.Core.Menus
             }
         }
 
-        public static async Task MessageReceivedIndex(SocketMessage message)
+        public static async Task MessageReceivedIndex(DiscordShardedClient client, SocketMessage message)
         {
+            int argPos = 0;
+            SocketUserMessage msg = message as SocketUserMessage;
+
+            try
+            {
+                if (!msg.HasMentionPrefix(client.CurrentUser, ref argPos))
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
             // Search the global Menu ID List by grabbing any entry that matches the channel ID of the sent message.
             if (Global.MenuIdList.Any(x => x.MenuMessage.Channel.Id == message.Channel.Id))
             {
@@ -1647,7 +1667,7 @@ namespace SocialLinker.Core.Menus
                 var menuSession = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Channel.Id == message.Channel.Id);
 
                 // If the message author is the menu user, perform an action.
-                if (message.Author.Id == menuSession.User.Id)
+                if ((message.Author.Id == menuSession.User.Id) && (!string.IsNullOrEmpty(message.Content)))
                 {
                     // Ensure that the current menu matches a certain state before proceeding.
                     switch (menuSession.CurrentMenu)

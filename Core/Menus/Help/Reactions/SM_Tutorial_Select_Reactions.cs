@@ -85,7 +85,6 @@ namespace SocialLinker.Core.Menus.Help.Reactions
 
                 // Go to a new menu.
                 _ = SM_Tutorial_Anime_Frames_Menu.SM_Tutorial_Anime_Frames_Page_1(menuSession.User, menuSession.MenuMessage);
-                //_ = SM_Tutorial_Dual_Menu.SM_Tutorial_Dual_Chara_Page_1(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 
@@ -96,18 +95,7 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                //_ = SM_Tutorial_Anime_Frames_Menu.SM_Tutorial_Anime_Frames_Page_1(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Five
-            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                //_ = SM_Tutorial_Cutin_Menu.SM_Tutorial_Cutin_Page_1(menuSession.User, menuSession.MenuMessage);
+                _ = SM_Tutorial_Line_Breaks_Menu.SM_Tutorial_Line_Breaks_Page_1(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
 

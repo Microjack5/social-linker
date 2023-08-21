@@ -44,7 +44,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(new_name_data.Game));
 
             embed.WithDescription("" +
-                $"Type in the name of the {AcronymToTitle(new_name_data.Game)} sprite set you'd like to change the display name of, or react with ↩️ to cancel.");
+                $"Type in the name of the {AcronymToTitle(new_name_data.Game)} sprite set you'd like to change the display name of, or react with ↩️ to cancel.\n" +
+                $"\n" +
+                $"{Global.MentionNotice}");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

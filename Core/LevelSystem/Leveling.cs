@@ -196,35 +196,15 @@ namespace SocialLinker.Core.LevelSystem
 
         internal static double CharacterCount(SocialLinkerCommand sl_command)
         {
-            char[] message_to_char_array = null;
+            Random rnd = new Random();
+            int return_count = rnd.Next(10, 2001);
 
-            switch (sl_command.CommandType)
+            if (sl_command.ValidCommand == true)
             {
-                case "Context":
-                    message_to_char_array = sl_command.Message.Content.ToCharArray();
-                    break;
-
-                case "Slash":
-                    List<SocketSlashCommandDataOption> slash_command_data_options_list = sl_command.SlashCommand.Data.Options.ToList();
-
-                    string list_to_string = "";
-
-                    for (int i = 0; i < slash_command_data_options_list.Count; i++)
-                    {
-                        list_to_string += slash_command_data_options_list[i] + " ";
-                    }
-
-                    message_to_char_array = list_to_string.ToCharArray();
-                    break;
-
-                default:
-                    message_to_char_array = sl_command.Message.Content.ToCharArray();
-                    break;
+                return_count = return_count * 2;
             }
 
-            // Turn the user message into a char array and count its elements.
-            double character_count = message_to_char_array.Length;
-            return character_count;
+            return return_count;
         }
 
         internal static int CalculateExpEarned(SocialLinkerCommand sl_command)

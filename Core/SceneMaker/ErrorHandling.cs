@@ -81,7 +81,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithDescription("A quotation mark was found earlier than expected. There might be a sprite number missing.");
             embed.AddField("Tips", "When creating a scene, make sure to include a sprite number after the character keyword.");
 
-            embed.WithImageUrl("https://i.imgur.com/qGWGAAG.png");
+            embed.WithImageUrl("https://i.imgur.com/YtNP3e6.png");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -123,7 +123,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithDescription("A quotation mark was found earlier than expected. There might be a sprite number missing or misplaced.");
             embed.AddField("Tips", "When creating a scene, make sure to include a sprite number after the game keyword.");
 
-            embed.WithImageUrl("https://i.imgur.com/Yu6fAAu.png");
+            embed.WithImageUrl("https://i.imgur.com/kb8PzaH.png");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -205,7 +205,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithDescription("A character keyword was found after a game keyword."); // A character keyword was found after a game keyword with no sprite number or dialogue afterwards.
             embed.AddField("Tips", "When creating a game-specific sprite sheet, make sure the game keyword comes after the character keyword.");
 
-            embed.WithImageUrl("https://i.imgur.com/n6U4wUg.png");
+            embed.WithImageUrl("https://i.imgur.com/Z0L6z5x.png");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -247,7 +247,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithDescription("A character keyword was found after a game keyword."); // A character keyword was found after a game keyword with no sprite number or dialogue afterwards.
             embed.AddField("Tips", "When viewing a character's animation frames, make sure the game keyword comes after the character keyword.");
 
-            embed.WithImageUrl("https://i.imgur.com/n6U4wUg.png");
+            embed.WithImageUrl("https://i.imgur.com/Z0L6z5x.png");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -332,7 +332,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.AddField("Tips", "" +
                 "Start with the base sprite number first, then connect an eye frame number to it with a hyphen. If the character sprite also has mouth frames, connect it after the eye frame number with a hyphen, too.");
 
-            embed.WithImageUrl("https://i.imgur.com/wQ72B6I.png");
+            embed.WithImageUrl("https://i.imgur.com/HrLAzlx.png");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -375,7 +375,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.AddField("Tips", "" +
                 "Start with the base sprite number first, then connect an eye frame number to it with a hyphen. If the character sprite also has mouth frames, connect it after the eye frame number with a hyphen, too.");
 
-            embed.WithImageUrl("https://i.imgur.com/wQ72B6I.png");
+            embed.WithImageUrl("https://i.imgur.com/HrLAzlx.png");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 

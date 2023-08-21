@@ -59,7 +59,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 $"\n" +
                 $"Type in a city or postal code you’d like to use with Social Linker, or react with ↩️ to cancel.\n" +
                 $"\n" +
-                $":warning: Changing this setting in private is recommended if using local locations.");
+                $":warning: Changing this setting in private is recommended if using local locations.\n" +
+                $"\n" +
+                $"{Global.MentionNotice}");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

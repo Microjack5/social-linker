@@ -377,18 +377,17 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"You can set your profile theme at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Theme Settings].\n" +
+                $"You can set your profile theme at any time from the **`settings`** menu by choosing [Profile Theme Settings].\n" +
                 "Use the following commands to access these main features:\n");
 
             embed.AddField($"Command List", 
-                $"> **`{BotConfig.bot.cmdPrefix}status`**\n" +
+                $"> **`status`**\n" +
                 $"Check your status screen.\n" +
-                $"Type `detail` after it to view a detailed breakdown of your profile, or tag a user to view theirs.\n" +
                 $"\n" +
-                $"> **`{BotConfig.bot.cmdPrefix}shop`**\n" +
+                $"> **`shop`**\n" +
                 $"Access the status screen Décor Shop.");
 
-            embed.WithImageUrl("https://i.imgur.com/kugq33y.png");
+            embed.WithImageUrl("https://i.imgur.com/ezUiOxl.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

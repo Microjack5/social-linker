@@ -14,10 +14,6 @@ using Discord.Interactions;
 using Newtonsoft.Json;
 using Discord.Net;
 using SocialLinker.Core.SceneMaker;
-using System.Timers;
-using System.Data.SqlClient;
-using System.Windows.Forms;
-using System.Windows.Interop;
 using SocialLinker.Core.CloudStorageTables;
 
 namespace SocialLinker
@@ -33,6 +29,7 @@ namespace SocialLinker
         public SocketUserMessage Message { get; set; }
         public SocketSlashCommand SlashCommand { get; set; }
         public MakerCommandData MakerCommand { get; set; }
+        public bool ValidCommand { get; set; }
     }
 
     public class CommandConverter : InteractionModuleBase<SocketInteractionContext>
@@ -95,7 +92,7 @@ namespace SocialLinker
             return slash_to_command;
         }
 
-        public static SocialLinkerCommand ContextCommandConverter(SocketUserMessage message)
+        public static SocialLinkerCommand ContextCommandConverter(SocketUserMessage message, DiscordShardedClient client)
         {
             List<string> input_substring;
 
@@ -103,14 +100,12 @@ namespace SocialLinker
 
             input_substring = message.Content.Split(delimiterChars).ToList();
 
-            int prefix_length = $"{BotConfig.bot.cmdPrefix}".Length;
-
             string parsed_command_name = "";
 
             int argPos = 0;
-            if (message.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
+            if (message.HasMentionPrefix(client.CurrentUser, ref argPos))
             {
-                parsed_command_name = input_substring[0].Substring(prefix_length);
+                parsed_command_name = input_substring[1];
             }
             else
             {
@@ -123,7 +118,7 @@ namespace SocialLinker
                 CommandName = parsed_command_name,
                 User = message.Author,
                 Channel = message.Channel,
-                MentionedUser = message.MentionedUsers.FirstOrDefault(),
+                MentionedUser = message.MentionedUsers.Skip(1).FirstOrDefault(),
                 Attachments = message.Attachments,
                 Message = message
             };
@@ -134,7 +129,7 @@ namespace SocialLinker
 
     class CommandHandler
     {
-        DiscordShardedClient _client;
+        public DiscordShardedClient _client;
         CommandService _service;
         public IServiceProvider _Services;
 
@@ -193,10 +188,10 @@ namespace SocialLinker
                     //If the user is in a time out status, do nothing and return
                     if (TimeOut.TimeOutStatus(msg) == "Yes") return;
 
-                    var converted_sl_command = CommandConverter.ContextCommandConverter(msg);
+                    var converted_sl_command = CommandConverter.ContextCommandConverter(msg, _client);
 
                     int argPos = 0;
-                    if (msg.HasStringPrefix(BotConfig.bot.cmdPrefix, ref argPos))
+                    if (msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
                     {
                         try
                         {
@@ -217,6 +212,8 @@ namespace SocialLinker
 
                     //Leveling up manages the user's time caps, so make sure it comes after AddProficiency and AddDiligence have ran
                     Leveling.UserSentMessage(converted_sl_command);
+
+                    Console.WriteLine("hewwo, i have sawn message");
                 });
             }
             catch (Exception ex)
@@ -230,17 +227,7 @@ namespace SocialLinker
         private async Task CommandIndex(SocialLinkerCommand command)
         {
             var commandChannel = (SocketGuildChannel)command.Channel;
-            //ulong[] allowed_servers = new ulong[] { 543226698238394378, 488920941041025025, 981870056688480266, 1085839296688295986 };
-
-            //if (allowed_servers.Contains(commandChannel.Guild.Id))
-            //{
-            //    // Do nothing
-            //}
-            //else
-            //{
-            //    await command.SlashCommand.RespondAsync("Global slash commands are temporarily disabled for this server.", ephemeral: true);
-            //    return;
-            //}
+            bool validityCheck = true;
 
             if (command.CommandType == "Slash")
             {
@@ -350,7 +337,13 @@ namespace SocialLinker
                 case "fix":
                     Commands.DevCommands.CorrectMouthFrames(command);
                     break;
+
+                default:
+                    validityCheck = false;
+                    break;
             }
+
+            command.ValidCommand = validityCheck;
         }
 
         public static async Task Status(DiscordSocketClient client)

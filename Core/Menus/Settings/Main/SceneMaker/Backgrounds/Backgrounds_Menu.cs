@@ -127,7 +127,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.Backgrounds
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.Setting_BG_Color}`**\n" +
                 "\n" +
-                "To use clear backgrounds, select :white_square_button:.");
+                "To use clear backgrounds, select :white_square_button:.\n" +
+                "\n" +
+                $"{Global.MentionNotice}");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
