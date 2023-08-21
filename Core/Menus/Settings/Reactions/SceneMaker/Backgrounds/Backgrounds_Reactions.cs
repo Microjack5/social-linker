@@ -294,6 +294,8 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.Backgrounds
             // Store the text of the message in a string and convert all letters to uppercase.
             string input_string = message.Content.ToUpper();
 
+            input_string = Global.RemoveBotMention(input_string).Trim();
+
             // Take a substring consisting of the first character of the input string.
             string first_char = input_string.Substring(0, 1);
 

@@ -217,7 +217,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"Many titles in the series have different Version Control settings! You can choose the versions you want from the **`{BotConfig.bot.cmdPrefix}settings`** menu and choosing [Scene Maker Settings] > [Version Control].\n");
+                $"Many titles in the series have different Version Control settings! You can choose the versions you want from the **`settings`** menu and choosing [Scene Maker Settings] > [Version Control].\n");
 
             embed.WithImageUrl("https://i.imgur.com/PdJAyYJ.gif");
 
@@ -386,7 +386,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"If you want to keep using their game style for other characters, make sure to change your Version Control settings appropriately from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Scene Maker Settings] > [Version Control].\n");
+                $"If you want to keep using their game style for other characters, make sure to change your Version Control settings appropriately from the **`settings`** menu by choosing [Scene Maker Settings] > [Version Control].\n");
 
             embed.WithImageUrl("https://i.imgur.com/b9buvHy.png");
 
@@ -585,7 +585,7 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "\n" +
                 "Master their usage and swap versions on the fly!");
 
-            embed.WithImageUrl("https://i.imgur.com/4oyn9Wy.png");
+            embed.WithImageUrl("https://i.imgur.com/OtjgqkC.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

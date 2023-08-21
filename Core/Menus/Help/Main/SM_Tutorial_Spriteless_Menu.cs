@@ -129,7 +129,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithDescription("" +
                 "When creating a scene, type `0` as the sprite number to not have a character sprite appear. This will only leave the character’s name displayed.");
 
-            embed.WithImageUrl("https://i.imgur.com/3OOlWYi.png");
+            embed.WithImageUrl("https://i.imgur.com/6NoOby5.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -210,7 +210,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"Combined with the Display Names menu in **`{BotConfig.bot.cmdPrefix}settings`** > [Scene Maker Settings], you could even emulate spriteless NPCs!");
+                $"Combined with the Display Names menu in **`settings`** > [Scene Maker Settings], you could even act out spriteless NPCs!");
 
             embed.WithImageUrl("https://i.imgur.com/gQuvGNE.png");
 
@@ -294,11 +294,11 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                "Use the character keyword `System` followed by a template keyword to create system messages in that template.\n" +
+                "Use the character keyword `System` with a game style keyword to create system messages in that template.\n" +
                 "\n" +
                 "Like when creating scenes with spriteless characters, the sprite number will be `0`.");
 
-            embed.WithImageUrl("https://i.imgur.com/nAIEuL0.png");
+            embed.WithImageUrl("https://i.imgur.com/usrLoth.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -383,7 +383,7 @@ namespace SocialLinker.Core.Menus.Help.Main
                 "\n" +
                 "The default form can still be selected by setting the sprite number to `0`, or you can set the sprite number to `1` for her sentient form.");
 
-            embed.WithImageUrl("https://i.imgur.com/7l3vkL4.gif");
+            embed.WithImageUrl("https://i.imgur.com/gZ7elqR.gif");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

@@ -1,72 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Timers;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord.Rest;
 using Discord.WebSocket;
+using Discord;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
-using Discord.Rest;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace SocialLinker.Core.Menus.Help.Main
 {
-    class Help_Menu
+    class SM_Tutorial_Line_Breaks_Menu
     {
-        public static async Task Help_Start(SocketTextChannel channel, SocketGuildUser user)
-        {
-            //Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Now Loading...",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            //Determine color for embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-
-            // Create a null variable for the message.
-            RestUserMessage message = null;
-
-            // Try to send a message to the channel. If the bot lacks permissions, catch the exception and return.
-            try
-            {
-                message = await channel.SendMessageAsync("", false, embed.Build());
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return;
-            }
-
-            // Create a new menu identifier entry for this current message and user to keep track of the overall menu status.
-            var menuSession = new MenuIdStructure()
-            {
-                User = user,
-                MenuMessage = message,
-                CurrentMenu = "Help_Start",
-                MenuTimer = new Timer()
-                {
-                    // Create a timer that expires as a "time out" duration for the user.
-                    Interval = MenuConfig.menu.timerDuration,
-                    AutoReset = false,
-                    Enabled = true
-                }
-            };
-
-            // Add the menu entry to the global list.
-            Global.MenuIdList.Add(menuSession);
-
-            // Create a new menu in the current channel.
-            await Help_Main_Menu(menuSession.User, menuSession.MenuMessage);
-        }
-
-        public static async Task Help_Main_Menu(SocketGuildUser user, RestUserMessage message)
+        public static async Task SM_Tutorial_Line_Breaks_Page_1(SocketGuildUser user, RestUserMessage message)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -77,7 +24,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Social Linker Help",
+                Name = "Line Breaks",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -85,7 +32,9 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "⚖️ Legal Notices | 📄 Credits | ❌ Close Menu"
+                Text = "" +
+                "↩️ Return to Tips & Tricks Menu\n" +
+                "Page 1 / 1"
             };
 
             embed.WithFooter(footer);
@@ -94,25 +43,11 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription(
-                "> **Tutorials**\n" +
-                ":large_blue_diamond: **`Status Screens`**\n" +
-                ":orange_circle: **`Scene Maker`**\n" +
-                "\n" +
-                "> **General Commands**\n" +
-                $"`help`\n" +
-                $"`settings`\n" +
-                "\n" +
-                "> **Social Commands**\n" +
-                $"`hug [user]`\n" +
-                $"`pat [user]`\n" +
-                $"`slap [user]`\n" +
-                $"`punch [user]`\n");
-            embed.AddField("Links",
-                "[Terms of Use](https://sites.google.com/view/social-linker-docs/terms-of-service)\n" +
-                "[Privacy Policy](https://sites.google.com/view/social-linker-docs/privacy-policy)\n" +
-                "[Social Linker Support](https://discord.gg/ZbEeZRjVvU)\n" +
-                "");
+            embed.WithDescription("" +
+                "Message-based commands have a distinct advantage of being able to input text on multiple lines.\n" +
+                "To insert a manual line break in your scene, simply input a line break into your message as normal.\n");
+
+            embed.WithImageUrl("https://i.imgur.com/miDb0ar.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -139,7 +74,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "Help_Main_Menu";
+            menuSession.CurrentMenu = "SM_Tutorial_Line_Breaks_Page_1";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -155,11 +90,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             List<IEmote> reaction_list = new List<IEmote> { };
 
             // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("🔷"));
-            reaction_list.Add(new Emoji("🟠"));
-            reaction_list.Add(new Emoji("⚖️"));
-            reaction_list.Add(new Emoji("📄"));
-            reaction_list.Add(new Emoji("❌"));
+            reaction_list.Add(new Emoji("↩️"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
@@ -214,7 +145,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can access the help menu at any time with the **`{BotConfig.bot.cmdPrefix}help`** command.");
+            embed.WithDescription($"You can view the list of scene maker tutorials at any time from the **`{BotConfig.bot.cmdPrefix}help`** menu by choosing [Scene Maker].");
             return embed;
         }
     }

@@ -8,7 +8,6 @@ using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using Discord.Rest;
-using SocialLinker.Core.LocalStorageTables;
 
 namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 {
@@ -45,7 +44,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 
             embed.WithDescription("" +
                 $"Type in the new display name you'd like for the selected sprites.\n" +
-                $"Please keep the new name within 32 characters.");
+                $"Please keep the new name within 32 characters.\n" +
+                $"\n" +
+                $"{Global.MentionNotice}");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
