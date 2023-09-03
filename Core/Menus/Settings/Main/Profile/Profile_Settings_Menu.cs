@@ -272,7 +272,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can view and change your user settings at any time with the **`{BotConfig.bot.cmdPrefix}settings`** command.");
+            embed.WithDescription($"You can view and change your user settings at any time with the **`settings`** command.");
             return embed;
         }
     }

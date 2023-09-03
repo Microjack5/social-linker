@@ -150,7 +150,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can adjust your display name settings at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Scene Maker Settings] > [Display Names].");
+            embed.WithDescription($"You can adjust your display name settings at any time from the **`settings`** menu by choosing [Scene Maker Settings] > [Display Names].");
             return embed;
         }
     }

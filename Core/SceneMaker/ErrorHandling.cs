@@ -699,7 +699,7 @@ namespace SocialLinker.Core.SceneMaker
                 $"Make sure the character’s keyword is typed correctly and try again.");
 
             /*embed.AddField("Tips", "" +
-                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`{BotConfig.bot.cmdPrefix}settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");*/
+                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");*/
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -743,7 +743,7 @@ namespace SocialLinker.Core.SceneMaker
                 $"Make sure the character’s keyword is typed correctly and try again.");
 
             /*embed.AddField("Tips", "" +
-                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`{BotConfig.bot.cmdPrefix}settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");*/
+                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");*/
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -784,7 +784,7 @@ namespace SocialLinker.Core.SceneMaker
             // Write an appropriate description for the error.
             embed.WithDescription($"There doesn’t seem to be a cut-in sprite set with the keyword {user_input}.");
             embed.AddField("Tips", "" +
-                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`{BotConfig.bot.cmdPrefix}settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");
+                $"Make sure the character’s keyword is typed correctly, or if using a custom sprite set, check your keywords in the **`settings`** menu by selecting [Scene Maker Settings] > [Custom Sprites].");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -824,8 +824,17 @@ namespace SocialLinker.Core.SceneMaker
 
             // Write an appropriate description for the error.
             embed.WithDescription($"That sprite number doesn’t seem to be in {character_name}'s sprite set from {game_version}.");
-            embed.AddField("Tips", "" +
-                $"Use **`{BotConfig.bot.cmdPrefix}maker {character_name}`** to view which character sprites are available.");
+
+            if (command.CommandType == "Slash")
+            {
+                embed.AddField("Tips", "" +
+                $"For slash commands, use **`maker_sheet`** to view which character sprites are available.");
+            }
+            else if (command.CommandType == "Context")
+            {
+                embed.AddField("Tips", "" +
+                $"For message-based commands, use **`maker {character_name}`** to view which character sprites are available.");
+            }
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -904,7 +913,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Write an appropriate description for the error.
             embed.WithDescription("This custom sprite set has not been made compatible with the chosen template.");
-            embed.AddField("Tips", $"To set compatibility for other templates, visit the **`{BotConfig.bot.cmdPrefix}settings`** menu and choose [Scene Maker Settings] > [Custom Sprites] > [Manage Custom Sprite Sets].");
+            embed.AddField("Tips", $"To set compatibility for other templates, visit the **`settings`** menu and choose [Scene Maker Settings] > [Custom Sprites] > [Manage Custom Sprite Sets].");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -944,7 +953,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Write an appropriate description for the error.
             embed.WithDescription($"This custom sprite set has not been made compatible with the active **{template_setting}** setting for the {game_version} template.");
-            embed.AddField("Tips", $"To set compatibility, visit the **`{BotConfig.bot.cmdPrefix}settings`** menu and choose [Scene Maker Settings] > [Custom Sprites] > [Manage Custom Sprite Sets].");
+            embed.AddField("Tips", $"To set compatibility, visit the **`settings`** menu and choose [Scene Maker Settings] > [Custom Sprites] > [Manage Custom Sprite Sets].");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -984,7 +993,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Write an appropriate description for the error.
             embed.WithDescription("Users can hold a maximum of 50 custom sprite sets they created at once.");
-            embed.AddField("Tips", $"To delete sets and make room, visit the **`{BotConfig.bot.cmdPrefix}settings`** menu and choose [Scene Maker Settings] > [Custom Sprites] > [Manage Custom Sprite Sets].");
+            embed.AddField("Tips", $"To delete sets and make room, visit the **`settings`** menu and choose [Scene Maker Settings] > [Custom Sprites] > [Manage Custom Sprite Sets].");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -1102,8 +1111,17 @@ namespace SocialLinker.Core.SceneMaker
 
             // Write an appropriate description for the error.
             embed.WithDescription($"That eye frame doesn’t seem to be part of {character_name}'s {command_data.Base_Sprite}{Number_Suffix(command_data.Base_Sprite)} {game_version} sprite.");
-            embed.AddField("Tips", "" +
-                $"Use **`{BotConfig.bot.cmdPrefix}maker {command_data.Character_Keyword} {command_data.Base_Sprite}`** to view which animation frames are available for the sprite.");
+
+            if (command.CommandType == "Slash")
+            {
+                embed.AddField("Tips", "" +
+                $"For slash commands, use **`maker_sheet`** and select the `sprite_number` option to view which animation frames are available for the sprite.");
+            }
+            else if (command.CommandType == "Context")
+            {
+                embed.AddField("Tips", "" +
+                $"For message-based commands, use **`maker {command_data.Character_Keyword} {command_data.Base_Sprite}`** to view which animation frames are available for the sprite.");
+            }
 
             // Send the message to the channel.
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
@@ -1143,8 +1161,17 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription($"That mouth frame doesn’t seem to be part of {character_name}'s {command_data.Base_Sprite}{Number_Suffix(command_data.Base_Sprite)} {game_version} sprite.");
-            embed.AddField("Tips", "" +
-                $"Use **`{BotConfig.bot.cmdPrefix}maker {command_data.Character_Keyword} {command_data.Base_Sprite}`** to view which animation frames are available for the sprite.");
+
+            if (command.CommandType == "Slash")
+            {
+                embed.AddField("Tips", "" +
+                $"For slash commands, use **`maker_sheet`** and select the `sprite_number` option to view which animation frames are available for the sprite.");
+            }
+            else if (command.CommandType == "Context")
+            {
+                embed.AddField("Tips", "" +
+                $"For message-based commands, use **`maker {command_data.Character_Keyword} {command_data.Base_Sprite}`** to view which animation frames are available for the sprite.");
+            }
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 
@@ -1198,7 +1225,7 @@ namespace SocialLinker.Core.SceneMaker
             // Write an appropriate description for the error.
             embed.WithDescription($"This command accesses content from {OfficialSetMethods.AcronymToFullTitle(template)}, which you've filtered out in your settings.");
             embed.AddField("Tips", "" +
-                $"You can change your content filter settings at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Settings] > [Content Filter].");
+                $"You can change your content filter settings at any time from the **`settings`** menu by choosing [Profile Settings] > [Content Filter].");
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());
 

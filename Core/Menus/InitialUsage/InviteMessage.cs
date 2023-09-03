@@ -25,7 +25,7 @@ namespace SocialLinker.Core.Menus.InitialUsage
                 "\n" +
                 "If you’ve used Social Linker in another server, you can pick up your progress right from where you left off.\n" +
                 "\n" +
-                $"Type **`{BotConfig.bot.cmdPrefix}help`** or use a slash command to get started.\n" +
+                $"Use the **`help`** slash command to get started.\n" +
                 "\n" +
                 "**Content: :copyright: ATLUS / SEGA / KOEI TECMO GAMES / ARC SYSTEM WORKS / FRENCH-BREAD / Rooster Teeth Productions, LLC. / Team ARCANA / Marvelous, Inc. / SUBTLE STYLE**\n" +
                 "```Social Linker is not affiliated, associated, authorized, maintained, sponsored, endorsed by, or in any way officially connected with these trademark and copyright holders. All content present is intended to fall under fair use.```");

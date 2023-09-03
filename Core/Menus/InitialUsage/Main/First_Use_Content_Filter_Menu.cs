@@ -799,10 +799,10 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl("https://i.imgur.com/L0K5pNh.png");
 
             embed.WithDescription($"" +
-                $"You can adjust your content filter settings at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Settings] > [Content Filter].");
+                $"You can adjust your content filter settings at any time from the **`settings`** menu by choosing [Profile Settings] > [Content Filter].");
 
             embed.AddField("Getting Started", "" +
-                $"Type **`{BotConfig.bot.cmdPrefix}help`** to view various commands and tutorials showing how to use Social Linker.");
+                $"Use the **`help`** slash command view various other commands and tutorials showing how to use Social Linker.");
 
             // Attempt editing the message if it hasn't been deleted by the user yet. If it has, catch the exception, send an error message, and return.
             try

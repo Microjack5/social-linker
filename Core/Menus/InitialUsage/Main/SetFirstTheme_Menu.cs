@@ -73,7 +73,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                     "The appearance of your commands will change based on each one, and you can switch to a different profile theme at any time.\n" +
                     "\n" +
                     ":warning: No profile themes can be chosen due to your content filter. " +
-                    $"You can edit your content filter at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Settings] > [Content Filter].";
+                    $"You can edit your content filter at any time from the **`settings`** menu by choosing [Profile Settings] > [Content Filter].";
 
                 var footer = new EmbedFooterBuilder
                 {
@@ -193,7 +193,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
 
             embed.WithDescription($"" +
                 $"Your profile theme has been set to `{game_title}`.\n\n" +
-                $"You can change your profile theme at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Theme Settings].");
+                $"You can change your profile theme at any time from the **`settings`** menu by choosing [Profile Theme Settings].");
 
             var footer = new EmbedFooterBuilder
             {
@@ -298,7 +298,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can set your profile theme at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Theme Settings].");
+            embed.WithDescription($"You can set your profile theme at any time from the **`settings`** menu by choosing [Profile Theme Settings].");
             return embed;
         }
     }

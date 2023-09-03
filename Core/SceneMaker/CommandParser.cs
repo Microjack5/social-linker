@@ -268,7 +268,7 @@ namespace SocialLinker.Core.SceneMaker
             }
 
             // If there are no indicies in the input_substring string list, we have a successful command! Generate a tutorial menu and return.
-            if (input_substring.Count == 1 && input_substring[0] == $"{BotConfig.bot.cmdPrefix}maker")
+            if (input_substring.Count == 1 && input_substring[0] == $"maker")
             {
                 await Help.HelpMenu(sl_command);
                 return;
@@ -835,7 +835,7 @@ namespace SocialLinker.Core.SceneMaker
                 }
 
                 // If there are no indicies in the input_substring string list, we have a successful command! Generate a tutorial menu and return.
-                if (input_substring.Count == 1 && input_substring[0] == $"{BotConfig.bot.cmdPrefix}maker")
+                if (input_substring.Count == 1 && input_substring[0] == $"maker")
                 {
                     await Help.HelpMenu(sl_command);
                     return;

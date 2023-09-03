@@ -1744,7 +1744,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can adjust your template settings at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Scene Maker Settings] > [Template Layout].");
+            embed.WithDescription($"You can adjust your template settings at any time from the **`settings`** menu by choosing [Scene Maker Settings] > [Template Layout].");
             return embed;
         }
     }

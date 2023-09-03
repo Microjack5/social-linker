@@ -44,7 +44,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"Type **`{BotConfig.bot.cmdPrefix}maker dual`** to start creating a scene with two characters. This is only possible with a select few templates, so choose the one you think fits best and follow the instructions provided.");
+                $"Type **`maker dual`** to start creating a scene with two characters. This is only possible with a select few templates, so choose the one you think fits best and follow the instructions provided.");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -226,7 +226,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can view the list of scene maker tutorials at any time from the **`{BotConfig.bot.cmdPrefix}help`** menu by choosing [Scene Maker].");
+            embed.WithDescription($"You can view the list of scene maker tutorials at any time from the **`help`** menu by choosing [Scene Maker].");
             return embed;
         }
     }

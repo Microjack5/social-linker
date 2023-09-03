@@ -187,7 +187,7 @@ namespace SocialLinker.Core.CloudStorageTables
                 Display_Names_Sort = "entry_new_old",
                 Setting_Sheet_Order = "Order by Outfit",
                 Setting_BG_Color = "Transparent",
-                Setting_BG_Upload = "Scale to Fit",
+                Setting_BG_Upload = "Scale to Fill",
                 P1_PSX_Resolution = "320 × 240",
                 P1_PSX_Scale = "Nearest Neighbor",
                 P1_PSP_Resolution = "480 × 272",

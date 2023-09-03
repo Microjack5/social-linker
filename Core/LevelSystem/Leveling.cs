@@ -197,11 +197,21 @@ namespace SocialLinker.Core.LevelSystem
         internal static double CharacterCount(SocialLinkerCommand sl_command)
         {
             Random rnd = new Random();
-            int return_count = rnd.Next(10, 2001);
+            int weighted_random = rnd.Next(1, 11);
+            int return_count = 10;
+
+            if (weighted_random != 5)
+            {
+                return_count = rnd.Next(10, 500);
+            }
+            else
+            {
+                return_count = rnd.Next(10, 2001);
+            }
 
             if (sl_command.ValidCommand == true)
             {
-                return_count = return_count * 2;
+                return_count = return_count * (int)1.5;
             }
 
             return return_count;
@@ -350,7 +360,7 @@ namespace SocialLinker.Core.LevelSystem
             {
                 var footer = new EmbedFooterBuilder
                 {
-                    Text = $"You can disable level up messages like these from the {BotConfig.bot.cmdPrefix}settings menu by choosing [Profile Settings]."
+                    Text = $"You can disable level up messages like these from the **`settings`** menu by choosing [Profile Settings]."
                 };
 
                 embed.WithFooter(footer);
@@ -444,16 +454,16 @@ namespace SocialLinker.Core.LevelSystem
             // If the user has reset their level before, display a message for current Star Level users depending on how many times their level has been reset.
             if (account.Level_Resets == 2)
             {
-                embed.WithDescription($"You've reached Level 99 three times! The option **Star Level** has reappeared for the final time in the **`{BotConfig.bot.cmdPrefix}settings`** menu under [Profile Settings].");
+                embed.WithDescription($"You've reached Level 99 three times! The option **Star Level** has reappeared for the final time in the **`settings`** menu under [Profile Settings].");
             }
             else if (account.Level_Resets == 1)
             {
-                embed.WithDescription($"You've reached Level 99 twice! The option **Star Level** has reappeared in the **`{BotConfig.bot.cmdPrefix}settings`** menu under [Profile Settings].");
+                embed.WithDescription($"You've reached Level 99 twice! The option **Star Level** has reappeared in the **`settings`** menu under [Profile Settings].");
             }
             // If not, introduce the concept of Star Levels to the user.
             else if (account.Level_Resets == 0)
             {
-                embed.WithDescription($"You've reached Level 99! A new option called **Star Level** has been unlocked in the **`{BotConfig.bot.cmdPrefix}settings`** menu under [Profile Settings].");
+                embed.WithDescription($"You've reached Level 99! A new option called **Star Level** has been unlocked in the **`settings`** menu under [Profile Settings].");
             }
             
             await channel.SendMessageAsync("", false, embed.Build());

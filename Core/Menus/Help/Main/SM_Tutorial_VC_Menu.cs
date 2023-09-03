@@ -962,7 +962,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can view the scene maker version control tutorial at any time from the **`{BotConfig.bot.cmdPrefix}help`** menu by choosing [Scene Maker] > [Tips & Tricks] > [Version Control].");
+            embed.WithDescription($"You can view the scene maker version control tutorial at any time from the **`help`** menu by choosing [Scene Maker] > [Tips & Tricks] > [Version Control].");
             return embed;
         }
     }

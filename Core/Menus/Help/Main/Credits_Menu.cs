@@ -274,7 +274,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can access the help menu at any time with the **`{BotConfig.bot.cmdPrefix}help`** command.");
+            embed.WithDescription($"You can access the help menu at any time with the **`help`** command.");
             return embed;
         }
     }

@@ -619,9 +619,9 @@ namespace SocialLinker.Core.Menus.Shop.Main
             embed.WithFooter(footer);
 
             embed.WithDescription($"" +
-                $"You can access your new décor at any time by using the **`{BotConfig.bot.cmdPrefix}status`** command." +
+                $"You can access your new décor at any time by using the **`status`** command." +
                 $"\n" +
-                $"To change décor, visit the **`{BotConfig.bot.cmdPrefix}settings`** menu and choose [Profile Settings] > [Status Screen Décor].");
+                $"To change décor, visit the **`settings`** menu and choose [Profile Settings] > [Status Screen Décor].");
 
             // Determine the color and thumbnail for the embeded message.
             if (account.Profile_Theme == "P3")
@@ -703,7 +703,7 @@ namespace SocialLinker.Core.Menus.Shop.Main
             embed.WithAuthor(author);
             embed.WithFooter(footer);
 
-            embed.WithDescription($"You can set your new décor at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Profile Settings] > [Status Screen Décor].");
+            embed.WithDescription($"You can set your new décor at any time from the **`settings`** menu by choosing [Profile Settings] > [Status Screen Décor].");
 
             // Determine the color and thumbnail for the embeded message.
             if (account.Profile_Theme == "P3")

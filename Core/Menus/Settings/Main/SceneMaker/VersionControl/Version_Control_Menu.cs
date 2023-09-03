@@ -1302,7 +1302,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can edit your version control settings at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Scene Maker Settings] > [Version Control].");
+            embed.WithDescription($"You can edit your version control settings at any time from the **`settings`** menu by choosing [Scene Maker Settings] > [Version Control].");
             return embed;
         }
     }

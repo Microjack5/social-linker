@@ -600,7 +600,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can view the basic scene maker tutorial at any time from the **`{BotConfig.bot.cmdPrefix}help`** menu by choosing [Scene Maker] > [Basic Tutorial].");
+            embed.WithDescription($"You can view the basic scene maker tutorial at any time from the **`help`** menu by choosing [Scene Maker] > [Basic Tutorial].");
             return embed;
         }
     }

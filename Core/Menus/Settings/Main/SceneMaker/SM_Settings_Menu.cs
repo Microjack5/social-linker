@@ -160,7 +160,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can view and change your scene maker settings at any time with the **`{BotConfig.bot.cmdPrefix}settings`** command by choosing [Scene Maker Settings].");
+            embed.WithDescription($"You can view and change your scene maker settings at any time with the **`settings`** command by choosing [Scene Maker Settings].");
             return embed;
         }
     }

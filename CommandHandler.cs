@@ -212,8 +212,6 @@ namespace SocialLinker
 
                     //Leveling up manages the user's time caps, so make sure it comes after AddProficiency and AddDiligence have ran
                     Leveling.UserSentMessage(converted_sl_command);
-
-                    Console.WriteLine("hewwo, i have sawn message");
                 });
             }
             catch (Exception ex)

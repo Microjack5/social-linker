@@ -224,7 +224,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.SpriteSheetOrder
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can adjust the order of your sprite sheets at any time from the **`{BotConfig.bot.cmdPrefix}settings`** menu by choosing [Scene Maker Settings] > [Sprite Sheet Order].");
+            embed.WithDescription($"You can adjust the order of your sprite sheets at any time from the **`settings`** menu by choosing [Scene Maker Settings] > [Sprite Sheet Order].");
             return embed;
         }
     }

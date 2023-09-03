@@ -125,7 +125,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"Use **`{BotConfig.bot.cmdPrefix}maker cut-in`** to view the list of compatible templates and choose the one you’re interested in. A character list of usable cut-ins for that template will appear to reference.");
+                $"Use **`maker cut-in`** to view the list of compatible templates and choose the one you’re interested in. A character list of usable cut-ins for that template will appear to reference.");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -206,7 +206,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"To view the cut-ins for a character, use the format **`{BotConfig.bot.cmdPrefix}maker [character]`** as if viewing their sprite sheet normally and add `cut-in` to the end.\n" +
+                $"To view the cut-ins for a character, use the format **`maker [character]`** as if viewing their sprite sheet normally and add `cut-in` to the end.\n" +
                 "\n" +
                 "If using a template keyword to specify the game, make sure `cut-in` is typed after it.");
 
@@ -388,7 +388,7 @@ namespace SocialLinker.Core.Menus.Help.Main
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"You can view the list of scene maker tutorials at any time from the **`{BotConfig.bot.cmdPrefix}help`** menu by choosing [Scene Maker].");
+            embed.WithDescription($"You can view the list of scene maker tutorials at any time from the **`help`** menu by choosing [Scene Maker].");
             return embed;
         }
     }
