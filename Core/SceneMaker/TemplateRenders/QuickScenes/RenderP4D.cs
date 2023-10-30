@@ -23,13 +23,18 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         int template_height = 1080;
         Random rnd = new Random();
 
-        public async Task Render_Quick_Scene_P4D(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public async Task Render_Quick_Scene_P4D(SocialLinkerCommand sl_command)
         {
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            MakerCommandData maker_command_data = sl_command.MakerCommand;
+
             RestUserMessage loader = await channel.SendMessageAsync("", false, P4D_Loading_Message().Build());
             var account = UserInfoClasses.GetAccount(user);
-            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -50,9 +55,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             Bitmap bustup = new Bitmap(2, 2);
 
-            if (command_data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
             }
 
             if (bustup == null)
@@ -71,24 +76,24 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
 
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (command_data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data.Base_Sprite != 0)
                 {
-                    Bitmap placed_bustup = Set_Bustup_Placement(sl_command, account, bustup, bustup_data, set_data, command_data);
+                    Bitmap placed_bustup = Set_Bustup_Placement(sl_command, account, bustup, bustup_data, set_data, maker_command_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
                 }
 
                 Bitmap text_overlay = new Bitmap(2, 2);
 
-                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P4D", "Dialogue", command_data.Dialogue);
+                maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P4D", "Dialogue", maker_command_data.Dialogue);
 
                 switch (account.P4D_TS_Scene_Type)
                 {
                     case "Dialogue":
-                        text_overlay = Render_Dialogue_Overlay(sl_command, account, set_data, command_data, bustup_data);
+                        text_overlay = Render_Dialogue_Overlay(sl_command, account, set_data, maker_command_data, bustup_data);
                         break;
 
                     case "Narration":
-                        text_overlay = Render_Narration_Overlay(sl_command, account, command_data, false);
+                        text_overlay = Render_Narration_Overlay(sl_command, account, maker_command_data, false);
                         break;
                 }
 
@@ -252,7 +257,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(dialogue_layer_2, 0, 0, template_width, template_height);
                 graphics.DrawImage(button_guide, 0, 0, template_width, template_height);
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, command_data);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P4D", "Name", display_name);
 
                 Bitmap rendered_name = Render_Name(display_name);

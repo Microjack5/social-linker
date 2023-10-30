@@ -29,11 +29,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public int max_line_length = 480;
 
-        public async Task Render_Quick_Scene_P3F(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public async Task Render_Quick_Scene_P3F(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P3F_Loading_Message().Build());
@@ -41,7 +44,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
 
-            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -65,9 +69,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Check if the base sprite number is something other than zero.
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-            if (command_data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -92,7 +96,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
 
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (command_data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data.Base_Sprite != 0)
                 {
                     graphics.DrawImage(bustup, bustup_data.P3F_Coord_X, bustup_data.P3F_Coord_Y, bustup_data.P3F_Scale_Width, bustup_data.P3F_Scale_Height);
                 }
@@ -116,13 +120,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // We'll start rendering our needed text here.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P3F", "Name", display_name);
 
                 graphics.DrawImage(Text_To_Red(Render_Name(display_name)), 0, 0, template_width, template_height);
 
-                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P3F", "Dialogue", command_data.Dialogue);
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3F", command_data.Dialogue, 3, max_line_length);
+                maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P3F", "Dialogue", maker_command_data.Dialogue);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3F", maker_command_data.Dialogue, 3, max_line_length);
 
                 // Draw the input dialogue to the template.
                 graphics.DrawImage(Text_To_Gray(Render_Dialogue(parsed_lines)), 0, 0, template_width, template_height);

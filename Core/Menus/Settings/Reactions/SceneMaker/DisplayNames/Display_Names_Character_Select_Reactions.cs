@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.LocalStorageTables;
-using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames;
 using SocialLinker.Core.SceneMaker;
 
@@ -53,8 +52,11 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
 
             MakerCommandData maker_command = new MakerCommandData()
             {
-                Sprite_Set_Version = naming_session.Game,
-                Character_Keyword = input_string
+                Character_Data = new MakerCharacterData()
+                {
+                    Sprite_Set_Version = naming_session.Game,
+                    Character_Keyword = input_string
+                }
             };
 
             OfficialSetData sprite_set_info = OfficialSetMethods.GetSpriteSetInfo(account, maker_command);

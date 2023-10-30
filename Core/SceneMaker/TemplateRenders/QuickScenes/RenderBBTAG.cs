@@ -25,17 +25,21 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         int template_height = 1080;
         bool is_spriteless = false;
 
-        public async Task Render_Quick_Scene_BBTAG(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public async Task Render_Quick_Scene_BBTAG(SocialLinkerCommand sl_command)
         {
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            MakerCommandData maker_command_data = sl_command.MakerCommand;
+
             RestUserMessage loader = await channel.SendMessageAsync("", false, BBTAG_Loading_Message(set_data.Series).Build());
 
             var account = UserInfoClasses.GetAccount(user);
-            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
-            if (command_data.Base_Sprite == 0)
+            if (maker_command_data.Character_Data.Base_Sprite == 0)
             {
                 is_spriteless = true;
             }
@@ -62,7 +66,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             if (is_spriteless == false)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -76,7 +80,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Time to put it all together!
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
                 DateTime user_time = Get_Date(sl_command, account);
                 Bitmap header = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//layer_1.png");
                 Bitmap nametag = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Nametag//{Series_To_Nametag(set_data.Series)}.png");
@@ -104,7 +108,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(textbox, 0, 0, template_width, template_height);
                 graphics.DrawImage(nametag, 0, 0, template_width, template_height);
                 graphics.DrawImage(rendered_name, 0, 0, template_width, template_height);
-                graphics.DrawImage(Render_Dialogue(command_data.Dialogue), 0, 0, template_width, template_height);
+                graphics.DrawImage(Render_Dialogue(maker_command_data.Dialogue), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -134,7 +138,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData command_data)
+        public async Task Render_System_Message(SocialLinkerCommand sl_command, MakerCommandData maker_command_data)
         {
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
@@ -179,7 +183,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(chapter_banner, 704, 33, 512, 128);
 
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (command_data.Base_Sprite == 0)
+                if (maker_command_data.Character_Data.Base_Sprite == 0)
                 {
                     textbox = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Message_Window//system_1.png");
                 }
@@ -189,7 +193,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 graphics.DrawImage(textbox, 0, 0, template_width, template_height);
-                graphics.DrawImage(Render_Dialogue(command_data.Dialogue), 0, 0, template_width, template_height);
+                graphics.DrawImage(Render_Dialogue(maker_command_data.Dialogue), 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.

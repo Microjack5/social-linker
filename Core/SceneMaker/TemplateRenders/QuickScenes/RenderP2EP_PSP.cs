@@ -25,11 +25,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         int template_width = 480;
         int template_height = 272;
 
-        public async Task Render_Quick_Scene_P2EP_PSP(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public async Task Render_Quick_Scene_P2EP_PSP(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P2EP_PSP_Loading_Message().Build());
@@ -37,7 +40,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
 
-            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -61,9 +65,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Check if the base sprite number is something other than zero.
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-            if (command_data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -119,16 +123,16 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(message_window, 0, 0, template_width, template_height);
 
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (command_data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data.Base_Sprite != 0)
                 {
-                    Bitmap placed_bustup = Set_Bustup_Placement(sl_command, account, bustup, bustup_data, set_data, command_data);
+                    Bitmap placed_bustup = Set_Bustup_Placement(sl_command, account, bustup, bustup_data, set_data, maker_command_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
                 }
             }
 
             System.Drawing.Color display_name_color = System.Drawing.Color.FromArgb(246, 243, 66);
 
-            string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+            string display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
             display_name = OfficialSetMethods.Validate_Input(sl_command, "P2EP-PSP", "Name", display_name);
 
             Bitmap display_name_layer = Render_Name(display_name);
@@ -139,7 +143,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 // Check if the base sprite number is something other than zero. If so, render the display name of the chosen sprite to the template.
-                if (command_data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data.Base_Sprite != 0)
                 {
                     graphics.DrawImage(Bitmap_To_Color(display_name_layer, display_name_color, display_name_area), 0, 0, template_width, template_height);
                 }
@@ -148,16 +152,16 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     // Change the base sprite number from the command data to one.
                     // This way, we can get the bustup data for the first sprite to retrieve its display name.
-                    command_data.Base_Sprite = 1;
+                    maker_command_data.Character_Data.Base_Sprite = 1;
 
                     // Get the bustup data for the first sprite and render the display name to the template.
-                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
                     graphics.DrawImage(Bitmap_To_Color(display_name_layer, display_name_color, display_name_area), 0, 0, template_width, template_height);
                 }
 
                 // Draw the input dialogue to the template.
-                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P2EP-PSP", "Dialogue", command_data.Dialogue);
-                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P2EP-PSP", command_data.Dialogue, 3, 370);
+                maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P2EP-PSP", "Dialogue", maker_command_data.Dialogue);
+                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P2EP-PSP", maker_command_data.Dialogue, 3, 370);
                 graphics.DrawImage(Render_Dialogue(dialogue_lines, false), 0, 0, template_width, template_height);
 
                 Bitmap cursor = Render_Cursor(account);

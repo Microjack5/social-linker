@@ -385,6 +385,14 @@
     <Compile Include="Core\SceneMaker\MoonPhaseCalculator.cs" />
     <Compile Include="Core\SceneMaker\OfficialSetLists.cs" />
     <Compile Include="Core\SceneMaker\OfficialSetSheets.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\MakerMulti\RenderBBTAG.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\MakerMulti\RenderP2EP_PS1.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\MakerMulti\RenderP2EP_PSP.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\MakerMulti\RenderP2IS_PS1.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\MakerMulti\RenderP2IS_PSP.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\MakerMulti\RenderP3P.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\MakerMulti\RenderP4AU.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\MakerMulti\RenderP4D.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderBBTAG.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP1_PS1.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP1_PSP.cs" />

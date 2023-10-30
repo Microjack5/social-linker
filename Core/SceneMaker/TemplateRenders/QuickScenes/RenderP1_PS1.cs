@@ -29,18 +29,22 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         int template_height = 240;
         int max_line_length = 232;
 
-        public async Task Render_Quick_Scene_P1_PS1(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public async Task Render_Quick_Scene_P1_PS1(SocialLinkerCommand sl_command)
         {
             try
             {
                 SocketUser user = sl_command.User;
                 SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
+                OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+                MakerCommandData maker_command_data = sl_command.MakerCommand;
+
                 var account = UserInfoClasses.GetAccount(user);
 
-                BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+                sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+                BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
-                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Dialogue", command_data.Dialogue);
+                maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Dialogue", maker_command_data.Dialogue);
 
                 // The P1-PS1 template has a unique function where display names are not rendered if the same character is used in succession.
                 // We'll call this "context switch". Get or create an active context switch object that stores data for this.
@@ -48,15 +52,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 string display_name = "";
 
-                if (command_data.Base_Sprite == 0)
+                if (maker_command_data.Character_Data.Base_Sprite == 0)
                 {
-                    display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                    display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
                     display_name = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Name", display_name);
-                    command_data.Base_Sprite = 0;
+                    maker_command_data.Character_Data.Base_Sprite = 0;
                 }
                 else
                 {
-                    display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                    display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
                     display_name = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Name", display_name);
                 }
 
@@ -67,19 +71,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     if (active_session.Recently_Used_Index != active_session.Active_Characters.IndexOf(set_data))
                     {
                         // Append the character's display name to their dialogue.
-                        command_data.Dialogue = $"{display_name}:  {command_data.Dialogue}";
+                        maker_command_data.Dialogue = $"{display_name}:  {maker_command_data.Dialogue}";
                     }
                     // Append the character's display name if they have Consistent Display Names set to "On".
                     else if (account.P1_PSX_TS_Consistent_Names == "On")
                     {
-                        command_data.Dialogue = $"{display_name}:  {command_data.Dialogue}";
+                        maker_command_data.Dialogue = $"{display_name}:  {maker_command_data.Dialogue}";
                     }
                 }
                 // If not, we'll want to add the set to the list.
                 else
                 {
                     // Append the character's display name to their dialogue.
-                    command_data.Dialogue = $"{display_name}:  {command_data.Dialogue}";
+                    maker_command_data.Dialogue = $"{display_name}:  {maker_command_data.Dialogue}";
 
                     // Check if the number of active characters in the list is three, which is the max number allowed.
                     if (active_session.Active_Characters.Count == 3)
@@ -97,7 +101,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Create a new int variable that stores the INDEX of the current set data in the session list.
                 int char_index = active_session.Active_Characters.IndexOf(set_data);
 
-                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PS1", command_data.Dialogue, 4, max_line_length);
+                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PS1", maker_command_data.Dialogue, 4, max_line_length);
 
                 // The string array list typically has a constant number of indicies when created, so get the number of lines that'll actually be rendered. 
                 int number_of_rendered_lines = Get_Number_of_Rendered_Lines(dialogue_lines);
@@ -113,7 +117,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(1, 2).Build());
 
                     // Render the first image.
-                    await Render_Offload(sl_command, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_1, loader);
+                    await Render_Offload(sl_command, account, active_session, set_data, bustup_data, maker_command_data, dialogue_lines_pt_1, loader);
 
                     // Move down one line and isolate another three lines of dialogue into a new string array list. This will imitate the text scrolling.
                     List<string>[] dialogue_lines_pt_2 = new List<string>[] { dialogue_lines[1], dialogue_lines[2], dialogue_lines[3] };
@@ -122,7 +126,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     loader = await channel.SendMessageAsync("", false, P1_PS1_Multi_Scene_Loading_Message(2, 2).Build());
 
                     // Render the second image.
-                    await Render_Offload(sl_command, account, active_session, set_data, bustup_data, command_data, dialogue_lines_pt_2, loader);
+                    await Render_Offload(sl_command, account, active_session, set_data, bustup_data, maker_command_data, dialogue_lines_pt_2, loader);
                 }
                 // If the number of rendered lines is exactly three or less, we'll only need to send one image.
                 else
@@ -131,7 +135,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PS1_Loading_Message().Build());
 
                     // Render the image.
-                    await Render_Offload(sl_command, account, active_session, set_data, bustup_data, command_data, dialogue_lines, loader);
+                    await Render_Offload(sl_command, account, active_session, set_data, bustup_data, maker_command_data, dialogue_lines, loader);
                 }
 
                 // Here, we're at the step where we've already rendered and sent the images we needed.
@@ -159,7 +163,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public async Task Render_Offload(SocialLinkerCommand sl_command, UserInfoFields account, ContextSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, List<string>[] dialogue_lines, RestUserMessage loader)
+        public async Task Render_Offload(SocialLinkerCommand sl_command, UserInfoFields account, ContextSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData maker_command_data, List<string>[] dialogue_lines, RestUserMessage loader)
         {
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -181,9 +185,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             Bitmap bustup = new Bitmap(2, 2);
 
-            if (command_data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
             }
 
             if (bustup == null)
@@ -203,7 +207,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     graphics.DrawImage(bg_shadow, 0, 0, template_width, template_height);
                 }
 
-                if (command_data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data.Base_Sprite != 0)
                 {
                     Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session, set_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);

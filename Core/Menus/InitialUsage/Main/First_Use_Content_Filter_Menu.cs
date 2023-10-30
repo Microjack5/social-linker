@@ -802,7 +802,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                 $"You can adjust your content filter settings at any time from the **`settings`** menu by choosing [Profile Settings] > [Content Filter].");
 
             embed.AddField("Getting Started", "" +
-                $"Use the **`help`** slash command view various other commands and tutorials showing how to use Social Linker.");
+                $"Use the **`help`** slash command to view various other commands and tutorials showing how to use Social Linker.");
 
             // Attempt editing the message if it hasn't been deleted by the user yet. If it has, catch the exception, send an error message, and return.
             try

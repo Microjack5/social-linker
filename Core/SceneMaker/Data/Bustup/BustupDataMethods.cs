@@ -15,7 +15,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
         private static List<BustupData> bustup_data_list;
         private static List<FrameData> frame_data_list;
 
-        public static BustupData Get_Bustup_Data(UserInfoFields account, OfficialSetData set_data, MakerCommandData command_data)
+        public static BustupData Get_Bustup_Data(UserInfoFields account, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create variables for the folder and JSON that contains the data for the set.
             string data_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -100,15 +100,15 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 string bustup_filename = "";
 
                 // Find the filename of the bustup that the user has selected.
-                if (command_data.Base_Sprite == 0)
+                if (maker_command_data.Character_Data.Base_Sprite == 0)
                 {
-                    command_data.Base_Sprite = 1;
-                    bustup_filename = Get_Bustup_Filename(account, set_data, command_data);
-                    command_data.Base_Sprite = 0;
+                    maker_command_data.Character_Data.Base_Sprite = 1;
+                    bustup_filename = Get_Bustup_Filename(account, set_data, maker_command_data);
+                    maker_command_data.Character_Data.Base_Sprite = 0;
                 }
                 else
                 {
-                    bustup_filename = Get_Bustup_Filename(account, set_data, command_data);
+                    bustup_filename = Get_Bustup_Filename(account, set_data, maker_command_data);
                 }
 
                 // Return the bustup data info by using its filename to search for its entry.
@@ -117,11 +117,11 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
             else
             {
                 Create_Bustup_Data_List(set_data);
-                return Get_Bustup_Data(account, set_data, command_data);
+                return Get_Bustup_Data(account, set_data, maker_command_data);
             }
         }
 
-        public static FrameData Get_Eye_Frame_Data(OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data)
+        public static FrameData Get_Eye_Frame_Data(OfficialSetData set_data, BustupData bustup_data, MakerCommandData maker_command_data)
         {
             // Create variables for the folder and JSON that contains the data for the set.
             string data_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -143,7 +143,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 string bustup_filename = bustup_data.Filename.Substring(0, bustup_data.Filename.Length - 4);
 
                 // Combine the base bustup filename substring with the needed frame suffix to create the frame filename.
-                string frame_filename = $"{bustup_filename}_e{command_data.Eye_Frame}.png";
+                string frame_filename = $"{bustup_filename}_e{maker_command_data.Character_Data.Eye_Frame}.png";
 
                 // Return the frame data info by using its filename to search for its entry.
                 return Frame_Data_From_Filename(frame_filename);
@@ -153,7 +153,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
             {
                 if (Create_Eye_Frame_Data_List(set_data) != default)
                 {
-                    return Get_Eye_Frame_Data(set_data, bustup_data, command_data);
+                    return Get_Eye_Frame_Data(set_data, bustup_data, maker_command_data);
                 }
                 else
                 {
@@ -162,7 +162,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
             } 
         }
 
-        public static FrameData Get_Mouth_Frame_Data(OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data)
+        public static FrameData Get_Mouth_Frame_Data(OfficialSetData set_data, BustupData bustup_data, MakerCommandData maker_command_data)
         {
             // Create variables for the folder and JSON that contains the data for the set.
             string data_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -184,7 +184,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 string bustup_filename = bustup_data.Filename.Substring(0, bustup_data.Filename.Length - 4);
 
                 // Combine the base bustup filename substring with the needed frame suffix to create the frame filename.
-                string frame_filename = $"{bustup_filename}_m{command_data.Mouth_Frame}.png";
+                string frame_filename = $"{bustup_filename}_m{maker_command_data.Character_Data.Mouth_Frame}.png";
 
                 // Return the frame data info by using its filename to search for its entry.
                 return Frame_Data_From_Filename(frame_filename);
@@ -192,7 +192,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
             // If the file doesn't exist, create it.
             if (Create_Mouth_Frame_Data_List(set_data) != default)
             {
-                return Get_Mouth_Frame_Data(set_data, bustup_data, command_data);
+                return Get_Mouth_Frame_Data(set_data, bustup_data, maker_command_data);
             }
             else
             {
@@ -555,7 +555,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
             return JsonConvert.DeserializeObject<List<FrameData>>(json);
         }
 
-        public static string Get_Bustup_Filename(UserInfoFields account, OfficialSetData set_data, MakerCommandData command_data)
+        public static string Get_Bustup_Filename(UserInfoFields account, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -578,7 +578,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
                 // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
                 int counter = 0;
-                int base_sprite_number = command_data.Base_Sprite;
+                int base_sprite_number = maker_command_data.Character_Data.Base_Sprite;
 
                 // The manner of iteration will change based on the user's settings.
                 // First, Order by Outfit.

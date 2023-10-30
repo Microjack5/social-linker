@@ -61,7 +61,7 @@ namespace SocialLinker.Core.LocalStorageTables
             return JsonConvert.DeserializeObject<List<OfficialSetData>>(json);
         }
 
-        public static OfficialSetData GetSpriteSetInfo(UserInfoFields account, MakerCommandData command_data)
+        public static OfficialSetData GetSpriteSetInfo(UserInfoFields account, MakerCommandData maker_command_data)
         {
             OfficialSetData last_matching_set = null;
 
@@ -77,12 +77,12 @@ namespace SocialLinker.Core.LocalStorageTables
                 for (int i = 0; i < generic_char_keywords.Length; i++)
                 {
                     // If the contents of the current index match the lowercase form of the user's input, we found a potential candidate!
-                    if (generic_char_keywords[i] == command_data.Character_Keyword.ToLower())
+                    if (generic_char_keywords[i] == maker_command_data.Character_Data.Character_Keyword.ToLower())
                     {
                         // Check to see if the user specified a sprite set version in their command.
                         // First, let's process the case that they didn't.
                         // We'll want to return a sprite set from the character's debut title that matches the user's desired version.
-                        if (command_data.Sprite_Set_Version == "")
+                        if (maker_command_data.Character_Data.Sprite_Set_Version == "")
                         {
                             // Check if the current set is from a title that has multiple versions to it.
                             // If so, the Version_Control_Check method will not return empty and instead return the user's version control settings for that title.
@@ -137,10 +137,10 @@ namespace SocialLinker.Core.LocalStorageTables
                             }
                         }
                         // If the user did specify a sprite set version in their command, let's make sure we get the right set!
-                        else if (command_data.Sprite_Set_Version != "")
+                        else if (maker_command_data.Character_Data.Sprite_Set_Version != "")
                         {
                             // First, convert the user's input title into one we can use.
-                            string input_template = InputToTemplate(account, command_data.Sprite_Set_Version);
+                            string input_template = InputToTemplate(account, maker_command_data.Character_Data.Sprite_Set_Version);
 
                             // Check if the set's origin matches the user's input template.
                             if (s.Origin == input_template)
@@ -433,11 +433,13 @@ namespace SocialLinker.Core.LocalStorageTables
             return "";
         }
 
-        public static string GetDisplayName(UserInfoFields account, MakerCommandData command_data, OfficialSetData set_data, BustupData bustup_data)
+        public static string GetDisplayName(UserInfoFields account, MakerCommandData maker_command_data)
         {
+            OfficialSetData set_data = maker_command_data.Character_Data.Set_Data;
+            BustupData bustup_data = maker_command_data.Character_Data.Bustup_Data;
             ulong user_id = Convert.ToUInt64(account.User_ID);
             string default_name = bustup_data.Default_Name_EN;
-
+            
             switch (set_data.Origin)
             {
                 case "P1-PS1":
@@ -466,14 +468,14 @@ namespace SocialLinker.Core.LocalStorageTables
                     break;
             }
 
-            DisplayNameTableData custom_name_data = DisplayNameLogging.GetCustomName(user_id, command_data, set_data, bustup_data);
+            DisplayNameTableData custom_name_data = DisplayNameLogging.GetCustomName(user_id, maker_command_data, set_data, bustup_data);
 
             if (custom_name_data == null)
             {
-                if (command_data.Base_Sprite == 0)
+                if (maker_command_data.Character_Data.Base_Sprite == 0)
                 {
-                    command_data.Base_Sprite = 1;
-                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+                    maker_command_data.Character_Data.Base_Sprite = 1;
+                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
                     return default_name;
                 }
                 else
@@ -483,7 +485,7 @@ namespace SocialLinker.Core.LocalStorageTables
             }
             else
             {
-                if (command_data.Base_Sprite == 0)
+                if (maker_command_data.Character_Data.Base_Sprite == 0)
                 {
                     if (custom_name_data.Spriteless_Included == "Yes")
                     {
@@ -491,8 +493,8 @@ namespace SocialLinker.Core.LocalStorageTables
                     }
                     else
                     {
-                        command_data.Base_Sprite = 1;
-                        bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+                        maker_command_data.Character_Data.Base_Sprite = 1;
+                        bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
                         return default_name;
                     }
                 }
@@ -661,7 +663,7 @@ namespace SocialLinker.Core.LocalStorageTables
             return;
         }
 
-        public static bool Base_Sprite_Validity_Check(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static bool Base_Sprite_Validity_Check(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -671,7 +673,7 @@ namespace SocialLinker.Core.LocalStorageTables
 
             // Now that we have a filecount for the set, let's see if the inputted sprite number is valid before we continue.
             // If not, send an error message and cancel the request.
-            if (command_data.Base_Sprite > filecount)
+            if (maker_command_data.Character_Data.Base_Sprite > filecount)
             {
                 _ = ErrorHandling.Sprite_Number_Not_Found(sl_command, set_data.Name, AcronymToFullTitle(set_data.Origin));
                 return false;
@@ -1056,11 +1058,13 @@ namespace SocialLinker.Core.LocalStorageTables
             return output_string;
         }
 
-        public static async Task Quick_Scene_Directory(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task Quick_Scene_Directory(SocialLinkerCommand sl_command)
         {
             MakerCommandLogging.LogData(sl_command);
 
-            if (command_data.Template == "")
+            var set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+
+            if (sl_command.MakerCommand.Template == "")
             {
                 if (Passes_Content_Filter_With_Fail_Error(sl_command, set_data.Origin) == false)
                 {
@@ -1071,81 +1075,81 @@ namespace SocialLinker.Core.LocalStorageTables
                 {
                     case "P1-PS1":
                         RenderP1_PS1 p1_ps1_render = new RenderP1_PS1();
-                        await p1_ps1_render.Render_Quick_Scene_P1_PS1(sl_command, set_data, command_data);
+                        await p1_ps1_render.Render_Quick_Scene_P1_PS1(sl_command);
                         return;
 
                     case "P1-PSP":
                         RenderP1_PSP p1_psp_render = new RenderP1_PSP();
-                        await p1_psp_render.Render_Quick_Scene_P1_PSP(sl_command, set_data, command_data);
+                        await p1_psp_render.Render_Quick_Scene_P1_PSP(sl_command);
                         return;
 
                     case "P2IS-PS1":
                         RenderP2IS_PS1 p2is_ps1_render = new RenderP2IS_PS1();
-                        await p2is_ps1_render.Render_Quick_Scene_P2IS_PS1(sl_command, set_data, command_data);
+                        await p2is_ps1_render.Render_Quick_Scene_P2IS_PS1(sl_command);
                         return;
 
                     case "P2IS-PSP":
                         RenderP2IS_PSP p2is_psp_render = new RenderP2IS_PSP();
-                        await p2is_psp_render.Render_Quick_Scene_P2IS_PSP(sl_command, set_data, command_data);
+                        await p2is_psp_render.Render_Quick_Scene_P2IS_PSP(sl_command);
                         return;
 
                     case "P2EP-PS1":
                         RenderP2EP_PS1 p2ep_ps1_render = new RenderP2EP_PS1();
-                        await p2ep_ps1_render.Render_Quick_Scene_P2EP_PS1(sl_command, set_data, command_data);
+                        await p2ep_ps1_render.Render_Quick_Scene_P2EP_PS1(sl_command);
                         return;
 
                     case "P2EP-PSP":
                         RenderP2EP_PSP p2ep_psp_render = new RenderP2EP_PSP();
-                        await p2ep_psp_render.Render_Quick_Scene_P2EP_PSP(sl_command, set_data, command_data);
+                        await p2ep_psp_render.Render_Quick_Scene_P2EP_PSP(sl_command);
                         return;
 
                     case "P3F":
                         RenderP3F p3f_render = new RenderP3F();
-                        await p3f_render.Render_Quick_Scene_P3F(sl_command, set_data, command_data);
+                        await p3f_render.Render_Quick_Scene_P3F(sl_command);
                         return;
 
                     case "P3P":
                         RenderP3P p3p_render = new RenderP3P();
-                        await p3p_render.Render_Quick_Scene_P3P(sl_command, set_data, command_data);
+                        await p3p_render.Render_Quick_Scene_P3P(sl_command);
                         return;
 
                     case "P4-PS2":
                         RenderP4_PS2 p4_ps2_render = new RenderP4_PS2();
-                        await p4_ps2_render.Render_Quick_Scene_P4_PS2(sl_command, set_data, command_data);
+                        await p4_ps2_render.Render_Quick_Scene_P4_PS2(sl_command);
                         return;
 
                     case "P4G":
-                        await RenderP4G.Render_Quick_Scene_P4G(sl_command, set_data, command_data);
+                        await RenderP4G.Render_Quick_Scene_P4G(sl_command);
                         return;
 
                     case "P4AU":
                         RenderP4AU p4au_render = new RenderP4AU();
-                        await p4au_render.Render_Quick_Scene_P4AU(sl_command, set_data, command_data);
+                        await p4au_render.Render_Quick_Scene_P4AU(sl_command);
                         return;
 
                     case "P4D":
                         RenderP4D p4d_render = new RenderP4D();
-                        await p4d_render.Render_Quick_Scene_P4D(sl_command, set_data, command_data);
+                        await p4d_render.Render_Quick_Scene_P4D(sl_command);
                         return;
 
                     case "P5-PS4":
                         RenderP5_PS4 p5_ps4_render = new RenderP5_PS4();
-                        await p5_ps4_render.Render_Quick_Scene_P5_PS4(sl_command, set_data, command_data);
+                        await p5_ps4_render.Render_Quick_Scene_P5_PS4(sl_command);
                         return;
 
                     case "P5R":
                         RenderP5R p5r_render = new RenderP5R();
-                        await p5r_render.Render_Quick_Scene_P5R(sl_command, set_data, command_data);
+                        await p5r_render.Render_Quick_Scene_P5R(sl_command);
                         return;
 
                     case "P5S":
                         RenderP5S p5s_render = new RenderP5S();
-                        await p5s_render.Render_Quick_Scene_P5S(sl_command, set_data, command_data);
+                        await p5s_render.Render_Quick_Scene_P5S(sl_command);
                         return;
 
                     case "BBTAG":
                         RenderBBTAG bbtag_render = new RenderBBTAG();
-                        await bbtag_render.Render_Quick_Scene_BBTAG(sl_command, set_data, command_data);
+                        await bbtag_render.Render_Quick_Scene_BBTAG(sl_command);
                         return;
                 }
             }
@@ -1157,10 +1161,10 @@ namespace SocialLinker.Core.LocalStorageTables
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(sl_command.User);
-            MakerCommandData command_data = sl_command.MakerCommand;
+            MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             // Convert the user's template input into one usable depending on their version control settings.
-            string template = InputToTemplate(account, command_data.Sprite_Set_Version);
+            string template = InputToTemplate(account, maker_command_data.Character_Data.Sprite_Set_Version);
 
             MakerCommandLogging.LogData(sl_command);
 
@@ -1173,81 +1177,81 @@ namespace SocialLinker.Core.LocalStorageTables
             {
                 case "P1-PS1":
                     RenderP1_PS1 p1_ps1_render = new RenderP1_PS1();
-                    await p1_ps1_render.Render_System_Message(sl_command, command_data);
+                    await p1_ps1_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P1-PSP":
                     RenderP1_PSP p1_psp_render = new RenderP1_PSP();
-                    await p1_psp_render.Render_System_Message(sl_command, command_data);
+                    await p1_psp_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P2IS-PS1":
                     RenderP2IS_PS1 p2is_ps1_render = new RenderP2IS_PS1();
-                    await p2is_ps1_render.Render_System_Message(sl_command, command_data);
+                    await p2is_ps1_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P2IS-PSP":
                     RenderP2IS_PSP p2is_psp_render = new RenderP2IS_PSP();
-                    await p2is_psp_render.Render_System_Message(sl_command, command_data);
+                    await p2is_psp_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P2EP-PS1":
                     RenderP2EP_PS1 p2ep_ps1_render = new RenderP2EP_PS1();
-                    await p2ep_ps1_render.Render_System_Message(sl_command, command_data);
+                    await p2ep_ps1_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P2EP-PSP":
                     RenderP2EP_PSP p2ep_psp_render = new RenderP2EP_PSP();
-                    await p2ep_psp_render.Render_System_Message(sl_command, command_data);
+                    await p2ep_psp_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P3F":
                     RenderP3F p3f_render = new RenderP3F();
-                    await p3f_render.Render_System_Message(sl_command, command_data);
+                    await p3f_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P3P":
                     RenderP3P p3p_render = new RenderP3P();
-                    await p3p_render.Render_System_Message(sl_command, command_data);
+                    await p3p_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P4-PS2":
                     RenderP4_PS2 p4_ps2_render = new RenderP4_PS2();
-                    await p4_ps2_render.Render_System_Message(sl_command, command_data);
+                    await p4_ps2_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P4G":
-                    await RenderP4G.Render_System_Message(sl_command, command_data);
+                    await RenderP4G.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P4AU":
                     RenderP4AU p4au_render = new RenderP4AU();
-                    await p4au_render.Render_System_Message(sl_command, command_data);
+                    await p4au_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P4D":
                     RenderP4D p4d_render = new RenderP4D();
-                    await p4d_render.Render_System_Message(sl_command, command_data);
+                    await p4d_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "P5-PS4":
                     RenderP5_PS4 p5_ps4_render = new RenderP5_PS4();
-                    await p5_ps4_render.Render_System_Message(sl_command, command_data);
+                    await p5_ps4_render.Render_System_Message(sl_command);
                     return;
 
                 case "P5R":
                     RenderP5R p5r_render = new RenderP5R();
-                    await p5r_render.Render_System_Message(sl_command, command_data);
+                    await p5r_render.Render_System_Message(sl_command);
                     return;
 
                 case "P5S":
                     RenderP5S p5s_render = new RenderP5S();
-                    await p5s_render.Render_System_Message(sl_command, command_data);
+                    await p5s_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
                 case "BBTAG":
                     RenderBBTAG bbtag_render = new RenderBBTAG();
-                    await bbtag_render.Render_System_Message(sl_command, command_data);
+                    await bbtag_render.Render_System_Message(sl_command, maker_command_data);
                     return;
             }
 
@@ -1972,7 +1976,7 @@ namespace SocialLinker.Core.LocalStorageTables
         }
 
         // Bustup construction
-        public static Bitmap Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data)
+        public static Bitmap Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, OfficialSetData set_data, BustupData bustup_data, MakerCommandData maker_command_data)
         {
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
@@ -1990,7 +1994,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
                 // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
                 int counter = 0;
-                int base_sprite_number = command_data.Base_Sprite;
+                int base_sprite_number = maker_command_data.Character_Data.Base_Sprite;
 
                 // The manner of iteration will change based on the user's settings.
                 // First, Order by Outfit.
@@ -2072,7 +2076,7 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             // If eye frames and mouth frames were not specified, return the base sprite.
-            if (command_data.Eye_Frame == default && command_data.Mouth_Frame == default)
+            if (maker_command_data.Character_Data.Eye_Frame == default && maker_command_data.Character_Data.Mouth_Frame == default)
             {
                 Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
                 return base_sprite;
@@ -2080,7 +2084,120 @@ namespace SocialLinker.Core.LocalStorageTables
             else
             {
                 Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, command_data, base_sprite, false);
+                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, maker_command_data, base_sprite, false);
+                return bustup_with_frames;
+            }
+        }
+
+        public static Bitmap Bustup_Selection_2(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data)
+        {
+            // Establish the directory of the specified sprite set.
+            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{maker_character_data.Set_Data.Origin}//Bustup//{maker_character_data.Set_Data.ID}";
+
+            // Get a count of how many files are in the sprite set's directory.
+            int filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path);
+
+            // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
+            string base_sprite_filename = "";
+
+            // Check if the sprite set's directory exists.
+            if (Directory.Exists(set_path))
+            {
+                // If so, it's time to find the filename for the user's selected sprite so we can retrieve the frames associated with it.
+                // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
+                // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
+                int counter = 0;
+                int base_sprite_number = maker_character_data.Base_Sprite;
+
+                // The manner of iteration will change based on the user's settings.
+                // First, Order by Outfit.
+                if (account.Setting_Sheet_Order == "Order by Outfit")
+                {
+                    // Create a loop starting at 1 meant to iterate though every file in the directory.
+                    // Outfit numbers always start at 1, so we'll begin there.
+                    for (int outfit = 1; outfit <= filecount; outfit++)
+                    {
+                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
+                        // This loop is searching for expressions, which start at 1.
+                        for (int expression = 1; expression <= filecount; expression++)
+                        {
+                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                            // Check if the created file path string exists.
+                            if (File.Exists($"{set_path}//{maker_character_data.Set_Data.ID.ToLower()}_{expression}_{outfit}.png"))
+                            {
+                                // If the file does exist, increment the counter by one.
+                                counter++;
+
+                                // Check if the counter matches the same number of the chosen sprite number.
+                                if (counter == base_sprite_number)
+                                {
+                                    // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                    base_sprite_filename = $"{maker_character_data.Set_Data.ID.ToLower()}_{expression}_{outfit}";
+
+                                    // Break out of the current loop.
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Check if the filename variable for the base sprite is not empty.
+                        if (base_sprite_filename != "")
+                        {
+                            // If so, we already found our filename! Break out of the outer loop.
+                            break;
+                        }
+                    }
+                }
+                // Second case, Order by Expression.
+                else if (account.Setting_Sheet_Order == "Order by Expression")
+                {
+                    // Create a loop starting at 1 meant to iterate though every file in the directory.
+                    // Expression numbers always start at 1, so we'll begin there.
+                    for (int expression = 1; expression <= filecount; expression++)
+                    {
+                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
+                        // This loop is searching for outfits, which start at 1.
+                        for (int outfit = 1; outfit <= filecount; outfit++)
+                        {
+                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                            // Check if the created file path string exists.
+                            if (File.Exists($"{set_path}//{maker_character_data.Set_Data.ID.ToLower()}_{expression}_{outfit}.png"))
+                            {
+                                // If the file does exist, increment the counter by one.
+                                counter++;
+
+                                // Check if the counter matches the same number of the chosen sprite number.
+                                if (counter == base_sprite_number)
+                                {
+                                    // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                    base_sprite_filename = $"{maker_character_data.Set_Data.ID.ToLower()}_{expression}_{outfit}";
+
+                                    // Break out of the current loop.
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Check if the filename variable for the base sprite is not empty.
+                        if (base_sprite_filename != "")
+                        {
+                            // If so, we already found our filename! Break out of the outer loop.
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // If eye frames and mouth frames were not specified, return the base sprite.
+            if (maker_character_data.Eye_Frame == default && maker_character_data.Mouth_Frame == default)
+            {
+                Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
+                return base_sprite;
+            }
+            else
+            {
+                Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
+                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, maker_command_data, base_sprite, false);
                 return bustup_with_frames;
             }
         }
@@ -2095,7 +2212,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{reverse_path}//{base_sprite_filename}");
 
                 // Do something
-                if (command_data.Eye_Frame == default && command_data.Mouth_Frame == default)
+                if (command_data.Character_Data.Eye_Frame == default && command_data.Character_Data.Mouth_Frame == default)
                 {
                     return base_sprite;
                 }
@@ -2111,7 +2228,7 @@ namespace SocialLinker.Core.LocalStorageTables
             }
         }
 
-        public static Bitmap Construct_Bustup_With_Frames(SocialLinkerCommand sl_command, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data, Bitmap bustup, bool reverse_file_exists)
+        public static Bitmap Construct_Bustup_With_Frames(SocialLinkerCommand sl_command, OfficialSetData set_data, BustupData bustup_data, MakerCommandData maker_command_data, Bitmap bustup, bool reverse_file_exists)
         {
             Bitmap edited_bustup = bustup;
 
@@ -2120,7 +2237,7 @@ namespace SocialLinker.Core.LocalStorageTables
             Bitmap eye_frame_sprite = default;
             Bitmap mouth_frame_sprite = default;
 
-            if (command_data.Eye_Frame != default && command_data.Eye_Frame != 0)
+            if (maker_command_data.Character_Data.Eye_Frame != default && maker_command_data.Character_Data.Eye_Frame != 0)
             {
                 // Establish the eye frame directory for the current sprite set.
                 string eye_frame_path = "";
@@ -2137,7 +2254,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
 
                 // Get the eye frame data of the frame specified in the user's command.
-                eye_frame_data = BustupDataMethods.Get_Eye_Frame_Data(set_data, bustup_data, command_data);
+                eye_frame_data = BustupDataMethods.Get_Eye_Frame_Data(set_data, bustup_data, maker_command_data);
 
                 // Ensure that the returned eye frame data is not null.
                 if (eye_frame_data != null)
@@ -2173,12 +2290,12 @@ namespace SocialLinker.Core.LocalStorageTables
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, command_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, maker_command_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
                     return null;
                 }
             }
 
-            if (command_data.Mouth_Frame != default && command_data.Mouth_Frame != 0)
+            if (maker_command_data.Character_Data.Mouth_Frame != default && maker_command_data.Character_Data.Mouth_Frame != 0)
             {
                 // Establish the mouth frame directory for the current sprite set.
                 string mouth_frame_path = "";
@@ -2195,7 +2312,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
 
                 // Get the mouth frame data of the frame specified in the user's command.
-                mouth_frame_data = BustupDataMethods.Get_Mouth_Frame_Data(set_data, bustup_data, command_data);
+                mouth_frame_data = BustupDataMethods.Get_Mouth_Frame_Data(set_data, bustup_data, maker_command_data);
 
                 // Ensure that the returned mouth frame data is not null.
                 if (mouth_frame_data != null)
@@ -2231,7 +2348,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, command_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, maker_command_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
                     return null;
                 }
             }

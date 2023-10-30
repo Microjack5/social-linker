@@ -45,11 +45,11 @@ namespace SocialLinker.Core.CloudStorageTables
                 Guild_ID = ((SocketGuildChannel)sl_command_data.Channel).Guild.Id.ToString(),
                 Channel_ID = sl_command_data.Channel.Id.ToString(),
                 Template = maker_command_data.Template,
-                Character_Keyword = maker_command_data.Character_Keyword,
-                Sprite_Set_Version = maker_command_data.Sprite_Set_Version,
-                Base_Sprite = maker_command_data.Base_Sprite,
-                Eye_Frame = maker_command_data.Eye_Frame,
-                Mouth_Frame = maker_command_data.Mouth_Frame,
+                Character_Keyword = maker_command_data.Character_Data.Character_Keyword,
+                Sprite_Set_Version = maker_command_data.Character_Data.Sprite_Set_Version,
+                Base_Sprite = maker_command_data.Character_Data.Base_Sprite,
+                Eye_Frame = maker_command_data.Character_Data.Eye_Frame,
+                Mouth_Frame = maker_command_data.Character_Data.Mouth_Frame,
                 Dialogue = maker_command_data.Dialogue,
                 Background_Used = bg_bool
             };

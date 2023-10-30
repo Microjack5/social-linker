@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Threading.Tasks;
-using Discord.Commands;
-using Fergun.Interactive;
 using SocialLinker.Core.SceneMaker.GlyphParsing;
 using System.IO;
 using Discord.WebSocket;
@@ -17,7 +15,6 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using SocialLinker.Core.Menus;
 using System.Timers;
 
@@ -29,15 +26,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         int template_height = 272;
         int max_line_length = 320;
 
-        public async Task Render_Quick_Scene_P1_PSP(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public async Task Render_Quick_Scene_P1_PSP(SocialLinkerCommand sl_command)
         {
             SocketUser user = sl_command.User;
+
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
 
             // Get the data for the chosen bustup.
-            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
             // The P1-PS1 template has a unique function where display names are not rendered if the same character is used in succession.
             // We'll call this "context switch". Get or create an active context switch object that stores data for this.
@@ -63,7 +64,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int char_index = active_session.Active_Characters.IndexOf(set_data);
 
             // Render the image.
-            await Render_Offload(sl_command, account, active_session, set_data, bustup_data, command_data);
+            await Render_Offload(sl_command, account, active_session, set_data, bustup_data, maker_command_data);
 
             // Here, we're at the step where we've already rendered and sent the images we needed.
             // For the Context Switch feature, we'll want to keep track of the past three unique characters used.
@@ -85,7 +86,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             active_session.Recently_Used_Index = char_index;
         }
 
-        public async Task Render_Offload(SocialLinkerCommand sl_command, UserInfoFields account, PlacementSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData command_data)
+        public async Task Render_Offload(SocialLinkerCommand sl_command, UserInfoFields account, PlacementSwitchData active_session, OfficialSetData set_data, BustupData bustup_data, MakerCommandData maker_command_data)
         {
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
             RestUserMessage loader = await channel.SendMessageAsync("", false, P1_PSP_Loading_Message().Build());
@@ -109,9 +110,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             Bitmap bustup = new Bitmap(2, 2);
 
-            if (command_data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
             }
 
             if (bustup == null)
@@ -144,7 +145,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 graphics.DrawImage(message_window, 0, 0, template_width, template_height);
 
-                if (command_data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data.Base_Sprite != 0)
                 {
                     Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, active_session, set_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
@@ -154,14 +155,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(cursor, 0, cursor_y_position, template_width, template_height);
             }
 
-            string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+            string display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
             display_name = OfficialSetMethods.Validate_Input(sl_command, "P1-PSP", "Name", display_name);
             Bitmap display_name_layer = Render_Name(display_name);
             
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P1-PSP", "Dialogue", command_data.Dialogue);
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PSP", command_data.Dialogue, 2, max_line_length);
+                maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P1-PSP", "Dialogue", maker_command_data.Dialogue);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P1-PSP", maker_command_data.Dialogue, 2, max_line_length);
                 graphics.DrawImage(display_name_layer, 0, 0, template_width, template_height);
                 graphics.DrawImage(Render_Dialogue(parsed_lines, false), 0, 0, template_width, template_height);
             }

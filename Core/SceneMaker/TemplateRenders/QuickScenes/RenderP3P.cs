@@ -47,11 +47,14 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         int max_line_length = 360;
         int error_counter = 0;
 
-        public async Task Render_Quick_Scene_P3P(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public async Task Render_Quick_Scene_P3P(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -59,7 +62,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Send a loading message to the channel while the sprite sheet is being made.
             RestUserMessage loader = await channel.SendMessageAsync("", false, P3P_Loading_Message(account).Build());
 
-            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -83,9 +87,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Check if the base sprite number is something other than zero.
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-            if (command_data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
             }
 
             if (bustup == null)
@@ -108,7 +112,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
 
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (command_data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data.Base_Sprite != 0)
                 {
                     Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, set_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
@@ -137,7 +141,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 System.Drawing.Color name_dark_blue = System.Drawing.Color.FromArgb(29, 0, 92);
                 Rectangle name_area = new Rectangle(0, 190, 480, 30);
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P3P", "Name", display_name);
 
                 Bitmap rendered_name = Render_Name(display_name);
@@ -147,8 +151,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 System.Drawing.Color dialogue_gray = System.Drawing.Color.FromArgb(72, 72, 72);
                 Rectangle dialogue_area = new Rectangle(0, 190, 480, 82);
 
-                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P3P", "Dialogue", command_data.Dialogue);
-                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3P", command_data.Dialogue, 3, max_line_length);
+                maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P3P", "Dialogue", maker_command_data.Dialogue);
+                List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P3P", maker_command_data.Dialogue, 3, max_line_length);
 
                 Bitmap rendered_dialogue = Render_Dialogue(parsed_lines);
                 Bitmap colored_dialogue = Bitmap_To_Color(rendered_dialogue, dialogue_gray, dialogue_area);
@@ -473,7 +477,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return bitmap;
         }
 
-        public static int Measure_Word_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
+        public int Measure_Word_Pixel_Length(SocialLinkerCommand sl_command, string input_word)
         {
             // Create an int variable to keep track of the pixel length of a word.
             int pixel_counter = 0;
@@ -525,7 +529,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return pixel_counter;
         }
 
-        public static string String_List_To_String(List<string> input_list)
+        public string String_List_To_String(List<string> input_list)
         {
             // Create an empty string variable.
             string output_string = "";
@@ -1110,7 +1114,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
+        public Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
         {
             Bitmap base_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
@@ -1128,7 +1132,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_bitmap;
         }
 
-        public static Bitmap Tint_Message_Window(Bitmap input_bitmap)
+        public Bitmap Tint_Message_Window(Bitmap input_bitmap)
         {
             // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
             System.Drawing.Color original_color;
@@ -1160,7 +1164,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return new_bitmap;
         }
 
-        public static Bitmap Color_Cursor(Bitmap input_bitmap, string user_setting)
+        public Bitmap Color_Cursor(Bitmap input_bitmap, string user_setting)
         {
             // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
             System.Drawing.Color actual_color;
@@ -1272,7 +1276,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static string Get_Time_of_Day(DateTime input_time)
+        public string Get_Time_of_Day(DateTime input_time)
         {
             // Get the current hour of the user.
             TimeSpan current_hour = input_time.TimeOfDay;
@@ -1364,7 +1368,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return time_of_day;
         }
 
-        public static int Get_Full_Moon_Countdown(double age)
+        public int Get_Full_Moon_Countdown(double age)
         {
             // Create a default return value. This is an unrealistic number for the countdown, but will not cause rendering issues if used.
             int countdownInt = 39;
@@ -1387,7 +1391,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Method from https://stackoverflow.com/questions/15408607/adjust-brightness-contrast-and-gamma-of-an-image
-        public static Bitmap Increase_Brightness_Contrast(Bitmap input_bitmap)
+        public Bitmap Increase_Brightness_Contrast(Bitmap input_bitmap)
         {
             Bitmap adjustedImage = new Bitmap(input_bitmap.Width, input_bitmap.Height);
             float brightness = 1.2f; // 1.2 times the brightness
@@ -1417,7 +1421,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return adjustedImage;
         }
 
-        public static Bitmap SetImageOpacity(Bitmap input_bitmap, float opacity)
+        public Bitmap SetImageOpacity(Bitmap input_bitmap, float opacity)
         {
             //create a Bitmap the size of the image provided  
             Bitmap base_template = new Bitmap(input_bitmap.Width, input_bitmap.Height);
@@ -1487,7 +1491,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return input_template;
         }
 
-        public static EmbedBuilder P3P_Loading_Message(UserInfoFields account)
+        public EmbedBuilder P3P_Loading_Message(UserInfoFields account)
         {
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder

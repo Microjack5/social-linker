@@ -19,7 +19,7 @@ namespace SocialLinker.Core.SceneMaker
     public class BustupFrameSheets
     {
         // Sprite sheet formation
-        public static Bitmap Generate_Standard_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static Bitmap Generate_Standard_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(sl_command.User);
@@ -53,7 +53,7 @@ namespace SocialLinker.Core.SceneMaker
                 // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
                 // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
                 int counter = 0;
-                int base_sprite_number = command_data.Base_Sprite;
+                int base_sprite_number = maker_command_data.Character_Data.Base_Sprite;
 
                 // The manner of iteration will change based on the user's settings.
                 // First, Order by Outfit.
@@ -501,7 +501,7 @@ namespace SocialLinker.Core.SceneMaker
         }
 
         // Methods made specifically for P4D
-        public static Bitmap Generate_P4D_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static Bitmap Generate_P4D_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(sl_command.User);
@@ -535,7 +535,7 @@ namespace SocialLinker.Core.SceneMaker
                 // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
                 // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
                 int counter = 0;
-                int base_sprite_number = command_data.Base_Sprite;
+                int base_sprite_number = maker_command_data.Character_Data.Base_Sprite;
 
                 // The manner of iteration will change based on the user's settings.
                 // First, Order by Outfit.
@@ -1358,7 +1358,7 @@ namespace SocialLinker.Core.SceneMaker
         }
 
         // Animation frame messages
-        public static async Task P1_PS1_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P1_PS1_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -1373,7 +1373,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
@@ -1398,7 +1398,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1429,7 +1429,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P1_PSP_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P1_PSP_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -1444,7 +1444,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P1-PSP")
             };
 
@@ -1469,7 +1469,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1500,7 +1500,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P2IS_PS1_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P2IS_PS1_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -1515,7 +1515,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PS1")
             };
 
@@ -1540,7 +1540,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1571,7 +1571,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P2IS_PSP_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P2IS_PSP_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -1586,7 +1586,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PSP")
             };
 
@@ -1611,7 +1611,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1642,7 +1642,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P2EP_PS1_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P2EP_PS1_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -1657,7 +1657,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P2EP-PS1")
             };
 
@@ -1682,7 +1682,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1713,7 +1713,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P2EP_PSP_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P2EP_PSP_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -1728,7 +1728,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P2EP-PSP")
             };
 
@@ -1753,7 +1753,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1784,7 +1784,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P3F_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P3F_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -1799,7 +1799,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P3F")
             };
 
@@ -1824,7 +1824,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1855,7 +1855,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P3P_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P3P_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -1870,7 +1870,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P3P")
             };
 
@@ -1895,7 +1895,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1926,7 +1926,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P4_PS2_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P4_PS2_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -1941,7 +1941,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P4-PS2")
             };
 
@@ -1966,7 +1966,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -1997,7 +1997,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P4G_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P4G_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -2012,7 +2012,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P4G")
             };
 
@@ -2037,7 +2037,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -2068,7 +2068,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P4D_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P4D_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -2083,7 +2083,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P4D")
             };
 
@@ -2108,7 +2108,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_P4D_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_P4D_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -2139,7 +2139,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P4AU_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P4AU_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -2154,7 +2154,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P4AU")
             };
 
@@ -2179,7 +2179,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_P4D_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_P4D_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -2210,7 +2210,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P5_PS4_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P5_PS4_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -2225,7 +2225,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P5-PS4")
             };
 
@@ -2250,7 +2250,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -2281,7 +2281,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P5R_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P5R_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -2296,7 +2296,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P5R")
             };
 
@@ -2321,7 +2321,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -2352,7 +2352,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task P5S_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task P5S_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -2367,7 +2367,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P5S")
             };
 
@@ -2392,7 +2392,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -2423,7 +2423,7 @@ namespace SocialLinker.Core.SceneMaker
             await loader.DeleteAsync();
         }
 
-        public static async Task BBTAG_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public static async Task BBTAG_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = sl_command.User;
@@ -2438,7 +2438,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{command_data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("BBTAG")
             };
 
@@ -2463,7 +2463,7 @@ namespace SocialLinker.Core.SceneMaker
             MemoryStream memoryStream = new MemoryStream();
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
-            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+            Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);

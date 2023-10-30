@@ -38,16 +38,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         char[] ba_gua = { '☰', '☱', '☲', '☳', '☴', '☵', '☶', '☷' };
         char[] abnormals = { 'g', 'j', 'p', 'q', 'y' };
 
-        public async Task Render_Quick_Scene_P2IS_PS1(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData command_data)
+        public async Task Render_Quick_Scene_P2IS_PS1(SocialLinkerCommand sl_command)
         {
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             RestUserMessage loader = await channel.SendMessageAsync("", false, P2IS_PS1_Loading_Message().Build());
 
             var account = UserInfoClasses.GetAccount(user);
 
-            BustupData bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
             Bitmap base_template = new Bitmap(template_width, template_height);
             Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
@@ -69,9 +73,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Check if the base sprite number is something other than zero.
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-            if (command_data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -88,7 +92,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
 
-                if (command_data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data.Base_Sprite != 0)
                 {
                     Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
@@ -96,11 +100,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 graphics.DrawImage(Render_Message_Window(account), 0, 0, template_width, template_height);
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, command_data, set_data, bustup_data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P2IS-PS1", "Name", display_name);
 
-                command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P2IS-PS1", "Dialogue", command_data.Dialogue);
-                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P2IS-PS1", command_data.Dialogue, 3, 230);
+                maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P2IS-PS1", "Dialogue", maker_command_data.Dialogue);
+                List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P2IS-PS1", maker_command_data.Dialogue, 3, 230);
 
                 graphics.DrawImage(Combined_Text_Layers(display_name, dialogue_lines), 0, 0, template_width, template_height);
                 graphics.DrawImage(Render_Cursor(), 0, 0, template_width, template_height);
