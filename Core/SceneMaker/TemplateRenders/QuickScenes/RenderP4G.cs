@@ -39,7 +39,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
 
-            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
             BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
             // Background rendering
@@ -66,7 +66,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
             if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -112,7 +112,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 // Now, it's time to render the text.
                 // Render the character's name to the template first.
-                string display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P4G", "Name", display_name);
                 graphics.DrawImage(Text_To_Brown(Render_Name(display_name)), 0, 0, template_width, template_height);
 

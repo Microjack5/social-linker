@@ -1087,7 +1087,7 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Eye_Frame_Not_Found(SocialLinkerCommand command, MakerCommandData maker_command_data, string character_name, string game_version)
+        public static async Task Eye_Frame_Not_Found(SocialLinkerCommand command, MakerCharacterData maker_command_data, string character_name, string game_version)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = command.User;
@@ -1110,7 +1110,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
             // Write an appropriate description for the error.
-            embed.WithDescription($"That eye frame doesn’t seem to be part of {character_name}'s {maker_command_data.Character_Data.Base_Sprite}{Number_Suffix(maker_command_data.Character_Data.Base_Sprite)} {game_version} sprite.");
+            embed.WithDescription($"That eye frame doesn’t seem to be part of {character_name}'s {maker_command_data.Base_Sprite}{Number_Suffix(maker_command_data.Base_Sprite)} {game_version} sprite.");
 
             if (command.CommandType == "Slash")
             {
@@ -1120,7 +1120,7 @@ namespace SocialLinker.Core.SceneMaker
             else if (command.CommandType == "Context")
             {
                 embed.AddField("Tips", "" +
-                $"For message-based commands, use **`maker {maker_command_data.Character_Data.Character_Keyword} {maker_command_data.Character_Data.Base_Sprite}`** to view which animation frames are available for the sprite.");
+                $"For message-based commands, use **`maker {maker_command_data.Character_Keyword} {maker_command_data.Base_Sprite}`** to view which animation frames are available for the sprite.");
             }
 
             // Send the message to the channel.
@@ -1138,7 +1138,7 @@ namespace SocialLinker.Core.SceneMaker
             error_timer.Elapsed += (sender, e) => ErrorTimer_Elapsed(sender, e, error_message, account);
         }
 
-        public static async Task Mouth_Frame_Not_Found(SocialLinkerCommand command, MakerCommandData maker_command_data, string character_name, string game_version)
+        public static async Task Mouth_Frame_Not_Found(SocialLinkerCommand command, MakerCharacterData maker_character_data, string character_name, string game_version)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
             SocketUser user = command.User;
@@ -1160,7 +1160,7 @@ namespace SocialLinker.Core.SceneMaker
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(Get_Profile_Help_Thumbnail(account));
 
-            embed.WithDescription($"That mouth frame doesn’t seem to be part of {character_name}'s {maker_command_data.Character_Data.Base_Sprite}{Number_Suffix(maker_command_data.Character_Data.Base_Sprite)} {game_version} sprite.");
+            embed.WithDescription($"That mouth frame doesn’t seem to be part of {character_name}'s {maker_character_data.Base_Sprite}{Number_Suffix(maker_character_data.Base_Sprite)} {game_version} sprite.");
 
             if (command.CommandType == "Slash")
             {
@@ -1170,7 +1170,7 @@ namespace SocialLinker.Core.SceneMaker
             else if (command.CommandType == "Context")
             {
                 embed.AddField("Tips", "" +
-                $"For message-based commands, use **`maker {maker_command_data.Character_Data.Character_Keyword} {maker_command_data.Character_Data.Base_Sprite}`** to view which animation frames are available for the sprite.");
+                $"For message-based commands, use **`maker {maker_character_data.Character_Keyword} {maker_character_data.Base_Sprite}`** to view which animation frames are available for the sprite.");
             }
 
             var error_message = await channel.SendMessageAsync("", false, embed.Build());

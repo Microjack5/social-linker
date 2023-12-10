@@ -148,6 +148,7 @@ namespace SocialLinker
             _client.ShardReady += Maker_List;
             _client.ShardReady += Maker_Sheet;
             _client.ShardReady += Maker_Create;
+            _client.ShardReady += Maker_Multi;
             _client.ShardReady += Hug;
             _client.ShardReady += Pat;
             _client.ShardReady += Punch;
@@ -318,6 +319,11 @@ namespace SocialLinker
                 case "maker_create":
                     command.MakerCommand = SL_To_Maker_Command(command);
                     await Commands.Maker.MakerCommandParser(command);
+                    SocialLinkerCommandLogging.LogData(command);
+                    break;
+
+                case "maker_multi":
+                    await Commands.MakerMulti.MakerMultiMenu(command);
                     SocialLinkerCommandLogging.LogData(command);
                     break;
 
@@ -586,6 +592,23 @@ namespace SocialLinker
                 .AddOption("dialogue", ApplicationCommandOptionType.String, "The character's spoken text.", isRequired: true)
                 .AddOption("background", ApplicationCommandOptionType.Attachment, "Upload an image to use as a background.", isRequired: false);
 
+                await client.Rest.CreateGlobalCommand(guildCommand.Build());
+            }
+            catch (HttpException exception)
+            {
+                var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
+                Console.WriteLine(json);
+            }
+        }
+
+        public static async Task Maker_Multi(DiscordSocketClient client)
+        {
+            var guildCommand = new SlashCommandBuilder()
+                .WithName("maker_multi")
+                .WithDescription("Quickly create a scene with multiple characters.");
+
+            try
+            {
                 await client.Rest.CreateGlobalCommand(guildCommand.Build());
             }
             catch (HttpException exception)

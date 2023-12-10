@@ -433,10 +433,10 @@ namespace SocialLinker.Core.LocalStorageTables
             return "";
         }
 
-        public static string GetDisplayName(UserInfoFields account, MakerCommandData maker_command_data)
+        public static string GetDisplayName(UserInfoFields account, MakerCharacterData maker_character_data)
         {
-            OfficialSetData set_data = maker_command_data.Character_Data.Set_Data;
-            BustupData bustup_data = maker_command_data.Character_Data.Bustup_Data;
+            OfficialSetData set_data = maker_character_data.Set_Data;
+            BustupData bustup_data = maker_character_data.Bustup_Data;
             ulong user_id = Convert.ToUInt64(account.User_ID);
             string default_name = bustup_data.Default_Name_EN;
             
@@ -468,14 +468,14 @@ namespace SocialLinker.Core.LocalStorageTables
                     break;
             }
 
-            DisplayNameTableData custom_name_data = DisplayNameLogging.GetCustomName(user_id, maker_command_data, set_data, bustup_data);
+            DisplayNameTableData custom_name_data = DisplayNameLogging.GetCustomName(user_id, maker_character_data);
 
             if (custom_name_data == null)
             {
-                if (maker_command_data.Character_Data.Base_Sprite == 0)
+                if (maker_character_data.Base_Sprite == 0)
                 {
-                    maker_command_data.Character_Data.Base_Sprite = 1;
-                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+                    maker_character_data.Base_Sprite = 1;
+                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_character_data);
                     return default_name;
                 }
                 else
@@ -485,7 +485,7 @@ namespace SocialLinker.Core.LocalStorageTables
             }
             else
             {
-                if (maker_command_data.Character_Data.Base_Sprite == 0)
+                if (maker_character_data.Base_Sprite == 0)
                 {
                     if (custom_name_data.Spriteless_Included == "Yes")
                     {
@@ -493,8 +493,8 @@ namespace SocialLinker.Core.LocalStorageTables
                     }
                     else
                     {
-                        maker_command_data.Character_Data.Base_Sprite = 1;
-                        bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+                        maker_character_data.Base_Sprite = 1;
+                        bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_character_data);
                         return default_name;
                     }
                 }
@@ -1663,7 +1663,8 @@ namespace SocialLinker.Core.LocalStorageTables
                     return RenderP3F.Measure_Word_Pixel_Length(sl_command, input_word);
 
                 case "P3P":
-                    return RenderP3P.Measure_Word_Pixel_Length(sl_command, input_word);
+                    RenderP3P p3p_measure = new RenderP3P();
+                    return p3p_measure.Measure_Word_Pixel_Length(sl_command, input_word);
 
                 case "P4-PS2":
                     return RenderP4_PS2.Measure_Word_Pixel_Length(sl_command, input_word);
@@ -1976,123 +1977,12 @@ namespace SocialLinker.Core.LocalStorageTables
         }
 
         // Bustup construction
-        public static Bitmap Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, OfficialSetData set_data, BustupData bustup_data, MakerCommandData maker_command_data)
+        public static Bitmap Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data)
         {
+            OfficialSetData set_data = maker_character_data.Set_Data;
+
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
-
-            // Get a count of how many files are in the sprite set's directory.
-            int filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path);
-
-            // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
-            string base_sprite_filename = "";
-
-            // Check if the sprite set's directory exists.
-            if (Directory.Exists(set_path))
-            {
-                // If so, it's time to find the filename for the user's selected sprite so we can retrieve the frames associated with it.
-                // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
-                // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
-                int counter = 0;
-                int base_sprite_number = maker_command_data.Character_Data.Base_Sprite;
-
-                // The manner of iteration will change based on the user's settings.
-                // First, Order by Outfit.
-                if (account.Setting_Sheet_Order == "Order by Outfit")
-                {
-                    // Create a loop starting at 1 meant to iterate though every file in the directory.
-                    // Outfit numbers always start at 1, so we'll begin there.
-                    for (int outfit = 1; outfit <= filecount; outfit++)
-                    {
-                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
-                        // This loop is searching for expressions, which start at 1.
-                        for (int expression = 1; expression <= filecount; expression++)
-                        {
-                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
-                            // Check if the created file path string exists.
-                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png"))
-                            {
-                                // If the file does exist, increment the counter by one.
-                                counter++;
-
-                                // Check if the counter matches the same number of the chosen sprite number.
-                                if (counter == base_sprite_number)
-                                {
-                                    // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
-                                    base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}";
-
-                                    // Break out of the current loop.
-                                    break;
-                                }
-                            }
-                        }
-
-                        // Check if the filename variable for the base sprite is not empty.
-                        if (base_sprite_filename != "")
-                        {
-                            // If so, we already found our filename! Break out of the outer loop.
-                            break;
-                        }
-                    }
-                }
-                // Second case, Order by Expression.
-                else if (account.Setting_Sheet_Order == "Order by Expression")
-                {
-                    // Create a loop starting at 1 meant to iterate though every file in the directory.
-                    // Expression numbers always start at 1, so we'll begin there.
-                    for (int expression = 1; expression <= filecount; expression++)
-                    {
-                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
-                        // This loop is searching for outfits, which start at 1.
-                        for (int outfit = 1; outfit <= filecount; outfit++)
-                        {
-                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
-                            // Check if the created file path string exists.
-                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png"))
-                            {
-                                // If the file does exist, increment the counter by one.
-                                counter++;
-
-                                // Check if the counter matches the same number of the chosen sprite number.
-                                if (counter == base_sprite_number)
-                                {
-                                    // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
-                                    base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}";
-
-                                    // Break out of the current loop.
-                                    break;
-                                }
-                            }
-                        }
-
-                        // Check if the filename variable for the base sprite is not empty.
-                        if (base_sprite_filename != "")
-                        {
-                            // If so, we already found our filename! Break out of the outer loop.
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // If eye frames and mouth frames were not specified, return the base sprite.
-            if (maker_command_data.Character_Data.Eye_Frame == default && maker_command_data.Character_Data.Mouth_Frame == default)
-            {
-                Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-                return base_sprite;
-            }
-            else
-            {
-                Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, maker_command_data, base_sprite, false);
-                return bustup_with_frames;
-            }
-        }
-
-        public static Bitmap Bustup_Selection_2(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data)
-        {
-            // Establish the directory of the specified sprite set.
-            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{maker_character_data.Set_Data.Origin}//Bustup//{maker_character_data.Set_Data.ID}";
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path);
@@ -2123,7 +2013,7 @@ namespace SocialLinker.Core.LocalStorageTables
                         {
                             // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
                             // Check if the created file path string exists.
-                            if (File.Exists($"{set_path}//{maker_character_data.Set_Data.ID.ToLower()}_{expression}_{outfit}.png"))
+                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png"))
                             {
                                 // If the file does exist, increment the counter by one.
                                 counter++;
@@ -2132,7 +2022,7 @@ namespace SocialLinker.Core.LocalStorageTables
                                 if (counter == base_sprite_number)
                                 {
                                     // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
-                                    base_sprite_filename = $"{maker_character_data.Set_Data.ID.ToLower()}_{expression}_{outfit}";
+                                    base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}";
 
                                     // Break out of the current loop.
                                     break;
@@ -2161,7 +2051,7 @@ namespace SocialLinker.Core.LocalStorageTables
                         {
                             // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
                             // Check if the created file path string exists.
-                            if (File.Exists($"{set_path}//{maker_character_data.Set_Data.ID.ToLower()}_{expression}_{outfit}.png"))
+                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png"))
                             {
                                 // If the file does exist, increment the counter by one.
                                 counter++;
@@ -2170,7 +2060,7 @@ namespace SocialLinker.Core.LocalStorageTables
                                 if (counter == base_sprite_number)
                                 {
                                     // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
-                                    base_sprite_filename = $"{maker_character_data.Set_Data.ID.ToLower()}_{expression}_{outfit}";
+                                    base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}";
 
                                     // Break out of the current loop.
                                     break;
@@ -2197,13 +2087,16 @@ namespace SocialLinker.Core.LocalStorageTables
             else
             {
                 Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, maker_command_data, base_sprite, false);
+                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, maker_character_data, base_sprite, false);
                 return bustup_with_frames;
             }
         }
 
-        public static Bitmap Reverse_Bustup_Selection(SocialLinkerCommand sl_command, OfficialSetData set_data, Bitmap bustup, BustupData bustup_data, MakerCommandData command_data)
+        public static Bitmap Reverse_Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data, Bitmap bustup)
         {
+            OfficialSetData set_data = maker_character_data.Set_Data;
+            BustupData bustup_data = maker_character_data.Bustup_Data;
+
             string reverse_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Reverse";
             string base_sprite_filename = $"r{bustup_data.Filename.Substring(1)}";
 
@@ -2212,13 +2105,13 @@ namespace SocialLinker.Core.LocalStorageTables
                 Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{reverse_path}//{base_sprite_filename}");
 
                 // Do something
-                if (command_data.Character_Data.Eye_Frame == default && command_data.Character_Data.Mouth_Frame == default)
+                if (maker_character_data.Eye_Frame == default && maker_character_data.Mouth_Frame == default)
                 {
                     return base_sprite;
                 }
                 else
                 {
-                    Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, set_data, bustup_data, command_data, base_sprite, true);
+                    Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, maker_character_data, base_sprite, true);
                     return bustup_with_frames;
                 }
             }
@@ -2228,7 +2121,7 @@ namespace SocialLinker.Core.LocalStorageTables
             }
         }
 
-        public static Bitmap Construct_Bustup_With_Frames(SocialLinkerCommand sl_command, OfficialSetData set_data, BustupData bustup_data, MakerCommandData maker_command_data, Bitmap bustup, bool reverse_file_exists)
+        public static Bitmap Construct_Bustup_With_Frames(SocialLinkerCommand sl_command, MakerCharacterData maker_character_data, Bitmap bustup, bool reverse_file_exists)
         {
             Bitmap edited_bustup = bustup;
 
@@ -2237,7 +2130,10 @@ namespace SocialLinker.Core.LocalStorageTables
             Bitmap eye_frame_sprite = default;
             Bitmap mouth_frame_sprite = default;
 
-            if (maker_command_data.Character_Data.Eye_Frame != default && maker_command_data.Character_Data.Eye_Frame != 0)
+            OfficialSetData set_data = maker_character_data.Set_Data;
+            BustupData bustup_data = maker_character_data.Bustup_Data;
+
+            if (maker_character_data.Eye_Frame != default && maker_character_data.Eye_Frame != 0)
             {
                 // Establish the eye frame directory for the current sprite set.
                 string eye_frame_path = "";
@@ -2254,7 +2150,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
 
                 // Get the eye frame data of the frame specified in the user's command.
-                eye_frame_data = BustupDataMethods.Get_Eye_Frame_Data(set_data, bustup_data, maker_command_data);
+                eye_frame_data = BustupDataMethods.Get_Eye_Frame_Data(set_data, bustup_data, maker_character_data);
 
                 // Ensure that the returned eye frame data is not null.
                 if (eye_frame_data != null)
@@ -2290,12 +2186,12 @@ namespace SocialLinker.Core.LocalStorageTables
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, maker_command_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, maker_character_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
                     return null;
                 }
             }
 
-            if (maker_command_data.Character_Data.Mouth_Frame != default && maker_command_data.Character_Data.Mouth_Frame != 0)
+            if (maker_character_data.Mouth_Frame != default && maker_character_data.Mouth_Frame != 0)
             {
                 // Establish the mouth frame directory for the current sprite set.
                 string mouth_frame_path = "";
@@ -2312,7 +2208,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
 
                 // Get the mouth frame data of the frame specified in the user's command.
-                mouth_frame_data = BustupDataMethods.Get_Mouth_Frame_Data(set_data, bustup_data, maker_command_data);
+                mouth_frame_data = BustupDataMethods.Get_Mouth_Frame_Data(set_data, bustup_data, maker_character_data);
 
                 // Ensure that the returned mouth frame data is not null.
                 if (mouth_frame_data != null)
@@ -2348,7 +2244,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, maker_command_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, maker_character_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
                     return null;
                 }
             }

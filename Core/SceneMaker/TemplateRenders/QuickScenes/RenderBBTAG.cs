@@ -36,7 +36,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             RestUserMessage loader = await channel.SendMessageAsync("", false, BBTAG_Loading_Message(set_data.Series).Build());
 
             var account = UserInfoClasses.GetAccount(user);
-            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
             BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
             if (maker_command_data.Character_Data.Base_Sprite == 0)
@@ -66,7 +66,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             if (is_spriteless == false)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -80,7 +80,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Time to put it all together!
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                string display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
                 DateTime user_time = Get_Date(sl_command, account);
                 Bitmap header = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//layer_1.png");
                 Bitmap nametag = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Nametag//{Series_To_Nametag(set_data.Series)}.png");

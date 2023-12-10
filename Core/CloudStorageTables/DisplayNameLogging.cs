@@ -27,8 +27,11 @@ namespace SocialLinker.Core.CloudStorageTables
             displayNameTable.CreateIfNotExists();
         }
 
-        public static DisplayNameTableData GetCustomName(ulong id, MakerCommandData maker_command_data, OfficialSetData set_data, BustupData bustup_data)
+        public static DisplayNameTableData GetCustomName(ulong id, MakerCharacterData maker_character_data)
         {
+            OfficialSetData set_data = maker_character_data.Set_Data;
+            BustupData bustup_data = maker_character_data.Bustup_Data;
+
             var storageAccount = new CloudStorageAccount(new StorageCredentials(AzureConfig.azureAccount.accountName, AzureConfig.azureAccount.accountKey), true);
             var tableClient = storageAccount.CreateCloudTableClient();
             var customNameTable = tableClient.GetTableReference(logging_table);
@@ -43,7 +46,7 @@ namespace SocialLinker.Core.CloudStorageTables
 
             for (int i = 0; i < results_list.Count; i++)
             {
-                if (maker_command_data.Character_Data.Base_Sprite == 0 || results_list[i].Sprites_Affected.Contains(bustup_data.Filename))
+                if (maker_character_data.Base_Sprite == 0 || results_list[i].Sprites_Affected.Contains(bustup_data.Filename))
                 {
                     return results_list[i];
                 }

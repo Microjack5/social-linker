@@ -33,7 +33,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             RestUserMessage loader = await channel.SendMessageAsync("", false, P4D_Loading_Message().Build());
             var account = UserInfoClasses.GetAccount(user);
-            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
             BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
             // Background rendering
@@ -57,7 +57,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data);
             }
 
             if (bustup == null)
@@ -219,7 +219,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 switch (account.P4D_TS_Position)
                 {
                     case "Left":
-                        bustup = OfficialSetMethods.Reverse_Bustup_Selection(sl_command, set_data, bustup, bustup_data, command_data);
+                        bustup = OfficialSetMethods.Reverse_Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data, bustup);
 
                         if (bustup_data.P4D_Dual_Flip == true)
                         {
@@ -257,7 +257,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(dialogue_layer_2, 0, 0, template_width, template_height);
                 graphics.DrawImage(button_guide, 0, 0, template_width, template_height);
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, command_data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P4D", "Name", display_name);
 
                 Bitmap rendered_name = Render_Name(display_name);

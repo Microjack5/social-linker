@@ -41,7 +41,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 var account = UserInfoClasses.GetAccount(user);
 
-                sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_command_data);
+                sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
                 BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
 
                 maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Dialogue", maker_command_data.Dialogue);
@@ -54,13 +54,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 if (maker_command_data.Character_Data.Base_Sprite == 0)
                 {
-                    display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
+                    display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
                     display_name = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Name", display_name);
                     maker_command_data.Character_Data.Base_Sprite = 0;
                 }
                 else
                 {
-                    display_name = OfficialSetMethods.GetDisplayName(account, maker_command_data);
+                    display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
                     display_name = OfficialSetMethods.Validate_Input(sl_command, "P1-PS1", "Name", display_name);
                 }
 
@@ -187,7 +187,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             if (maker_command_data.Character_Data.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, set_data, bustup_data, maker_command_data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data);
             }
 
             if (bustup == null)

@@ -3,6 +3,7 @@ using System.Linq;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus;
+using SocialLinker.Core.SceneMaker;
 using SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes;
 
 namespace SocialLinker
@@ -17,6 +18,7 @@ namespace SocialLinker
         internal static List<DisplayNameInternalData> DisplayNameTempList { get; set; } = new List<DisplayNameInternalData>();
         internal static List<ContextSwitchData> P1_PS1_Usage_List { get; set; } = new List<ContextSwitchData>();
         internal static List<PlacementSwitchData> P1_PSP_Usage_List { get; set; } = new List<PlacementSwitchData>();
+        internal static List<SocialLinkerCommand> MultiMaker_Session_List { get; set; } = new List<SocialLinkerCommand>();
 
         internal static string[] p1_ps1_version_keywords = { "P1-PS1", "P1-PSX", "P1PS1", "P1PSX" };
         internal static string[] p1_psp_version_keywords = { "P1-PSP", "P1PSP", "P1-P", "P1P" };

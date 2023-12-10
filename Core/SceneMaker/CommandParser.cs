@@ -1211,6 +1211,7 @@ namespace SocialLinker.Core.SceneMaker
 
     public class MakerMultiCommandData : MakerCommandData
     {
+        public int Expected_Characters { get; set; }
         public MakerCharacterData Character_Data_1 { get; set; }
         public MakerCharacterData Character_Data_2 { get; set; }
         public MakerCharacterData Character_Data_3 { get; set; }
