@@ -39,8 +39,8 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
-                multimaker_session.MakerMultiCommand.Template = "P3P";
-                multimaker_session.MakerMultiCommand.Expected_Characters = 2;
+                multimaker_session.MakerCommand.Template = "P3P";
+                multimaker_session.MakerCommand.Expected_Characters = 2;
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -54,8 +54,8 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
-                multimaker_session.MakerMultiCommand.Template = "P4AU";
-                multimaker_session.MakerMultiCommand.Expected_Characters = 2;
+                multimaker_session.MakerCommand.Template = "P4AU";
+                multimaker_session.MakerCommand.Expected_Characters = 2;
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -69,8 +69,8 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
-                multimaker_session.MakerMultiCommand.Template = "P4D";
-                multimaker_session.MakerMultiCommand.Expected_Characters = 2;
+                multimaker_session.MakerCommand.Template = "P4D";
+                multimaker_session.MakerCommand.Expected_Characters = 2;
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -83,7 +83,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             else if (reaction.Emote.Name == "BBTAG")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-                multimaker_session.MakerMultiCommand.Template = "BBTAG";
+                multimaker_session.MakerCommand.Template = "BBTAG";
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -134,7 +134,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-                multimaker_session.MakerMultiCommand.Template = "P2IS-PS1";
+                multimaker_session.MakerCommand.Template = "P2IS-PS1";
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -147,7 +147,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-                multimaker_session.MakerMultiCommand.Template = "P2IS-PSP";
+                multimaker_session.MakerCommand.Template = "P2IS-PSP";
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -175,7 +175,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-                multimaker_session.MakerMultiCommand.Template = "P2EP-PS1";
+                multimaker_session.MakerCommand.Template = "P2EP-PS1";
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -188,7 +188,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-                multimaker_session.MakerMultiCommand.Template = "P2EP-PSP";
+                multimaker_session.MakerCommand.Template = "P2EP-PSP";
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();

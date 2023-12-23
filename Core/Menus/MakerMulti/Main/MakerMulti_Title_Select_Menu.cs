@@ -70,15 +70,22 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 }
             };
 
-            sl_command.MakerMultiCommand = new MakerMultiCommandData()
+            MakerCommandData maker_command_data = new MakerCommandData()
             {
+                Template = "",
                 Character_Data_1 = new MakerCharacterData(),
                 Character_Data_2 = new MakerCharacterData(),
                 Character_Data_3 = new MakerCharacterData(),
                 Character_Data_4 = new MakerCharacterData(),
                 Dialogue = "",
-                Background = null
+                Background = null,
+                Expected_Characters = 0,
+                Display_Name = "",
+                Display_Name_Has_Invalid_Char = false,
+                Dialogue_Has_Invalid_Char = false
             };
+
+            sl_command.MakerCommand = maker_command_data;
 
             // Add the menu entry to the global list.
             Global.MenuIdList.Add(menuSession);

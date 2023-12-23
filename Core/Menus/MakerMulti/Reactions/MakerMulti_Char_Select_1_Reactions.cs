@@ -70,9 +70,9 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
             MakerCommandData maker_command = new MakerCommandData()
             {
-                Character_Data = new MakerCharacterData()
+                Character_Data_1 = new MakerCharacterData()
                 {
-                    Sprite_Set_Version = multimaker_session.MakerMultiCommand.Template,
+                    Sprite_Set_Version = multimaker_session.MakerCommand.Template,
                     Character_Keyword = input_string
                 }
             };
@@ -89,7 +89,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 return Task.CompletedTask;
             }
 
-            multimaker_session.MakerMultiCommand.Character_Data_1.Set_Data = sprite_set_info;
+            multimaker_session.MakerCommand.Character_Data_1.Set_Data = sprite_set_info;
 
             // Stop the timeout timer associated with the menu.
             menuSession.MenuTimer.Stop();

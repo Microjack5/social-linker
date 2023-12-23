@@ -52,7 +52,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
-            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data_1.Set_Data;
             MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             RestUserMessage loader = await channel.SendMessageAsync("", false, P5R_Loading_Message().Build());
@@ -60,13 +60,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var account = UserInfoClasses.GetAccount(user);
             user_time = Get_Date(sl_command, account);
 
-            if (maker_command_data.Character_Data.Base_Sprite == 0)
+            if (maker_command_data.Character_Data_1.Base_Sprite == 0)
             {
                 is_spriteless = true;
             }
 
-            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
-            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
+            sl_command.MakerCommand.Character_Data_1.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data_1);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data_1.Bustup_Data;
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -89,9 +89,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Check if the base sprite number is something other than zero.
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-            if (maker_command_data.Character_Data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data_1.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data_1);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -102,7 +102,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 return;
             }
 
-            string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
+            string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
             display_name = OfficialSetMethods.Validate_Input(sl_command, "P5R", "Name", display_name);
 
             Bitmap calendar = new Bitmap(2, 2);
@@ -127,7 +127,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
                 graphics.DrawImage(scene_border, 0, 0, template_width, template_height);
 
-                if (maker_command_data.Character_Data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data_1.Base_Sprite != 0)
                 {
                     Bitmap bustup_layer = Render_Bustup(account, user_time, set_data, bustup_data, bustup);
                     graphics.DrawImage(bustup_layer, 0, 0, bustup_layer.Width, bustup_layer.Height);
@@ -189,7 +189,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             var account = UserInfoClasses.GetAccount(user);
             user_time = Get_Date(sl_command, account);
 
-            if (maker_command_data.Character_Data.Base_Sprite == 0)
+            if (maker_command_data.Character_Data_1.Base_Sprite == 0)
             {
                 is_spriteless = true;
             }
@@ -3936,7 +3936,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 timeOfDay = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Time_of_Day//{Get_Time_of_Day(user_time)}.png");
 
                 // Since it's a specialized date, the day will always be either the 24th or the 25th.
-                char[] day = DateTime.Now.Day.ToString().ToCharArray();
+                char[] day = user_time.Day.ToString().ToCharArray();
 
                 dayBottom_tens = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Bottom//Day//Double_Digit//Tens_Place//{day[0]}.png");
                 dayBottom_ones = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Bottom//Day//Double_Digit//Ones_Place//{day[1]}.png");
@@ -4623,8 +4623,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 timeOfDay = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Time_of_Day//{Get_Time_of_Day(user_time)}.png");
 
                 // Since it's a specialized date, the day will always be the 14th.
-                char[] day = DateTime.Now.Day.ToString().ToCharArray();
-
                 dayBottom_tens = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Bottom//Day//Double_Digit//Tens_Place//1.png");
                 dayBottom_ones = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Bottom//Day//Double_Digit//Ones_Place//4.png");
 
@@ -4917,8 +4915,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 timeOfDay = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Time_of_Day//{Get_Time_of_Day(user_time)}.png");
 
                 // Since it's a specialized date, the day for the Harvest festival will always be the 15th.
-                char[] day = DateTime.Now.Day.ToString().ToCharArray();
-
                 dayBottom_tens = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Bottom//Day//Double_Digit//Tens_Place//1.png");
                 dayBottom_ones = System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P5R//Calendar//Calendar_Bottom//Day//Double_Digit//Ones_Place//5.png");
 

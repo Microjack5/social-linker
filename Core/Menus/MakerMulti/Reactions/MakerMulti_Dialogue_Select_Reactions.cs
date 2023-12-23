@@ -33,7 +33,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 string input_string = message.Content;
                 input_string = Global.RemoveBotMention(input_string).Trim();
 
-                multimaker_session.MakerMultiCommand.Dialogue = input_string;
+                multimaker_session.MakerCommand.Dialogue = input_string;
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();

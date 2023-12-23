@@ -28,13 +28,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
-            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data_1.Set_Data;
             MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             RestUserMessage loader = await channel.SendMessageAsync("", false, P4D_Loading_Message().Build());
             var account = UserInfoClasses.GetAccount(user);
-            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
-            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
+            sl_command.MakerCommand.Character_Data_1.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data_1);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data_1.Bustup_Data;
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -55,9 +55,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             Bitmap bustup = new Bitmap(2, 2);
 
-            if (maker_command_data.Character_Data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data_1.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data_1);
             }
 
             if (bustup == null)
@@ -76,7 +76,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
 
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (maker_command_data.Character_Data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data_1.Base_Sprite != 0)
                 {
                     Bitmap placed_bustup = Set_Bustup_Placement(sl_command, account, bustup, bustup_data, set_data, maker_command_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
@@ -219,7 +219,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 switch (account.P4D_TS_Position)
                 {
                     case "Left":
-                        bustup = OfficialSetMethods.Reverse_Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data, bustup);
+                        bustup = OfficialSetMethods.Reverse_Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data_1, bustup);
 
                         if (bustup_data.P4D_Dual_Flip == true)
                         {
@@ -257,7 +257,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(dialogue_layer_2, 0, 0, template_width, template_height);
                 graphics.DrawImage(button_guide, 0, 0, template_width, template_height);
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P4D", "Name", display_name);
 
                 Bitmap rendered_name = Render_Name(display_name);

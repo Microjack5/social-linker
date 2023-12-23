@@ -22,7 +22,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-                multimaker_session.MakerMultiCommand.Expected_Characters = 2;
+                multimaker_session.MakerCommand.Expected_Characters = 2;
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -35,7 +35,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-                multimaker_session.MakerMultiCommand.Expected_Characters = 3;
+                multimaker_session.MakerCommand.Expected_Characters = 3;
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -48,7 +48,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-                multimaker_session.MakerMultiCommand.Expected_Characters = 4;
+                multimaker_session.MakerCommand.Expected_Characters = 4;
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();

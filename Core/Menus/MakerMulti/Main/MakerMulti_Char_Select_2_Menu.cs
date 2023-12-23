@@ -45,7 +45,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"Type in the name of the second {OfficialSetMethods.AcronymToFullTitle(multimaker_session.MakerMultiCommand.Template)} character you'd like to use.\n" +
+                $"Type in the name of the second {OfficialSetMethods.AcronymToFullTitle(multimaker_session.MakerCommand.Template)} character you'd like to use.\n" +
                 $"\n" +
                 $"{Global.MentionNotice}");
 
@@ -126,7 +126,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"There doesn’t seem to be a sprite set with the keyword \"{user_input}\" in {OfficialSetMethods.AcronymToFullTitle(multimaker_session.MakerMultiCommand.Template)}.\n");
+                $"There doesn’t seem to be a sprite set with the keyword \"{user_input}\" in {OfficialSetMethods.AcronymToFullTitle(multimaker_session.MakerCommand.Template)}.\n");
             embed.AddField("Tips", "" +
                 $"Make sure the character’s keyword is typed correctly and react with ↩️ to try again.");
 

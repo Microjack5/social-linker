@@ -28,7 +28,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
-            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data_1.Set_Data;
             MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             // Send a loading message to the channel while the sprite sheet is being made.
@@ -37,8 +37,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
 
-            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
-            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
+            sl_command.MakerCommand.Character_Data_1.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data_1);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data_1.Bustup_Data;
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -62,9 +62,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Check if the base sprite number is something other than zero.
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-            if (maker_command_data.Character_Data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data_1.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data_1);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -91,7 +91,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(layer_1, 0, 0, template_width, template_height);
 
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (maker_command_data.Character_Data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data_1.Base_Sprite != 0)
                 {
                     Bitmap placed_bustup = Set_Bustup_Placement(sl_command, account, bustup, bustup_data, set_data, maker_command_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
@@ -100,7 +100,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             System.Drawing.Color display_name_color = System.Drawing.Color.FromArgb(166, 222, 69);
 
-            string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
+            string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
             display_name = OfficialSetMethods.Validate_Input(sl_command, "P2IS-PSP", "Name", display_name);
 
             Bitmap display_name_layer = Render_Name(display_name);
@@ -111,7 +111,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 // Check if the base sprite number is something other than zero. If so, render the display name of the chosen sprite to the template.
-                if (maker_command_data.Character_Data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data_1.Base_Sprite != 0)
                 {
                     graphics.DrawImage(Bitmap_To_Color(display_name_layer, display_name_color, display_name_area), 0, 0, template_width, template_height);
                 }
@@ -120,10 +120,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 {
                     // Change the base sprite number from the command data to one.
                     // This way, we can get the bustup data for the first sprite to retrieve its display name.
-                    maker_command_data.Character_Data.Base_Sprite = 1;
+                    maker_command_data.Character_Data_1.Base_Sprite = 1;
 
                     // Get the bustup data for the first sprite and render the display name to the template.
-                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
+                    bustup_data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data_1);
                     graphics.DrawImage(Bitmap_To_Color(display_name_layer, display_name_color, display_name_area), 0, 0, template_width, template_height);
                 }
 

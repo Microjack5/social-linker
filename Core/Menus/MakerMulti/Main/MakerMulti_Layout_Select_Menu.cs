@@ -53,7 +53,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 "Select how many characters you'd like to use in your scene." +
                 $"\n";
 
-            var template = multimaker_session.MakerMultiCommand.Template;
+            var template = multimaker_session.MakerCommand.Template;
 
             if (two_character_templates.Any(s => template.Contains(s)))
             {

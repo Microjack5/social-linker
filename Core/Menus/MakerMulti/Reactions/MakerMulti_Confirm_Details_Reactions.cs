@@ -44,7 +44,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 }
 
                 // Go to a new menu.
-                if (multimaker_session.MakerMultiCommand.Template == "P3P")
+                if (multimaker_session.MakerCommand.Template == "P3P")
                 {
                     SceneMaker.TemplateRenders.MakerMulti.RenderP3P p3p_render = new SceneMaker.TemplateRenders.MakerMulti.RenderP3P();
                     _ = p3p_render.Render_Quick_Scene_P3P(multimaker_session);

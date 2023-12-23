@@ -47,15 +47,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
-            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data_1.Set_Data;
             MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             RestUserMessage loader = await channel.SendMessageAsync("", false, P2EP_PS1_Loading_Message().Build());
 
             var account = UserInfoClasses.GetAccount(user);
 
-            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
-            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
+            sl_command.MakerCommand.Character_Data_1.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data_1);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data_1.Bustup_Data;
 
             Bitmap base_template = new Bitmap(template_width, template_height);
             Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width, template_height);
@@ -77,9 +77,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Check if the base sprite number is something other than zero.
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-            if (maker_command_data.Character_Data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data_1.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data_1);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -96,7 +96,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
 
-                if (maker_command_data.Character_Data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data_1.Base_Sprite != 0)
                 {
                     Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
@@ -104,7 +104,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 graphics.DrawImage(Render_Message_Window(account), 0, 0, template_width, template_height);
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P2EP-PS1", "Name", display_name);
 
                 maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P2EP-PS1", "Dialogue", maker_command_data.Dialogue);

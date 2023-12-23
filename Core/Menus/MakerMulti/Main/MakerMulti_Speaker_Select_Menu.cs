@@ -50,16 +50,16 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 results_list += "" +
                     "Select a character to use their display name in the scene, or type in a different display name to use.\n" +
                     $"\n" +
-                    $":one: {multimaker_session.MakerMultiCommand.Character_Data_1.Bustup_Data.Default_Name_EN}\n" +
-                    $":two: {multimaker_session.MakerMultiCommand.Character_Data_2.Bustup_Data.Default_Name_EN}\n";
+                    $":one: {multimaker_session.MakerCommand.Character_Data_1.Bustup_Data.Default_Name_EN}\n" +
+                    $":two: {multimaker_session.MakerCommand.Character_Data_2.Bustup_Data.Default_Name_EN}\n";
 
-                if (multimaker_session.MakerMultiCommand.Character_Data_3.Character_Keyword != default)
+                if (multimaker_session.MakerCommand.Character_Data_3.Character_Keyword != default)
                 {
-                    results_list += $":three: {multimaker_session.MakerMultiCommand.Character_Data_3.Bustup_Data.Default_Name_EN}\n";
+                    results_list += $":three: {multimaker_session.MakerCommand.Character_Data_3.Bustup_Data.Default_Name_EN}\n";
                 }
-                if (multimaker_session.MakerMultiCommand.Character_Data_4.Character_Keyword != default)
+                if (multimaker_session.MakerCommand.Character_Data_4.Character_Keyword != default)
                 {
-                    results_list += $":four: {multimaker_session.MakerMultiCommand.Character_Data_4.Bustup_Data.Default_Name_EN}\n";
+                    results_list += $":four: {multimaker_session.MakerCommand.Character_Data_4.Bustup_Data.Default_Name_EN}\n";
                 }
 
                 results_list += "" +
@@ -113,11 +113,11 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
                 reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
 
-                if (multimaker_session.MakerMultiCommand.Character_Data_3.Character_Keyword != default)
+                if (multimaker_session.MakerCommand.Character_Data_3.Character_Keyword != default)
                 {
                     reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
                 }
-                if (multimaker_session.MakerMultiCommand.Character_Data_4.Character_Keyword != default)
+                if (multimaker_session.MakerCommand.Character_Data_4.Character_Keyword != default)
                 {
                     reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
                 }

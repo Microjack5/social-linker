@@ -152,7 +152,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                         return Task.CompletedTask;
                 }
 
-                if (MakerMulti_Sprite_Select_1_Reactions.Base_Sprite_Validity_Check(multimaker_session.MakerMultiCommand.Character_Data_2) == false)
+                if (MakerMulti_Sprite_Select_1_Reactions.Base_Sprite_Validity_Check(multimaker_session.MakerCommand.Character_Data_2) == false)
                 {
                     // Stop the timeout timer associated with the menu.
                     menuSession.MenuTimer.Stop();
@@ -161,7 +161,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                     _ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Invalid_Base_Sprite(menuSession.User, menuSession.MenuMessage);
                     return Task.CompletedTask;
                 }
-                if ((multimaker_session.MakerMultiCommand.Character_Data_2.Base_Sprite == 0) && ((multimaker_session.MakerMultiCommand.Character_Data_2.Eye_Frame != default) || (multimaker_session.MakerMultiCommand.Character_Data_2.Mouth_Frame != default)))
+                if ((multimaker_session.MakerCommand.Character_Data_2.Base_Sprite == 0) && ((multimaker_session.MakerCommand.Character_Data_2.Eye_Frame != default) || (multimaker_session.MakerCommand.Character_Data_2.Mouth_Frame != default)))
                 {
                     // Stop the timeout timer associated with the menu.
                     menuSession.MenuTimer.Stop();
@@ -171,21 +171,21 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                     return Task.CompletedTask;
                 }
 
-                if (multimaker_session.MakerMultiCommand.Character_Data_2.Base_Sprite != 0)
+                if (multimaker_session.MakerCommand.Character_Data_2.Base_Sprite != 0)
                 {
-                    var bustup = MakerMulti_Sprite_Select_1_Reactions.Bustup_Selection(menuSession, account, multimaker_session.MakerMultiCommand.Character_Data_2, 2); // Just a validity check
+                    var bustup = MakerMulti_Sprite_Select_1_Reactions.Bustup_Selection(menuSession, account, multimaker_session.MakerCommand.Character_Data_2, 2); // Just a validity check
 
                     if (bustup == null) // In case the validity check fails
                     {
                         return Task.CompletedTask;
                     }
 
-                    multimaker_session.MakerMultiCommand.Character_Data_2.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, multimaker_session.MakerMultiCommand.Character_Data_2.Set_Data, multimaker_session.MakerMultiCommand.Character_Data_2);
+                    multimaker_session.MakerCommand.Character_Data_2.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, multimaker_session.MakerCommand.Character_Data_2.Set_Data, multimaker_session.MakerCommand.Character_Data_2);
                 }
 
                 menuSession.MenuTimer.Stop();
 
-                if (multimaker_session.MakerMultiCommand.Expected_Characters > 2)
+                if (multimaker_session.MakerCommand.Expected_Characters > 2)
                 {
                     _ = MakerMulti_Char_Select_3_Menu.MakerMulti_Character_Select_3_Main(menuSession.User, menuSession.MenuMessage);
                 }

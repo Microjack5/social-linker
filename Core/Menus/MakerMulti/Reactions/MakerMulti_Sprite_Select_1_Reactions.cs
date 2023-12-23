@@ -159,7 +159,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                         return Task.CompletedTask;
                 }
 
-                if (Base_Sprite_Validity_Check(multimaker_session.MakerMultiCommand.Character_Data_1) == false)
+                if (Base_Sprite_Validity_Check(multimaker_session.MakerCommand.Character_Data_1) == false)
                 {
                     // Stop the timeout timer associated with the menu.
                     menuSession.MenuTimer.Stop();
@@ -168,7 +168,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                     _ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Invalid_Base_Sprite(menuSession.User, menuSession.MenuMessage);
                     return Task.CompletedTask;
                 }
-                if ((multimaker_session.MakerMultiCommand.Character_Data_1.Base_Sprite == 0) && ((multimaker_session.MakerMultiCommand.Character_Data_1.Eye_Frame != default) || (multimaker_session.MakerMultiCommand.Character_Data_1.Mouth_Frame != default)))
+                if ((multimaker_session.MakerCommand.Character_Data_1.Base_Sprite == 0) && ((multimaker_session.MakerCommand.Character_Data_1.Eye_Frame != default) || (multimaker_session.MakerCommand.Character_Data_1.Mouth_Frame != default)))
                 {
                     // Stop the timeout timer associated with the menu.
                     menuSession.MenuTimer.Stop();
@@ -178,16 +178,16 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                     return Task.CompletedTask;
                 }
 
-                if (multimaker_session.MakerMultiCommand.Character_Data_1.Base_Sprite != 0)
+                if (multimaker_session.MakerCommand.Character_Data_1.Base_Sprite != 0)
                 {
-                    var bustup = Bustup_Selection(menuSession, account, multimaker_session.MakerMultiCommand.Character_Data_1, 1); // Just a validity check
+                    var bustup = Bustup_Selection(menuSession, account, multimaker_session.MakerCommand.Character_Data_1, 1); // Just a validity check
 
                     if (bustup == null) // In case the validity check fails
                     {
                         return Task.CompletedTask;
                     }
 
-                    multimaker_session.MakerMultiCommand.Character_Data_1.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, multimaker_session.MakerMultiCommand.Character_Data_1.Set_Data, multimaker_session.MakerMultiCommand.Character_Data_1);
+                    multimaker_session.MakerCommand.Character_Data_1.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, multimaker_session.MakerCommand.Character_Data_1.Set_Data, multimaker_session.MakerCommand.Character_Data_1);
                 }
 
                 menuSession.MenuTimer.Stop();
@@ -267,27 +267,27 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             switch (current_character)
             {
                 case 1:
-                    sl_command.MakerMultiCommand.Character_Data_1.Base_Sprite = temp_character_data.Base_Sprite;
-                    sl_command.MakerMultiCommand.Character_Data_1.Eye_Frame = temp_character_data.Eye_Frame;
-                    sl_command.MakerMultiCommand.Character_Data_1.Mouth_Frame = temp_character_data.Mouth_Frame;
+                    sl_command.MakerCommand.Character_Data_1.Base_Sprite = temp_character_data.Base_Sprite;
+                    sl_command.MakerCommand.Character_Data_1.Eye_Frame = temp_character_data.Eye_Frame;
+                    sl_command.MakerCommand.Character_Data_1.Mouth_Frame = temp_character_data.Mouth_Frame;
                     break;
 
                 case 2:
-                    sl_command.MakerMultiCommand.Character_Data_2.Base_Sprite = temp_character_data.Base_Sprite;
-                    sl_command.MakerMultiCommand.Character_Data_2.Eye_Frame = temp_character_data.Eye_Frame;
-                    sl_command.MakerMultiCommand.Character_Data_2.Mouth_Frame = temp_character_data.Mouth_Frame;
+                    sl_command.MakerCommand.Character_Data_2.Base_Sprite = temp_character_data.Base_Sprite;
+                    sl_command.MakerCommand.Character_Data_2.Eye_Frame = temp_character_data.Eye_Frame;
+                    sl_command.MakerCommand.Character_Data_2.Mouth_Frame = temp_character_data.Mouth_Frame;
                     break;
 
                 case 3:
-                    sl_command.MakerMultiCommand.Character_Data_3.Base_Sprite = temp_character_data.Base_Sprite;
-                    sl_command.MakerMultiCommand.Character_Data_3.Eye_Frame = temp_character_data.Eye_Frame;
-                    sl_command.MakerMultiCommand.Character_Data_3.Mouth_Frame = temp_character_data.Mouth_Frame;
+                    sl_command.MakerCommand.Character_Data_3.Base_Sprite = temp_character_data.Base_Sprite;
+                    sl_command.MakerCommand.Character_Data_3.Eye_Frame = temp_character_data.Eye_Frame;
+                    sl_command.MakerCommand.Character_Data_3.Mouth_Frame = temp_character_data.Mouth_Frame;
                     break;
 
                 case 4:
-                    sl_command.MakerMultiCommand.Character_Data_4.Base_Sprite = temp_character_data.Base_Sprite;
-                    sl_command.MakerMultiCommand.Character_Data_4.Eye_Frame = temp_character_data.Eye_Frame;
-                    sl_command.MakerMultiCommand.Character_Data_4.Mouth_Frame = temp_character_data.Mouth_Frame;
+                    sl_command.MakerCommand.Character_Data_4.Base_Sprite = temp_character_data.Base_Sprite;
+                    sl_command.MakerCommand.Character_Data_4.Eye_Frame = temp_character_data.Eye_Frame;
+                    sl_command.MakerCommand.Character_Data_4.Mouth_Frame = temp_character_data.Mouth_Frame;
                     break;
             }
         }

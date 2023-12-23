@@ -77,12 +77,12 @@ namespace SocialLinker.Core.LocalStorageTables
                 for (int i = 0; i < generic_char_keywords.Length; i++)
                 {
                     // If the contents of the current index match the lowercase form of the user's input, we found a potential candidate!
-                    if (generic_char_keywords[i] == maker_command_data.Character_Data.Character_Keyword.ToLower())
+                    if (generic_char_keywords[i] == maker_command_data.Character_Data_1.Character_Keyword.ToLower())
                     {
                         // Check to see if the user specified a sprite set version in their command.
                         // First, let's process the case that they didn't.
                         // We'll want to return a sprite set from the character's debut title that matches the user's desired version.
-                        if (maker_command_data.Character_Data.Sprite_Set_Version == "")
+                        if (maker_command_data.Character_Data_1.Sprite_Set_Version == "")
                         {
                             // Check if the current set is from a title that has multiple versions to it.
                             // If so, the Version_Control_Check method will not return empty and instead return the user's version control settings for that title.
@@ -137,10 +137,10 @@ namespace SocialLinker.Core.LocalStorageTables
                             }
                         }
                         // If the user did specify a sprite set version in their command, let's make sure we get the right set!
-                        else if (maker_command_data.Character_Data.Sprite_Set_Version != "")
+                        else if (maker_command_data.Character_Data_1.Sprite_Set_Version != "")
                         {
                             // First, convert the user's input title into one we can use.
-                            string input_template = InputToTemplate(account, maker_command_data.Character_Data.Sprite_Set_Version);
+                            string input_template = InputToTemplate(account, maker_command_data.Character_Data_1.Sprite_Set_Version);
 
                             // Check if the set's origin matches the user's input template.
                             if (s.Origin == input_template)
@@ -673,7 +673,7 @@ namespace SocialLinker.Core.LocalStorageTables
 
             // Now that we have a filecount for the set, let's see if the inputted sprite number is valid before we continue.
             // If not, send an error message and cancel the request.
-            if (maker_command_data.Character_Data.Base_Sprite > filecount)
+            if (maker_command_data.Character_Data_1.Base_Sprite > filecount)
             {
                 _ = ErrorHandling.Sprite_Number_Not_Found(sl_command, set_data.Name, AcronymToFullTitle(set_data.Origin));
                 return false;
@@ -1062,7 +1062,7 @@ namespace SocialLinker.Core.LocalStorageTables
         {
             MakerCommandLogging.LogData(sl_command);
 
-            var set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            var set_data = sl_command.MakerCommand.Character_Data_1.Set_Data;
 
             if (sl_command.MakerCommand.Template == "")
             {
@@ -1164,7 +1164,7 @@ namespace SocialLinker.Core.LocalStorageTables
             MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             // Convert the user's template input into one usable depending on their version control settings.
-            string template = InputToTemplate(account, maker_command_data.Character_Data.Sprite_Set_Version);
+            string template = InputToTemplate(account, maker_command_data.Character_Data_1.Sprite_Set_Version);
 
             MakerCommandLogging.LogData(sl_command);
 

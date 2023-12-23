@@ -29,7 +29,6 @@ namespace SocialLinker
         public SocketUserMessage Message { get; set; }
         public SocketSlashCommand SlashCommand { get; set; }
         public MakerCommandData MakerCommand { get; set; }
-        public MakerMultiCommandData MakerMultiCommand { get; set; }
         public bool ValidCommand { get; set; }
     }
 
@@ -623,7 +622,7 @@ namespace SocialLinker
             MakerCommandData maker_command_data = new MakerCommandData()
             {
                 Template = "",
-                Character_Data = new MakerCharacterData()
+                Character_Data_1 = new MakerCharacterData()
                 {
                     Character_Keyword = "",
                     Sprite_Set_Version = "",
@@ -646,23 +645,23 @@ namespace SocialLinker
                         break;
 
                     case "character":
-                        maker_command_data.Character_Data.Character_Keyword = slash_command_data_options_list[i].Value.ToString();
+                        maker_command_data.Character_Data_1.Character_Keyword = slash_command_data_options_list[i].Value.ToString();
                         break;
 
                     case "character_version":
-                        maker_command_data.Character_Data.Sprite_Set_Version = Value_To_Template(slash_command_data_options_list[i].Value.ToString());
+                        maker_command_data.Character_Data_1.Sprite_Set_Version = Value_To_Template(slash_command_data_options_list[i].Value.ToString());
                         break;
 
                     case "sprite_number":
-                        maker_command_data.Character_Data.Base_Sprite = Convert.ToInt32(slash_command_data_options_list[i].Value.ToString());
+                        maker_command_data.Character_Data_1.Base_Sprite = Convert.ToInt32(slash_command_data_options_list[i].Value.ToString());
                         break;
 
                     case "eye_frame":
-                        maker_command_data.Character_Data.Eye_Frame = Convert.ToInt32(slash_command_data_options_list[i].Value.ToString());
+                        maker_command_data.Character_Data_1.Eye_Frame = Convert.ToInt32(slash_command_data_options_list[i].Value.ToString());
                         break;
 
                     case "mouth_frame":
-                        maker_command_data.Character_Data.Mouth_Frame = Convert.ToInt32(slash_command_data_options_list[i].Value.ToString());
+                        maker_command_data.Character_Data_1.Mouth_Frame = Convert.ToInt32(slash_command_data_options_list[i].Value.ToString());
                         break;
 
                     case "dialogue":

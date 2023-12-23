@@ -32,7 +32,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
-            OfficialSetData set_data = sl_command.MakerCommand.Character_Data.Set_Data;
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data_1.Set_Data;
             MakerCommandData maker_command_data = sl_command.MakerCommand;
 
             // Send a loading message to the channel while the sprite sheet is being made.
@@ -41,8 +41,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
 
-            sl_command.MakerCommand.Character_Data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data);
-            BustupData bustup_data = sl_command.MakerCommand.Character_Data.Bustup_Data;
+            sl_command.MakerCommand.Character_Data_1.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data_1);
+            BustupData bustup_data = sl_command.MakerCommand.Character_Data_1.Bustup_Data;
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -66,9 +66,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // Check if the base sprite number is something other than zero.
             // If it is zero, we have nothing to render. Otherwise, retrieve the bustup.
-            if (maker_command_data.Character_Data.Base_Sprite != 0)
+            if (maker_command_data.Character_Data_1.Base_Sprite != 0)
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data);
+                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data_1);
             }
 
             // If the bustup returns as null, however, something went wrong with rendering the animation frames.
@@ -104,7 +104,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (maker_command_data.Character_Data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data_1.Base_Sprite != 0)
                 {
                     // Make a drop shadow of the bustup first and render it to the template before the main image.
                     Bitmap drop_shadow = Create_Bustup_Drop_Shadow(bustup);
@@ -138,7 +138,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Using that string array list, let's generate all the vectors and text in one go!
                 Bitmap merged_vectors_bitmap = new Bitmap(template_width, template_height);
 
-                if (maker_command_data.Character_Data.Base_Sprite != 0)
+                if (maker_command_data.Character_Data_1.Base_Sprite != 0)
                 {
                     merged_vectors_bitmap = Combine_Vector_Bitmaps(account, dialogue_lines, false, false);
                 }
@@ -147,7 +147,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     merged_vectors_bitmap = Combine_Vector_Bitmaps(account, dialogue_lines, false, true);
                 }
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data);
+                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P5S", "Name", display_name);
 
                 Bitmap merged_text_bitmap = Combine_Text_Bitmaps(display_name, dialogue_lines);

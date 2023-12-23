@@ -47,22 +47,22 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             results_list += "" +
                 "Are the details correct? Upload an image as a background or select ✅ to create your scene.\n" +
                 "\n" +
-                $"**Game Style:** {multimaker_session.MakerMultiCommand.Template}\n" +
-                $"**Character #1:** {multimaker_session.MakerMultiCommand.Character_Data_1.Bustup_Data.Default_Name_EN}\n" +
-                $"**Character #2:** {multimaker_session.MakerMultiCommand.Character_Data_2.Bustup_Data.Default_Name_EN}\n";
+                $"**Game Style:** {multimaker_session.MakerCommand.Template}\n" +
+                $"**Character #1:** {multimaker_session.MakerCommand.Character_Data_1.Bustup_Data.Default_Name_EN}\n" +
+                $"**Character #2:** {multimaker_session.MakerCommand.Character_Data_2.Bustup_Data.Default_Name_EN}\n";
 
-            if (multimaker_session.MakerMultiCommand.Character_Data_3.Character_Keyword != default)
+            if (multimaker_session.MakerCommand.Character_Data_3.Character_Keyword != default)
             {
-                results_list += $"**Character #3:** {multimaker_session.MakerMultiCommand.Character_Data_3.Bustup_Data.Default_Name_EN}\n";
+                results_list += $"**Character #3:** {multimaker_session.MakerCommand.Character_Data_3.Bustup_Data.Default_Name_EN}\n";
             }
-            if (multimaker_session.MakerMultiCommand.Character_Data_4.Character_Keyword != default)
+            if (multimaker_session.MakerCommand.Character_Data_4.Character_Keyword != default)
             {
-                results_list += $"**Character #4:** {multimaker_session.MakerMultiCommand.Character_Data_4.Bustup_Data.Default_Name_EN}\n";
+                results_list += $"**Character #4:** {multimaker_session.MakerCommand.Character_Data_4.Bustup_Data.Default_Name_EN}\n";
             }
 
             results_list += "" +
-                $"**Display Name:** {multimaker_session.MakerMultiCommand.Display_Name}\n" +
-                $"**Dialogue:** {multimaker_session.MakerMultiCommand.Dialogue}\n";
+                $"**Display Name:** {multimaker_session.MakerCommand.Display_Name}\n" +
+                $"**Dialogue:** {multimaker_session.MakerCommand.Dialogue}\n";
 
             embed.WithDescription(results_list);
 

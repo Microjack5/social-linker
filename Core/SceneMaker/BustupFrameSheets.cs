@@ -53,7 +53,7 @@ namespace SocialLinker.Core.SceneMaker
                 // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
                 // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
                 int counter = 0;
-                int base_sprite_number = maker_command_data.Character_Data.Base_Sprite;
+                int base_sprite_number = maker_command_data.Character_Data_1.Base_Sprite;
 
                 // The manner of iteration will change based on the user's settings.
                 // First, Order by Outfit.
@@ -535,7 +535,7 @@ namespace SocialLinker.Core.SceneMaker
                 // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
                 // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
                 int counter = 0;
-                int base_sprite_number = maker_command_data.Character_Data.Base_Sprite;
+                int base_sprite_number = maker_command_data.Character_Data_1.Base_Sprite;
 
                 // The manner of iteration will change based on the user's settings.
                 // First, Order by Outfit.
@@ -1373,7 +1373,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P1-PS1")
             };
 
@@ -1444,7 +1444,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P1-PSP")
             };
 
@@ -1515,7 +1515,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PS1")
             };
 
@@ -1586,7 +1586,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P2IS-PSP")
             };
 
@@ -1657,7 +1657,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P2EP-PS1")
             };
 
@@ -1728,7 +1728,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P2EP-PSP")
             };
 
@@ -1799,7 +1799,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P3F")
             };
 
@@ -1870,7 +1870,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P3P")
             };
 
@@ -1941,7 +1941,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P4-PS2")
             };
 
@@ -2012,7 +2012,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P4G")
             };
 
@@ -2083,7 +2083,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P4D")
             };
 
@@ -2154,7 +2154,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P4AU")
             };
 
@@ -2225,7 +2225,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P5-PS4")
             };
 
@@ -2296,7 +2296,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P5R")
             };
 
@@ -2367,7 +2367,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("P5S")
             };
 
@@ -2438,7 +2438,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data.Base_Sprite}",
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
                 IconUrl = EmbedSettings.Get_Game_Logo("BBTAG")
             };
 

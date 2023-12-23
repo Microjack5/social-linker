@@ -52,7 +52,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
 
             MakerCommandData maker_command = new MakerCommandData()
             {
-                Character_Data = new MakerCharacterData()
+                Character_Data_1 = new MakerCharacterData()
                 {
                     Sprite_Set_Version = naming_session.Game,
                     Character_Keyword = input_string

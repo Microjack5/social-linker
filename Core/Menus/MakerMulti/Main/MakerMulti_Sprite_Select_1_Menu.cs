@@ -44,7 +44,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"Type in the sprite number of {multimaker_session.MakerMultiCommand.Character_Data_1.Set_Data.Name}'s sprite set that you'd like to use.\n" +
+                $"Type in the sprite number of {multimaker_session.MakerCommand.Character_Data_1.Set_Data.Name}'s sprite set that you'd like to use.\n" +
                 $"\n" +
                 $"{Global.MentionNotice}");
 
@@ -104,7 +104,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
-            var character_data = multimaker_session.MakerMultiCommand.Character_Data_1;
+            var character_data = multimaker_session.MakerCommand.Character_Data_1;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -127,7 +127,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"That sprite number doesn’t seem to be in {character_data.Bustup_Data.Default_Name_EN}'s sprite set from {OfficialSetMethods.AcronymToFullTitle(multimaker_session.MakerMultiCommand.Template)}.");
+                $"That sprite number doesn’t seem to be in {character_data.Bustup_Data.Default_Name_EN}'s sprite set from {OfficialSetMethods.AcronymToFullTitle(multimaker_session.MakerCommand.Template)}.");
 
             if (multimaker_session.CommandType == "Slash")
             {
@@ -436,7 +436,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
-            var character_data = multimaker_session.MakerMultiCommand.Character_Data_1;
+            var character_data = multimaker_session.MakerCommand.Character_Data_1;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -518,7 +518,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
-            var character_data = multimaker_session.MakerMultiCommand.Character_Data_1;
+            var character_data = multimaker_session.MakerCommand.Character_Data_1;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
