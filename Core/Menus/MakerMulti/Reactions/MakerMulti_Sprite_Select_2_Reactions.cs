@@ -191,7 +191,15 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 }
                 else
                 {
-                    _ = MakerMulti_Speaker_Select_Menu.MakerMulti_Speaker_Select_Main(menuSession.User, menuSession.MenuMessage);
+                    if ((multimaker_session.MakerCommand.Template == "P4AU" && account.P4AU_TS_Scene_Type == "Narration") ||
+                        (multimaker_session.MakerCommand.Template == "P4D" && account.P4D_TS_Scene_Type == "Narration"))
+                    {
+                        _ = MakerMulti_Dialogue_Select_Menu.MakerMulti_Dialogue_Select_Main(menuSession.User, menuSession.MenuMessage);
+                    }
+                    else
+                    {
+                        _ = MakerMulti_Speaker_Select_Menu.MakerMulti_Speaker_Select_Main(menuSession.User, menuSession.MenuMessage);
+                    }
                 }
 
                 return Task.CompletedTask;

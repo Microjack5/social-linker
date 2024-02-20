@@ -44,10 +44,27 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 }
 
                 // Go to a new menu.
-                if (multimaker_session.MakerCommand.Template == "P3P")
+                switch (multimaker_session.MakerCommand.Template)
                 {
-                    SceneMaker.TemplateRenders.MakerMulti.RenderP3P p3p_render = new SceneMaker.TemplateRenders.MakerMulti.RenderP3P();
-                    _ = p3p_render.Render_Quick_Scene_P3P(multimaker_session);
+                    case "P3P":
+                        SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP3P p3p_render = new SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP3P();
+                        _ = p3p_render.Render_Multi_Character_Scene_P3P(multimaker_session);
+                        break;
+
+                    case "P4AU":
+                        SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP4AU p4au_render = new SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP4AU();
+                        _ = p4au_render.Render_Multi_Character_Scene_P4AU(multimaker_session);
+                        break;
+
+                    case "P4D":
+                        SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP4D p4d_render = new SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP4D();
+                        _ = p4d_render.Render_Multi_Character_Scene_P4D(multimaker_session);
+                        break;
+
+                    case "BBTAG":
+                        SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharBBTAG bbtag_render = new SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharBBTAG();
+                        _ = bbtag_render.Render_Multi_Character_Scene_BBTAG(multimaker_session);
+                        break;
                 }
 
                 return Task.CompletedTask;

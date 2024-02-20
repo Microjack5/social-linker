@@ -423,6 +423,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             else
             {
                 Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
+
+                // We need a temporary bustup_data object here to check for associated animation frames
+                maker_character_data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_character_data);
+
                 Bitmap bustup_with_frames = Construct_Bustup_With_Frames(menuSession, maker_character_data, base_sprite, false, current_character);
                 return bustup_with_frames;
             }

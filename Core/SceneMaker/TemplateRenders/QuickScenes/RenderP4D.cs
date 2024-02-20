@@ -89,7 +89,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 switch (account.P4D_TS_Scene_Type)
                 {
                     case "Dialogue":
-                        text_overlay = Render_Dialogue_Overlay(sl_command, account, set_data, maker_command_data, bustup_data);
+                        string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
+                        text_overlay = Render_Dialogue_Overlay(sl_command, account, maker_command_data, display_name);
                         break;
 
                     case "Narration":
@@ -242,7 +243,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public Bitmap Render_Dialogue_Overlay(SocialLinkerCommand sl_command, UserInfoFields account, OfficialSetData set_data, MakerCommandData command_data, BustupData bustup_data)
+        public Bitmap Render_Dialogue_Overlay(SocialLinkerCommand sl_command, UserInfoFields account, MakerCommandData command_data, string display_name)
         {
             Bitmap base_template = new Bitmap(template_width, template_height);
 
@@ -257,7 +258,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(dialogue_layer_2, 0, 0, template_width, template_height);
                 graphics.DrawImage(button_guide, 0, 0, template_width, template_height);
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P4D", "Name", display_name);
 
                 Bitmap rendered_name = Render_Name(display_name);
@@ -725,7 +725,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Loading message
-        public static EmbedBuilder P4D_Loading_Message()
+        public EmbedBuilder P4D_Loading_Message()
         {
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder

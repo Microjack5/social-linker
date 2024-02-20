@@ -526,7 +526,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public static DateTime Get_Date(SocialLinkerCommand sl_command, UserInfoFields account)
+        public DateTime Get_Date(SocialLinkerCommand sl_command, UserInfoFields account)
         {
             // Create an empty string variable. This is where the API request will be stored.
             string json_location = "";
@@ -659,7 +659,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public static EmbedBuilder BBTAG_Loading_Message(string series)
+        public EmbedBuilder BBTAG_Loading_Message(string series)
         {
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder

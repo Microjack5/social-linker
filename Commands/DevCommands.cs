@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using SocialLinker.Core.CloudStorageTables;
+using SocialLinker.Core.SceneMaker;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace SocialLinker.Commands
 {
@@ -292,6 +296,581 @@ namespace SocialLinker.Commands
 
                 Console.WriteLine($"{allFiles[i]} saved!");
             }
+        }
+
+        public static async Task P3RE_Bustup_Test(SocialLinkerCommand command)
+        {
+            Bitmap bustup = new Bitmap(2, 2);
+            var attachment = command.Attachments.FirstOrDefault();
+
+            if (attachment != null)
+            {
+                // Here, we'll want to try and retrieve the user's input image.
+                try
+                {
+                    // Declare variables for a web request to retrieve the image.
+                    System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(attachment.Url);
+                    webRequest.AllowWriteStreamBuffering = true;
+                    webRequest.Timeout = 30000;
+
+                    // Create a stream and download the image to it.
+                    System.Net.WebResponse webResponse = webRequest.GetResponse();
+                    System.IO.Stream stream = webResponse.GetResponseStream();
+
+                    // Copy the stream's contents to the background bitmap variable.
+                    bustup = (Bitmap)System.Drawing.Image.FromStream(stream);
+
+                    webResponse.Close();
+                }
+                // If an exception occurs here, the filetype is likely incompatible.
+                // Send an error message, delete the loading message, and return.
+                catch (System.ArgumentException e)
+                {
+                    Console.WriteLine(e);
+                    throw new ArgumentException();
+                }
+            }
+            else
+            {
+                await command.Channel.SendMessageAsync("No image found.");
+                return;
+            }
+
+            Bitmap base_template = new Bitmap(bustup.Width, bustup.Height);
+            Bitmap highlight_layer = new Bitmap(bustup.Width, bustup.Height);
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                System.Drawing.Color current_pixel;
+
+                // Base sprite
+                for (int i = 0; i < bustup.Width; i++)
+                {
+                    for (int j = 0; j < bustup.Height; j++)
+                    {
+                        current_pixel = bustup.GetPixel(i, j);
+
+                        if (current_pixel.A > 10)
+                        {
+                            base_template.SetPixel(i, j, Color.FromArgb(255, current_pixel.R, current_pixel.G, current_pixel.B));
+                        }
+                    }
+                }
+            }
+
+            using (Graphics graphics = Graphics.FromImage(highlight_layer))
+            {
+                System.Drawing.Color current_pixel;
+                System.Drawing.Color highlight = Color.FromArgb(255, 255, 255);
+
+                // Highlight
+                for (int i = 0; i < bustup.Width; i++)
+                {
+                    for (int j = 0; j < bustup.Height; j++)
+                    {
+                        current_pixel = bustup.GetPixel(i, j);
+
+                        if (current_pixel.A > 150)
+                        {
+                            highlight_layer.SetPixel(i, j, Color.FromArgb(current_pixel.A, highlight.R, highlight.G, highlight.B));
+                        }
+                    }
+                }
+            }
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.DrawImage(highlight_layer, 0, 0, highlight_layer.Width, highlight_layer.Height);
+            }
+
+            MemoryStream memoryStream = new MemoryStream();
+            base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            try
+            {
+                // Send the image.
+                await command.Channel.SendFileAsync(memoryStream, $"scene_{command.User.Id}_{DateTime.UtcNow}.png", "Result:");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                return;
+            }
+        }
+
+        public static async Task Organize_P3RE(SocialLinkerCommand command)
+        {
+            if (command.User.Id != 222504679878164481)
+            {
+                return;
+            }
+
+            // Data to alter - START
+
+            string char_id = "B2";
+            List<string> pose_a_frames = new List<string>() { "F00", "F01", "F02", "F03", "F05", "F10", "F64" };
+            List<string> pose_b_frames = new List<string>() { "F04", "F06", "F08", "F11", "F61" };
+            List<string> pose_c_frames = new List<string>();
+            List<string> pose_d_frames = new List<string>();
+            List<string> pose_p_frames = new List<string>();
+            List<string> outfit_list = new List<string>() { "C002", "C051", "C052", "C201", "C001", "C006", "C005", "C159", "C154", "C102", "C156", "C106", "C155", "C157" };
+
+            int eye_pose_a_x_coord = 668;
+            int eye_pose_a_y_coord = 1072;
+            int eye_pose_b_x_coord = 761;
+            int eye_pose_b_y_coord = 1049;
+            int eye_pose_c_x_coord = 0;
+            int eye_pose_c_y_coord = 0;
+            int eye_pose_d_x_coord = 0;
+            int eye_pose_d_y_coord = 0;
+
+            int mouth_pose_a_x_coord = 668;
+            int mouth_pose_a_y_coord = 1310;
+            int mouth_pose_b_x_coord = 761;
+            int mouth_pose_b_y_coord = 1287;
+            int mouth_pose_c_x_coord = 0;
+            int mouth_pose_c_y_coord = 0;
+            int mouth_pose_d_x_coord = 0;
+            int mouth_pose_d_y_coord = 0;
+
+            // Data to alter - END
+
+            List<string> base_sprite_identifiers = new List<string>();
+            List<string> eye_frame_identifiers = new List<string>();
+            List<string> mouth_frame_identifiers = new List<string>();
+
+            List<string> expression_list = new List<string>();
+
+            string base_path = $@"C:\Users\Alice\Desktop\Social Linker\SocialLinker\Assets\SceneMaker\Templates";
+            string source_framepath = $@"{base_path}\P3R\Bustup\{char_id}";
+            string export_framepath = $@"{base_path}\P3R (Export)\Bustup\{char_id}";
+            string sprite_sheet_framepath = $@"{base_path}\P3R (Sprite Sheet)\Bustup\{char_id}";
+            string eyes_folder = "Eyes";
+            string mouth_folder = "Mouth";
+
+            string[] all_base_sprites = Directory.GetFiles(source_framepath, $"*.png");
+
+            int base_sprite_filecount = all_base_sprites.Length;
+
+            char[] delimiters = { '_', '.' };
+            
+            await command.Channel.SendMessageAsync($"" +
+                $"Character ID: {char_id}\n" +
+                $"Number of base sprites: {base_sprite_filecount}\n" +
+                $"Beginning to sort eye frames. Check the console for progress.");
+
+            for (int i = 0; i < base_sprite_filecount; i++)
+            {
+                Console.WriteLine($"Organizing eye frames on {i + 1}/{base_sprite_filecount}...");
+                List<string> destructured_filename = Path.GetFileName(all_base_sprites[i]).Split(delimiters).ToList();
+
+                string current_character_code = $"{destructured_filename[0]}_{destructured_filename[1]}_{destructured_filename[2]}";
+                string current_base_pose_code = $"{destructured_filename[3]}";
+                string current_base_outfit_code = $"{destructured_filename[4]}";
+
+                if (!outfit_list.Contains($"{current_base_outfit_code}"))
+                {
+                    await command.Channel.SendMessageAsync($"Current outfit code not found in list: {current_base_outfit_code}. Adding...");
+                    outfit_list.Add(current_base_outfit_code);
+                }
+
+                Bitmap current_base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{all_base_sprites[i]}");
+
+                Bitmap base_sprite_sheet_copy = Bitmap_to_Opaque(current_base_sprite);
+
+                string new_pose_code = "";
+
+                switch (current_base_pose_code)
+                {
+                    case "PoseA":
+                        new_pose_code = "a";
+                        break;
+
+                    case "PoseB":
+                        new_pose_code = "b";
+                        break;
+
+                    case "PoseC":
+                        new_pose_code = "c";
+                        break;
+
+                    case "PoseD":
+                        new_pose_code = "d";
+                        break;
+
+                    case "PoseP":
+                        new_pose_code = "p";
+                        break;
+                }
+
+                if (Directory.Exists($@"{source_framepath}\{eyes_folder}"))
+                {
+                    string[] all_eye_frames = Directory.GetFiles($@"{source_framepath}\{eyes_folder}", $"*.png");
+
+                    int eye_frame_filecount = all_eye_frames.Length;
+
+                    for (int j = 0; j < eye_frame_filecount; j++)
+                    {
+                        List<string> destructured_eye_filename = Path.GetFileName(all_eye_frames[j]).Split(delimiters).ToList();
+
+                        string current_character_eye_code = $"{destructured_eye_filename[0]}_{destructured_eye_filename[1]}_{destructured_eye_filename[2]}";
+                        string current_expression_code = $"{destructured_eye_filename[3]}";
+                        string current_eye_outfit_code = $"{destructured_eye_filename[4]}";
+                        string current_frame_code = $"{destructured_eye_filename[5]}";
+
+                        bool special_frame_check = false;
+
+                        foreach (var frame in all_eye_frames)
+                        {
+                            if (frame.Contains(current_base_outfit_code))
+                            {
+                                special_frame_check = true;
+                            }
+                        }
+
+                        if (!expression_list.Contains($"{current_expression_code}"))
+                        {
+                            expression_list.Add(current_expression_code);
+                        }
+
+                        using (Graphics graphics = Graphics.FromImage(base_sprite_sheet_copy))
+                        {
+                            Bitmap current_eye_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{all_eye_frames[j]}");
+                            Bitmap eye_sprite_sheet_copy = Bitmap_to_Opaque(current_eye_sprite);
+                            string new_eye_filename = "";
+
+                            if ((pose_a_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseA")) ||
+                                (pose_b_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseB")) ||
+                                (pose_c_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseC")) ||
+                                (pose_d_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseD")) ||
+                                (pose_p_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseP")))
+                            {
+                                if (current_eye_outfit_code == "C900" && !special_frame_check)
+                                {
+                                    new_eye_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_0{new_pose_code}_{current_frame_code.ToLower()}";
+
+                                    string sprite_sheet_eye_folder = $@"{sprite_sheet_framepath}\{eyes_folder}";
+
+                                    if (!File.Exists($@"{sprite_sheet_eye_folder}\{new_eye_filename}.png"))
+                                    {
+                                        eye_sprite_sheet_copy.Save($@"{sprite_sheet_eye_folder}\{new_eye_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                    }
+
+                                    if (current_frame_code == "E1")
+                                    {
+                                        string sprite_sheet_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_{outfit_list.IndexOf(current_base_outfit_code) + 1}{new_pose_code}";
+
+                                        if (File.Exists($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png"))
+                                        {
+                                            Console.WriteLine("Existing filename detected! It isn't supposed to be here...");
+                                        }
+
+                                        switch (current_base_pose_code)
+                                        {
+                                            case "PoseA":
+                                                graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_a_x_coord, eye_pose_a_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
+                                                break;
+
+                                            case "PoseB":
+                                                graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_b_x_coord, eye_pose_b_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
+                                                break;
+
+                                            case "PoseC":
+                                                graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_c_x_coord, eye_pose_c_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
+                                                break;
+
+                                            case "PoseD":
+                                                graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_d_x_coord, eye_pose_d_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
+                                                break;
+
+                                            case "PoseP":
+                                                // Do nothing
+                                                break;
+                                        }
+
+                                        base_sprite_sheet_copy.Save($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                    }
+                                }
+                                else if (current_eye_outfit_code == current_base_outfit_code)
+                                {
+                                    new_eye_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_{outfit_list.IndexOf(current_base_outfit_code) + 1}{new_pose_code}_{current_frame_code.ToLower()}";
+
+                                    string sprite_sheet_eye_folder = $@"{sprite_sheet_framepath}\{eyes_folder}";
+
+                                    if (!File.Exists($@"{sprite_sheet_eye_folder}\{new_eye_filename}.png"))
+                                    {
+                                        eye_sprite_sheet_copy.Save($@"{sprite_sheet_eye_folder}\{new_eye_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                    }
+
+                                    if (current_frame_code == "E1")
+                                    {
+                                        string sprite_sheet_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_{outfit_list.IndexOf(current_base_outfit_code) + 1}{new_pose_code}";
+
+                                        if (File.Exists($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png"))
+                                        {
+                                            Console.WriteLine("Existing filename detected! It isn't supposed to be here...");
+                                        }
+
+                                        switch (current_base_pose_code)
+                                        {
+                                            case "PoseA":
+                                                graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_a_x_coord, eye_pose_a_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
+                                                break;
+
+                                            case "PoseB":
+                                                graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_b_x_coord, eye_pose_b_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
+                                                break;
+
+                                            case "PoseC":
+                                                graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_c_x_coord, eye_pose_c_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
+                                                break;
+
+                                            case "PoseD":
+                                                graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_d_x_coord, eye_pose_d_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
+                                                break;
+
+                                            case "PoseP":
+                                                // Do nothing
+                                                break;
+                                        }
+
+                                        base_sprite_sheet_copy.Save($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            await command.Channel.SendMessageAsync($"" +
+                $"Beginning to sort mouth frames. Check the console for progress.");
+
+            for (int i = 0; i < base_sprite_filecount; i++)
+            {
+                Console.WriteLine($"Organizing mouth frames on {i + 1}/{base_sprite_filecount}...");
+                List<string> destructured_filename = Path.GetFileName(all_base_sprites[i]).Split(delimiters).ToList();
+
+                string current_character_code = $"{destructured_filename[0]}_{destructured_filename[1]}_{destructured_filename[2]}";
+                string current_base_pose_code = $"{destructured_filename[3]}";
+                string current_base_outfit_code = $"{destructured_filename[4]}";
+
+                if (!outfit_list.Contains($"{current_base_outfit_code}"))
+                {
+                    await command.Channel.SendMessageAsync($"Current outfit code not found in list: {current_base_outfit_code}. Adding...");
+                    outfit_list.Add(current_base_outfit_code);
+                }
+
+                Bitmap current_base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{all_base_sprites[i]}");
+
+                Bitmap base_sprite_sheet_copy = Bitmap_to_Opaque(current_base_sprite);
+
+                string new_pose_code = "";
+
+                switch (current_base_pose_code)
+                {
+                    case "PoseA":
+                        new_pose_code = "a";
+                        break;
+
+                    case "PoseB":
+                        new_pose_code = "b";
+                        break;
+
+                    case "PoseC":
+                        new_pose_code = "c";
+                        break;
+
+                    case "PoseD":
+                        new_pose_code = "d";
+                        break;
+
+                    case "PoseP":
+                        new_pose_code = "p";
+                        break;
+                }
+
+                if (Directory.Exists($@"{source_framepath}\{mouth_folder}"))
+                {
+                    string[] all_mouth_frames = Directory.GetFiles($@"{source_framepath}\{mouth_folder}", $"*.png");
+
+                    int mouth_frame_filecount = all_mouth_frames.Length;
+
+                    for (int j = 0; j < mouth_frame_filecount; j++)
+                    {
+                        List<string> destructured_mouth_filename = Path.GetFileName(all_mouth_frames[j]).Split(delimiters).ToList();
+
+                        string current_character_mouth_code = $"{destructured_mouth_filename[0]}_{destructured_mouth_filename[1]}_{destructured_mouth_filename[2]}";
+                        string current_expression_code = $"{destructured_mouth_filename[3]}";
+                        string current_mouth_outfit_code = $"{destructured_mouth_filename[4]}";
+                        string current_frame_code = $"{destructured_mouth_filename[5]}";
+
+                        bool special_frame_check = false;
+
+                        foreach (var frame in all_mouth_frames)
+                        {
+                            if (frame.Contains(current_base_outfit_code))
+                            {
+                                special_frame_check = true;
+                            }
+                        }
+
+                        if (!expression_list.Contains($"{current_expression_code}"))
+                        {
+                            Console.WriteLine("Warning!! An expression code seems to have gone missing.");
+                            expression_list.Add(current_expression_code);
+                        }
+
+                        string sprite_sheet_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_{outfit_list.IndexOf(current_base_outfit_code) + 1}{new_pose_code}";
+
+                        // We need to only overwrite existing files here to avoid accidentally creating new ones
+                        if (File.Exists($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png"))
+                        {
+                            Bitmap original = (Bitmap)System.Drawing.Image.FromFile($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png");
+                            Bitmap clone = new Bitmap(original);
+                            original.Dispose();
+
+                            using (Graphics graphics = Graphics.FromImage(clone))
+                            {
+                                Bitmap current_mouth_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{all_mouth_frames[j]}");
+                                Bitmap mouth_sprite_sheet_copy = Bitmap_to_Opaque(current_mouth_sprite);
+                                string new_mouth_filename = "";
+
+                                if ((pose_a_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseA")) ||
+                                    (pose_b_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseB")) ||
+                                    (pose_c_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseC")) ||
+                                    (pose_d_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseD")) ||
+                                    (pose_p_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseP")))
+                                {
+                                    if (current_mouth_outfit_code == "C900" && !special_frame_check)
+                                    {
+                                        new_mouth_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_0{new_pose_code}_{current_frame_code.ToLower()}";
+
+                                        string sprite_sheet_eye_folder = $@"{sprite_sheet_framepath}\{mouth_folder}";
+
+                                        if (!File.Exists($@"{sprite_sheet_eye_folder}\{new_mouth_filename}.png"))
+                                        {
+                                            mouth_sprite_sheet_copy.Save($@"{sprite_sheet_eye_folder}\{new_mouth_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                        }
+
+                                        if (current_frame_code == "M1")
+                                        {
+                                            Console.WriteLine($"Overwriting {sprite_sheet_filename}.png...");
+
+                                            switch (current_base_pose_code)
+                                            {
+                                                case "PoseA":
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_a_x_coord, mouth_pose_a_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
+                                                    break;
+
+                                                case "PoseB":
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_b_x_coord, mouth_pose_b_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
+                                                    break;
+
+                                                case "PoseC":
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_c_x_coord, mouth_pose_c_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
+                                                    break;
+
+                                                case "PoseD":
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_d_x_coord, mouth_pose_d_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
+                                                    break;
+
+                                                case "PoseP":
+                                                    // Do nothing
+                                                    break;
+                                            }
+
+                                            clone.Save($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                            clone.Dispose();
+                                        }
+                                    }
+                                    else if (current_mouth_outfit_code == current_base_outfit_code)
+                                    {
+                                        new_mouth_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_{outfit_list.IndexOf(current_base_outfit_code) + 1}{new_pose_code}_{current_frame_code.ToLower()}";
+
+                                        string sprite_sheet_mouth_folder = $@"{sprite_sheet_framepath}\{mouth_folder}";
+
+                                        if (!File.Exists($@"{sprite_sheet_mouth_folder}\{new_mouth_filename}.png"))
+                                        {
+                                            mouth_sprite_sheet_copy.Save($@"{sprite_sheet_mouth_folder}\{new_mouth_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                        }
+
+                                        if (current_frame_code == "M1")
+                                        {
+                                            Console.WriteLine($"Overwriting {sprite_sheet_filename}.png...");
+
+                                            switch (current_base_pose_code)
+                                            {
+                                                case "PoseA":
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_a_x_coord, mouth_pose_a_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
+                                                    break;
+
+                                                case "PoseB":
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_b_x_coord, mouth_pose_b_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
+                                                    break;
+
+                                                case "PoseC":
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_c_x_coord, mouth_pose_c_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
+                                                    break;
+
+                                                case "PoseD":
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_d_x_coord, mouth_pose_d_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
+                                                    break;
+
+                                                case "PoseP":
+                                                    // Do nothing
+                                                    break;
+                                            }
+
+                                            clone.Save($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                            clone.Dispose();
+                                        }
+                                    }
+                                }
+                                clone.Dispose();
+                            }
+                        }
+
+                        
+                    }
+                }
+            }
+
+            Console.WriteLine($"{char_id} organized!");
+            await command.Channel.SendMessageAsync("Sorting finished.");
+        }
+
+        public static Bitmap Bitmap_to_Opaque(Bitmap input_bitmap)
+        {
+            Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            using (Graphics graphics = Graphics.FromImage(output_bitmap))
+            {
+                System.Drawing.Color current_pixel;
+
+                // Base sprite
+                for (int x_pixel = 0; x_pixel < input_bitmap.Width; x_pixel++)
+                {
+                    for (int y_pixel = 0; y_pixel < input_bitmap.Height; y_pixel++)
+                    {
+                        current_pixel = input_bitmap.GetPixel(x_pixel, y_pixel);
+
+                        if (current_pixel.A > 10)
+                        {
+                            output_bitmap.SetPixel(x_pixel, y_pixel, Color.FromArgb(255, current_pixel.R, current_pixel.G, current_pixel.B));
+                        }
+                    }
+                }
+            }
+
+            return output_bitmap;
         }
     }
 }

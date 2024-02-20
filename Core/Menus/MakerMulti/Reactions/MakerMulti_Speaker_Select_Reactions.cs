@@ -37,6 +37,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
                 multimaker_session.MakerCommand.Display_Name = multimaker_session.MakerCommand.Character_Data_1.Bustup_Data.Default_Name_EN;
+                multimaker_session.MakerCommand.P4AU_Multi_Char_Protag_Highlight_Toggle = true;
 
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();

@@ -102,6 +102,9 @@ namespace SocialLinker.Core.Menus
                             return new Color(0, 195, 243);
                     }
 
+                case "P3R":
+                    return new Color(0, 195, 243);
+
                 case "P4-PS2":
                     return new Color(241, 233, 0);
 
@@ -174,6 +177,9 @@ namespace SocialLinker.Core.Menus
 
                 case "P3P":
                     return "https://i.imgur.com/y7x9wce.png";
+
+                case "P3R":
+                    return "https://i.imgur.com/Np4bRsS.png";
 
                 case "P4-PS2":
                     return "https://i.imgur.com/8Qs9g1d.png";

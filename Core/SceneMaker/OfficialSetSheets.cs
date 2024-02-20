@@ -580,6 +580,197 @@ namespace SocialLinker.Core.SceneMaker
             return base_template;
         }
 
+        public static Bitmap Generate_P3R_Bustup_Sprite_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(sl_command.User);
+
+            // Establish the directory of the specified sprite set.
+            // This string structure should direct to any set containing bust-ups once the proper variables are input.
+            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin} (Sprite Sheet)//Bustup//{set_data.ID}";
+
+            // Create a filename for the bitmap that will be generated.
+            var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
+
+            // Get a count of how many files are in the sprite set's directory.
+            int filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path);
+
+            // Determine how the items will be rendered on the bitmap based on the size of sublist_length.
+            // This is done by taking the square root of the input sublist_length variable. Notice that the result will be a double at times and not a full integer.
+            double sq_count = Math.Sqrt(filecount);
+
+            // Determine how many columns and rows will be displayed on the bitmap.
+            // Columns are determined by calculating the ceiling of the sq_count double variable.
+            // Rows are calculated by converting the sq_count double straight to an int.
+            int columns = (int)Math.Ceiling(sq_count);
+            int rows = Convert.ToInt32(sq_count);
+
+            // Create variables for the desired width and height of each sprite to be drawn on the template.
+            int item_width = 512;
+            int item_height = 512;
+
+            // Set the width and height of the bitmap based on the desired dimensions of each sprite and the expected amounts of columns and rows.
+            int template_width = (columns * item_width);
+            int template_height = (rows * item_height);
+
+            // Declare a bitmap variable.
+            Bitmap base_template;
+
+            // If either the template_width or template_height values end up being 0 (a result of no files in the directory), create a default size of 2 x 2.
+            if (template_width == 0 || template_height == 0)
+            {
+                base_template = new Bitmap(2, 2);
+            }
+            // Else, create a bitmap working space from the calculated new_width and new_height values.
+            else
+            {
+                base_template = new Bitmap(template_width, template_height);
+            }
+
+            // Pose list for Reload bustups
+            List<string> poses = new List<string>() { "a", "b", "c", "d", "p" };
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Create two int variables that represent the X and Y values on the base_template bitmap.
+                int x = 0;
+                int y = 0;
+
+                // Depending on the user's settings, render the sprite sheet in two different ways.
+                // First, "Order by Outfit".
+                if (account.Setting_Sheet_Order == "Order by Outfit")
+                {
+                    // Create a loop starting at 1 meant to iterate though every file in the directory.
+                    // Outfit numbers always start at 1, so we'll begin there.
+                    for (int outfit = 1; outfit <= filecount; outfit++)
+                    {
+                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
+                        // This loop is searching for expressions, which start at 1.
+                        for (int expression = 1; expression <= filecount; expression++)
+                        {
+                            for (int pose_index = 0; pose_index < poses.Count; pose_index++)
+                            {
+                                // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                                // Check if the created file path string exists.
+                                if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
+                                {
+                                    // If the file path does exist, copy the file to an image variable.
+                                    System.Drawing.Image current_sprite = System.Drawing.Image.FromFile($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png");
+
+                                    // Draw the sprite to the template at the current X and Y coordinates.
+                                    graphics.DrawImage(current_sprite, x, y, item_width, item_height);
+
+                                    // Move the current X coordinate over to the right so the next sprite can be rendered right next to the current one.
+                                    x = x + item_width;
+
+                                    // Check if the newly positioned X coordinate is greater than or equal to the template's max width.
+                                    // If so, move the X coordinate to 0 and the Y coordinate down an entire sprite's length.
+                                    if (x >= template_width)
+                                    {
+                                        x = 0;
+                                        y = y + item_height;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                // Here, we check if the user's settings is on "Order by Expression".
+                else if (account.Setting_Sheet_Order == "Order by Expression")
+                {
+                    // Create a loop starting at 1 meant to iterate though every file in the directory.
+                    // This loop is searching for expressions, which start at 1.
+                    for (int expression = 1; expression <= filecount; expression++)
+                    {
+                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
+                        // Outfit numbers always start at 1, so we'll begin there.
+                        for (int outfit = 1; outfit <= filecount; outfit++)
+                        {
+                            for (int pose_index = 0; pose_index < poses.Count; pose_index++)
+                            {
+                                // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                                // Check if the created file path string exists.
+                                if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
+                                {
+                                    // If the file path does exist, copy the file to an image variable.
+                                    System.Drawing.Image current_sprite = System.Drawing.Image.FromFile($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png");
+
+                                    // Draw the sprite to the template at the current X and Y coordinates.
+                                    graphics.DrawImage(current_sprite, x, y, item_width, item_height);
+
+                                    // Move the current X coordinate over to the right so the next sprite can be rendered right next to the current one.
+                                    x = x + item_width;
+
+                                    // Check if the newly positioned X coordinate is greater than or equal to the template's max width.
+                                    // If so, move the X coordinate to 0 and the Y coordinate down an entire sprite's length.
+                                    if (x >= template_width)
+                                    {
+                                        x = 0;
+                                        y = y + item_height;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Reset the X and Y coordinates to 0.
+                // Now that we're done assembling the sprites on the template, it's time to label them.
+                x = 0;
+                y = 0;
+
+                // Create a single loop to iterate for as many times as there are files in the directory.
+                for (int i = 1; i <= filecount; i++)
+                {
+                    using (Font rockwell = new Font("Rockwell", 45, FontStyle.Bold))
+                    {
+                        // Create a GraphicsPath object.
+                        GraphicsPath myPath = new GraphicsPath();
+
+                        // Set up all the string parameters.
+                        string stringText = $"{i}";
+
+                        System.Drawing.FontFamily family = new System.Drawing.FontFamily("Rockwell");
+                        int fontStyle = (int)FontStyle.Bold;
+                        int emSize = 23;
+                        Point origin = new Point(x + (128 * 2), y + (222 * 2) + 20);
+
+                        StringFormat stringFormat = new StringFormat();
+                        stringFormat.Alignment = StringAlignment.Center;
+                        stringFormat.LineAlignment = StringAlignment.Center;
+
+                        // Add the string to the path.
+                        myPath.AddString(stringText,
+                            family,
+                            fontStyle,
+                            emSize = (int)graphics.DpiY * 78 / 72,
+                            origin,
+                            stringFormat);
+
+                        //Draw the path to the screen.
+                        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                        graphics.FillPath(System.Drawing.Brushes.White, myPath);
+                        graphics.DrawPath(new System.Drawing.Pen(System.Drawing.Brushes.Black, 4), myPath);
+                        graphics.FillPath(System.Drawing.Brushes.White, myPath);
+                        graphics.DrawPath(new System.Drawing.Pen(System.Drawing.Brushes.Black, 0), myPath);
+                    }
+
+                    // Move the current X coordinate over to the right so the next sprite can be rendered right next to the current one.
+                    x = x + item_width;
+
+                    // Check if the newly positioned X coordinate is greater than or equal to the template's max width.
+                    // If so, move the X coordinate to 0 and the Y coordinate down an entire sprite's length.
+                    if (x >= template_width)
+                    {
+                        x = 0;
+                        y = y + item_height;
+                    }
+                }
+            }
+
+            return base_template;
+        }
+
         public static Bitmap Generate_P4_PS2_Bustup_Sprite_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data)
         {
             // Get the account information of the command's user.
@@ -1359,6 +1550,8 @@ namespace SocialLinker.Core.SceneMaker
             int highest_outfit = 1;
             int highest_expression = 1;
 
+            bool order_determined = false;
+
             // Create a loop starting at 1 meant to iterate though every file in the directory.
             // Outfit numbers always start at 1, so we'll begin there.
             for (int outfit = 1; outfit <= filecount; outfit++)
@@ -1367,6 +1560,11 @@ namespace SocialLinker.Core.SceneMaker
                 // This loop is searching for expressions, which start at 1.
                 for (int expression = 1; expression <= filecount; expression++)
                 {
+                    if (order_determined == true)
+                    {
+                        break;
+                    }
+
                     // If the current outfit value is greater than the value stored in highest_outfit, copy the current outfit value to highest_outfit.
                     if (outfit > highest_outfit)
                     {
@@ -1378,24 +1576,55 @@ namespace SocialLinker.Core.SceneMaker
                         highest_expression = expression;
                     }
 
-                    // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
-                    // Check if the created file path string exists, the values of highest_outfit and highest_expression are both greater than 1, and the set's filecount is greater than 2.
-                    if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png") && highest_outfit > 1 && highest_expression > 1 && filecount > 2)
+                    switch (set_data.Origin)
                     {
-                        // Add a section to the string variable detailing the order the sprites have been organized in based on the user's settings.
-                        switch (account.Setting_Sheet_Order)
-                        {
-                            case "Order by Outfit":
-                                footer_text += $"Order: Outfit\n";
-                                break;
+                        case "P3R":
+                            set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin} (Sprite Sheet)//Bustup//{set_data.ID}";
 
-                            case "Order by Expression":
-                                footer_text += $"Order: Expression\n";
-                                break;
-                        }
+                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                            // Check if the created file path string exists, the values of highest_outfit and highest_expression are both greater than 1, and the set's filecount is greater than 2.
+                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}a.png") && highest_outfit > 1 && highest_expression > 1 && filecount > 2)
+                            {
+                                // Add a section to the string variable detailing the order the sprites have been organized in based on the user's settings.
+                                switch (account.Setting_Sheet_Order)
+                                {
+                                    case "Order by Outfit":
+                                        footer_text += $"Order: Outfit\n";
+                                        order_determined = true;
+                                        break;
 
-                        variance_check++;
-                        break;
+                                    case "Order by Expression":
+                                        footer_text += $"Order: Expression\n";
+                                        order_determined = true;
+                                        break;
+                                }
+
+                                variance_check++;
+                            }
+                            break;
+
+                        default:
+                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                            // Check if the created file path string exists, the values of highest_outfit and highest_expression are both greater than 1, and the set's filecount is greater than 2.
+                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png") && highest_outfit > 1 && highest_expression > 1 && filecount > 2)
+                            {
+                                // Add a section to the string variable detailing the order the sprites have been organized in based on the user's settings.
+                                switch (account.Setting_Sheet_Order)
+                                {
+                                    case "Order by Outfit":
+                                        footer_text += $"Order: Outfit\n";
+                                        order_determined = true;
+                                        break;
+
+                                    case "Order by Expression":
+                                        footer_text += $"Order: Expression\n";
+                                        order_determined = true;
+                                        break;
+                                }
+
+                                variance_check++;
+                            }
+                            break;
                     }
                 }
 
@@ -1484,9 +1713,9 @@ namespace SocialLinker.Core.SceneMaker
                 }
 
                 // Persona 3
-                if (set_data.Origin != "P3F" && set_data.Origin != "P3P")
+                if (set_data.Origin != "P3F" && set_data.Origin != "P3P" && set_data.Origin != "P3R")
                 {
-                    if (appearances.Contains("P3F") && appearances.Contains("P3P"))
+                    if (appearances.Contains("P3F") && appearances.Contains("P3P") && appearances.Contains("P3R"))
                     {
                         displayed_appearances.Add("P3");
                     }
@@ -1500,6 +1729,11 @@ namespace SocialLinker.Core.SceneMaker
                         if (appearances.Contains("P3P"))
                         {
                             displayed_appearances.Add("P3P");
+                        }
+
+                        if (appearances.Contains("P3R"))
+                        {
+                            displayed_appearances.Add("P3R");
                         }
                     }
                 }
@@ -2170,6 +2404,77 @@ namespace SocialLinker.Core.SceneMaker
             }
 
             
+        }
+
+        public static async Task P3R_Sprite_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            // Send a loading message to the channel while the sprite sheet is being made.
+            RestUserMessage loader = await channel.SendMessageAsync("Loading...");
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = $"{set_data.Name}'s Conversation {Noun_Form_Of_Portrait(set_data)}",
+                IconUrl = EmbedSettings.Get_Game_Logo("P3R")
+            };
+
+            embed.WithAuthor(author);
+
+            // Set the color and thumbnail for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3R", null));
+
+            // Create a footer based on the user's settings.
+            var footer = new EmbedFooterBuilder
+            {
+                Text = Create_Sprite_Sheet_Footer(account, set_data)
+            };
+
+            // Add the footer to the embed.
+            embed.WithFooter(footer);
+
+            // Attach a locally generated image to the embed. This image hasn't been created yet, so the filename is just a placeholder for now.
+            embed.WithImageUrl($"attachment://preview.png");
+
+            // Create a new stream. We'll use this to create the locally generated image.
+            MemoryStream memoryStream = new MemoryStream();
+
+            // Generate a bitmap comprised of thumbnail previews of the décor being listed on the current page.
+            Bitmap sprite_set_preview = Generate_P3R_Bustup_Sprite_Sheet(sl_command, set_data);
+
+            // Save the sprite set preview bitmap to the stream as a PNG.
+            sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+            // Ensure the stream is set to the beginning of itself.
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            // Send the embeded message to the channel.
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
         }
 
         public static async Task P4_PS2_Sprite_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data)

@@ -81,7 +81,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
                 if (maker_command_data.Character_Data_1.Base_Sprite != 0)
                 {
-                    Bitmap placed_bustup = Set_Bustup_Placement(sl_command, account, bustup, bustup_data, set_data, maker_command_data);
+                    Bitmap placed_bustup = Set_Bustup_Placement(sl_command, account, bustup, bustup_data, maker_command_data);
                     graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
                 }
 
@@ -92,7 +92,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 switch (account.P4AU_TS_Scene_Type)
                 {
                     case "Dialogue":
-                        text_overlay = Render_Dialogue_Overlay(sl_command, account, set_data, maker_command_data, bustup_data);
+                        string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
+                        text_overlay = Render_Dialogue_Overlay(sl_command, account, maker_command_data, display_name);
                         break;
 
                     case "Narration":
@@ -209,7 +210,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public Bitmap Set_Bustup_Placement(SocialLinkerCommand sl_command, UserInfoFields account, Bitmap bustup, BustupData bustup_data, OfficialSetData set_data, MakerCommandData command_data)
+        public Bitmap Set_Bustup_Placement(SocialLinkerCommand sl_command, UserInfoFields account, Bitmap bustup, BustupData bustup_data, MakerCommandData command_data)
         {
             // Create a starting base bitmap to render all graphics on.
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -272,7 +273,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public Bitmap Render_Dialogue_Overlay(SocialLinkerCommand sl_command, UserInfoFields account, OfficialSetData set_data, MakerCommandData command_data, BustupData bustup_data)
+        public Bitmap Render_Dialogue_Overlay(SocialLinkerCommand sl_command, UserInfoFields account, MakerCommandData command_data, string display_name)
         {
             Bitmap base_template = new Bitmap(template_width, template_height);
 
@@ -287,7 +288,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 List<string>[] parsed_lines = OfficialSetMethods.Line_Parser(sl_command, "P4AU", command_data.Dialogue, 3, 850);
                 graphics.DrawImage(Render_Dialogue(parsed_lines, 149, 529, account), 0, 0, template_width, template_height);
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P4AU", "Name", display_name);
 
                 Bitmap rendered_display_name = Bitmap_To_Color(Render_Name(display_name), System.Drawing.Color.Black, new Rectangle(142, 478, 600, 49));
@@ -657,7 +657,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Utility
-        public static Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
+        public Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
         {
             Bitmap base_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
@@ -675,7 +675,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_bitmap;
         }
 
-        public static Bitmap Keep_Pixel_Overlap(Bitmap bottom_bitmap, Bitmap top_bitmap)
+        public Bitmap Keep_Pixel_Overlap(Bitmap bottom_bitmap, Bitmap top_bitmap)
         {
             System.Drawing.Color bottom_pixel_color;
             System.Drawing.Color top_pixel_color;
@@ -761,7 +761,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return input_template;
         }
 
-        public static EmbedBuilder P4AU_Loading_Message()
+        public EmbedBuilder P4AU_Loading_Message()
         {
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder

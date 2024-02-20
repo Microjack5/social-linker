@@ -3,7 +3,6 @@ using System.Linq;
 using SocialLinker.Cooldown;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus;
-using SocialLinker.Core.SceneMaker;
 using SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes;
 
 namespace SocialLinker
@@ -28,6 +27,7 @@ namespace SocialLinker
         internal static string[] p2ep_psp_version_keywords = { "P2EP-PSP", "P2EPPSP", "P2EP-P", "EP-PSP", "EP-P", "P2EPP", "EPPSP", "EPP" };
         internal static string[] p3f_version_keywords = { "P3F", "FES", "P3FES", "P3-PS2", "P3F-PS2", "FES-PS2", "P3FES-PS2", "P3-FES", "P3PS2", "P3FPS2", "FESPS2", "P3FESPS2" };
         internal static string[] p3p_version_keywords = { "P3P", "P3-PSP", "P3PSP" };
+        internal static string[] p3r_version_keywords = { "P3R", "P3RE" };
         internal static string[] p4_ps2_version_keywords = { "P4-PS2", "P4PS2" };
         internal static string[] p4g_version_keywords = { "P4G" };
         internal static string[] p5_ps4_version_keywords = { "P5-PS3", "P5-PS4", "P5PS3", "P5PS4" };

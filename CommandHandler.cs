@@ -342,6 +342,14 @@ namespace SocialLinker
                     Commands.DevCommands.CorrectMouthFrames(command);
                     break;
 
+                case "testp3r":
+                    await Commands.DevCommands.P3RE_Bustup_Test(command);
+                    break;
+
+                case "sortp3r":
+                    await Commands.DevCommands.Organize_P3RE(command);
+                    break;
+
                 default:
                     validityCheck = false;
                     break;

@@ -313,6 +313,10 @@ namespace SocialLinker.Core.LocalStorageTables
             {
                 return "P3P";
             }
+            else if (Global.p3r_version_keywords.Contains(input_template))
+            {
+                return "P3R";
+            }
             else if (Global.p4_ps2_version_keywords.Contains(input_template))
             {
                 return "P4-PS2";
@@ -404,6 +408,9 @@ namespace SocialLinker.Core.LocalStorageTables
 
                 case "P3P":
                     return "Persona 3 Portable";
+
+                case "P3R":
+                    return "Persona 3 Reload";
 
                 case "P4-PS2":
                     return "Persona 4 (PlayStation®️ 2)";
@@ -549,6 +556,10 @@ namespace SocialLinker.Core.LocalStorageTables
                     await OfficialSetLists.P3P_Set_List(sl_command);
                     return;
 
+                case "P3R":
+                    await OfficialSetLists.P3R_Set_List(sl_command);
+                    return;
+
                 case "P4-PS2":
                     await OfficialSetLists.P4_PS2_Set_List(sl_command);
                     return;
@@ -626,6 +637,10 @@ namespace SocialLinker.Core.LocalStorageTables
 
                 case "P3P":
                     await OfficialSetSheets.P3P_Sprite_Sheet(sl_command, sprite_set_info);
+                    return;
+
+                case "P3R":
+                    await OfficialSetSheets.P3R_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
                 case "P4-PS2":

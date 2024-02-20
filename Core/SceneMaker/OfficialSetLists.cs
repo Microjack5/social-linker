@@ -314,6 +314,44 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
+        public static async Task P3R_Set_List(SocialLinkerCommand sl_command)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Persona 3 Reload Conversation Portrait Sets",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            // Assign a color and thumbnail to the embeded message based on the title.
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3R", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P3R"));
+
+            // Create a description with the list of sprite sets available for the title.
+            embed.WithDescription($"{OfficialSetMethods.Generate_Normal_Set_List("P3R")}");
+
+            // Create a footer based on the game version the list is from.
+            var footer = new EmbedFooterBuilder
+            {
+                Text = "Version: P3R"
+            };
+
+            // Add the footer to the embed.
+            embed.WithFooter(footer);
+
+            // Send the embeded message to the channel.
+            await channel.SendMessageAsync("", false, embed.Build());
+        }
+
         public static async Task P4_PS2_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.

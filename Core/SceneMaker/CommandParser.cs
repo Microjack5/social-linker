@@ -38,6 +38,7 @@ namespace SocialLinker.Core.SceneMaker
             version_keywords.AddRange(Global.p2ep_psp_version_keywords);
             version_keywords.AddRange(Global.p3f_version_keywords);
             version_keywords.AddRange(Global.p3p_version_keywords);
+            version_keywords.AddRange(Global.p3r_version_keywords);
             version_keywords.AddRange(Global.p4_ps2_version_keywords);
             version_keywords.AddRange(Global.p4g_version_keywords);
             version_keywords.AddRange(Global.p5_ps4_version_keywords);
@@ -1203,9 +1204,12 @@ namespace SocialLinker.Core.SceneMaker
         public MakerCharacterData Character_Data_4 { get; set; } // MakerMulti
         public string Dialogue { get; set; }
         public IAttachment Background { get; set; }
+        public int Layout { get; set; } // MakerMulti
         public int Expected_Characters { get; set; } // MakerMulti
         public string Display_Name { get; set; } // MakerMulti
+        public int[] Layer_Order { get; set; } // MakerMulti
         public bool Display_Name_Has_Invalid_Char { get; set; }
         public bool Dialogue_Has_Invalid_Char { get; set; }
+        public bool P4AU_Multi_Char_Protag_Highlight_Toggle { get; set; } // MakerMulti
     }
 }

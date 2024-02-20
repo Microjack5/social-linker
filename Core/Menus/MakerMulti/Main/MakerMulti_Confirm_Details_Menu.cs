@@ -48,8 +48,13 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 "Are the details correct? Upload an image as a background or select ✅ to create your scene.\n" +
                 "\n" +
                 $"**Game Style:** {multimaker_session.MakerCommand.Template}\n" +
+                $"\n" +
                 $"**Character #1:** {multimaker_session.MakerCommand.Character_Data_1.Bustup_Data.Default_Name_EN}\n" +
-                $"**Character #2:** {multimaker_session.MakerCommand.Character_Data_2.Bustup_Data.Default_Name_EN}\n";
+                $"**Sprite Number:** {multimaker_session.MakerCommand.Character_Data_1.Base_Sprite}\n" +
+                $"\n" +
+                $"**Character #2:** {multimaker_session.MakerCommand.Character_Data_2.Bustup_Data.Default_Name_EN}\n" +
+                $"**Sprite Number:** {multimaker_session.MakerCommand.Character_Data_2.Base_Sprite}\n" +
+                $"\n";
 
             if (multimaker_session.MakerCommand.Character_Data_3.Character_Keyword != default)
             {
