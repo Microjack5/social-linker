@@ -342,6 +342,7 @@ namespace SocialLinker.Commands
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 System.Drawing.Color current_pixel;
+                int new_alpha = 0;
 
                 // Base sprite
                 for (int i = 0; i < bustup.Width; i++)
@@ -350,33 +351,59 @@ namespace SocialLinker.Commands
                     {
                         current_pixel = bustup.GetPixel(i, j);
 
-                        if (current_pixel.A > 10)
+                        if (current_pixel.A >= 50)
                         {
-                            base_template.SetPixel(i, j, Color.FromArgb(255, current_pixel.R, current_pixel.G, current_pixel.B));
+                            new_alpha = current_pixel.A * 2;
+
+                            if (new_alpha > 250)
+                            {
+                                new_alpha = 255;
+                            }
+
+                            base_template.SetPixel(i, j, Color.FromArgb(new_alpha, current_pixel.R, current_pixel.G, current_pixel.B));
                         }
                     }
                 }
             }
 
-            using (Graphics graphics = Graphics.FromImage(highlight_layer))
-            {
-                System.Drawing.Color current_pixel;
-                System.Drawing.Color highlight = Color.FromArgb(255, 255, 255);
+            //using (Graphics graphics = Graphics.FromImage(base_template))
+            //{
+            //    System.Drawing.Color current_pixel;
 
-                // Highlight
-                for (int i = 0; i < bustup.Width; i++)
-                {
-                    for (int j = 0; j < bustup.Height; j++)
-                    {
-                        current_pixel = bustup.GetPixel(i, j);
+            //    // Base sprite
+            //    for (int i = 0; i < bustup.Width; i++)
+            //    {
+            //        for (int j = 0; j < bustup.Height; j++)
+            //        {
+            //            current_pixel = bustup.GetPixel(i, j);
 
-                        if (current_pixel.A > 150)
-                        {
-                            highlight_layer.SetPixel(i, j, Color.FromArgb(current_pixel.A, highlight.R, highlight.G, highlight.B));
-                        }
-                    }
-                }
-            }
+            //            if (current_pixel.A > 10)
+            //            {
+            //                base_template.SetPixel(i, j, Color.FromArgb(255, current_pixel.R, current_pixel.G, current_pixel.B));
+            //            }
+            //        }
+            //    }
+            //}
+
+            //using (Graphics graphics = Graphics.FromImage(highlight_layer))
+            //{
+            //    System.Drawing.Color current_pixel;
+            //    System.Drawing.Color highlight = Color.FromArgb(255, 255, 255);
+
+            //    // Highlight
+            //    for (int i = 0; i < bustup.Width; i++)
+            //    {
+            //        for (int j = 0; j < bustup.Height; j++)
+            //        {
+            //            current_pixel = bustup.GetPixel(i, j);
+
+            //            if (current_pixel.A > 150)
+            //            {
+            //                highlight_layer.SetPixel(i, j, Color.FromArgb(current_pixel.A, highlight.R, highlight.G, highlight.B));
+            //            }
+            //        }
+            //    }
+            //}
 
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
@@ -407,20 +434,51 @@ namespace SocialLinker.Commands
 
         public static async Task Organize_P3RE(SocialLinkerCommand command)
         {
-            if (command.User.Id != 222504679878164481)
-            {
-                return;
-            }
+            //if (command.User.Id != 222504679878164481)
+            //{
+            //    return;
+            //}
 
-            // Data to alter - START
+            //string char_id = "B2";
+            //List<string> pose_a_frames = new List<string>() { "F00", "F01", "F02", "F03", "F05", "F10", "F64" };
+            //List<string> pose_b_frames = new List<string>() { "F04", "F06", "F08", "F11", "F61" };
+            //List<string> pose_c_frames = new List<string>();
+            //List<string> pose_d_frames = new List<string>();
+            //List<string> pose_p_frames = new List<string>();
+            //List<string> outfit_list = new List<string>() { "C002", "C051", "C052", "C201", "C001", "C006", "C005", "C159", "C154", "C102", "C156", "C106", "C155", "C157" };
+
+            //int eye_pose_a_x_coord = 668;
+            //int eye_pose_a_y_coord = 1072;
+            //int eye_pose_b_x_coord = 761;
+            //int eye_pose_b_y_coord = 1049;
+            //int eye_pose_c_x_coord = 0;
+            //int eye_pose_c_y_coord = 0;
+            //int eye_pose_d_x_coord = 0;
+            //int eye_pose_d_y_coord = 0;
+
+            //int mouth_pose_a_x_coord = 668;
+            //int mouth_pose_a_y_coord = 1310;
+            //int mouth_pose_b_x_coord = 761;
+            //int mouth_pose_b_y_coord = 1287;
+            //int mouth_pose_c_x_coord = 0;
+            //int mouth_pose_c_y_coord = 0;
+            //int mouth_pose_d_x_coord = 0;
+            //int mouth_pose_d_y_coord = 0;
+
+            //string base_path = $@"C:\Users\Alice\Desktop\Social Linker\SocialLinker\Assets\SceneMaker\Templates";
+            //string source_framepath = $@"{base_path}\P3R\Bustup\{char_id}";
+            //string export_framepath = $@"{base_path}\P3R (Export)\Bustup\{char_id}";
+            //string sprite_sheet_framepath = $@"{base_path}\P3R (Sprite Sheet)\Bustup\{char_id}";
+
+            // START -----------------------------------
 
             string char_id = "B2";
-            List<string> pose_a_frames = new List<string>() { "F00", "F01", "F02", "F03", "F05", "F10", "F64" };
+            List<string> pose_a_frames = new List<string>() { "F00", "F01", "F03", "F05", "F10", "F64" };
             List<string> pose_b_frames = new List<string>() { "F04", "F06", "F08", "F11", "F61" };
             List<string> pose_c_frames = new List<string>();
             List<string> pose_d_frames = new List<string>();
             List<string> pose_p_frames = new List<string>();
-            List<string> outfit_list = new List<string>() { "C002", "C051", "C052", "C201", "C001", "C006", "C005", "C159", "C154", "C102", "C156", "C106", "C155", "C157" };
+            List<string> outfit_list = new List<string>();
 
             int eye_pose_a_x_coord = 668;
             int eye_pose_a_y_coord = 1072;
@@ -440,20 +498,80 @@ namespace SocialLinker.Commands
             int mouth_pose_d_x_coord = 0;
             int mouth_pose_d_y_coord = 0;
 
-            // Data to alter - END
+            string base_path = $@"F:\Projects\Modding\Persona 3 Reload\_Waiting Room\Automation";
+            string source_framepath = $@"{base_path}\1. Source\{char_id}";
+            string export_framepath = $@"{base_path}\2. Export\{char_id}";
+            string sprite_sheet_framepath = $@"{base_path}\3. Sprite Sheet\{char_id}";
 
-            List<string> base_sprite_identifiers = new List<string>();
-            List<string> eye_frame_identifiers = new List<string>();
-            List<string> mouth_frame_identifiers = new List<string>();
+            // END -------------------------------------
 
-            List<string> expression_list = new List<string>();
-
-            string base_path = $@"C:\Users\Alice\Desktop\Social Linker\SocialLinker\Assets\SceneMaker\Templates";
-            string source_framepath = $@"{base_path}\P3R\Bustup\{char_id}";
-            string export_framepath = $@"{base_path}\P3R (Export)\Bustup\{char_id}";
-            string sprite_sheet_framepath = $@"{base_path}\P3R (Sprite Sheet)\Bustup\{char_id}";
             string eyes_folder = "Eyes";
             string mouth_folder = "Mouth";
+
+            await Organize_P3RE_Workload(
+            command,
+            char_id,
+            pose_a_frames,
+            pose_b_frames,
+            pose_c_frames,
+            pose_d_frames,
+            pose_p_frames,
+            outfit_list,
+            eye_pose_a_x_coord,
+            eye_pose_a_y_coord,
+            eye_pose_b_x_coord,
+            eye_pose_b_y_coord,
+            eye_pose_c_x_coord,
+            eye_pose_c_y_coord,
+            eye_pose_d_x_coord,
+            eye_pose_d_y_coord,
+            mouth_pose_a_x_coord,
+            mouth_pose_a_y_coord,
+            mouth_pose_b_x_coord,
+            mouth_pose_b_y_coord,
+            mouth_pose_c_x_coord,
+            mouth_pose_c_y_coord,
+            mouth_pose_d_x_coord,
+            mouth_pose_d_y_coord,
+            source_framepath,
+            export_framepath,
+            sprite_sheet_framepath,
+            eyes_folder,
+            mouth_folder);
+        }
+
+        public static async Task Organize_P3RE_Workload(
+            SocialLinkerCommand command,
+            string char_id,
+            List<string> pose_a_frames,
+            List<string> pose_b_frames,
+            List<string> pose_c_frames,
+            List<string> pose_d_frames,
+            List<string> pose_p_frames,
+            List<string> outfit_list,
+            int eye_pose_a_x_coord,
+            int eye_pose_a_y_coord,
+            int eye_pose_b_x_coord,
+            int eye_pose_b_y_coord,
+            int eye_pose_c_x_coord,
+            int eye_pose_c_y_coord,
+            int eye_pose_d_x_coord,
+            int eye_pose_d_y_coord,
+            int mouth_pose_a_x_coord,
+            int mouth_pose_a_y_coord,
+            int mouth_pose_b_x_coord,
+            int mouth_pose_b_y_coord,
+            int mouth_pose_c_x_coord,
+            int mouth_pose_c_y_coord,
+            int mouth_pose_d_x_coord,
+            int mouth_pose_d_y_coord,
+            string source_framepath,
+            string export_framepath,
+            string sprite_sheet_framepath,
+            string eyes_folder,
+            string mouth_folder)
+        {
+            List<string> expression_list = new List<string>();
 
             string[] all_base_sprites = Directory.GetFiles(source_framepath, $"*.png");
 
@@ -483,7 +601,7 @@ namespace SocialLinker.Commands
 
                 Bitmap current_base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{all_base_sprites[i]}");
 
-                Bitmap base_sprite_sheet_copy = Bitmap_to_Opaque(current_base_sprite);
+                Bitmap base_sprite_sheet_copy = P3RE_Bitmap_to_Opaque(current_base_sprite);
 
                 string new_pose_code = "";
 
@@ -508,6 +626,13 @@ namespace SocialLinker.Commands
                     case "PoseP":
                         new_pose_code = "p";
                         break;
+                }
+
+                string exported_base_sprite_filename = $"{char_id.ToLower()}_0_{outfit_list.IndexOf(current_base_outfit_code) + 1}{new_pose_code}";
+
+                if (!File.Exists($@"{export_framepath}\{exported_base_sprite_filename}.png"))
+                {
+                    current_base_sprite.Save($@"{export_framepath}\{exported_base_sprite_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
                 }
 
                 if (Directory.Exists($@"{source_framepath}\{eyes_folder}"))
@@ -543,7 +668,7 @@ namespace SocialLinker.Commands
                         using (Graphics graphics = Graphics.FromImage(base_sprite_sheet_copy))
                         {
                             Bitmap current_eye_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{all_eye_frames[j]}");
-                            Bitmap eye_sprite_sheet_copy = Bitmap_to_Opaque(current_eye_sprite);
+                            Bitmap eye_sprite_sheet_copy = P3RE_Bitmap_to_Opaque(current_eye_sprite);
                             string new_eye_filename = "";
 
                             if ((pose_a_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseA")) ||
@@ -561,6 +686,8 @@ namespace SocialLinker.Commands
                                     if (!File.Exists($@"{sprite_sheet_eye_folder}\{new_eye_filename}.png"))
                                     {
                                         eye_sprite_sheet_copy.Save($@"{sprite_sheet_eye_folder}\{new_eye_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+
+                                        current_eye_sprite.Save($@"{export_framepath}\{eyes_folder}\{new_eye_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
                                     }
 
                                     if (current_frame_code == "E1")
@@ -607,6 +734,8 @@ namespace SocialLinker.Commands
                                     if (!File.Exists($@"{sprite_sheet_eye_folder}\{new_eye_filename}.png"))
                                     {
                                         eye_sprite_sheet_copy.Save($@"{sprite_sheet_eye_folder}\{new_eye_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+
+                                        current_eye_sprite.Save($@"{export_framepath}\{eyes_folder}\{new_eye_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
                                     }
 
                                     if (current_frame_code == "E1")
@@ -667,10 +796,6 @@ namespace SocialLinker.Commands
                     await command.Channel.SendMessageAsync($"Current outfit code not found in list: {current_base_outfit_code}. Adding...");
                     outfit_list.Add(current_base_outfit_code);
                 }
-
-                Bitmap current_base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{all_base_sprites[i]}");
-
-                Bitmap base_sprite_sheet_copy = Bitmap_to_Opaque(current_base_sprite);
 
                 string new_pose_code = "";
 
@@ -740,7 +865,7 @@ namespace SocialLinker.Commands
                             using (Graphics graphics = Graphics.FromImage(clone))
                             {
                                 Bitmap current_mouth_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{all_mouth_frames[j]}");
-                                Bitmap mouth_sprite_sheet_copy = Bitmap_to_Opaque(current_mouth_sprite);
+                                Bitmap mouth_sprite_sheet_copy = P3RE_Bitmap_to_Opaque(current_mouth_sprite);
                                 string new_mouth_filename = "";
 
                                 if ((pose_a_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseA")) ||
@@ -753,11 +878,13 @@ namespace SocialLinker.Commands
                                     {
                                         new_mouth_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_0{new_pose_code}_{current_frame_code.ToLower()}";
 
-                                        string sprite_sheet_eye_folder = $@"{sprite_sheet_framepath}\{mouth_folder}";
+                                        string sprite_sheet_mouth_folder = $@"{sprite_sheet_framepath}\{mouth_folder}";
 
-                                        if (!File.Exists($@"{sprite_sheet_eye_folder}\{new_mouth_filename}.png"))
+                                        if (!File.Exists($@"{sprite_sheet_mouth_folder}\{new_mouth_filename}.png"))
                                         {
-                                            mouth_sprite_sheet_copy.Save($@"{sprite_sheet_eye_folder}\{new_mouth_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                            mouth_sprite_sheet_copy.Save($@"{sprite_sheet_mouth_folder}\{new_mouth_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+
+                                            current_mouth_sprite.Save($@"{export_framepath}\{mouth_folder}\{new_mouth_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
                                         }
 
                                         if (current_frame_code == "M1")
@@ -800,6 +927,8 @@ namespace SocialLinker.Commands
                                         if (!File.Exists($@"{sprite_sheet_mouth_folder}\{new_mouth_filename}.png"))
                                         {
                                             mouth_sprite_sheet_copy.Save($@"{sprite_sheet_mouth_folder}\{new_mouth_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
+
+                                            current_mouth_sprite.Save($@"{export_framepath}\{mouth_folder}\{new_mouth_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
                                         }
 
                                         if (current_frame_code == "M1")
@@ -847,13 +976,14 @@ namespace SocialLinker.Commands
             await command.Channel.SendMessageAsync("Sorting finished.");
         }
 
-        public static Bitmap Bitmap_to_Opaque(Bitmap input_bitmap)
+        public static Bitmap P3RE_Bitmap_to_Opaque(Bitmap input_bitmap)
         {
             Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
             using (Graphics graphics = Graphics.FromImage(output_bitmap))
             {
                 System.Drawing.Color current_pixel;
+                int new_alpha = 0;
 
                 // Base sprite
                 for (int x_pixel = 0; x_pixel < input_bitmap.Width; x_pixel++)
@@ -862,9 +992,16 @@ namespace SocialLinker.Commands
                     {
                         current_pixel = input_bitmap.GetPixel(x_pixel, y_pixel);
 
-                        if (current_pixel.A > 10)
+                        if (current_pixel.A >= 50)
                         {
-                            output_bitmap.SetPixel(x_pixel, y_pixel, Color.FromArgb(255, current_pixel.R, current_pixel.G, current_pixel.B));
+                            new_alpha = current_pixel.A * 2;
+
+                            if (new_alpha > 250)
+                            {
+                                new_alpha = 255;
+                            }
+
+                            output_bitmap.SetPixel(x_pixel, y_pixel, Color.FromArgb(new_alpha, current_pixel.R, current_pixel.G, current_pixel.B));
                         }
                     }
                 }
