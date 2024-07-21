@@ -1315,7 +1315,7 @@ namespace SocialLinker.Core.SceneMaker
             string frame_filename_generic = "";
 
             // Check if the sprite set's directory exists.
-            base_sprite_filename = OfficialSetMethods.Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_command_data);
+            base_sprite_filename = OfficialSetMethods.Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_command_data.Character_Data_1, true);
 
             // At this point, we should have the file name for the base sprite.
             // Check if the path for the set's eye frames exists.

@@ -89,7 +89,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 // Draw the character bust-up to the template if the base sprite number is not '0'.
                 if (maker_command_data.Character_Data_1.Base_Sprite != 0)
                 {
-                    graphics.DrawImage(bustup, 100, 100, 100, 100);
+                    graphics.DrawImage(bustup, 100, 100, bustup.Width, bustup.Height);
                 }
             }
 
