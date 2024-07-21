@@ -2025,10 +2025,12 @@ namespace SocialLinker.Core.LocalStorageTables
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
 
             // Get a count of how many files are in the sprite set's directory.
-            int filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path);
+            int filecount = AttachmentCountItemDirectory(set_path);
 
             // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
             string base_sprite_filename = "";
+
+            base_sprite_filename = Get_Standard_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data);
 
             // Check if the sprite set's directory exists.
             if (Directory.Exists(set_path))
@@ -2335,6 +2337,270 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             return new_bitmap;
+        }
+
+        public static string Get_Standard_Bustup_Filename_From_Sprite_Number(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCharacterData maker_character_data)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(sl_command.User);
+
+            // Establish the directory of the specified sprite set.
+            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+
+            // Create a filename for the bitmap that will be generated.
+            var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
+
+            // Get a count of how many files are in the sprite set's directory.
+            int filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path);
+
+            // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
+            string base_sprite_filename = "";
+
+            // Check if the sprite set's directory exists.
+            if (Directory.Exists(set_path))
+            {
+                // If so, it's time to find the filename for the user's selected sprite so we can retrieve the frames associated with it.
+                // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
+                // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
+                int counter = 0;
+                int base_sprite_number = maker_character_data.Base_Sprite;
+
+                // The manner of iteration will change based on the user's settings.
+                // First, Order by Outfit.
+                if (account.Setting_Sheet_Order == "Order by Outfit")
+                {
+                    // Create a loop starting at 1 meant to iterate though every file in the directory.
+                    // Outfit numbers always start at 1, so we'll begin there.
+                    for (int outfit = 1; outfit <= filecount; outfit++)
+                    {
+                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
+                        // This loop is searching for expressions, which start at 1.
+                        for (int expression = 1; expression <= filecount; expression++)
+                        {
+                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                            // Check if the created file path string exists.
+                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png"))
+                            {
+                                // If the file does exist, increment the counter by one.
+                                counter++;
+
+                                // Check if the counter matches the same number of the chosen sprite number.
+                                if (counter == base_sprite_number)
+                                {
+                                    // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                    base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}";
+
+                                    // Break out of the current loop.
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Check if the filename variable for the base sprite is not empty.
+                        if (base_sprite_filename != "")
+                        {
+                            // If so, we already found our filename! Break out of the outer loop.
+                            break;
+                        }
+                    }
+                }
+                // Second case, Order by Expression.
+                else if (account.Setting_Sheet_Order == "Order by Expression")
+                {
+                    // Create a loop starting at 1 meant to iterate though every file in the directory.
+                    // Expression numbers always start at 1, so we'll begin there.
+                    for (int expression = 1; expression <= filecount; expression++)
+                    {
+                        // Inside, create a secondary loop also meant to iterate though every file in the directory.
+                        // This loop is searching for outfits, which start at 1.
+                        for (int outfit = 1; outfit <= filecount; outfit++)
+                        {
+                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                            // Check if the created file path string exists.
+                            if (File.Exists($"{set_path}//{set_data.ID.ToLower()}_{expression}_{outfit}.png"))
+                            {
+                                // If the file does exist, increment the counter by one.
+                                counter++;
+
+                                // Check if the counter matches the same number of the chosen sprite number.
+                                if (counter == base_sprite_number)
+                                {
+                                    // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                    base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}";
+
+                                    // Break out of the current loop.
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Check if the filename variable for the base sprite is not empty.
+                        if (base_sprite_filename != "")
+                        {
+                            // If so, we already found our filename! Break out of the outer loop.
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return base_sprite_filename;
+        }
+
+        public static string Get_P3R_Bustup_Filename_From_Sprite_Number(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(sl_command.User);
+
+            // Establish the directory of the specified sprite set.
+            string set_path_raw = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            string set_path_preview = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
+
+            // Using the sprite set's path, create a path variable for the Eye frame folder.
+            string eye_frame_path_raw = $@"{set_path_raw}//Eyes";
+
+            // Create a filename for the bitmap that will be generated.
+            var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
+
+            // Get a count of how many files are in the sprite set's directory.
+            int bustup_filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path_raw);
+            int frame_filecount = Directory.EnumerateFiles(eye_frame_path_raw).Where(f => f.Contains("e1")).Count();
+
+            // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
+            string base_sprite_filename = "";
+
+            char[] poses = new char[] { 'a', 'b', 'c', 'd', 'p' };
+
+            string frame_filename_specific = "";
+            string frame_filename_generic = "";
+
+            // Check if the sprite set's directory exists.
+            if (Directory.Exists(set_path_raw))
+            {
+                // If so, it's time to find the filename for the user's selected sprite so we can retrieve the frames associated with it.
+                // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
+                // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
+                int counter = 0;
+                int base_sprite_number = maker_command_data.Character_Data_1.Base_Sprite;
+
+                // The manner of iteration will change based on the user's settings.
+                // First, Order by Outfit.
+                if (account.Setting_Sheet_Order == "Order by Outfit")
+                {
+                    // Create a loop starting at 1 meant to iterate though every file in the directory.
+                    // Outfit numbers always start at 1, so we'll begin there.
+                    for (int outfit = 1; outfit <= bustup_filecount; outfit++)
+                    {
+                        // Inside, create a secondary loop meant to iterate though every file in the "Eyes" directory.
+                        // This loop is counting the amount of expressions available, which starts at 1.
+                        // The "Eyes" folder is the most reliable way of determining this, in contrast to the "Mouth" folder.
+                        for (int expression = 1; expression <= frame_filecount; expression++)
+                        {
+                            // We'll put a third loop here, iterating through the types of poses a character could have.
+                            for (int pose_index = 0; pose_index < poses.Length; pose_index++)
+                            {
+                                frame_filename_specific = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+                                frame_filename_generic = $"{set_data.ID.ToLower()}_{expression}_0{poses[pose_index]}";
+
+                                // Here, we're going to create two file paths that could potentially exist given the combination of expression and outfit numbers.
+                                // Given the nature of P3R sprites, the file names may have two different naming conventions, hence the two paths.
+                                // Check if the created file path strings exist.
+                                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e1.png") ||
+                                    File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e1.png"))
+                                {
+                                    // Check the set preview folder to see if this current filename exists for a base sprite.
+                                    if (File.Exists($"{set_path_preview}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
+                                    {
+                                        // If the file does exist, increment the counter by one.
+                                        counter++;
+                                    }
+
+                                    // Check if the counter matches the same number of the chosen sprite number.
+                                    if (counter == base_sprite_number)
+                                    {
+                                        // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                        base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+
+                                        // Break out of the current loop.
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Break out of the higher loop if we have our filename.
+                            if (base_sprite_filename != "")
+                            {
+                                break;
+                            }
+                        }
+
+                        // Final loop to break out of if we have our filename!
+                        if (base_sprite_filename != "")
+                        {
+                            break;
+                        }
+                    }
+                }
+                // Second case, Order by Expression.
+                else if (account.Setting_Sheet_Order == "Order by Expression")
+                {
+                    // Create a loop meant to iterate though every file in the "Eyes" directory.
+                    // This loop is counting the amount of expressions available, which starts at 1.
+                    // The "Eyes" folder is the most reliable way of determining this, in contrast to the "Mouth" folder.
+                    for (int expression = 1; expression <= frame_filecount; expression++)
+                    {
+                        // Inside, create a secondary loop starting at 1 meant to iterate though every outfit in the base sprite directory.
+                        // Outfit numbers always start at 1, so we'll begin there.
+                        for (int outfit = 1; outfit <= bustup_filecount; outfit++)
+                        {
+                            // We'll put a third loop here, iterating through the types of poses a character could have.
+                            for (int pose_index = 0; pose_index < poses.Length; pose_index++)
+                            {
+                                frame_filename_specific = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+                                frame_filename_generic = $"{set_data.ID.ToLower()}_{expression}_0{poses[pose_index]}";
+
+                                // Here, we're going to create two file paths that could potentially exist given the combination of expression and outfit numbers.
+                                // Given the nature of P3R sprites, the file names may have two different naming conventions, hence the two paths.
+                                // Check if the created file path strings exist.
+                                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e1.png") ||
+                                    File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e1.png"))
+                                {
+                                    // Check the set preview folder to see if this current filename exists for a base sprite.
+                                    if (File.Exists($"{set_path_preview}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
+                                    {
+                                        // If the file does exist, increment the counter by one.
+                                        counter++;
+                                    }
+
+                                    // Check if the counter matches the same number of the chosen sprite number.
+                                    if (counter == base_sprite_number)
+                                    {
+                                        // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                        base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+
+                                        // Break out of the current loop.
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Break out of the higher loop if we have our filename.
+                            if (base_sprite_filename != "")
+                            {
+                                break;
+                            }
+                        }
+
+                        // Final loop to break out of if we have our filename!
+                        if (base_sprite_filename != "")
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return base_sprite_filename;
         }
 
         // Method from https://stackoverflow.com/questions/47695942/wrong-number-of-file-count-being-returned-from-directory
