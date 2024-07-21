@@ -13,6 +13,7 @@ using SocialLinker.Core.SceneMaker.Data.Bustup;
 using System.Drawing.Drawing2D;
 using SocialLinker.Core.SceneMaker.GlyphParsing;
 using SocialLinker.Core.SceneMaker.Data.Calendar;
+using System.Data.SqlTypes;
 
 namespace SocialLinker.Core.LocalStorageTables
 {
@@ -681,7 +682,16 @@ namespace SocialLinker.Core.LocalStorageTables
         public static bool Base_Sprite_Validity_Check(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
         {
             // Establish the directory of the specified sprite set.
-            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            string set_path = "";
+
+            if (set_data.Origin == "P3R")
+            {
+                set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
+            }
+            else
+            {
+                set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            }
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = AttachmentCountItemDirectory(set_path);
@@ -738,6 +748,10 @@ namespace SocialLinker.Core.LocalStorageTables
 
                 case "P3P":
                     await BustupFrameSheets.P3P_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+                    return;
+
+                case "P3R":
+                    await BustupFrameSheets.P3R_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
                 case "P4-PS2":
@@ -1126,6 +1140,11 @@ namespace SocialLinker.Core.LocalStorageTables
                     case "P3P":
                         RenderP3P p3p_render = new RenderP3P();
                         await p3p_render.Render_Quick_Scene_P3P(sl_command);
+                        return;
+
+                    case "P3R":
+                        RenderP3R p3r_render = new RenderP3R();
+                        await p3r_render.Render_Quick_Scene_P3R(sl_command);
                         return;
 
                     case "P4-PS2":
@@ -1995,6 +2014,12 @@ namespace SocialLinker.Core.LocalStorageTables
         public static Bitmap Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data)
         {
             OfficialSetData set_data = maker_character_data.Set_Data;
+
+            if (set_data.Origin == "P3R")
+            {
+                // Go somewhere else
+                return new Bitmap(2, 2);
+            }
 
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";

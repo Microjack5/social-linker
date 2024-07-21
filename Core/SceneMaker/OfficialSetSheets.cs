@@ -587,7 +587,7 @@ namespace SocialLinker.Core.SceneMaker
 
             // Establish the directory of the specified sprite set.
             // This string structure should direct to any set containing bust-ups once the proper variables are input.
-            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin} (Sprite Sheet)//Bustup//{set_data.ID}";
+            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
 
             // Create a filename for the bitmap that will be generated.
             var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
@@ -648,6 +648,7 @@ namespace SocialLinker.Core.SceneMaker
                         // This loop is searching for expressions, which start at 1.
                         for (int expression = 1; expression <= filecount; expression++)
                         {
+                            // We'll put a third loop here, iterating through the types of poses a character could have.
                             for (int pose_index = 0; pose_index < poses.Count; pose_index++)
                             {
                                 // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.

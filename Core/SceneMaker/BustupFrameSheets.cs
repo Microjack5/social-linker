@@ -1247,9 +1247,9 @@ namespace SocialLinker.Core.SceneMaker
                 }
 
                 // Persona 3
-                if (set_data.Origin != "P3F" && set_data.Origin != "P3P")
+                if (set_data.Origin != "P3F" && set_data.Origin != "P3P" && set_data.Origin != "P3R")
                 {
-                    if (appearances.Contains("P3F") && appearances.Contains("P3P"))
+                    if (appearances.Contains("P3F") && appearances.Contains("P3P") && appearances.Contains("P3R"))
                     {
                         displayed_appearances.Add("P3");
                     }
@@ -1263,6 +1263,11 @@ namespace SocialLinker.Core.SceneMaker
                         if (appearances.Contains("P3P"))
                         {
                             displayed_appearances.Add("P3P");
+                        }
+
+                        if (appearances.Contains("P3R"))
+                        {
+                            displayed_appearances.Add("P3R");
                         }
                     }
                 }
@@ -1355,6 +1360,600 @@ namespace SocialLinker.Core.SceneMaker
             }
 
             return footer_text;
+        }
+
+        // Methods made specifically for P3R
+
+        public static string Get_P3R_Bustup_Filename_From_Sprite_Number(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(sl_command.User);
+
+            // Establish the directory of the specified sprite set.
+            string set_path_raw = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            string set_path_preview = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
+
+            // Using the sprite set's path, create path variables for Eye and Mouth frame folders.
+            // These paths aren't guaranteed to exist, but we'll handle that validity check later.
+            string eye_frame_path_raw = $@"{set_path_raw}//Eyes";
+            string mouth_frame_path_raw = $@"{set_path_raw}//Mouth";
+
+            string eye_frame_path_preview = $@"{set_path_preview}//Eyes";
+            string mouth_frame_path_preview = $@"{set_path_preview}//Mouth";
+
+            // Create a filename for the bitmap that will be generated.
+            var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
+
+            // Get a count of how many files are in the sprite set's directory.
+            int bustup_filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path_raw);
+            int frame_filecount = Directory.EnumerateFiles(eye_frame_path_raw).Where(f => f.Contains("e1")).Count();
+
+            // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
+            string base_sprite_filename = "";
+
+            char[] poses = new char[] { 'a', 'b', 'c', 'd', 'p' };
+
+            string frame_filename_specific = "";
+            string frame_filename_generic = "";
+
+            // Check if the sprite set's directory exists.
+            if (Directory.Exists(set_path_raw))
+            {
+                // If so, it's time to find the filename for the user's selected sprite so we can retrieve the frames associated with it.
+                // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
+                // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
+                int counter = 0;
+                int base_sprite_number = maker_command_data.Character_Data_1.Base_Sprite;
+
+                // The manner of iteration will change based on the user's settings.
+                // First, Order by Outfit.
+                if (account.Setting_Sheet_Order == "Order by Outfit")
+                {
+                    // Create a loop starting at 1 meant to iterate though every file in the directory.
+                    // Outfit numbers always start at 1, so we'll begin there.
+                    for (int outfit = 1; outfit <= bustup_filecount; outfit++)
+                    {
+                        // Inside, create a secondary loop meant to iterate though every file in the "Eyes" directory.
+                        // This loop is counting the amount of expressions available, which starts at 1.
+                        // The "Eyes" folder is the most reliable way of determining this, in contrast to the "Mouth" folder.
+                        for (int expression = 1; expression <= frame_filecount; expression++)
+                        {
+                            // We'll put a third loop here, iterating through the types of poses a character could have.
+                            for (int pose_index = 0; pose_index < poses.Length; pose_index++)
+                            {
+                                frame_filename_specific = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+                                frame_filename_generic = $"{set_data.ID.ToLower()}_{expression}_0{poses[pose_index]}";
+
+                                // Here, we're going to create two file paths that could potentially exist given the combination of expression and outfit numbers.
+                                // Given the nature of P3R sprites, the file names may have two different naming conventions, hence the two paths.
+                                // Check if the created file path strings exist.
+                                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e1.png") ||
+                                    File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e1.png"))
+                                {
+                                    // Check the set preview folder to see if this current filename exists for a base sprite.
+                                    if (File.Exists($"{set_path_preview}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
+                                    {
+                                        // If the file does exist, increment the counter by one.
+                                        counter++;
+                                    }
+
+                                    // Check if the counter matches the same number of the chosen sprite number.
+                                    if (counter == base_sprite_number)
+                                    {
+                                        // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                        base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+
+                                        // Break out of the current loop.
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Break out of the higher loop if we have our filename.
+                            if (base_sprite_filename != "")
+                            {
+                                break;
+                            }
+                        }
+
+                        // Final loop to break out of if we have our filename!
+                        if (base_sprite_filename != "")
+                        {
+                            break;
+                        }
+                    }
+                }
+                // Second case, Order by Expression.
+                else if (account.Setting_Sheet_Order == "Order by Expression")
+                {
+                    // Create a loop meant to iterate though every file in the "Eyes" directory.
+                    // This loop is counting the amount of expressions available, which starts at 1.
+                    // The "Eyes" folder is the most reliable way of determining this, in contrast to the "Mouth" folder.
+                    for (int expression = 1; expression <= frame_filecount; expression++)
+                    {
+                        // Inside, create a secondary loop starting at 1 meant to iterate though every outfit in the base sprite directory.
+                        // Outfit numbers always start at 1, so we'll begin there.
+                        for (int outfit = 1; outfit <= bustup_filecount; outfit++)
+                        {
+                            // We'll put a third loop here, iterating through the types of poses a character could have.
+                            for (int pose_index = 0; pose_index < poses.Length; pose_index++)
+                            {
+                                frame_filename_specific = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+                                frame_filename_generic = $"{set_data.ID.ToLower()}_{expression}_0{poses[pose_index]}";
+
+                                // Here, we're going to create two file paths that could potentially exist given the combination of expression and outfit numbers.
+                                // Given the nature of P3R sprites, the file names may have two different naming conventions, hence the two paths.
+                                // Check if the created file path strings exist.
+                                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e1.png") ||
+                                    File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e1.png"))
+                                {
+                                    // Check the set preview folder to see if this current filename exists for a base sprite.
+                                    if (File.Exists($"{set_path_preview}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
+                                    {
+                                        // If the file does exist, increment the counter by one.
+                                        counter++;
+                                    }
+
+                                    // Check if the counter matches the same number of the chosen sprite number.
+                                    if (counter == base_sprite_number)
+                                    {
+                                        // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                        base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+
+                                        // Break out of the current loop.
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Break out of the higher loop if we have our filename.
+                            if (base_sprite_filename != "")
+                            {
+                                break;
+                            }
+                        }
+
+                        // Final loop to break out of if we have our filename!
+                        if (base_sprite_filename != "")
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return base_sprite_filename;
+        }
+
+        public static Bitmap Generate_P3R_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(sl_command.User);
+
+            // Establish the directory of the specified sprite set.
+            string set_path_raw = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            string set_path_preview = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
+
+            // Using the sprite set's path, create path variables for Eye and Mouth frame folders.
+            // These paths aren't guaranteed to exist, but we'll handle that validity check later.
+            string eye_frame_path_raw = $@"{set_path_raw}//Eyes";
+            string mouth_frame_path_raw = $@"{set_path_raw}//Mouth";
+
+            string eye_frame_path_preview = $@"{set_path_preview}//Eyes";
+            string mouth_frame_path_preview = $@"{set_path_preview}//Mouth";
+
+            // Create a filename for the bitmap that will be generated.
+            var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
+
+            // Get a count of how many files are in the sprite set's directory.
+            int bustup_filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path_raw);
+            int frame_filecount = Directory.EnumerateFiles(eye_frame_path_raw).Where(f => f.Contains("e1")).Count();
+
+            // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
+            string base_sprite_filename = "";
+
+            // Create variables that keep track of how many frames of each frame type are present for the base sprite.
+            // This will help us perform the math needed to form the sprite sheet.
+            int eye_frame_count = 0;
+            int mouth_frame_count = 0;
+
+            char[] poses = new char[] { 'a', 'b', 'c', 'd', 'p'};
+
+            string frame_filename_specific = "";
+            string frame_filename_generic = "";
+
+            // Check if the sprite set's directory exists.
+            if (Directory.Exists(set_path_raw))
+            {
+                // If so, it's time to find the filename for the user's selected sprite so we can retrieve the frames associated with it.
+                // We can do this by creating a counter starting from zero that will increment by one until it reaches the sprite numer the user specified.
+                // Once it reaches that number, the iterated filename will be saved and we can use that to find its associated frames.
+                int counter = 0;
+                int base_sprite_number = maker_command_data.Character_Data_1.Base_Sprite;
+
+                // The manner of iteration will change based on the user's settings.
+                // First, Order by Outfit.
+                if (account.Setting_Sheet_Order == "Order by Outfit")
+                {
+                    // Create a loop starting at 1 meant to iterate though every file in the directory.
+                    // Outfit numbers always start at 1, so we'll begin there.
+                    for (int outfit = 1; outfit <= bustup_filecount; outfit++)
+                    {
+                        // Inside, create a secondary loop meant to iterate though every file in the "Eyes" directory.
+                        // This loop is counting the amount of expressions available, which starts at 1.
+                        // The "Eyes" folder is the most reliable way of determining this, in contrast to the "Mouth" folder.
+                        for (int expression = 1; expression <= frame_filecount; expression++)
+                        {
+                            // We'll put a third loop here, iterating through the types of poses a character could have.
+                            for (int pose_index = 0; pose_index < poses.Length; pose_index++)
+                            {
+                                frame_filename_specific = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+                                frame_filename_generic = $"{set_data.ID.ToLower()}_{expression}_0{poses[pose_index]}";
+
+                                // Here, we're going to create two file paths that could potentially exist given the combination of expression and outfit numbers.
+                                // Given the nature of P3R sprites, the file names may have two different naming conventions, hence the two paths.
+                                // Check if the created file path strings exist.
+                                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e1.png") ||
+                                    File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e1.png"))
+                                {
+                                    // Check the set preview folder to see if this current filename exists for a base sprite.
+                                    if (File.Exists($"{set_path_preview}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
+                                    {
+                                        // If the file does exist, increment the counter by one.
+                                        counter++;
+                                    }
+                                    
+                                    // Check if the counter matches the same number of the chosen sprite number.
+                                    if (counter == base_sprite_number)
+                                    {
+                                        // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                        base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+
+                                        // Break out of the current loop.
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Break out of the higher loop if we have our filename.
+                            if (base_sprite_filename != "")
+                            {
+                                break;
+                            }
+                        }
+
+                        // Final loop to break out of if we have our filename!
+                        if (base_sprite_filename != "")
+                        {
+                            break;
+                        }
+                    }
+                }
+                // Second case, Order by Expression.
+                else if (account.Setting_Sheet_Order == "Order by Expression")
+                {
+                    // Create a loop meant to iterate though every file in the "Eyes" directory.
+                    // This loop is counting the amount of expressions available, which starts at 1.
+                    // The "Eyes" folder is the most reliable way of determining this, in contrast to the "Mouth" folder.
+                    for (int expression = 1; expression <= frame_filecount; expression++)
+                    {
+                        // Inside, create a secondary loop starting at 1 meant to iterate though every outfit in the base sprite directory.
+                        // Outfit numbers always start at 1, so we'll begin there.
+                        for (int outfit = 1; outfit <= bustup_filecount; outfit++)
+                        {
+                            // We'll put a third loop here, iterating through the types of poses a character could have.
+                            for (int pose_index = 0; pose_index < poses.Length; pose_index++)
+                            {
+                                frame_filename_specific = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+                                frame_filename_generic = $"{set_data.ID.ToLower()}_{expression}_0{poses[pose_index]}";
+
+                                // Here, we're going to create two file paths that could potentially exist given the combination of expression and outfit numbers.
+                                // Given the nature of P3R sprites, the file names may have two different naming conventions, hence the two paths.
+                                // Check if the created file path strings exist.
+                                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e1.png") ||
+                                    File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e1.png"))
+                                {
+                                    // Check the set preview folder to see if this current filename exists for a base sprite.
+                                    if (File.Exists($"{set_path_preview}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
+                                    {
+                                        // If the file does exist, increment the counter by one.
+                                        counter++;
+                                    }
+
+                                    // Check if the counter matches the same number of the chosen sprite number.
+                                    if (counter == base_sprite_number)
+                                    {
+                                        // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                        base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+
+                                        // Break out of the current loop.
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Break out of the higher loop if we have our filename.
+                            if (base_sprite_filename != "")
+                            {
+                                break;
+                            }
+                        }
+
+                        // Final loop to break out of if we have our filename!
+                        if (base_sprite_filename != "")
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // At this point, we should have the file name for the base sprite.
+            // Check if the path for the set's eye frames exists.
+            // Not all sets will have eye frames, so this block doesn't always need to execute.
+            if (Directory.Exists(eye_frame_path_raw))
+            {
+                // Get a count of how many files are in the sprite set's directory.
+                bustup_filecount = OfficialSetMethods.AttachmentCountItemDirectory(eye_frame_path_raw);
+
+                // Form an array of file names for the sprite's eye frames
+                string[] allFiles = { };
+
+                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e1.png"))
+                {
+                    allFiles = Directory.GetFiles(eye_frame_path_raw, $"{frame_filename_specific}_e*.png");
+                }
+                else if (File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e1.png"))
+                {
+                    allFiles = Directory.GetFiles(eye_frame_path_raw, $"{frame_filename_generic}_e*.png");
+                }
+
+                // Assign the array length to the eye frame count
+                eye_frame_count = allFiles.Length;
+            }
+
+            // Check if the path for the set's mouth frames exists.
+            // Not all sets will have mouth frames, so this block doesn't always need to execute.
+            if (Directory.Exists(mouth_frame_path_raw))
+            {
+                // Get a count of how many files are in the sprite set's directory.
+                bustup_filecount = OfficialSetMethods.AttachmentCountItemDirectory(mouth_frame_path_raw);
+
+                // Form an array of file names for the sprite's mouth frames
+                string[] allFiles = { };
+
+                if (File.Exists($"{mouth_frame_path_raw}//{frame_filename_specific}_m1.png"))
+                {
+                    allFiles = Directory.GetFiles(mouth_frame_path_raw, $"{frame_filename_specific}_m*.png");
+                }
+                else if (File.Exists($"{mouth_frame_path_raw}//{frame_filename_generic}_m1.png"))
+                {
+                    allFiles = Directory.GetFiles(mouth_frame_path_raw, $"{frame_filename_generic}_m*.png");
+                }
+
+                // Assign the array length to the mouth frame count.
+                mouth_frame_count = allFiles.Length;
+            }
+
+            // Time to put together the final bitmap! Create the base that the other layers will go on.
+            Bitmap base_template = new Bitmap(1000, 1000);
+
+            // Here, start drawing on the base bitmap.
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                // Depending on what types and how many frames the sprite has, we want to render the frame sheet in different manners.
+                // Check for the case that the sprite has no eye or mouth frames.
+                if (eye_frame_count == 0 && mouth_frame_count == 0)
+                {
+                    // Since there are no frames, create a bustup section that fills the entire frame sheet.
+                    Bitmap bustup_section = Create_Base_Bustup_Bitmap((Bitmap)System.Drawing.Image.FromFile($"{set_path_preview}//{base_sprite_filename}.png"), set_data, 0);
+
+                    // Draw the bustup section to the base template.
+                    graphics.DrawImage(bustup_section, 100, 0, bustup_section.Width, bustup_section.Height);
+                }
+                // Check for the case that the sprite has eye frames AND mouth frames.
+                else if (eye_frame_count > 0 && mouth_frame_count > 0)
+                {
+                    // Create a bustup section that accounts for frames of both types present on the sheet.
+                    Bitmap bustup_section = Create_Base_Bustup_Bitmap((Bitmap)System.Drawing.Image.FromFile($"{set_path_preview}//{base_sprite_filename}.png"), set_data, 2);
+
+                    // Draw the bustup section to the base template.
+                    graphics.DrawImage(bustup_section, 100, 0, bustup_section.Width, bustup_section.Height);
+
+                    // Create two lists of bitmaps to contain the frames for the sprite.
+                    List<Bitmap> eye_frame_list = new List<Bitmap>();
+                    List<Bitmap> mouth_frame_list = new List<Bitmap>();
+
+                    // Add each eye frame for the sprite to the list.
+                    // This assumes the file names are correct while iterating to add them instantly.
+                    for (int i = 0; i < eye_frame_count; i++)
+                    {
+                        if (File.Exists($"{eye_frame_path_preview}//{frame_filename_specific}_e{i + 1}.png"))
+                        {
+                            eye_frame_list.Add((Bitmap)System.Drawing.Image.FromFile($"{eye_frame_path_preview}//{frame_filename_specific}_e{i + 1}.png"));
+                        }
+                        else if (File.Exists($"{eye_frame_path_preview}//{frame_filename_generic}_e{i + 1}.png"))
+                        {
+                            eye_frame_list.Add((Bitmap)System.Drawing.Image.FromFile($"{eye_frame_path_preview}//{frame_filename_generic}_e{i + 1}.png"));
+                        }
+                    }
+
+                    // Add each mouth frame for the sprite to the list.
+                    // This assumes the file names are correct while iterating to add them instantly.
+                    for (int i = 0; i < mouth_frame_count; i++)
+                    {
+                        if (File.Exists($"{mouth_frame_path_preview}//{frame_filename_specific}_m{i + 1}.png"))
+                        {
+                            mouth_frame_list.Add((Bitmap)System.Drawing.Image.FromFile($"{mouth_frame_path_preview}//{frame_filename_specific}_m{i + 1}.png"));
+                        }
+                        else if (File.Exists($"{mouth_frame_path_preview}//{frame_filename_generic}_m{i + 1}.png"))
+                        {
+                            mouth_frame_list.Add((Bitmap)System.Drawing.Image.FromFile($"{mouth_frame_path_preview}//{frame_filename_generic}_m{i + 1}.png"));
+                        }
+                    }
+
+                    // Create frame bitmaps for the eye and mouth sections.
+                    Bitmap eye_frame_section = Create_Standard_Frame_Bitmap(eye_frame_list.ToArray());
+                    Bitmap mouth_frame_section = Create_Standard_Frame_Bitmap(mouth_frame_list.ToArray());
+
+                    // Draw the frame bitmaps to the base template.
+                    graphics.DrawImage(eye_frame_section, 100, 400, eye_frame_section.Width, eye_frame_section.Height);
+                    graphics.DrawImage(mouth_frame_section, 100, 700, mouth_frame_section.Width, mouth_frame_section.Height);
+                }
+                // Check for the case that the sprite either has eye frames but no mouth frames, or mouth frames but no eye frames.
+                else if (eye_frame_count > 0 || mouth_frame_count > 0)
+                {
+                    // Create a bustup section that accounts for one type of frame present on the sheet.
+                    Bitmap bustup_section = Create_Base_Bustup_Bitmap((Bitmap)System.Drawing.Image.FromFile($"{set_path_preview}//{base_sprite_filename}.png"), set_data, 1);
+                    graphics.DrawImage(bustup_section, 100, 0, bustup_section.Width, bustup_section.Height);
+
+                    // Now, let's check for which frame type does exist for the sprite.
+                    // If any eye frames exist, create an eye frame panel.
+                    if (eye_frame_count > 0)
+                    {
+                        List<Bitmap> eye_frame_list = new List<Bitmap>();
+
+                        for (int i = 0; i < eye_frame_count; i++)
+                        {
+                            if (File.Exists($"{eye_frame_path_preview}//{frame_filename_specific}_e{i + 1}.png"))
+                            {
+                                eye_frame_list.Add((Bitmap)System.Drawing.Image.FromFile($"{eye_frame_path_preview}//{frame_filename_specific}_e{i + 1}.png"));
+                            }
+                            else if (File.Exists($"{eye_frame_path_preview}//{frame_filename_generic}_e{i + 1}.png"))
+                            {
+                                eye_frame_list.Add((Bitmap)System.Drawing.Image.FromFile($"{eye_frame_path_preview}//{frame_filename_generic}_e{i + 1}.png"));
+                            }
+                        }
+
+                        Bitmap eye_frame_section = Create_Standard_Frame_Bitmap(eye_frame_list.ToArray());
+                        graphics.DrawImage(eye_frame_section, 100, 700, eye_frame_section.Width, eye_frame_section.Height);
+                    }
+                    // If any mouth frames exist, create a mouth frame panel.
+                    else if (mouth_frame_count > 0)
+                    {
+                        List<Bitmap> mouth_frame_list = new List<Bitmap>();
+
+                        for (int i = 0; i < mouth_frame_count; i++)
+                        {
+                            if (File.Exists($"{mouth_frame_path_preview}//{frame_filename_specific}_m{i + 1}.png"))
+                            {
+                                mouth_frame_list.Add((Bitmap)System.Drawing.Image.FromFile($"{mouth_frame_path_preview}//{frame_filename_specific}_m{i + 1}.png"));
+                            }
+                            else if (File.Exists($"{mouth_frame_path_preview}//{frame_filename_generic}_m{i + 1}.png"))
+                            {
+                                mouth_frame_list.Add((Bitmap)System.Drawing.Image.FromFile($"{mouth_frame_path_preview}//{frame_filename_generic}_m{i + 1}.png"));
+                            }
+                        }
+
+                        Bitmap mouth_frame_section = Create_Standard_Frame_Bitmap(mouth_frame_list.ToArray());
+                        graphics.DrawImage(mouth_frame_section, 100, 700, mouth_frame_section.Width, mouth_frame_section.Height);
+                    }
+                }
+
+                // Now, we should create an overlay that will assist the user's viewing of the frame sheet.
+                // Create a "black bar" bitmap that will contain information on the side of the frame sheet.
+                Bitmap black_bar = new Bitmap(100, 1000);
+
+                // We'll also want to create a "white bar" bitmap to separate sections on the frame sheet.
+                Bitmap white_bar = new Bitmap(1000, 6);
+
+                // Fill the black_bar bitmap with the color black.
+                using (Graphics overlay_object = Graphics.FromImage(black_bar))
+                {
+                    overlay_object.Clear(System.Drawing.Color.Black);
+                }
+
+                // Fill the white_bar bitmap with the color white.
+                using (Graphics overlay_object = Graphics.FromImage(white_bar))
+                {
+                    overlay_object.Clear(System.Drawing.Color.White);
+                }
+
+                // Draw the black bar to the base template. We'll handle drawing the white bars later.
+                graphics.DrawImage(black_bar, 0, 0, black_bar.Width, black_bar.Height);
+
+                // Now, let's start rendering text for user readability.
+                //Set text rendering to have antialiasing.
+                graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+
+                // Create three rectangle variables to represent text boxes that may be rendered to the template.
+                // Depending on the frames available, only one or two of these variables may be used.
+                Rectangle base_text_box = new Rectangle(0, 0, 0, 0);
+                Rectangle eyes_text_box = new Rectangle(0, 0, 0, 0);
+                Rectangle mouth_text_box = new Rectangle(0, 0, 0, 0);
+
+                // Create a font object to draw text to the base template.
+                using (Font frame_font = new Font("Eurostar Black Extended", 35))
+                {
+                    // Format strings so that their placement is at the center of the text box.
+                    StringFormat stringFormat = new StringFormat();
+                    stringFormat.Alignment = StringAlignment.Center;
+                    stringFormat.LineAlignment = StringAlignment.Center;
+
+                    // Check if the number of eye and mouth frames present is zero.
+                    if (eye_frame_count == 0 && mouth_frame_count == 0)
+                    {
+                        // Rotate the graphics object by -90 degrees so that the text will appear on its side.
+                        graphics.RotateTransform(-90);
+
+                        // Redefine the text box for the base sprite to take up the entire sheet since there will be no frames to show and draw the text to the template.
+                        // The X coordinate starts at -1000 to compensate for the -90 degree rotation.
+                        base_text_box = new Rectangle(-1000 + 0, 0, 1000, 100);
+                        graphics.DrawString("NO FRAMES", frame_font, System.Drawing.Brushes.White, base_text_box, stringFormat);
+                    }
+                    // Check if there are both eye frames and mouth frames present.
+                    else if (eye_frame_count > 0 && mouth_frame_count > 0)
+                    {
+                        // Draw two white bars to the template so they will appear as dividers for each section.
+                        graphics.DrawImage(white_bar, 0, 397, white_bar.Width, white_bar.Height);
+                        graphics.DrawImage(white_bar, 0, 697, white_bar.Width, white_bar.Height);
+
+                        // Rotate the graphics object by -90 degrees so that the text will appear on its side.
+                        graphics.RotateTransform(-90);
+
+                        // Redefine the text boxes for the base, eye, and mouth sections and draw their text to the template.
+                        // The X coordinates start at -1000 to compensate for the -90 degree rotation.
+                        base_text_box = new Rectangle(-1000 + 600, 0, 400, 100);
+                        graphics.DrawString("BASE", frame_font, System.Drawing.Brushes.White, base_text_box, stringFormat);
+
+                        eyes_text_box = new Rectangle(-1000 + 300, 0, 300, 100);
+                        graphics.DrawString("EYES", frame_font, System.Drawing.Brushes.White, eyes_text_box, stringFormat);
+
+                        mouth_text_box = new Rectangle(-1000 + 0, 0, 300, 100);
+                        graphics.DrawString("MOUTH", frame_font, System.Drawing.Brushes.White, mouth_text_box, stringFormat);
+                    }
+                    // Check if there are either eye frames OR mouth frames present.
+                    else if (eye_frame_count > 0 || mouth_frame_count > 0)
+                    {
+                        // Draw a white bar to the template so it will appear as a divider for each section.
+                        graphics.DrawImage(white_bar, 0, 697, white_bar.Width, white_bar.Height);
+
+                        // Rotate the graphics object by -90 degrees so that the text will appear on its side.
+                        graphics.RotateTransform(-90);
+
+                        // Redefine the text box for the base sprite and draw the text for it to the template.
+                        // The X coordinates start at -1000 to compensate for the -90 degree rotation.
+                        base_text_box = new Rectangle(-1000 + 300, 0, 700, 100);
+                        graphics.DrawString("BASE", frame_font, System.Drawing.Brushes.White, base_text_box, stringFormat);
+
+                        // Since we've confirmed there are either eye frames or mouth frames present, do a comparison to see which type it is and draw the appropriate text to the template.
+                        // The X coordinates start at -1000 to compensate for the -90 degree rotation.
+                        if (eye_frame_count > 0)
+                        {
+                            eyes_text_box = new Rectangle(-1000 + 0, 0, 300, 100);
+                            graphics.DrawString("EYES", frame_font, System.Drawing.Brushes.White, eyes_text_box, stringFormat);
+                        }
+                        else if (mouth_frame_count > 0)
+                        {
+                            mouth_text_box = new Rectangle(-1000 + 0, 0, 300, 100);
+                            graphics.DrawString("MOUTH", frame_font, System.Drawing.Brushes.White, mouth_text_box, stringFormat);
+                        }
+                    }
+                }
+            }
+
+            // Return the base template.
+            return base_template;
         }
 
         // Animation frame messages
@@ -1825,6 +2424,78 @@ namespace SocialLinker.Core.SceneMaker
 
             // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
             Bitmap sprite_set_preview = Generate_Standard_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
+
+            // Save the sprite set preview bitmap to the stream as a PNG.
+            sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+            // Ensure the stream is set to the beginning of itself.
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            // Send the embeded message to the channel.
+            try
+            {
+                await sl_command.Channel.SendFileAsync(memoryStream, "preview.png", "", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Clean up resources used by the stream and delete the loading message.
+            memoryStream.Dispose();
+            await loader.DeleteAsync();
+        }
+
+        public static async Task P3R_Bustup_Frame_Sheet(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            // Send a loading message to the channel while the sprite sheet is being made.
+            //RestUserMessage loader = await channel.SendMessageAsync("", false, P3F_Loading_Message().Build());
+            RestUserMessage loader = await channel.SendMessageAsync("Loading...");
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = $"{set_data.Name}'s Animation Frames - Portrait #{maker_command_data.Character_Data_1.Base_Sprite}",
+                IconUrl = EmbedSettings.Get_Game_Logo("P3R")
+            };
+
+            embed.WithAuthor(author);
+
+            // Set the color and thumbnail for the embeded message.
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3R", null));
+
+            // Create a footer based on the user's settings.
+            var footer = new EmbedFooterBuilder
+            {
+                Text = Create_Sprite_Sheet_Footer(account, set_data)
+            };
+
+            // Add the footer to the embed.
+            embed.WithFooter(footer);
+
+            // Attach a locally generated image to the embed. This image hasn't been created yet, so the filename is just a placeholder for now.
+            embed.WithImageUrl($"attachment://preview.png");
+
+            // Create a new stream. We'll use this to create the locally generated image.
+            MemoryStream memoryStream = new MemoryStream();
+
+            // Generate a bitmap comprised of the base sprite chosen and any animation frames it may have.
+            Bitmap sprite_set_preview = Generate_P3R_Bustup_Frame_Sheet(sl_command, set_data, maker_command_data);
 
             // Save the sprite set preview bitmap to the stream as a PNG.
             sprite_set_preview.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);

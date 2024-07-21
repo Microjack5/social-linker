@@ -45,17 +45,17 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                 "Change the default templates and sprite sets available for different versions of the same title.");
             embed.AddField(":two: Template Layout",
                 "Change select visual elements while using various templates.");
-            /*embed.AddField(":three: Sprite Mode",
-                "Change the type of sprites used for certain scene maker templates.");*/
-            embed.AddField(":three: Display Names",
+            embed.AddField(":three: Calendar Cycles",
+                "Manually set the date, time of day, moon phases, and more.");
+            embed.AddField(":four: Display Names",
                 "Change the displayed names of various characters and sprite sets.");
-            embed.AddField(":four: Sprite Sheet Order",
+            embed.AddField(":five: Sprite Sheet Order",
                 "Change whether sprite sets are ordered by outfit or by expression.");
-            embed.AddField(":five: Backgrounds",
+            embed.AddField(":six: Backgrounds",
                 "Determine how background images are rendered within the scene maker.");
-            embed.AddField(":six: Resolution & Scaling",
+            embed.AddField(":seven: Resolution & Scaling",
                 "Change output resolutions and scaling methods per template.");
-            embed.AddField(":seven: Auto-Delete",
+            embed.AddField(":eight: Auto-Delete",
                 "Toggle auto-deletion of error messages and scene maker commands.");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
@@ -105,7 +105,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             reaction_list.Add(new Emoji("\u0035\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0036\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0037\ufe0f\u20e3"));
-            //reaction_list.Add(new Emoji("\u0038\ufe0f\u20e3"));
+            reaction_list.Add(new Emoji("\u0038\ufe0f\u20e3"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);

@@ -439,46 +439,13 @@ namespace SocialLinker.Commands
             //    return;
             //}
 
-            //string char_id = "B2";
-            //List<string> pose_a_frames = new List<string>() { "F00", "F01", "F02", "F03", "F05", "F10", "F64" };
-            //List<string> pose_b_frames = new List<string>() { "F04", "F06", "F08", "F11", "F61" };
-            //List<string> pose_c_frames = new List<string>();
-            //List<string> pose_d_frames = new List<string>();
-            //List<string> pose_p_frames = new List<string>();
-            //List<string> outfit_list = new List<string>() { "C002", "C051", "C052", "C201", "C001", "C006", "C005", "C159", "C154", "C102", "C156", "C106", "C155", "C157" };
-
-            //int eye_pose_a_x_coord = 668;
-            //int eye_pose_a_y_coord = 1072;
-            //int eye_pose_b_x_coord = 761;
-            //int eye_pose_b_y_coord = 1049;
-            //int eye_pose_c_x_coord = 0;
-            //int eye_pose_c_y_coord = 0;
-            //int eye_pose_d_x_coord = 0;
-            //int eye_pose_d_y_coord = 0;
-
-            //int mouth_pose_a_x_coord = 668;
-            //int mouth_pose_a_y_coord = 1310;
-            //int mouth_pose_b_x_coord = 761;
-            //int mouth_pose_b_y_coord = 1287;
-            //int mouth_pose_c_x_coord = 0;
-            //int mouth_pose_c_y_coord = 0;
-            //int mouth_pose_d_x_coord = 0;
-            //int mouth_pose_d_y_coord = 0;
-
-            //string base_path = $@"C:\Users\Alice\Desktop\Social Linker\SocialLinker\Assets\SceneMaker\Templates";
-            //string source_framepath = $@"{base_path}\P3R\Bustup\{char_id}";
-            //string export_framepath = $@"{base_path}\P3R (Export)\Bustup\{char_id}";
-            //string sprite_sheet_framepath = $@"{base_path}\P3R (Sprite Sheet)\Bustup\{char_id}";
-
-            // START -----------------------------------
-
             string char_id = "B2";
-            List<string> pose_a_frames = new List<string>() { "F00", "F01", "F03", "F05", "F10", "F64" };
+            List<string> pose_a_frames = new List<string>() { "F00", "F01", "F02", "F03", "F05", "F10", "F64" };
             List<string> pose_b_frames = new List<string>() { "F04", "F06", "F08", "F11", "F61" };
             List<string> pose_c_frames = new List<string>();
             List<string> pose_d_frames = new List<string>();
             List<string> pose_p_frames = new List<string>();
-            List<string> outfit_list = new List<string>();
+            List<string> outfit_list = new List<string>() { "C002", "C051", "C052", "C201", "C001", "C006", "C005", "C159", "C154", "C102", "C156", "C106", "C155", "C157" };
 
             int eye_pose_a_x_coord = 668;
             int eye_pose_a_y_coord = 1072;
@@ -498,10 +465,43 @@ namespace SocialLinker.Commands
             int mouth_pose_d_x_coord = 0;
             int mouth_pose_d_y_coord = 0;
 
-            string base_path = $@"F:\Projects\Modding\Persona 3 Reload\_Waiting Room\Automation";
-            string source_framepath = $@"{base_path}\1. Source\{char_id}";
-            string export_framepath = $@"{base_path}\2. Export\{char_id}";
-            string sprite_sheet_framepath = $@"{base_path}\3. Sprite Sheet\{char_id}";
+            string base_path = $@"C:\Users\Alice\Desktop\P3R Workspace";
+            string source_framepath = $@"{base_path}\1. Base Files\{char_id}";
+            string export_framepath = $@"{base_path}\2. Renamed Files\{char_id}";
+            string sprite_sheet_framepath = $@"{base_path}\3. Assembled Sprites\{char_id}";
+
+            // START -----------------------------------
+
+            //string char_id = "B31";
+            //List<string> pose_a_frames = new List<string>() { "F00", "F01", "F02", "F03", "F04", "F05", "F08" };
+            //List<string> pose_b_frames = new List<string>();
+            //List<string> pose_c_frames = new List<string>();
+            //List<string> pose_d_frames = new List<string>();
+            //List<string> pose_p_frames = new List<string>();
+            //List<string> outfit_list = new List<string>();
+
+            //int eye_pose_a_x_coord = 628;
+            //int eye_pose_a_y_coord = 773;
+            //int eye_pose_b_x_coord = 0;
+            //int eye_pose_b_y_coord = 0;
+            //int eye_pose_c_x_coord = 0;
+            //int eye_pose_c_y_coord = 0;
+            //int eye_pose_d_x_coord = 0;
+            //int eye_pose_d_y_coord = 0;
+
+            //int mouth_pose_a_x_coord = 629;
+            //int mouth_pose_a_y_coord = 1280;
+            //int mouth_pose_b_x_coord = 0;
+            //int mouth_pose_b_y_coord = 0;
+            //int mouth_pose_c_x_coord = 0;
+            //int mouth_pose_c_y_coord = 0;
+            //int mouth_pose_d_x_coord = 0;
+            //int mouth_pose_d_y_coord = 0;
+
+            //string base_path = $@"F:\Projects\Modding\Persona 3 Reload\_Waiting Room\Automation";
+            //string source_framepath = $@"{base_path}\1. Source\{char_id}";
+            //string export_framepath = $@"{base_path}\2. Export\{char_id}";
+            //string sprite_sheet_framepath = $@"{base_path}\3. Sprite Sheet\{char_id}";
 
             // END -------------------------------------
 
@@ -996,7 +996,7 @@ namespace SocialLinker.Commands
                         {
                             new_alpha = current_pixel.A * 2;
 
-                            if (new_alpha > 250)
+                            if (new_alpha > 240)
                             {
                                 new_alpha = 255;
                             }

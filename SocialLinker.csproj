@@ -429,6 +429,7 @@
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP2IS_PSP.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP3F.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP3P.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP3R.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP4AU.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP4D.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP4_PS2.cs" />
@@ -502,6 +503,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\Menus\Settings\Main\SceneMaker\CalendarCycles\" />
     <Folder Include="Core\SceneMaker\Data\Assist\" />
     <Folder Include="Core\SceneMaker\Data\Cutin\" />
   </ItemGroup>
