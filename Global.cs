@@ -44,6 +44,8 @@ namespace SocialLinker
         internal static string[] p5s_generic_keywords = { "P5S" };
         internal static string[] bbtag_generic_keywords = { "BBTAG" };
 
+        internal static char[] p3r_poses = { 'a', 'b', 'c', 'd', 'p' };
+
         internal static int error_duration = 60000;
         internal static int API_Timeout = 5000;
         internal static int Max_PMedals = 999;

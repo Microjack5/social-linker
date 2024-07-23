@@ -21,7 +21,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
     public class RenderP3R
     {
-        public int internal_template_width = 4096;
+        public int internal_template_width = 3840;
         public int internal_template_height = 2160;
 
         public int final_template_width = 1920;

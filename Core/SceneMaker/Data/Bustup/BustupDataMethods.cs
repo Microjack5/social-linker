@@ -162,6 +162,130 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
             } 
         }
 
+        public static FrameData Get_P3R_Eye_Frame_Data(OfficialSetData set_data, BustupData bustup_data, MakerCharacterData maker_character_data, string base_sprite_filename_raw, string base_sprite_filename_preview)
+        {
+            string set_path_raw = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            string eye_frame_path_raw = $@"{set_path_raw}//Eyes";
+
+            string data_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}";
+            string data_sheet = "eye_frame_data.json";
+
+            if (!Directory.Exists(data_folder))
+            {
+                Directory.CreateDirectory(data_folder);
+            }
+
+            // If the file exists at the specified directory, load its contents.
+            if (File.Exists(data_folder + "/" + data_sheet))
+            {
+                // Load the data sheet for the selected sprite set.
+                frame_data_list = Load_Frame_Data_List(data_folder + "/" + data_sheet).ToList();
+
+                string bustup_filename = base_sprite_filename_preview;
+
+                // Parse filename here
+                List<string> parsed_filename = bustup_filename.Split(new char[] { '_' }).ToList();
+
+                string char_id = parsed_filename[0];
+                string expression = parsed_filename[1];
+                string outfit_and_pose = parsed_filename[2];
+
+                string outfit = outfit_and_pose.Substring(0, outfit_and_pose.Length - 1);
+                string pose = outfit_and_pose.Substring(outfit_and_pose.Length - 1);
+
+                string frame_filename_specific = bustup_filename;
+                string frame_filename_generic = $"{char_id}_{expression}_0{pose}";
+                string frame_filename_chosen = "";
+
+                // Combine the base bustup filename substring with the needed frame suffix to create the frame filename.
+                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e{maker_character_data.Eye_Frame}.png"))
+                {
+                    frame_filename_chosen = $"{frame_filename_specific}_e{maker_character_data.Eye_Frame}.png";
+                }
+                else if (File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e{maker_character_data.Eye_Frame}.png"))
+                {
+                    frame_filename_chosen = $"{frame_filename_generic}_e{maker_character_data.Eye_Frame}.png";
+                }
+
+                // Return the frame data info by using its filename to search for its entry.
+                return Frame_Data_From_Filename(frame_filename_chosen);
+            }
+            // If the file doesn't exist, create it.
+            else
+            {
+                if (Create_P3R_Eye_Frame_Data_List(set_data) != default)
+                {
+                    return Get_P3R_Eye_Frame_Data(set_data, bustup_data, maker_character_data, base_sprite_filename_raw, base_sprite_filename_preview);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public static FrameData Get_P3R_Mouth_Frame_Data(OfficialSetData set_data, BustupData bustup_data, MakerCharacterData maker_character_data, string base_sprite_filename_raw, string base_sprite_filename_preview)
+        {
+            string set_path_raw = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            string mouth_frame_path_raw = $@"{set_path_raw}//Mouth";
+
+            string data_folder = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}";
+            string data_sheet = "mouth_frame_data.json";
+
+            if (!Directory.Exists(data_folder))
+            {
+                Directory.CreateDirectory(data_folder);
+            }
+
+            // If the file exists at the specified directory, load its contents.
+            if (File.Exists(data_folder + "/" + data_sheet))
+            {
+                // Load the data sheet for the selected sprite set.
+                frame_data_list = Load_Frame_Data_List(data_folder + "/" + data_sheet).ToList();
+
+                string bustup_filename = base_sprite_filename_preview;
+
+                // Parse filename here
+                List<string> parsed_filename = bustup_filename.Split(new char[] { '_' }).ToList();
+
+                string char_id = parsed_filename[0];
+                string expression = parsed_filename[1];
+                string outfit_and_pose = parsed_filename[2];
+
+                string outfit = outfit_and_pose.Substring(0, outfit_and_pose.Length - 1);
+                string pose = outfit_and_pose.Substring(outfit_and_pose.Length - 1);
+
+                string frame_filename_specific = $"{char_id}_{expression}_0{pose}";
+                string frame_filename_generic = bustup_filename;
+                string frame_filename_chosen = "";
+
+                // Combine the base bustup filename substring with the needed frame suffix to create the frame filename.
+                if (File.Exists($"{mouth_frame_path_raw}//{frame_filename_specific}_m{maker_character_data.Mouth_Frame}.png"))
+                {
+                    frame_filename_chosen = $"{frame_filename_specific}_m{maker_character_data.Mouth_Frame}.png";
+                }
+                else if (File.Exists($"{mouth_frame_path_raw}//{frame_filename_generic}_m{maker_character_data.Mouth_Frame}.png"))
+                {
+                    frame_filename_chosen = $"{frame_filename_generic}_m{maker_character_data.Mouth_Frame}.png";
+                }
+
+                // Return the frame data info by using its filename to search for its entry.
+                return Frame_Data_From_Filename(frame_filename_chosen);
+            }
+            // If the file doesn't exist, create it.
+            else
+            {
+                if (Create_P3R_Mouth_Frame_Data_List(set_data) != default)
+                {
+                    return Get_P3R_Mouth_Frame_Data(set_data, bustup_data, maker_character_data, base_sprite_filename_raw, base_sprite_filename_preview);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         public static FrameData Get_Mouth_Frame_Data(OfficialSetData set_data, BustupData bustup_data, MakerCharacterData maker_character_data)
         {
             // Create variables for the folder and JSON that contains the data for the set.
@@ -516,6 +640,242 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             //    Coord_Y = 387
                             //};
                             //new_list.Add(new_frame_data);
+                        }
+                    }
+                }
+            }
+
+            // Write all text to the data file.
+            try
+            {
+                string json = JsonConvert.SerializeObject(new_list, Formatting.Indented);
+                File.WriteAllText(data_path, json);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"'{e}'");
+            }
+
+            return new_list;
+        }
+
+        public static List<FrameData> Create_P3R_Eye_Frame_Data_List(OfficialSetData set_data) // For dev purposes only
+        {
+            // Create a new empty frame data list.
+            // This is what we'll be using to create frame data for each image.
+            var new_list = new List<FrameData>();
+
+            // Establish the paths for the directory where the eye frames are held, as well as the directory for where the data sheet is held.
+            string base_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            string eye_frame_path = $@"{base_path}//Eyes";
+
+            string data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}//eye_frame_data.json";
+
+            // Initialize a new int variable to zero.
+            // We'll need this to store how many frames are in the eye frame directory.
+            int base_bustup_filecount = 0;
+            int eye_frame_filecount = 0;
+
+            // Check if the eye frame directory established exists.
+            // If so, change the filecount int to how many images are in the eye frame directory.
+            if (Directory.Exists(base_path))
+            {
+                base_bustup_filecount = OfficialSetMethods.AttachmentCountItemDirectory(base_path);
+            }
+            // If not, return null.
+            else
+            {
+                return null;
+            }
+
+            if (Directory.Exists(eye_frame_path))
+            {
+                eye_frame_filecount = OfficialSetMethods.AttachmentCountItemDirectory(eye_frame_path);
+            }
+            // If not, return null.
+            else
+            {
+                return null;
+            }
+
+            char[] poses = Global.p3r_poses;
+
+            // Create a loop starting at 1 meant to iterate though every file in the directory.
+            // Expression numbers always start at 1, so we'll begin there.
+            for (int expression = 1; expression <= eye_frame_filecount; expression++)
+            {
+                // Inside, create a secondary loop also meant to iterate though every file in the directory.
+                // This loop is searching for outfits, which start at 0 in P3R.
+                for (int outfit = 0; outfit < base_bustup_filecount; outfit++)
+                {
+                    // Third loop for pose index
+                    for (int pose_index = 0; pose_index < poses.Length; pose_index++)
+                    {
+                        // Get the current filename generated from the for loops.
+                        // This name isn't guaranteed to exist, but we will test it soon to find out.
+                        string current_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+
+                        // Let's get the file count for any images in the directory that share the same base sprite filename substring as our current generated name. 
+                        // We do that by forming an array of all filenames that match.
+                        string[] allFiles = Directory.GetFiles(eye_frame_path, $"{current_filename}_e*.png");
+
+                        // Take the length of the array and assign it to a new int variable.
+                        int base_sprite_eye_frame_count = allFiles.Length;
+
+                        // We're already within two loops to generate the base filename, but now we need to use another loop to iterate through potentially multiple frames for the same sprite.
+                        for (int i = 1; i <= base_sprite_eye_frame_count; i++)
+                        {
+                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                            // Check if the created file path string exists.
+                            if (File.Exists($"{eye_frame_path}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png"))
+                            {
+                                // EXPERIMENT START
+                                FrameData new_frame_data = new FrameData();
+
+                                if (poses[pose_index] == 'a')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 256,
+                                        Coord_X = 668,
+                                        Coord_Y = 1072
+                                    };
+                                }
+                                else if (poses[pose_index] == 'b')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 256,
+                                        Coord_X = 761,
+                                        Coord_Y = 1049
+                                    };
+                                }
+
+                                new_list.Add(new_frame_data);
+                                // EXPERIMENT END
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Write all text to the data file.
+            try
+            {
+                string json = JsonConvert.SerializeObject(new_list, Formatting.Indented);
+                File.WriteAllText(data_path, json);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"'{e}'");
+            }
+
+            return new_list;
+        }
+
+        public static List<FrameData> Create_P3R_Mouth_Frame_Data_List(OfficialSetData set_data) // For dev purposes only
+        {
+            // Create a new empty frame data list.
+            // This is what we'll be using to create frame data for each image.
+            var new_list = new List<FrameData>();
+
+            // Establish the paths for the directory where the eye frames are held, as well as the directory for where the data sheet is held.
+            string base_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            string mouth_frame_path = $@"{base_path}//Mouth";
+
+            string data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}//mouth_frame_data.json";
+
+            // Initialize a new int variable to zero.
+            // We'll need this to store how many frames are in the eye frame directory.
+            int base_bustup_filecount = 0;
+            int mouth_frame_filecount = 0;
+
+            // Check if the eye frame directory established exists.
+            // If so, change the filecount int to how many images are in the eye frame directory.
+            if (Directory.Exists(base_path))
+            {
+                base_bustup_filecount = OfficialSetMethods.AttachmentCountItemDirectory(base_path);
+            }
+            // If not, return null.
+            else
+            {
+                return null;
+            }
+
+            if (Directory.Exists(mouth_frame_path))
+            {
+                mouth_frame_filecount = OfficialSetMethods.AttachmentCountItemDirectory(mouth_frame_path);
+            }
+            // If not, return null.
+            else
+            {
+                return null;
+            }
+
+            char[] poses = Global.p3r_poses;
+
+            // Create a loop starting at 1 meant to iterate though every file in the directory.
+            // Expression numbers always start at 1, so we'll begin there.
+            for (int expression = 1; expression <= mouth_frame_filecount; expression++)
+            {
+                // Inside, create a secondary loop also meant to iterate though every file in the directory.
+                // This loop is searching for outfits, which start at 0 in P3R.
+                for (int outfit = 0; outfit < base_bustup_filecount; outfit++)
+                {
+                    // Third loop for pose index
+                    for (int pose_index = 0; pose_index < poses.Length; pose_index++)
+                    {
+                        // Get the current filename generated from the for loops.
+                        // This name isn't guaranteed to exist, but we will test it soon to find out.
+                        string current_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
+
+                        // Let's get the file count for any images in the directory that share the same base sprite filename substring as our current generated name. 
+                        // We do that by forming an array of all filenames that match.
+                        string[] allFiles = Directory.GetFiles(mouth_frame_path, $"{current_filename}_m*.png");
+
+                        // Take the length of the array and assign it to a new int variable.
+                        int base_sprite_eye_frame_count = allFiles.Length;
+
+                        // We're already within two loops to generate the base filename, but now we need to use another loop to iterate through potentially multiple frames for the same sprite.
+                        for (int i = 1; i <= base_sprite_eye_frame_count; i++)
+                        {
+                            // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
+                            // Check if the created file path string exists.
+                            if (File.Exists($"{mouth_frame_path}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png"))
+                            {
+                                // EXPERIMENT START
+                                FrameData new_frame_data = new FrameData();
+
+                                if (poses[pose_index] == 'a')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 256,
+                                        Coord_X = 668,
+                                        Coord_Y = 1310
+                                    };
+                                }
+                                else if (poses[pose_index] == 'b')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 256,
+                                        Coord_X = 761,
+                                        Coord_Y = 1287
+                                    };
+                                }
+
+                                new_list.Add(new_frame_data);
+                                // EXPERIMENT END
+                            }
                         }
                     }
                 }

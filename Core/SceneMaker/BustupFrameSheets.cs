@@ -1309,13 +1309,21 @@ namespace SocialLinker.Core.SceneMaker
             int eye_frame_count = 0;
             int mouth_frame_count = 0;
 
-            char[] poses = new char[] { 'a', 'b', 'c', 'd', 'p'};
-
-            string frame_filename_specific = "";
-            string frame_filename_generic = "";
-
             // Check if the sprite set's directory exists.
             base_sprite_filename = OfficialSetMethods.Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_command_data.Character_Data_1, true);
+
+            // Parse filename here
+            List<string> parsed_filename = base_sprite_filename.Split(new char[] { '_' }).ToList();
+
+            string char_id = parsed_filename[0];
+            string expression = parsed_filename[1];
+            string outfit_and_pose = parsed_filename[2];
+
+            string outfit = outfit_and_pose.Substring(0, outfit_and_pose.Length - 1);
+            string pose = outfit_and_pose.Substring(outfit_and_pose.Length - 1);
+
+            string frame_filename_specific = base_sprite_filename;
+            string frame_filename_generic = $"{char_id}_{expression}_0{pose}"; 
 
             // At this point, we should have the file name for the base sprite.
             // Check if the path for the set's eye frames exists.

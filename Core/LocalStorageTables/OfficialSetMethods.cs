@@ -2026,7 +2026,19 @@ namespace SocialLinker.Core.LocalStorageTables
 
             if (set_data.Origin == "P3R")
             {
+                if (maker_character_data.Eye_Frame == default)
+                {
+                    maker_character_data.Eye_Frame = 1;
+                }
+                if (maker_character_data.Mouth_Frame == default)
+                {
+                    maker_character_data.Mouth_Frame = 1;
+                }
+
                 base_sprite_filename = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, false);
+                Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
+                Bitmap bustup_with_frames = Construct_P3R_Bustup_With_Frames(sl_command, maker_character_data, base_sprite);
+                return bustup_with_frames;
             }
             else
             {
@@ -2226,6 +2238,94 @@ namespace SocialLinker.Core.LocalStorageTables
             return edited_bustup;
         }
 
+        public static Bitmap Construct_P3R_Bustup_With_Frames(SocialLinkerCommand sl_command, MakerCharacterData maker_character_data, Bitmap bustup)
+        {
+            Bitmap edited_bustup = bustup;
+
+            FrameData eye_frame_data = default;
+            FrameData mouth_frame_data = default;
+            Bitmap eye_frame_sprite = default;
+            Bitmap mouth_frame_sprite = default;
+
+            OfficialSetData set_data = maker_character_data.Set_Data;
+            BustupData bustup_data = maker_character_data.Bustup_Data;
+
+            string base_sprite_filename_raw = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, false);
+            string base_sprite_filename_preview = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, true);
+
+            if (maker_character_data.Eye_Frame != default && maker_character_data.Eye_Frame != 0)
+            {
+                // Establish the eye frame directory for the current sprite set.
+                string eye_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Eyes";
+
+                // Get the eye frame data of the frame specified in the user's command.
+                eye_frame_data = BustupDataMethods.Get_P3R_Eye_Frame_Data(set_data, bustup_data, maker_character_data, base_sprite_filename_raw, base_sprite_filename_preview);
+
+                // Ensure that the returned eye frame data is not null.
+                if (eye_frame_data != null)
+                {
+                    string eye_frame_filename = eye_frame_data.Filename;
+
+                    // Check that the eye frame path exists.
+                    if (File.Exists($"{eye_frame_path}//{eye_frame_filename}"))
+                    {
+                        // Save the eye frame to a bitmap variable.
+                        eye_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{eye_frame_path}//{eye_frame_filename}");
+                    }
+                }
+                // If the frame data is null, send an error message and return null as well.
+                else
+                {
+                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, maker_character_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                    return null;
+                }
+            }
+
+            if (maker_character_data.Mouth_Frame != default && maker_character_data.Mouth_Frame != 0)
+            {
+                // Establish the mouth frame directory for the current sprite set.
+                string mouth_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Mouth";
+
+                // Get the mouth frame data of the frame specified in the user's command.
+                mouth_frame_data = BustupDataMethods.Get_P3R_Mouth_Frame_Data(set_data, bustup_data, maker_character_data, base_sprite_filename_raw, base_sprite_filename_preview);
+
+                // Ensure that the returned mouth frame data is not null.
+                if (mouth_frame_data != null)
+                {
+                    string mouth_frame_filename = mouth_frame_data.Filename;
+
+                    // Check that the mouth frame path exists.
+                    if (File.Exists($"{mouth_frame_path}//{mouth_frame_filename}"))
+                    {
+                        // Save the mouth frame to a bitmap variable.
+                        mouth_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{mouth_frame_path}//{mouth_frame_filename}");
+                    }
+                }
+                // If the frame data is null, send an error message and return null as well.
+                else
+                {
+                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, maker_character_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                    return null;
+                }
+            }
+
+            // Draw the frames to the cropped bustup.
+            using (Graphics graphics = Graphics.FromImage(edited_bustup))
+            {
+                if (mouth_frame_sprite != default && mouth_frame_data != default)
+                {
+                    graphics.DrawImage(mouth_frame_sprite, mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
+                }
+
+                if (eye_frame_sprite != default && eye_frame_data != default)
+                {
+                    graphics.DrawImage(eye_frame_sprite, eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
+                }
+            }
+
+            return edited_bustup;
+        }
+
         public static Bitmap Crop_Rectangle_From_Bitmap(Bitmap input_bitmap, Rectangle crop_region)
         {
             // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
@@ -2387,7 +2487,7 @@ namespace SocialLinker.Core.LocalStorageTables
             // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
             string base_sprite_filename = "";
 
-            char[] poses = new char[] { 'a', 'b', 'c', 'd', 'p' };
+            char[] poses = Global.p3r_poses;
 
             string frame_filename_specific = "";
             string frame_filename_generic = "";
@@ -2436,7 +2536,7 @@ namespace SocialLinker.Core.LocalStorageTables
                                     // Check if the counter matches the same number of the chosen sprite number.
                                     if (counter == base_sprite_number)
                                     {
-                                        // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                        // If it does, we found our sprite! Save the filename to the variable created earlier.
                                         if (is_preview)
                                         {
                                             base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
@@ -2500,7 +2600,7 @@ namespace SocialLinker.Core.LocalStorageTables
                                     // Check if the counter matches the same number of the chosen sprite number.
                                     if (counter == base_sprite_number)
                                     {
-                                        // If it does, we found our sprite! Save the filename to the variable created earlier so we can reference it later.
+                                        // If it does, we found our sprite! Save the filename to the variable created earlier.
                                         if (is_preview)
                                         {
                                             base_sprite_filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}";
