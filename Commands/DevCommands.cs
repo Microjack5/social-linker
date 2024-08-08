@@ -298,6 +298,26 @@ namespace SocialLinker.Commands
             }
         }
 
+        public static async Task P3R_Burn_Calculator(SocialLinkerCommand command)
+        {
+            List<int> I = new List<int>() { 171, 173, 185 }; // Image value
+            List<int> E = new List<int>() { 187, 171, 172 }; // Final outcome
+            List<int> M = new List<int>(); // Mask value
+
+            for (int i = 0; i < I.Count; i++)
+            {
+                //M.Add(((256 * (255 - I[i])) / (255 - E[i])) - 1); // ChatGPT
+                //M.Add((256 * (255 - I[i]) - 255 + E[i]) / (255 - E[i])); // Gemini
+
+                M.Add((256 * I[i] / E[i]) - 1);
+            }
+
+            await command.Message.Channel.SendMessageAsync($"" +
+                $"Initial image value: ({I[0]}, {I[1]}, {I[2]})\n" +
+                $"Final value: ({E[0]}, {E[1]}, {E[2]})\n" +
+                $"The mask value is: ({M[0]}, {M[1]}, {M[2]})");
+        }
+
         public static async Task P3RE_Bustup_Test(SocialLinkerCommand command)
         {
             Bitmap bustup = new Bitmap(2, 2);
@@ -339,32 +359,7 @@ namespace SocialLinker.Commands
             Bitmap base_template = new Bitmap(bustup.Width, bustup.Height);
             Bitmap highlight_layer = new Bitmap(bustup.Width, bustup.Height);
 
-            using (Graphics graphics = Graphics.FromImage(base_template))
-            {
-                System.Drawing.Color current_pixel;
-                int new_alpha = 0;
-
-                // Base sprite
-                for (int i = 0; i < bustup.Width; i++)
-                {
-                    for (int j = 0; j < bustup.Height; j++)
-                    {
-                        current_pixel = bustup.GetPixel(i, j);
-
-                        if (current_pixel.A >= 50)
-                        {
-                            new_alpha = current_pixel.A * 2;
-
-                            if (new_alpha > 250)
-                            {
-                                new_alpha = 255;
-                            }
-
-                            base_template.SetPixel(i, j, Color.FromArgb(new_alpha, current_pixel.R, current_pixel.G, current_pixel.B));
-                        }
-                    }
-                }
-            }
+            base_template = P3RE_Bitmap_to_Opaque(bustup);
 
             //using (Graphics graphics = Graphics.FromImage(base_template))
             //{
@@ -385,25 +380,25 @@ namespace SocialLinker.Commands
             //    }
             //}
 
-            //using (Graphics graphics = Graphics.FromImage(highlight_layer))
-            //{
-            //    System.Drawing.Color current_pixel;
-            //    System.Drawing.Color highlight = Color.FromArgb(255, 255, 255);
+            using (Graphics graphics = Graphics.FromImage(highlight_layer))
+            {
+                System.Drawing.Color current_pixel;
+                System.Drawing.Color highlight = Color.FromArgb(255, 255, 255);
 
-            //    // Highlight
-            //    for (int i = 0; i < bustup.Width; i++)
-            //    {
-            //        for (int j = 0; j < bustup.Height; j++)
-            //        {
-            //            current_pixel = bustup.GetPixel(i, j);
+                // Highlight
+                for (int i = 0; i < bustup.Width; i++)
+                {
+                    for (int j = 0; j < bustup.Height; j++)
+                    {
+                        current_pixel = bustup.GetPixel(i, j);
 
-            //            if (current_pixel.A > 150)
-            //            {
-            //                highlight_layer.SetPixel(i, j, Color.FromArgb(current_pixel.A, highlight.R, highlight.G, highlight.B));
-            //            }
-            //        }
-            //    }
-            //}
+                        if (current_pixel.A > 150)
+                        {
+                            highlight_layer.SetPixel(i, j, Color.FromArgb(current_pixel.A, highlight.R, highlight.G, highlight.B));
+                        }
+                    }
+                }
+            }
 
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
@@ -432,38 +427,40 @@ namespace SocialLinker.Commands
             }
         }
 
-        public static async Task Organize_P3RE(SocialLinkerCommand command)
+        public static async Task Organize_P3RE_Params(SocialLinkerCommand command)
         {
             //if (command.User.Id != 222504679878164481)
             //{
             //    return;
             //}
 
-            string char_id = "B2";
-            List<string> pose_a_frames = new List<string>() { "F00", "F01", "F02", "F03", "F05", "F10", "F64" };
-            List<string> pose_b_frames = new List<string>() { "F04", "F06", "F08", "F11", "F61" };
+            string char_id = "B28";
+            List<string> pose_a_frames = new List<string>() { "F00", "F01", "F02", "F03", "F04" };
+            List<string> pose_b_frames = new List<string>();
             List<string> pose_c_frames = new List<string>();
             List<string> pose_d_frames = new List<string>();
-            List<string> pose_p_frames = new List<string>();
-            List<string> outfit_list = new List<string>() { "C002", "C051", "C052", "C201", "C001", "C006", "C005", "C159", "C154", "C102", "C156", "C106", "C155", "C157" };
+            List<string> pose_p_frames = new List<string>() { "F90" };
+            List<string> outfit_list = new List<string>() { "C006", "C901", "C902", "C903", "C904" };
 
-            int eye_pose_a_x_coord = 668;
-            int eye_pose_a_y_coord = 1072;
-            int eye_pose_b_x_coord = 761;
-            int eye_pose_b_y_coord = 1049;
+            int eye_pose_a_x_coord = 839;
+            int eye_pose_a_y_coord = 795;
+            int eye_pose_b_x_coord = 0;
+            int eye_pose_b_y_coord = 0;
             int eye_pose_c_x_coord = 0;
             int eye_pose_c_y_coord = 0;
             int eye_pose_d_x_coord = 0;
             int eye_pose_d_y_coord = 0;
 
-            int mouth_pose_a_x_coord = 668;
-            int mouth_pose_a_y_coord = 1310;
-            int mouth_pose_b_x_coord = 761;
-            int mouth_pose_b_y_coord = 1287;
+            int mouth_pose_a_x_coord = 839;
+            int mouth_pose_a_y_coord = 1297;
+            int mouth_pose_b_x_coord = 0;
+            int mouth_pose_b_y_coord = 0;
             int mouth_pose_c_x_coord = 0;
             int mouth_pose_c_y_coord = 0;
             int mouth_pose_d_x_coord = 0;
             int mouth_pose_d_y_coord = 0;
+            int mouth_pose_p_x_coord = 835;
+            int mouth_pose_p_y_coord = 1524;
 
             string base_path = $@"C:\Users\Alice\Desktop\P3R Workspace";
             string source_framepath = $@"{base_path}\1. Base Files\{char_id}";
@@ -533,6 +530,8 @@ namespace SocialLinker.Commands
             mouth_pose_c_y_coord,
             mouth_pose_d_x_coord,
             mouth_pose_d_y_coord,
+            mouth_pose_p_x_coord,
+            mouth_pose_p_y_coord,
             source_framepath,
             export_framepath,
             sprite_sheet_framepath,
@@ -565,6 +564,8 @@ namespace SocialLinker.Commands
             int mouth_pose_c_y_coord,
             int mouth_pose_d_x_coord,
             int mouth_pose_d_y_coord,
+            int mouth_pose_p_x_coord,
+            int mouth_pose_p_y_coord,
             string source_framepath,
             string export_framepath,
             string sprite_sheet_framepath,
@@ -674,8 +675,7 @@ namespace SocialLinker.Commands
                             if ((pose_a_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseA")) ||
                                 (pose_b_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseB")) ||
                                 (pose_c_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseC")) ||
-                                (pose_d_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseD")) ||
-                                (pose_p_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseP")))
+                                (pose_d_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseD")))
                             {
                                 if (current_eye_outfit_code == "C900" && !special_frame_check)
                                 {
@@ -715,10 +715,6 @@ namespace SocialLinker.Commands
 
                                             case "PoseD":
                                                 graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_d_x_coord, eye_pose_d_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
-                                                break;
-
-                                            case "PoseP":
-                                                // Do nothing
                                                 break;
                                         }
 
@@ -764,15 +760,23 @@ namespace SocialLinker.Commands
                                             case "PoseD":
                                                 graphics.DrawImage(eye_sprite_sheet_copy, eye_pose_d_x_coord, eye_pose_d_y_coord, eye_sprite_sheet_copy.Width, eye_sprite_sheet_copy.Height);
                                                 break;
-
-                                            case "PoseP":
-                                                // Do nothing
-                                                break;
                                         }
 
                                         base_sprite_sheet_copy.Save($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
                                     }
                                 }
+                            }
+                            else if (pose_p_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseP"))
+                            {
+                                string sprite_sheet_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_{outfit_list.IndexOf(current_base_outfit_code) + 1}{new_pose_code}";
+
+                                if (File.Exists($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png"))
+                                {
+                                    Console.WriteLine("Existing filename detected! It isn't supposed to be here...");
+                                }
+
+                                // Phone bustups have no eye frames
+                                base_sprite_sheet_copy.Save($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
                             }
                         }
                     }
@@ -849,7 +853,8 @@ namespace SocialLinker.Commands
 
                         if (!expression_list.Contains($"{current_expression_code}"))
                         {
-                            Console.WriteLine("Warning!! An expression code seems to have gone missing.");
+                            Console.WriteLine("Warning!! An expression code seems to have gone missing or was not added with the eye frames.\n");
+                            Console.WriteLine($"Adding {current_expression_code} to the list.");
                             expression_list.Add(current_expression_code);
                         }
 
@@ -910,7 +915,7 @@ namespace SocialLinker.Commands
                                                     break;
 
                                                 case "PoseP":
-                                                    // Do nothing
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_p_x_coord, mouth_pose_p_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
                                                     break;
                                             }
 
@@ -954,7 +959,7 @@ namespace SocialLinker.Commands
                                                     break;
 
                                                 case "PoseP":
-                                                    // Do nothing
+                                                    graphics.DrawImage(mouth_sprite_sheet_copy, mouth_pose_p_x_coord, mouth_pose_p_y_coord, mouth_sprite_sheet_copy.Width, mouth_sprite_sheet_copy.Height);
                                                     break;
                                             }
 
@@ -966,8 +971,6 @@ namespace SocialLinker.Commands
                                 clone.Dispose();
                             }
                         }
-
-                        
                     }
                 }
             }

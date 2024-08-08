@@ -2015,6 +2015,11 @@ namespace SocialLinker.Core.LocalStorageTables
         {
             OfficialSetData set_data = maker_character_data.Set_Data;
 
+            if (set_data.Origin == "P3R")
+            {
+                return P3R_Bustup_Selection(sl_command, account, maker_character_data);
+            }
+
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
 
@@ -2022,28 +2027,7 @@ namespace SocialLinker.Core.LocalStorageTables
             int filecount = AttachmentCountItemDirectory(set_path);
 
             // Create a variable for the base sprite's filename.
-            string base_sprite_filename = "";
-
-            if (set_data.Origin == "P3R")
-            {
-                if (maker_character_data.Eye_Frame == default)
-                {
-                    maker_character_data.Eye_Frame = 1;
-                }
-                if (maker_character_data.Mouth_Frame == default)
-                {
-                    maker_character_data.Mouth_Frame = 1;
-                }
-
-                base_sprite_filename = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, false);
-                Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-                Bitmap bustup_with_frames = Construct_P3R_Bustup_With_Frames(sl_command, maker_character_data, base_sprite);
-                return bustup_with_frames;
-            }
-            else
-            {
-                base_sprite_filename = Get_Standard_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data);
-            }
+            string base_sprite_filename = Get_Standard_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data);
 
             // If eye frames and mouth frames were not specified, return the base sprite.
             if (maker_character_data.Eye_Frame == default && maker_character_data.Mouth_Frame == default)
@@ -2057,11 +2041,6 @@ namespace SocialLinker.Core.LocalStorageTables
                 Bitmap bustup_with_frames = Construct_Bustup_With_Frames(sl_command, maker_character_data, base_sprite, false);
                 return bustup_with_frames;
             }
-        }
-
-        public static Bitmap P3R_Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data)
-        {
-            return new Bitmap(2, 2);
         }
 
         public static Bitmap Reverse_Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data, Bitmap bustup)
@@ -2238,94 +2217,6 @@ namespace SocialLinker.Core.LocalStorageTables
             return edited_bustup;
         }
 
-        public static Bitmap Construct_P3R_Bustup_With_Frames(SocialLinkerCommand sl_command, MakerCharacterData maker_character_data, Bitmap bustup)
-        {
-            Bitmap edited_bustup = bustup;
-
-            FrameData eye_frame_data = default;
-            FrameData mouth_frame_data = default;
-            Bitmap eye_frame_sprite = default;
-            Bitmap mouth_frame_sprite = default;
-
-            OfficialSetData set_data = maker_character_data.Set_Data;
-            BustupData bustup_data = maker_character_data.Bustup_Data;
-
-            string base_sprite_filename_raw = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, false);
-            string base_sprite_filename_preview = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, true);
-
-            if (maker_character_data.Eye_Frame != default && maker_character_data.Eye_Frame != 0)
-            {
-                // Establish the eye frame directory for the current sprite set.
-                string eye_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Eyes";
-
-                // Get the eye frame data of the frame specified in the user's command.
-                eye_frame_data = BustupDataMethods.Get_P3R_Eye_Frame_Data(set_data, bustup_data, maker_character_data, base_sprite_filename_raw, base_sprite_filename_preview);
-
-                // Ensure that the returned eye frame data is not null.
-                if (eye_frame_data != null)
-                {
-                    string eye_frame_filename = eye_frame_data.Filename;
-
-                    // Check that the eye frame path exists.
-                    if (File.Exists($"{eye_frame_path}//{eye_frame_filename}"))
-                    {
-                        // Save the eye frame to a bitmap variable.
-                        eye_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{eye_frame_path}//{eye_frame_filename}");
-                    }
-                }
-                // If the frame data is null, send an error message and return null as well.
-                else
-                {
-                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, maker_character_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
-                    return null;
-                }
-            }
-
-            if (maker_character_data.Mouth_Frame != default && maker_character_data.Mouth_Frame != 0)
-            {
-                // Establish the mouth frame directory for the current sprite set.
-                string mouth_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Mouth";
-
-                // Get the mouth frame data of the frame specified in the user's command.
-                mouth_frame_data = BustupDataMethods.Get_P3R_Mouth_Frame_Data(set_data, bustup_data, maker_character_data, base_sprite_filename_raw, base_sprite_filename_preview);
-
-                // Ensure that the returned mouth frame data is not null.
-                if (mouth_frame_data != null)
-                {
-                    string mouth_frame_filename = mouth_frame_data.Filename;
-
-                    // Check that the mouth frame path exists.
-                    if (File.Exists($"{mouth_frame_path}//{mouth_frame_filename}"))
-                    {
-                        // Save the mouth frame to a bitmap variable.
-                        mouth_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{mouth_frame_path}//{mouth_frame_filename}");
-                    }
-                }
-                // If the frame data is null, send an error message and return null as well.
-                else
-                {
-                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, maker_character_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
-                    return null;
-                }
-            }
-
-            // Draw the frames to the cropped bustup.
-            using (Graphics graphics = Graphics.FromImage(edited_bustup))
-            {
-                if (mouth_frame_sprite != default && mouth_frame_data != default)
-                {
-                    graphics.DrawImage(mouth_frame_sprite, mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
-                }
-
-                if (eye_frame_sprite != default && eye_frame_data != default)
-                {
-                    graphics.DrawImage(eye_frame_sprite, eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
-                }
-            }
-
-            return edited_bustup;
-        }
-
         public static Bitmap Crop_Rectangle_From_Bitmap(Bitmap input_bitmap, Rectangle crop_region)
         {
             // Create a color variable. We'll use this to iterate through the input bitmap and store each pixel's color values here.
@@ -2463,6 +2354,170 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             return base_sprite_filename;
+        }
+
+        // P3R Methods
+
+        public static Bitmap P3R_Bustup_Selection(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data)
+        {
+            OfficialSetData set_data = maker_character_data.Set_Data;
+
+            // Establish the directory of the specified sprite set.
+            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+
+            // Get a count of how many files are in the sprite set's directory.
+            int filecount = AttachmentCountItemDirectory(set_path);
+
+            if (maker_character_data.Eye_Frame == default)
+            {
+                maker_character_data.Eye_Frame = 1;
+            }
+            if (maker_character_data.Mouth_Frame == default)
+            {
+                maker_character_data.Mouth_Frame = 1;
+            }
+
+            string base_sprite_filename = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, false);
+
+            Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
+            Bitmap bustup_with_frames = Construct_P3R_Bustup_With_Frames(sl_command, maker_character_data, base_sprite);
+            return bustup_with_frames;
+        }
+
+        public static Bitmap Construct_P3R_Bustup_With_Frames(SocialLinkerCommand sl_command, MakerCharacterData maker_character_data, Bitmap bustup)
+        {
+            Bitmap output_bitmap = new Bitmap(bustup.Width, bustup.Height);
+            Bitmap opaque_bustup = new Bitmap(bustup.Width, bustup.Height);
+            Bitmap base_light_layer = new Bitmap(bustup.Width, bustup.Height);
+            Bitmap rim_light_layer = new Bitmap(bustup.Width, bustup.Height);
+
+            System.Drawing.Color default_base_light = System.Drawing.Color.White;
+            System.Drawing.Color default_rim_light = System.Drawing.Color.White;
+
+            System.Drawing.Color early_morning_outdoor_glint_base_light = System.Drawing.Color.FromArgb(255, 251, 238); // temp
+            System.Drawing.Color early_morning_outdoor_glint_rim_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+
+            System.Drawing.Color daytime_base_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+            System.Drawing.Color daytime_rim_light = System.Drawing.Color.FromArgb(250, 247, 204);
+
+            System.Drawing.Color indoor_daytime_glint_base_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+            System.Drawing.Color indoor_daytime_glint_rim_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+
+            System.Drawing.Color outdoor_daytime_glint_base_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+            System.Drawing.Color outdoor_daytime_glint_rim_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+
+            System.Drawing.Color dark_hour_base_light = System.Drawing.Color.FromArgb(250, 250, 185); // temp
+            System.Drawing.Color dark_hour_rim_light = System.Drawing.Color.FromArgb(174, 250, 1);
+
+            System.Drawing.Color arqa_base_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+            System.Drawing.Color arqa_rim_light = System.Drawing.Color.FromArgb(250, 108, 216);
+
+            System.Drawing.Color velvet_base_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+            System.Drawing.Color velvet_rim_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+
+            System.Drawing.Color voices_base_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+            System.Drawing.Color voices_rim_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
+
+            System.Drawing.Color base_light = early_morning_outdoor_glint_base_light;
+            System.Drawing.Color rim_light = default_rim_light;
+
+            FrameData eye_frame_data = default;
+            FrameData mouth_frame_data = default;
+            Bitmap eye_frame_sprite = default;
+            Bitmap mouth_frame_sprite = default;
+
+            OfficialSetData set_data = maker_character_data.Set_Data;
+            BustupData bustup_data = maker_character_data.Bustup_Data;
+
+            string base_sprite_filename_raw = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, false);
+            string base_sprite_filename_preview = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, true);
+
+            if (maker_character_data.Eye_Frame != default && maker_character_data.Eye_Frame != 0)
+            {
+                // Establish the eye frame directory for the current sprite set.
+                string eye_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Eyes";
+
+                // Get the eye frame data of the frame specified in the user's command.
+                eye_frame_data = BustupDataMethods.Get_P3R_Eye_Frame_Data(set_data, bustup_data, maker_character_data, base_sprite_filename_raw, base_sprite_filename_preview);
+
+                // Ensure that the returned eye frame data is not null.
+                if (eye_frame_data != null)
+                {
+                    string eye_frame_filename = eye_frame_data.Filename;
+
+                    // Check that the eye frame path exists.
+                    if (File.Exists($"{eye_frame_path}//{eye_frame_filename}"))
+                    {
+                        // Save the eye frame to a bitmap variable.
+                        eye_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{eye_frame_path}//{eye_frame_filename}");
+                    }
+                }
+                // If the frame data is null, send an error message and return null as well.
+                else
+                {
+                    _ = ErrorHandling.Eye_Frame_Not_Found(sl_command, maker_character_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                    return null;
+                }
+            }
+
+            if (maker_character_data.Mouth_Frame != default && maker_character_data.Mouth_Frame != 0)
+            {
+                // Establish the mouth frame directory for the current sprite set.
+                string mouth_frame_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}//Mouth";
+
+                // Get the mouth frame data of the frame specified in the user's command.
+                mouth_frame_data = BustupDataMethods.Get_P3R_Mouth_Frame_Data(set_data, bustup_data, maker_character_data, base_sprite_filename_raw, base_sprite_filename_preview);
+
+                // Ensure that the returned mouth frame data is not null.
+                if (mouth_frame_data != null)
+                {
+                    string mouth_frame_filename = mouth_frame_data.Filename;
+
+                    // Check that the mouth frame path exists.
+                    if (File.Exists($"{mouth_frame_path}//{mouth_frame_filename}"))
+                    {
+                        // Save the mouth frame to a bitmap variable.
+                        mouth_frame_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{mouth_frame_path}//{mouth_frame_filename}");
+                    }
+                }
+                // If the frame data is null, send an error message and return null as well.
+                else
+                {
+                    _ = ErrorHandling.Mouth_Frame_Not_Found(sl_command, maker_character_data, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                    return null;
+                }
+            }
+
+            // Make the base bustup opaque
+            opaque_bustup = P3R_Bitmap_to_Opaque(bustup);
+            //opaque_bustup = Create_P3R_Bustup_Base_Lighting(opaque_bustup, base_light);
+            //opaque_bustup = Apply_P3R_Gradient_Overlay(opaque_bustup);
+
+            //rim_light_layer = Create_P3R_Bustup_Rim_Lighting(bustup, rim_light);
+            //rim_light_layer = Apply_P3R_Gradient_Overlay(highlight_layer);
+
+            // Draw the frames to the cropped bustup.
+            using (Graphics graphics = Graphics.FromImage(output_bitmap))
+            {
+                graphics.DrawImage(opaque_bustup, 0, 0, opaque_bustup.Width, opaque_bustup.Height);
+                graphics.DrawImage(rim_light_layer, 0, 0, base_light_layer.Width, base_light_layer.Height);
+
+                if (mouth_frame_sprite != default && mouth_frame_data != default)
+                {
+                    mouth_frame_sprite = P3R_Bitmap_to_Opaque(mouth_frame_sprite);
+                    //mouth_frame_sprite = Create_P3R_Bustup_Base_Lighting(mouth_frame_sprite, base_light);
+                    graphics.DrawImage(mouth_frame_sprite, mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
+                }
+
+                if (eye_frame_sprite != default && eye_frame_data != default)
+                {
+                    eye_frame_sprite = P3R_Bitmap_to_Opaque(eye_frame_sprite);
+                    //eye_frame_sprite = Create_P3R_Bustup_Base_Lighting(eye_frame_sprite, base_light);
+                    graphics.DrawImage(eye_frame_sprite, eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
+                }
+            }
+
+            return output_bitmap;
         }
 
         public static string Get_P3R_Bustup_Filename_From_Sprite_Number(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCharacterData maker_character_data, bool is_preview)
@@ -2633,6 +2688,307 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             return base_sprite_filename;
+        }
+
+        public static Bitmap P3R_Bitmap_to_Opaque(Bitmap input_bitmap)
+        {
+            Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            using (Graphics graphics = Graphics.FromImage(output_bitmap))
+            {
+                System.Drawing.Color current_pixel;
+                int new_alpha = 0;
+
+                // Base sprite
+                for (int x_pixel = 0; x_pixel < input_bitmap.Width; x_pixel++)
+                {
+                    for (int y_pixel = 0; y_pixel < input_bitmap.Height; y_pixel++)
+                    {
+                        current_pixel = input_bitmap.GetPixel(x_pixel, y_pixel);
+
+                        if (current_pixel.A >= 50)
+                        {
+                            new_alpha = current_pixel.A * 2;
+
+                            if (new_alpha > 240)
+                            {
+                                new_alpha = 255;
+                            }
+
+                            output_bitmap.SetPixel(x_pixel, y_pixel, System.Drawing.Color.FromArgb(new_alpha, current_pixel.R, current_pixel.G, current_pixel.B));
+                        }
+                    }
+                }
+            }
+
+            return output_bitmap;
+        }
+
+        public static Bitmap Create_P3R_Bustup_Base_Lighting(Bitmap input_bitmap, System.Drawing.Color mask)
+        {
+            Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+            Bitmap highlight_layer = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            List<int> color_values = new List<int>() { mask.R, mask.G, mask.B };
+
+            using (Graphics graphics = Graphics.FromImage(output_bitmap))
+            {
+                System.Drawing.Color current_pixel;
+                System.Drawing.Color new_pixel_color = System.Drawing.Color.White;
+
+                for (int x_pixel = 0; x_pixel < input_bitmap.Width; x_pixel++)
+                {
+                    for (int y_pixel = 0; y_pixel < input_bitmap.Height; y_pixel++)
+                    {
+                        current_pixel = input_bitmap.GetPixel(x_pixel, y_pixel);
+
+                        // Blend Mode - Burn
+                        int new_red_pixel = Math.Max(Burn_Equation(mask.R, current_pixel.R), 0);
+                        int new_green_pixel = Math.Max(Burn_Equation(mask.G, current_pixel.G), 0);
+                        int new_blue_pixel = Math.Max(Burn_Equation(mask.B, current_pixel.B), 0);
+
+                        new_pixel_color = System.Drawing.Color.FromArgb(current_pixel.A, new_red_pixel, new_green_pixel, new_blue_pixel);
+
+                        output_bitmap.SetPixel(x_pixel, y_pixel, new_pixel_color);
+                    }
+                }
+            }
+
+            return output_bitmap;
+        }
+
+        public static Bitmap Create_P3R_Bustup_Rim_Lighting(Bitmap input_bitmap, System.Drawing.Color mask)
+        {
+            Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            using (Graphics graphics = Graphics.FromImage(output_bitmap))
+            {
+                System.Drawing.Color current_pixel;
+
+                // Highlight
+                for (int x = 0; x < input_bitmap.Width; x++)
+                {
+                    for (int y = 0; y < input_bitmap.Height; y++)
+                    {
+                        current_pixel = input_bitmap.GetPixel(x, y);
+
+                        if (current_pixel.A > 150)
+                        {
+                            // Blend Mode - Addition
+                            int new_red_value = Math.Min((current_pixel.R + mask.R), 255);
+                            int new_green_value = Math.Min((current_pixel.G + mask.G), 255);
+                            int new_blue_value = Math.Min((current_pixel.B + mask.B), 255);
+
+                            output_bitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(current_pixel.A, new_red_value, new_green_value, new_blue_value));
+                        }
+                    }
+                }
+            }
+
+            return output_bitmap;
+        }
+
+        public static int Burn_Equation (int mask_value, int image_value)
+        {
+            int M = mask_value;
+            int I = image_value;
+
+            return 255 - (256 * (255 - I)) / (M + 1);
+        }
+
+        public static Bitmap Create_P3R_Bustup_Base_Lighting_old(Bitmap input_bitmap, System.Drawing.Color light_color)
+        {
+            Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+            Bitmap highlight_layer = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            List<int> color_values = new List<int>() { light_color.R, light_color.G, light_color.B };
+
+            int new_red_pixel = light_color.R;
+            int new_green_pixel = light_color.G;
+            int new_blue_pixel = light_color.B;
+
+            using (Graphics graphics = Graphics.FromImage(output_bitmap))
+            {
+                System.Drawing.Color current_pixel;
+                System.Drawing.Color new_pixel_color = System.Drawing.Color.White;
+
+                for (int x_pixel = 0; x_pixel < input_bitmap.Width; x_pixel++)
+                {
+                    for (int y_pixel = 0; y_pixel < input_bitmap.Height; y_pixel++)
+                    {
+                        current_pixel = input_bitmap.GetPixel(x_pixel, y_pixel);
+
+                        new_red_pixel = current_pixel.R - light_color.R;
+                        new_green_pixel = current_pixel.G - light_color.G;
+                        new_blue_pixel = current_pixel.B - light_color.B;
+
+                        if (new_red_pixel < 0)
+                        {
+                            new_red_pixel = 0;
+                        }
+                        if (new_green_pixel < 0)
+                        {
+                            new_green_pixel = 0;
+                        }
+                        if (new_blue_pixel < 0)
+                        {
+                            new_blue_pixel = 0;
+                        }
+
+                        new_pixel_color = System.Drawing.Color.FromArgb(current_pixel.A, new_red_pixel, new_green_pixel, new_blue_pixel);
+
+                        output_bitmap.SetPixel(x_pixel, y_pixel, new_pixel_color);
+                    }
+                }
+            }
+
+            //int lowest_value_index = color_values.IndexOf(color_values.Min());
+
+            //int new_red_pixel = light_color.R;
+            //int new_green_pixel = light_color.G;
+            //int new_blue_pixel = light_color.B;
+
+            //using (Graphics graphics = Graphics.FromImage(output_bitmap))
+            //{
+            //    System.Drawing.Color current_pixel;
+            //    System.Drawing.Color new_pixel_color = System.Drawing.Color.White;
+
+            //    for (int x_pixel = 0; x_pixel < input_bitmap.Width; x_pixel++)
+            //    {
+            //        for (int y_pixel = 0; y_pixel < input_bitmap.Height; y_pixel++)
+            //        {
+            //            current_pixel = input_bitmap.GetPixel(x_pixel, y_pixel);
+
+            //            switch (lowest_value_index)
+            //            {
+            //                case 0:
+            //                    new_red_pixel = current_pixel.R - light_color.R;
+            //                    new_green_pixel = current_pixel.G;
+            //                    new_blue_pixel = current_pixel.B;
+            //                    break;
+
+            //                case 1:
+            //                    new_red_pixel = current_pixel.R;
+            //                    new_green_pixel = current_pixel.G - light_color.G;
+            //                    new_blue_pixel = current_pixel.B;
+            //                    break;
+
+            //                case 2:
+            //                    new_red_pixel = current_pixel.R;
+            //                    new_green_pixel = current_pixel.G;
+            //                    new_blue_pixel = current_pixel.B - light_color.B;
+            //                    break;
+            //            }
+
+            //            if (new_red_pixel < 0)
+            //            {
+            //                new_red_pixel = 0;
+            //            }
+            //            if (new_green_pixel < 0)
+            //            {
+            //                new_green_pixel = 0;
+            //            }
+            //            if (new_blue_pixel < 0)
+            //            {
+            //                new_blue_pixel = 0;
+            //            }
+
+            //            new_pixel_color = System.Drawing.Color.FromArgb(current_pixel.A, new_red_pixel, new_green_pixel, new_blue_pixel);
+
+            //            output_bitmap.SetPixel(x_pixel, y_pixel, new_pixel_color);
+            //        }
+            //    }
+            //}
+
+            return output_bitmap;
+        }
+
+        public static Bitmap Apply_P3R_Gradient_Overlay(Bitmap input_bitmap)
+        {
+            Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            //Bitmap overlay_gradient = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Bustup//AmbientLight//overlay.png");
+            Bitmap rim_gradient = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Bustup//AmbientLight//rim.png");
+            Bitmap rim_gradient_transparent = new Bitmap(rim_gradient.Width, rim_gradient.Height);
+            Bitmap rim_gradient_enlarged = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+            Bitmap rim_gradient_cropped = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+
+            using (Graphics graphics = Graphics.FromImage(rim_gradient_transparent))
+            {
+                System.Drawing.Color current_pixel;
+
+                for (int x = 0; x < rim_gradient.Width; x++)
+                {
+                    for (int y = 0; y < rim_gradient.Height; y++)
+                    {
+                        current_pixel = rim_gradient.GetPixel(x, y);
+
+                        if (current_pixel.R > 0)
+                        {
+                            rim_gradient_transparent.SetPixel(x, y, System.Drawing.Color.FromArgb((255 - current_pixel.R), 0, 0, 0));
+                        }
+                        else
+                        {
+                            rim_gradient_transparent.SetPixel(x, y, System.Drawing.Color.FromArgb(current_pixel.A, 0, 0, 0));
+                        }
+                    }
+                }
+            }
+
+            using (Graphics graphics = Graphics.FromImage(rim_gradient_enlarged))
+            {
+                graphics.DrawImage(rim_gradient_transparent, 0, 0, input_bitmap.Width, input_bitmap.Height);
+            }
+
+            using (Graphics graphics = Graphics.FromImage(rim_gradient_cropped))
+            {
+                System.Drawing.Color current_input_pixel;
+                System.Drawing.Color current_gradient_pixel;
+
+                for (int x = 0; x < input_bitmap.Width; x++)
+                {
+                    for (int y = 0; y < input_bitmap.Height; y++)
+                    {
+                        current_input_pixel = input_bitmap.GetPixel(x, y);
+                        current_gradient_pixel = rim_gradient_enlarged.GetPixel(x, y);
+
+                        if (current_input_pixel.A > 0 & current_gradient_pixel.A > 0)
+                        {
+                            int new_red_value = current_input_pixel.R - (current_gradient_pixel.A / 6);
+                            int new_green_value = current_input_pixel.G - (current_gradient_pixel.A / 6);
+                            int new_blue_value = current_input_pixel.B - (current_gradient_pixel.A / 6);
+
+                            if (new_red_value < 0)
+                            {
+                                new_red_value = 0;
+                            }
+                            if (new_green_value < 0)
+                            {
+                                new_green_value = 0;
+                            }
+                            if (new_blue_value < 0)
+                            {
+                                new_blue_value = 0;
+                            }
+
+                            rim_gradient_cropped.SetPixel(x, y, System.Drawing.Color.FromArgb(current_input_pixel.A, new_red_value, new_green_value, new_blue_value));
+                        }
+                        else
+                        {
+                            // Do nothing
+                            rim_gradient_cropped.SetPixel(x, y, current_input_pixel);
+                        }
+                    }
+                }
+            }
+
+            using (Graphics graphics = Graphics.FromImage(output_bitmap))
+            {
+                //graphics.DrawImage(input_bitmap, 0, 0, input_bitmap.Width, input_bitmap.Height);
+                graphics.DrawImage(rim_gradient_cropped, 0, 0, rim_gradient_cropped.Width, rim_gradient_cropped.Height);
+            }
+
+            return output_bitmap;
         }
 
         // Method from https://stackoverflow.com/questions/47695942/wrong-number-of-file-count-being-returned-from-directory

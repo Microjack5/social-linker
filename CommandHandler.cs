@@ -334,6 +334,10 @@ namespace SocialLinker
                     await Commands.DevCommands.ExpCalculator(command);
                     break;
 
+                case "calcburn":
+                    await Commands.DevCommands.P3R_Burn_Calculator(command);
+                    break;
+
                 case "calclevel":
                     await Commands.DevCommands.LevelCalculator(command);
                     break;
@@ -347,7 +351,7 @@ namespace SocialLinker
                     break;
 
                 case "sortp3r":
-                    await Commands.DevCommands.Organize_P3RE(command);
+                    await Commands.DevCommands.Organize_P3RE_Params(command);
                     break;
 
                 default:
