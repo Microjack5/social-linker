@@ -440,7 +440,7 @@ namespace SocialLinker.Commands
             List<string> pose_c_frames = new List<string>();
             List<string> pose_d_frames = new List<string>();
             List<string> pose_p_frames = new List<string>() { "F90" };
-            List<string> outfit_list = new List<string>() { "C006", "C901", "C902", "C903", "C904" };
+            List<string> outfit_list = new List<string>() { "C006", "C901", "C902", "C903", "C904", "C905" };
 
             int eye_pose_a_x_coord = 839;
             int eye_pose_a_y_coord = 795;
@@ -675,7 +675,8 @@ namespace SocialLinker.Commands
                             if ((pose_a_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseA")) ||
                                 (pose_b_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseB")) ||
                                 (pose_c_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseC")) ||
-                                (pose_d_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseD")))
+                                (pose_d_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseD")) ||
+                                (pose_p_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseP")))
                             {
                                 if (current_eye_outfit_code == "C900" && !special_frame_check)
                                 {
@@ -765,18 +766,6 @@ namespace SocialLinker.Commands
                                         base_sprite_sheet_copy.Save($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
                                     }
                                 }
-                            }
-                            else if (pose_p_frames.Contains(current_expression_code) && (current_base_pose_code == "PoseP"))
-                            {
-                                string sprite_sheet_filename = $"{char_id.ToLower()}_{expression_list.IndexOf(current_expression_code) + 1}_{outfit_list.IndexOf(current_base_outfit_code) + 1}{new_pose_code}";
-
-                                if (File.Exists($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png"))
-                                {
-                                    Console.WriteLine("Existing filename detected! It isn't supposed to be here...");
-                                }
-
-                                // Phone bustups have no eye frames
-                                base_sprite_sheet_copy.Save($@"{sprite_sheet_framepath}\{sprite_sheet_filename}.png", System.Drawing.Imaging.ImageFormat.Png);
                             }
                         }
                     }

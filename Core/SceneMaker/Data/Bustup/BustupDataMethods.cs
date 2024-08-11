@@ -255,8 +255,8 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 string outfit = outfit_and_pose.Substring(0, outfit_and_pose.Length - 1);
                 string pose = outfit_and_pose.Substring(outfit_and_pose.Length - 1);
 
-                string frame_filename_specific = $"{char_id}_{expression}_0{pose}";
-                string frame_filename_generic = bustup_filename;
+                string frame_filename_specific = bustup_filename;
+                string frame_filename_generic = $"{char_id}_{expression}_0{pose}";
                 string frame_filename_chosen = "";
 
                 // Combine the base bustup filename substring with the needed frame suffix to create the frame filename.
@@ -738,20 +738,9 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                                     {
                                         Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
                                         Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 668,
-                                        Coord_Y = 1072
-                                    };
-                                }
-                                else if (poses[pose_index] == 'b')
-                                {
-                                    new_frame_data = new FrameData()
-                                    {
-                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
-                                        Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 761,
-                                        Coord_Y = 1049
+                                        Scale_Height = 512,
+                                        Coord_X = 839,
+                                        Coord_Y = 795
                                     };
                                 }
 
@@ -783,19 +772,19 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
             // This is what we'll be using to create frame data for each image.
             var new_list = new List<FrameData>();
 
-            // Establish the paths for the directory where the eye frames are held, as well as the directory for where the data sheet is held.
+            // Establish the paths for the directory where the mouth frames are held, as well as the directory for where the data sheet is held.
             string base_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
             string mouth_frame_path = $@"{base_path}//Mouth";
 
             string data_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Data//Template_Data//{set_data.Origin}//Bustup//{set_data.ID}//mouth_frame_data.json";
 
             // Initialize a new int variable to zero.
-            // We'll need this to store how many frames are in the eye frame directory.
+            // We'll need this to store how many frames are in the mouth frame directory.
             int base_bustup_filecount = 0;
             int mouth_frame_filecount = 0;
 
-            // Check if the eye frame directory established exists.
-            // If so, change the filecount int to how many images are in the eye frame directory.
+            // Check if the mouth frame directory established exists.
+            // If so, change the filecount int to how many images are in the mouth frame directory.
             if (Directory.Exists(base_path))
             {
                 base_bustup_filecount = OfficialSetMethods.AttachmentCountItemDirectory(base_path);
@@ -824,7 +813,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
             {
                 // Inside, create a secondary loop also meant to iterate though every file in the directory.
                 // This loop is searching for outfits, which start at 0 in P3R.
-                for (int outfit = 0; outfit < base_bustup_filecount; outfit++)
+                for (int outfit = 0; outfit <= base_bustup_filecount; outfit++)
                 {
                     // Third loop for pose index
                     for (int pose_index = 0; pose_index < poses.Length; pose_index++)
@@ -838,10 +827,10 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                         string[] allFiles = Directory.GetFiles(mouth_frame_path, $"{current_filename}_m*.png");
 
                         // Take the length of the array and assign it to a new int variable.
-                        int base_sprite_eye_frame_count = allFiles.Length;
+                        int base_sprite_mouth_frame_count = allFiles.Length;
 
                         // We're already within two loops to generate the base filename, but now we need to use another loop to iterate through potentially multiple frames for the same sprite.
-                        for (int i = 1; i <= base_sprite_eye_frame_count; i++)
+                        for (int i = 1; i <= base_sprite_mouth_frame_count; i++)
                         {
                             // Here, we're going to create a file path that could potentially exist given the combination of expression and outfit numbers.
                             // Check if the created file path string exists.
@@ -857,19 +846,19 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                                         Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
                                         Scale_Width = 512,
                                         Scale_Height = 256,
-                                        Coord_X = 668,
-                                        Coord_Y = 1310
+                                        Coord_X = 839,
+                                        Coord_Y = 1297
                                     };
                                 }
-                                else if (poses[pose_index] == 'b')
+                                else if (poses[pose_index] == 'p')
                                 {
                                     new_frame_data = new FrameData()
                                     {
                                         Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
-                                        Scale_Width = 512,
+                                        Scale_Width = 256,
                                         Scale_Height = 256,
-                                        Coord_X = 761,
-                                        Coord_Y = 1287
+                                        Coord_X = 835,
+                                        Coord_Y = 1524
                                     };
                                 }
 

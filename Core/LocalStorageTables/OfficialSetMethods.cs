@@ -2368,7 +2368,9 @@ namespace SocialLinker.Core.LocalStorageTables
             // Get a count of how many files are in the sprite set's directory.
             int filecount = AttachmentCountItemDirectory(set_path);
 
-            if (maker_character_data.Eye_Frame == default)
+            string base_sprite_filename = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, false);
+
+            if (maker_character_data.Eye_Frame == default && !base_sprite_filename.Contains("p"))
             {
                 maker_character_data.Eye_Frame = 1;
             }
@@ -2376,8 +2378,6 @@ namespace SocialLinker.Core.LocalStorageTables
             {
                 maker_character_data.Mouth_Frame = 1;
             }
-
-            string base_sprite_filename = Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, false);
 
             Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
             Bitmap bustup_with_frames = Construct_P3R_Bustup_With_Frames(sl_command, maker_character_data, base_sprite);
@@ -2529,15 +2529,15 @@ namespace SocialLinker.Core.LocalStorageTables
             string set_path_raw = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
             string set_path_preview = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
 
-            // Using the sprite set's path, create a path variable for the Eye frame folder.
-            string eye_frame_path_raw = $@"{set_path_raw}//Eyes";
+            // Using the sprite set's path, create a path variable for the Mouth frame folder.
+            string mouth_frame_path_raw = $@"{set_path_raw}//Mouth";
 
             // Create a filename for the bitmap that will be generated.
             var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
 
             // Get a count of how many files are in the sprite set's directory.
             int bustup_filecount = OfficialSetMethods.AttachmentCountItemDirectory(set_path_raw);
-            int frame_filecount = Directory.EnumerateFiles(eye_frame_path_raw).Where(f => f.Contains("e1")).Count();
+            int frame_filecount = Directory.EnumerateFiles(mouth_frame_path_raw).Where(f => f.Contains("m1")).Count();
 
             // Create a variable for the base sprite's filename. We'll go searching for it in a few moments.
             string base_sprite_filename = "";
@@ -2564,9 +2564,9 @@ namespace SocialLinker.Core.LocalStorageTables
                     // Outfit numbers always start at 1, so we'll begin there.
                     for (int outfit = 1; outfit <= bustup_filecount; outfit++)
                     {
-                        // Inside, create a secondary loop meant to iterate though every file in the "Eyes" directory.
+                        // Inside, create a secondary loop meant to iterate though every file in the "Mouth" directory.
                         // This loop is counting the amount of expressions available, which starts at 1.
-                        // The "Eyes" folder is the most reliable way of determining this, in contrast to the "Mouth" folder.
+                        // The "Mouth" folder seems to be the most reliable way of determining this due to Pose P bustups, in contrast to the "Eyes" folder.
                         for (int expression = 1; expression <= frame_filecount; expression++)
                         {
                             // We'll put a third loop here, iterating through the types of poses a character could have.
@@ -2578,8 +2578,8 @@ namespace SocialLinker.Core.LocalStorageTables
                                 // Here, we're going to create two file paths that could potentially exist given the combination of expression and outfit numbers.
                                 // Given the nature of P3R sprites, the file names may have two different naming conventions, hence the two paths.
                                 // Check if the created file path strings exist.
-                                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e1.png") ||
-                                    File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e1.png"))
+                                if (File.Exists($"{mouth_frame_path_raw}//{frame_filename_specific}_m1.png") ||
+                                    File.Exists($"{mouth_frame_path_raw}//{frame_filename_generic}_m1.png"))
                                 {
                                     // Check the set preview folder to see if this current filename exists for a base sprite.
                                     if (File.Exists($"{set_path_preview}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
@@ -2624,9 +2624,9 @@ namespace SocialLinker.Core.LocalStorageTables
                 // Second case, Order by Expression.
                 else if (account.Setting_Sheet_Order == "Order by Expression")
                 {
-                    // Create a loop meant to iterate though every file in the "Eyes" directory.
+                    // Create a loop meant to iterate though every file in the "Mouth" directory.
                     // This loop is counting the amount of expressions available, which starts at 1.
-                    // The "Eyes" folder is the most reliable way of determining this, in contrast to the "Mouth" folder.
+                    // The "Mouth" folder seems to be the most reliable way of determining this due to Pose P bustups, in contrast to the "Eyes" folder.
                     for (int expression = 1; expression <= frame_filecount; expression++)
                     {
                         // Inside, create a secondary loop starting at 1 meant to iterate though every outfit in the base sprite directory.
@@ -2642,8 +2642,8 @@ namespace SocialLinker.Core.LocalStorageTables
                                 // Here, we're going to create two file paths that could potentially exist given the combination of expression and outfit numbers.
                                 // Given the nature of P3R sprites, the file names may have two different naming conventions, hence the two paths.
                                 // Check if the created file path strings exist.
-                                if (File.Exists($"{eye_frame_path_raw}//{frame_filename_specific}_e1.png") ||
-                                    File.Exists($"{eye_frame_path_raw}//{frame_filename_generic}_e1.png"))
+                                if (File.Exists($"{mouth_frame_path_raw}//{frame_filename_specific}_m1.png") ||
+                                    File.Exists($"{mouth_frame_path_raw}//{frame_filename_generic}_m1.png"))
                                 {
                                     // Check the set preview folder to see if this current filename exists for a base sprite.
                                     if (File.Exists($"{set_path_preview}//{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}.png"))
