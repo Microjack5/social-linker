@@ -9,3 +9,4 @@
 /obj/Debug/SocialLinker.csproj.AssemblyReference.cache
 /obj/Debug/SocialLinker.csproj.CoreCompileInputs.cache
 /obj/Debug/SocialLinker.csproj.FileListAbsolute.txt
+/Commands/DevCommands.cs
