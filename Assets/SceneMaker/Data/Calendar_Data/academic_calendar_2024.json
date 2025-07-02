@@ -1,30 +1,44 @@
 [
   {
-    "Term": 2,
+    "Term": 1,
     "Condition": "First Day of School",
-    "Month": "January",
-    "Day": 9,
+    "Month": "August",
+    "Day": 26,
+    "Year": 2024
+  },
+  {
+    "Term": 1,
+    "Condition": "Closing Ceremony",
+    "Month": "December",
+    "Day": 13,
     "Year": 2024
   },
   {
     "Term": 2,
+    "Condition": "First Day of School",
+    "Month": "January",
+    "Day": 7,
+    "Year": 2025
+  },
+  {
+    "Term": 2,
     "Condition": "Closing Ceremony",
-    "Month": "March",
-    "Day": 28,
-    "Year": 2024
+    "Month": "April",
+    "Day": 4,
+    "Year": 2025
   },
   {
     "Term": 3,
     "Condition": "First Day of School",
     "Month": "April",
-    "Day": 15,
-    "Year": 2024
+    "Day": 22,
+    "Year": 2025
   },
   {
     "Term": 3,
     "Condition": "Closing Ceremony",
     "Month": "June",
-    "Day": 28,
-    "Year": 2024
-  }
+    "Day": 27,
+    "Year": 2025
+  },
 ]

@@ -4,6 +4,7 @@ using SocialLinker.Core.Menus.Settings.Main;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.AutoDelete;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.Backgrounds;
+using SocialLinker.Core.Menus.Settings.Main.SceneMaker.CalendarCycles;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.SpriteSheetOrder;
@@ -47,15 +48,15 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
             }
 
             // Keycap Three
-            /*else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
+            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                // [Insert method here]
+                _ = Calendar_Cycles_Menu.Calendar_Cycles_Main(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
-            } */
+            }
 
             // Keycap Four
             else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")

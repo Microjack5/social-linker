@@ -218,9 +218,11 @@
     <Compile Include="Config\WeatherAPIConfig.cs" />
     <Compile Include="Cooldown\UserCooldownFields.cs" />
     <Compile Include="Cooldown\UserCooldownMethods.cs" />
+    <Compile Include="Core\CloudStorageTables\CalendarCycles.cs" />
     <Compile Include="Core\CloudStorageTables\SocialLinkerCommandLogging.cs" />
     <Compile Include="Core\CloudStorageTables\DisplayNameLogging.cs" />
     <Compile Include="Core\CloudStorageTables\MakerCommandLogging.cs" />
+    <Compile Include="Core\CloudStorageTables\UserCalendarCycleFields.cs" />
     <Compile Include="Core\CloudStorageTables\UserInfoClasses.cs" />
     <Compile Include="Core\CloudStorageTables\UserInfoFields.cs" />
     <Compile Include="Core\LevelSystem\Leveling.cs" />
@@ -302,6 +304,8 @@
     <Compile Include="Core\Menus\Settings\Main\Profile\Profile_Theme_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\AutoDelete\Auto_Delete_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\Backgrounds\Backgrounds_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\CalendarCycles\Calendar_Cycles_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\CalendarCycles\Calendar_Cycles_P5S_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Character_Select_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Custom_Input_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\DisplayNames\Display_Names_Edit_Menu.cs" />
@@ -354,6 +358,8 @@
     <Compile Include="Core\Menus\Settings\Reactions\Profile\Status_Decor_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\AutoDelete\Auto_Delete_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\Backgrounds\Backgrounds_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\CalendarCycles\Calendar_Cycles_P5S_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\CalendarCycles\Calendar_Cycles_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Character_Select_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Custom_Input_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\DisplayNames\Display_Names_Edit_Reactions.cs" />
@@ -503,7 +509,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Menus\Settings\Main\SceneMaker\CalendarCycles\" />
     <Folder Include="Core\SceneMaker\Data\Assist\" />
     <Folder Include="Core\SceneMaker\Data\Cutin\" />
   </ItemGroup>

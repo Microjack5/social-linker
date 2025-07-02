@@ -979,6 +979,57 @@ namespace SocialLinker.Core.LocalStorageTables
             return sorted_string;
         }
 
+        public static string Generate_P3R_Set_List()
+        {
+            // Create an empty string list.
+            List<string> specified_set_list = new List<string>();
+
+            int current_id = 0;
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                current_id = Int32.Parse(s.ID.Substring(1));
+
+                if (s.Origin == "P3R" && (current_id < 48))
+                {
+                    specified_set_list.Add(s.Name);
+                }
+            }
+
+            specified_set_list = specified_set_list.OrderBy(s => s).ToList();
+
+            string sorted_string = "";
+
+            foreach (string s in specified_set_list)
+            {
+                sorted_string += $"- {s}\n";
+            }
+
+            sorted_string += "\n";
+            sorted_string += "**__Episode Aigis__**\n";
+
+            List<string> secondary_set_list = new List<string>();
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                current_id = Int32.Parse(s.ID.Substring(1));
+
+                if (s.Origin == "P3R" && (current_id >= 48))
+                {
+                    secondary_set_list.Add(s.Name);
+                }
+            }
+
+            secondary_set_list = secondary_set_list.OrderBy(s => s).ToList();
+
+            foreach (string s in secondary_set_list)
+            {
+                sorted_string += $"- {s}\n";
+            }
+
+            return sorted_string;
+        }
+
         public static string Generate_BBTAG_Set_List()
         {
             // Create an empty string variable.

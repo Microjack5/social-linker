@@ -84,6 +84,14 @@
         public int P3P_Nav_Scale_Height { get; set; }
         public int P3P_Nav_Coord_X { get; set; }
         public int P3P_Nav_Coord_Y { get; set; }
+        public int P3R_Scale_Width { get; set; }
+        public int P3R_Scale_Height { get; set; }
+        public int P3R_Coord_X { get; set; }
+        public int P3R_Coord_Y { get; set; }
+        public int P3R_Nav_Scale_Width { get; set; }
+        public int P3R_Nav_Scale_Height { get; set; }
+        public int P3R_Nav_Coord_X { get; set; }
+        public int P3R_Nav_Coord_Y { get; set; }
         public int P4_PS2_Scale_Width { get; set; }
         public int P4_PS2_Scale_Height { get; set; }
         public int P4_PS2_Coord_X { get; set; }

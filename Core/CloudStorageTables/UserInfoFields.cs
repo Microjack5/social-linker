@@ -142,5 +142,28 @@ namespace SocialLinker.Core.CloudStorageTables
         public string P4D_Scale { get; set; }
         public string Auto_Delete_Commands { get; set; }
         public string Auto_Delete_Error_Messages { get; set; }
+
+        // Calendar
+        public string P1_PSX_Manual_Cycle_Toggle { get; set; }
+        public string P1_PSX_Manual_Cycle_Moon_Phase { get; set; }
+        public string P1_PSP_Manual_Cycle_Toggle { get; set; }
+        public string P1_PSP_Manual_Cycle_Moon_Phase { get; set; }
+        public string P3F_Manual_Cycle_Toggle { get; set; }
+        public string P3F_Manual_Cycle_Moon_Phase { get; set; }
+        public string P3P_Manual_Cycle_Toggle { get; set; }
+        public string P3R_Manual_Cycle_Toggle { get; set; }
+        public string P4_PS2_Manual_Cycle_Toggle { get; set; }
+        public string P4G_Manual_Cycle_Toggle { get; set; }
+        public string P5_PS3_Manual_Cycle_Toggle { get; set; }
+        public string P5R_Manual_Cycle_Toggle { get; set; }
+        public string P5R_Manual_Cycle_Month { get; set; }
+        public string P5R_Manual_Cycle_Day { get; set; }
+        public string P5R_Manual_Cycle_Day_of_Week { get; set; }
+        public string P5R_Manual_Cycle_Time_of_Day { get; set; }
+        public string P5S_Manual_Cycle_Cycle_Toggle { get; set; }
+        public string P5S_Manual_Cycle_Month { get; set; }
+        public string P5S_Manual_Cycle_Day { get; set; }
+        public string P5S_Manual_Cycle_Day_of_Week { get; set; }
+        public string P5S_Manual_Cycle_Time_of_Day { get; set; }
     }
 }

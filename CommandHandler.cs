@@ -351,7 +351,24 @@ namespace SocialLinker
                     break;
 
                 case "sortp3r":
-                    await Commands.DevCommands.Organize_P3RE_Params(command);
+                    //await Commands.DevCommands.Organize_P3RE_Params(command);
+                    await Commands.DevCommands.Organize_P3RE_Params_extend(command);
+                    break;
+
+                case "resizep3r":
+                    await Commands.DevCommands.Resize_Animation_Frames_extend(command);
+                    break;
+
+                case "generatep3r":
+                    await Commands.DevCommands.Generate_And_Name_Bustup_Files(command);
+                    break;
+
+                case "cropp3r":
+                    await Commands.DevCommands.Crop_Gallery_extend(command);
+                    break;
+
+                case "renamep3r":
+                    await Commands.DevCommands.Rename_Bustup_Files_2(command);
                     break;
 
                 default:

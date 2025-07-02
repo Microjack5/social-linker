@@ -20,6 +20,7 @@ using System;
 using Discord.Commands;
 using SocialLinker.Core.Menus.MakerMulti.Reactions;
 using SocialLinker.Core.Menus.MakerMulti.Main;
+using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.CalendarCycles;
 
 namespace SocialLinker.Core.Menus
 {
@@ -1098,6 +1099,14 @@ namespace SocialLinker.Core.Menus
                             case "Template_Layout_BBTAG_Background_Blur_Confirm":
                                 await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Background_Blur_Confirm(reaction, menuSession);
                                 break;
+
+                            case "Calendar_Cycles_Main":
+                                await Calendar_Cycles_Reactions.Nav_Calendar_Cycles_Main(reaction, menuSession);
+                                break;
+
+                            //case "Calendar_Cycles_P5S_Main":
+                            //    await Calendar_Cycles_Reactions.Nav_Calendar_Cycles_Main(reaction, menuSession);
+                            //    break;
 
                             case "Display_Names_Main":
                                 await Display_Names_Reactions.Nav_Display_Names_Main(reaction, menuSession);
