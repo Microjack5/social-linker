@@ -28,7 +28,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 var embed = new EmbedBuilder();
                 var author = new EmbedAuthorBuilder
                 {
-                    Name = "Who's the Speaker?",
+                    Name = "Who's Speaking?",
                     IconUrl = user.GetAvatarUrl()
                 };
 

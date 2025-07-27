@@ -126,7 +126,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             string input_string = message.Content;
             input_string = Global.RemoveBotMention(input_string).Trim();
 
-            string result = MakerMulti_Sprite_Select_1_Reactions.Sprite_Number_Parser(input_string, multimaker_session, 4);
+            string result = Utility.Sprite_Number_Parser(input_string, multimaker_session, 4);
 
             switch (result)
             {
@@ -150,7 +150,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                     return Task.CompletedTask;
             }
 
-            if (MakerMulti_Sprite_Select_1_Reactions.Base_Sprite_Validity_Check(multimaker_session.MakerCommand.Character_Data_4) == false)
+            if (Utility.Base_Sprite_Validity_Check(multimaker_session.MakerCommand.Character_Data_4) == false)
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -171,7 +171,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
             if (multimaker_session.MakerCommand.Character_Data_4.Base_Sprite != 0)
             {
-                var bustup = MakerMulti_Sprite_Select_1_Reactions.Bustup_Selection(menuSession, account, multimaker_session.MakerCommand.Character_Data_4, 4); // Just a validity check
+                var bustup = Utility.Bustup_Selection(menuSession, account, multimaker_session.MakerCommand.Character_Data_4, 4); // Just a validity check
 
                 if (bustup == null) // In case the validity check fails
                 {

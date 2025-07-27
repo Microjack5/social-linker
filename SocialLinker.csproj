@@ -291,6 +291,7 @@
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Sprite_Select_3_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Sprite_Select_4_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Title_Select_Reactions.cs" />
+    <Compile Include="Core\Menus\MakerMulti\Reactions\Utility.cs" />
     <Compile Include="Core\Menus\MenuDirectory.cs" />
     <Compile Include="Core\Menus\MenuIdStructure.cs" />
     <Compile Include="Core\Menus\ReactionHandling.cs" />

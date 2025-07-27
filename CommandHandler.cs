@@ -364,7 +364,7 @@ namespace SocialLinker
                     break;
 
                 case "cropp3r":
-                    await Commands.DevCommands.Crop_Gallery_extend(command);
+                    await Commands.DevCommands.Gallery_Cropper(command);
                     break;
 
                 case "renamep3r":
