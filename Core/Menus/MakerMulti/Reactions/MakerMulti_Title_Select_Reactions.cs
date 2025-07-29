@@ -13,9 +13,11 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 {
     class MakerMulti_Title_Select_Reactions
     {
-        public static Task Nav_MakerMulti_Main_Menu(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_MakerMulti_Main_Menu(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "P2IS")
+            string selected = component.Data.Values.First();
+
+            if (selected == "P2IS")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -25,7 +27,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 return Task.CompletedTask;
             }
 
-            else if (reaction.Emote.Name == "P2EP")
+            else if (selected == "P2EP")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
@@ -35,7 +37,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 return Task.CompletedTask;
             }
 
-            else if (reaction.Emote.Name == "P3P")
+            else if (selected == "P3P")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
@@ -46,11 +48,12 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = MakerMulti_Char_Select_1_Menu.MakerMulti_Character_Select_1_Main(menuSession.User, menuSession.MenuMessage);
+                //_ = MakerMulti_Char_Select_1_Menu.MakerMulti_Character_Select_1_Main(menuSession.User, menuSession.MenuMessage);
+                _ = MakerMulti_Data_Entry_Menu.MakerMulti_Data_Entry_Main(menuSession);
                 return Task.CompletedTask;
             }
 
-            else if (reaction.Emote.Name == "P4AU")
+            else if (selected == "P4AU")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
@@ -65,7 +68,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 return Task.CompletedTask;
             }
 
-            else if (reaction.Emote.Name == "P4D")
+            else if (selected == "P4D")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
@@ -80,7 +83,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 return Task.CompletedTask;
             }
 
-            else if (reaction.Emote.Name == "BBTAG")
+            else if (selected == "BBTAG")
             {
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
                 multimaker_session.MakerCommand.Template = "BBTAG";
@@ -93,7 +96,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 return Task.CompletedTask;
             }
 
-            else if (reaction.Emote.Name == "❌")
+            else if (selected == "❌")
             {
                 // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();

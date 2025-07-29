@@ -121,6 +121,90 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithFooter(footer);
 
             embed.WithDescription("" +
+                "Quickly create a scene with multiple characters based on your existing scene maker settings. Choose a compatible title to start.\n");
+
+            // Attempt editing the message if it hasn't been deleted by the user yet.
+            // If it has, catch the exception, remove the menu entry from the global list, and return.
+            try
+            {
+                // Remove all reactions from the current message.
+                await message.RemoveAllReactionsAsync();
+
+                // Build the select menu
+                var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select a title")
+                    .WithCustomId("multimaker-select")
+                    .WithMinValues(1)
+                    .WithMaxValues(1)
+                    .AddOption("Persona 2: Innocent Sin", "P2IS", emote: Emote.Parse("<:P2IS:788950080396328990>"))
+                    .AddOption("Persona 2: Eternal Punishment", "P2EP", emote: Emote.Parse("<:P2EP:788950163363463172>"))
+                    .AddOption("Persona 3 Portable", "P3P", emote: Emote.Parse("<:P3P:1096338602046267392>"))
+                    .AddOption("Persona 4 Arena Ultimax", "P4AU", emote: Emote.Parse("<:P4AU:751133122342420572>"))
+                    .AddOption("Persona 4: Dancing All Night", "P4D", emote: Emote.Parse("<:P4D:751133120346062859>"))
+                    .AddOption("BlazBlue: Cross Tag Battle", "BBTAG", emote: Emote.Parse("<:BBTAG:751133123013771617>"));
+
+                var component = new ComponentBuilder()
+                    .WithSelectMenu(selectMenu);
+
+                // Modify the message with the embed and the select menu
+                await message.ModifyAsync(msg =>
+                {
+                    msg.Embed = embed.Build();
+                    msg.Components = component.Build();
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(menuSession);
+
+                return;
+            }
+
+            // Edit the menu session according to the current message.
+            menuSession.CurrentMenu = "MakerMulti_Main_Menu";
+            menuSession.MenuTimer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = MenuConfig.menu.timerDuration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the menu timer runs out, activate a function.
+            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+        }
+
+        public static async Task MakerMulti_Main_Menu_old(SocketGuildUser user, RestUserMessage message)
+        {
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            // Find the menu session associated with the current user.
+            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == user.Id);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Multi-character Scene Maker",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            var footer = new EmbedFooterBuilder
+            {
+                Text = "❌ Close Menu"
+            };
+
+            embed.WithFooter(footer);
+
+            embed.WithDescription("" +
                 "Quickly create a scene with multiple characters based on your existing scene maker settings. Choose a compatible title to start.\n" +
                 "\n" +
                 "<:P2IS:788950080396328990> **Persona 2: Innocent Sin**\n" +
@@ -364,6 +448,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 // Edit the current active message by replacing it with the recently created embed.
                 await message.ModifyAsync(x => {
                     x.Embed = MenuTimedOut(menuSession.User).Build();
+                    x.Components = new ComponentBuilder().Build();
                 });
             }
             catch (Exception ex)

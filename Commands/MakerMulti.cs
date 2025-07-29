@@ -1,12 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using SocialLinker.Cooldown;
-using SocialLinker.Core.Menus.InitialUsage.Main;
 using SocialLinker.Core.CloudStorageTables;
+using SocialLinker.Core.Menus.InitialUsage.Main;
 using SocialLinker.Core.Menus.MakerMulti.Main;
+using System;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialLinker.Commands
 {
