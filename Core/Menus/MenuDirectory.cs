@@ -19,6 +19,7 @@ using SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout;
 using SocialLinker.Core.Menus.Shop.Reactions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
@@ -2115,26 +2116,40 @@ namespace SocialLinker.Core.Menus
         {
             var user = (SocketGuildUser)component.User;
 
-            Console.WriteLine("test 1");
-
             if (Global.MenuIdList.Any(x => x.MenuMessage.Id == component.Message.Id))
             {
-                Console.WriteLine("test 2");
                 var menuSession = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Id == component.Message.Id);
 
                 if (user.Id == menuSession.User.Id)
                 {
-                    Console.WriteLine($"test 3: {menuSession.CurrentMenu}");
-
                     switch (menuSession.CurrentMenu)
                     {
-                        case "MakerMulti_Data_Entry_Main":
-                            Console.WriteLine("YEEHAW 1!!!");
-                            await MakerMulti_Data_Entry_Reactions.Nav_MakerMulti_Data_Entry_Main(component);
+                        case "MakerMulti_Char_Entry_1_Main":
+                            //await component.DeferAsync();
+                            await MakerMulti_Char_Entry_1_Reactions.Nav_MakerMulti_Char_Entry_1_Main(component);
                             break;
                     }
+                }
+            }
+        }
 
-                    await component.DeferAsync();
+        public static async Task ModalSubmittedIndex(SocketModal modal)
+        {
+            var user = (SocketGuildUser)modal.User;
+
+            if (Global.MenuIdList.Any(x => x.MenuMessage.Id == modal.Message.Id))
+            {
+                var menuSession = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Id == modal.Message.Id);
+
+                if (modal.Data.CustomId == "multi-char1-modal-submit")
+                {
+                    var charName = modal.Data.Components
+                    .FirstOrDefault(x => x.CustomId == "char-name")?.Value;
+
+                    // Do something with the name, like store it or move forward
+                    await modal.RespondAsync($"✅ Character #1 set to: **{charName}**", ephemeral: true);
+
+                    await modal.DeferAsync();
                 }
             }
         }

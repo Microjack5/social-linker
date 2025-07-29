@@ -276,7 +276,7 @@
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Char_Select_3_Menu.cs" />
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Char_Select_4_Menu.cs" />
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Confirm_Details_Menu.cs" />
-    <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Data_Entry_Menu.cs" />
+    <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Char_Entry_1_Menu.cs" />
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Dialogue_Select_Menu.cs" />
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Layout_Select_Menu.cs" />
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Speaker_Select_Menu.cs" />
@@ -290,7 +290,7 @@
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Char_Select_3_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Char_Select_4_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Confirm_Details_Reactions.cs" />
-    <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Data_Entry_Reactions.cs" />
+    <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Char_Entry_1_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Dialogue_Select_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Layout_Select_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Speaker_Select_Reactions.cs" />

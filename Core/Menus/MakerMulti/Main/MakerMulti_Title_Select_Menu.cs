@@ -113,13 +113,6 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
             embed.WithDescription("" +
                 "Quickly create a scene with multiple characters based on your existing scene maker settings. Choose a compatible title to start.\n");
 

@@ -15,22 +15,10 @@ using System.Timers;
 
 namespace SocialLinker.Core.Menus.MakerMulti.Main
 {
-    class MakerMulti_Data_Entry_Menu
+    class MakerMulti_Char_Entry_1_Menu
     {
-        public static async Task MakerMulti_Data_Entry_Main(MenuIdStructure menuSession)
+        public static async Task MakerMulti_Char_Entry_1_Main(MenuIdStructure menuSession)
         {
-            //var mb = new ModalBuilder()
-            //.WithTitle("Data Entry")
-            //.WithCustomId("makermulti_data_entry")
-            //.AddTextInput("Character #1", "character_1")
-            //.AddTextInput("Sprite #1", "sprite_1")
-            //.AddTextInput("Character #2", "character_2")
-            //.AddTextInput("Sprite #2", "sprite_2")
-            //.AddTextInput("Display Name", "display_name")
-            //.AddTextInput("Dialogue", "dialogue", TextInputStyle.Paragraph);
-
-            //await Context.Interaction.RespondWithModalAsync(mb.Build());
-
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(menuSession.User);
             var message = menuSession.MenuMessage;
@@ -41,7 +29,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Multi-Character Data Entry",
+                Name = "Character Details",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -52,11 +40,11 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription("" +
-                $"Click the \"Enter Info\" button below to start filling out your multi-character scene info!");
+                $"Time to enter character details! Select the \"Enter Info\" button to specify characters and their sprite numbers.");
 
             var component = new ComponentBuilder()
-                .WithButton("Enter Info", customId: "multi-char-modal", ButtonStyle.Primary)
-                .WithButton("↩️ Return", customId: "multi-char-back", ButtonStyle.Secondary);
+                .WithButton("Enter Info", customId: "makermulti-char-entry-1-modal-open", ButtonStyle.Primary)
+                .WithButton("↩️ Return", customId: "makermulti-char-entry-1-back", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -84,7 +72,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Data_Entry_Main";
+            menuSession.CurrentMenu = "MakerMulti_Char_Entry_1_Main";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -103,33 +91,21 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task MakerMulti_Data_Entry_Modal(SocketMessageComponent component)
+        public static async Task MakerMulti_Char_Details_Modal(SocketMessageComponent component)
         {
             // Get the account information of the command's user.
-            if (component.Data.CustomId == "multi-char-modal")
+            if (component.Data.CustomId == "makermulti-char-entry-1-modal-open")
             {
-                //var modal = new ModalBuilder()
-                //    .WithTitle("Data Entry")
-                //    .WithCustomId("makermulti_data_entry")
-                //    .AddTextInput("Character #1", "character_1", required: true)
-                //    .AddTextInput("Sprite #1", "sprite_1")
-                //    .AddTextInput("Character #2", "character_2")
-                //    .AddTextInput("Sprite #2", "sprite_2")
-                //    .AddTextInput("Display Name", "display_name")
-                //    .AddTextInput("Dialogue", "dialogue", TextInputStyle.Paragraph);
-
-                //await component.RespondWithModalAsync(modal.Build());
-
                 try
                 {
                     var modal = new ModalBuilder()
                     .WithTitle("Character Details")
-                    .WithCustomId("makermulti_data_entry")
+                    .WithCustomId("makermulti-char-entry-1-modal")
                     .AddTextInput("Character #1", "character_1")
                     .AddTextInput("Sprite number for Character #1", "sprite_1")
                     .AddTextInput("Character #2", "character_2")
-                    .AddTextInput("Sprite number for Character #2", "sprite_2")
-                    .AddTextInput("Display Name", "display_name");
+                    .AddTextInput("Sprite number for Character #2", "sprite_2");
+                    //.AddTextInput("Display Name", "display_name");
 
                     await component.RespondWithModalAsync(modal.Build());
                 }

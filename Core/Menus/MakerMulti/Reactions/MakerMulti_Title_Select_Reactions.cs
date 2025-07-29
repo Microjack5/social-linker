@@ -49,7 +49,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
                 // Go to a new menu.
                 //_ = MakerMulti_Char_Select_1_Menu.MakerMulti_Character_Select_1_Main(menuSession.User, menuSession.MenuMessage);
-                _ = MakerMulti_Data_Entry_Menu.MakerMulti_Data_Entry_Main(menuSession);
+                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Char_Entry_1_Main(menuSession);
                 return Task.CompletedTask;
             }
 

@@ -9,15 +9,14 @@ using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 {
-    class MakerMulti_Data_Entry_Reactions
+    class MakerMulti_Char_Entry_1_Reactions
     {
-        public static Task Nav_MakerMulti_Data_Entry_Main(SocketMessageComponent component)
+        public static Task Nav_MakerMulti_Char_Entry_1_Main(SocketMessageComponent component)
         {
-            if (component.Data.CustomId == "multi-char-modal")
+            if (component.Data.CustomId == "makermulti-char-entry-1-modal-open")
             {
-                Console.WriteLine("YEEHAW 2!!!");
                 // Go to a new menu.
-                _ = MakerMulti_Data_Entry_Menu.MakerMulti_Data_Entry_Modal(component);
+                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Char_Details_Modal(component);
                 return Task.CompletedTask;
             }
 
