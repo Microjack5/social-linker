@@ -36,6 +36,7 @@ namespace SocialLinker
             _client.ReactionRemoved += Core.Menus.MenuDirectory.ReactionRemovedIndex;
             _client.SelectMenuExecuted += Core.Menus.MenuDirectory.SelectMenuInteractionReceivedIndex;
             _client.ButtonExecuted += Core.Menus.MenuDirectory.ButtonInteractionReceivedIndex;
+            _client.ModalSubmitted += Core.Menus.MenuDirectory.ModalSubmittedIndex;
             _client.MessageReceived += async (message) =>
             {
                 await Core.Menus.MenuDirectory.MessageReceivedIndex(_client, message);

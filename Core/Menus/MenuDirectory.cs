@@ -2126,7 +2126,7 @@ namespace SocialLinker.Core.Menus
                     {
                         case "MakerMulti_Char_Entry_1_Main":
                             //await component.DeferAsync();
-                            await MakerMulti_Char_Entry_1_Reactions.Nav_MakerMulti_Char_Entry_1_Main(component);
+                            await MakerMulti_Char_Entry_1_Reactions.Nav_MakerMulti_Char_Entry_1_Main(component, menuSession);
                             break;
                     }
                 }
@@ -2141,15 +2141,14 @@ namespace SocialLinker.Core.Menus
             {
                 var menuSession = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Id == modal.Message.Id);
 
-                if (modal.Data.CustomId == "multi-char1-modal-submit")
+                if (user.Id == menuSession.User.Id)
                 {
-                    var charName = modal.Data.Components
-                    .FirstOrDefault(x => x.CustomId == "char-name")?.Value;
-
-                    // Do something with the name, like store it or move forward
-                    await modal.RespondAsync($"✅ Character #1 set to: **{charName}**", ephemeral: true);
-
-                    await modal.DeferAsync();
+                    switch (modal.Data.CustomId)
+                    {
+                        case "makermulti-char-entry-1-modal-submit":
+                            await MakerMulti_Char_Entry_1_Reactions.Nav_MakerMulti_Char_Entry_1_Modal(modal, menuSession);
+                            break;
+                    }
                 }
             }
         }

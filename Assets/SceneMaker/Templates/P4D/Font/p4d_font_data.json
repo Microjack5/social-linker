@@ -102,7 +102,7 @@
     "Column": 13,
     "LeftCut": 0,
     "RightCut": 32,
-    "SupportedChars": "[ '-' ]"
+    "SupportedChars": "[ '—' ]"
   },
   {
     "Row": 0,
@@ -1985,7 +1985,7 @@
     "Column": 10,
     "LeftCut": 8,
     "RightCut": 26,
-    "SupportedChars": "[ '\u0000' ]"
+    "SupportedChars": "[ '-' ]"
   },
   {
     "Row": 17,
@@ -2111,7 +2111,7 @@
     "Column": 12,
     "LeftCut": 3,
     "RightCut": 29,
-    "SupportedChars": "[ '−' ]"
+    "SupportedChars": "[ '-' ]"
   },
   {
     "Row": 18,

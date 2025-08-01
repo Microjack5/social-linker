@@ -97,14 +97,21 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
 
         public static async Task MakerMulti_Sprite_Select_1_Invalid_Base_Sprite(SocketGuildUser user, RestUserMessage message)
         {
+            Console.WriteLine("We made it!");
+
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
 
+            Console.WriteLine("pretest 1");
+
             // Find the menu session associated with the current user.
             var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            Console.WriteLine("pretest 2");
             var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+            Console.WriteLine("pretest 3");
 
             var character_data = multimaker_session.MakerCommand.Character_Data_1;
+            Console.WriteLine($"pretest 4: {character_data.Set_Data.Name}");
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -115,6 +122,8 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
 
             embed.WithAuthor(author);
 
+            Console.WriteLine("pretest 5");
+
             var footer = new EmbedFooterBuilder
             {
                 Text = "↩️ Retry"
@@ -122,12 +131,17 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
 
             embed.WithFooter(footer);
 
+            Console.WriteLine("pretest 6");
+
             // Determine the color and thumbnail for the embeded message
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
+            Console.WriteLine("pretest 7");
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
+            Console.WriteLine("pretest 8");
+
             embed.WithDescription("" +
-                $"That sprite number doesn’t seem to be in {character_data.Bustup_Data.Default_Name_EN}'s sprite set from {OfficialSetMethods.AcronymToFullTitle(multimaker_session.MakerCommand.Template)}.");
+                $"That sprite number doesn’t seem to be in {character_data.Set_Data.Name}'s sprite set from {OfficialSetMethods.AcronymToFullTitle(multimaker_session.MakerCommand.Template)}.");
 
             if (multimaker_session.CommandType == "Slash")
             {
@@ -137,20 +151,27 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             else if (multimaker_session.CommandType == "Context")
             {
                 embed.AddField("Tips", "" +
-                $"For message-based commands, use **`maker {character_data.Bustup_Data.Default_Name_EN}`** to view which character sprites are available.");
+                $"For message-based commands, use **`maker {character_data.Set_Data.Name}`** to view which character sprites are available.");
             }
+
+            Console.WriteLine("pretest 9");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
             try
             {
+                Console.WriteLine("test 1");
                 // Remove all reactions from the current message.
                 await message.RemoveAllReactionsAsync();
 
+                Console.WriteLine("test 2");
                 // Edit the current active message by replacing it with the recently created embed.
                 await message.ModifyAsync(x => {
                     x.Embed = embed.Build();
+                    x.Components = null;
                 });
+
+                Console.WriteLine("test 3");
             }
             catch (Exception ex)
             {

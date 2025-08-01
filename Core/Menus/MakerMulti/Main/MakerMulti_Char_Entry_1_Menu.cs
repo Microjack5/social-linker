@@ -100,7 +100,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 {
                     var modal = new ModalBuilder()
                     .WithTitle("Character Details")
-                    .WithCustomId("makermulti-char-entry-1-modal")
+                    .WithCustomId("makermulti-char-entry-1-modal-submit")
                     .AddTextInput("Character #1", "character_1")
                     .AddTextInput("Sprite number for Character #1", "sprite_1")
                     .AddTextInput("Character #2", "character_2")
@@ -113,8 +113,6 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 {
                     Console.WriteLine(ex.Message);
                 }
-
-                
             }
         }
 

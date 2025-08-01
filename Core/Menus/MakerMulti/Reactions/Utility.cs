@@ -126,6 +126,21 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             return true;
         }
 
+        public static OfficialSetData ValidateCharacter(SocialLinkerCommand multimaker_session, UserInfoFields account, string input_string)
+        {
+            MakerCommandData maker_command = new MakerCommandData()
+            {
+                Character_Data_1 = new MakerCharacterData()
+                {
+                    Sprite_Set_Version = multimaker_session.MakerCommand.Template,
+                    Character_Keyword = input_string
+                }
+            };
+
+            return OfficialSetMethods.GetSpriteSetInfo(account, maker_command);
+        }
+
+
         // Bustup construction (Maker-Multi)
         public static Bitmap Bustup_Selection(MenuIdStructure menuSession, UserInfoFields account, MakerCharacterData maker_character_data, int current_character)
         {
