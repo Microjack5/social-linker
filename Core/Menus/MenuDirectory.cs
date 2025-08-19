@@ -2128,6 +2128,11 @@ namespace SocialLinker.Core.Menus
                             //await component.DeferAsync();
                             await MakerMulti_Char_Entry_1_Reactions.Nav_MakerMulti_Char_Entry_1_Main(component, menuSession);
                             break;
+
+                        case "MakerMulti_Dialogue_Entry_Main":
+                            //await component.DeferAsync();
+                            await MakerMulti_Dialogue_Entry_Reactions.Nav_MakerMulti_Dialogue_Entry_Main(component, menuSession);
+                            break;
                     }
                 }
             }
@@ -2147,6 +2152,10 @@ namespace SocialLinker.Core.Menus
                     {
                         case "makermulti-char-entry-1-modal-submit":
                             await MakerMulti_Char_Entry_1_Reactions.Nav_MakerMulti_Char_Entry_1_Modal(modal, menuSession);
+                            break;
+
+                        case "makermulti-dialogue-entry-modal-submit":
+                            await MakerMulti_Dialogue_Entry_Reactions.Nav_MakerMulti_Dialogue_Details_Modal(modal, menuSession);
                             break;
                     }
                 }

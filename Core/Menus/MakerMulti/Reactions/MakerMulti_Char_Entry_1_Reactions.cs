@@ -51,10 +51,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
             if (char_1_set_info == null)
             {
-                // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
                 _ = MakerMulti_Char_Select_1_Menu.MakerMulti_Character_Select_1_Invalid_Character(menuSession.User, menuSession.MenuMessage, character_1);
                 return Task.CompletedTask;
             }
@@ -71,39 +68,26 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                     break;
 
                 case "Too_Many_Animation_Frames":
-                    // Stop the timeout timer associated with the menu.
                     menuSession.MenuTimer.Stop();
-
-                    // Go to a new menu.
                     _ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Error_Too_Many_Animation_Frames(menuSession.User, menuSession.MenuMessage);
                     return Task.CompletedTask;
 
                 case "Non_Digit_In_Sprite_Number":
-                    // Stop the timeout timer associated with the menu.
                     menuSession.MenuTimer.Stop();
-
-                    // Go to a new menu.
                     _ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Error_Non_Digit_In_Sprite_Number(menuSession.User, menuSession.MenuMessage);
                     return Task.CompletedTask;
             }
 
             if (Utility.Base_Sprite_Validity_Check(multimaker_session.MakerCommand.Character_Data_1) == false)
             {
-                // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                Console.WriteLine("Oopsie 1");
                 modal.DeferAsync(ephemeral: true);
                 _ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Invalid_Base_Sprite(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
             if ((multimaker_session.MakerCommand.Character_Data_1.Base_Sprite == 0) && ((multimaker_session.MakerCommand.Character_Data_1.Eye_Frame != default) || (multimaker_session.MakerCommand.Character_Data_1.Mouth_Frame != default)))
             {
-                // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
                 _ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Error_Animation_Frame_With_Blank_Sprite(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
@@ -126,10 +110,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
             if (char_2_set_info == null)
             {
-                // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
                 _ = MakerMulti_Char_Select_2_Menu.MakerMulti_Character_Select_2_Invalid_Character(menuSession.User, menuSession.MenuMessage, character_2);
                 return Task.CompletedTask;
             }
@@ -147,37 +128,25 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                     break;
 
                 case "Too_Many_Animation_Frames":
-                    // Stop the timeout timer associated with the menu.
                     menuSession.MenuTimer.Stop();
-
-                    // Go to a new menu.
                     _ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Error_Too_Many_Animation_Frames(menuSession.User, menuSession.MenuMessage);
                     return Task.CompletedTask;
 
                 case "Non_Digit_In_Sprite_Number":
-                    // Stop the timeout timer associated with the menu.
                     menuSession.MenuTimer.Stop();
-
-                    // Go to a new menu.
                     _ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Error_Non_Digit_In_Sprite_Number(menuSession.User, menuSession.MenuMessage);
                     return Task.CompletedTask;
             }
 
             if (Utility.Base_Sprite_Validity_Check(multimaker_session.MakerCommand.Character_Data_2) == false)
             {
-                // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
                 _ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Invalid_Base_Sprite(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
             if ((multimaker_session.MakerCommand.Character_Data_2.Base_Sprite == 0) && ((multimaker_session.MakerCommand.Character_Data_2.Eye_Frame != default) || (multimaker_session.MakerCommand.Character_Data_2.Mouth_Frame != default)))
             {
-                // Stop the timeout timer associated with the menu.
                 menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
                 _ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Error_Animation_Frame_With_Blank_Sprite(menuSession.User, menuSession.MenuMessage);
                 return Task.CompletedTask;
             }
@@ -204,7 +173,14 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 $"Sprite #2: {sprite_2}\n" +
                 $"");
 
-            //modal.DeferAsync(ephemeral: true);
+            multimaker_session.MakerCommand.Display_Name = "Both of them";
+            multimaker_session.MakerCommand.Dialogue = "Testing, 1, 2, 3...";
+
+            modal.DeferAsync(ephemeral: true);
+            _ = MakerMulti_Dialogue_Entry_Menu.MakerMulti_Dialogue_Entry_Main(menuSession);
+
+            //SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP3P p3p_render = new SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP3P();
+            //_ = p3p_render.Render_Multi_Character_Scene_P3P(multimaker_session);
 
             return Task.CompletedTask;
         }

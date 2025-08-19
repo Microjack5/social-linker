@@ -364,11 +364,11 @@ namespace SocialLinker
                     break;
 
                 case "cropp3r":
-                    await Commands.DevCommands.Gallery_Cropper(command);
+                    await Commands.DevCommands.Crop_Gallery_extend(command);
                     break;
 
                 case "renamep3r":
-                    await Commands.DevCommands.Rename_Bustup_Files_2(command);
+                    await Commands.DevCommands.Rename_Bustup_Files(command);
                     break;
 
                 default:
