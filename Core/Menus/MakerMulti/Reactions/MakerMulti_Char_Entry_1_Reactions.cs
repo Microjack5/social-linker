@@ -52,7 +52,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             if (char_1_set_info == null)
             {
                 menuSession.MenuTimer.Stop();
-                _ = MakerMulti_Char_Select_1_Menu.MakerMulti_Character_Select_1_Invalid_Character(menuSession.User, menuSession.MenuMessage, character_1);
+                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Invalid_Character(menuSession.User, menuSession.MenuMessage, character_1);
                 return Task.CompletedTask;
             }
 
@@ -69,12 +69,12 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
                 case "Too_Many_Animation_Frames":
                     menuSession.MenuTimer.Stop();
-                    _ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Error_Too_Many_Animation_Frames(menuSession.User, menuSession.MenuMessage);
+                    _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Sprite_Select_Error_Too_Many_Animation_Frames(menuSession.User, menuSession.MenuMessage, multimaker_session.MakerCommand.Character_Data_1);
                     return Task.CompletedTask;
 
                 case "Non_Digit_In_Sprite_Number":
                     menuSession.MenuTimer.Stop();
-                    _ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Error_Non_Digit_In_Sprite_Number(menuSession.User, menuSession.MenuMessage);
+                    _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Sprite_Select_Error_Non_Digit_In_Sprite_Number(menuSession.User, menuSession.MenuMessage, multimaker_session.MakerCommand.Character_Data_1);
                     return Task.CompletedTask;
             }
 
@@ -82,13 +82,13 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             {
                 menuSession.MenuTimer.Stop();
                 modal.DeferAsync(ephemeral: true);
-                _ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Invalid_Base_Sprite(menuSession.User, menuSession.MenuMessage);
+                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Invalid_Base_Sprite(menuSession.User, menuSession.MenuMessage, multimaker_session.MakerCommand.Character_Data_1);
                 return Task.CompletedTask;
             }
             if ((multimaker_session.MakerCommand.Character_Data_1.Base_Sprite == 0) && ((multimaker_session.MakerCommand.Character_Data_1.Eye_Frame != default) || (multimaker_session.MakerCommand.Character_Data_1.Mouth_Frame != default)))
             {
                 menuSession.MenuTimer.Stop();
-                _ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Error_Animation_Frame_With_Blank_Sprite(menuSession.User, menuSession.MenuMessage);
+                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Sprite_Select_Error_Animation_Frame_With_Blank_Sprite(menuSession.User, menuSession.MenuMessage, multimaker_session.MakerCommand.Character_Data_1);
                 return Task.CompletedTask;
             }
 
@@ -111,7 +111,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             if (char_2_set_info == null)
             {
                 menuSession.MenuTimer.Stop();
-                _ = MakerMulti_Char_Select_2_Menu.MakerMulti_Character_Select_2_Invalid_Character(menuSession.User, menuSession.MenuMessage, character_2);
+                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Invalid_Character(menuSession.User, menuSession.MenuMessage, character_2);
                 return Task.CompletedTask;
             }
 
@@ -129,25 +129,25 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
                 case "Too_Many_Animation_Frames":
                     menuSession.MenuTimer.Stop();
-                    _ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Error_Too_Many_Animation_Frames(menuSession.User, menuSession.MenuMessage);
+                    _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Sprite_Select_Error_Too_Many_Animation_Frames(menuSession.User, menuSession.MenuMessage, multimaker_session.MakerCommand.Character_Data_2);
                     return Task.CompletedTask;
 
                 case "Non_Digit_In_Sprite_Number":
                     menuSession.MenuTimer.Stop();
-                    _ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Error_Non_Digit_In_Sprite_Number(menuSession.User, menuSession.MenuMessage);
+                    _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Sprite_Select_Error_Non_Digit_In_Sprite_Number(menuSession.User, menuSession.MenuMessage, multimaker_session.MakerCommand.Character_Data_2);
                     return Task.CompletedTask;
             }
 
             if (Utility.Base_Sprite_Validity_Check(multimaker_session.MakerCommand.Character_Data_2) == false)
             {
                 menuSession.MenuTimer.Stop();
-                _ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Invalid_Base_Sprite(menuSession.User, menuSession.MenuMessage);
+                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Invalid_Base_Sprite(menuSession.User, menuSession.MenuMessage, multimaker_session.MakerCommand.Character_Data_2);
                 return Task.CompletedTask;
             }
             if ((multimaker_session.MakerCommand.Character_Data_2.Base_Sprite == 0) && ((multimaker_session.MakerCommand.Character_Data_2.Eye_Frame != default) || (multimaker_session.MakerCommand.Character_Data_2.Mouth_Frame != default)))
             {
                 menuSession.MenuTimer.Stop();
-                _ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Error_Animation_Frame_With_Blank_Sprite(menuSession.User, menuSession.MenuMessage);
+                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Sprite_Select_Error_Animation_Frame_With_Blank_Sprite(menuSession.User, menuSession.MenuMessage, multimaker_session.MakerCommand.Character_Data_2);
                 return Task.CompletedTask;
             }
 
@@ -164,23 +164,8 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             }
 
             menuSession.MenuTimer.Stop();
-
-            Console.WriteLine($"\n" +
-                $"~Printed Values~\n" +
-                $"Char #1: {character_1}\n" +
-                $"Sprite #1: {sprite_1}\n" +
-                $"Char #2: {character_2}\n" +
-                $"Sprite #2: {sprite_2}\n" +
-                $"");
-
-            multimaker_session.MakerCommand.Display_Name = "Both of them";
-            multimaker_session.MakerCommand.Dialogue = "Testing, 1, 2, 3...";
-
             modal.DeferAsync(ephemeral: true);
             _ = MakerMulti_Dialogue_Entry_Menu.MakerMulti_Dialogue_Entry_Main(menuSession);
-
-            //SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP3P p3p_render = new SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP3P();
-            //_ = p3p_render.Render_Multi_Character_Scene_P3P(multimaker_session);
 
             return Task.CompletedTask;
         }

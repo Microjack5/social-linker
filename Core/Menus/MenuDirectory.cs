@@ -1877,46 +1877,6 @@ namespace SocialLinker.Core.Menus
                         case "Display_Names_Custom_Input_Main":
                             await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Main_Received(message, menuSession);
                             break;
-
-                        case "MakerMulti_Character_Select_1_Main":
-                            await MakerMulti_Char_Select_1_Reactions.Nav_MakerMulti_Character_Select_1_Main_Received(message, menuSession);
-                            break;
-
-                        case "MakerMulti_Sprite_Select_1_Main":
-                            await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Main_Received(message, menuSession);
-                            break;
-
-                        case "MakerMulti_Character_Select_2_Main":
-                            await MakerMulti_Char_Select_2_Reactions.Nav_MakerMulti_Character_Select_2_Main_Received(message, menuSession);
-                            break;
-
-                        case "MakerMulti_Sprite_Select_2_Main":
-                            await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Main_Received(message, menuSession);
-                            break;
-
-                        case "MakerMulti_Character_Select_3_Main":
-                            await MakerMulti_Char_Select_3_Reactions.Nav_MakerMulti_Character_Select_3_Main_Received(message, menuSession);
-                            break;
-
-                        case "MakerMulti_Sprite_Select_3_Main":
-                            await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Main_Received(message, menuSession);
-                            break;
-
-                        case "MakerMulti_Character_Select_4_Main":
-                            await MakerMulti_Char_Select_4_Reactions.Nav_MakerMulti_Character_Select_4_Main_Received(message, menuSession);
-                            break;
-
-                        case "MakerMulti_Sprite_Select_4_Main":
-                            await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Main_Received(message, menuSession);
-                            break;
-
-                        case "MakerMulti_Speaker_Select_Main":
-                            await MakerMulti_Speaker_Select_Reactions.Nav_MakerMulti_Speaker_Select_Main_Received(message, menuSession);
-                            break;
-
-                        case "MakerMulti_Dialogue_Select_Main":
-                            await MakerMulti_Dialogue_Select_Reactions.Nav_MakerMulti_Dialogue_Select_Main_Received(message, menuSession);
-                            break;
                     }
                 }
             }
