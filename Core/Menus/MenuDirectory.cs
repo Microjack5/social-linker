@@ -1924,36 +1924,36 @@ namespace SocialLinker.Core.Menus
                 {
                     switch (menuSession.CurrentMenu)
                     {
-                        case "MakerMulti_Char_Entry_1_Main":
-                            await MakerMulti_Char_Entry_1_Reactions.Nav_MakerMulti_Char_Entry_1_Main(component, menuSession);
+                        case "MakerMulti_Char_Details_Pt1_Main":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_Char_Details_Pt1_Main(component, menuSession);
                             break;
 
-                        case "MakerMulti_Char_Entry_1_Invalid_Character":
-                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                        case "MakerMulti_Char_Details_Pt1_Invalid_Character":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
                             break;
 
-                        case "MakerMulti_Char_Entry_1_Invalid_Base_Sprite":
-                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                        case "MakerMulti_Char_Details_Pt1_Invalid_Base_Sprite":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
                             break;
 
-                        case "MakerMulti_Char_Entry_1_Sprite_Select_Too_Many_Animation_Frames":
-                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                        case "MakerMulti_Char_Details_Pt1_Sprite_Select_Too_Many_Animation_Frames":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
                             break;
 
-                        case "MakerMulti_Char_Entry_1_Sprite_Select_Non_Digit_In_Sprite_Number":
-                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                        case "MakerMulti_Char_Details_Pt1_Sprite_Select_Non_Digit_In_Sprite_Number":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
                             break;
 
-                        case "MakerMulti_Char_Entry_1_Sprite_Select_Animation_Frame_With_Blank_Sprite":
-                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                        case "MakerMulti_Char_Details_Pt1_Sprite_Select_Animation_Frame_With_Blank_Sprite":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
                             break;
 
-                        case "MakerMulti_Char_Entry_1_Sprite_Select_Eye_Frame_Not_Found":
-                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                        case "MakerMulti_Char_Details_Pt1_Sprite_Select_Eye_Frame_Not_Found":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
                             break;
 
-                        case "MakerMulti_Char_Entry_1_Sprite_Select_Mouth_Frame_Not_Found":
-                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                        case "MakerMulti_Char_Details_Pt1_Sprite_Select_Mouth_Frame_Not_Found":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
                             break;
 
                         case "MakerMulti_Dialogue_Entry_Main":
@@ -1982,7 +1982,7 @@ namespace SocialLinker.Core.Menus
                     switch (modal.Data.CustomId)
                     {
                         case "makermulti-char-entry-1-modal-submit":
-                            await MakerMulti_Char_Entry_1_Reactions.Nav_MakerMulti_Char_Entry_1_Modal(modal, menuSession);
+                            await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_Char_Details_Pt1_Modal(modal, menuSession);
                             break;
 
                         case "makermulti-dialogue-entry-modal-submit":

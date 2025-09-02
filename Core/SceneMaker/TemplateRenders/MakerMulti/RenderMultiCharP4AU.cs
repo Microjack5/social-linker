@@ -155,17 +155,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                 switch (char_number)
                 {
                     case 1:
-                        Console.WriteLine("Case 1");
                         Bitmap bustup_yellow = base_p4au_rendering.Bitmap_To_Color(bustup, System.Drawing.Color.FromArgb(240, 253, 39), new Rectangle(0, 0, bustup.Width, bustup.Height));
                         Bitmap bustup_white = base_p4au_rendering.Bitmap_To_Color(bustup, System.Drawing.Color.White, new Rectangle(0, 0, bustup.Width, bustup.Height));
 
-                        Console.WriteLine($"P4AU_TS_Scene_Type: {account.P4AU_TS_Scene_Type}");
-                        Console.WriteLine($"P4AU_TS_Highlight: {account.P4AU_TS_Highlight}");
-                        Console.WriteLine($"P4AU_Multi_Char_Protag_Highlight_Toggle: {sl_command.MakerCommand.P4AU_Multi_Char_Protag_Highlight_Toggle}");
-
                         if ((account.P4AU_TS_Scene_Type == "Dialogue") && (account.P4AU_TS_Highlight == "On") && (sl_command.MakerCommand.P4AU_Multi_Char_Protag_Highlight_Toggle == true))
                         {
-                            Console.WriteLine("All true!");
                             graphics.DrawImage(bustup_yellow, bustup_data.P4AU_Right_Coord_X - 16, bustup_data.P4AU_Right_Coord_Y, bustup_data.P4AU_Scale_Width, bustup_data.P4AU_Scale_Height);
                             graphics.DrawImage(bustup_white, bustup_data.P4AU_Right_Coord_X - 6, bustup_data.P4AU_Right_Coord_Y, bustup_data.P4AU_Scale_Width, bustup_data.P4AU_Scale_Height);
                         }
@@ -173,7 +167,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                         graphics.DrawImage(bustup, bustup_data.P4AU_Right_Coord_X, bustup_data.P4AU_Right_Coord_Y, bustup_data.P4AU_Scale_Width, bustup_data.P4AU_Scale_Height);
                         break;
                     case 2:
-                        Console.WriteLine("Case 2");
                         bustup = OfficialSetMethods.Reverse_Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data_2, bustup);
 
                         if (bustup_data.P4AU_Dual_Flip == true)

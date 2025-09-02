@@ -41,7 +41,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
                 menuSession.MenuTimer.Stop();
 
-                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Char_Entry_1_Main(menuSession);
+                _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_Char_Details_Pt1_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -54,7 +54,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
                 menuSession.MenuTimer.Stop();
 
-                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Char_Entry_1_Main(menuSession);
+                _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_Char_Details_Pt1_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -67,7 +67,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
                 menuSession.MenuTimer.Stop();
 
-                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Char_Entry_1_Main(menuSession);
+                _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_Char_Details_Pt1_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -78,7 +78,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 
                 menuSession.MenuTimer.Stop();
 
-                _ = MakerMulti_Char_Entry_1_Menu.MakerMulti_Char_Entry_1_Main(menuSession);
+                _ = MakerMulti_BBTAG_Layout_Menu.MakerMulti_BBTAG_Layout_Main(menuSession);
                 return Task.CompletedTask;
             }
 

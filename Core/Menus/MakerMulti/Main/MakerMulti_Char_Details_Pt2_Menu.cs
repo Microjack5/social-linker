@@ -12,9 +12,9 @@ using System.Timers;
 
 namespace SocialLinker.Core.Menus.MakerMulti.Main
 {
-    class MakerMulti_Char_Entry_1_Menu
+    class MakerMulti_Char_Details_Pt2_Menu
     {
-        public static async Task MakerMulti_Char_Entry_1_Main(MenuIdStructure menuSession)
+        public static async Task MakerMulti_Char_Details_Pt2_Main(MenuIdStructure menuSession)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(menuSession.User);
@@ -26,7 +26,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Character Details",
+                Name = "Character Details (Part 2)",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -37,10 +37,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
 
             embed.WithDescription("" +
-                $"Let's make your scene! Select \"Enter Character Details\" to specify characters and their sprite numbers.");
+                $"Let's do the next characters! Select \"Enter Character Details\" to specify characters and their sprite numbers.");
 
             var component = new ComponentBuilder()
-                .WithButton("Enter Character Details", customId: "makermulti-char-entry-1-modal-open", ButtonStyle.Primary)
+                .WithButton("Enter Character Details", customId: "makermulti-char-entry-pt2-modal-open", ButtonStyle.Primary)
                 .WithButton("↩️ Return", customId: "back-to-makermulti-title-select", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
@@ -69,7 +69,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Char_Entry_1_Main";
+            menuSession.CurrentMenu = "MakerMulti_Char_Entry_Pt2_Main";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -79,23 +79,23 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             };
 
             // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
         }
 
-        public static async Task MakerMulti_Char_Details_Modal(SocketMessageComponent component)
+        public static async Task MakerMulti_Char_Details_Pt2_Modal(SocketMessageComponent component)
         {
             // Get the account information of the command's user.
-            if (component.Data.CustomId == "makermulti-char-entry-1-modal-open")
+            if (component.Data.CustomId == "makermulti-char-entry-pt2-modal-open")
             {
                 try
                 {
                     var modal = new ModalBuilder()
                     .WithTitle("Character Details")
-                    .WithCustomId("makermulti-char-entry-1-modal-submit")
-                    .AddTextInput("Character #1", "character_1")
-                    .AddTextInput("Sprite number for Character #1", "sprite_1")
-                    .AddTextInput("Character #2", "character_2")
-                    .AddTextInput("Sprite number for Character #2", "sprite_2");
+                    .WithCustomId("makermulti-char-entry-pt2-modal-submit")
+                    .AddTextInput("Character #3", "character_3")
+                    .AddTextInput("Sprite number for Character #3", "sprite_3")
+                    .AddTextInput("Character #4", "character_4")
+                    .AddTextInput("Sprite number for Character #4", "sprite_4");
 
                     await component.RespondWithModalAsync(modal.Build());
                 }
@@ -106,8 +106,31 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
         }
 
-        // Sprite Select 1
-        public static async Task MakerMulti_Char_Entry_1_Invalid_Character(SocketGuildUser user, RestUserMessage message, string user_input)
+        // BBTAG
+        public static async Task MakerMulti_BBTAG_3Char_Details_Modal(SocketMessageComponent component)
+        {
+            // Get the account information of the command's user.
+            if (component.Data.CustomId == "makermulti-bbtag-3char-entry-modal-open")
+            {
+                try
+                {
+                    var modal = new ModalBuilder()
+                    .WithTitle("Character Details")
+                    .WithCustomId("makermulti-bbtag-3char-entry-modal-submit")
+                    .AddTextInput("Character #3", "character_3")
+                    .AddTextInput("Sprite number for Character #3", "sprite_3");
+
+                    await component.RespondWithModalAsync(modal.Build());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        // Error Handling
+        public static async Task MakerMulti_Char_Details_Pt2_Invalid_Character(SocketGuildUser user, RestUserMessage message, string user_input)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -135,7 +158,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Make sure the character’s keyword is typed correctly and react with ↩️ to try again.");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-pt2", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -163,7 +186,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Char_Entry_1_Invalid_Character";
+            menuSession.CurrentMenu = "MakerMulti_Char_Entry_Pt2_Invalid_Character";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -173,10 +196,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             };
 
             // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
         }
 
-        public static async Task MakerMulti_Char_Entry_1_Invalid_Base_Sprite(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
+        public static async Task MakerMulti_Char_Details_Pt2_Invalid_Base_Sprite(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -205,7 +228,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Use the slash command **`maker_sheet`** to view which character sprites are available.");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-pt2", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -233,7 +256,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Char_Entry_1_Invalid_Base_Sprite";
+            menuSession.CurrentMenu = "MakerMulti_Char_Entry_Pt2_Invalid_Base_Sprite";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -243,10 +266,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             };
 
             // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
         }
 
-        public static async Task MakerMulti_Char_Entry_1_Sprite_Select_Too_Many_Animation_Frames(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
+        public static async Task MakerMulti_Char_Details_Pt2_Sprite_Select_Too_Many_Animation_Frames(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -273,7 +296,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 "Start with the base sprite number first, then connect an eye frame number to it with a hyphen. If the character sprite also has mouth frames, connect it after the eye frame number with a hyphen, too.");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-pt2", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -301,7 +324,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Char_Entry_1_Sprite_Select_Too_Many_Animation_Frames";
+            menuSession.CurrentMenu = "MakerMulti_Char_Entry_Pt2_Sprite_Select_Too_Many_Animation_Frames";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -311,10 +334,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             };
 
             // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
         }
 
-        public static async Task MakerMulti_Char_Entry_1_Sprite_Select_Non_Digit_In_Sprite_Number(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
+        public static async Task MakerMulti_Char_Details_Pt2_Sprite_Select_Non_Digit_In_Sprite_Number(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -341,7 +364,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 "Start with the base sprite number first, then connect an eye frame number to it with a hyphen. If the character sprite also has mouth frames, connect it after the eye frame number with a hyphen, too.");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-pt2", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -369,7 +392,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Char_Entry_1_Sprite_Select_Non_Digit_In_Sprite_Number";
+            menuSession.CurrentMenu = "MakerMulti_Char_Entry_Pt2_Sprite_Select_Non_Digit_In_Sprite_Number";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -379,10 +402,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             };
 
             // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
         }
 
-        public static async Task MakerMulti_Char_Entry_1_Sprite_Select_Animation_Frame_With_Blank_Sprite(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
+        public static async Task MakerMulti_Char_Details_Pt2_Sprite_Select_Animation_Frame_With_Blank_Sprite(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -409,7 +432,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Check which animation frames are available for the character and react with ↩️ to try again.\n");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-pt2", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -437,7 +460,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Char_Entry_1_Sprite_Select_Animation_Frame_With_Blank_Sprite";
+            menuSession.CurrentMenu = "MakerMulti_Char_Entry_Pt2_Sprite_Select_Animation_Frame_With_Blank_Sprite";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -447,10 +470,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             };
 
             // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
         }
 
-        public static async Task MakerMulti_Char_Entry_1_Sprite_Select_Eye_Frame_Not_Found(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
+        public static async Task MakerMulti_Char_Details_Pt2_Sprite_Select_Eye_Frame_Not_Found(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -477,7 +500,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Check which animation frames are available for the character and react with ↩️ to try again.\n");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-pt2", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -505,7 +528,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Char_Entry_1_Sprite_Select_Eye_Frame_Not_Found";
+            menuSession.CurrentMenu = "MakerMulti_Char_Entry_Pt2_Sprite_Select_Eye_Frame_Not_Found";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -515,10 +538,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             };
 
             // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
         }
 
-        public static async Task MakerMulti_Char_Entry_1_Sprite_Select_Mouth_Frame_Not_Found(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
+        public static async Task MakerMulti_Char_Details_Pt2_Sprite_Select_Mouth_Frame_Not_Found(SocketGuildUser user, RestUserMessage message, MakerCharacterData character_data)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -545,7 +568,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Check which animation frames are available for the character and react with ↩️ to try again.\n");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-entry-pt2", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -573,7 +596,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Char_Entry_1_Sprite_Select_Mouth_Frame_Not_Found";
+            menuSession.CurrentMenu = "MakerMulti_Char_Entry_Pt2_Sprite_Select_Mouth_Frame_Not_Found";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -583,61 +606,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             };
 
             // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-        }
-
-        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure menuSession)
-        {
-            // Assign the menu session's message to another variable.
-            var message = menuSession.MenuMessage;
-
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = MenuTimedOut(menuSession.User).Build();
-                    x.Components = new ComponentBuilder().Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Remove the menu entry from the global list.
-            Global.MenuIdList.Remove(menuSession);
-        }
-
-        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
-        {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Inactive Menu",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
-
-            embed.WithDescription($"You can create scene maker images with two or more characters at any time with the **`MakerMulti`** command.");
-            return embed;
+            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
         }
     }
 }

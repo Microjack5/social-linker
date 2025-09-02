@@ -39,7 +39,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
 
             var component = new ComponentBuilder()
                 .WithButton("Enter Display Name & Dialogue", customId: "makermulti-dialogue-entry-modal-open", ButtonStyle.Primary)
-                .WithButton("↩️ Return", customId: "back-to-makermulti-char-entry-1", ButtonStyle.Secondary);
+                .WithButton("↩️ Return", customId: "back-to-makermulti-char-details-pt1", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

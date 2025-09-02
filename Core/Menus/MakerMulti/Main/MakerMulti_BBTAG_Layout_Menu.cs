@@ -1,14 +1,10 @@
-﻿using Discord.Rest;
-using Discord;
-using Discord.WebSocket;
+﻿using Discord;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using SocialLinker.Core.SceneMaker;
 
 namespace SocialLinker.Core.Menus.MakerMulti.Main
 {

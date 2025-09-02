@@ -24,6 +24,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                     break;
             }
 
+            menuSession.MenuTimer.Stop();
             menuSession.MenuMessage.DeleteAsync();
             SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP4AU p4au_render = new SceneMaker.TemplateRenders.MakerMulti.RenderMultiCharP4AU();
             _ = p4au_render.Render_Multi_Character_Scene_P4AU(multimaker_session);
