@@ -1898,173 +1898,13 @@ namespace SocialLinker.Core.Menus
                             await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_Main_Menu(component, menuSession);
                             break;
 
-                        //case "MakerMulti_VC_P2IS_Main":
-                        //    await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_VC_P2IS_Main(reaction, menuSession);
-                        //    break;
+                        case "MakerMulti_VC_P2IS_Main":
+                            await MakerMulti_Version_Control_Reactions.Nav_MakerMulti_VC_P2IS_Main(component, menuSession);
+                            break;
 
-                        //case "MakerMulti_VC_P2EP_Main":
-                        //    await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_VC_P2EP_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Layout_Select_Main":
-                        //    await MakerMulti_Layout_Select_Reactions.Nav_MakerMulti_Layout_Select_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Character_Select_1_Main":
-                        //    await MakerMulti_Char_Select_1_Reactions.Nav_MakerMulti_Character_Select_1_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Character_Select_1_Invalid_Character":
-                        //    await MakerMulti_Char_Select_1_Reactions.Nav_MakerMulti_Character_Select_1_Invalid_Character(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_1_Main":
-                        //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_1_Invalid_Base_Sprite":
-                        //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Invalid_Base_Sprite(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_1_Error_Too_Many_Animation_Frames":
-                        //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Too_Many_Animation_Frames(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_1_Error_Non_Digit_In_Sprite_Number":
-                        //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Non_Digit_In_Sprite_Number(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_1_Error_Animation_Frame_With_Blank_Sprite":
-                        //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Animation_Frame_With_Blank_Sprite(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_1_Error_Eye_Frame_Not_Found":
-                        //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Eye_Frame_Not_Found(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_1_Error_Mouth_Frame_Not_Found":
-                        //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Mouth_Frame_Not_Found(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Character_Select_2_Main":
-                        //    await MakerMulti_Char_Select_2_Reactions.Nav_MakerMulti_Character_Select_2_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Character_Select_2_Invalid_Character":
-                        //    await MakerMulti_Char_Select_2_Reactions.Nav_MakerMulti_Character_Select_2_Invalid_Character(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_2_Main":
-                        //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_2_Invalid_Base_Sprite":
-                        //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Invalid_Base_Sprite(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_2_Error_Too_Many_Animation_Frames":
-                        //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Too_Many_Animation_Frames(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_2_Error_Non_Digit_In_Sprite_Number":
-                        //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Non_Digit_In_Sprite_Number(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_2_Error_Animation_Frame_With_Blank_Sprite":
-                        //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Animation_Frame_With_Blank_Sprite(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_2_Error_Eye_Frame_Not_Found":
-                        //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Eye_Frame_Not_Found(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_2_Error_Mouth_Frame_Not_Found":
-                        //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Mouth_Frame_Not_Found(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Character_Select_3_Main":
-                        //    await MakerMulti_Char_Select_3_Reactions.Nav_MakerMulti_Character_Select_3_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Character_Select_3_Invalid_Character":
-                        //    await MakerMulti_Char_Select_3_Reactions.Nav_MakerMulti_Character_Select_3_Invalid_Character(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_3_Main":
-                        //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_3_Invalid_Base_Sprite":
-                        //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Invalid_Base_Sprite(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_3_Error_Too_Many_Animation_Frames":
-                        //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Too_Many_Animation_Frames(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_3_Error_Non_Digit_In_Sprite_Number":
-                        //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Non_Digit_In_Sprite_Number(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_3_Error_Animation_Frame_With_Blank_Sprite":
-                        //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Animation_Frame_With_Blank_Sprite(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_3_Error_Eye_Frame_Not_Found":
-                        //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Eye_Frame_Not_Found(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_3_Error_Mouth_Frame_Not_Found":
-                        //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Mouth_Frame_Not_Found(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Character_Select_4_Main":
-                        //    await MakerMulti_Char_Select_4_Reactions.Nav_MakerMulti_Character_Select_4_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Character_Select_4_Invalid_Character":
-                        //    await MakerMulti_Char_Select_4_Reactions.Nav_MakerMulti_Character_Select_4_Invalid_Character(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_4_Main":
-                        //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_4_Invalid_Base_Sprite":
-                        //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Invalid_Base_Sprite(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_4_Error_Too_Many_Animation_Frames":
-                        //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Too_Many_Animation_Frames(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_4_Error_Non_Digit_In_Sprite_Number":
-                        //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Non_Digit_In_Sprite_Number(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_4_Error_Animation_Frame_With_Blank_Sprite":
-                        //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Animation_Frame_With_Blank_Sprite(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_4_Error_Eye_Frame_Not_Found":
-                        //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Eye_Frame_Not_Found(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Sprite_Select_4_Error_Mouth_Frame_Not_Found":
-                        //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Mouth_Frame_Not_Found(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Speaker_Select_Main":
-                        //    await MakerMulti_Speaker_Select_Reactions.Nav_MakerMulti_Speaker_Select_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Dialogue_Select_Main":
-                        //    await MakerMulti_Dialogue_Select_Reactions.Nav_MakerMulti_Dialogue_Select_Main(reaction, menuSession);
-                        //    break;
-
-                        //case "MakerMulti_Confirm_Details_Main":
-                        //    await MakerMulti_Confirm_Details_Reactions.Nav_MakerMulti_Confirm_Details_Main(reaction, menuSession);
-                        //    break;
+                        case "MakerMulti_VC_P2EP_Main":
+                            await MakerMulti_Version_Control_Reactions.Nav_MakerMulti_VC_P2EP_Main(component, menuSession);
+                            break;
                     }
 
                     await component.DeferAsync();
@@ -2085,13 +1925,44 @@ namespace SocialLinker.Core.Menus
                     switch (menuSession.CurrentMenu)
                     {
                         case "MakerMulti_Char_Entry_1_Main":
-                            //await component.DeferAsync();
                             await MakerMulti_Char_Entry_1_Reactions.Nav_MakerMulti_Char_Entry_1_Main(component, menuSession);
+                            break;
+
+                        case "MakerMulti_Char_Entry_1_Invalid_Character":
+                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                            break;
+
+                        case "MakerMulti_Char_Entry_1_Invalid_Base_Sprite":
+                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                            break;
+
+                        case "MakerMulti_Char_Entry_1_Sprite_Select_Too_Many_Animation_Frames":
+                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                            break;
+
+                        case "MakerMulti_Char_Entry_1_Sprite_Select_Non_Digit_In_Sprite_Number":
+                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                            break;
+
+                        case "MakerMulti_Char_Entry_1_Sprite_Select_Animation_Frame_With_Blank_Sprite":
+                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                            break;
+
+                        case "MakerMulti_Char_Entry_1_Sprite_Select_Eye_Frame_Not_Found":
+                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
+                            break;
+
+                        case "MakerMulti_Char_Entry_1_Sprite_Select_Mouth_Frame_Not_Found":
+                            await MakerMulti_Char_Entry_1_Reactions.Return_To_Char_Entry_1(component, menuSession);
                             break;
 
                         case "MakerMulti_Dialogue_Entry_Main":
                             //await component.DeferAsync();
                             await MakerMulti_Dialogue_Entry_Reactions.Nav_MakerMulti_Dialogue_Entry_Main(component, menuSession);
+                            break;
+
+                        case "MakerMulti_P4AU_Protag_Highlight_Main":
+                            await MakerMulti_P4AU_Protag_Highlight_Reactions.Nav_MakerMulti_P4AU_Protag_Highlight_Main(component, menuSession);
                             break;
                     }
                 }

@@ -646,7 +646,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Utility
-        public static Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
+        public Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
         {
             Bitmap base_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
@@ -709,7 +709,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Method from https://stackoverflow.com/questions/33024881/invert-image-faster-in-c-sharp
-        public static Bitmap Invert_Bitmap(Bitmap input_bitmap)
+        public Bitmap Invert_Bitmap(Bitmap input_bitmap)
         {
             Bitmap base_template = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
@@ -730,7 +730,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         }
 
         // Loading message
-        public static EmbedBuilder P2EP_PSP_Loading_Message()
+        public EmbedBuilder P2EP_PSP_Loading_Message()
         {
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder

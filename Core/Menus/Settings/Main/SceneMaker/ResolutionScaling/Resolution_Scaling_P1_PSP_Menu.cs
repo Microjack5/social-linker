@@ -24,7 +24,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Resolution & Scaling - Persona (Remake)",
+                Name = "Resolution & Scaling - Persona (PSP™)",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -113,7 +113,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ Persona (Remake) Resolution & Scaling Menu"
+                Text = "↩️ Persona (PSP™) Resolution & Scaling Menu"
             };
 
             embed.WithFooter(footer);
@@ -201,7 +201,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ Persona (Remake) Resolution & Scaling Menu"
+                Text = "↩️ Persona (PSP™) Resolution & Scaling Menu"
             };
 
             embed.WithFooter(footer);
@@ -284,7 +284,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "💠 Persona (Remake) Resolution & Scaling Menu | ❌ Close Menu"
+                Text = "💠 Persona (PSP™) Resolution & Scaling Menu | ❌ Close Menu"
             };
 
             embed.WithFooter(footer);
@@ -361,7 +361,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "💠 Persona (Remake) Resolution & Scaling Menu | ❌ Close Menu"
+                Text = "💠 Persona (PSP™) Resolution & Scaling Menu | ❌ Close Menu"
             };
 
             embed.WithFooter(footer);

@@ -24,7 +24,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Template Settings - Persona (Remake)",
+                Name = "Template Settings - Persona (PSP™)",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -115,7 +115,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ Return to Persona (Remake) Template Settings"
+                Text = "↩️ Return to Persona (PSP™) Template Settings"
             };
 
             embed.WithFooter(footer);
@@ -200,7 +200,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ Return to Persona (Remake) Template Settings"
+                Text = "↩️ Return to Persona (PSP™) Template Settings"
             };
 
             embed.WithFooter(footer);
@@ -289,7 +289,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ Return to Persona (Remake) Template Settings"
+                Text = "↩️ Return to Persona (PSP™) Template Settings"
             };
 
             embed.WithFooter(footer);
@@ -374,7 +374,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "💠 Persona (Remake) Template Settings | ❌ Close Menu"
+                Text = "💠 Persona (PSP™) Template Settings | ❌ Close Menu"
             };
 
             embed.WithFooter(footer);
@@ -451,7 +451,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "💠 Persona (Remake) Template Settings | ❌ Close Menu"
+                Text = "💠 Persona (PSP™) Template Settings | ❌ Close Menu"
             };
 
             embed.WithFooter(footer);
@@ -528,7 +528,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "💠 Persona (Remake) Template Settings | ❌ Close Menu"
+                Text = "💠 Persona (PSP™) Template Settings | ❌ Close Menu"
             };
 
             embed.WithFooter(footer);

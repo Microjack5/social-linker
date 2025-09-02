@@ -1211,5 +1211,6 @@ namespace SocialLinker.Core.SceneMaker
         public bool Display_Name_Has_Invalid_Char { get; set; }
         public bool Dialogue_Has_Invalid_Char { get; set; }
         public bool P4AU_Multi_Char_Protag_Highlight_Toggle { get; set; } // MakerMulti
+        public int BBTAG_Layout { get; set; } // MakerMulti
     }
 }

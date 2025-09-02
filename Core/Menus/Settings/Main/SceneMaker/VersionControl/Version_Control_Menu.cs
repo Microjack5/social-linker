@@ -140,7 +140,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             }
             else if (account.VC_P1 == "P1-PSP")
             {
-                version_title = "Persona (Remake)";
+                version_title = "Persona (PSP™)";
             }
 
             // Use the version_title string in the embed's description.
@@ -150,7 +150,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                 $"⚙️ **Current Setting:** **`{version_title}`**\n" +
                 $"\n" +
                 $":one: **Revelations: Persona**\n" +
-                $":two: **Persona (Remake)**");
+                $":two: **Persona (PSP™)**");
 
             // Embed the user tutorial image for the menu.
             embed.WithImageUrl("https://i.imgur.com/t4YH4rN.png");
@@ -240,7 +240,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             }
             else if (account.VC_P2IS == "P2IS-PSP")
             {
-                version_title = "Persona 2: Innocent Sin (Remake)";
+                version_title = "Persona 2: Innocent Sin (PSP™)";
             }
 
             // Use the version_title string in the embed's description.
@@ -250,7 +250,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                 $"⚙️ **Current Setting:** **`{version_title}`**\n" +
                 $"\n" +
                 $":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
-                $":two: Persona 2: Innocent Sin (Remake)");
+                $":two: Persona 2: Innocent Sin (PSP™)");
 
             // Embed the user tutorial image for the menu.
             embed.WithImageUrl("https://i.imgur.com/7oh20qY.png");
@@ -340,7 +340,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             }
             else if (account.VC_P2EP == "P2EP-PSP")
             {
-                version_title = "Persona 2: Eternal Punishment (Remake)";
+                version_title = "Persona 2: Eternal Punishment (PSP™)";
             }
 
             // Use the version_title string in the embed's description.
@@ -350,7 +350,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                 $"⚙️ **Current Setting:** **`{version_title}`**\n" +
                 $"\n" +
                 $":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
-                $":two: Persona 2: Eternal Punishment (Remake)");
+                $":two: Persona 2: Eternal Punishment (PSP™)");
 
             // Embed the user tutorial image for the menu.
             embed.WithImageUrl("https://i.imgur.com/QPpK2TO.png");
@@ -740,7 +740,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             }
             else if (account.VC_P1 == "P1-PSP")
             {
-                version_title = "Persona (Remake)";
+                version_title = "Persona (PSP™)";
                 embed.WithThumbnailUrl("https://i.imgur.com/V3GQl38.jpg");
             }
 
@@ -832,7 +832,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             }
             else if (account.VC_P2IS == "P2IS-PSP")
             {
-                version_title = "Persona 2: Innocent Sin (Remake)";
+                version_title = "Persona 2: Innocent Sin (PSP™)";
                 embed.WithThumbnailUrl("https://i.imgur.com/yMcba0F.jpg");
             }
 
@@ -924,7 +924,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             }
             else if (account.VC_P2EP == "P2EP-PSP")
             {
-                version_title = "Persona 2: Eternal Punishment (Remake)";
+                version_title = "Persona 2: Eternal Punishment (PSP™)";
                 embed.WithThumbnailUrl("https://i.imgur.com/x04Ldby.jpg");
             }
 

@@ -701,7 +701,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Reactions
                 user_filter += "P1-PS1;";
             }
 
-            // Persona (Remake)
+            // Persona (PSP™)
             if (filterSession.P1_VC_PSP_Select == true)
             {
                 user_filter += "P1-PSP;";
@@ -713,7 +713,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Reactions
                 user_filter += "P2IS-PS1;";
             }
 
-            // Persona 2: Innocent Sin (Remake)
+            // Persona 2: Innocent Sin (PSP™)
             if (filterSession.P2IS_VC_PSP_Select == true)
             {
                 user_filter += "P2IS-PSP;";
@@ -725,7 +725,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Reactions
                 user_filter += "P2EP-PS1;";
             }
 
-            // Persona 2: Eternal Punishment (Remake)
+            // Persona 2: Eternal Punishment (PSP™)
             if (filterSession.P2EP_VC_PSP_Select == true)
             {
                 user_filter += "P2EP-PSP;";

@@ -1,15 +1,10 @@
 ﻿using Discord;
-using Discord.Rest;
 using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
-using SocialLinker.Core.LocalStorageTables;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -36,15 +31,15 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithAuthor(author);
 
             // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
+            embed.WithColor(EmbedSettings.Get_Game_Color(multimaker_session.MakerCommand.Template, null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
 
             embed.WithDescription("" +
                 $"Next, Select \"Enter Display Name & Dialogue\" button to specify the display name and what you want them to say.");
 
             var component = new ComponentBuilder()
                 .WithButton("Enter Display Name & Dialogue", customId: "makermulti-dialogue-entry-modal-open", ButtonStyle.Primary)
-                .WithButton("↩️ Return", customId: "makermulti-dialogue-entry-back", ButtonStyle.Secondary);
+                .WithButton("↩️ Return", customId: "back-to-makermulti-char-entry-1", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

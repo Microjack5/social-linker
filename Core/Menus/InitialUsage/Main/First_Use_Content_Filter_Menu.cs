@@ -303,7 +303,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                 "**Which version of Persona would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Revelations: Persona\n" +
-                ":two: Persona (Remake)");
+                ":two: Persona (PSP™)");
 
             embed.WithImageUrl("https://i.imgur.com/t4YH4rN.png");
 
@@ -387,7 +387,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                 "**Which version of Persona 2: Innocent Sin would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
-                ":two: Persona 2: Innocent Sin (Remake)");
+                ":two: Persona 2: Innocent Sin (PSP™)");
 
             embed.WithImageUrl("https://i.imgur.com/7oh20qY.png");
 
@@ -471,7 +471,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                 "**Which version of Persona 2: Eternal Punishment would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
-                ":two: Persona 2: Eternal Punishment (Remake)");
+                ":two: Persona 2: Eternal Punishment (PSP™)");
 
             embed.WithImageUrl("https://i.imgur.com/QPpK2TO.png");
 

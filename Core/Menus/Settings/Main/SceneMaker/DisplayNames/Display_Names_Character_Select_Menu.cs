@@ -234,19 +234,19 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                     return "Revelations: Persona";
 
                 case "P1-PSP":
-                    return "Persona (Remake)";
+                    return "Persona (PSP™)";
 
                 case "P2IS-PS1":
                     return "Persona 2: Innocent Sin (PlayStation®️)";
 
                 case "P2IS-PSP":
-                    return "Persona 2: Innocent Sin (Remake)";
+                    return "Persona 2: Innocent Sin (PSP™)";
 
                 case "P2EP-PS1":
                     return "Persona 2: Eternal Punishment (PlayStation®️)";
 
                 case "P2EP-PSP":
-                    return "Persona 2: Eternal Punishment (Remake)";
+                    return "Persona 2: Eternal Punishment (PSP™)";
 
                 case "P3F":
                     return "Persona 3 FES";

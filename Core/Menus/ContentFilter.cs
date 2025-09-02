@@ -64,7 +64,7 @@ namespace SocialLinker.Core.Menus
 
             if (filter_list.Contains("P1-PSP"))
             {
-                title_list.Add("Persona (Remake)");
+                title_list.Add("Persona (PSP™)");
             }
 
             if (filter_list.Contains("P2IS-PS1"))
@@ -74,7 +74,7 @@ namespace SocialLinker.Core.Menus
 
             if (filter_list.Contains("P2IS-PSP"))
             {
-                title_list.Add("Persona 2: Innocent Sin (Remake)");
+                title_list.Add("Persona 2: Innocent Sin (PSP™)");
             }
 
             if (filter_list.Contains("P2EP-PS1"))
@@ -84,7 +84,7 @@ namespace SocialLinker.Core.Menus
 
             if (filter_list.Contains("P2EP-PSP"))
             {
-                title_list.Add("Persona 2: Eternal Punishment (Remake)");
+                title_list.Add("Persona 2: Eternal Punishment (PSP™)");
             }
 
             if (filter_list.Contains("P3F"))

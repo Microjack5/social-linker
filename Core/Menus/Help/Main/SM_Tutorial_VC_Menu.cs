@@ -474,15 +474,15 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             embed.AddField("Persona Keywords", "" +
                 "<:P1_PS1:824469261316915220> `P1-PS1` - **Revelations: Persona**\n" +
-                "<:P1:751133115531133112> `P1-PSP` - **Persona (Remake)**");
+                "<:P1:751133115531133112> `P1-PSP` - **Persona (PSP™)**");
 
             embed.AddField("Persona 2: Innocent Sin Keywords", "" +
                 "<:P2IS:788950080396328990> `P2IS-PS1` - **Persona 2: Innocent Sin (PlayStation®️)**\n" +
-                "<:P2IS:788950080396328990> `P2IS-PSP` - **Persona 2: Innocent Sin (Remake)**");
+                "<:P2IS:788950080396328990> `P2IS-PSP` - **Persona 2: Innocent Sin (PSP™)**");
 
             embed.AddField("Persona 2: Eternal Punishment Keywords", "" +
                 "<:P2EP:788950163363463172> `P2EP-PS1` - **Persona 2: Eternal Punishment (PlayStation®️)**\n" +
-                "<:P2EP:788950163363463172> `P2EP-PSP` - **Persona 2: Eternal Punishment (Remake)**");
+                "<:P2EP:788950163363463172> `P2EP-PSP` - **Persona 2: Eternal Punishment (PSP™)**");
 
             embed.AddField("Persona 3 Keywords", "" +
                 "<:P3F:1096338540369039413> `P3F` - **Persona 3 FES**\n" +
@@ -753,15 +753,15 @@ namespace SocialLinker.Core.Menus.Help.Main
 
             embed.AddField("Persona Keywords", "" +
                 "<:P1_PS1:824469261316915220> `P1-PS1` - **Revelations: Persona**\n" +
-                "<:P1:751133115531133112> `P1-PSP` - **Persona (Remake)**");
+                "<:P1:751133115531133112> `P1-PSP` - **Persona (PSP™)**");
 
             embed.AddField("Persona 2: Innocent Sin Keywords", "" +
                 "<:P2IS:788950080396328990> `P2IS-PS1` - **Persona 2: Innocent Sin (PlayStation®️)**\n" +
-                "<:P2IS:788950080396328990> `P2IS-PSP` - **Persona 2: Innocent Sin (Remake)**");
+                "<:P2IS:788950080396328990> `P2IS-PSP` - **Persona 2: Innocent Sin (PSP™)**");
 
             embed.AddField("Persona 2: Eternal Punishment Keywords", "" +
                 "<:P2EP:788950163363463172> `P2EP-PS1` - **Persona 2: Eternal Punishment (PlayStation®️)**\n" +
-                "<:P2EP:788950163363463172> `P2EP-PSP` - **Persona 2: Eternal Punishment (Remake)**");
+                "<:P2EP:788950163363463172> `P2EP-PSP` - **Persona 2: Eternal Punishment (PSP™)**");
 
             embed.AddField("Persona 3 Keywords", "" +
                 "<:P3F:1096338540369039413> `P3F` - **Persona 3 FES**\n" +

@@ -112,9 +112,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             };
 
             embed.WithAuthor(author);
+            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
 
             embed.WithDescription("" +
-                "Quickly create a scene with multiple characters based on your existing scene maker settings. Choose a compatible title to start.\n");
+                "Quickly create a scene with multiple characters based on your existing scene maker settings! Choose a compatible title to start.\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -292,7 +293,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 "**Which version of Persona 2: Innocent Sin would you like to use?**\n" +
                 "\n" +
                 ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
-                ":two: Persona 2: Innocent Sin (Remake)");
+                ":two: Persona 2: Innocent Sin (PSP™)");
 
             embed.WithImageUrl("https://i.imgur.com/7oh20qY.png");
 
@@ -375,7 +376,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 "**Which version of Persona 2: Eternal Punishment would you like to use?**\n" +
                 "\n" +
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
-                ":two: Persona 2: Eternal Punishment (Remake)");
+                ":two: Persona 2: Eternal Punishment (PSP™)");
 
             embed.WithImageUrl("https://i.imgur.com/QPpK2TO.png");
 

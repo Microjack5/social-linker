@@ -256,12 +256,14 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 // We need a temporary bustup_data object here to check for associated animation frames
                 maker_character_data.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, maker_character_data);
 
-                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(menuSession, maker_character_data, base_sprite, false, current_character);
+                Console.WriteLine("Are we going here?");
+
+                Bitmap bustup_with_frames = Construct_Bustup_With_Frames(menuSession, maker_character_data, base_sprite, false);
                 return bustup_with_frames;
             }
         }
 
-        public static Bitmap Reverse_Bustup_Selection(MenuIdStructure menuSession, MakerCharacterData maker_character_data, Bitmap bustup, int current_character)
+        public static Bitmap Reverse_Bustup_Selection(MenuIdStructure menuSession, MakerCharacterData maker_character_data, Bitmap bustup)
         {
             OfficialSetData set_data = maker_character_data.Set_Data;
             BustupData bustup_data = maker_character_data.Bustup_Data;
@@ -280,7 +282,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 }
                 else
                 {
-                    Bitmap bustup_with_frames = Construct_Bustup_With_Frames(menuSession, maker_character_data, base_sprite, true, current_character);
+                    Bitmap bustup_with_frames = Construct_Bustup_With_Frames(menuSession, maker_character_data, base_sprite, true);
                     return bustup_with_frames;
                 }
             }
@@ -290,7 +292,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             }
         }
 
-        public static Bitmap Construct_Bustup_With_Frames(MenuIdStructure menuSession, MakerCharacterData maker_character_data, Bitmap bustup, bool reverse_file_exists, int current_character)
+        public static Bitmap Construct_Bustup_With_Frames(MenuIdStructure menuSession, MakerCharacterData maker_character_data, Bitmap bustup, bool reverse_file_exists)
         {
             Bitmap edited_bustup = bustup;
 
@@ -355,30 +357,8 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    switch (current_character)
-                    {
-                        case 1:
-                            menuSession.MenuTimer.Stop();
-                            //_ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Error_Eye_Frame_Not_Found(menuSession.User, menuSession.MenuMessage);
-                            break;
-
-                        case 2:
-                            menuSession.MenuTimer.Stop();
-                            //_ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Error_Eye_Frame_Not_Found(menuSession.User, menuSession.MenuMessage);
-                            break;
-
-                        case 3:
-                            menuSession.MenuTimer.Stop();
-                            //_ = MakerMulti_Sprite_Select_3_Menu.MakerMulti_Sprite_Select_3_Error_Eye_Frame_Not_Found(menuSession.User, menuSession.MenuMessage);
-                            break;
-
-                        case 4:
-                            menuSession.MenuTimer.Stop();
-                            //_ = MakerMulti_Sprite_Select_4_Menu.MakerMulti_Sprite_Select_4_Error_Eye_Frame_Not_Found(menuSession.User, menuSession.MenuMessage);
-                            break;
-                    }
-
-                    return null;
+                    menuSession.MenuTimer.Stop();
+                    throw new EyeFrameNotFoundException();
                 }
             }
 
@@ -435,30 +415,8 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 // If the frame data is null, send an error message and return null as well.
                 else
                 {
-                    switch (current_character)
-                    {
-                        case 1:
-                            menuSession.MenuTimer.Stop();
-                            //_ = MakerMulti_Sprite_Select_1_Menu.MakerMulti_Sprite_Select_1_Error_Mouth_Frame_Not_Found(menuSession.User, menuSession.MenuMessage);
-                            break;
-
-                        case 2:
-                            menuSession.MenuTimer.Stop();
-                            //_ = MakerMulti_Sprite_Select_2_Menu.MakerMulti_Sprite_Select_2_Error_Mouth_Frame_Not_Found(menuSession.User, menuSession.MenuMessage);
-                            break;
-
-                        case 3:
-                            menuSession.MenuTimer.Stop();
-                            //_ = MakerMulti_Sprite_Select_3_Menu.MakerMulti_Sprite_Select_3_Error_Mouth_Frame_Not_Found(menuSession.User, menuSession.MenuMessage);
-                            break;
-
-                        case 4:
-                            menuSession.MenuTimer.Stop();
-                            //_ = MakerMulti_Sprite_Select_4_Menu.MakerMulti_Sprite_Select_4_Error_Mouth_Frame_Not_Found(menuSession.User, menuSession.MenuMessage);
-                            break;
-                    }
-
-                    return null;
+                    menuSession.MenuTimer.Stop();
+                    throw new MouthFrameNotFoundException();
                 }
             }
 
@@ -508,6 +466,16 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             }
 
             return new_bitmap;
+        }
+
+        public class EyeFrameNotFoundException : Exception
+        {
+            public EyeFrameNotFoundException() : base("Eye frame not found") { }
+        }
+
+        public class MouthFrameNotFoundException : Exception
+        {
+            public MouthFrameNotFoundException() : base("Mouth frame not found") { }
         }
     }
 }
