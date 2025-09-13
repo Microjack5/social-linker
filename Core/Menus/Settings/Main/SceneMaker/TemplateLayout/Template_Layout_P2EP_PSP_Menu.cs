@@ -24,7 +24,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Template Settings - Persona 2: Eternal Punishment (PSP™)",
+                Name = "Template Settings - Persona 2: Eternal Punishment (PSP®️)",
                 IconUrl = user.GetAvatarUrl()
             };
 

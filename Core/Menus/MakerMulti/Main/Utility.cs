@@ -12,6 +12,36 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
 {
     class Utility
     {
+        public static string BBTAG_Series_To_Emote(string series)
+        {
+            switch (series)
+            {
+                case "BlazBlue":
+                    return "<:BlazBlue:657430195967492098>";
+
+                case "Persona 4 Arena":
+                    return "<:Persona4Arena:657430197699739669>";
+
+                case "Under Night In-Birth":
+                    return "<:UnderNightInBirth:657430196755890217>";
+
+                case "RWBY":
+                    return "<:RWBY:657428740594204692>";
+
+                case "Arcana Heart":
+                    return "<:ArcanaHeart:657428744222539787>";
+
+                case "Senran Kagura":
+                    return "<:SenranKagura:657428641281474570>";
+
+                case "Akatsuki En-Eins":
+                    return "<:AkatsukiEnEins:657428743845052427>";
+
+                default:
+                    return "";
+            }
+        }
+
         public static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure menuSession)
         {
             // Assign the menu session's message to another variable.

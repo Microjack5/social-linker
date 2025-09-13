@@ -37,11 +37,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
                 multimaker_session.MakerCommand.Template = "P3P";
-                multimaker_session.MakerCommand.Expected_Characters = 2;
 
                 menuSession.MenuTimer.Stop();
 
-                _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_Char_Details_Pt1_Main(menuSession);
+                _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_2Char_Details_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -50,11 +49,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
                 multimaker_session.MakerCommand.Template = "P4AU";
-                multimaker_session.MakerCommand.Expected_Characters = 2;
 
                 menuSession.MenuTimer.Stop();
 
-                _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_Char_Details_Pt1_Main(menuSession);
+                _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_2Char_Details_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -63,11 +61,10 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
                 multimaker_session.MakerCommand.Template = "P4D";
-                multimaker_session.MakerCommand.Expected_Characters = 2;
 
                 menuSession.MenuTimer.Stop();
 
-                _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_Char_Details_Pt1_Main(menuSession);
+                _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_2Char_Details_Main(menuSession);
                 return Task.CompletedTask;
             }
 

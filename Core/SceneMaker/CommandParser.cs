@@ -1195,6 +1195,16 @@ namespace SocialLinker.Core.SceneMaker
         public BustupData Bustup_Data { get; set; }
     }
 
+    public class MakerMultiDataBBTAG
+    {
+        public string Layout { get; set; } // MakerMulti
+        public string Speaker { get; set; } // MakerMulti
+        public string Speaker_Series { get; set; } // MakerMulti
+        public bool Speaker_Exists_In_Game { get; set; }
+        public bool Speaker_Is_Spriteless { get; set; }
+        //public MakerCharacterData Character_Data { get; set; } // MakerMulti
+    }
+
     public class MakerCommandData
     {
         public string Template { get; set; }
@@ -1211,6 +1221,9 @@ namespace SocialLinker.Core.SceneMaker
         public bool Display_Name_Has_Invalid_Char { get; set; }
         public bool Dialogue_Has_Invalid_Char { get; set; }
         public bool P4AU_Multi_Char_Protag_Highlight_Toggle { get; set; } // MakerMulti
-        public int BBTAG_Layout { get; set; } // MakerMulti
+        //public string BBTAG_Layout { get; set; } // MakerMulti
+        //public string BBTAG_Speaker { get; set; } // MakerMulti
+        //public MakerCharacterData BBTAG_Speaker_Data { get; set; } // MakerMulti
+        public MakerMultiDataBBTAG BBTAG_Specific_Data { get; set; }
     }
 }

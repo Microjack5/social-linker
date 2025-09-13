@@ -1905,6 +1905,18 @@ namespace SocialLinker.Core.Menus
                         case "MakerMulti_VC_P2EP_Main":
                             await MakerMulti_Version_Control_Reactions.Nav_MakerMulti_VC_P2EP_Main(component, menuSession);
                             break;
+
+                        case "MakerMulti_BBTAG_Layout_Main":
+                            await MakerMulti_BBTAG_Layout_Reactions.Nav_MakerMulti_BBTAG_Layout_Main(component, menuSession);
+                            break;
+
+                        case "MakerMulti_BBTAG_Speaker_Main":
+                            await MakerMulti_BBTAG_Speaker_Reactions.Nav_MakerMulti_BBTAG_Speaker_Main(component, menuSession);
+                            break;
+
+                        case "MakerMulti_BBTAG_Offscreen_Speaker_Main":
+                            await MakerMulti_BBTAG_Speaker_Reactions.Nav_MakerMulti_BBTAG_Offscreen_Speaker_Main(component, menuSession);
+                            break;
                     }
 
                     await component.DeferAsync();
@@ -1924,41 +1936,50 @@ namespace SocialLinker.Core.Menus
                 {
                     switch (menuSession.CurrentMenu)
                     {
-                        case "MakerMulti_Char_Details_Pt1_Main":
-                            await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_Char_Details_Pt1_Main(component, menuSession);
+                        case "MakerMulti_1Char_Details_Main":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_1Char_Details_Main(component, menuSession);
+                            break;
+
+                        case "MakerMulti_2Char_Details_Main":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_2Char_Details_Main(component, menuSession);
                             break;
 
                         case "MakerMulti_Char_Details_Pt1_Invalid_Character":
-                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
-                            break;
-
                         case "MakerMulti_Char_Details_Pt1_Invalid_Base_Sprite":
-                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
-                            break;
-
                         case "MakerMulti_Char_Details_Pt1_Sprite_Select_Too_Many_Animation_Frames":
-                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
-                            break;
-
                         case "MakerMulti_Char_Details_Pt1_Sprite_Select_Non_Digit_In_Sprite_Number":
-                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
-                            break;
-
                         case "MakerMulti_Char_Details_Pt1_Sprite_Select_Animation_Frame_With_Blank_Sprite":
-                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
-                            break;
-
                         case "MakerMulti_Char_Details_Pt1_Sprite_Select_Eye_Frame_Not_Found":
-                            await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
-                            break;
-
                         case "MakerMulti_Char_Details_Pt1_Sprite_Select_Mouth_Frame_Not_Found":
                             await MakerMulti_Char_Details_Pt1_Reactions.Return_To_Char_Details_Pt1(component, menuSession);
                             break;
 
-                        case "MakerMulti_Dialogue_Entry_Main":
-                            //await component.DeferAsync();
-                            await MakerMulti_Dialogue_Entry_Reactions.Nav_MakerMulti_Dialogue_Entry_Main(component, menuSession);
+                        // Pt 2
+                        case "MakerMulti_3Char_Details_Main":
+                            await MakerMulti_Char_Details_Pt2_Reactions.Nav_MakerMulti_3Char_Details_Main(component, menuSession);
+                            break;
+
+                        case "MakerMulti_4Char_Details_Main":
+                            await MakerMulti_Char_Details_Pt2_Reactions.Nav_MakerMulti_4Char_Details_Main(component, menuSession);
+                            break;
+
+                        case "MakerMulti_Char_Details_Pt2_Invalid_Character":
+                        case "MakerMulti_Char_Details_Pt2_Invalid_Base_Sprite":
+                        case "MakerMulti_Char_Details_Pt2_Sprite_Select_Too_Many_Animation_Frames":
+                        case "MakerMulti_Char_Details_Pt2_Sprite_Select_Non_Digit_In_Sprite_Number":
+                        case "MakerMulti_Char_Details_Pt2_Sprite_Select_Animation_Frame_With_Blank_Sprite":
+                        case "MakerMulti_Char_Details_Pt2_Sprite_Select_Eye_Frame_Not_Found":
+                        case "MakerMulti_Char_Details_Pt2_Sprite_Select_Mouth_Frame_Not_Found":
+                            await MakerMulti_Char_Details_Pt2_Reactions.Return_To_Char_Details_Pt2(component, menuSession);
+                            break;
+
+                        // Dialogue
+                        case "MakerMulti_Display_Name_and_Dialogue_Entry_Main":
+                            await MakerMulti_Dialogue_Entry_Reactions.Nav_MakerMulti_Display_Name_and_Dialogue_Entry_Main(component, menuSession);
+                            break;
+
+                        case "MakerMulti_Dialogue_Only_Entry_Main":
+                            await MakerMulti_Dialogue_Entry_Reactions.Nav_MakerMulti_Dialogue_Only_Entry_Main(component, menuSession);
                             break;
 
                         case "MakerMulti_P4AU_Protag_Highlight_Main":
@@ -1981,12 +2002,28 @@ namespace SocialLinker.Core.Menus
                 {
                     switch (modal.Data.CustomId)
                     {
-                        case "makermulti-char-entry-1-modal-submit":
-                            await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_Char_Details_Pt1_Modal(modal, menuSession);
+                        case "makermulti-1char-details-modal-submit":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_1Char_Details_Modal(modal, menuSession);
                             break;
 
-                        case "makermulti-dialogue-entry-modal-submit":
-                            await MakerMulti_Dialogue_Entry_Reactions.Nav_MakerMulti_Dialogue_Details_Modal(modal, menuSession);
+                        case "makermulti-2char-details-modal-submit":
+                            await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_2Char_Details_Modal(modal, menuSession);
+                            break;
+
+                        case "makermulti-3char-details-modal-submit":
+                            await MakerMulti_Char_Details_Pt2_Reactions.Nav_MakerMulti_3Char_Details_Modal(modal, menuSession);
+                            break;
+
+                        case "makermulti-4char-details-modal-submit":
+                            await MakerMulti_Char_Details_Pt2_Reactions.Nav_MakerMulti_4Char_Details_Modal(modal, menuSession);
+                            break;
+
+                        case "makermulti-display-name-and-dialogue-entry-modal-submit":
+                            await MakerMulti_Dialogue_Entry_Reactions.Nav_MakerMulti_Display_Name_and_Dialogue_Details_Modal(modal, menuSession);
+                            break;
+
+                        case "makermulti-dialogue-only-entry-modal-submit":
+                            await MakerMulti_Dialogue_Entry_Reactions.Nav_MakerMulti_Dialogue_Only_Details_Modal(modal, menuSession);
                             break;
                     }
                 }

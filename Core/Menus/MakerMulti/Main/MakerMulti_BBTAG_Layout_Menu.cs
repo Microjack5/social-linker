@@ -32,24 +32,25 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("BBTAG"));
 
             embed.WithDescription("" +
-                "Choose the layout of the scene.\n");
+                "Choose how you'd like the characters to be placed in the scene.\n");
 
-            embed.WithImageUrl("https://i.imgur.com/H1dJ2aU");
+            embed.WithImageUrl("https://i.imgur.com/enrWkjK.png");
 
             var selectMenu = new SelectMenuBuilder()
                     .WithPlaceholder("Select a layout")
                     .WithCustomId("multimaker-bbtag-layout")
                     .WithMinValues(1)
                     .WithMaxValues(1)
-                    .AddOption("Layout 1", "1")
-                    .AddOption("Layout 2", "2")
-                    .AddOption("Layout 3", "3")
-                    .AddOption("Layout 4", "4")
-                    .AddOption("Layout 5", "5")
-                    .AddOption("Layout 6", "6")
-                    .AddOption("Layout 7", "7")
-                    .AddOption("Layout 8", "8")
-                    .AddOption("Layout 9", "9");
+                    .AddOption("One character left", "1", null, new Emoji("1️⃣"))
+                    .AddOption("One character right", "2", null, new Emoji("2️⃣"))
+                    .AddOption("One character centered", "3", null, new Emoji("3️⃣"))
+                    .AddOption("One character left + One character right", "4", null, new Emoji("4️⃣"))
+                    .AddOption("Tag team left", "5", null, new Emoji("5️⃣"))
+                    .AddOption("Tag team right", "6", null, new Emoji("6️⃣"))
+                    .AddOption("Tag team centered", "7", null, new Emoji("7️⃣"))
+                    .AddOption("One character left + Tag team right", "8", null, new Emoji("8️⃣"))
+                    .AddOption("Tag team left + One character right", "9", null, new Emoji("9️⃣"))
+                    .AddOption("Tag team left + Tag team right", "10", null, new Emoji("🔟"));
 
             var component = new ComponentBuilder()
                 .WithSelectMenu(selectMenu);
@@ -66,6 +67,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                     x.Embed = embed.Build();
                     x.Components = component.Build();
                 });
+
             }
             catch (Exception ex)
             {

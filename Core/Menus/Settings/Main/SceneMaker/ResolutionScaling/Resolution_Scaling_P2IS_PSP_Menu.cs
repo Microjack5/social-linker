@@ -25,7 +25,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Resolution & Scaling - Persona 2: Innocent Sin (PSP™)",
+                Name = "Resolution & Scaling - Persona 2: Innocent Sin (PSP®️)",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -114,7 +114,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ P2IS (PSP™) Resolution & Scaling Menu"
+                Text = "↩️ P2IS (PSP®️) Resolution & Scaling Menu"
             };
 
             embed.WithFooter(footer);
@@ -202,7 +202,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ P2IS (PSP™) Resolution & Scaling Menu"
+                Text = "↩️ P2IS (PSP®️) Resolution & Scaling Menu"
             };
 
             embed.WithFooter(footer);
@@ -285,7 +285,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "💠 P2IS (PSP™) Resolution & Scaling Menu | ❌ Close Menu"
+                Text = "💠 P2IS (PSP®️) Resolution & Scaling Menu | ❌ Close Menu"
             };
 
             embed.WithFooter(footer);
@@ -362,7 +362,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "💠 P2IS (PSP™) Resolution & Scaling Menu | ❌ Close Menu"
+                Text = "💠 P2IS (PSP®️) Resolution & Scaling Menu | ❌ Close Menu"
             };
 
             embed.WithFooter(footer);

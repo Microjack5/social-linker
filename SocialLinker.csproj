@@ -271,7 +271,6 @@
     <Compile Include="Core\Menus\InitialUsage\Reactions\First_Use_Content_Filter_Reactions.cs" />
     <Compile Include="Core\Menus\InitialUsage\Reactions\SetFirstTheme_Reactions.cs" />
     <Compile Include="Core\Menus\ItemListIterator.cs" />
-    <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_BBTAG_Char_Entry_1_Menu.cs" />
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_BBTAG_Layout_Menu.cs" />
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_BBTAG_Speaker_Menu.cs" />
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Char_Details_Pt1_Menu.cs" />
@@ -282,7 +281,9 @@
     <Compile Include="Core\Menus\MakerMulti\Main\MakerMulti_Version_Control_Menu.cs" />
     <Compile Include="Core\Menus\MakerMulti\Main\Utility.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_BBTAG_Layout_Reactions.cs" />
+    <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_BBTAG_Speaker_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Char_Details_Pt1_Reactions.cs" />
+    <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Char_Details_Pt2_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Dialogue_Entry_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_P4AU_Protag_Highlight_Reactions.cs" />
     <Compile Include="Core\Menus\MakerMulti\Reactions\MakerMulti_Title_Select_Reactions.cs" />

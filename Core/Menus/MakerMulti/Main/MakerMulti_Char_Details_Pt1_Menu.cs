@@ -14,7 +14,30 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
 {
     class MakerMulti_Char_Details_Pt1_Menu
     {
-        public static async Task MakerMulti_Char_Details_Pt1_Main(MenuIdStructure menuSession)
+        private static string back_to_1char_detail_menu = "back-to-makermulti-1char-details";
+        private static string back_to_2char_detail_menu = "back-to-makermulti-2char-details";
+        //private static string back_to_bbtag_layout_menu = "back-to-makermulti-bbtag-layout-select";
+
+        public static string Get_Back_Button_Id(SocialLinkerCommand multimaker_session)
+        {
+            switch (multimaker_session.MakerCommand.Template)
+            {
+                case "BBTAG":
+                    switch (multimaker_session.MakerCommand.Expected_Characters)
+                    {
+                        case 1:
+                            return back_to_1char_detail_menu;
+
+                        default:
+                            return back_to_2char_detail_menu;
+                    }
+            }
+
+            return back_to_2char_detail_menu;
+        }
+
+        // Main
+        public static async Task MakerMulti_1Char_Details_Main(MenuIdStructure menuSession)
         {
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(menuSession.User);
@@ -37,103 +60,30 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
 
             embed.WithDescription("" +
-                $"Let's make your scene! Select \"Enter Character Details\" to specify characters and their sprite numbers.");
+                $"Let's get started with your scene! Select **`[Enter Character Details]`** to specify your character and their sprite number.");
+
+            switch (multimaker_session.MakerCommand.Template)
+            {
+                case "BBTAG":
+                    switch (multimaker_session.MakerCommand.BBTAG_Specific_Data.Layout)
+                    {
+                        case "1":
+                            embed.WithImageUrl("https://i.imgur.com/7qN7IXv.png");
+                            break;
+
+                        case "2":
+                            embed.WithImageUrl("https://i.imgur.com/l3ZG5Gq.png");
+                            break;
+
+                        case "3":
+                            embed.WithImageUrl("https://i.imgur.com/BnDIfWC.png");
+                            break;
+                    }    
+                    break;
+            }
 
             var component = new ComponentBuilder()
-                .WithButton("Enter Character Details", customId: "makermulti-char-details-pt1-modal-open", ButtonStyle.Primary)
-                .WithButton("↩️ Return", customId: "back-to-makermulti-title-select", ButtonStyle.Secondary);
-
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                    x.Components = component.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                await message.DeleteAsync();
-                await ErrorHandling.PermissionCheck(message);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_Char_Details_Pt1_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
-        }
-
-        public static async Task MakerMulti_Char_Details_Pt1_Modal(SocketMessageComponent component)
-        {
-            // Get the account information of the command's user.
-            if (component.Data.CustomId == "makermulti-char-details-pt1-modal-open")
-            {
-                try
-                {
-                    var modal = new ModalBuilder()
-                    .WithTitle("Character Details")
-                    .WithCustomId("makermulti-char-entry-1-modal-submit")
-                    .AddTextInput("Character #1", "character_1")
-                    .AddTextInput("Sprite number for Character #1", "sprite_1")
-                    .AddTextInput("Character #2", "character_2")
-                    .AddTextInput("Sprite number for Character #2", "sprite_2");
-
-                    await component.RespondWithModalAsync(modal.Build());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-        }
-
-        // BBTAG
-        public static async Task MakerMulti_BBTAG_1Char_Details_Main(MenuIdStructure menuSession)
-        {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(menuSession.User);
-            var message = menuSession.MenuMessage;
-            var user = menuSession.User;
-
-            var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Character Details",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Game_Color(multimaker_session.MakerCommand.Template, account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
-
-            embed.WithDescription("" +
-                $"Let's make your scene! Select \"Enter Character Details\" to specify your character and their sprite number.");
-
-            var component = new ComponentBuilder()
-                .WithButton("Enter Character Details", customId: "makermulti-bbtag-1char-details-modal-open", ButtonStyle.Primary)
+                .WithButton("Enter Character Details", customId: "makermulti-1char-details-modal-open", ButtonStyle.Primary)
                 .WithButton("↩️ Return", customId: "back-to-makermulti-bbtag-layout-select", ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
@@ -162,7 +112,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             }
 
             // Edit the menu session according to the current message.
-            menuSession.CurrentMenu = "MakerMulti_BBTAG_1Char_Details_Main";
+            menuSession.CurrentMenu = "MakerMulti_1Char_Details_Main";
             menuSession.MenuTimer = new Timer()
             {
                 // Create a timer that expires as a "time out" duration for the user.
@@ -175,18 +125,186 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
         }
 
-        public static async Task MakerMulti_BBTAG_1Char_Details_Modal(SocketMessageComponent component)
+        public static async Task MakerMulti_2Char_Details_Main(MenuIdStructure menuSession)
         {
             // Get the account information of the command's user.
-            if (component.Data.CustomId == "makermulti-bbtag-1char-details-modal-open")
+            var account = UserInfoClasses.GetAccount(menuSession.User);
+            var message = menuSession.MenuMessage;
+            var user = menuSession.User;
+
+            var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Character Details",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            // Determine the color and thumbnail for the embeded message
+            embed.WithColor(EmbedSettings.Get_Game_Color(multimaker_session.MakerCommand.Template, account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
+
+            string back_button_id = "";
+
+            if (multimaker_session.MakerCommand.Template == "BBTAG")
+            {
+                back_button_id = "back-to-makermulti-bbtag-layout-select";
+            }
+            else
+            {
+                back_button_id = "back-to-makermulti-title-select";
+            }
+
+            embed.WithDescription("" +
+                $"Let's get started with your scene! Select **`[Enter Character Details]`** to specify Characters #1 & #2 with their sprite numbers.");
+
+            switch (multimaker_session.MakerCommand.Template)
+            {
+                case "P2IS-PS1":
+                    embed.WithImageUrl("https://i.imgur.com/vfmrprZ.png");
+                    break;
+
+                case "P2IS-PSP":
+                    embed.WithImageUrl("https://i.imgur.com/ossp5cl.png");
+                    break;
+
+                case "P2EP-PS1":
+                    embed.WithImageUrl("https://i.imgur.com/85Z4cIc.png");
+                    break;
+
+                case "P2EP-PSP":
+                    embed.WithImageUrl("https://i.imgur.com/oITaVYl.png");
+                    break;
+
+                case "P3P":
+                    embed.WithImageUrl("https://i.imgur.com/wn1P3sy.png");
+                    break;
+
+                case "P4AU":
+                    embed.WithImageUrl("https://i.imgur.com/xL7MWrn.png");
+                    break;
+
+                case "P4D":
+                    embed.WithImageUrl("https://i.imgur.com/mx7hq8T.png");
+                    break;
+
+                case "BBTAG":
+                    switch (multimaker_session.MakerCommand.BBTAG_Specific_Data.Layout)
+                    {
+                        case "4":
+                            embed.WithImageUrl("https://i.imgur.com/B2V7VjZ.png");
+                            break;
+
+                        case "5":
+                            embed.WithImageUrl("https://i.imgur.com/pdHXTrI.png");
+                            break;
+
+                        case "6":
+                            embed.WithImageUrl("https://i.imgur.com/Ca9Eqp6.png");
+                            break;
+
+                        case "7":
+                            embed.WithImageUrl("https://i.imgur.com/lsfpQDh.png");
+                            break;
+
+                        case "8":
+                            embed.WithImageUrl("https://i.imgur.com/InejQFE.png");
+                            break;
+
+                        case "9":
+                            embed.WithImageUrl("https://i.imgur.com/GkAPNhN.png");
+                            break;
+
+                        case "10":
+                            embed.WithImageUrl("https://i.imgur.com/eHAGpqL.png");
+                            break;
+                    }
+                    break;
+            }
+
+            var component = new ComponentBuilder()
+                .WithButton("Enter Character Details", customId: "makermulti-2char-details-modal-open", ButtonStyle.Primary)
+                .WithButton("↩️ Return", customId: back_button_id, ButtonStyle.Secondary);
+
+            // Attempt editing the message if it hasn't been deleted by the user yet.
+            // If it has, catch the exception, remove the menu entry from the global list, and return.
+            try
+            {
+                // Remove all reactions from the current message.
+                await message.RemoveAllReactionsAsync();
+
+                // Edit the current active message by replacing it with the recently created embed.
+                await message.ModifyAsync(x => {
+                    x.Embed = embed.Build();
+                    x.Components = component.Build();
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                await message.DeleteAsync();
+                await ErrorHandling.PermissionCheck(message);
+
+                // Remove the menu entry from the global list.
+                Global.MenuIdList.Remove(menuSession);
+
+                return;
+            }
+
+            // Edit the menu session according to the current message.
+            menuSession.CurrentMenu = "MakerMulti_2Char_Details_Main";
+            menuSession.MenuTimer = new Timer()
+            {
+                // Create a timer that expires as a "time out" duration for the user.
+                Interval = MenuConfig.menu.timerDuration,
+                AutoReset = false,
+                Enabled = true
+            };
+
+            // If the menu timer runs out, activate a function.
+            menuSession.MenuTimer.Elapsed += (sender, e) => Utility.MenuTimer_Elapsed(sender, e, menuSession);
+        }
+
+        // Modal
+        public static async Task MakerMulti_1Char_Details_Modal(SocketMessageComponent component)
+        {
+            // Get the account information of the command's user.
+            if (component.Data.CustomId == "makermulti-1char-details-modal-open")
             {
                 try
                 {
                     var modal = new ModalBuilder()
                     .WithTitle("Character Details")
-                    .WithCustomId("makermulti-bbtag-1char-details-modal-submit")
+                    .WithCustomId("makermulti-1char-details-modal-submit")
                     .AddTextInput("Character", "character_1")
                     .AddTextInput("Sprite number", "sprite_1");
+
+                    await component.RespondWithModalAsync(modal.Build());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        public static async Task MakerMulti_2Char_Details_Modal(SocketMessageComponent component)
+        {
+            // Get the account information of the command's user.
+            if (component.Data.CustomId == "makermulti-2char-details-modal-open")
+            {
+                try
+                {
+                    var modal = new ModalBuilder()
+                    .WithTitle("Character Details")
+                    .WithCustomId("makermulti-2char-details-modal-submit")
+                    .AddTextInput("Character #1", "character_1")
+                    .AddTextInput("Sprite number for Character #1", "sprite_1")
+                    .AddTextInput("Character #2", "character_2")
+                    .AddTextInput("Sprite number for Character #2", "sprite_2");
 
                     await component.RespondWithModalAsync(modal.Build());
                 }
@@ -226,7 +344,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Make sure the character’s keyword is typed correctly and react with ↩️ to try again.");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-details-pt1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: Get_Back_Button_Id(multimaker_session), ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -296,7 +414,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Use the slash command **`maker_sheet`** to view which character sprites are available.");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-details-pt1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: Get_Back_Button_Id(multimaker_session), ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -364,7 +482,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 "Start with the base sprite number first, then connect an eye frame number to it with a hyphen. If the character sprite also has mouth frames, connect it after the eye frame number with a hyphen, too.");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-details-pt1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: Get_Back_Button_Id(multimaker_session), ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -432,7 +550,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 "Start with the base sprite number first, then connect an eye frame number to it with a hyphen. If the character sprite also has mouth frames, connect it after the eye frame number with a hyphen, too.");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-details-pt1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: Get_Back_Button_Id(multimaker_session), ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -500,7 +618,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Check which animation frames are available for the character and react with ↩️ to try again.\n");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-details-pt1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: Get_Back_Button_Id(multimaker_session), ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -568,7 +686,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Check which animation frames are available for the character and react with ↩️ to try again.\n");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-details-pt1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: Get_Back_Button_Id(multimaker_session), ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -636,7 +754,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                 $"Check which animation frames are available for the character and react with ↩️ to try again.\n");
 
             var component = new ComponentBuilder()
-                .WithButton("↩️ Retry", customId: "back-to-makermulti-char-details-pt1", ButtonStyle.Secondary);
+                .WithButton("↩️ Retry", customId: Get_Back_Button_Id(multimaker_session), ButtonStyle.Secondary);
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

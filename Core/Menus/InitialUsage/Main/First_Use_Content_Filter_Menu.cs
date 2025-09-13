@@ -149,6 +149,128 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             await First_Use_Content_Filter_Main(menuSession.User, menuSession.MenuMessage);
         }
 
+        //public static async Task First_Use_Content_Filter_Main(SocketGuildUser user, RestUserMessage message)
+        //{
+        //    // Get the account information of the command's user.
+        //    var account = UserInfoClasses.GetAccount(user);
+
+        //    // Find the menu session associated with the current user.
+        //    var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+
+        //    // Find the filter session associated with the current user.
+        //    var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == user.Id);
+
+        //    // In case the user backtracks to this menu, set the values to activate all the other interactive menus and title options to false.
+        //    filterSession.P1_Select = false;
+        //    filterSession.P2IS_Select = false;
+        //    filterSession.P2EP_Select = false;
+        //    filterSession.P3_Select = false;
+        //    filterSession.P4_Select = false;
+        //    filterSession.P4AU_Select = false;
+        //    filterSession.P4D_Select = false;
+        //    filterSession.P5_Select = false;
+        //    filterSession.BBTAG_Select = false;
+        //    filterSession.P5S_Select = false;
+
+        //    var embed = new EmbedBuilder();
+        //    var author = new EmbedAuthorBuilder
+        //    {
+        //        Name = "First time using Social Linker?",
+        //        IconUrl = user.GetAvatarUrl()
+        //    };
+
+        //    embed.WithAuthor(author);
+
+        //    var footer = new EmbedFooterBuilder
+        //    {
+        //        Text = "✅ Confirm"
+        //    };
+
+        //    embed.WithFooter(footer);
+
+        //    embed.WithThumbnailUrl("https://i.imgur.com/L0K5pNh.png");
+
+        //    embed.WithDescription("" +
+        //        ":warning: **__PLEASE READ CAREFULLY BEFORE CONTINUING!__** :warning:\n" +
+        //        "\n" +
+        //        "Social Linker contains content from all across the Persona series, so it might be easy to spoil yourself if you’re actively avoiding certain titles.\n" +
+        //        "\n" +
+        //        "**Select the games you want to __avoid spoilers for__ by reacting with their icons below.**\n" +
+        //        "You’ll receive a warning message whenever related content is accessed to prevent you from accidentally viewing it. " +
+        //        "This won’t prevent other users around you from accessing such content, however.\n" +
+        //        "\n" +
+        //        "Once you’ve finished selecting unwanted titles (or if you wish to choose nothing), select ✅ to continue.\n" +
+        //        "You can change these settings later on whenever you wish to.\n" +
+        //        "\n" +
+        //        "<:P1:751133115531133112> **Persona**\n" +
+        //        "<:P2IS:788950080396328990> **Persona 2: Innocent Sin**\n" +
+        //        "<:P2EP:788950163363463172> **Persona 2: Eternal Punishment**\n" +
+        //        "<:P3:751133114918633483> **Persona 3**\n" +
+        //        "<:P4:751133120530612274> **Persona 4**\n" +
+        //        "<:P4AU:751133122342420572> **Persona 4 Arena Ultimax**\n" +
+        //        "<:P4D:751133120346062859> **Persona 4: Dancing All Night**\n" +
+        //        "<:P5:751133123861020742> **Persona 5**\n" +
+        //        "<:P5S:852644176188669972> **Persona 5 Strikers**\n" +
+        //        "<:BBTAG:751133123013771617> **BlazBlue: Cross Tag Battle**\n");
+
+        //    // Attempt editing the message if it hasn't been deleted by the user yet.
+        //    // If it has, catch the exception, remove the menu entry from the global list, and return.
+        //    try
+        //    {
+        //        // Remove all reactions from the current message.
+        //        await message.RemoveAllReactionsAsync();
+
+        //        // Edit the current active message by replacing it with the recently created embed.
+        //        await message.ModifyAsync(x => {
+        //            x.Embed = embed.Build();
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex);
+        //        await message.DeleteAsync();
+        //        await ErrorHandling.PermissionCheck(message);
+
+        //        // Remove the menu and filter entries from the global list.
+        //        Global.MenuIdList.Remove(menuSession);
+        //        Global.ContentFilterList.Remove(filterSession);
+
+        //        return;
+        //    }
+
+        //    // Edit the menu session according to the current message.
+        //    menuSession.CurrentMenu = "First_Use_Content_Filter_Main";
+        //    menuSession.MenuTimer = new Timer()
+        //    {
+        //        // Create a timer that expires as a "time out" duration for the user.
+        //        Interval = MenuConfig.menu.timerDuration,
+        //        AutoReset = false,
+        //        Enabled = true
+        //    };
+
+        //    // If the menu timer runs out, activate a function.
+        //    menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+
+        //    // Create an empty list for reactions.
+        //    List<IEmote> reaction_list = new List<IEmote> { };
+
+        //    // Add needed emote reactions for the menu.
+        //    reaction_list.Add(Emote.Parse("<:P1:751133115531133112>"));
+        //    reaction_list.Add(Emote.Parse("<:P2IS:788950080396328990>"));
+        //    reaction_list.Add(Emote.Parse("<:P2EP:788950163363463172>"));
+        //    reaction_list.Add(Emote.Parse("<:P3:751133114918633483>"));
+        //    reaction_list.Add(Emote.Parse("<:P4:751133120530612274>"));
+        //    reaction_list.Add(Emote.Parse("<:P4AU:751133122342420572>"));
+        //    reaction_list.Add(Emote.Parse("<:P4D:751133120346062859>"));
+        //    reaction_list.Add(Emote.Parse("<:P5:751133123861020742>"));
+        //    reaction_list.Add(Emote.Parse("<:P5S:852644176188669972>"));
+        //    reaction_list.Add(Emote.Parse("<:BBTAG:751133123013771617>"));
+        //    reaction_list.Add(new Emoji("✅"));
+
+        //    // Add the reactions to the message.
+        //    _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+        //}
+
         public static async Task First_Use_Content_Filter_Main(SocketGuildUser user, RestUserMessage message)
         {
             // Get the account information of the command's user.
@@ -156,21 +278,6 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
 
             // Find the menu session associated with the current user.
             var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
-
-            // Find the filter session associated with the current user.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == user.Id);
-
-            // In case the user backtracks to this menu, set the values to activate all the other interactive menus and title options to false.
-            filterSession.P1_Select = false;
-            filterSession.P2IS_Select = false;
-            filterSession.P2EP_Select = false;
-            filterSession.P3_Select = false;
-            filterSession.P4_Select = false;
-            filterSession.P4AU_Select = false;
-            filterSession.P4D_Select = false;
-            filterSession.P5_Select = false;
-            filterSession.BBTAG_Select = false;
-            filterSession.P5S_Select = false;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -191,27 +298,13 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             embed.WithThumbnailUrl("https://i.imgur.com/L0K5pNh.png");
 
             embed.WithDescription("" +
-                ":warning: **__PLEASE READ CAREFULLY BEFORE CONTINUING!__** :warning:\n" +
+                "Here's a quick guide to start!\n" +
                 "\n" +
-                "Social Linker contains content from all across the Persona series, so it might be easy to spoil yourself if you’re actively avoiding certain titles.\n" +
+                "🔷 Use the **`help`** command for guides on how to use features like the scene maker and status screens.\n" +
+                "🔷 Use the **`settings`** command to customize your Social Linker profile and change how your scene maker images appear.\n" +
+                "🔷 Avoiding spoilers? Go to [Profile Settings] under the **`settings`** menu to filter out content for specific titles.\n" +
                 "\n" +
-                "**Select the games you want to __avoid spoilers for__ by reacting with their icons below.**\n" +
-                "You’ll receive a warning message whenever related content is accessed to prevent you from accidentally viewing it. " +
-                "This won’t prevent other users around you from accessing such content, however.\n" +
-                "\n" +
-                "Once you’ve finished selecting unwanted titles (or if you wish to choose nothing), select ✅ to continue.\n" +
-                "You can change these settings later on whenever you wish to.\n" +
-                "\n" +
-                "<:P1:751133115531133112> **Persona**\n" +
-                "<:P2IS:788950080396328990> **Persona 2: Innocent Sin**\n" +
-                "<:P2EP:788950163363463172> **Persona 2: Eternal Punishment**\n" +
-                "<:P3:751133114918633483> **Persona 3**\n" +
-                "<:P4:751133120530612274> **Persona 4**\n" +
-                "<:P4AU:751133122342420572> **Persona 4 Arena Ultimax**\n" +
-                "<:P4D:751133120346062859> **Persona 4: Dancing All Night**\n" +
-                "<:P5:751133123861020742> **Persona 5**\n" +
-                "<:P5S:852644176188669972> **Persona 5 Strikers**\n" +
-                "<:BBTAG:751133123013771617> **BlazBlue: Cross Tag Battle**\n");
+                "That's all! Press the button to unlock Social Linker and start using commands!\n");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -303,9 +396,9 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                 "**Which version of Persona would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Revelations: Persona\n" +
-                ":two: Persona (PSP™)");
+                ":two: Persona (PSP®️)");
 
-            embed.WithImageUrl("https://i.imgur.com/t4YH4rN.png");
+            embed.WithImageUrl("https://i.imgur.com/bCWThuf.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -387,9 +480,9 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                 "**Which version of Persona 2: Innocent Sin would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
-                ":two: Persona 2: Innocent Sin (PSP™)");
+                ":two: Persona 2: Innocent Sin (PSP®️)");
 
-            embed.WithImageUrl("https://i.imgur.com/7oh20qY.png");
+            embed.WithImageUrl("https://i.imgur.com/6Utgced.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -471,9 +564,9 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                 "**Which version of Persona 2: Eternal Punishment would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
-                ":two: Persona 2: Eternal Punishment (PSP™)");
+                ":two: Persona 2: Eternal Punishment (PSP®️)");
 
-            embed.WithImageUrl("https://i.imgur.com/QPpK2TO.png");
+            embed.WithImageUrl("https://i.imgur.com/JAZN3dP.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

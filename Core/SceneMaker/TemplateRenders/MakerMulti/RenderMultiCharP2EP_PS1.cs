@@ -95,7 +95,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
 
                 graphics.DrawImage(base_p2ep_ps1_rendering.Render_Message_Window(account), 0, 0, template_width, template_height);
 
-                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
+                string display_name = sl_command.MakerCommand.Display_Name;
                 display_name = OfficialSetMethods.Validate_Input(sl_command, "P2EP-PS1", "Name", display_name);
 
                 maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P2EP-PS1", "Dialogue", maker_command_data.Dialogue);

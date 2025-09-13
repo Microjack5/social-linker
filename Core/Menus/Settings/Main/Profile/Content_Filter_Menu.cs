@@ -198,9 +198,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 "**Which version of Persona would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Revelations: Persona\n" +
-                ":two: Persona (PSP™)");
+                ":two: Persona (PSP®️)");
 
-            embed.WithImageUrl("https://i.imgur.com/t4YH4rN.png");
+            embed.WithImageUrl("https://i.imgur.com/bCWThuf.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -282,9 +282,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 "**Which version of Persona 2: Innocent Sin would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
-                ":two: Persona 2: Innocent Sin (PSP™)");
+                ":two: Persona 2: Innocent Sin (PSP®️)");
 
-            embed.WithImageUrl("https://i.imgur.com/7oh20qY.png");
+            embed.WithImageUrl("https://i.imgur.com/6Utgced.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -366,9 +366,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 "**Which version of Persona 2: Eternal Punishment would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
                 "\n" +
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
-                ":two: Persona 2: Eternal Punishment (PSP™)");
+                ":two: Persona 2: Eternal Punishment (PSP®️)");
 
-            embed.WithImageUrl("https://i.imgur.com/QPpK2TO.png");
+            embed.WithImageUrl("https://i.imgur.com/JAZN3dP.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.

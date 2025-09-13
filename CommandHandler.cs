@@ -322,6 +322,7 @@ namespace SocialLinker
                     break;
 
                 case "maker_multi":
+                    command.MakerCommand = SL_To_Maker_Command(command);
                     await Commands.MakerMulti.MakerMultiMenu(command);
                     SocialLinkerCommandLogging.LogData(command);
                     break;
@@ -633,7 +634,8 @@ namespace SocialLinker
         {
             var guildCommand = new SlashCommandBuilder()
                 .WithName("maker_multi")
-                .WithDescription("Quickly create a scene with multiple characters.");
+                .WithDescription("Quickly create a scene with multiple characters.")
+                .AddOption("background", ApplicationCommandOptionType.Attachment, "Upload an image to use as a background.", isRequired: false);
 
             try
             {

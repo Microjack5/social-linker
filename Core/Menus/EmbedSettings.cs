@@ -90,17 +90,26 @@ namespace SocialLinker.Core.Menus
                     return new Color(0, 195, 243);
 
                 case "P3P":
-                    switch (account.P3P_TS_Color)
+                    try
                     {
-                        case "Male Protagonist":
-                            return new Color(0, 195, 243);
+                        switch (account.P3P_TS_Color)
+                        {
+                            case "Male Protagonist":
+                                return new Color(0, 195, 243);
 
-                        case "Female Protagonist":
-                            return new Color(255, 117, 154);
+                            case "Female Protagonist":
+                                return new Color(255, 117, 154);
 
-                        default:
-                            return new Color(0, 195, 243);
+                            default:
+                                return new Color(0, 195, 243);
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                        return new Color(0, 195, 243);
+                    }
+                    
 
                 case "P3R":
                     return new Color(0, 195, 243);
@@ -127,21 +136,29 @@ namespace SocialLinker.Core.Menus
                     return new Color(212, 0, 12);
 
                 case "BBTAG":
-                    // Assign an embed color based on the user's episode header setting for the BBTAG template.
-                    switch (account.BBTAG_TS_Header)
+                    try
                     {
-                        case "Episode P4A":
-                            return new Color(241, 233, 0);
+                        // Assign an embed color based on the user's episode header setting for the BBTAG template.
+                        switch (account.BBTAG_TS_Header)
+                        {
+                            case "Episode P4A":
+                                return new Color(241, 233, 0);
 
-                        case "Episode Under Night In-Birth":
-                            return new Color(141, 72, 249);
+                            case "Episode Under Night In-Birth":
+                                return new Color(141, 72, 249);
 
-                        case "Episode RWBY":
-                            return new Color(250, 50, 85);
+                            case "Episode RWBY":
+                                return new Color(250, 50, 85);
 
-                        // If the episode header is set to BlazBlue, Prologue, or Extra, default to a blue color.
-                        default:
-                            return new Color(66, 119, 255);
+                            // If the episode header is set to BlazBlue, Prologue, or Extra, default to a blue color.
+                            default:
+                                return new Color(66, 119, 255);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                        return new Color(66, 119, 255);
                     }
 
                 default:

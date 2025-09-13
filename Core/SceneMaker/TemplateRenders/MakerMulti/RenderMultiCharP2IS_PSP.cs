@@ -110,7 +110,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
 
             System.Drawing.Color display_name_color = System.Drawing.Color.FromArgb(166, 222, 69);
 
-            string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
+            string display_name = sl_command.MakerCommand.Display_Name;
             display_name = OfficialSetMethods.Validate_Input(sl_command, "P2IS-PSP", "Name", display_name);
 
             Bitmap display_name_layer = base_p2is_psp_rendering.Render_Name(display_name);
@@ -120,6 +120,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
             // We'll start rendering our needed text here.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
+                graphics.DrawImage(base_p2is_psp_rendering.Bitmap_To_Color(display_name_layer, display_name_color, display_name_area), 0, 0, template_width, template_height);
+
                 // Draw the input dialogue to the template.
                 maker_command_data.Dialogue = OfficialSetMethods.Validate_Input(sl_command, "P2IS-PSP", "Dialogue", maker_command_data.Dialogue);
                 List<string>[] dialogue_lines = OfficialSetMethods.Line_Parser(sl_command, "P2IS-PSP", maker_command_data.Dialogue, 3, 370);

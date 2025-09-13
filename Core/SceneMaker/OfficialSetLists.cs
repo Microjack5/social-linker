@@ -60,7 +60,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Persona (PSP™) Conversation Portrait Sets",
+                Name = "Persona (PSP®️) Conversation Portrait Sets",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -136,7 +136,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Persona 2: Innocent Sin (PSP™) Conversation Portrait Sets",
+                Name = "Persona 2: Innocent Sin (PSP®️) Conversation Portrait Sets",
                 IconUrl = user.GetAvatarUrl()
             };
 
@@ -212,7 +212,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "Persona 2: Eternal Punishment (PSP™) Conversation Portrait Sets",
+                Name = "Persona 2: Eternal Punishment (PSP®️) Conversation Portrait Sets",
                 IconUrl = user.GetAvatarUrl()
             };
 

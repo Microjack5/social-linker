@@ -24,29 +24,79 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
         QuickScenes.RenderBBTAG base_bbtag_rendering = new QuickScenes.RenderBBTAG();
         int template_width = 1920;
         int template_height = 1080;
-        bool is_spriteless = false;
-
-        int screen_center = 964;
         int dual_offset = 150;
 
         public async Task Render_Multi_Character_Scene_BBTAG(SocialLinkerCommand sl_command)
         {
             SocketUser user = sl_command.User;
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
-
-            OfficialSetData set_data = sl_command.MakerCommand.Character_Data_1.Set_Data;
             MakerCommandData maker_command_data = sl_command.MakerCommand;
 
-            RestUserMessage loader = await channel.SendMessageAsync("", false, base_bbtag_rendering.BBTAG_Loading_Message(set_data.Series).Build());
-
             var account = UserInfoClasses.GetAccount(user);
-            sl_command.MakerCommand.Character_Data_1.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data, sl_command.MakerCommand.Character_Data_1);
-            BustupData bustup_data = sl_command.MakerCommand.Character_Data_1.Bustup_Data;
 
-            if (maker_command_data.Character_Data_1.Base_Sprite == 0)
+            OfficialSetData set_data_1 = null;
+            OfficialSetData set_data_2 = null;
+            OfficialSetData set_data_3 = null;
+            OfficialSetData set_data_4 = null;
+
+            BustupData bustup_data_1 = null;
+            BustupData bustup_data_2 = null;
+            BustupData bustup_data_3 = null;
+            BustupData bustup_data_4 = null;
+
+            Bitmap bustup_1 = new Bitmap(2, 2);
+            Bitmap bustup_2 = new Bitmap(2, 2);
+            Bitmap bustup_3 = new Bitmap(2, 2);
+            Bitmap bustup_4 = new Bitmap(2, 2);
+
+            switch (sl_command.MakerCommand.Expected_Characters)
             {
-                is_spriteless = true;
+                case 4:
+                    set_data_4 = sl_command.MakerCommand.Character_Data_4.Set_Data;
+                    sl_command.MakerCommand.Character_Data_4.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data_4, maker_command_data.Character_Data_4);
+                    bustup_data_4 = sl_command.MakerCommand.Character_Data_4.Bustup_Data;
+
+                    if (maker_command_data.Character_Data_4.Base_Sprite != 0)
+                    {
+                        bustup_4 = OfficialSetMethods.Bustup_Selection(sl_command, account, maker_command_data.Character_Data_4);
+                    }
+                    goto case 3;
+
+                case 3:
+                    set_data_3 = sl_command.MakerCommand.Character_Data_3.Set_Data;
+                    sl_command.MakerCommand.Character_Data_3.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data_3, maker_command_data.Character_Data_3);
+                    bustup_data_3 = sl_command.MakerCommand.Character_Data_3.Bustup_Data;
+
+                    if (maker_command_data.Character_Data_3.Base_Sprite != 0)
+                    {
+                        bustup_3 = OfficialSetMethods.Bustup_Selection(sl_command, account, maker_command_data.Character_Data_3);
+                    }
+                    goto case 2;
+
+                case 2:
+                    set_data_2 = sl_command.MakerCommand.Character_Data_2.Set_Data;
+                    sl_command.MakerCommand.Character_Data_2.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data_2, maker_command_data.Character_Data_2);
+                    bustup_data_2 = sl_command.MakerCommand.Character_Data_2.Bustup_Data;
+
+                    if (maker_command_data.Character_Data_2.Base_Sprite != 0)
+                    {
+                        bustup_2 = OfficialSetMethods.Bustup_Selection(sl_command, account, maker_command_data.Character_Data_2);
+                    }
+                    goto case 1;
+
+                case 1:
+                    set_data_1 = sl_command.MakerCommand.Character_Data_1.Set_Data;
+                    sl_command.MakerCommand.Character_Data_1.Bustup_Data = BustupDataMethods.Get_Bustup_Data(account, set_data_1, maker_command_data.Character_Data_1);
+                    bustup_data_1 = sl_command.MakerCommand.Character_Data_1.Bustup_Data;
+
+                    if (maker_command_data.Character_Data_1.Base_Sprite != 0)
+                    {
+                        bustup_1 = OfficialSetMethods.Bustup_Selection(sl_command, account, maker_command_data.Character_Data_1);
+                    }
+                    break;
             }
+
+            RestUserMessage loader = await channel.SendMessageAsync("", false, base_bbtag_rendering.BBTAG_Loading_Message(set_data_1.Series).Build());
 
             // Background rendering
             Bitmap base_template = new Bitmap(template_width, template_height);
@@ -65,54 +115,170 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                 return;
             }
 
-            // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
-            Bitmap bustup = new Bitmap(2, 2);
-
-            if (is_spriteless == false)
+            if (account.BBTAG_TS_BG_Blur == "On")
             {
-                bustup = OfficialSetMethods.Bustup_Selection(sl_command, account, sl_command.MakerCommand.Character_Data_1);
+                background = base_bbtag_rendering.Blur_Background(background);
             }
 
-            // If the bustup returns as null, however, something went wrong with rendering the animation frames.
-            // An error message has already been sent in the frame rendering method, so delete the loading message and return.
-            if (bustup == null)
+            try
             {
-                await loader.DeleteAsync();
-                return;
+                // Time to put it all together!
+                using (Graphics graphics = Graphics.FromImage(base_template))
+                {
+                    string display_name = sl_command.MakerCommand.Display_Name;
+                    DateTime user_time = base_bbtag_rendering.Get_Date(sl_command, account);
+                    Bitmap header = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//layer_1.png");
+                    Bitmap rendered_name = base_bbtag_rendering.Render_Name(display_name ?? "");
+                    Bitmap chapter_banner = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Chapter_Banner//{base_bbtag_rendering.Get_Chapter_Banner(account)}//{base_bbtag_rendering.Get_Day_Of_Week(account, user_time)}.png");
+                    Bitmap nametag = new Bitmap(2, 2);
+                    Bitmap textbox = new Bitmap(2, 2);
+
+                    graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
+                    graphics.DrawImage(background, 0, 0, template_width, template_height);
+                    graphics.DrawImage(header, 0, 0, template_width, template_height);
+                    graphics.DrawImage(chapter_banner, 704, 33, 512, 128);
+
+                    Bitmap bustup_layer = new Bitmap(1920, 1080);
+                    int selected_bbtag_layout = Int32.Parse(maker_command_data.BBTAG_Specific_Data.Layout);
+
+                    Bitmap bustup_layer_1 = Set_Bustup_Placement(account, bustup_1, bustup_data_1, selected_bbtag_layout, 1);
+                    Bitmap bustup_layer_2 = Set_Bustup_Placement(account, bustup_2, bustup_data_2, selected_bbtag_layout, 2);
+                    Bitmap bustup_layer_3 = Set_Bustup_Placement(account, bustup_3, bustup_data_3, selected_bbtag_layout, 3);
+                    Bitmap bustup_layer_4 = Set_Bustup_Placement(account, bustup_4, bustup_data_4, selected_bbtag_layout, 4);
+
+                    graphics.DrawImage(bustup_layer_1, 0, 0, bustup_layer_1.Width, bustup_layer_1.Height);
+                    graphics.DrawImage(bustup_layer_2, 0, 0, bustup_layer_2.Width, bustup_layer_2.Height);
+                    graphics.DrawImage(bustup_layer_4, 0, 0, bustup_layer_4.Width, bustup_layer_4.Height);
+                    graphics.DrawImage(bustup_layer_3, 0, 0, bustup_layer_3.Width, bustup_layer_3.Height);
+
+                    string textbox_type = "";
+
+                    // Nametag
+                    if (maker_command_data.BBTAG_Specific_Data.Speaker_Series != default)
+                    {
+                        nametag = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Nametag//{base_bbtag_rendering.Series_To_Nametag(maker_command_data.BBTAG_Specific_Data.Speaker_Series)}.png");
+                    }
+
+                    // Textbox
+                    if (maker_command_data.BBTAG_Specific_Data.Speaker_Is_Spriteless)
+                    {
+                        textbox_type = "textbox_none";
+                    }
+                    else
+                    {
+                        switch (maker_command_data.BBTAG_Specific_Data.Speaker)
+                        {
+                            case "system_1":
+                                textbox_type = "system_1";
+                                break;
+
+                            case "system_2":
+                                textbox_type = "system_2";
+                                break;
+
+                            case "offscreen":
+                                textbox_type = "textbox_none";
+                                break;
+
+                            default:
+                                switch (maker_command_data.BBTAG_Specific_Data.Layout)
+                                {
+                                    case "1":
+                                        textbox_type = "textbox_left";
+                                        break;
+
+                                    case "2":
+                                        textbox_type = "textbox_right";
+                                        break;
+
+                                    case "3":
+                                        textbox_type = "textbox_center";
+                                        break;
+
+                                    case "4":
+                                        switch (maker_command_data.BBTAG_Specific_Data.Speaker)
+                                        {
+                                            case "char_1":
+                                                textbox_type = "textbox_left";
+                                                break;
+
+                                            default:
+                                                textbox_type = "textbox_right";
+                                                break;
+                                        }
+                                        break;
+
+                                    case "5":
+                                        textbox_type = "textbox_left";
+                                        break;
+
+                                    case "6":
+                                        textbox_type = "textbox_right";
+                                        break;
+
+                                    case "7":
+                                        textbox_type = "textbox_center";
+                                        break;
+
+                                    case "8":
+                                        switch (maker_command_data.BBTAG_Specific_Data.Speaker)
+                                        {
+                                            case "char_1":
+                                                textbox_type = "textbox_left";
+                                                break;
+
+                                            default:
+                                                textbox_type = "textbox_right";
+                                                break;
+                                        }
+                                        break;
+
+                                    case "9":
+                                        switch (maker_command_data.BBTAG_Specific_Data.Speaker)
+                                        {
+                                            case "char_3":
+                                                textbox_type = "textbox_right";
+                                                break;
+
+                                            default:
+                                                textbox_type = "textbox_left";
+                                                break;
+                                        }
+                                        break;
+
+                                    case "10":
+                                        switch (maker_command_data.BBTAG_Specific_Data.Speaker)
+                                        {
+                                            case "char_1":
+                                            case "char_2":
+                                                textbox_type = "textbox_left";
+                                                break;
+
+                                            default:
+                                                textbox_type = "textbox_right";
+                                                break;
+                                        }
+                                        break;
+
+                                    default:
+                                        textbox_type = "textbox_none";
+                                        break;
+                                }
+                                break;
+                        }
+                    }
+
+                    textbox = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Message_Window//{textbox_type}.png");
+
+                    //graphics.DrawImage(textbox, 0, 0, template_width, template_height);
+                    //graphics.DrawImage(nametag, 0, 0, template_width, template_height);
+                    //graphics.DrawImage(rendered_name, 0, 0, template_width, template_height);
+                    //graphics.DrawImage(base_bbtag_rendering.Render_Dialogue(maker_command_data.Dialogue), 0, 0, template_width, template_height);
+                }
             }
-
-            // Time to put it all together!
-            using (Graphics graphics = Graphics.FromImage(base_template))
+            catch (Exception err)
             {
-                string display_name = OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1);
-                DateTime user_time = base_bbtag_rendering.Get_Date(sl_command, account);
-                Bitmap header = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//layer_1.png");
-                Bitmap nametag = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Nametag//{base_bbtag_rendering.Series_To_Nametag(set_data.Series)}.png");
-                Bitmap rendered_name = base_bbtag_rendering.Render_Name(display_name);
-                Bitmap chapter_banner = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Chapter_Banner//{base_bbtag_rendering.Get_Chapter_Banner(account)}//{base_bbtag_rendering.Get_Day_Of_Week(account, user_time)}.png");
-                Bitmap textbox = new Bitmap(2, 2);
-
-                graphics.DrawImage(colored_background_bitmap, 0, 0, template_width, template_height);
-                graphics.DrawImage(background, 0, 0, template_width, template_height);
-                graphics.DrawImage(header, 0, 0, template_width, template_height);
-                graphics.DrawImage(chapter_banner, 704, 33, 512, 128);
-
-                // Draw the character bust-up to the template if the base sprite number is not '0'.
-                if (is_spriteless == false)
-                {
-                    textbox = base_bbtag_rendering.Get_Message_Window(account);
-                    //Bitmap placed_bustup = Set_Bustup_Placement(account, bustup, bustup_data, set_data);
-                    //graphics.DrawImage(placed_bustup, 0, 0, template_width, template_height);
-                }
-                else
-                {
-                    textbox = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Message_Window//textbox_none.png");
-                }
-
-                graphics.DrawImage(textbox, 0, 0, template_width, template_height);
-                graphics.DrawImage(nametag, 0, 0, template_width, template_height);
-                graphics.DrawImage(rendered_name, 0, 0, template_width, template_height);
-                graphics.DrawImage(base_bbtag_rendering.Render_Dialogue(maker_command_data.Dialogue), 0, 0, template_width, template_height);
+                Console.WriteLine(err);
             }
 
             // Save the entire base template to a data stream.
@@ -144,6 +310,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
 
         public Bitmap Set_Bustup_Placement(UserInfoFields account, Bitmap bustup, BustupData bustup_data, int layout_number, int char_number)
         {
+            if (bustup_data == null)
+            {
+                return new Bitmap(2, 2);
+            }
+
             // Create a starting base bitmap to render all graphics on.
             Bitmap base_template = new Bitmap(template_width, template_height);
 
@@ -158,6 +329,33 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                             case 1:
                                 graphics.DrawImage(bustup, bustup_data.BBTAG_Left_Coord_X, bustup_data.BBTAG_Left_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
                                 break;
+                        }
+                        break;
+
+                    case 2:
+                        switch (char_number)
+                        {
+                            case 1:
+                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X, bustup_data.BBTAG_Right_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
+                                break;
+                        }
+                        break;
+
+                    case 3:
+                        switch (char_number)
+                        {
+                            case 1:
+                                graphics.DrawImage(bustup, bustup_data.BBTAG_Enlarged_Coord_X, bustup_data.BBTAG_Enlarged_Coord_Y, bustup_data.BBTAG_Enlarged_Scale_Width, bustup_data.BBTAG_Enlarged_Scale_Height);
+                                break;
+                        }
+                        break;
+
+                    case 4:
+                        switch (char_number)
+                        {
+                            case 1:
+                                graphics.DrawImage(bustup, bustup_data.BBTAG_Left_Coord_X, bustup_data.BBTAG_Left_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
+                                break;
 
                             case 2:
                                 graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X, bustup_data.BBTAG_Right_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
@@ -165,7 +363,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                         }
                         break;
 
-                    case 2:
+                    case 5:
                         switch (char_number)
                         {
                             case 1:
@@ -178,20 +376,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                         }
                         break;
 
-                    case 3:
+                    case 6:
                         switch (char_number)
                         {
                             case 1:
-                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X + screen_center - dual_offset, bustup_data.BBTAG_Right_Coord_X, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
+                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X - dual_offset, bustup_data.BBTAG_Right_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
                                 break;
 
                             case 2:
-                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X + screen_center + dual_offset, bustup_data.BBTAG_Right_Coord_X, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
+                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X + dual_offset, bustup_data.BBTAG_Right_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
                                 break;
                         }
                         break;
 
-                    case 4:
+                    case 7:
                         switch (char_number)
                         {
                             case 1:
@@ -204,7 +402,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                         }
                         break;
 
-                    case 5:
+                    case 8:
                         switch (char_number)
                         {
                             case 1:
@@ -212,16 +410,16 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                                 break;
 
                             case 2:
-                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X + screen_center - dual_offset, bustup_data.BBTAG_Right_Coord_X, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
+                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X - dual_offset, bustup_data.BBTAG_Right_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
                                 break;
 
                             case 3:
-                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X + screen_center + dual_offset, bustup_data.BBTAG_Right_Coord_X, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
+                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X + dual_offset, bustup_data.BBTAG_Right_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
                                 break;
                         }
                         break;
 
-                    case 6:
+                    case 9:
                         switch (char_number)
                         {
                             case 1:
@@ -238,7 +436,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                         }
                         break;
 
-                    case 7:
+                    case 10:
                         switch (char_number)
                         {
                             case 1:
@@ -250,11 +448,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                                 break;
 
                             case 3:
-                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X + screen_center - dual_offset, bustup_data.BBTAG_Right_Coord_X, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
+                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X - dual_offset, bustup_data.BBTAG_Right_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
                                 break;
 
                             case 4:
-                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X + screen_center + dual_offset, bustup_data.BBTAG_Right_Coord_X, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
+                                graphics.DrawImage(bustup, bustup_data.BBTAG_Right_Coord_X + dual_offset, bustup_data.BBTAG_Right_Coord_Y, bustup_data.BBTAG_Scale_Width, bustup_data.BBTAG_Scale_Height);
                                 break;
                         }
                         break;

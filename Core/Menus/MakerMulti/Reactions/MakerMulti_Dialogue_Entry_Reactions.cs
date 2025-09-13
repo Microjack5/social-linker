@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus.MakerMulti.Main;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,26 +9,65 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
 {
     class MakerMulti_Dialogue_Entry_Reactions
     {
-        public static Task Nav_MakerMulti_Dialogue_Entry_Main(SocketMessageComponent component, MenuIdStructure menuSession)
+        public static Task Nav_MakerMulti_Display_Name_and_Dialogue_Entry_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
             menuSession.MenuTimer.Stop();
 
             switch (component.Data.CustomId)
             {
-                case "makermulti-dialogue-entry-modal-open":
-                    _ = MakerMulti_Dialogue_Entry_Menu.MakerMulti_Dialogue_Details_Modal(component);
+                case "makermulti-display-name-and-dialogue-entry-modal-open":
+                    _ = MakerMulti_Dialogue_Entry_Menu.MakerMulti_Display_Name_and_Dialogue_Details_Modal(component);
                     break;
 
-                case "back-to-makermulti-char-details-pt1":
+                case "back-to-makermulti-1char-details":
                     component.DeferAsync(ephemeral: true);
-                    _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_Char_Details_Pt1_Main(menuSession);
+                    _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_1Char_Details_Main(menuSession);
+                    break;
+
+                case "back-to-makermulti-2char-details":
+                    component.DeferAsync(ephemeral: true);
+                    _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_2Char_Details_Main(menuSession);
+                    break;
+
+                case "back-to-makermulti-3char-details":
+                    component.DeferAsync(ephemeral: true);
+                    _ = MakerMulti_Char_Details_Pt2_Menu.MakerMulti_3Char_Details_Main(menuSession);
+                    break;
+
+                case "back-to-makermulti-4char-details":
+                    component.DeferAsync(ephemeral: true);
+                    _ = MakerMulti_Char_Details_Pt2_Menu.MakerMulti_4Char_Details_Main(menuSession);
+                    break;
+
+                case "back-to-multimaker-bbtag-offscreen-speaker-series":
+                    component.DeferAsync(ephemeral: true);
+                    _ = MakerMulti_BBTAG_Speaker_Menu.MakerMulti_BBTAG_Speaker_Main(menuSession);
                     break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_MakerMulti_Dialogue_Details_Modal(SocketModal modal, MenuIdStructure menuSession)
+        public static Task Nav_MakerMulti_Dialogue_Only_Entry_Main(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            menuSession.MenuTimer.Stop();
+
+            switch (component.Data.CustomId)
+            {
+                case "makermulti-dialogue-only-entry-modal-open":
+                    _ = MakerMulti_Dialogue_Entry_Menu.MakerMulti_Dialogue_Only_Details_Modal(component);
+                    break;
+
+                case "back-to-makermulti-bbtag-speaker-select": // You can only be on this menu is System XX is chosen (so far)
+                    component.DeferAsync(ephemeral: true);
+                    _ = MakerMulti_BBTAG_Speaker_Menu.MakerMulti_BBTAG_Speaker_Main(menuSession);
+                    break;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_MakerMulti_Display_Name_and_Dialogue_Details_Modal(SocketModal modal, MenuIdStructure menuSession)
         {
             var multimaker_session = Global.MultiMaker_Session_List.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
             var account = UserInfoClasses.GetAccount(menuSession.User);
@@ -38,7 +78,6 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             multimaker_session.MakerCommand.Dialogue = modal.Data.Components
             .FirstOrDefault(x => x.CustomId == "dialogue")?.Value;
 
-            
             modal.DeferAsync(ephemeral: true);
 
             switch (multimaker_session.MakerCommand.Template)
@@ -98,6 +137,11 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             }
 
             return Task.CompletedTask;
+        }
+
+        public static Task Nav_MakerMulti_Dialogue_Only_Details_Modal(SocketModal modal, MenuIdStructure menuSession)
+        {
+            return Nav_MakerMulti_Display_Name_and_Dialogue_Details_Modal(modal, menuSession);
         }
     }
 }

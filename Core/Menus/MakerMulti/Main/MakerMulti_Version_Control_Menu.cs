@@ -33,7 +33,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithDescription("" +
                 "Which version of Persona 2: Innocent Sin would you like to use?\n");
 
-            embed.WithImageUrl("https://i.imgur.com/7oh20qY.png");
+            embed.WithImageUrl("https://i.imgur.com/6Utgced.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -49,7 +49,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                     .WithMinValues(1)
                     .WithMaxValues(1)
                     .AddOption("Persona 2: Innocent Sin (PlayStation®️)", "P2IS-PS1", emote: Emote.Parse("<:P2IS:788950080396328990>"))
-                    .AddOption("Persona 2: Innocent Sin (PSP™)", "P2IS-PSP", emote: Emote.Parse("<:P2IS:788950080396328990>"));
+                    .AddOption("Persona 2: Innocent Sin (PSP®️)", "P2IS-PSP", emote: Emote.Parse("<:P2IS:788950080396328990>"));
 
                 var component = new ComponentBuilder()
                     .WithSelectMenu(selectMenu);
@@ -108,7 +108,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithDescription("" +
                 "Which version of Persona 2: Eternal Punishment would you like to use?\n");
 
-            embed.WithImageUrl("https://i.imgur.com/QPpK2TO.png");
+            embed.WithImageUrl("https://i.imgur.com/JAZN3dP.png");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -124,7 +124,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                     .WithMinValues(1)
                     .WithMaxValues(1)
                     .AddOption("Persona 2: Eternal Punishment (PlayStation®️)", "P2EP-PS1", emote: Emote.Parse("<:P2EP:788950163363463172>"))
-                    .AddOption("Persona 2: Eternal Punishment (PSP™)", "P2EP-PSP", emote: Emote.Parse("<:P2EP:788950163363463172>"));
+                    .AddOption("Persona 2: Eternal Punishment (PSP®️)", "P2EP-PSP", emote: Emote.Parse("<:P2EP:788950163363463172>"));
 
                 var component = new ComponentBuilder()
                     .WithSelectMenu(selectMenu);

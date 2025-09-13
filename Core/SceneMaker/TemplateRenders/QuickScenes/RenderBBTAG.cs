@@ -61,6 +61,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 return;
             }
 
+            if (account.BBTAG_TS_BG_Blur == "On")
+            {
+                background = Blur_Background(background);
+            }
+
             // Next, time for the conversation portrait! Create and initialize a new bitmap variable for it.
             Bitmap bustup = new Bitmap(2, 2);
 
@@ -110,6 +115,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(rendered_name, 0, 0, template_width, template_height);
                 graphics.DrawImage(Render_Dialogue(maker_command_data.Dialogue), 0, 0, template_width, template_height);
             }
+
+            Console.WriteLine($"{background.Width}, {background.Height}");
 
             // Save the entire base template to a data stream.
             MemoryStream memoryStream = new MemoryStream();
@@ -322,6 +329,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap base_template = new Bitmap(template_width, template_height);
             Bitmap fog_layer = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//story_bg_grad00.png");
 
+            //Console.WriteLine($"{template_width}, {template_height}");
             base_template = Blur(background, new Rectangle(0, 0, template_width, template_height), 4);
 
             using (Graphics graphics = Graphics.FromImage(base_template))
@@ -351,6 +359,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Get pointer to first line
             byte* scan0 = (byte*)blurredData.Scan0.ToPointer();
 
+            Console.WriteLine("ARE YOU COMING IN OR NOT");
+
             // look at every pixel in the blur rectangle
             for (int xx = rectangle.X; xx < rectangle.X + rectangle.Width; xx++)
             {
@@ -376,9 +386,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         }
                     }
 
-                    avgR = avgR / blurPixelCount;
-                    avgG = avgG / blurPixelCount;
-                    avgB = avgB / blurPixelCount;
+                    //avgR = avgR / blurPixelCount;
+                    //avgG = avgG / blurPixelCount;
+                    //avgB = avgB / blurPixelCount;
+
+                    avgR = blurPixelCount == 0 ? 0 : avgR / blurPixelCount;
+                    avgG = blurPixelCount == 0 ? 0 : avgG / blurPixelCount;
+                    avgB = blurPixelCount == 0 ? 0 : avgB / blurPixelCount;
 
                     // now that we know the average for the blur size, set each pixel to that color
                     for (int x = xx; x < xx + blurSize && x < image.Width && x < rectangle.Width; x++)
