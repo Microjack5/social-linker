@@ -116,8 +116,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(Render_Dialogue(maker_command_data.Dialogue), 0, 0, template_width, template_height);
             }
 
-            Console.WriteLine($"{background.Width}, {background.Height}");
-
             // Save the entire base template to a data stream.
             MemoryStream memoryStream = new MemoryStream();
             base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -329,7 +327,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap base_template = new Bitmap(template_width, template_height);
             Bitmap fog_layer = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//story_bg_grad00.png");
 
-            //Console.WriteLine($"{template_width}, {template_height}");
             base_template = Blur(background, new Rectangle(0, 0, template_width, template_height), 4);
 
             using (Graphics graphics = Graphics.FromImage(base_template))
