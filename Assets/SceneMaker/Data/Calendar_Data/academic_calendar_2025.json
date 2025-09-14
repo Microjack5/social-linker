@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "Term": 1,
+    "Condition": "First Day of School",
+    "Month": "August",
+    "Day": 26,
+    "Year": 2025
+  },
+  {
+    "Term": 1,
+    "Condition": "Closing Ceremony",
+    "Month": "December",
+    "Day": 12,
+    "Year": 2025
+  },
+  {
+    "Term": 2,
+    "Condition": "First Day of School",
+    "Month": "January",
+    "Day": 6,
+    "Year": 2026
+  },
+  {
+    "Term": 2,
+    "Condition": "Closing Ceremony",
+    "Month": "March",
+    "Day": 27,
+    "Year": 2026
+  },
+  {
+    "Term": 3,
+    "Condition": "First Day of School",
+    "Month": "April",
+    "Day": 14,
+    "Year": 2026
+  },
+  {
+    "Term": 3,
+    "Condition": "Closing Ceremony",
+    "Month": "June",
+    "Day": 26,
+    "Year": 2026
+  },
+]
