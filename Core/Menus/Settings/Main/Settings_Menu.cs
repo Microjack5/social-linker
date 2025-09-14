@@ -109,6 +109,7 @@ namespace SocialLinker.Core.Menus.Settings.Main
                 // Edit the current active message by replacing it with the recently created embed.
                 await message.ModifyAsync(x => {
                     x.Embed = embed.Build();
+                    x.Components = new ComponentBuilder().Build();
                 });
             }
             catch (Exception ex)

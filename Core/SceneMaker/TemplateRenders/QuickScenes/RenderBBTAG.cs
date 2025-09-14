@@ -359,8 +359,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Get pointer to first line
             byte* scan0 = (byte*)blurredData.Scan0.ToPointer();
 
-            Console.WriteLine("ARE YOU COMING IN OR NOT");
-
             // look at every pixel in the blur rectangle
             for (int xx = rectangle.X; xx < rectangle.X + rectangle.Width; xx++)
             {

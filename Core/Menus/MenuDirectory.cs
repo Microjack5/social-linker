@@ -78,37 +78,37 @@ namespace SocialLinker.Core.Menus
                                 await SetFirstTheme_Reactions.Nav_SetFirstThemeConfirm(reaction, menuSession);
                                 break;
 
-                            case "First_Use_Content_Filter_Main":
-                                await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_Main_Added(reaction, menuSession);
-                                break;
+                            //case "First_Use_Content_Filter_Main":
+                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_Main_Added(reaction, menuSession);
+                            //    break;
 
-                            case "First_Use_Content_Filter_VC_P1_Main":
-                                await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P1_Main_Added(reaction, menuSession);
-                                break;
+                            //case "First_Use_Content_Filter_VC_P1_Main":
+                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P1_Main_Added(reaction, menuSession);
+                            //    break;
 
-                            case "First_Use_Content_Filter_VC_P2IS_Main":
-                                await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2IS_Main_Added(reaction, menuSession);
-                                break;
+                            //case "First_Use_Content_Filter_VC_P2IS_Main":
+                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2IS_Main_Added(reaction, menuSession);
+                            //    break;
 
-                            case "First_Use_Content_Filter_VC_P2EP_Main":
-                                await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2EP_Main_Added(reaction, menuSession);
-                                break;
+                            //case "First_Use_Content_Filter_VC_P2EP_Main":
+                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2EP_Main_Added(reaction, menuSession);
+                            //    break;
 
-                            case "First_Use_Content_Filter_VC_P3_Main":
-                                await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P3_Main_Added(reaction, menuSession);
-                                break;
+                            //case "First_Use_Content_Filter_VC_P3_Main":
+                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P3_Main_Added(reaction, menuSession);
+                            //    break;
 
-                            case "First_Use_Content_Filter_VC_P4_Main":
-                                await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P4_Main_Added(reaction, menuSession);
-                                break;
+                            //case "First_Use_Content_Filter_VC_P4_Main":
+                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P4_Main_Added(reaction, menuSession);
+                            //    break;
 
-                            case "First_Use_Content_Filter_VC_P5_Main":
-                                await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P5_Main_Added(reaction, menuSession);
-                                break;
+                            //case "First_Use_Content_Filter_VC_P5_Main":
+                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P5_Main_Added(reaction, menuSession);
+                            //    break;
 
-                            case "First_Use_Content_Filter_Confirm":
-                                await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_Confirm(reaction, menuSession);
-                                break;
+                            //case "First_Use_Content_Filter_Confirm":
+                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_Confirm(reaction, menuSession);
+                            //    break;
 
                             // Namespace: SocialLinker.Core.Menus.Help
                             case "Help_Main_Menu":
@@ -1698,33 +1698,33 @@ namespace SocialLinker.Core.Menus
                     switch (menuSession.CurrentMenu)
                     {
                         // Namespace: SocialLinker.Core.Menus.InitialUsage
-                        case "First_Use_Content_Filter_Main":
-                            await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_Main_Removed(reaction, menuSession);
-                            break;
+                        //case "First_Use_Content_Filter_Main":
+                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_Main_Removed(reaction, menuSession);
+                        //    break;
 
-                        case "First_Use_Content_Filter_VC_P1_Main":
-                            await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P1_Main_Removed(reaction, menuSession);
-                            break;
+                        //case "First_Use_Content_Filter_VC_P1_Main":
+                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P1_Main_Removed(reaction, menuSession);
+                        //    break;
 
-                        case "First_Use_Content_Filter_VC_P2IS_Main":
-                            await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2IS_Main_Removed(reaction, menuSession);
-                            break;
+                        //case "First_Use_Content_Filter_VC_P2IS_Main":
+                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2IS_Main_Removed(reaction, menuSession);
+                        //    break;
 
-                        case "First_Use_Content_Filter_VC_P2EP_Main":
-                            await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2EP_Main_Removed(reaction, menuSession);
-                            break;
+                        //case "First_Use_Content_Filter_VC_P2EP_Main":
+                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2EP_Main_Removed(reaction, menuSession);
+                        //    break;
 
-                        case "First_Use_Content_Filter_VC_P3_Main":
-                            await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P3_Main_Removed(reaction, menuSession);
-                            break;
+                        //case "First_Use_Content_Filter_VC_P3_Main":
+                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P3_Main_Removed(reaction, menuSession);
+                        //    break;
 
-                        case "First_Use_Content_Filter_VC_P4_Main":
-                            await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P4_Main_Removed(reaction, menuSession);
-                            break;
+                        //case "First_Use_Content_Filter_VC_P4_Main":
+                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P4_Main_Removed(reaction, menuSession);
+                        //    break;
 
-                        case "First_Use_Content_Filter_VC_P5_Main":
-                            await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P5_Main_Removed(reaction, menuSession);
-                            break;
+                        //case "First_Use_Content_Filter_VC_P5_Main":
+                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P5_Main_Removed(reaction, menuSession);
+                        //    break;
 
                         // Namespace: SocialLinker.Core.Menus.Settings.Reactions.General
                         case "Content_Filter_Main":
@@ -1936,6 +1936,14 @@ namespace SocialLinker.Core.Menus
                 {
                     switch (menuSession.CurrentMenu)
                     {
+                        case "First_Use_Intro_Main":
+                            await First_Use_Content_Filter_Reactions.Nav_First_Use_Intro_Main(component, menuSession);
+                            break;
+
+                        case "First_Use_Intro_Confirm":
+                            await First_Use_Content_Filter_Reactions.Nav_First_Use_Intro_Confirm(component, menuSession);
+                            break;
+
                         case "MakerMulti_1Char_Details_Main":
                             await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_1Char_Details_Main(component, menuSession);
                             break;

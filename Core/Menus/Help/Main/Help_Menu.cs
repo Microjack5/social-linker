@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Timers;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
-using Discord.Rest;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace SocialLinker.Core.Menus.Help.Main
 {
@@ -124,6 +125,7 @@ namespace SocialLinker.Core.Menus.Help.Main
                 // Edit the current active message by replacing it with the recently created embed.
                 await message.ModifyAsync(x => {
                     x.Embed = embed.Build();
+                    x.Components = new ComponentBuilder().Build();
                 });
             }
             catch (Exception ex)
