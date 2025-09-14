@@ -40,14 +40,24 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                     _ = MakerMulti_Char_Details_Pt1_Menu.MakerMulti_2Char_Details_Modal(component);
                     break;
 
-                case "back-to-makermulti-title-select":
+                case "back-to-makermulti-p2is-vc-select":
                     component.DeferAsync(ephemeral: true);
-                    _ = MakerMulti_Title_Select_Menu.MakerMulti_Main_Menu(menuSession.User, menuSession.MenuMessage);
+                    _ = MakerMulti_Version_Control_Menu.MakerMulti_VC_P2IS_Main(menuSession);
+                    break;
+
+                case "back-to-makermulti-p2ep-vc-select":
+                    component.DeferAsync(ephemeral: true);
+                    _ = MakerMulti_Version_Control_Menu.MakerMulti_VC_P2EP_Main(menuSession);
                     break;
 
                 case "back-to-makermulti-bbtag-layout-select":
                     component.DeferAsync(ephemeral: true);
                     _ = MakerMulti_BBTAG_Layout_Menu.MakerMulti_BBTAG_Layout_Main(menuSession);
+                    break;
+
+                case "back-to-makermulti-title-select":
+                    component.DeferAsync(ephemeral: true);
+                    _ = MakerMulti_Title_Select_Menu.MakerMulti_Main_Menu(menuSession.User, menuSession.MenuMessage);
                     break;
             }
 

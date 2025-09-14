@@ -53,7 +53,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
 
             embed.WithDescription("" +
-                $"Character #3's time! Select **`[Enter Character Details]`** to specify the character and their sprite number.");
+                $"Character #3's time! Select [Enter Character Details] to specify the character and their sprite number.");
 
             switch (multimaker_session.MakerCommand.Template)
             {
@@ -137,7 +137,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
 
             embed.WithDescription("" +
-                $"Let's do the next two characters! Select **`[Enter Character Details]`** to specify the characters and their sprite numbers.");
+                $"Let's do the next two characters! Select [Enter Character Details] to specify the characters and their sprite numbers.");
 
             switch (multimaker_session.MakerCommand.Template)
             {

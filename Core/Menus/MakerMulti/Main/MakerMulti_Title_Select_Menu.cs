@@ -1,14 +1,16 @@
-﻿using Discord.Rest;
-using Discord;
+﻿using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
+using SocialLinker.Core.LocalStorageTables;
+using SocialLinker.Core.SceneMaker;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using SocialLinker.Core.SceneMaker;
 
 namespace SocialLinker.Core.Menus.MakerMulti.Main
 {
@@ -16,6 +18,27 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
     {
         public static async Task MakerMulti_Start(SocialLinkerCommand sl_command)
         {
+            // Background check
+            if (sl_command.MakerCommand.Background != null)
+            {
+                Bitmap background = new Bitmap(2, 2);
+
+                try
+                {
+                    background = OfficialSetMethods.Render_Background(sl_command, 1280, 720);
+                }
+                catch (System.ArgumentException e)
+                {
+                    Console.WriteLine(e);
+                    _ = SocialLinker.Core.SceneMaker.ErrorHandling.Incompatible_File_Type(sl_command);
+                    return;
+                }
+                finally
+                {
+                    background.Dispose();
+                }
+            }
+
             var channel = (SocketTextChannel)sl_command.Channel;
             var user = (SocketGuildUser)sl_command.User;
 

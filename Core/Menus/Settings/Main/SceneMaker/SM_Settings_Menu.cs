@@ -41,21 +41,36 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
+            //embed.AddField(":one: Version Control",
+            //    "Change the default templates and sprite sets available for different versions of the same title.");
+            //embed.AddField(":two: Template Layout",
+            //    "Change select visual elements while using various templates.");
+            //embed.AddField(":three: Calendar Cycles",
+            //    "Manually set the date, time of day, moon phases, and more.");
+            //embed.AddField(":four: Display Names",
+            //    "Change the displayed names of various characters and sprite sets.");
+            //embed.AddField(":five: Sprite Sheet Order",
+            //    "Change whether sprite sets are ordered by outfit or by expression.");
+            //embed.AddField(":six: Backgrounds",
+            //    "Determine how background images are rendered within the scene maker.");
+            //embed.AddField(":seven: Resolution & Scaling",
+            //    "Change output resolutions and scaling methods per template.");
+            //embed.AddField(":eight: Auto-Delete",
+            //    "Toggle auto-deletion of error messages and scene maker commands.");
+
             embed.AddField(":one: Version Control",
                 "Change the default templates and sprite sets available for different versions of the same title.");
             embed.AddField(":two: Template Layout",
                 "Change select visual elements while using various templates.");
-            embed.AddField(":three: Calendar Cycles",
-                "Manually set the date, time of day, moon phases, and more.");
-            embed.AddField(":four: Display Names",
+            embed.AddField(":three: Display Names",
                 "Change the displayed names of various characters and sprite sets.");
-            embed.AddField(":five: Sprite Sheet Order",
+            embed.AddField(":four: Sprite Sheet Order",
                 "Change whether sprite sets are ordered by outfit or by expression.");
-            embed.AddField(":six: Backgrounds",
+            embed.AddField(":five: Backgrounds",
                 "Determine how background images are rendered within the scene maker.");
-            embed.AddField(":seven: Resolution & Scaling",
+            embed.AddField(":six: Resolution & Scaling",
                 "Change output resolutions and scaling methods per template.");
-            embed.AddField(":eight: Auto-Delete",
+            embed.AddField(":seven: Auto-Delete",
                 "Toggle auto-deletion of error messages and scene maker commands.");
 
             // Attempt editing the message if it hasn't been deleted by the user yet.

@@ -78,38 +78,6 @@ namespace SocialLinker.Core.Menus
                                 await SetFirstTheme_Reactions.Nav_SetFirstThemeConfirm(reaction, menuSession);
                                 break;
 
-                            //case "First_Use_Content_Filter_Main":
-                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_Main_Added(reaction, menuSession);
-                            //    break;
-
-                            //case "First_Use_Content_Filter_VC_P1_Main":
-                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P1_Main_Added(reaction, menuSession);
-                            //    break;
-
-                            //case "First_Use_Content_Filter_VC_P2IS_Main":
-                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2IS_Main_Added(reaction, menuSession);
-                            //    break;
-
-                            //case "First_Use_Content_Filter_VC_P2EP_Main":
-                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2EP_Main_Added(reaction, menuSession);
-                            //    break;
-
-                            //case "First_Use_Content_Filter_VC_P3_Main":
-                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P3_Main_Added(reaction, menuSession);
-                            //    break;
-
-                            //case "First_Use_Content_Filter_VC_P4_Main":
-                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P4_Main_Added(reaction, menuSession);
-                            //    break;
-
-                            //case "First_Use_Content_Filter_VC_P5_Main":
-                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P5_Main_Added(reaction, menuSession);
-                            //    break;
-
-                            //case "First_Use_Content_Filter_Confirm":
-                            //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_Confirm(reaction, menuSession);
-                            //    break;
-
                             // Namespace: SocialLinker.Core.Menus.Help
                             case "Help_Main_Menu":
                                 await Help_Reactions.Nav_Help_Main_Menu(reaction, menuSession);
@@ -1466,178 +1434,6 @@ namespace SocialLinker.Core.Menus
                             case "Auto_Delete_Error_Messages_Confirm":
                                 await Auto_Delete_Reactions.Nav_Auto_Delete_Error_Messages_Confirm(reaction, menuSession);
                                 break;
-
-                            //case "MakerMulti_Main_Menu":
-                            //    await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_Main_Menu(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_VC_P2IS_Main":
-                            //    await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_VC_P2IS_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_VC_P2EP_Main":
-                            //    await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_VC_P2EP_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Layout_Select_Main":
-                            //    await MakerMulti_Layout_Select_Reactions.Nav_MakerMulti_Layout_Select_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Character_Select_1_Main":
-                            //    await MakerMulti_Char_Select_1_Reactions.Nav_MakerMulti_Character_Select_1_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Character_Select_1_Invalid_Character":
-                            //    await MakerMulti_Char_Select_1_Reactions.Nav_MakerMulti_Character_Select_1_Invalid_Character(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_1_Main":
-                            //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_1_Invalid_Base_Sprite":
-                            //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Invalid_Base_Sprite(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_1_Error_Too_Many_Animation_Frames":
-                            //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Too_Many_Animation_Frames(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_1_Error_Non_Digit_In_Sprite_Number":
-                            //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Non_Digit_In_Sprite_Number(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_1_Error_Animation_Frame_With_Blank_Sprite":
-                            //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Animation_Frame_With_Blank_Sprite(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_1_Error_Eye_Frame_Not_Found":
-                            //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Eye_Frame_Not_Found(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_1_Error_Mouth_Frame_Not_Found":
-                            //    await MakerMulti_Sprite_Select_1_Reactions.Nav_MakerMulti_Sprite_Select_1_Error_Mouth_Frame_Not_Found(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Character_Select_2_Main":
-                            //    await MakerMulti_Char_Select_2_Reactions.Nav_MakerMulti_Character_Select_2_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Character_Select_2_Invalid_Character":
-                            //    await MakerMulti_Char_Select_2_Reactions.Nav_MakerMulti_Character_Select_2_Invalid_Character(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_2_Main":
-                            //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_2_Invalid_Base_Sprite":
-                            //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Invalid_Base_Sprite(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_2_Error_Too_Many_Animation_Frames":
-                            //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Too_Many_Animation_Frames(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_2_Error_Non_Digit_In_Sprite_Number":
-                            //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Non_Digit_In_Sprite_Number(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_2_Error_Animation_Frame_With_Blank_Sprite":
-                            //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Animation_Frame_With_Blank_Sprite(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_2_Error_Eye_Frame_Not_Found":
-                            //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Eye_Frame_Not_Found(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_2_Error_Mouth_Frame_Not_Found":
-                            //    await MakerMulti_Sprite_Select_2_Reactions.Nav_MakerMulti_Sprite_Select_2_Error_Mouth_Frame_Not_Found(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Character_Select_3_Main":
-                            //    await MakerMulti_Char_Select_3_Reactions.Nav_MakerMulti_Character_Select_3_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Character_Select_3_Invalid_Character":
-                            //    await MakerMulti_Char_Select_3_Reactions.Nav_MakerMulti_Character_Select_3_Invalid_Character(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_3_Main":
-                            //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_3_Invalid_Base_Sprite":
-                            //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Invalid_Base_Sprite(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_3_Error_Too_Many_Animation_Frames":
-                            //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Too_Many_Animation_Frames(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_3_Error_Non_Digit_In_Sprite_Number":
-                            //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Non_Digit_In_Sprite_Number(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_3_Error_Animation_Frame_With_Blank_Sprite":
-                            //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Animation_Frame_With_Blank_Sprite(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_3_Error_Eye_Frame_Not_Found":
-                            //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Eye_Frame_Not_Found(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_3_Error_Mouth_Frame_Not_Found":
-                            //    await MakerMulti_Sprite_Select_3_Reactions.Nav_MakerMulti_Sprite_Select_3_Error_Mouth_Frame_Not_Found(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Character_Select_4_Main":
-                            //    await MakerMulti_Char_Select_4_Reactions.Nav_MakerMulti_Character_Select_4_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Character_Select_4_Invalid_Character":
-                            //    await MakerMulti_Char_Select_4_Reactions.Nav_MakerMulti_Character_Select_4_Invalid_Character(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_4_Main":
-                            //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_4_Invalid_Base_Sprite":
-                            //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Invalid_Base_Sprite(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_4_Error_Too_Many_Animation_Frames":
-                            //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Too_Many_Animation_Frames(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_4_Error_Non_Digit_In_Sprite_Number":
-                            //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Non_Digit_In_Sprite_Number(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_4_Error_Animation_Frame_With_Blank_Sprite":
-                            //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Animation_Frame_With_Blank_Sprite(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_4_Error_Eye_Frame_Not_Found":
-                            //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Eye_Frame_Not_Found(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Sprite_Select_4_Error_Mouth_Frame_Not_Found":
-                            //    await MakerMulti_Sprite_Select_4_Reactions.Nav_MakerMulti_Sprite_Select_4_Error_Mouth_Frame_Not_Found(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Speaker_Select_Main":
-                            //    await MakerMulti_Speaker_Select_Reactions.Nav_MakerMulti_Speaker_Select_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Dialogue_Select_Main":
-                            //    await MakerMulti_Dialogue_Select_Reactions.Nav_MakerMulti_Dialogue_Select_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "MakerMulti_Confirm_Details_Main":
-                            //    await MakerMulti_Confirm_Details_Reactions.Nav_MakerMulti_Confirm_Details_Main(reaction, menuSession);
-                            //    break;
                         }
                     }
                     // If the reactor is neither the bot nor the menu user, remove the reaction.
@@ -1697,35 +1493,6 @@ namespace SocialLinker.Core.Menus
                     // Ensure that the current menu matches a certain state before proceeding.
                     switch (menuSession.CurrentMenu)
                     {
-                        // Namespace: SocialLinker.Core.Menus.InitialUsage
-                        //case "First_Use_Content_Filter_Main":
-                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_Main_Removed(reaction, menuSession);
-                        //    break;
-
-                        //case "First_Use_Content_Filter_VC_P1_Main":
-                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P1_Main_Removed(reaction, menuSession);
-                        //    break;
-
-                        //case "First_Use_Content_Filter_VC_P2IS_Main":
-                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2IS_Main_Removed(reaction, menuSession);
-                        //    break;
-
-                        //case "First_Use_Content_Filter_VC_P2EP_Main":
-                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P2EP_Main_Removed(reaction, menuSession);
-                        //    break;
-
-                        //case "First_Use_Content_Filter_VC_P3_Main":
-                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P3_Main_Removed(reaction, menuSession);
-                        //    break;
-
-                        //case "First_Use_Content_Filter_VC_P4_Main":
-                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P4_Main_Removed(reaction, menuSession);
-                        //    break;
-
-                        //case "First_Use_Content_Filter_VC_P5_Main":
-                        //    await First_Use_Content_Filter_Reactions.Nav_First_Use_Content_Filter_VC_P5_Main_Removed(reaction, menuSession);
-                        //    break;
-
                         // Namespace: SocialLinker.Core.Menus.Settings.Reactions.General
                         case "Content_Filter_Main":
                             await Content_Filter_Reactions.Nav_Content_Filter_Main_Removed(reaction, menuSession);
@@ -1944,6 +1711,7 @@ namespace SocialLinker.Core.Menus
                             await First_Use_Content_Filter_Reactions.Nav_First_Use_Intro_Confirm(component, menuSession);
                             break;
 
+                        // Pt 1
                         case "MakerMulti_1Char_Details_Main":
                             await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_1Char_Details_Main(component, menuSession);
                             break;

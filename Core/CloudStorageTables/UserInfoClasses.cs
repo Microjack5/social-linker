@@ -11,7 +11,7 @@ namespace SocialLinker.Core.CloudStorageTables
 {
     public static class UserInfoClasses
     {
-        private static string accountsTable = "UserInformationDev"; //"UserInformation"
+        private static string accountsTable = "UserInformation"; //"UserInformationDev"
 
         static UserInfoClasses()
         {

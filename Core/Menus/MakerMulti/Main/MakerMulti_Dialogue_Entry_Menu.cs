@@ -35,7 +35,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
 
             embed.WithDescription("" +
-                $"Next, Select \"Enter Display Name & Dialogue\" button to specify the display name and what you want them to say.");
+                $"Next, Select [Enter Display Name & Dialogue] button to specify the display name and what you want them to say.");
 
             var component = new ComponentBuilder()
                 .WithButton("Enter Display Name & Dialogue", customId: "makermulti-display-name-and-dialogue-entry-modal-open", ButtonStyle.Primary);
@@ -135,7 +135,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
 
             embed.WithDescription("" +
-                $"Next, Select \"Enter Dialogue\" button to specify what you want the character to say.");
+                $"Next, Select [Enter Dialogue] button to specify what you want the character to say.");
 
             var component = new ComponentBuilder()
                 .WithButton("Enter Dialogue", customId: "makermulti-dialogue-only-entry-modal-open", ButtonStyle.Primary)

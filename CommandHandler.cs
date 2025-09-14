@@ -4,7 +4,6 @@ using Discord.Commands;
 using Discord.WebSocket;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using SocialLinker.Config;
 using SocialLinker.Core.LevelSystem;
 using Fergun.Interactive;
 using System.Collections.Generic;
@@ -532,16 +531,22 @@ namespace SocialLinker
                     .WithName("game")
                     .WithDescription("The game you wish to choose.")
                     .WithRequired(true)
-                    .AddChoice("P1", 1)
-                    .AddChoice("P2IS", 2)
-                    .AddChoice("P2EP", 3)
-                    .AddChoice("P3", 4)
-                    .AddChoice("P4", 5)
-                    .AddChoice("P4AU", 6)
-                    .AddChoice("P4D", 7)
-                    .AddChoice("P5", 8)
-                    .AddChoice("P5S", 9)
-                    .AddChoice("BBTAG", 10)
+                    .AddChoice(Global.GetGameTitle("P1-PS1"), 1)
+                    .AddChoice(Global.GetGameTitle("P1-PSP"), 2)
+                    .AddChoice(Global.GetGameTitle("P2IS-PS1"), 3)
+                    .AddChoice(Global.GetGameTitle("P2IS-PSP"), 4)
+                    .AddChoice(Global.GetGameTitle("P2EP-PS1"), 5)
+                    .AddChoice(Global.GetGameTitle("P2EP-PSP"), 6)
+                    .AddChoice(Global.GetGameTitle("P3F"), 7)
+                    .AddChoice(Global.GetGameTitle("P3P"), 8)
+                    .AddChoice(Global.GetGameTitle("P4-PS2"), 9)
+                    .AddChoice(Global.GetGameTitle("P4G"), 10)
+                    .AddChoice(Global.GetGameTitle("P4AU"), 11)
+                    .AddChoice(Global.GetGameTitle("P4D"), 12)
+                    .AddChoice(Global.GetGameTitle("P5-PS4"), 13)
+                    .AddChoice(Global.GetGameTitle("P5R"), 14)
+                    .AddChoice(Global.GetGameTitle("P5S"), 15)
+                    .AddChoice(Global.GetGameTitle("BBTAG"), 16)
                     .WithType(ApplicationCommandOptionType.Integer)
                     );
 
@@ -566,16 +571,22 @@ namespace SocialLinker
                     .WithName("character_version")
                     .WithDescription("Specifies the game a character's sprite sheet comes from.")
                     .WithRequired(false)
-                    .AddChoice("P1", 1)
-                    .AddChoice("P2IS", 2)
-                    .AddChoice("P2EP", 3)
-                    .AddChoice("P3", 4)
-                    .AddChoice("P4", 5)
-                    .AddChoice("P4AU", 6)
-                    .AddChoice("P4D", 7)
-                    .AddChoice("P5", 8)
-                    .AddChoice("P5S", 9)
-                    .AddChoice("BBTAG", 10)
+                    .AddChoice(Global.GetGameTitle("P1-PS1"), 1)
+                    .AddChoice(Global.GetGameTitle("P1-PSP"), 2)
+                    .AddChoice(Global.GetGameTitle("P2IS-PS1"), 3)
+                    .AddChoice(Global.GetGameTitle("P2IS-PSP"), 4)
+                    .AddChoice(Global.GetGameTitle("P2EP-PS1"), 5)
+                    .AddChoice(Global.GetGameTitle("P2EP-PSP"), 6)
+                    .AddChoice(Global.GetGameTitle("P3F"), 7)
+                    .AddChoice(Global.GetGameTitle("P3P"), 8)
+                    .AddChoice(Global.GetGameTitle("P4-PS2"), 9)
+                    .AddChoice(Global.GetGameTitle("P4G"), 10)
+                    .AddChoice(Global.GetGameTitle("P4AU"), 11)
+                    .AddChoice(Global.GetGameTitle("P4D"), 12)
+                    .AddChoice(Global.GetGameTitle("P5-PS4"), 13)
+                    .AddChoice(Global.GetGameTitle("P5R"), 14)
+                    .AddChoice(Global.GetGameTitle("P5S"), 15)
+                    .AddChoice(Global.GetGameTitle("BBTAG"), 16)
                     .WithType(ApplicationCommandOptionType.Integer)
                     )
                 .AddOption("sprite_number", ApplicationCommandOptionType.Integer, "View animation frames for a character's specific sprite.", isRequired: false);
@@ -603,16 +614,22 @@ namespace SocialLinker
                     .WithName("character_version")
                     .WithDescription("Specifies the game a character's sprite sheet comes from.")
                     .WithRequired(false)
-                    .AddChoice("P1", 1)
-                    .AddChoice("P2IS", 2)
-                    .AddChoice("P2EP", 3)
-                    .AddChoice("P3", 4)
-                    .AddChoice("P4", 5)
-                    .AddChoice("P4AU", 6)
-                    .AddChoice("P4D", 7)
-                    .AddChoice("P5", 8)
-                    .AddChoice("P5S", 9)
-                    .AddChoice("BBTAG", 10)
+                    .AddChoice(Global.GetGameTitle("P1-PS1"), 1)
+                    .AddChoice(Global.GetGameTitle("P1-PSP"), 2)
+                    .AddChoice(Global.GetGameTitle("P2IS-PS1"), 3)
+                    .AddChoice(Global.GetGameTitle("P2IS-PSP"), 4)
+                    .AddChoice(Global.GetGameTitle("P2EP-PS1"), 5)
+                    .AddChoice(Global.GetGameTitle("P2EP-PSP"), 6)
+                    .AddChoice(Global.GetGameTitle("P3F"), 7)
+                    .AddChoice(Global.GetGameTitle("P3P"), 8)
+                    .AddChoice(Global.GetGameTitle("P4-PS2"), 9)
+                    .AddChoice(Global.GetGameTitle("P4G"), 10)
+                    .AddChoice(Global.GetGameTitle("P4AU"), 11)
+                    .AddChoice(Global.GetGameTitle("P4D"), 12)
+                    .AddChoice(Global.GetGameTitle("P5-PS4"), 13)
+                    .AddChoice(Global.GetGameTitle("P5R"), 14)
+                    .AddChoice(Global.GetGameTitle("P5S"), 15)
+                    .AddChoice(Global.GetGameTitle("BBTAG"), 16)
                     .WithType(ApplicationCommandOptionType.Integer)
                     )
                 .AddOption("sprite_number", ApplicationCommandOptionType.Integer, "The specific sprite from the character's sprite sheet to use.", isRequired: true)
@@ -715,42 +732,66 @@ namespace SocialLinker
             switch (value)
             {
                 case "1":
-                    template = "P1";
+                    template = "P1-PS1";
                     break;
 
                 case "2":
-                    template = "P2IS";
+                    template = "P1-PSP";
                     break;
 
                 case "3":
-                    template = "P2EP";
+                    template = "P2IS-PS1";
                     break;
 
                 case "4":
-                    template = "P3";
+                    template = "P2IS-PSP";
                     break;
 
                 case "5":
-                    template = "P4";
+                    template = "P2EP-PS1";
                     break;
 
                 case "6":
-                    template = "P4AU";
+                    template = "P2EP-PSP";
                     break;
 
                 case "7":
-                    template = "P4D";
+                    template = "P3F";
                     break;
 
                 case "8":
-                    template = "P5";
+                    template = "P3P";
                     break;
 
                 case "9":
-                    template = "P5S";
+                    template = "P4-PS2";
                     break;
 
                 case "10":
+                    template = "P4G";
+                    break;
+
+                case "11":
+                    template = "P4AU";
+                    break;
+
+                case "12":
+                    template = "P4D";
+                    break;
+
+                case "13":
+                    template = "P5-PS4";
+                    break;
+
+                case "14":
+                    template = "P5R";
+                    break;
+
+                case "15":
+                    template = "P5S";
+                    break;
+
+                case "16":
                     template = "BBTAG";
                     break;
             }

@@ -60,7 +60,7 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(multimaker_session.MakerCommand.Template));
 
             embed.WithDescription("" +
-                $"Let's get started with your scene! Select **`[Enter Character Details]`** to specify your character and their sprite number.");
+                $"Let's get started with your scene! Select [Enter Character Details] to specify your character and their sprite number.");
 
             switch (multimaker_session.MakerCommand.Template)
             {
@@ -149,17 +149,29 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
 
             string back_button_id = "";
 
-            if (multimaker_session.MakerCommand.Template == "BBTAG")
+            switch (multimaker_session.MakerCommand.Template)
             {
-                back_button_id = "back-to-makermulti-bbtag-layout-select";
-            }
-            else
-            {
-                back_button_id = "back-to-makermulti-title-select";
+                case "P2IS-PS1":
+                case "P2IS-PSP":
+                    back_button_id = "back-to-makermulti-p2is-vc-select";
+                    break;
+
+                case "P2EP-PS1":
+                case "P2EP-PSP":
+                    back_button_id = "back-to-makermulti-p2ep-vc-select";
+                    break;
+
+                case "BBTAG":
+                    back_button_id = "back-to-makermulti-bbtag-layout-select";
+                    break;
+
+                default:
+                    back_button_id = "back-to-makermulti-title-select";
+                    break;
             }
 
             embed.WithDescription("" +
-                $"Let's get started with your scene! Select **`[Enter Character Details]`** to specify Characters #1 & #2 with their sprite numbers.");
+                $"Let's get started with your scene! Select [Enter Character Details] to specify Characters #1 & #2 with their sprite numbers.");
 
             switch (multimaker_session.MakerCommand.Template)
             {

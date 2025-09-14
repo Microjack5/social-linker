@@ -19,6 +19,31 @@ namespace SocialLinker
         internal static List<PlacementSwitchData> P1_PSP_Usage_List { get; set; } = new List<PlacementSwitchData>();
         internal static List<SocialLinkerCommand> MultiMaker_Session_List { get; set; } = new List<SocialLinkerCommand>();
 
+        public static readonly Dictionary<string, string> Game_Titles = new Dictionary<string, string>
+        {
+            { "P1-PS1", "Revelations: Persona" },
+            { "P1-PSP", "Persona (PSP®️)" },
+            { "P2IS-PS1", "Persona 2: Innocent Sin (PlayStation®️)" },
+            { "P2IS-PSP", "Persona 2: Innocent Sin (PSP®️)" },
+            { "P2EP-PS1", "Persona 2: Eternal Punishment (PlayStation®️)" },
+            { "P2EP-PSP", "Persona 2: Eternal Punishment (PSP®️)" },
+            { "P3F", "Persona 3 FES" },
+            { "P3P", "Persona 3 Portable" },
+            { "P4-PS2", "Persona 4 (PlayStation®️ 2)" },
+            { "P4G", "Persona 4 Golden" },
+            { "P4AU", "Persona 4 Arena Ultimax" },
+            { "P4D", "Persona 4: Dancing All Night" },
+            { "P5-PS4", "Persona 5 (PlayStation®️ 4)" },
+            { "P5R", "Persona 5 Royal" },
+            { "P5S", "Persona 5 Strikers" },
+            { "BBTAG", "BlazBlue: Cross Tag Battle" }
+        };
+
+        public static string GetGameTitle(string keyword) =>
+        Game_Titles.TryGetValue(keyword, out var fullTitle)
+            ? fullTitle
+            : "Unknown Game";
+
         internal static string[] p1_ps1_version_keywords = { "P1-PS1", "P1-PSX", "P1PS1", "P1PSX" };
         internal static string[] p1_psp_version_keywords = { "P1-PSP", "P1PSP", "P1-P", "P1P" };
         internal static string[] p2is_ps1_version_keywords = { "P2IS-PS1", "P2IS-PSX", "P2ISPS1", "P2ISPSX", "P2-PS1", "P2-PSX", "P2PS1", "P2PSX", "IS-PS1", "IS-PSX", "ISPS1", "ISPSX" };

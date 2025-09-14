@@ -315,10 +315,10 @@ namespace SocialLinker.Core.LocalStorageTables
             {
                 return "P3P";
             }
-            else if (Global.p3r_version_keywords.Contains(input_template))
-            {
-                return "P3R";
-            }
+            //else if (Global.p3r_version_keywords.Contains(input_template))
+            //{
+            //    return "P3R";
+            //}
             else if (Global.p4_ps2_version_keywords.Contains(input_template))
             {
                 return "P4-PS2";
@@ -558,9 +558,9 @@ namespace SocialLinker.Core.LocalStorageTables
                     await OfficialSetLists.P3P_Set_List(sl_command);
                     return;
 
-                case "P3R":
-                    await OfficialSetLists.P3R_Set_List(sl_command);
-                    return;
+                //case "P3R":
+                //    await OfficialSetLists.P3R_Set_List(sl_command);
+                //    return;
 
                 case "P4-PS2":
                     await OfficialSetLists.P4_PS2_Set_List(sl_command);
@@ -641,9 +641,9 @@ namespace SocialLinker.Core.LocalStorageTables
                     await OfficialSetSheets.P3P_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
-                case "P3R":
-                    await OfficialSetSheets.P3R_Sprite_Sheet(sl_command, sprite_set_info);
-                    return;
+                //case "P3R":
+                //    await OfficialSetSheets.P3R_Sprite_Sheet(sl_command, sprite_set_info);
+                //    return;
 
                 case "P4-PS2":
                     await OfficialSetSheets.P4_PS2_Sprite_Sheet(sl_command, sprite_set_info);
@@ -685,14 +685,16 @@ namespace SocialLinker.Core.LocalStorageTables
             // Establish the directory of the specified sprite set.
             string set_path = "";
 
-            if (set_data.Origin == "P3R")
-            {
-                set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
-            }
-            else
-            {
-                set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
-            }
+            //if (set_data.Origin == "P3R")
+            //{
+            //    set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
+            //}
+            //else
+            //{
+            //    set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            //}
+
+            set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = AttachmentCountItemDirectory(set_path);
@@ -751,9 +753,9 @@ namespace SocialLinker.Core.LocalStorageTables
                     await BustupFrameSheets.P3P_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
-                case "P3R":
-                    await BustupFrameSheets.P3R_Bustup_Frame_Sheet(sl_command, set_data, command_data);
-                    return;
+                //case "P3R":
+                //    await BustupFrameSheets.P3R_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+                //    return;
 
                 case "P4-PS2":
                     await BustupFrameSheets.P4_PS2_Bustup_Frame_Sheet(sl_command, set_data, command_data);
