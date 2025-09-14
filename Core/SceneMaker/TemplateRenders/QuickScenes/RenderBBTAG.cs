@@ -61,7 +61,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 return;
             }
 
-            if (account.BBTAG_TS_BG_Blur == "On")
+            if (account.BBTAG_TS_BG_Blur == "On" && sl_command.MakerCommand.Background != null)
             {
                 background = Blur_Background(background);
             }

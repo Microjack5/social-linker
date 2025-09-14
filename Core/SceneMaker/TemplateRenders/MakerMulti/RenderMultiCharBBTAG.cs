@@ -115,7 +115,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
                 return;
             }
 
-            if (account.BBTAG_TS_BG_Blur == "On")
+            if (account.BBTAG_TS_BG_Blur == "On" && sl_command.MakerCommand.Background != null)
             {
                 background = base_bbtag_rendering.Blur_Background(background);
             }
@@ -270,10 +270,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.MakerMulti
 
                     textbox = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//BBTAG//Main//Message_Window//{textbox_type}.png");
 
-                    //graphics.DrawImage(textbox, 0, 0, template_width, template_height);
-                    //graphics.DrawImage(nametag, 0, 0, template_width, template_height);
-                    //graphics.DrawImage(rendered_name, 0, 0, template_width, template_height);
-                    //graphics.DrawImage(base_bbtag_rendering.Render_Dialogue(maker_command_data.Dialogue), 0, 0, template_width, template_height);
+                    graphics.DrawImage(textbox, 0, 0, template_width, template_height);
+                    graphics.DrawImage(nametag, 0, 0, template_width, template_height);
+                    graphics.DrawImage(rendered_name, 0, 0, template_width, template_height);
+                    graphics.DrawImage(base_bbtag_rendering.Render_Dialogue(maker_command_data.Dialogue), 0, 0, template_width, template_height);
                 }
             }
             catch (Exception err)
