@@ -38,7 +38,7 @@ namespace SocialLinker.Core.SceneMaker
             version_keywords.AddRange(Global.p2ep_psp_version_keywords);
             version_keywords.AddRange(Global.p3f_version_keywords);
             version_keywords.AddRange(Global.p3p_version_keywords);
-            version_keywords.AddRange(Global.p3r_version_keywords);
+            //version_keywords.AddRange(Global.p3r_version_keywords);
             version_keywords.AddRange(Global.p4_ps2_version_keywords);
             version_keywords.AddRange(Global.p4g_version_keywords);
             version_keywords.AddRange(Global.p5_ps4_version_keywords);
