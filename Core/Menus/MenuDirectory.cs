@@ -50,6 +50,31 @@ namespace SocialLinker.Core.Menus
                     // Else, if the reactor is the menu user, perform an action.
                     else if (reaction.UserId == menuSession.User.Id)
                     {
+                        // Menu deletion
+                        if (reaction.Emote.Name == "❌")
+                        {
+                            // Stop the timeout timer associated with the menu.
+                            menuSession.MenuTimer.Stop();
+
+                            // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
+                            try
+                            {
+                                _ = menuSession.MenuMessage.DeleteAsync();
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex);
+                            }
+
+                            // If the menu session is not null, remove it from the global list.
+                            if (menuSession != null)
+                            {
+                                Global.MenuIdList.Remove(menuSession);
+                            }
+
+                            return;
+                        }
+
                         // Next, let's check all the users who reacted with this emote before we perform any actions.
                         // We want to make sure the reaction added is an emote that the bot has also reacted to, or else we want to ignore it to prevent errors.
                         // First, get a list of all users who reacted with the emote. Set the limit to a value of 3 (only two should be here max).
@@ -1452,7 +1477,6 @@ namespace SocialLinker.Core.Menus
             {
                 Console.WriteLine(ex.ToString());
             }
-            
         }
 
         public static async Task ReactionRemovedIndex(Cacheable<IUserMessage, ulong> cache, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
