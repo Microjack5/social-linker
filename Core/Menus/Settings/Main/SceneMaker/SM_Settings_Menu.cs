@@ -120,7 +120,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             reaction_list.Add(new Emoji("\u0035\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0036\ufe0f\u20e3"));
             reaction_list.Add(new Emoji("\u0037\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0038\ufe0f\u20e3"));
+            //reaction_list.Add(new Emoji("\u0038\ufe0f\u20e3"));
 
             // Add the reactions to the message.
             _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
