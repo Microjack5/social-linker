@@ -302,9 +302,9 @@ namespace SocialLinker.Core.Menus
                                 break;
 
                             // Namespace: SocialLinker.Core.Menus.Settings
-                            case "Settings_Main_Menu":
-                                await Settings_Reactions.Nav_Settings_Main_Menu(reaction, menuSession);
-                                break;
+                            //case "Settings_Main_Menu":
+                            //    await Settings_Reactions.Nav_Settings_Main_Menu(reaction, menuSession);
+                            //    break;
 
                             case "Time_Weather_Main":
                                 await Time_Weather_Reactions.Nav_Time_Weather_Main(reaction, menuSession);
@@ -412,61 +412,61 @@ namespace SocialLinker.Core.Menus
                                 break;
 
                             // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker
-                            case "SM_Settings_Menu":
-                                await SM_Settings_Reactions.Nav_SM_Settings_Main(reaction, menuSession);
-                                break;
+                            //case "SM_Settings_Menu":
+                            //    await SM_Settings_Reactions.Nav_SM_Settings_Main(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_Main":
-                                await Version_Control_Reactions.Nav_Version_Control_Main(reaction, menuSession);
-                                break;
+                            //case "Version_Control_Main":
+                            //    await Version_Control_Reactions.Nav_Version_Control_Main(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P1":
-                                await Version_Control_Reactions.Nav_Version_Control_P1(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P1":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P1(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P2IS":
-                                await Version_Control_Reactions.Nav_Version_Control_P2IS(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P2IS":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P2IS(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P2EP":
-                                await Version_Control_Reactions.Nav_Version_Control_P2EP(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P2EP":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P2EP(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P3":
-                                await Version_Control_Reactions.Nav_Version_Control_P3(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P3":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P3(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P4":
-                                await Version_Control_Reactions.Nav_Version_Control_P4(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P4":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P4(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P5":
-                                await Version_Control_Reactions.Nav_Version_Control_P5(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P5":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P5(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P1_Confirm":
-                                await Version_Control_Reactions.Nav_Version_Control_P1_Confirm(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P1_Confirm":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P1_Confirm(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P2IS_Confirm":
-                                await Version_Control_Reactions.Nav_Version_Control_P2IS_Confirm(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P2IS_Confirm":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P2IS_Confirm(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P2EP_Confirm":
-                                await Version_Control_Reactions.Nav_Version_Control_P2EP_Confirm(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P2EP_Confirm":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P2EP_Confirm(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P3_Confirm":
-                                await Version_Control_Reactions.Nav_Version_Control_P3_Confirm(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P3_Confirm":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P3_Confirm(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P4_Confirm":
-                                await Version_Control_Reactions.Nav_Version_Control_P4_Confirm(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P4_Confirm":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P4_Confirm(reaction, menuSession);
+                            //    break;
 
-                            case "Version_Control_P5_Confirm":
-                                await Version_Control_Reactions.Nav_Version_Control_P5_Confirm(reaction, menuSession);
-                                break;
+                            //case "Version_Control_P5_Confirm":
+                            //    await Version_Control_Reactions.Nav_Version_Control_P5_Confirm(reaction, menuSession);
+                            //    break;
 
                             case "Template_Layout_Main":
                                 await Template_Layout_Reactions.Nav_Template_Layout_Main(reaction, menuSession);
@@ -1680,11 +1680,46 @@ namespace SocialLinker.Core.Menus
             if (Global.MenuIdList.Any(x => x.MenuMessage.Id == component.Message.Id))
             {
                 var menuSession = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Id == component.Message.Id);
+                menuSession.MenuTimer.Stop();
 
                 if (user.Id == menuSession.User.Id)
                 {
                     switch (menuSession.CurrentMenu)
                     {
+                        // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker
+                        case "SM_Settings_Menu":
+                            await SM_Settings_Reactions.Nav_SM_Settings_Main(component, menuSession);
+                            break;
+
+                        case "Version_Control_Main":
+                            await Version_Control_Reactions.Nav_Version_Control_Main(component, menuSession);
+                            break;
+
+                        case "Version_Control_P1":
+                            await Version_Control_Reactions.Nav_Version_Control_P1(component, menuSession);
+                            break;
+
+                        case "Version_Control_P2IS":
+                            await Version_Control_Reactions.Nav_Version_Control_P2IS(component, menuSession);
+                            break;
+
+                        case "Version_Control_P2EP":
+                            await Version_Control_Reactions.Nav_Version_Control_P2EP(component, menuSession);
+                            break;
+
+                        case "Version_Control_P3":
+                            await Version_Control_Reactions.Nav_Version_Control_P3(component, menuSession);
+                            break;
+
+                        case "Version_Control_P4":
+                            await Version_Control_Reactions.Nav_Version_Control_P4(component, menuSession);
+                            break;
+
+                        case "Version_Control_P5":
+                            await Version_Control_Reactions.Nav_Version_Control_P5(component, menuSession);
+                            break;
+
+                        // Maker Multi
                         case "MakerMulti_Main_Menu":
                             await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_Main_Menu(component, menuSession);
                             break;
@@ -1722,6 +1757,9 @@ namespace SocialLinker.Core.Menus
             if (Global.MenuIdList.Any(x => x.MenuMessage.Id == component.Message.Id))
             {
                 var menuSession = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Id == component.Message.Id);
+                menuSession.MenuTimer.Stop();
+
+                await component.DeferAsync();
 
                 if (user.Id == menuSession.User.Id)
                 {
@@ -1733,6 +1771,36 @@ namespace SocialLinker.Core.Menus
 
                         case "First_Use_Intro_Confirm":
                             await First_Use_Content_Filter_Reactions.Nav_First_Use_Intro_Confirm(component, menuSession);
+                            break;
+
+                        // Settings
+                        case "Settings_Main_Menu":
+                            await Settings_Reactions.Nav_Settings_Main_Menu(component, menuSession);
+                            break;
+
+                        // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker
+                        case "Version_Control_P1_Confirm":
+                            await Version_Control_Reactions.Nav_Version_Control_P1_Confirm(component, menuSession);
+                            break;
+
+                        case "Version_Control_P2IS_Confirm":
+                            await Version_Control_Reactions.Nav_Version_Control_P2IS_Confirm(component, menuSession);
+                            break;
+
+                        case "Version_Control_P2EP_Confirm":
+                            await Version_Control_Reactions.Nav_Version_Control_P2EP_Confirm(component, menuSession);
+                            break;
+
+                        case "Version_Control_P3_Confirm":
+                            await Version_Control_Reactions.Nav_Version_Control_P3_Confirm(component, menuSession);
+                            break;
+
+                        case "Version_Control_P4_Confirm":
+                            await Version_Control_Reactions.Nav_Version_Control_P4_Confirm(component, menuSession);
+                            break;
+
+                        case "Version_Control_P5_Confirm":
+                            await Version_Control_Reactions.Nav_Version_Control_P5_Confirm(component, menuSession);
                             break;
 
                         // Pt 1

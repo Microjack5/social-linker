@@ -402,6 +402,7 @@
     <Compile Include="Core\Menus\Settings\Reactions\Settings_Reactions.cs" />
     <Compile Include="Core\Menus\Shop\Main\ShopMenu.cs" />
     <Compile Include="Core\Menus\Shop\Reactions\ShopReactions.cs" />
+    <Compile Include="Core\Menus\Utility.cs" />
     <Compile Include="Core\SceneMaker\BustupFrameSheets.cs" />
     <Compile Include="Core\SceneMaker\Data\Bustup\BustupData.cs" />
     <Compile Include="Core\SceneMaker\Data\Bustup\BustupDataMethods.cs" />

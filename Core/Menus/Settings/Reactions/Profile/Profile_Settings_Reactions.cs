@@ -15,7 +15,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Settings_Menu.Settings_Main_Menu(menuSession.User, menuSession.MenuMessage);
+                _ = Settings_Menu.Settings_Main_Menu(menuSession);
                 return Task.CompletedTask;
             }
 
