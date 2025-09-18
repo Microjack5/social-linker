@@ -17,7 +17,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
                 return Task.CompletedTask;
             }
 

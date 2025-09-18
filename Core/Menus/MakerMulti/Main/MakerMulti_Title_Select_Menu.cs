@@ -154,12 +154,12 @@ namespace SocialLinker.Core.Menus.MakerMulti.Main
                     .WithCustomId("multimaker-select")
                     .WithMinValues(1)
                     .WithMaxValues(1)
-                    .AddOption("Persona 2: Innocent Sin", "P2IS", emote: Emote.Parse("<:P2IS:788950080396328990>"))
-                    .AddOption("Persona 2: Eternal Punishment", "P2EP", emote: Emote.Parse("<:P2EP:788950163363463172>"))
-                    .AddOption("Persona 3 Portable", "P3P", emote: Emote.Parse("<:P3P:1096338602046267392>"))
-                    .AddOption("Persona 4 Arena Ultimax", "P4AU", emote: Emote.Parse("<:P4AU:751133122342420572>"))
-                    .AddOption("Persona 4: Dancing All Night", "P4D", emote: Emote.Parse("<:P4D:751133120346062859>"))
-                    .AddOption("BlazBlue: Cross Tag Battle", "BBTAG", emote: Emote.Parse("<:BBTAG:751133123013771617>"));
+                    .AddOption("Persona 2: Innocent Sin", "P2IS", emote: Emote.Parse(Global.GetGameEmote("P2IS")))
+                    .AddOption("Persona 2: Eternal Punishment", "P2EP", emote: Emote.Parse(Global.GetGameEmote("P2EP")))
+                    .AddOption("Persona 3 Portable", "P3P", emote: Emote.Parse(Global.GetGameEmote("P3P")))
+                    .AddOption("Persona 4 Arena Ultimax", "P4AU", emote: Emote.Parse(Global.GetGameEmote("P4AU")))
+                    .AddOption("Persona 4: Dancing All Night", "P4D", emote: Emote.Parse(Global.GetGameEmote("P4D")))
+                    .AddOption("BlazBlue: Cross Tag Battle", "BBTAG", emote: Emote.Parse(Global.GetGameEmote("BBTAG")));
 
                 var component = new ComponentBuilder()
                     .WithSelectMenu(selectMenu);

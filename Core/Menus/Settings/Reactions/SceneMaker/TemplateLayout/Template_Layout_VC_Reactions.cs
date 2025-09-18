@@ -1,44 +1,28 @@
-﻿using System.Threading.Tasks;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
 {
     class Template_Layout_VC_Reactions
     {
-        public static Task Nav_Template_Layout_VC_P1_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_VC_P1_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PSP_Menu.Template_Layout_P1_PSP_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "P1-PS1":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
+                case "P1-PSP":
+                    _ = Template_Layout_P1_PSP_Menu.Template_Layout_P1_PSP_Main(menuSession.User, menuSession.MenuMessage);
+                    break;
+                case "return":
+                    _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
@@ -52,7 +36,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -89,7 +73,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -126,7 +110,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -163,7 +147,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -200,7 +184,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
                 return Task.CompletedTask;
             }
 

@@ -1,809 +1,347 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
-using SocialLinker.Core.Menus.Settings.Main;
-using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
 {
     class Template_Layout_P1_PS1_Reactions
     {
-        public static Task Nav_Template_Layout_P1_PS1_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_VC_Menu.Template_Layout_VC_P1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Moon_Phases(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_BG_Darken(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Five
-            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Consistent_Names(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Six
-            else if (reaction.Emote.Name == "\u0036\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Localized_Names(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "1":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper(menuSession);
+                    break;
+                case "2":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Moon_Phases(menuSession);
+                    break;
+                case "3":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement(menuSession);
+                    break;
+                case "4":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_BG_Darken(menuSession);
+                    break;
+                case "5":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Consistent_Names(menuSession);
+                    break;
+                case "6":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Localized_Names(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_VC_Menu.Template_Layout_VC_P1_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_Wallpaper(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Wallpaper(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+            var account = menuSession.Account;
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "1":
+                    account.P1_PSX_TS_Wallpaper = "Type 1";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.P1_PSX_TS_Wallpaper = "Type 2";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession);
+                    break;
+                case "3":
+                    account.P1_PSX_TS_Wallpaper = "Type 3";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen wallpaper to the user's account settings.
-                account.P1_PSX_TS_Wallpaper = "Type 1";
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession);
+                    break;
+                case "4":
+                    account.P1_PSX_TS_Wallpaper = "Type 4";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession);
+                    break;
+                case "5":
+                    account.P1_PSX_TS_Wallpaper = "Type 5";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession);
+                    break;
+                case "6":
+                    account.P1_PSX_TS_Wallpaper = "Type 6";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession);
+                    break;
+                case "7":
+                    account.P1_PSX_TS_Wallpaper = "Type 7";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession);
+                    break;
+                case "8":
+                    account.P1_PSX_TS_Wallpaper = "Type 8";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen wallpaper to the user's account settings.
-                account.P1_PSX_TS_Wallpaper = "Type 2";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen wallpaper to the user's account settings.
-                account.P1_PSX_TS_Wallpaper = "Type 3";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen wallpaper to the user's account settings.
-                account.P1_PSX_TS_Wallpaper = "Type 4";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Five
-            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen wallpaper to the user's account settings.
-                account.P1_PSX_TS_Wallpaper = "Type 5";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Six
-            else if (reaction.Emote.Name == "\u0036\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen wallpaper to the user's account settings.
-                account.P1_PSX_TS_Wallpaper = "Type 6";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Seven
-            else if (reaction.Emote.Name == "\u0037\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen wallpaper to the user's account settings.
-                account.P1_PSX_TS_Wallpaper = "Type 7";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Eight
-            else if (reaction.Emote.Name == "\u0038\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen wallpaper to the user's account settings.
-                account.P1_PSX_TS_Wallpaper = "Type 8";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Wallpaper_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_Moon_Phases(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Moon_Phases(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+            var account = menuSession.Account;
 
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
+
+                case "on":
+                    account.P1_PSX_TS_Moon_HUD = "On";
+                    UserInfoClasses.UpdateAccount(account);
+
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Moon_Phases_Confirm(menuSession);
+                    break;
+
+                case "off":
+                    account.P1_PSX_TS_Moon_HUD = "Off";
+                    UserInfoClasses.UpdateAccount(account);
+
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Moon_Phases_Confirm(menuSession);
+                    break;
             }
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
+            return Task.CompletedTask;
+
+        }
+
+        public static Task Nav_Template_Layout_P1_PS1_Placement(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            string selected = component.Data.Values.First();
+            var account = menuSession.Account;
+
+            switch (selected)
             {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                case "1":
+                    account.P1_PSX_TS_Position = "Left";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Moon_HUD = "On";
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.P1_PSX_TS_Position = "Center";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement_Confirm(menuSession);
+                    break;
+                case "3":
+                    account.P1_PSX_TS_Position = "Right";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement_Confirm(menuSession);
+                    break;
+                case "4":
+                    account.P1_PSX_TS_Position = "Switch";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Moon_Phases_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Moon_HUD = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Moon_Phases_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_Placement(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_BG_Darken(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "on":
+                    account.P1_PSX_TS_BG_Darken = "On";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_BG_Darken_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Position = "Left";
+                case "off":
+                    account.P1_PSX_TS_BG_Darken = "Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Position = "Center";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Position = "Right";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Position = "Switch";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_BG_Darken_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_BG_Darken(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Consistent_Names(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "on":
+                    account.P1_PSX_TS_Consistent_Names = "On";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Consistent_Names_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_BG_Darken = "On";
+                case "off":
+                    account.P1_PSX_TS_Consistent_Names = "Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_BG_Darken_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_BG_Darken = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_BG_Darken_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Consistent_Names_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_Consistent_Names(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Localized_Names(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "on":
+                    account.P1_PSX_TS_Localized_Revelations_Names = "On";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Localized_Names_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Consistent_Names = "On";
+                case "off":
+                    account.P1_PSX_TS_Localized_Revelations_Names = "Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Consistent_Names_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Consistent_Names = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Consistent_Names_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Localized_Names_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_Localized_Names(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Wallpaper_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Localized_Revelations_Names = "On";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Localized_Names_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P1_PSX_TS_Localized_Revelations_Names = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Localized_Names_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "back-to-p1-ps1-template-settings":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_Wallpaper_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Moon_Phases_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p1-ps1-template-settings":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_Moon_Phases_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Placement_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p1-ps1-template-settings":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_Placement_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_BG_Darken_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p1-ps1-template-settings":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_BG_Darken_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Consistent_Names_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p1-ps1-template-settings":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P1_PS1_Consistent_Names_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P1_PS1_Localized_Names_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Template_Layout_P1_PS1_Localized_Names_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            if (reaction.Emote.Name == "💠")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p1-ps1-template-settings":
+                    _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;

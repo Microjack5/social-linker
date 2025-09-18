@@ -1,25 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Timers;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
-using Discord.WebSocket;
-using SocialLinker.Config;
-using SocialLinker.Core.CloudStorageTables;
-using Discord.Rest;
 
 namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 {
     class Template_Layout_P1_PS1_Menu
     {
-        public static async Task Template_Layout_P1_PS1_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -30,19 +20,11 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Version Select"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
-                "**Select a setting to edit.**\n" +
+                "Select a setting to edit.\n" +
                 "\n" +
                 ":one: Wallpaper\n" +
                 ":two: Moon Phases\n" +
@@ -51,64 +33,33 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":five: Consistent Display Names\n" +
                 ":six: Localized Display Names");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select an option")
+                    .WithCustomId("template-layout-p1-ps1-main")
+                    .WithMinValues(1)
+                    .WithMaxValues(1)
+                    .AddOption("Wallpaper", "1", null, new Emoji("1️⃣"))
+                    .AddOption("Moon Phases", "2", null, new Emoji("2️⃣"))
+                    .AddOption("Sprite Placement", "3", null, new Emoji("3️⃣"))
+                    .AddOption("Darken Background", "4", null, new Emoji("4️⃣"))
+                    .AddOption("Consistent Display Names", "5", null, new Emoji("5️⃣"))
+                    .AddOption("Localized Display Names", "6", null, new Emoji("6️⃣"))
+                    .AddOption("Return to Version Select", "return", null, new Emoji("↩️"));
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0035\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0036\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Wallpaper(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Wallpaper(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -119,19 +70,11 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Revelations: Persona Template Settings"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
-                "**Change the background of the message window. Pick the one that suits you.**\n" +
+                "Change the background of the message window. Pick the one that suits you.\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P1_PSX_TS_Wallpaper}`**\n" +
                 "\n" +
@@ -146,66 +89,35 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithImageUrl("https://i.imgur.com/SE0PWwd.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select an option")
+                    .WithCustomId("template-layout-p1-ps1-wallpaper")
+                    .WithMinValues(1)
+                    .WithMaxValues(1)
+                    .AddOption("Type 1", "1", null, new Emoji("1️⃣"))
+                    .AddOption("Type 2", "2", null, new Emoji("2️⃣"))
+                    .AddOption("Type 3", "3", null, new Emoji("3️⃣"))
+                    .AddOption("Type 4", "4", null, new Emoji("4️⃣"))
+                    .AddOption("Type 5", "5", null, new Emoji("5️⃣"))
+                    .AddOption("Type 6", "6", null, new Emoji("6️⃣"))
+                    .AddOption("Type 7", "7", null, new Emoji("7️⃣"))
+                    .AddOption("Type 8", "8", null, new Emoji("8️⃣"))
+                    .AddOption("Return to Version Select", "return", null, new Emoji("↩️"));
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Wallpaper";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0035\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0036\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0037\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0038\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Moon_Phases(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Moon_Phases(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -223,74 +135,32 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithFooter(footer);
 
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
-                "**Toggle the moon phases on and off in created scenes.**\n" +
+                "Toggle the moon phases on and off in created scenes.\n" +
                 "\n" +
-                $"⚙️ **Current setting:** **`{account.P1_PSX_TS_Moon_HUD}`**\n" +
-                "\n" +
-                ":one: On\n" +
-                ":two: Off\n");
+                $"⚙️ **Current setting:** **`{account.P1_PSX_TS_Moon_HUD}`**\n");
 
             embed.WithImageUrl("https://i.imgur.com/xbEo69c.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("↩️", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ On", customId: "on", ButtonStyle.Secondary)
+                .WithButton("❌ Off", customId: "off", ButtonStyle.Secondary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Moon_Phases";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Placement(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Placement(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -301,19 +171,11 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Revelations: Persona Template Settings"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
-                "**Choose the default position character sprites are rendered at.**\n" +
+                "Choose the default position character sprites are rendered at.\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P1_PSX_TS_Position}`**\n" +
                 "\n" +
@@ -324,62 +186,31 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithImageUrl("https://i.imgur.com/OsvwaV7.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select an option")
+                    .WithCustomId("template-layout-p1-ps1-placement")
+                    .WithMinValues(1)
+                    .WithMaxValues(1)
+                    .AddOption("Left", "left", null, new Emoji("1️⃣"))
+                    .AddOption("Right", "right", null, new Emoji("2️⃣"))
+                    .AddOption("Center", "center", null, new Emoji("3️⃣"))
+                    .AddOption("Switch", "switch", null, new Emoji("4️⃣"))
+                    .AddOption("Return to Revelations: Persona Template Settings", "return", null, new Emoji("↩️"));
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Placement";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_BG_Darken(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_BG_Darken(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -392,79 +223,37 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "↩️ Revelations: Persona Template Settings"
+                Text = "↩️ Return to Revelations: Persona Template Settings"
             };
 
             embed.WithFooter(footer);
 
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
-                "**Toggle a filter to darken background elements on and off.**\n" +
+                "Toggle a filter to darken background elements on and off.\n" +
                 "\n" +
-                $"⚙️ **Current setting:** **`{account.P1_PSX_TS_BG_Darken}`**\n" +
-                "\n" +
-                ":one: On\n" +
-                ":two: Off\n");
+                $"⚙️ **Current setting:** **`{account.P1_PSX_TS_BG_Darken}`**\n");
 
             embed.WithImageUrl("https://i.imgur.com/zxMGylO.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("↩️", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ On", customId: "on", ButtonStyle.Secondary)
+                .WithButton("❌ Off", customId: "off", ButtonStyle.Secondary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_BG_Darken";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Consistent_Names(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Consistent_Names(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -482,74 +271,32 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithFooter(footer);
 
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
-                "**Set the toggle on to always display a character's name, or off to hide their name for consecutive scenes they speak in.**\n" +
+                "Set the toggle on to always display a character's name, or off to hide their name for consecutive scenes they speak in.\n" +
                 "\n" +
-                $"⚙️ **Current setting:** **`{account.P1_PSX_TS_Consistent_Names}`**\n" +
-                "\n" +
-                ":one: On\n" +
-                ":two: Off\n");
+                $"⚙️ **Current setting:** **`{account.P1_PSX_TS_Consistent_Names}`**\n");
 
             embed.WithImageUrl("https://i.imgur.com/1v4HjkQ.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("↩️", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ On", customId: "on", ButtonStyle.Secondary)
+                .WithButton("❌ Off", customId: "off", ButtonStyle.Secondary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Consistent_Names";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Localized_Names(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Localized_Names(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -567,74 +314,32 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithFooter(footer);
 
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
-                "**Set characters to have their localized display names on or off. This can still be overridden with custom display names.**\n" +
+                "Set characters to have their localized display names on or off. This can still be overridden with custom display names.\n" +
                 "\n" +
-                $"⚙️ **Current setting:** **`{account.P1_PSX_TS_Localized_Revelations_Names}`**\n" +
-                "\n" +
-                ":one: On\n" +
-                ":two: Off\n");
+                $"⚙️ **Current setting:** **`{account.P1_PSX_TS_Localized_Revelations_Names}`**\n");
 
             embed.WithImageUrl("https://i.imgur.com/opEvVqv.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("↩️", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ On", customId: "on", ButtonStyle.Secondary)
+                .WithButton("❌ Off", customId: "off", ButtonStyle.Secondary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Localized_Names";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Wallpaper_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Wallpaper_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -645,73 +350,26 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 Revelations: Persona Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
                 $"Your wallpaper has been set to **`{account.P1_PSX_TS_Wallpaper}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("💠 Revelations: Persona Template Settings", customId: "back-to-p1-ps1-template-settings", ButtonStyle.Primary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Wallpaper_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Moon_Phases_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Moon_Phases_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -722,73 +380,26 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 Revelations: Persona Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
                 $"Moon phases have been set to **`{account.P1_PSX_TS_Moon_HUD}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("💠 Revelations: Persona Template Settings", customId: "back-to-p1-ps1-template-settings", ButtonStyle.Primary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Moon_Phases_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Placement_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Placement_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -799,73 +410,26 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 Revelations: Persona Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
                 $"Sprite placements have been set to **`{account.P1_PSX_TS_Position}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("💠 Revelations: Persona Template Settings", customId: "back-to-p1-ps1-template-settings", ButtonStyle.Primary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Placement_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_BG_Darken_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_BG_Darken_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -876,73 +440,26 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 Revelations: Persona Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
                 $"The Darken Background toggle has been set to **`{account.P1_PSX_TS_BG_Darken}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("💠 Revelations: Persona Template Settings", customId: "back-to-p1-ps1-template-settings", ButtonStyle.Primary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_BG_Darken_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Consistent_Names_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Consistent_Names_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -960,66 +477,26 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithFooter(footer);
 
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
                 $"Consistent display names have been set to **`{account.P1_PSX_TS_Consistent_Names}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("💠 Revelations: Persona Template Settings", customId: "back-to-p1-ps1-template-settings", ButtonStyle.Primary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Consistent_Names_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
         }
 
-        public static async Task Template_Layout_P1_PS1_Localized_Names_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P1_PS1_Localized_Names_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -1030,117 +507,19 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 Revelations: Persona Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PS1"));
 
             embed.WithDescription("" +
                 $"Localized display names have been set to **`{account.P1_PSX_TS_Localized_Revelations_Names}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
+            var component = new ComponentBuilder()
+                .WithButton("💠 Revelations: Persona Template Settings", customId: "back-to-p1-ps1-template-settings", ButtonStyle.Primary);
 
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
 
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P1_PS1_Localized_Names_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
-
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
-        }
-
-        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure menuSession)
-        {
-            // Assign the menu session's message to another variable.
-            var message = menuSession.MenuMessage;
-
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = MenuTimedOut(menuSession.User).Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Remove the menu entry from the global list.
-            Global.MenuIdList.Remove(menuSession);
-        }
-
-        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
-        {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Inactive Menu",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
-
-            embed.WithDescription($"You can adjust your template settings at any time from the **`settings`** menu by choosing [Scene Maker Settings] > [Template Layout].");
-            return embed;
         }
     }
 }

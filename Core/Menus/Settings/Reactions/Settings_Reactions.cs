@@ -2,8 +2,6 @@
 using SocialLinker.Core.Menus.MakerMulti.Main;
 using SocialLinker.Core.Menus.Settings.Main.Profile;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
-using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions

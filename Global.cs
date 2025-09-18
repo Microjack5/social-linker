@@ -44,6 +44,37 @@ namespace SocialLinker
             ? fullTitle
             : "Unknown Game";
 
+        public static readonly Dictionary<string, string> Game_Emotes = new Dictionary<string, string>
+        {
+            { "P1", "<:P1:751133115531133112>" },
+            { "P1-PS1", "<:P1:751133115531133112>" },
+            { "P1-PSP", "<:P1:751133115531133112>" },
+            { "P2IS", "<:P2IS:788950080396328990>" },
+            { "P2IS-PS1", "<:P2IS:788950080396328990>" },
+            { "P2IS-PSP", "<:P2IS:788950080396328990>" },
+            { "P2EP", "<:P2EP:788950163363463172>" },
+            { "P2EP-PS1", "<:P2EP:788950163363463172>" },
+            { "P2EP-PSP", "<:P2EP:788950163363463172>" },
+            { "P3", "<:P3:751133114918633483>" },
+            { "P3F", "<:P3:751133114918633483>" },
+            { "P3P", "<:P3P:1096338602046267392>" },
+            { "P4", "<:P4:751133120530612274>" },
+            { "P4-PS2", "<:P4:751133120530612274>" },
+            { "P4G", "<:P4G:751133123479207956>" },
+            { "P4AU", "<:P4AU:751133122342420572>" },
+            { "P4D", "<:P4D:751133120346062859>" },
+            { "P5", "<:P5:751133123861020742>" },
+            { "P5-PS4", "<:P5:751133123861020742>" },
+            { "P5R", "<:P5R:751133123617488937>" },
+            { "P5S", "<:P5S:852644176188669972>" },
+            { "BBTAG", "<:BBTAG:751133123013771617>" }
+        };
+
+        public static string GetGameEmote(string keyword) =>
+        Game_Emotes.TryGetValue(keyword, out var fullEmote)
+            ? fullEmote
+            : "";
+
         internal static string[] p1_ps1_version_keywords = { "P1-PS1", "P1-PSX", "P1PS1", "P1PSX" };
         internal static string[] p1_psp_version_keywords = { "P1-PSP", "P1PSP", "P1-P", "P1P" };
         internal static string[] p2is_ps1_version_keywords = { "P2IS-PS1", "P2IS-PSX", "P2ISPS1", "P2ISPSX", "P2-PS1", "P2-PSX", "P2PS1", "P2PSX", "IS-PS1", "IS-PSX", "ISPS1", "ISPSX" };

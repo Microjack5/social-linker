@@ -22,7 +22,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
                     _ = Version_Control_Menu.Version_Control_Main(menuSession);
                     break;
                 case "2":
-                    _ = Template_Layout_Menu.Template_Layout_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
                     break;
                 case "3":
                     _ = Display_Names_Menu.Display_Names_Start(menuSession.User, menuSession.MenuMessage);

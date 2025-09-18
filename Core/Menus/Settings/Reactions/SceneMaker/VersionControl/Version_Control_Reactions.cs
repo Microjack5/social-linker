@@ -1,7 +1,6 @@
 ﻿using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 

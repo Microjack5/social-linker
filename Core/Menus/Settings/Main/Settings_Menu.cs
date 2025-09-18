@@ -83,7 +83,7 @@ namespace SocialLinker.Core.Menus.Settings.Main
 
             var footer = new EmbedFooterBuilder
             {
-                Text = "React with ❌ to close the menu"
+                Text = "React with ❌ to close any menu"
             };
 
             embed.WithFooter(footer);
