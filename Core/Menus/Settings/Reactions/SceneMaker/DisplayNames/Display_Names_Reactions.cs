@@ -21,7 +21,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = SM_Settings_Menu.SM_Settings_Main(menuSession.User, menuSession.MenuMessage);
+                _ = SM_Settings_Menu.SM_Settings_Main(menuSession);
                 return Task.CompletedTask;
             }
 

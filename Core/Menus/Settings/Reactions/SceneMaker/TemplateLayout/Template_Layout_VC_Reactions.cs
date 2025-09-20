@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                     _ = Template_Layout_P1_PS1_Menu.Template_Layout_P1_PS1_Main(menuSession);
                     break;
                 case "P1-PSP":
-                    _ = Template_Layout_P1_PSP_Menu.Template_Layout_P1_PSP_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = Template_Layout_P1_PSP_Menu.Template_Layout_P1_PSP_Main(menuSession);
                     break;
                 case "return":
                     _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
@@ -176,38 +177,21 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_VC_P5_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_VC_P5_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "P5-PS4":
+                    _ = Template_Layout_P5_PS3_Menu.Template_Layout_P5_PS3_Main(menuSession.User, menuSession.MenuMessage);
+                    break;
+                case "P5R":
+                    _ = Template_Layout_P5R_Menu.Template_Layout_P5R_Main(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;

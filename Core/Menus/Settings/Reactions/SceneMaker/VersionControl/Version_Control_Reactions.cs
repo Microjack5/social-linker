@@ -33,7 +33,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
                     _ = Version_Control_Menu.Version_Control_P5(menuSession);
                     break;
                 case "return":
-                    _ = SM_Settings_Menu.SM_Settings_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = SM_Settings_Menu.SM_Settings_Main(menuSession);
                     break;
             }
 

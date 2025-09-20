@@ -1,21 +1,15 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
-using Discord.WebSocket;
-using SocialLinker.Core.CloudStorageTables;
-using Discord.Rest;
 
 namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
 {
     class SM_Settings_Menu
     {
-        public static async Task SM_Settings_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task SM_Settings_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder

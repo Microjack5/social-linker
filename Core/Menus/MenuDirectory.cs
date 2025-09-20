@@ -492,10 +492,6 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_VC_Reactions.Nav_Template_Layout_VC_P4_Main(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_VC_P5_Main":
-                                await Template_Layout_VC_Reactions.Nav_Template_Layout_VC_P5_Main(reaction, menuSession);
-                                break;
-
                             //case "Template_Layout_P1_PS1_Main":
                             //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Main(reaction, menuSession);
                             //    break;
@@ -548,33 +544,9 @@ namespace SocialLinker.Core.Menus
                             //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Localized_Names_Confirm(reaction, menuSession);
                             //    break;
 
-                            case "Template_Layout_P1_PSP_Main":
-                                await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Main(reaction, menuSession);
-                                break;
+                            
 
-                            case "Template_Layout_P1_PSP_Moon_Phases":
-                                await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Moon_Phases(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P1_PSP_Placement":
-                                await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Placement(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P1_PSP_BG_Darken":
-                                await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_BG_Darken(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P1_PSP_Moon_Phases_Confirm":
-                                await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Moon_Phases_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P1_PSP_Placement_Confirm":
-                                await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Placement_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P1_PSP_BG_Darken_Confirm":
-                                await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_BG_Darken_Confirm(reaction, menuSession);
-                                break;
+                            
 
                             case "Template_Layout_P2IS_PS1_Main":
                                 await Template_Layout_P2IS_PS1_Reactions.Nav_Template_Layout_P2IS_PS1_Main(reaction, menuSession);
@@ -958,54 +930,6 @@ namespace SocialLinker.Core.Menus
 
                             case "Template_Layout_P5_PS3_Cursor_Panel_Confirm":
                                 await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Cursor_Panel_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Main":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Main(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Date_Weather":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Date_Weather(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Scene_Border":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Scene_Border(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Cursor_Panel":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Cursor_Panel(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Phone_Calls_Main":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Main(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Phone_Calls_Toggle":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Toggle(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Phone_Calls_Location":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Location(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Date_Weather_Confirm":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Date_Weather_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Scene_Border_Confirm":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Scene_Border_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Cursor_Panel_Confirm":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Cursor_Panel_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Phone_Calls_Toggle_Confirm":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Toggle_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5R_Phone_Calls_Location_Confirm":
-                                await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Location_Confirm(reaction, menuSession);
                                 break;
 
                             case "Template_Layout_P5S_Main":
@@ -1727,6 +1651,10 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_VC_Reactions.Nav_Template_Layout_VC_P1_Main(component, menuSession);
                             break;
 
+                        case "Template_Layout_VC_P5_Main":
+                            await Template_Layout_VC_Reactions.Nav_Template_Layout_VC_P5_Main(component, menuSession);
+                            break;
+
                         case "Template_Layout_P1_PS1_Main":
                             await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Main(component, menuSession);
                             break;
@@ -1737,6 +1665,38 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P1_PS1_Placement":
                             await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Placement(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PSP_Main":
+                            await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PSP_Placement":
+                            await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Placement(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Main":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Date_Weather":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Date_Weather(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Scene_Border":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Scene_Border(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Cursor_Panel":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Cursor_Panel(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Phone_Calls_Main":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Phone_Calls_Location":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Location(component, menuSession);
                             break;
 
                         // Maker Multi
@@ -1861,6 +1821,50 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P1_PS1_Localized_Names_Confirm":
                             await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Localized_Names_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PSP_Moon_Phases":
+                            await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Moon_Phases(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PSP_BG_Darken":
+                            await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_BG_Darken(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PSP_Moon_Phases_Confirm":
+                            await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Moon_Phases_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PSP_Placement_Confirm":
+                            await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Placement_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P1_PSP_BG_Darken_Confirm":
+                            await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_BG_Darken_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Phone_Calls_Toggle":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Toggle(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Date_Weather_Confirm":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Date_Weather_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Scene_Border_Confirm":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Scene_Border_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Cursor_Panel_Confirm":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Cursor_Panel_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Phone_Calls_Toggle_Confirm":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Toggle_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5R_Phone_Calls_Location_Confirm":
+                            await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Location_Confirm(component, menuSession);
                             break;
 
                         // Pt 1

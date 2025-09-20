@@ -45,7 +45,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
                     _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession.User, menuSession.MenuMessage);
                     break;
                 case "return":
-                    _ = SM_Settings_Menu.SM_Settings_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = SM_Settings_Menu.SM_Settings_Main(menuSession);
                     break;
             }
 
