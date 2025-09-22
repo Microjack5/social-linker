@@ -130,7 +130,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     graphics.DrawImage(bustup_layer, 0, 0, bustup_layer.Width, bustup_layer.Height);
                 }
 
-                if (account.P5_PS4_TS_HUD != "None")
+                if (account.P5_PS4_TS_HUD != "Off")
                 {
                     calendar = Construct_Calendar(sl_command, account);
                     graphics.DrawImage(calendar, 0, 0, template_width, template_height);
@@ -221,7 +221,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
                 graphics.DrawImage(scene_border, 0, 0, template_width, template_height);
 
-                if (account.P5_PS4_TS_HUD != "None")
+                if (account.P5_PS4_TS_HUD != "Off")
                 {
                     calendar = Construct_Calendar(sl_command, account);
                     graphics.DrawImage(calendar, 0, 0, template_width, template_height);

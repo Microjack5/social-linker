@@ -904,34 +904,6 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Navigator_Caller_Location_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P5_PS3_Main":
-                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Main(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5_PS3_Date_Weather":
-                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Date_Weather(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5_PS3_Scene_Border":
-                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Scene_Border(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5_PS3_Cursor_Panel":
-                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Cursor_Panel(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5_PS3_Date_Weather_Confirm":
-                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Date_Weather_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5_PS3_Scene_Border_Confirm":
-                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Scene_Border_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5_PS3_Cursor_Panel_Confirm":
-                                await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Cursor_Panel_Confirm(reaction, menuSession);
-                                break;
-
                             case "Template_Layout_P5S_Main":
                                 await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Main(reaction, menuSession);
                                 break;
@@ -1675,6 +1647,18 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Placement(component, menuSession);
                             break;
 
+                        case "Template_Layout_P5_PS3_Main":
+                            await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5_PS3_Scene_Border":
+                            await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Scene_Border(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5_PS3_Cursor_Panel":
+                            await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Cursor_Panel(component, menuSession);
+                            break;
+
                         case "Template_Layout_P5R_Main":
                             await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Main(component, menuSession);
                             break;
@@ -1841,6 +1825,22 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P1_PSP_BG_Darken_Confirm":
                             await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_BG_Darken_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5_PS3_Date_Weather":
+                            await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Date_Weather(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5_PS3_Date_Weather_Confirm":
+                            await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Date_Weather_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5_PS3_Scene_Border_Confirm":
+                            await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Scene_Border_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5_PS3_Cursor_Panel_Confirm":
+                            await Template_Layout_P5_PS3_Reactions.Nav_Template_Layout_P5_PS3_Cursor_Panel_Confirm(component, menuSession);
                             break;
 
                         case "Template_Layout_P5R_Phone_Calls_Toggle":
