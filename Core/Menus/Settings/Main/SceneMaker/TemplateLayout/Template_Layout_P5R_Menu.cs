@@ -24,7 +24,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
-                "**Select a setting to edit.**\n" +
+                "Select a setting to edit.\n" +
                 "\n" +
                 ":one: Date & Weather\n" +
                 ":two: Scene Border\n" +
@@ -70,7 +70,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
-                "**Toggle the date & weather HUD on and off.**\n" +
+                "Toggle the date & weather HUD on and off.\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P5R_TS_HUD}`**\n" +
                 "\n" +
@@ -118,7 +118,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
-                "**Toggle between scene borders used in different contexts.**\n" +
+                "Toggle between scene borders used in different contexts.\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P5R_TS_Border}`**\n" +
                 "\n" +
@@ -166,7 +166,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
-                "**Change how the message window's cursor and control panel are displayed.**\n" +
+                "Change how the message window's cursor and control panel are displayed.\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P5R_TS_Panel}`**\n" +
                 "\n" +
@@ -214,7 +214,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
-                "**Select a setting to edit.**\n" +
+                "Select a setting to edit.\n" +
                 "\n" +
                 ":one: Caller Toggle\n" +
                 ":two: Caller Location\n");
@@ -264,12 +264,9 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
-                "**Toggle phone call settings for character sprites on and off.**\n" +
+                "Toggle phone call settings for character sprites on and off.\n" +
                 "\n" +
-                $"⚙️ **Current setting:** **`{account.P5R_TS_Caller_Toggle}`**\n" +
-                "\n" +
-                ":one: On\n" +
-                ":two: Off\n");
+                $"⚙️ **Current setting:** **`{account.P5R_TS_Caller_Toggle}`**\n");
 
             embed.WithImageUrl("https://i.imgur.com/thCJrMc.png");
 
@@ -311,7 +308,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5R"));
 
             embed.WithDescription("" +
-                "**Toggle between normal and Velvet Room calling locations.**\n" +
+                "Toggle between normal and Velvet Room calling locations.\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P5R_TS_Caller_Location}`**\n" +
                 "\n" +

@@ -1,992 +1,419 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
 {
     class Template_Layout_P5S_Reactions
     {
-        public static Task Nav_Template_Layout_P5S_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Skip_Button(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Auto_Advance(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Scene_Border(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Five
-            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Date_Location_Layout(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Six
-            else if (reaction.Emote.Name == "\u0036\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Seven
-            else if (reaction.Emote.Name == "\u0037\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Watermark(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "1":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type(menuSession);
+                    break;
+                case "2":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Skip_Button(menuSession);
+                    break;
+                case "3":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Auto_Advance(menuSession);
+                    break;
+                case "4":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Scene_Border(menuSession);
+                    break;
+                case "5":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Date_Location_Layout(menuSession);
+                    break;
+                case "6":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon(menuSession);
+                    break;
+                case "7":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Watermark(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Controller_Type(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Controller_Type(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+            var account = menuSession.Account;
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "1":
+                    account.P5S_TS_Controller_Type = "PlayStation® 4";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.P5S_TS_Controller_Type = "Nintendo Switch";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type_Confirm(menuSession);
+                    break;
+                case "3":
+                    account.P5S_TS_Controller_Type = "Xbox One";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Controller_Type = "PlayStation® 4";
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type_Confirm(menuSession);
+                    break;
+                case "4":
+                    account.P5S_TS_Controller_Type = "Keyboard";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Controller_Type = "Nintendo Switch";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Controller_Type = "Xbox One";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Controller_Type = "Keyboard";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Controller_Type_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Skip_Button(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Skip_Button(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "on":
+                    account.P5S_TS_Skip_Button = "On";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Skip_Button_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Skip_Button = "On";
+                case "off":
+                    account.P5S_TS_Skip_Button = "Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Skip_Button_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Skip_Button = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Skip_Button_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Skip_Button_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Auto_Advance(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Auto_Advance(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "on":
+                    account.P5S_TS_Auto_Advance = "On";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Auto_Advance_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Auto_Advance = "On";
+                case "off":
+                    account.P5S_TS_Auto_Advance = "Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Auto_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Auto_Advance = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Auto_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Auto_Advance_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Scene_Border(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Scene_Border(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "on":
+                    account.P5S_TS_Scene_Border = "On";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Scene_Border_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Scene_Border = "On";
+                case "off":
+                    account.P5S_TS_Scene_Border = "Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Scene_Border_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Scene_Border = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Scene_Border_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Scene_Border_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Date_Location_Layout(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Date_Location_Layout(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+            var account = menuSession.Account;
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "1":
+                    account.P5S_TS_Date_Location_Layout = "Display All";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Date_Location_Layout_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.P5S_TS_Date_Location_Layout = "Date Only";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Date_Location_Layout_Confirm(menuSession);
+                    break;
+                case "3":
+                    account.P5S_TS_Date_Location_Layout = "None";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Date_Location_Layout = "Display All";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Date_Location_Layout_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Date_Location_Layout = "Date Only";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Date_Location_Layout_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Date_Location_Layout = "None";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Date_Location_Layout_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Date_Location_Layout_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Location_Icon(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Location_Icon(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+            var account = menuSession.Account;
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "1":
+                    account.P5S_TS_Location_Icon = "Yongen-Jaya";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.P5S_TS_Location_Icon = "Shibuya";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "3":
+                    account.P5S_TS_Location_Icon = "Sendai";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Yongen-Jaya";
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "4":
+                    account.P5S_TS_Location_Icon = "Sapporo";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "5":
+                    account.P5S_TS_Location_Icon = "Okinawa";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "6":
+                    account.P5S_TS_Location_Icon = "Fukuoka";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "7":
+                    account.P5S_TS_Location_Icon = "Kyoto";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "8":
+                    account.P5S_TS_Location_Icon = "Osaka";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Shibuya";
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "9":
+                    account.P5S_TS_Location_Icon = "Yokohama";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "10":
+                    account.P5S_TS_Location_Icon = "Shiba Park";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "car":
+                    account.P5S_TS_Location_Icon = "RV Travel";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Sendai";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Sapporo";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Five
-            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Okinawa";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Six
-            else if (reaction.Emote.Name == "\u0036\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Fukuoka";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Seven
-            else if (reaction.Emote.Name == "\u0037\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Kyoto";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Eight
-            else if (reaction.Emote.Name == "\u0038\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Osaka";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Nine
-            else if (reaction.Emote.Name == "\u0039\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Yokohama";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Ten
-            else if (reaction.Emote.Name == "🔟")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "Shiba Park";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Blue Car
-            else if (reaction.Emote.Name == "🚙")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Location_Icon = "RV Travel";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Location_Icon_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Watermark(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Watermark(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "on":
+                    account.P5S_TS_Watermark = "On";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Watermark_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Watermark = "On";
+                case "off":
+                    account.P5S_TS_Watermark = "Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Watermark_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P5S_TS_Watermark = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Watermark_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Watermark_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Controller_Type_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Controller_Type_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p5s-template-settings":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Skip_Button_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Skip_Button_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p5s-template-settings":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Auto_Advance_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Auto_Advance_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p5s-template-settings":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Scene_Border_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Scene_Border_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p5s-template-settings":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Date_Location_Layout_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Date_Location_Layout_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p5s-template-settings":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Location_Icon_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Location_Icon_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p5s-template-settings":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P5S_Watermark_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P5S_Watermark_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p5s-template-settings":
+                    _ = Template_Layout_P5S_Menu.Template_Layout_P5S_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;

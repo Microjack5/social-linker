@@ -904,66 +904,6 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Navigator_Caller_Location_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P5S_Main":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Main(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Controller_Type":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Controller_Type(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Skip_Button":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Skip_Button(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Auto_Advance":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Auto_Advance(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Scene_Border":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Scene_Border(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Date_Location_Layout":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Date_Location_Layout(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Location_Icon":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Location_Icon(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Watermark":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Watermark(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Controller_Type_Confirm":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Controller_Type_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Skip_Button_Confirm":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Skip_Button_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Auto_Advance_Confirm":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Auto_Advance_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Scene_Border_Confirm":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Scene_Border_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Date_Location_Layout_Confirm":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Date_Location_Layout_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Location_Icon_Confirm":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Location_Icon_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P5S_Watermark_Confirm":
-                                await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Watermark_Confirm(reaction, menuSession);
-                                break;
-
                             case "Template_Layout_BBTAG_Main":
                                 await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Main(reaction, menuSession);
                                 break;
@@ -1683,6 +1623,22 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Location(component, menuSession);
                             break;
 
+                        case "Template_Layout_P5S_Main":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Controller_Type":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Controller_Type(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Date_Location_Layout":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Date_Location_Layout(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Location_Icon":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Location_Icon(component, menuSession);
+                            break;
+
                         // Maker Multi
                         case "MakerMulti_Main_Menu":
                             await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_Main_Menu(component, menuSession);
@@ -1865,6 +1821,50 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P5R_Phone_Calls_Location_Confirm":
                             await Template_Layout_P5R_Reactions.Nav_Template_Layout_P5R_Phone_Calls_Location_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Skip_Button":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Skip_Button(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Auto_Advance":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Auto_Advance(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Scene_Border":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Scene_Border(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Watermark":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Watermark(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Controller_Type_Confirm":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Controller_Type_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Skip_Button_Confirm":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Skip_Button_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Auto_Advance_Confirm":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Auto_Advance_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Scene_Border_Confirm":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Scene_Border_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Date_Location_Layout_Confirm":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Date_Location_Layout_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Location_Icon_Confirm":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Location_Icon_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P5S_Watermark_Confirm":
+                            await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Watermark_Confirm(component, menuSession);
                             break;
 
                         // Pt 1
