@@ -65,7 +65,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PSP"));
 
             embed.WithDescription("" +
-                "**Which version would you like to edit?**\n");
+                "Which version would you like to edit?\n");
 
             embed.WithImageUrl("https://i.imgur.com/6Utgced.png");
 
@@ -106,7 +106,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PSP"));
 
             embed.WithDescription("" +
-                "**Which version would you like to edit?**\n" +
+                "Which version would you like to edit?\n" +
                 "\n" +
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
                 ":two: Persona 2: Eternal Punishment (PSP®️)");
@@ -150,7 +150,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl("https://i.imgur.com/trtPflx.png");
 
             embed.WithDescription("" +
-                "**Which version would you like to edit?**\n" +
+                "Which version would you like to edit?\n" +
                 "\n" +
                 ":one: Persona 3 FES\n" +
                 ":two: Persona 3 Portable");
@@ -194,7 +194,10 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
-                "**Which version would you like to edit?**\n");
+                "Which version would you like to edit?\n" +
+                "\n" +
+                ":one: Persona 4 (PlayStation®️ 2)\n" +
+                ":two: Persona 4 Golden");
 
             embed.WithImageUrl("https://i.imgur.com/ZVldBKO.png");
 
@@ -235,7 +238,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
-                "**Which version would you like to edit?**\n" +
+                "Which version would you like to edit?\n" +
                 "\n" +
                 ":one: Persona 5 (PlayStation®️ 4)\n" +
                 ":two: Persona 5 Royal");
