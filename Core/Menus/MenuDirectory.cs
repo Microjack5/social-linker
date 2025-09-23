@@ -742,18 +742,6 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Dual_Character_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P4_PS2_Main":
-                                await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Main(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4_PS2_Date_Weather":
-                                await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Date_Weather(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4_PS2_Date_Weather_Confirm":
-                                await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Date_Weather_Confirm(reaction, menuSession);
-                                break;
-
                             case "Template_Layout_P4AU_Main":
                                 await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Main(reaction, menuSession);
                                 break;
@@ -1577,6 +1565,14 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Placement(component, menuSession);
                             break;
 
+                        case "Template_Layout_P4_PS2_Main":
+                            await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4_PS2_Date_Weather":
+                            await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Date_Weather(component, menuSession);
+                            break;
+
                         case "Template_Layout_P4G_Main":
                             await Template_Layout_P4G_Reactions.Nav_Template_Layout_P4G_Main(component, menuSession);
                             break;
@@ -1779,6 +1775,10 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P1_PSP_BG_Darken_Confirm":
                             await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_BG_Darken_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4_PS2_Date_Weather_Confirm":
+                            await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Date_Weather_Confirm(component, menuSession);
                             break;
 
                         case "Template_Layout_P4G_Date_Weather_Confirm":

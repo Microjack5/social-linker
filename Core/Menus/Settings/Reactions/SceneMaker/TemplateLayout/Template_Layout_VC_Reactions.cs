@@ -95,7 +95,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
             switch (selected)
             {
                 case "P4-PS2":
-                    //_ = Template_Layout_P4_PS2_Menu.Template_Layout_P4_PS2_Main(menuSession);
+                    _ = Template_Layout_P4_PS2_Menu.Template_Layout_P4_PS2_Main(menuSession);
                     break;
                 case "P4G":
                     _ = Template_Layout_P4G_Menu.Template_Layout_P4G_Main(menuSession);
