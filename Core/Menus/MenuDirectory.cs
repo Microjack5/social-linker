@@ -686,26 +686,6 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P3F_Main":
-                                await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Main(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3F_Date_Moon":
-                                await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Date_Moon(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3F_Navigatior_Window":
-                                await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Navigatior_Window(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3F_Date_Moon_Confirm":
-                                await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Date_Moon_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3F_Navigatior_Window_Confirm":
-                                await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Navigatior_Window_Confirm(reaction, menuSession);
-                                break;
-
                             case "Template_Layout_P3P_Main":
                                 await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Main(reaction, menuSession);
                                 break;
@@ -1565,6 +1545,14 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_Placement(component, menuSession);
                             break;
 
+                        case "Template_Layout_P3F_Main":
+                            await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3F_Date_Moon":
+                            await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Date_Moon(component, menuSession);
+                            break;
+
                         case "Template_Layout_P4_PS2_Main":
                             await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Main(component, menuSession);
                             break;
@@ -1775,6 +1763,18 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P1_PSP_BG_Darken_Confirm":
                             await Template_Layout_P1_PSP_Reactions.Nav_Template_Layout_P1_PSP_BG_Darken_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3F_Navigatior_Window":
+                            await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Navigatior_Window(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3F_Date_Moon_Confirm":
+                            await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Date_Moon_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3F_Navigatior_Window_Confirm":
+                            await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Navigatior_Window_Confirm(component, menuSession);
                             break;
 
                         case "Template_Layout_P4_PS2_Date_Weather_Confirm":
