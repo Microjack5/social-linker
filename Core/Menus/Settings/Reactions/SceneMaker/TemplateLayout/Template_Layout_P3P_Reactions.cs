@@ -66,40 +66,33 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
             string selected = component.Data.Values.First();
             var account = menuSession.Account;
 
-            try
+            switch (selected)
             {
-                switch (selected)
-                {
-                    case "1":
+                case "1":
 
-                        account.P3P_TS_HUD = "Display All";
-                        UserInfoClasses.UpdateAccount(account);
+                    account.P3P_TS_HUD = "Display All";
+                    UserInfoClasses.UpdateAccount(account);
 
-                        menuSession.Account = account;
-                        _ = Template_Layout_P3P_Menu.Template_Layout_P3P_Date_Moon_Confirm(menuSession);
-                        break;
-                    case "2":
-                        account.P3P_TS_HUD = "Countdown Off";
-                        UserInfoClasses.UpdateAccount(account);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P3P_Menu.Template_Layout_P3P_Date_Moon_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.P3P_TS_HUD = "Countdown Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                        menuSession.Account = account;
-                        _ = Template_Layout_P3P_Menu.Template_Layout_P3P_Date_Moon_Confirm(menuSession);
-                        break;
-                    case "3":
-                        account.P3P_TS_HUD = "None";
-                        UserInfoClasses.UpdateAccount(account);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P3P_Menu.Template_Layout_P3P_Date_Moon_Confirm(menuSession);
+                    break;
+                case "3":
+                    account.P3P_TS_HUD = "None";
+                    UserInfoClasses.UpdateAccount(account);
 
-                        menuSession.Account = account;
-                        _ = Template_Layout_P3P_Menu.Template_Layout_P3P_Date_Moon_Confirm(menuSession);
-                        break;
-                    case "return":
-                        _ = Template_Layout_P3P_Menu.Template_Layout_P3P_Main(menuSession);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
+                    menuSession.Account = account;
+                    _ = Template_Layout_P3P_Menu.Template_Layout_P3P_Date_Moon_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_P3P_Menu.Template_Layout_P3P_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
