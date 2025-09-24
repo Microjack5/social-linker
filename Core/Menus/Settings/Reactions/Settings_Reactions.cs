@@ -1,5 +1,4 @@
 ﻿using Discord.WebSocket;
-using SocialLinker.Core.Menus.MakerMulti.Main;
 using SocialLinker.Core.Menus.Settings.Main.Profile;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using System.Threading.Tasks;

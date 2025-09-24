@@ -686,42 +686,6 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P3P_Main":
-                                await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Main(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3P_Color_Scheme":
-                                await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Color_Scheme(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3P_Date_Moon":
-                                await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Date_Moon(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3P_Sprite_Placement":
-                                await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Sprite_Placement(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3P_Dual_Character":
-                                await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Dual_Character(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3P_Color_Scheme_Confirm":
-                                await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Color_Scheme_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3P_Date_Moon_Confirm":
-                                await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Date_Moon_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3P_Sprite_Placement_Confirm":
-                                await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Sprite_Placement_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P3P_Dual_Character_Confirm":
-                                await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Dual_Character_Confirm(reaction, menuSession);
-                                break;
-
                             case "Template_Layout_P4AU_Main":
                                 await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Main(reaction, menuSession);
                                 break;
@@ -1553,6 +1517,22 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Date_Moon(component, menuSession);
                             break;
 
+                        case "Template_Layout_P3P_Main":
+                            await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3P_Color_Scheme":
+                            await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Color_Scheme(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3P_Date_Moon":
+                            await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Date_Moon(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3P_Sprite_Placement":
+                            await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Sprite_Placement(component, menuSession);
+                            break;
+
                         case "Template_Layout_P4_PS2_Main":
                             await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Main(component, menuSession);
                             break;
@@ -1775,6 +1755,18 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P3F_Navigatior_Window_Confirm":
                             await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Navigatior_Window_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3P_Color_Scheme_Confirm":
+                            await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Color_Scheme_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3P_Date_Moon_Confirm":
+                            await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Date_Moon_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3P_Sprite_Placement_Confirm":
+                            await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Sprite_Placement_Confirm(component, menuSession);
                             break;
 
                         case "Template_Layout_P4_PS2_Date_Weather_Confirm":

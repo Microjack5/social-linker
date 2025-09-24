@@ -78,7 +78,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
                     _ = Template_Layout_P3F_Menu.Template_Layout_P3F_Main(menuSession);
                     break;
                 case "P3P":
-                    //_ = Template_Layout_P3P_Menu.Template_Layout_P3P_Main(menuSession);
+                    _ = Template_Layout_P3P_Menu.Template_Layout_P3P_Main(menuSession);
                     break;
                 case "return":
                     _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
