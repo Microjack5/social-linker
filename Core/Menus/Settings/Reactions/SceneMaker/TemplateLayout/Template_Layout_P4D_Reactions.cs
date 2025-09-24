@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
@@ -10,620 +9,155 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
 {
     class Template_Layout_P4D_Reactions
     {
-        public static Task Nav_Template_Layout_P4D_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P4D_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Scene_Type(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Auto_Advance(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Sprite_Placement(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "1":
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Scene_Type(menuSession);
+                    break;
+                case "2":
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Auto_Advance(menuSession);
+                    break;
+                case "3":
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Sprite_Placement(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P4D_Scene_Type(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P4D_Scene_Type(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+            var account = menuSession.Account;
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "1":
+                    account.P4D_TS_Scene_Type = "Dialogue";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Scene_Type_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.P4D_TS_Scene_Type = "Narration";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Scene_Type = "Dialogue";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Scene_Type_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Scene_Type = "Narration";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Scene_Type_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Scene_Type_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P4D_Auto_Advance(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P4D_Auto_Advance(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "on":
+                    account.P4D_TS_Auto_Advance = "On";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Auto_Advance_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Auto_Advance = "On";
+                case "off":
+                    account.P4D_TS_Auto_Advance = "Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Auto_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Auto_Advance = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Auto_Advance_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Auto_Advance_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P4D_Sprite_Placement(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P4D_Sprite_Placement(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+            var account = menuSession.Account;
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "1":
+                    account.P4D_TS_Position = "Left";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Sprite_Placement_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.P4D_TS_Position = "Center";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Sprite_Placement_Confirm(menuSession);
+                    break;
+                case "3":
+                    account.P4D_TS_Position = "Right";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Position = "Left";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Sprite_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Position = "Center";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Sprite_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Position = "Right";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Sprite_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Sprite_Placement_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P4D_Dual_Character(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P4D_Scene_Type_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Dual = "Normal";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Dual_Character_Default_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Dual = "Navigator";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Dual_Character_Navigator_Caller_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Dual = "Phone Call";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Dual_Character_Navigator_Caller_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "back-to-p4d-template-settings":
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P4D_Navigator_Caller_Location(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P4D_Auto_Advance_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Nav_Call_Location = 1;
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Navigator_Caller_Location_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Nav_Call_Location = 2;
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Navigator_Caller_Location_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P4D_TS_Nav_Call_Location = 3;
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Navigator_Caller_Location_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "back-to-p4d-template-settings":
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_P4D_Scene_Type_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_P4D_Sprite_Placement_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Template_Layout_P4D_Auto_Advance_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            if (reaction.Emote.Name == "💠")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Template_Layout_P4D_Sprite_Placement_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            if (reaction.Emote.Name == "💠")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Template_Layout_P4D_Dual_Character_Default_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            if (reaction.Emote.Name == "💠")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Template_Layout_P4D_Dual_Character_Navigator_Caller_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            if (reaction.Emote.Name == "💠")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "✅")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Navigator_Caller_Location(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Template_Layout_P4D_Navigator_Caller_Location_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            if (reaction.Emote.Name == "💠")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p4d-template-settings":
+                    _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
