@@ -1,436 +1,191 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
 {
     class Template_Layout_BBTAG_Reactions
     {
-        public static Task Nav_Template_Layout_BBTAG_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_BBTAG_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Sprite_Placement(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Background_Blur(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "1":
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header(menuSession);
+                    break;
+                case "2":
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Sprite_Placement(menuSession);
+                    break;
+                case "3":
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Background_Blur(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_BBTAG_Header(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_BBTAG_Header(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+            var account = menuSession.Account;
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "1":
+                    account.BBTAG_TS_Header = "Prologue";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.BBTAG_TS_Header = "Episode BlazBlue";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession);
+                    break;
+                case "3":
+                    account.BBTAG_TS_Header = "Episode P4A";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_Header = "Prologue";
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession);
+                    break;
+                case "4":
+                    account.BBTAG_TS_Header = "Episode Under Night In-Birth";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession);
+                    break;
+                case "5":
+                    account.BBTAG_TS_Header = "Episode RWBY";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession);
+                    break;
+                case "6":
+                    account.BBTAG_TS_Header = "Episode Extra";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_Header = "Episode BlazBlue";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_Header = "Episode P4A";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_Header = "Episode Under Night In-Birth";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Five
-            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_Header = "Episode RWBY";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Six
-            else if (reaction.Emote.Name == "\u0036\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_Header = "Episode Extra";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Header_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_BBTAG_Sprite_Placement(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_BBTAG_Sprite_Placement(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+            var account = menuSession.Account;
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "1":
+                    account.BBTAG_TS_Position = "Left";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Sprite_Placement_Confirm(menuSession);
+                    break;
+                case "2":
+                    account.BBTAG_TS_Position = "Center";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Sprite_Placement_Confirm(menuSession);
+                    break;
+                case "3":
+                    account.BBTAG_TS_Position = "Right";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_Position = "Left";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Sprite_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_Position = "Center";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Sprite_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_Position = "Right";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Sprite_Placement_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Sprite_Placement_Confirm(menuSession);
+                    break;
+                case "return":
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_BBTAG_Background_Blur(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_BBTAG_Background_Blur(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "on":
+                    account.BBTAG_TS_BG_Blur = "On";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Background_Blur_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_BG_Blur = "On";
+                case "off":
+                    account.BBTAG_TS_BG_Blur = "Off";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Background_Blur_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.BBTAG_TS_BG_Blur = "Off";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Background_Blur_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Background_Blur_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_BBTAG_Header_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_BBTAG_Header_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-bbtag-template-settings":
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_BBTAG_Sprite_Placement_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_BBTAG_Sprite_Placement_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-bbtag-template-settings":
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Template_Layout_BBTAG_Background_Blur_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Template_Layout_BBTAG_Background_Blur_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-bbtag-template-settings":
+                    _ = Template_Layout_BBTAG_Menu.Template_Layout_BBTAG_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;

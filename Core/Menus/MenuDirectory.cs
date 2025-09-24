@@ -686,33 +686,9 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_BBTAG_Main":
-                                await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Main(reaction, menuSession);
-                                break;
+                            
 
-                            case "Template_Layout_BBTAG_Header":
-                                await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Header(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_BBTAG_Sprite_Placement":
-                                await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Sprite_Placement(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_BBTAG_Background_Blur":
-                                await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Background_Blur(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_BBTAG_Header_Confirm":
-                                await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Header_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_BBTAG_Sprite_Placement_Confirm":
-                                await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Sprite_Placement_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_BBTAG_Background_Blur_Confirm":
-                                await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Background_Blur_Confirm(reaction, menuSession);
-                                break;
+                            
 
                             case "Calendar_Cycles_Main":
                                 await Calendar_Cycles_Reactions.Nav_Calendar_Cycles_Main(reaction, menuSession);
@@ -1505,6 +1481,18 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Location_Icon(component, menuSession);
                             break;
 
+                        case "Template_Layout_BBTAG_Main":
+                            await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_BBTAG_Header":
+                            await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Header(component, menuSession);
+                            break;
+
+                        case "Template_Layout_BBTAG_Sprite_Placement":
+                            await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Sprite_Placement(component, menuSession);
+                            break;
+
                         // Maker Multi
                         case "MakerMulti_Main_Menu":
                             await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_Main_Menu(component, menuSession);
@@ -1807,6 +1795,22 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P5S_Watermark_Confirm":
                             await Template_Layout_P5S_Reactions.Nav_Template_Layout_P5S_Watermark_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_BBTAG_Background_Blur":
+                            await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Background_Blur(component, menuSession);
+                            break;
+
+                        case "Template_Layout_BBTAG_Header_Confirm":
+                            await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Header_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_BBTAG_Sprite_Placement_Confirm":
+                            await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Sprite_Placement_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_BBTAG_Background_Blur_Confirm":
+                            await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Background_Blur_Confirm(component, menuSession);
                             break;
 
                         // Pt 1
