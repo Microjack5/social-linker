@@ -30,7 +30,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
                     _ = Template_Layout_VC_Menu.Template_Layout_VC_P4_Main(menuSession);
                     break;
                 case "P4AU":
-                    _ = Template_Layout_P4AU_Menu.Template_Layout_P4AU_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = Template_Layout_P4AU_Menu.Template_Layout_P4AU_Main(menuSession);
                     break;
                 case "P4D":
                     _ = Template_Layout_P4D_Menu.Template_Layout_P4D_Main(menuSession);

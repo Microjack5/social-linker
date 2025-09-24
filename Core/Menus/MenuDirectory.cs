@@ -686,82 +686,6 @@ namespace SocialLinker.Core.Menus
                                 await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Template_Layout_P4AU_Main":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Main(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Scene_Type":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Scene_Type(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Auto_Advance":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Auto_Advance(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Control_Panel":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Control_Panel(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Sprite_Placement":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Sprite_Placement(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Dual_Character":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Dual_Character(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Navigator_Location":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Navigator_Location(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Caller_Location":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Caller_Location(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Highlight":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Highlight(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Scene_Type_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Scene_Type_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Auto_Advance_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Auto_Advance_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Control_Panel_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Control_Panel_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Sprite_Placement_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Sprite_Placement_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Dual_Character_Default_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Dual_Character_Default_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Dual_Character_Navigator_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Dual_Character_Navigator_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Dual_Character_Caller_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Dual_Character_Caller_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Navigator_Location_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Navigator_Location_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Caller_Location_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Caller_Location_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P4AU_Highlight_Confirm":
-                                await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Highlight_Confirm(reaction, menuSession);
-                                break;
-
                             case "Template_Layout_BBTAG_Main":
                                 await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Main(reaction, menuSession);
                                 break;
@@ -1501,6 +1425,22 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P4G_Reactions.Nav_Template_Layout_P4G_Date_Weather(component, menuSession);
                             break;
 
+                        case "Template_Layout_P4AU_Main":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Scene_Type":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Scene_Type(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Control_Panel":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Control_Panel(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Sprite_Placement":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Sprite_Placement(component, menuSession);
+                            break;
+
                         case "Template_Layout_P4D_Main":
                             await Template_Layout_P4D_Reactions.Nav_Template_Layout_P4D_Main(component, menuSession);
                             break;
@@ -1739,6 +1679,34 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P4G_Date_Weather_Confirm":
                             await Template_Layout_P4G_Reactions.Nav_Template_Layout_P4G_Date_Weather_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Auto_Advance":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Auto_Advance(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Highlight":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Highlight(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Scene_Type_Confirm":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Scene_Type_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Auto_Advance_Confirm":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Auto_Advance_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Control_Panel_Confirm":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Control_Panel_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Sprite_Placement_Confirm":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Sprite_Placement_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P4AU_Highlight_Confirm":
+                            await Template_Layout_P4AU_Reactions.Nav_Template_Layout_P4AU_Highlight_Confirm(component, menuSession);
                             break;
 
                         case "Template_Layout_P4D_Auto_Advance":
