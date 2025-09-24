@@ -35,7 +35,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.TemplateLayout
             switch (selected)
             {
                 case "P2IS-PS1":
-                    //_ = Template_Layout_P2IS_PS1_Menu.Template_Layout_P2IS_PS1_Main(menuSession);
+                    _ = Template_Layout_P2IS_PS1_Menu.Template_Layout_P2IS_PS1_Main(menuSession);
                     break;
                 case "P2IS-PSP":
                     //_ = Template_Layout_P2IS_PSP_Menu.Template_Layout_P2IS_PSP_Main(menuSession);
