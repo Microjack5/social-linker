@@ -67,7 +67,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
             embed.WithDescription("" +
                 "Which version would you like to edit?\n");
 
-            embed.WithImageUrl("https://i.imgur.com/6Utgced.png");
+            embed.WithImageUrl("https://i.imgur.com/JAZN3dP.png");
 
             var selectMenu = new SelectMenuBuilder()
                     .WithPlaceholder("Select a version")
@@ -111,7 +111,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
                 ":two: Persona 2: Eternal Punishment (PSP®️)");
 
-            embed.WithImageUrl("https://i.imgur.com/JAZN3dP.png");
+            embed.WithImageUrl("https://i.imgur.com/6Utgced.png");
 
             var selectMenu = new SelectMenuBuilder()
                     .WithPlaceholder("Select a version")

@@ -44,7 +44,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                     .AddOption("Sprite Placement", "3", null, new Emoji("3️⃣"))
                     .AddOption("Sprite Flip", "4", null, new Emoji("4️⃣"))
                     .AddOption("Localized Display Names", "5", null, new Emoji("5️⃣"))
-                    .AddOption("Return to P2IS Template Settings", "return", null, new Emoji("↩️"));
+                    .AddOption("Return to Version Select", "return", null, new Emoji("↩️"));
 
             var component = new ComponentBuilder()
                 .WithSelectMenu(selectMenu);
