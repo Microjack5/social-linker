@@ -32,7 +32,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
                     _ = Sheet_Order_Menu.Sheet_Order_Main(menuSession);
                     break;
                 case "5":
-                    _ = Backgrounds_Menu.Backgrounds_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = Backgrounds_Menu.Backgrounds_Main(menuSession);
                     break;
                 case "6":
                     _ = Resolution_Scaling_Menu.Resolution_Scaling_Main(menuSession.User, menuSession.MenuMessage);

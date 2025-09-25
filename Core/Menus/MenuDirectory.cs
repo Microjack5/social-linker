@@ -624,30 +624,6 @@ namespace SocialLinker.Core.Menus
                                 await Display_Names_Edit_Reactions.Nav_Display_Names_Delete_Confirmation(reaction, menuSession);
                                 break;
 
-                            case "Backgrounds_Main":
-                                await Backgrounds_Reactions.Nav_Backgrounds_Main(reaction, menuSession);
-                                break;
-
-                            case "Backgrounds_Default_Color":
-                                await Backgrounds_Reactions.Nav_Backgrounds_Default_Color(reaction, menuSession);
-                                break;
-
-                            case "Backgrounds_Upload_Settings":
-                                await Backgrounds_Reactions.Nav_Backgrounds_Upload_Settings(reaction, menuSession);
-                                break;
-
-                            case "Backgrounds_Default_Color_Error":
-                                await Backgrounds_Reactions.Nav_Backgrounds_Default_Color_Error(reaction, menuSession);
-                                break;
-
-                            case "Backgrounds_Default_Color_Confirm":
-                                await Backgrounds_Reactions.Nav_Backgrounds_Default_Color_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Backgrounds_Upload_Settings_Confirm":
-                                await Backgrounds_Reactions.Nav_Backgrounds_Upload_Settings_Confirm(reaction, menuSession);
-                                break;
-
                             case "Resolution_Scaling_Main":
                                 await Resolution_Scaling_Reactions.Nav_Resolution_Scaling_Main(reaction, menuSession);
                                 break;
@@ -1077,10 +1053,6 @@ namespace SocialLinker.Core.Menus
                     switch (menuSession.CurrentMenu)
                     {
                         // Namespace: SocialLinker.Core.Menus.Settings.Reactions.General
-                        case "Backgrounds_Default_Color":
-                            await Backgrounds_Reactions.Nav_Backgrounds_Default_Color_Message_Received(message, menuSession);
-                            break;
-
                         case "Time_Weather_Main":
                             await Time_Weather_Reactions.Nav_Time_Weather_Main_Received(message, menuSession);
                             break;
@@ -1371,6 +1343,14 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Sprite_Placement(component, menuSession);
                             break;
 
+                        case "Backgrounds_Main":
+                            await Backgrounds_Reactions.Nav_Backgrounds_Main(component, menuSession);
+                            break;
+
+                        case "Backgrounds_Upload_Settings":
+                            await Backgrounds_Reactions.Nav_Backgrounds_Upload_Settings(component, menuSession);
+                            break;
+
                         // Maker Multi
                         case "MakerMulti_Main_Menu":
                             await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_Main_Menu(component, menuSession);
@@ -1411,7 +1391,10 @@ namespace SocialLinker.Core.Menus
                 var menuSession = Global.MenuIdList.SingleOrDefault(x => x.MenuMessage.Id == component.Message.Id);
                 menuSession.MenuTimer.Stop();
 
-                await component.DeferAsync();
+                if (!component.Data.CustomId.Contains("modal-open"))
+                {
+                    await component.DeferAsync();
+                }
 
                 if (user.Id == menuSession.User.Id)
                 {
@@ -1807,6 +1790,22 @@ namespace SocialLinker.Core.Menus
                             await Sheet_Order_Reactions.Nav_Sheet_Order_Confirm(component, menuSession);
                             break;
 
+                        case "Backgrounds_Default_Color":
+                            await Backgrounds_Reactions.Nav_Backgrounds_Default_Color(component, menuSession);
+                            break;
+
+                        case "Backgrounds_Default_Color_Error":
+                            await Backgrounds_Reactions.Nav_Backgrounds_Default_Color_Error(component, menuSession);
+                            break;
+
+                        case "Backgrounds_Default_Color_Confirm":
+                            await Backgrounds_Reactions.Nav_Backgrounds_Default_Color_Confirm(component, menuSession);
+                            break;
+
+                        case "Backgrounds_Upload_Settings_Confirm":
+                            await Backgrounds_Reactions.Nav_Backgrounds_Upload_Settings_Confirm(component, menuSession);
+                            break;
+
                         // Pt 1
                         case "MakerMulti_1Char_Details_Main":
                             await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_1Char_Details_Main(component, menuSession);
@@ -1872,8 +1871,14 @@ namespace SocialLinker.Core.Menus
 
                 if (user.Id == menuSession.User.Id)
                 {
+                    await modal.DeferAsync(ephemeral: true);
+
                     switch (modal.Data.CustomId)
                     {
+                        case "color-code-modal-submit":
+                            await Backgrounds_Reactions.Nav_Backgrounds_Default_Color_Modal(modal, menuSession);
+                            break;
+
                         case "makermulti-1char-details-modal-submit":
                             await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_1Char_Details_Modal(modal, menuSession);
                             break;
