@@ -531,45 +531,6 @@ namespace SocialLinker.Core.Menus
                             //    break;
 
                             
-                            case "Template_Layout_P2EP_PSP_Main":
-                                await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Main(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P2EP_PSP_Window_Color":
-                                await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Window_Color(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P2EP_PSP_Inverted_Filter":
-                                await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Inverted_Filter(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P2EP_PSP_Placement":
-                                await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Placement(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P2EP_PSP_Sprite_Flip":
-                                await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P2EP_PSP_Window_Color_Confirm":
-                                await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Window_Color_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P2EP_PSP_Inverted_Filter_Confirm":
-                                await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Inverted_Filter_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P2EP_PSP_Placement_Confirm":
-                                await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Placement_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Template_Layout_P2EP_PSP_Sprite_Flip_Confirm":
-                                await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip_Confirm(reaction, menuSession);
-                                break;
-
-                            
-
-                            
 
                             case "Calendar_Cycles_Main":
                                 await Calendar_Cycles_Reactions.Nav_Calendar_Cycles_Main(reaction, menuSession);
@@ -1274,6 +1235,18 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P2EP_PS1_Reactions.Nav_Template_Layout_P2EP_PS1_Placement(component, menuSession);
                             break;
 
+                        case "Template_Layout_P2EP_PSP_Main":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Window_Color":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Window_Color(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Placement":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Placement(component, menuSession);
+                            break;
+
                         case "Template_Layout_P3F_Main":
                             await Template_Layout_P3F_Reactions.Nav_Template_Layout_P3F_Main(component, menuSession);
                             break;
@@ -1632,6 +1605,30 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_P2EP_PS1_Localized_Names_Confirm":
                             await Template_Layout_P2EP_PS1_Reactions.Nav_Template_Layout_P2EP_PS1_Localized_Names_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Inverted_Filter":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Inverted_Filter(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Sprite_Flip":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Window_Color_Confirm":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Window_Color_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Inverted_Filter_Confirm":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Inverted_Filter_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Placement_Confirm":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Placement_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P2EP_PSP_Sprite_Flip_Confirm":
+                            await Template_Layout_P2EP_PSP_Reactions.Nav_Template_Layout_P2EP_PSP_Sprite_Flip_Confirm(component, menuSession);
                             break;
 
                         case "Template_Layout_P3F_Navigatior_Window":
