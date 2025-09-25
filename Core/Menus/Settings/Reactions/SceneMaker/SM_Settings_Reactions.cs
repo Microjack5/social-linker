@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using SocialLinker.Core.Menus.Settings.Main;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker;
+using SocialLinker.Core.Menus.Settings.Main.SceneMaker.AutoDelete;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.Backgrounds;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling;
@@ -28,16 +29,16 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
                     _ = Display_Names_Menu.Display_Names_Start(menuSession.User, menuSession.MenuMessage);
                     break;
                 case "4":
-                    _ = Display_Names_Menu.Display_Names_Start(menuSession.User, menuSession.MenuMessage);
+                    _ = Sheet_Order_Menu.Sheet_Order_Main(menuSession);
                     break;
                 case "5":
-                    _ = Sheet_Order_Menu.Sheet_Order_Main(menuSession.User, menuSession.MenuMessage);
-                    break;
-                case "6":
                     _ = Backgrounds_Menu.Backgrounds_Main(menuSession.User, menuSession.MenuMessage);
                     break;
-                case "7":
+                case "6":
                     _ = Resolution_Scaling_Menu.Resolution_Scaling_Main(menuSession.User, menuSession.MenuMessage);
+                    break;
+                case "7":
+                    _ = Auto_Delete_Menu.Auto_Delete_Main(menuSession.User, menuSession.MenuMessage);
                     break;
                 case "return":
                     _ = Settings_Menu.Settings_Main_Menu(menuSession);

@@ -624,14 +624,6 @@ namespace SocialLinker.Core.Menus
                                 await Display_Names_Edit_Reactions.Nav_Display_Names_Delete_Confirmation(reaction, menuSession);
                                 break;
 
-                            case "Sheet_Order_Main":
-                                await Sheet_Order_Reactions.Nav_Sheet_Order_Main(reaction, menuSession);
-                                break;
-
-                            case "Sheet_Order_Confirm":
-                                await Sheet_Order_Reactions.Nav_Sheet_Order_Confirm(reaction, menuSession);
-                                break;
-
                             case "Backgrounds_Main":
                                 await Backgrounds_Reactions.Nav_Backgrounds_Main(reaction, menuSession);
                                 break;
@@ -1805,6 +1797,14 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_BBTAG_Background_Blur_Confirm":
                             await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Background_Blur_Confirm(component, menuSession);
+                            break;
+
+                        case "Sheet_Order_Main":
+                            await Sheet_Order_Reactions.Nav_Sheet_Order_Main(component, menuSession);
+                            break;
+
+                        case "Sheet_Order_Confirm":
+                            await Sheet_Order_Reactions.Nav_Sheet_Order_Confirm(component, menuSession);
                             break;
 
                         // Pt 1
