@@ -38,7 +38,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
                     _ = Resolution_Scaling_Menu.Resolution_Scaling_Main(menuSession.User, menuSession.MenuMessage);
                     break;
                 case "7":
-                    _ = Auto_Delete_Menu.Auto_Delete_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = Auto_Delete_Menu.Auto_Delete_Main(menuSession);
                     break;
                 case "return":
                     _ = Settings_Menu.Settings_Main_Menu(menuSession);

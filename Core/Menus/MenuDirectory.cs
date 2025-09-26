@@ -843,26 +843,6 @@ namespace SocialLinker.Core.Menus
                             case "Resolution_Scaling_P4AU_Scaling_Method_Confirm":
                                 await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Scaling_Method_Confirm(reaction, menuSession);
                                 break;
-
-                            case "Auto_Delete_Main":
-                                await Auto_Delete_Reactions.Nav_Auto_Delete_Main(reaction, menuSession);
-                                break;
-
-                            case "Auto_Delete_Commands":
-                                await Auto_Delete_Reactions.Nav_Auto_Delete_Commands(reaction, menuSession);
-                                break;
-
-                            case "Auto_Delete_Error_Messages":
-                                await Auto_Delete_Reactions.Nav_Auto_Delete_Error_Messages(reaction, menuSession);
-                                break;
-
-                            case "Auto_Delete_Commands_Confirm":
-                                await Auto_Delete_Reactions.Nav_Auto_Delete_Commands_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Auto_Delete_Error_Messages_Confirm":
-                                await Auto_Delete_Reactions.Nav_Auto_Delete_Error_Messages_Confirm(reaction, menuSession);
-                                break;
                         }
                     }
                     // If the reactor is neither the bot nor the menu user, remove the reaction.
@@ -1351,6 +1331,10 @@ namespace SocialLinker.Core.Menus
                             await Backgrounds_Reactions.Nav_Backgrounds_Upload_Settings(component, menuSession);
                             break;
 
+                        case "Auto_Delete_Main":
+                            await Auto_Delete_Reactions.Nav_Auto_Delete_Main(component, menuSession);
+                            break;
+
                         // Maker Multi
                         case "MakerMulti_Main_Menu":
                             await MakerMulti_Title_Select_Reactions.Nav_MakerMulti_Main_Menu(component, menuSession);
@@ -1804,6 +1788,22 @@ namespace SocialLinker.Core.Menus
 
                         case "Backgrounds_Upload_Settings_Confirm":
                             await Backgrounds_Reactions.Nav_Backgrounds_Upload_Settings_Confirm(component, menuSession);
+                            break;
+
+                        case "Auto_Delete_Commands":
+                            await Auto_Delete_Reactions.Nav_Auto_Delete_Commands(component, menuSession);
+                            break;
+
+                        case "Auto_Delete_Error_Messages":
+                            await Auto_Delete_Reactions.Nav_Auto_Delete_Error_Messages(component, menuSession);
+                            break;
+
+                        case "Auto_Delete_Commands_Confirm":
+                            await Auto_Delete_Reactions.Nav_Auto_Delete_Commands_Confirm(component, menuSession);
+                            break;
+
+                        case "Auto_Delete_Error_Messages_Confirm":
+                            await Auto_Delete_Reactions.Nav_Auto_Delete_Error_Messages_Confirm(component, menuSession);
                             break;
 
                         // Pt 1

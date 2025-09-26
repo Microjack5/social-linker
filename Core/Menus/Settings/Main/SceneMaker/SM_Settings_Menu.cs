@@ -40,7 +40,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             embed.AddField(":six: Resolution & Scaling",
                 "Change output resolutions and scaling methods per template.");
             embed.AddField(":seven: Auto-Delete",
-                "Toggle auto-deletion of error messages and scene maker commands.");
+                "Toggle auto-deletion of error messages and message-based scene maker commands.");
 
             var selectMenu = new SelectMenuBuilder()
                     .WithPlaceholder("Select an option")
