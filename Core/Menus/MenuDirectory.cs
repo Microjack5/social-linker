@@ -623,226 +623,6 @@ namespace SocialLinker.Core.Menus
                             case "Display_Names_Delete_Confirmation":
                                 await Display_Names_Edit_Reactions.Nav_Display_Names_Delete_Confirmation(reaction, menuSession);
                                 break;
-
-                            case "Resolution_Scaling_Main":
-                                await Resolution_Scaling_Reactions.Nav_Resolution_Scaling_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_VC_P1_Main":
-                                await Resolution_Scaling_VC_Reactions.Nav_Resolution_Scaling_VC_P1_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_VC_P2IS_Main":
-                                await Resolution_Scaling_VC_Reactions.Nav_Resolution_Scaling_VC_P2IS_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_VC_P2EP_Main":
-                                await Resolution_Scaling_VC_Reactions.Nav_Resolution_Scaling_VC_P2EP_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_VC_P3_Main":
-                                await Resolution_Scaling_VC_Reactions.Nav_Resolution_Scaling_VC_P3_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PS1_Main":
-                                await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PS1_Output_Resolution":
-                                await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PS1_Scaling_Method":
-                                await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PS1_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PS1_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PSP_Main":
-                                await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PSP_Output_Resolution":
-                                await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PSP_Scaling_Method":
-                                await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PSP_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P1_PSP_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PS1_Main":
-                                await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PS1_Output_Resolution":
-                                await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PS1_Scaling_Method":
-                                await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PS1_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PS1_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PSP_Main":
-                                await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PSP_Output_Resolution":
-                                await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PSP_Scaling_Method":
-                                await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PS1_Main":
-                                await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PS1_Output_Resolution":
-                                await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PS1_Scaling_Method":
-                                await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PS1_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PS1_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PSP_Main":
-                                await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PSP_Output_Resolution":
-                                await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PSP_Scaling_Method":
-                                await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PSP_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P2EP_PSP_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3F_Main":
-                                await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3F_Output_Resolution":
-                                await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3F_Scaling_Method":
-                                await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3F_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3F_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3P_Main":
-                                await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3P_Output_Resolution":
-                                await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3P_Scaling_Method":
-                                await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3P_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P3P_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4_PS2_Main":
-                                await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4_PS2_Output_Resolution":
-                                await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4_PS2_Scaling_Method":
-                                await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4_PS2_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4_PS2_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4AU_Main":
-                                await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Main(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4AU_Output_Resolution":
-                                await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Output_Resolution(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4AU_Scaling_Method":
-                                await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Scaling_Method(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4AU_Output_Resolution_Confirm":
-                                await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Output_Resolution_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Resolution_Scaling_P4AU_Scaling_Method_Confirm":
-                                await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Scaling_Method_Confirm(reaction, menuSession);
-                                break;
                         }
                     }
                     // If the reactor is neither the bot nor the menu user, remove the reaction.
@@ -1331,6 +1111,146 @@ namespace SocialLinker.Core.Menus
                             await Backgrounds_Reactions.Nav_Backgrounds_Upload_Settings(component, menuSession);
                             break;
 
+                        case "Resolution_Scaling_Main":
+                            await Resolution_Scaling_Reactions.Nav_Resolution_Scaling_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_VC_P1_Main":
+                            await Resolution_Scaling_VC_Reactions.Nav_Resolution_Scaling_VC_P1_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_VC_P2IS_Main":
+                            await Resolution_Scaling_VC_Reactions.Nav_Resolution_Scaling_VC_P2IS_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_VC_P2EP_Main":
+                            await Resolution_Scaling_VC_Reactions.Nav_Resolution_Scaling_VC_P2EP_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_VC_P3_Main":
+                            await Resolution_Scaling_VC_Reactions.Nav_Resolution_Scaling_VC_P3_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PS1_Main":
+                            await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PS1_Output_Resolution":
+                            await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PS1_Scaling_Method":
+                            await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Scaling_Method(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PSP_Main":
+                            await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PSP_Output_Resolution":
+                            await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PSP_Scaling_Method":
+                            await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Scaling_Method(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PS1_Main":
+                            await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PS1_Output_Resolution":
+                            await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PS1_Scaling_Method":
+                            await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Scaling_Method(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PSP_Main":
+                            await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PSP_Output_Resolution":
+                            await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PSP_Scaling_Method":
+                            await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Scaling_Method(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PS1_Main":
+                            await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PS1_Output_Resolution":
+                            await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PS1_Scaling_Method":
+                            await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Scaling_Method(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PSP_Main":
+                            await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PSP_Output_Resolution":
+                            await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PSP_Scaling_Method":
+                            await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Scaling_Method(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3F_Main":
+                            await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3F_Output_Resolution":
+                            await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3F_Scaling_Method":
+                            await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Scaling_Method(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3P_Main":
+                            await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3P_Output_Resolution":
+                            await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3P_Scaling_Method":
+                            await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Scaling_Method(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4_PS2_Main":
+                            await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4_PS2_Output_Resolution":
+                            await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4_PS2_Scaling_Method":
+                            await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Scaling_Method(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4AU_Main":
+                            await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Main(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4AU_Output_Resolution":
+                            await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Output_Resolution(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4AU_Scaling_Method":
+                            await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Scaling_Method(component, menuSession);
+                            break;
+
                         case "Auto_Delete_Main":
                             await Auto_Delete_Reactions.Nav_Auto_Delete_Main(component, menuSession);
                             break;
@@ -1788,6 +1708,86 @@ namespace SocialLinker.Core.Menus
 
                         case "Backgrounds_Upload_Settings_Confirm":
                             await Backgrounds_Reactions.Nav_Backgrounds_Upload_Settings_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PS1_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PS1_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P1_PS1_Reactions.Nav_Resolution_Scaling_P1_PS1_Scaling_Method_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PSP_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P1_PSP_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P1_PSP_Reactions.Nav_Resolution_Scaling_P1_PSP_Scaling_Method_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PS1_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PS1_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P2IS_PS1_Reactions.Nav_Resolution_Scaling_P2IS_PS1_Scaling_Method_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P2IS_PSP_Reactions.Nav_Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PS1_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PS1_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P2EP_PS1_Reactions.Nav_Resolution_Scaling_P2EP_PS1_Scaling_Method_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PSP_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P2EP_PSP_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P2EP_PSP_Reactions.Nav_Resolution_Scaling_P2EP_PSP_Scaling_Method_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3F_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3F_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P3F_Reactions.Nav_Resolution_Scaling_P3F_Scaling_Method_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3P_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P3P_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P3P_Reactions.Nav_Resolution_Scaling_P3P_Scaling_Method_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4_PS2_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4_PS2_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P4_PS2_Reactions.Nav_Resolution_Scaling_P4_PS2_Scaling_Method_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4AU_Output_Resolution_Confirm":
+                            await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Output_Resolution_Confirm(component, menuSession);
+                            break;
+
+                        case "Resolution_Scaling_P4AU_Scaling_Method_Confirm":
+                            await Resolution_Scaling_P4AU_Reactions.Nav_Resolution_Scaling_P4AU_Scaling_Method_Confirm(component, menuSession);
                             break;
 
                         case "Auto_Delete_Commands":
