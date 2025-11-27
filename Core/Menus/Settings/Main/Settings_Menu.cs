@@ -56,7 +56,7 @@ namespace SocialLinker.Core.Menus.Settings.Main
                     AutoReset = false,
                     Enabled = true
                 },
-                InactiveMessage = $"You can view and change your user settings at any time with the **`settings`** command."
+                InactiveMessage = "You can view and change your user settings at any time with the **`settings`** command."
             };
 
             // Add the menu entry to the global list.

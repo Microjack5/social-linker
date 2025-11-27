@@ -38,7 +38,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Reactions
             {
                 case "go-to-help-menu":
                     component.DeferAsync(ephemeral: true);
-                    _ = Help_Menu.Help_Main_Menu(menuSession.User, menuSession.MenuMessage);
+                    _ = Help_Menu.Help_Main_Menu(menuSession);
                     break;
 
                 case "go-to-settings-menu":

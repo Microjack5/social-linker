@@ -104,158 +104,6 @@ namespace SocialLinker.Core.Menus
                                 break;
 
                             // Namespace: SocialLinker.Core.Menus.Help
-                            case "Help_Main_Menu":
-                                await Help_Reactions.Nav_Help_Main_Menu(reaction, menuSession);
-                                break;
-
-                            case "Legal_Notices_Main":
-                                await Legal_Notices_Reactions.Nav_Legal_Notices_Main(reaction, menuSession);
-                                break;
-
-                            case "Credits_Page_1":
-                                await Credits_Reactions.Nav_Credits_Page_1(reaction, menuSession);
-                                break;
-
-                            case "Credits_Page_2":
-                                await Credits_Reactions.Nav_Credits_Page_2(reaction, menuSession);
-                                break;
-
-                            case "Status_Tutorial_Page_1":
-                                await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_1(reaction, menuSession);
-                                break;
-
-                            case "Status_Tutorial_Page_2":
-                                await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_2(reaction, menuSession);
-                                break;
-
-                            case "Status_Tutorial_Page_3":
-                                await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_3(reaction, menuSession);
-                                break;
-
-                            case "Status_Tutorial_Page_4":
-                                await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_4(reaction, menuSession);
-                                break;
-
-                            case "Status_Tutorial_Page_5":
-                                await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_5(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Select_Main":
-                                await SM_Tutorial_Select_Reactions.Nav_SM_Tutorial_Select_Main(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Basics_Page_1":
-                                await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_1(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Basics_Page_2":
-                                await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_2(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Basics_Page_3":
-                                await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_3(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Basics_Page_4":
-                                await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_4(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Basics_Page_5":
-                                await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_5(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Basics_Page_6":
-                                await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_6(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Select_Advanced":
-                                await SM_Tutorial_Select_Reactions.Nav_SM_Tutorial_Select_Advanced(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Main":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Main(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Basic_Page_1":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Basic_Page_1(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Basic_Page_2":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Basic_Page_2(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Auto_Page_1":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Auto_Page_1(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Auto_Page_2":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Auto_Page_2(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Bypass_Page_1":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Bypass_Page_1(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Bypass_Page_2":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Bypass_Page_2(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Cross_Page_1":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Cross_Page_1(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Cross_Page_2":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Cross_Page_2(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_VC_Cross_Page_3":
-                                await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Cross_Page_3(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Spriteless_Main":
-                                await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_Main(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Spriteless_Chara_Page_1":
-                                await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_Chara_Page_1(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Spriteless_Chara_Page_2":
-                                await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_Chara_Page_2(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Spriteless_System_Page_1":
-                                await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_System_Page_1(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Spriteless_System_Page_2":
-                                await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_System_Page_2(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Dual_Chara_Page_1":
-                                await SM_Tutorial_Dual_Reactions.Nav_SM_Tutorial_Dual_Chara_Page_1(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Dual_Chara_Page_2":
-                                await SM_Tutorial_Dual_Reactions.Nav_SM_Tutorial_Dual_Chara_Page_2(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Anime_Frames_Page_1":
-                                await SM_Tutorial_Anime_Frames_Reactions.Nav_SM_Tutorial_Anime_Frames_Page_1(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Anime_Frames_Page_2":
-                                await SM_Tutorial_Anime_Frames_Reactions.Nav_SM_Tutorial_Anime_Frames_Page_2(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Anime_Frames_Page_3":
-                                await SM_Tutorial_Anime_Frames_Reactions.Nav_SM_Tutorial_Anime_Frames_Page_3(reaction, menuSession);
-                                break;
-
-                            case "SM_Tutorial_Line_Breaks_Page_1":
-                                await SM_Tutorial_Line_Breaks_Reactions.Nav_SM_Tutorial_Line_Breaks_Page_1(reaction, menuSession);
-                                break;
-
                             case "SM_Tutorial_Cutin_Page_1":
                                 await SM_Tutorial_Cutin_Reactions.Nav_SM_Tutorial_Cutin_Page_1(reaction, menuSession);
                                 break;
@@ -846,6 +694,23 @@ namespace SocialLinker.Core.Menus
                 {
                     switch (menuSession.CurrentMenu)
                     {
+                        // Namespace: SocialLinker.Core.Menus.Help
+                        case "SM_Tutorial_Select_Main":
+                            await SM_Tutorial_Select_Reactions.Nav_SM_Tutorial_Select_Main(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Select_Advanced":
+                            await SM_Tutorial_Select_Reactions.Nav_SM_Tutorial_Select_Advanced(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_VC_Main":
+                            await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Main(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Spriteless_Main":
+                            await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_Main(component, menuSession);
+                            break;
+
                         // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker
                         case "SM_Settings_Menu":
                             await SM_Settings_Reactions.Nav_SM_Settings_Main(component, menuSession);
@@ -1310,6 +1175,127 @@ namespace SocialLinker.Core.Menus
 
                         case "First_Use_Intro_Confirm":
                             await First_Use_Content_Filter_Reactions.Nav_First_Use_Intro_Confirm(component, menuSession);
+                            break;
+
+                        // Namespace: SocialLinker.Core.Menus.Help
+                        case "Help_Main_Menu":
+                            await Help_Reactions.Nav_Help_Main_Menu(component, menuSession);
+                            break;
+
+                        case "Status_Tutorial_Page_1":
+                            await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_1(component, menuSession);
+                            break;
+
+                        case "Status_Tutorial_Page_2":
+                            await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_2(component, menuSession);
+                            break;
+
+                        case "Status_Tutorial_Page_3":
+                            await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_3(component, menuSession);
+                            break;
+
+                        case "Status_Tutorial_Page_4":
+                            await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_4(component, menuSession);
+                            break;
+
+                        case "Status_Tutorial_Page_5":
+                            await Status_Tutorial_Reactions.Nav_Status_Tutorial_Page_5(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Basics_Page_1":
+                            await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_1(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Basics_Page_2":
+                            await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_2(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Basics_Page_3":
+                            await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_3(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Basics_Page_4":
+                            await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_4(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Basics_Page_5":
+                            await SM_Tutorial_Basics_Reactions.Nav_SM_Tutorial_Basics_Page_5(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_VC_Basic_Page_1":
+                            await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Basic_Page_1(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_VC_Basic_Page_2":
+                            await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Basic_Page_2(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_VC_Auto_Page_1":
+                            await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Auto_Page_1(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_VC_Auto_Page_2":
+                            await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Auto_Page_2(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_VC_Bypass_Page_1":
+                            await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Bypass_Page_1(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_VC_Bypass_Page_2":
+                            await SM_Tutorial_VC_Reactions.Nav_SM_Tutorial_VC_Bypass_Page_2(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Spriteless_Chara_Page_1":
+                            await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_Chara_Page_1(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Spriteless_Chara_Page_2":
+                            await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_Chara_Page_2(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Spriteless_System_Page_1":
+                            await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_System_Page_1(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Spriteless_System_Page_2":
+                            await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_System_Page_2(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Multi_Chara_Page_1":
+                            await SM_Tutorial_Multi_Reactions.Nav_SM_Tutorial_Multi_Chara_Page_1(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Multi_Chara_Page_2":
+                            await SM_Tutorial_Multi_Reactions.Nav_SM_Tutorial_Multi_Chara_Page_2(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Anime_Frames_Page_1":
+                            await SM_Tutorial_Anime_Frames_Reactions.Nav_SM_Tutorial_Anime_Frames_Page_1(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Anime_Frames_Page_2":
+                            await SM_Tutorial_Anime_Frames_Reactions.Nav_SM_Tutorial_Anime_Frames_Page_2(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Anime_Frames_Page_3":
+                            await SM_Tutorial_Anime_Frames_Reactions.Nav_SM_Tutorial_Anime_Frames_Page_3(component, menuSession);
+                            break;
+
+                        case "SM_Tutorial_Line_Breaks_Page_1":
+                            await SM_Tutorial_Line_Breaks_Reactions.Nav_SM_Tutorial_Line_Breaks_Page_1(component, menuSession);
+                            break;
+
+                        case "Legal_Notices_Main":
+                            await Legal_Notices_Reactions.Nav_Legal_Notices_Main(component, menuSession);
+                            break;
+
+                        case "Credits_Page_1":
+                            await Credits_Reactions.Nav_Credits_Page_1(component, menuSession);
+                            break;
+
+                        case "Credits_Page_2":
+                            await Credits_Reactions.Nav_Credits_Page_2(component, menuSession);
                             break;
 
                         // Settings
