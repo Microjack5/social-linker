@@ -78,7 +78,7 @@ namespace SocialLinker.Core.Menus
             return embed;
         }
 
-        public static async Task CleanMessage(MenuIdStructure menuSession, EmbedBuilder embed, ComponentBuilder component)
+        public static async Task CleanMessage(MenuIdStructure menuSession, EmbedBuilder embed, ComponentBuilder component, bool removeAttachment = false)
         {
             // Attempt editing the message if it hasn't been deleted by the user yet.
             // If it has, catch the exception, remove the menu entry from the global list, and return.
@@ -92,6 +92,10 @@ namespace SocialLinker.Core.Menus
                 // Edit the current active message by replacing it with the recently created embed.
                 await message.ModifyAsync(x =>
                 {
+                    if (removeAttachment)
+                    {
+                        x.Attachments = Array.Empty<FileAttachment>();
+                    }
                     x.Embed = embed.Build();
 
                     if (component != null)

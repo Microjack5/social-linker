@@ -550,7 +550,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             menuSession.CurrentMenu = "Status_Decor_Exit";
 
-            await Utility.CleanMessage(menuSession, embed, null);
+            await Utility.CleanMessage(menuSession, embed, null, true);
             Utility.NewTimer(menuSession);
 
             await Profile_Settings_Menu.Profile_Settings_Main(menuSession);
