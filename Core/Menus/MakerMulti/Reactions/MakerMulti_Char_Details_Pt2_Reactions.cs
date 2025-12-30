@@ -57,7 +57,6 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             }
 
             menuSession.MenuTimer.Stop();
-            await modal.DeferAsync(ephemeral: true);
 
             if (multimaker_session.MakerCommand.Template == "BBTAG")
             {
@@ -99,7 +98,6 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
             }
 
             menuSession.MenuTimer.Stop();
-            await modal.DeferAsync(ephemeral: true);
 
             if (multimaker_session.MakerCommand.Template == "BBTAG")
             {
