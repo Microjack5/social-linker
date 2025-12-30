@@ -1,711 +1,423 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus.Settings.Main.Profile;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
 {
     class Content_Filter_Reactions
     {
         // Methods that activate on the ReactionAdded event.
-        public static Task Nav_Content_Filter_Main_Added(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Content_Filter_Main_Added(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
+            // Find the user's filter session
+            var filterSession = Global.ContentFilterList
+                .SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
-            if (reaction.Emote.Name == "↩️")
+            if (filterSession == null)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P1")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P1_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P2IS")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P2IS_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P2EP")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P2EP_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P3_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P4")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P4_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P4AU")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P4AU_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P4D")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P4D_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P5")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P5_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P5S")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P5S_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "BBTAG")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.BBTAG_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "✅")
-            {
-                filterSession.Menu_List = CreateMenuList(reaction);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Decide what menu to go to next.
-                _ = VersionControlMenuDirectory(reaction, menuSession);
                 return Task.CompletedTask;
             }
 
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P1_Main_Added(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            if (reaction.Emote.Name == "↩️")
+            switch (component.Data.CustomId)
             {
-                // Change the options on this menu to false.
-                filterSession.P1_VC_PSX_Select = false;
-                filterSession.P1_VC_PSP_Select = false;
+                case "return":
+                    _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession);
+                    break;
 
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Create a new instance of this class in order to call the non-static ReturnToPreviousMenu method.
-                Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
-
-                // Call the ReturnToPreviousMenu method to return to the previous menu.
-                content_nav.ReturnToPreviousMenu(reaction, menuSession);
-
-                return Task.CompletedTask;
+                case "confirm":
+                    filterSession.Menu_List = CreateMenuList(component);
+                    _ = VersionControlMenuDirectory(component, menuSession);
+                    break;
             }
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
+            var selectedValues = component.Data.Values;
+
+            foreach (var value in selectedValues)
             {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P1_VC_PSX_Select = true;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P1_VC_PSP_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "✅")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Decide which menu to go to next.
-                _ = VersionControlMenuDirectory(reaction, menuSession);
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P2IS_Main_Added(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            if (reaction.Emote.Name == "↩️")
-            {
-                // Change the options on this menu to false.
-                filterSession.P2IS_VC_PSX_Select = false;
-                filterSession.P2IS_VC_PSP_Select = false;
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Create a new instance of this class in order to call the non-static ReturnToPreviousMenu method.
-                Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
-
-                // Call the ReturnToPreviousMenu method to return to the previous menu.
-                content_nav.ReturnToPreviousMenu(reaction, menuSession);
-
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P2IS_VC_PSX_Select = true;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P2IS_VC_PSP_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "✅")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Decide which menu to go to next.
-                _ = VersionControlMenuDirectory(reaction, menuSession);
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P2EP_Main_Added(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            if (reaction.Emote.Name == "↩️")
-            {
-                // Change the options on this menu to false.
-                filterSession.P2EP_VC_PSX_Select = false;
-                filterSession.P2EP_VC_PSP_Select = false;
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Create a new instance of this class in order to call the non-static ReturnToPreviousMenu method.
-                Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
-
-                // Call the ReturnToPreviousMenu method to return to the previous menu.
-                content_nav.ReturnToPreviousMenu(reaction, menuSession);
-
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P2EP_VC_PSX_Select = true;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P2EP_VC_PSP_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "✅")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Decide which menu to go to next.
-                _ = VersionControlMenuDirectory(reaction, menuSession);
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P3_Main_Added(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            if (reaction.Emote.Name == "↩️")
-            {
-                // Change the options on this menu to false.
-                filterSession.P3_VC_P3F_Select = false;
-                filterSession.P3_VC_P3P_Select = false;
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Create a new instance of this class in order to call the non-static ReturnToPreviousMenu method.
-                Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
-
-                // Call the ReturnToPreviousMenu method to return to the previous menu.
-                content_nav.ReturnToPreviousMenu(reaction, menuSession);
-
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P3_VC_P3F_Select = true;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P3_VC_P3P_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "✅")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Decide which menu to go to next.
-                _ = VersionControlMenuDirectory(reaction, menuSession);
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P4_Main_Added(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            if (reaction.Emote.Name == "↩️")
-            {
-                // Change the options on this menu to false.
-                filterSession.P4_VC_PS2_Select = false;
-                filterSession.P4_VC_P4G_Select = false;
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Create a new instance of this class in order to call the non-static ReturnToPreviousMenu method.
-                Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
-
-                // Call the ReturnToPreviousMenu method to return to the previous menu.
-                content_nav.ReturnToPreviousMenu(reaction, menuSession);
-
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P4_VC_PS2_Select = true;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P4_VC_P4G_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "✅")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Decide which menu to go to next.
-                _ = VersionControlMenuDirectory(reaction, menuSession);
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P5_Main_Added(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            if (reaction.Emote.Name == "↩️")
-            {
-                // Change the options on this menu to false.
-                filterSession.P5_VC_PS4_Select = false;
-                filterSession.P5_VC_P5R_Select = false;
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Create a new instance of this class in order to call the non-static ReturnToPreviousMenu method.
-                Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
-
-                // Call the ReturnToPreviousMenu method to return to the previous menu.
-                content_nav.ReturnToPreviousMenu(reaction, menuSession);
-
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P5_VC_PS4_Select = true;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to true in the filter list.
-                filterSession.P5_VC_P5R_Select = true;
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "✅")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Decide which menu to go to next.
-                _ = VersionControlMenuDirectory(reaction, menuSession);
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            if (reaction.Emote.Name == "💠")
-            {
-                // Remove the content filter entry from the global list.
-                Global.ContentFilterList.Remove(filterSession);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
+                switch (value)
                 {
-                    _ = menuSession.MenuMessage.DeleteAsync();
+                    case "p1":
+                        filterSession.P1_Select = true;
+                        break;
+
+                    case "p2is":
+                        filterSession.P2IS_Select = true;
+                        break;
+
+                    case "p2ep":
+                        filterSession.P2EP_Select = true;
+                        break;
+
+                    case "p3":
+                        filterSession.P3_Select = true;
+                        break;
+
+                    case "p4":
+                        filterSession.P4_Select = true;
+                        break;
+
+                    case "p4au":
+                        filterSession.P4AU_Select = true;
+                        break;
+
+                    case "p4d":
+                        filterSession.P4D_Select = true;
+                        break;
+
+                    case "p5":
+                        filterSession.P5_Select = true;
+                        break;
+
+                    case "p5s":
+                        filterSession.P5S_Select = true;
+                        break;
+
+                    case "bbtag":
+                        filterSession.BBTAG_Select = true;
+                        break;
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
+            }
 
-                // If the menu session is not null, remove it and the filter session from the global list.
-                if (menuSession != null)
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Content_Filter_VC_P1_Main_Added(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            // Find the user's filter session
+            var filterSession = Global.ContentFilterList
+                .SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+
+            if (filterSession == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    filterSession.P1_VC_PSX_Select = false;
+                    filterSession.P1_VC_PSP_Select = false;
+                    Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
+                    content_nav.ReturnToPreviousMenu(component, menuSession);
+                    break;
+
+                case "confirm":
+                    _ = VersionControlMenuDirectory(component, menuSession);
+                    break;
+            }
+
+            var selectedValues = component.Data.Values;
+
+            foreach (var value in selectedValues)
+            {
+                switch (value)
                 {
-                    Global.MenuIdList.Remove(menuSession);
+                    case "p1-ps1":
+                        filterSession.P1_VC_PSX_Select = true;
+                        break;
+
+                    case "p1-psp":
+                        filterSession.P1_VC_PSP_Select = true;
+                        break;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Content_Filter_VC_P2IS_Main_Added(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            // Find the user's filter session
+            var filterSession = Global.ContentFilterList
+                .SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+
+            if (filterSession == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    filterSession.P2IS_VC_PSX_Select = false;
+                    filterSession.P2IS_VC_PSP_Select = false;
+                    Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
+                    content_nav.ReturnToPreviousMenu(component, menuSession);
+                    break;
+
+                case "confirm":
+                    _ = VersionControlMenuDirectory(component, menuSession);
+                    break;
+            }
+
+            var selectedValues = component.Data.Values;
+
+            foreach (var value in selectedValues)
+            {
+                switch (value)
+                {
+                    case "p2is-ps1":
+                        filterSession.P2IS_VC_PSX_Select = true;
+                        break;
+
+                    case "p2is-psp":
+                        filterSession.P2IS_VC_PSP_Select = true;
+                        break;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Content_Filter_VC_P2EP_Main_Added(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            // Find the user's filter session
+            var filterSession = Global.ContentFilterList
+                .SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+
+            if (filterSession == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    filterSession.P2EP_VC_PSX_Select = false;
+                    filterSession.P2EP_VC_PSP_Select = false;
+                    Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
+                    content_nav.ReturnToPreviousMenu(component, menuSession);
+                    break;
+
+                case "confirm":
+                    _ = VersionControlMenuDirectory(component, menuSession);
+                    break;
+            }
+
+            var selectedValues = component.Data.Values;
+
+            foreach (var value in selectedValues)
+            {
+                switch (value)
+                {
+                    case "p2ep-ps1":
+                        filterSession.P2EP_VC_PSX_Select = true;
+                        break;
+
+                    case "p2ep-psp":
+                        filterSession.P2EP_VC_PSP_Select = true;
+                        break;
+                }
+            }
+
+            
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Content_Filter_VC_P3_Main_Added(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            // Find the user's filter session
+            var filterSession = Global.ContentFilterList
+                .SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+
+            if (filterSession == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    filterSession.P3_VC_P3F_Select = false;
+                    filterSession.P3_VC_P3P_Select = false;
+                    Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
+                    content_nav.ReturnToPreviousMenu(component, menuSession);
+                    break;
+
+                case "confirm":
+                    _ = VersionControlMenuDirectory(component, menuSession);
+                    break;
+            }
+
+            var selectedValues = component.Data.Values;
+
+            foreach (var value in selectedValues)
+            {
+                switch (value)
+                {
+                    case "p3f":
+                        filterSession.P3_VC_P3F_Select = true;
+                        break;
+
+                    case "p3p":
+                        filterSession.P3_VC_P3P_Select = true;
+                        break;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Content_Filter_VC_P4_Main_Added(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            // Find the user's filter session
+            var filterSession = Global.ContentFilterList
+                .SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+
+            if (filterSession == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    filterSession.P4_VC_PS2_Select = false;
+                    filterSession.P4_VC_P4G_Select = false;
+                    Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
+                    content_nav.ReturnToPreviousMenu(component, menuSession);
+                    break;
+
+                case "confirm":
+                    _ = VersionControlMenuDirectory(component, menuSession);
+                    break;
+            }
+
+            var selectedValues = component.Data.Values;
+
+            foreach (var value in selectedValues)
+            {
+                switch (value)
+                {
+                    case "p4-ps2":
+                        filterSession.P4_VC_PS2_Select = true;
+                        break;
+
+                    case "p4g":
+                        filterSession.P4_VC_P4G_Select = true;
+                        break;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Content_Filter_VC_P5_Main_Added(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            // Find the user's filter session
+            var filterSession = Global.ContentFilterList
+                .SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+
+            if (filterSession == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    filterSession.P5_VC_PS4_Select = false;
+                    filterSession.P5_VC_P5R_Select = false;
+                    Content_Filter_Reactions content_nav = new Content_Filter_Reactions();
+                    content_nav.ReturnToPreviousMenu(component, menuSession);
+                    break;
+
+                case "confirm":
+                    _ = VersionControlMenuDirectory(component, menuSession);
+                    break;
+            }
+
+            var selectedValues = component.Data.Values;
+
+            foreach (var value in selectedValues)
+            {
+                switch (value)
+                {
+                    case "p5-ps4":
+                        filterSession.P5_VC_PS4_Select = true;
+                        break;
+
+                    case "p5r":
+                        filterSession.P5_VC_P5R_Select = true;
+                        break;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task Nav_Content_Filter_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            // Search for a content filter list that corresponds to the user's ID.
+            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+
+            switch (component.Data.CustomId)
+            {
+                case "profile-settings":
                     Global.ContentFilterList.Remove(filterSession);
-                }
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        // Methods that activate on the ReactionRemoved event.
-        public static Task Nav_Content_Filter_Main_Removed(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            if (reaction.Emote.Name == "P1")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P1_Select = false;
-
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P2IS")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P2IS_Select = false;
-
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P2EP")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P2EP_Select = false;
-
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P3_Select = false;
-
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P4")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P4_Select = false;
-
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P4AU")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P4AU_Select = false;
-
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P4D")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P4D_Select = false;
-
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "P5")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P5_Select = false;
-
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "BBTAG")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.BBTAG_Select = false;
-
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P1_Main_Removed(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            // Keycap One
-            if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P1_VC_PSX_Select = false;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P1_VC_PSP_Select = false;
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P2IS_Main_Removed(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            // Keycap One
-            if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P2IS_VC_PSX_Select = false;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P2IS_VC_PSP_Select = false;
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P2EP_Main_Removed(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            // Keycap One
-            if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P2EP_VC_PSX_Select = false;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P2EP_VC_PSP_Select = false;
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P3_Main_Removed(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            // Keycap One
-            if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P3_VC_P3F_Select = false;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P3_VC_P3P_Select = false;
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P4_Main_Removed(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            // Keycap One
-            if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P4_VC_PS2_Select = false;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P4_VC_P4G_Select = false;
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public static Task Nav_Content_Filter_VC_P5_Main_Removed(SocketReaction reaction, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-            // Keycap One
-            if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P5_VC_PS4_Select = false;
-                return Task.CompletedTask;
-            }
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // If this option is selected, change the value to false in the filter list.
-                filterSession.P5_VC_P5R_Select = false;
-                return Task.CompletedTask;
+                    _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
         // Methods that suppliment the functionality of the menus.
-        public static Task VersionControlMenuDirectory(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task VersionControlMenuDirectory(SocketMessageComponent component, MenuIdStructure menuSession)
         {
             // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
+            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == component.User.Id);
 
             // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(menuSession.User);
+            var account = menuSession.Account;
 
             //Check each field of titles with alternate versions to see if they have been chosen.
             // Persona
             if (filterSession.P1_Select == true && (filterSession.P1_VC_PSX_Select == false && filterSession.P1_VC_PSP_Select == false))
             {
                 // Go to a new menu.
-                _ = Content_Filter_Menu.Content_Filter_VC_P1_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Content_Filter_Menu.Content_Filter_VC_P1_Main(menuSession);
                 return Task.CompletedTask;
             }
             // Persona 2: Innocent Sin
             else if (filterSession.P2IS_Select == true && (filterSession.P2IS_VC_PSX_Select == false && filterSession.P2IS_VC_PSP_Select == false))
             {
                 // Go to a new menu.
-                _ = Content_Filter_Menu.Content_Filter_VC_P2IS_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Content_Filter_Menu.Content_Filter_VC_P2IS_Main(menuSession);
                 return Task.CompletedTask;
             }
             // Persona 2: Eternal Punishment
             else if (filterSession.P2EP_Select == true && (filterSession.P2EP_VC_PSX_Select == false && filterSession.P2EP_VC_PSP_Select == false))
             {
                 // Go to a new menu.
-                _ = Content_Filter_Menu.Content_Filter_VC_P2EP_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Content_Filter_Menu.Content_Filter_VC_P2EP_Main(menuSession);
                 return Task.CompletedTask;
             }
             // Persona 3
             else if (filterSession.P3_Select == true && (filterSession.P3_VC_P3F_Select == false && filterSession.P3_VC_P3P_Select == false))
             {
                 // Go to a new menu.
-                _ = Content_Filter_Menu.Content_Filter_VC_P3_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Content_Filter_Menu.Content_Filter_VC_P3_Main(menuSession);
                 return Task.CompletedTask;
             }
             // Persona 4
             else if (filterSession.P4_Select == true && (filterSession.P4_VC_PS2_Select == false && filterSession.P4_VC_P4G_Select == false))
             {
                 // Go to a new menu.
-                _ = Content_Filter_Menu.Content_Filter_VC_P4_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Content_Filter_Menu.Content_Filter_VC_P4_Main(menuSession);
                 return Task.CompletedTask;
             }
             // Persona 5
             else if (filterSession.P5_Select == true && (filterSession.P5_VC_PS4_Select == false && filterSession.P5_VC_P5R_Select == false))
             {
                 // Go to a new menu.
-                _ = Content_Filter_Menu.Content_Filter_VC_P5_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Content_Filter_Menu.Content_Filter_VC_P5_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -827,7 +539,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
             UserInfoClasses.UpdateAccount(account);
 
             // Go to the confirmation menu.
-            _ = Content_Filter_Menu.Content_Filter_Confirm(menuSession.User, menuSession.MenuMessage);
+            _ = Content_Filter_Menu.Content_Filter_Confirm(menuSession);
 
             return Task.CompletedTask;
         }
@@ -959,10 +671,10 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
             return account;
         }
 
-        public void ReturnToPreviousMenu(SocketReaction reaction, MenuIdStructure menuSession)
+        public void ReturnToPreviousMenu(SocketMessageComponent component, MenuIdStructure menuSession)
         {
             // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
+            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == component.User.Id);
 
             // Use the session's menu list to find the index of the current menu.
             int index = filterSession.Menu_List.IndexOf(menuSession.CurrentMenu);
@@ -970,14 +682,16 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
             try
             {
                 // Assign the namespace of the content filter menu methods as a string.
-                Type type = Type.GetType($"SocialLinker.Core.Menus.Settings.Main.General.Content_Filter_Menu");
+                Type type = Type.GetType($"SocialLinker.Core.Menus.Settings.Main.Profile.Content_Filter_Menu");
 
                 // Specify the method of whatever menu class is chosen to invoke.
                 // Since we want to backtrack through a menu, the menu keyword will be in the index before the current one.
                 MethodInfo methodInfo = type.GetMethod($"{filterSession.Menu_List[index - 1]}");
 
+                Console.WriteLine($"{filterSession.Menu_List[index - 1]}");
+
                 // Store the typical parameters for a menu method within an object array.
-                object[] parametersArray = new object[] { menuSession.User, menuSession.MenuMessage };
+                object[] parametersArray = new object[] { menuSession };
 
                 // Call the method to jump to the previous menu.
                 methodInfo.Invoke(this, parametersArray);
@@ -989,10 +703,10 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
             }
         }
 
-        public static List<string> CreateMenuList(SocketReaction reaction)
+        public static List<string> CreateMenuList(SocketMessageComponent component)
         {
             // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == reaction.UserId);
+            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == component.User.Id);
 
             // Create an empty string list variable to store the menu list in.
             List<string> menu_list = new List<string>();
@@ -1039,6 +753,10 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
 
             // Add the last possible menu message to the string list.
             menu_list.Add("Content_Filter_Confirm");
+
+            foreach (var menu in menu_list) {
+                Console.WriteLine($"{menu}\n");
+            }
 
             return menu_list;
         }

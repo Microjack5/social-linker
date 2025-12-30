@@ -89,8 +89,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                     .WithCustomId("version-control-p1")
                     .WithMinValues(1)
                     .WithMaxValues(1)
-                    .AddOption("Revelations: Persona", "p1-ps1", emote: Emote.Parse("<:P1:751133115531133112>"))
-                    .AddOption("Persona (PSP®️)", "p1-psp", emote: Emote.Parse("<:P1:751133115531133112>"))
+                    .AddOption("Revelations: Persona", "p1-ps1", emote: Emote.Parse(Global.GetGameEmote("P1-PS1")))
+                    .AddOption("Persona (PSP®️)", "p1-psp", emote: Emote.Parse(Global.GetGameEmote("P1-PSP")))
                     .AddOption("Return to Version Control Settings", "return", null, new Emoji("↩️"));
 
             var component = new ComponentBuilder()
@@ -143,8 +143,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                     .WithCustomId("version-control-p2is")
                     .WithMinValues(1)
                     .WithMaxValues(1)
-                    .AddOption("Persona 2: Innocent Sin (PlayStation®️)", "p2is-ps1", emote: Emote.Parse("<:P2IS:788950080396328990>"))
-                    .AddOption("Persona 2: Innocent Sin (PSP®️)", "p2is-psp", emote: Emote.Parse("<:P2IS:788950080396328990>"))
+                    .AddOption("Persona 2: Innocent Sin (PlayStation®️)", "p2is-ps1", emote: Emote.Parse(Global.GetGameEmote("P2IS-PS1")))
+                    .AddOption("Persona 2: Innocent Sin (PSP®️)", "p2is-psp", emote: Emote.Parse(Global.GetGameEmote("P2IS-PSP")))
                     .AddOption("Return to Version Control Settings", "return", null, new Emoji("↩️"));
 
             var component = new ComponentBuilder()
@@ -197,8 +197,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                     .WithCustomId("version-control-p2ep")
                     .WithMinValues(1)
                     .WithMaxValues(1)
-                    .AddOption("Persona 2: Eternal Punishment (PlayStation®️)", "p2ep-ps1", emote: Emote.Parse("<:P2EP:788950163363463172>"))
-                    .AddOption("Persona 2: Eternal Punishment (PSP®️)", "p2ep-psp", emote: Emote.Parse("<:P2EP:788950163363463172>"))
+                    .AddOption("Persona 2: Eternal Punishment (PlayStation®️)", "p2ep-ps1", emote: Emote.Parse(Global.GetGameEmote("P2EP-PS1")))
+                    .AddOption("Persona 2: Eternal Punishment (PSP®️)", "p2ep-psp", emote: Emote.Parse(Global.GetGameEmote("P2EP-PSP")))
                     .AddOption("Return to Version Control Settings", "return", null, new Emoji("↩️"));
 
             var component = new ComponentBuilder()
@@ -258,8 +258,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                     .WithCustomId("version-control-p3")
                     .WithMinValues(1)
                     .WithMaxValues(1)
-                    .AddOption("Persona 3 FES", "p3f", emote: Emote.Parse("<:P3F:1096338540369039413>"))
-                    .AddOption("Persona 3 Portable", "p3p", emote: Emote.Parse("<:P3P:1096338602046267392>"))
+                    .AddOption("Persona 3 FES", "p3f", emote: Emote.Parse(Global.GetGameEmote("P3F")))
+                    .AddOption("Persona 3 Portable", "p3p", emote: Emote.Parse(Global.GetGameEmote("P3P")))
                     .AddOption("Return to Version Control Settings", "return", null, new Emoji("↩️"));
 
             var component = new ComponentBuilder()
@@ -312,8 +312,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                     .WithCustomId("version-control-p4")
                     .WithMinValues(1)
                     .WithMaxValues(1)
-                    .AddOption("Persona 4 (PlayStation®️ 2)", "p4-ps2", emote: Emote.Parse("<:P4:751133120530612274>"))
-                    .AddOption("Persona 4 Golden", "p4g", emote: Emote.Parse("<:P4G:751133123479207956>"))
+                    .AddOption("Persona 4 (PlayStation®️ 2)", "p4-ps2", emote: Emote.Parse(Global.GetGameEmote("P4-PS2")))
+                    .AddOption("Persona 4 Golden", "p4g", emote: Emote.Parse(Global.GetGameEmote("P4G")))
                     .AddOption("Return to Version Control Settings", "return", null, new Emoji("↩️"));
 
             var component = new ComponentBuilder()
@@ -366,8 +366,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                     .WithCustomId("version-control-p5")
                     .WithMinValues(1)
                     .WithMaxValues(1)
-                    .AddOption("Persona 5 (PlayStation®️ 4)", "p5-ps4", emote: Emote.Parse("<:P5:751133123861020742>"))
-                    .AddOption("Persona 5 Royal", "p5r", emote: Emote.Parse("<:P5R:751133123617488937>"))
+                    .AddOption("Persona 5 (PlayStation®️ 4)", "p5-ps4", emote: Emote.Parse(Global.GetGameEmote("P5-PS4")))
+                    .AddOption("Persona 5 Royal", "p5r", emote: Emote.Parse(Global.GetGameEmote("P5R")))
                     .AddOption("Return to Version Control Settings", "return-to-vc-settings", null, new Emoji("↩️"));
 
             var component = new ComponentBuilder()

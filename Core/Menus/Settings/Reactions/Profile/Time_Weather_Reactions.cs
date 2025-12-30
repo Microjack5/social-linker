@@ -19,7 +19,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -49,7 +49,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession);
                 return Task.CompletedTask;
             }
 

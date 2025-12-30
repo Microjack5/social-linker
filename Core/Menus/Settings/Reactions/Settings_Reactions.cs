@@ -12,7 +12,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions
             switch (component.Data.CustomId)
             {
                 case "profile-settings":
-                    _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = Profile_Settings_Menu.Profile_Settings_Main(menuSession);
                     break;
 
                 case "scene-maker-settings":

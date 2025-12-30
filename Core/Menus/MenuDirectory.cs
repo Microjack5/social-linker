@@ -166,87 +166,7 @@ namespace SocialLinker.Core.Menus
                                 await Time_Weather_Reactions.Nav_Time_Weather_Confirm(reaction, menuSession);
                                 break;
 
-                            case "Level_Up_Notifications_Main":
-                                await Level_Up_Notifications_Reactions.Nav_Level_Up_Notifications_Main(reaction, menuSession);
-                                break;
-
-                            case "Level_Up_Notifications_Confirm":
-                                await Level_Up_Notifications_Reactions.Nav_Level_Up_Notifications_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Rank_Up_Notifications_Main":
-                                await Rank_Up_Notifications_Reactions.Nav_Rank_Up_Notifications_Main(reaction, menuSession);
-                                break;
-
-                            case "Rank_Up_Notifications_Confirm":
-                                await Rank_Up_Notifications_Reactions.Nav_Rank_Up_Notifications_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Content_Filter_Main":
-                                await Content_Filter_Reactions.Nav_Content_Filter_Main_Added(reaction, menuSession);
-                                break;
-
-                            case "Content_Filter_VC_P1_Main":
-                                await Content_Filter_Reactions.Nav_Content_Filter_VC_P1_Main_Added(reaction, menuSession);
-                                break;
-
-                            case "Content_Filter_VC_P2IS_Main":
-                                await Content_Filter_Reactions.Nav_Content_Filter_VC_P2IS_Main_Added(reaction, menuSession);
-                                break;
-
-                            case "Content_Filter_VC_P2EP_Main":
-                                await Content_Filter_Reactions.Nav_Content_Filter_VC_P2EP_Main_Added(reaction, menuSession);
-                                break;
-
-                            case "Content_Filter_VC_P3_Main":
-                                await Content_Filter_Reactions.Nav_Content_Filter_VC_P3_Main_Added(reaction, menuSession);
-                                break;
-
-                            case "Content_Filter_VC_P4_Main":
-                                await Content_Filter_Reactions.Nav_Content_Filter_VC_P4_Main_Added(reaction, menuSession);
-                                break;
-
-                            case "Content_Filter_VC_P5_Main":
-                                await Content_Filter_Reactions.Nav_Content_Filter_VC_P5_Main_Added(reaction, menuSession);
-                                break;
-
-                            case "Content_Filter_Confirm":
-                                await Content_Filter_Reactions.Nav_Content_Filter_Confirm(reaction, menuSession);
-                                break;
-
                             // Namespace: SocialLinker.Core.Menus.Settings.Main.Profile 
-                            case "Profile_Settings_Menu":
-                                await Profile_Settings_Reactions.Nav_Profile_Settings_Main(reaction, menuSession);
-                                break;
-
-                            case "Profile_Theme_Main":
-                                await Profile_Theme_Reactions.Nav_Profile_Theme_Main(reaction, menuSession);
-                                break;
-
-                            case "Profile_Theme_Confirm":
-                                await Profile_Theme_Reactions.Nav_Profile_Theme_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Status_Decor_Main":
-                                await Status_Decor_Reactions.Nav_Status_Decor_Main(reaction, menuSession);
-                                break;
-
-                            case "Set_Decor_Preview":
-                                await Status_Decor_Reactions.Nav_Set_Decor_Preview(reaction, menuSession);
-                                break;
-
-                            case "Set_Decor_Confirm":
-                                await Status_Decor_Reactions.Nav_Set_Decor_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Decor_Sort":
-                                await Status_Decor_Reactions.Nav_Decor_Sort(reaction, menuSession);
-                                break;
-
-                            case "Decor_Sort_Confirm":
-                                await Status_Decor_Reactions.Nav_Decor_Sort_Confirm(reaction, menuSession);
-                                break;
-
                             case "Star_Level_Main":
                                 await Star_Level_Reactions.Nav_Star_Level_Main(reaction, menuSession);
                                 break;
@@ -529,33 +449,8 @@ namespace SocialLinker.Core.Menus
                     // Ensure that the current menu matches a certain state before proceeding.
                     switch (menuSession.CurrentMenu)
                     {
-                        // Namespace: SocialLinker.Core.Menus.Settings.Reactions.General
-                        case "Content_Filter_Main":
-                            await Content_Filter_Reactions.Nav_Content_Filter_Main_Removed(reaction, menuSession);
-                            break;
-
-                        case "Content_Filter_VC_P1_Main":
-                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P1_Main_Removed(reaction, menuSession);
-                            break;
-
-                        case "Content_Filter_VC_P2IS_Main":
-                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P2IS_Main_Removed(reaction, menuSession);
-                            break;
-
-                        case "Content_Filter_VC_P2EP_Main":
-                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P2EP_Main_Removed(reaction, menuSession);
-                            break;
-
-                        case "Content_Filter_VC_P3_Main":
-                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P3_Main_Removed(reaction, menuSession);
-                            break;
-
-                        case "Content_Filter_VC_P4_Main":
-                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P4_Main_Removed(reaction, menuSession);
-                            break;
-
-                        case "Content_Filter_VC_P5_Main":
-                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P5_Main_Removed(reaction, menuSession);
+                        // Nothing here for now
+                        case "blank":
                             break;
                     }
                 }
@@ -694,6 +589,34 @@ namespace SocialLinker.Core.Menus
                 {
                     switch (menuSession.CurrentMenu)
                     {
+                        case "Content_Filter_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P1_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P1_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P2IS_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P2IS_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P2EP_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P2EP_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P3_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P3_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P4_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P4_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P5_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P5_Main_Added(component, menuSession);
+                            break;
+
                         // Namespace: SocialLinker.Core.Menus.Help
                         case "SM_Tutorial_Select_Main":
                             await SM_Tutorial_Select_Reactions.Nav_SM_Tutorial_Select_Main(component, menuSession);
@@ -709,6 +632,11 @@ namespace SocialLinker.Core.Menus
 
                         case "SM_Tutorial_Spriteless_Main":
                             await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_Main(component, menuSession);
+                            break;
+
+                        // Namespace: SocialLinker.Core.Menus.Settings.Main.Profile 
+                        case "Profile_Settings_Menu":
+                            await Profile_Settings_Reactions.Nav_Profile_Settings_Main(component, menuSession);
                             break;
 
                         // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker
@@ -1301,6 +1229,82 @@ namespace SocialLinker.Core.Menus
                         // Settings
                         case "Settings_Main_Menu":
                             await Settings_Reactions.Nav_Settings_Main_Menu(component, menuSession);
+                            break;
+
+                        case "Profile_Theme_Main":
+                            await Profile_Theme_Reactions.Nav_Profile_Theme_Main(component, menuSession);
+                            break;
+
+                        case "Profile_Theme_Confirm":
+                            await Profile_Theme_Reactions.Nav_Profile_Theme_Confirm(component, menuSession);
+                            break;
+
+                        case "Status_Decor_Main":
+                            await Status_Decor_Reactions.Nav_Status_Decor_Main(component, menuSession);
+                            break;
+
+                        case "Set_Decor_Preview":
+                            await Status_Decor_Reactions.Nav_Set_Decor_Preview(component, menuSession);
+                            break;
+
+                        case "Set_Decor_Confirm":
+                            await Status_Decor_Reactions.Nav_Set_Decor_Confirm(component, menuSession);
+                            break;
+
+                        case "Decor_Sort":
+                            await Status_Decor_Reactions.Nav_Decor_Sort(component, menuSession);
+                            break;
+
+                        case "Decor_Sort_Confirm":
+                            await Status_Decor_Reactions.Nav_Decor_Sort_Confirm(component, menuSession);
+                            break;
+
+                        case "Level_Up_Notifications_Main":
+                            await Level_Up_Notifications_Reactions.Nav_Level_Up_Notifications_Main(component, menuSession);
+                            break;
+
+                        case "Level_Up_Notifications_Confirm":
+                            await Level_Up_Notifications_Reactions.Nav_Level_Up_Notifications_Confirm(component, menuSession);
+                            break;
+
+                        case "Rank_Up_Notifications_Main":
+                            await Rank_Up_Notifications_Reactions.Nav_Rank_Up_Notifications_Main(component, menuSession);
+                            break;
+
+                        case "Rank_Up_Notifications_Confirm":
+                            await Rank_Up_Notifications_Reactions.Nav_Rank_Up_Notifications_Confirm(component, menuSession);
+                            break;
+
+                        case "Content_Filter_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P1_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P1_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P2IS_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P2IS_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P2EP_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P2EP_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P3_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P3_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P4_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P4_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_VC_P5_Main":
+                            await Content_Filter_Reactions.Nav_Content_Filter_VC_P5_Main_Added(component, menuSession);
+                            break;
+
+                        case "Content_Filter_Confirm":
+                            await Content_Filter_Reactions.Nav_Content_Filter_Confirm(component, menuSession);
                             break;
 
                         // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker

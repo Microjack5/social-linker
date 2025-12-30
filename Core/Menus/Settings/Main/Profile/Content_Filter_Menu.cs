@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
 using System.Threading.Tasks;
 using Discord;
-using Discord.WebSocket;
-using SocialLinker.Config;
-using SocialLinker.Core.CloudStorageTables;
-using Discord.Rest;
 
 namespace SocialLinker.Core.Menus.Settings.Main.Profile
 {
     class Content_Filter_Menu
     {
-        public static async Task Content_Filter_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Content_Filter_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             // Find a filter session associated with the current user.
             var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == user.Id);
@@ -81,98 +73,47 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Cancel | ✅ Continue"
-            };
-
-            embed.WithFooter(footer);
-
-            // Determine the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription("" +
-                "Choose to hide content related to certain titles. Select any titles you wish to block (or select nothing to reset), then react with ✅ to continue.\n" +
+                "Choose to hide content related to certain titles. Select any titles you wish to block (or select nothing to reset), then press ✅ to continue.\n" +
                 "\n" +
                 $"⚙️ **Currently Filtered Titles:**\n" +
                 $"\n" +
-                $"{filter_text}" +
-                "\n" +
-                "<:P1:751133115531133112> **Persona**\n" +
-                "<:P2IS:788950080396328990> **Persona 2: Innocent Sin**\n" +
-                "<:P2EP:788950163363463172> **Persona 2: Eternal Punishment**\n" +
-                "<:P3:751133114918633483> **Persona 3**\n" +
-                "<:P4:751133120530612274> **Persona 4**\n" +
-                "<:P4AU:751133122342420572> **Persona 4 Arena Ultimax**\n" +
-                "<:P4D:751133120346062859> **Persona 4: Dancing All Night**\n" +
-                "<:P5:751133123861020742> **Persona 5**\n" +
-                "<:P5S:852644176188669972> **Persona 5 Strikers**\n" +
-                "<:BBTAG:751133123013771617> **BlazBlue: Cross Tag Battle**\n");
+                $"{filter_text}");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Content_Filter_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select title(s)")
+                    .WithCustomId("content-filter-main")
+                    .WithMaxValues(10)
+                    .AddOption("Persona", "p1", emote: Emote.Parse(Global.GetGameEmote("P1")))
+                    .AddOption("Persona 2: Innocent Sin", "p2is", emote: Emote.Parse(Global.GetGameEmote("P2IS")))
+                    .AddOption("Persona 2: Eternal Punishment", "p2ep", emote: Emote.Parse(Global.GetGameEmote("P2EP")))
+                    .AddOption("Persona 3", "p3", emote: Emote.Parse(Global.GetGameEmote("P3")))
+                    .AddOption("Persona 4", "p4", emote: Emote.Parse(Global.GetGameEmote("P4")))
+                    .AddOption("Persona 4 Arena Ultimax", "p4au", emote: Emote.Parse(Global.GetGameEmote("P4AU")))
+                    .AddOption("Persona 4: Dancing All Night", "p4d", emote: Emote.Parse(Global.GetGameEmote("P4D")))
+                    .AddOption("Persona 5", "p5", emote: Emote.Parse(Global.GetGameEmote("P5")))
+                    .AddOption("Persona 5 Strikers", "p5s", emote: Emote.Parse(Global.GetGameEmote("P5S")))
+                    .AddOption("BlazBlue: Cross Tag Battle", "bbtag", emote: Emote.Parse(Global.GetGameEmote("BBTAG")));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ Confirm", customId: "confirm", ButtonStyle.Secondary);
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(Emote.Parse("<:P1:751133115531133112>"));
-            reaction_list.Add(Emote.Parse("<:P2IS:788950080396328990>"));
-            reaction_list.Add(Emote.Parse("<:P2EP:788950163363463172>"));
-            reaction_list.Add(Emote.Parse("<:P3:751133114918633483>"));
-            reaction_list.Add(Emote.Parse("<:P4:751133120530612274>"));
-            reaction_list.Add(Emote.Parse("<:P4AU:751133122342420572>"));
-            reaction_list.Add(Emote.Parse("<:P4D:751133120346062859>"));
-            reaction_list.Add(Emote.Parse("<:P5:751133123861020742>"));
-            reaction_list.Add(Emote.Parse("<:P5S:852644176188669972>"));
-            reaction_list.Add(Emote.Parse("<:BBTAG:751133123013771617>"));
-            reaction_list.Add(new Emoji("✅"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Content_Filter_VC_P1_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Content_Filter_VC_P1_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -183,80 +124,37 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Previous Menu | ✅ Confirm"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P1-PSP", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P1-PSP"));
 
             embed.WithDescription("" +
-                "**Which version of Persona would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
-                "\n" +
-                ":one: Revelations: Persona\n" +
-                ":two: Persona (PSP®️)");
+                "Which version of Persona would you like to block? Select all that apply, then react with ✅ to continue.");
 
             embed.WithImageUrl("https://i.imgur.com/bCWThuf.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Content_Filter_VC_P1_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select version(s)")
+                    .WithCustomId("content-filter-vc-p1")
+                    .WithMaxValues(2)
+                    .AddOption("Revelations: Persona", "p1-ps1", emote: Emote.Parse(Global.GetGameEmote("P1-PS1")))
+                    .AddOption("Persona (PSP®️)", "p1-psp", emote: Emote.Parse(Global.GetGameEmote("P1-PSP")));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ Confirm", customId: "confirm", ButtonStyle.Secondary);
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("✅"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Content_Filter_VC_P2IS_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Content_Filter_VC_P2IS_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -267,80 +165,37 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Previous Menu | ✅ Confirm"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PSP", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PSP"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 2: Innocent Sin would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
-                "\n" +
-                ":one: Persona 2: Innocent Sin (PlayStation®️)\n" +
-                ":two: Persona 2: Innocent Sin (PSP®️)");
+                "Which version of Persona 2: Innocent Sin would you like to block? Select all that apply, then react with ✅ to continue.");
 
-            embed.WithImageUrl("https://i.imgur.com/6Utgced.png");
+            embed.WithImageUrl("https://i.imgur.com/JAZN3dP.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Content_Filter_VC_P2IS_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select version(s)")
+                    .WithCustomId("content-filter-vc-p2is")
+                    .WithMaxValues(2)
+                    .AddOption("Persona 2: Innocent Sin (PlayStation®️)", "p2is-ps1", emote: Emote.Parse(Global.GetGameEmote("P2IS-PS1")))
+                    .AddOption("Persona 2: Innocent Sin (PSP®️)", "p2is-psp", emote: Emote.Parse(Global.GetGameEmote("P2IS-PSP")));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ Confirm", customId: "confirm", ButtonStyle.Secondary);
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("✅"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Content_Filter_VC_P2EP_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Content_Filter_VC_P2EP_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -351,80 +206,37 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Previous Menu | ✅ Confirm"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2EP-PSP", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2EP-PSP"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 2: Eternal Punishment would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
-                "\n" +
-                ":one: Persona 2: Eternal Punishment (PlayStation®️)\n" +
-                ":two: Persona 2: Eternal Punishment (PSP®️)");
+                "Which version of Persona 2: Eternal Punishment would you like to block? Select all that apply, then react with ✅ to continue.");
 
-            embed.WithImageUrl("https://i.imgur.com/JAZN3dP.png");
+            embed.WithImageUrl("https://i.imgur.com/6Utgced.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Content_Filter_VC_P2EP_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select version(s)")
+                    .WithCustomId("content-filter-vc-p2ep")
+                    .WithMaxValues(2)
+                    .AddOption("Persona 2: Eternal Punishment (PlayStation®️)", "p2ep-ps1", emote: Emote.Parse(Global.GetGameEmote("P2EP-PS1")))
+                    .AddOption("Persona 2: Eternal Punishment (PSP®️)", "p2ep-psp", emote: Emote.Parse(Global.GetGameEmote("P2EP-PSP")));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ Confirm", customId: "confirm", ButtonStyle.Secondary); ;
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("✅"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Content_Filter_VC_P3_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Content_Filter_VC_P3_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -435,80 +247,37 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Previous Menu | ✅ Confirm"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3F", null));
             embed.WithThumbnailUrl("https://i.imgur.com/trtPflx.png");
 
             embed.WithDescription("" +
-                "**Which version of Persona 3 would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
-                "\n" +
-                ":one: Persona 3 FES\n" +
-                ":two: Persona 3 Portable");
+                "Which version of Persona 3 would you like to block? Select all that apply, then react with ✅ to continue.");
 
             embed.WithImageUrl("https://i.imgur.com/hZJTcx4.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Content_Filter_VC_P3_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select version(s)")
+                    .WithCustomId("content-filter-vc-p3")
+                    .WithMaxValues(2)
+                    .AddOption("Persona 3 FES", "p3f", emote: Emote.Parse(Global.GetGameEmote("P3F")))
+                    .AddOption("Persona 3 Portable", "p3p", emote: Emote.Parse(Global.GetGameEmote("P3P")));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ Confirm", customId: "confirm", ButtonStyle.Secondary); ;
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("✅"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Content_Filter_VC_P4_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Content_Filter_VC_P4_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -519,80 +288,37 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Previous Menu | ✅ Confirm"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P4-PS2", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P4-PS2"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 4 would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
-                "\n" +
-                ":one: Persona 4 (PlayStation®️ 2)\n" +
-                ":two: Persona 4 Golden");
+                "Which version of Persona 4 would you like to block? Select all that apply, then react with ✅ to continue.");
 
             embed.WithImageUrl("https://i.imgur.com/ZVldBKO.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Content_Filter_VC_P4_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                .WithPlaceholder("Select version(s)")
+                .WithCustomId("content-filter-vc-p4")
+                .WithMaxValues(2)
+                .AddOption("Persona 4 (PlayStation®️ 2)", "p4-ps2", emote: Emote.Parse(Global.GetGameEmote("P4-PS2")))
+                .AddOption("Persona 4 Golden", "p4g", emote: Emote.Parse(Global.GetGameEmote("P4G")));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ Confirm", customId: "confirm", ButtonStyle.Secondary); ;
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("✅"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Content_Filter_VC_P5_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Content_Filter_VC_P5_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -603,80 +329,37 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Previous Menu | ✅ Confirm"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P5-PS4", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5-PS4"));
 
             embed.WithDescription("" +
-                "**Which version of Persona 5 would you like to block? Select all that apply, then react with ✅ to continue.**\n" +
-                "\n" +
-                ":one: Persona 5 (PlayStation®️ 4)\n" +
-                ":two: Persona 5 Royal");
+                "Which version of Persona 5 would you like to block? Select all that apply, then react with ✅ to continue.");
 
             embed.WithImageUrl("https://i.imgur.com/7PMim5v.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Content_Filter_VC_P5_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                .WithPlaceholder("Select version(s)")
+                .WithCustomId("content-filter-vc-p5")
+                .WithMaxValues(2)
+                .AddOption("Persona 5 (PlayStation®️ 4)", "p5-ps4", emote: Emote.Parse(Global.GetGameEmote("P5-PS4")))
+                .AddOption("Persona 5 Royal", "p5r", emote: Emote.Parse(Global.GetGameEmote("P5R")));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ Confirm", customId: "confirm", ButtonStyle.Secondary);
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("✅"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Content_Filter_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Content_Filter_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             // Search for a content filter list that corresponds to the user's ID.
             var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
@@ -705,13 +388,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             };
 
             embed.WithAuthor(author);
-
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 General Settings Menu | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
 
             // Determine the color and thumbnail for the embeded message.
             if (account.Profile_Theme == "P3")
@@ -743,118 +419,15 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                     $"{filter_text}");
             };
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                // Remove the content filter entry from the global list.
-                Global.ContentFilterList.Remove(filterSession);
-
-                return;
-            }
-
-            // Remove the content filter entry from the global list.
             Global.ContentFilterList.Remove(filterSession);
 
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Content_Filter_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("💠 Profile Settings", customId: "profile-settings", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
-        }
-
-        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure menuSession)
-        {
-            // Search for a content filter list that corresponds to the user's ID.
-            var filterSession = Global.ContentFilterList.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
-
-            // Assign the menu session's message to another variable.
-            var message = menuSession.MenuMessage;
-
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = MenuTimedOut(menuSession.User).Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                // Remove the content filter entry from the global list.
-                Global.ContentFilterList.Remove(filterSession);
-
-                return;
-            }
-
-            // Remove the menu entry from the global list.
-            Global.MenuIdList.Remove(menuSession);
-
-            // Remove the content filter entry from the global list.
-            Global.ContentFilterList.Remove(filterSession);
-        }
-
-        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
-        {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Inactive Menu",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
-
-            embed.WithDescription($"You can edit your content settings at any time from the **`settings`** menu by choosing [Profile Settings] > [Content Filter].");
-            return embed;
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
     }
 }
