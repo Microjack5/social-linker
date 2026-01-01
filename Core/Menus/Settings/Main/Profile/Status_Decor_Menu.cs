@@ -118,6 +118,12 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == user.Id);
 
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select Décor")
+                    .WithCustomId("status-decor-main")
+                    .WithMinValues(1)
+                    .WithMaxValues(1);
+
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
@@ -166,45 +172,13 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
                 // Add the entry to the displayed_shop_list string.
                 displayed_decor_list += $":{DecorInfoMethods.NumberToWords(displayed_list_counter)}: {decor_info.Title}\n";
-            }
 
-            // Create a string variable to store text for the footer. This will change depending on the state of the menu.
-            string footer_text = "";
+                selectMenu.AddOption($"{DecorInfoMethods.NumberToKeycapEmoji(displayed_list_counter)} {decor_info.Title}", $"{displayed_list_counter}");
+            }
 
             // Depending on whether or not the user owns or can set any décor, perform different actions.
             if (displayed_decor_list.Length > 0)
             {
-                // Add a "Back" button to be displayed on the footer.
-                footer_text += "↩️ Profile Settings | ";
-
-                // Check if the starting item index is greater than or equal to max_items_displayed.
-                if (itemSession.ItemIndexBase >= itemSession.MaxItemsDisplayed)
-                {
-                    // If so, there will be a "Previous Page" button displayed on the footer.
-                    footer_text += "◀️ Previous Page | ";
-                }
-                // Check if the number of items in the list minus the starting item index is more than max_items_displayed.
-                if (remaining_list_length > itemSession.MaxItemsDisplayed)
-                {
-                    // If so, there will be a "Next Page" button on the footer.
-                    footer_text += "▶️ Next Page | ";
-                }
-
-                // Calculate the amount of pages there will be in total and store it in a variable.
-                int pageCount = (itemSession.ItemList.Count + itemSession.MaxItemsDisplayed - 1) / itemSession.MaxItemsDisplayed;
-
-                // Add two icons to the end of footer_text regardless of the state, plus a page counter on a new line.
-                footer_text += $"⚙️ Sort\nPage {itemSession.CurrentPage} / {pageCount}";
-
-                // Create the footer object for the embed.
-                var footer = new EmbedFooterBuilder
-                {
-                    Text = footer_text
-                };
-
-                // Add the footer to the embed.
-                embed.WithFooter(footer);
-
                 // Create an empty string variable. This will hold part of the embeded message's description
                 string description_text = "";
 
@@ -212,8 +186,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 if (account.Decor_Setting != "" && account.Profile_Theme != "")
                 {
                     description_text = "" +
-                        "**Select a décor to view.**\n" +
-                        "**To remove your current décor and set the default one for your profile theme, select :white_square_button:.**";
+                        "Select a décor to view.\n" +
+                        "To remove your current décor and set the default one for your profile theme, select :white_square_button:.";
                 }
                 // If not, create a default description text instructing to select a décor.
                 else
@@ -275,18 +249,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             }
             else
             {
-                // Add a "Back" button to be displayed on the footer.
-                footer_text += "↩️ Profile Settings";
-
-                // Create the footer object for the embed.
-                var footer = new EmbedFooterBuilder
-                {
-                    Text = footer_text
-                };
-
-                // Add the footer to the embed.
-                embed.WithFooter(footer);
-
                 embed.WithDescription($"You don't have any other décor to set. Visit the Décor Shop with the **`shop`** command to browse and buy décor for your collection.");
 
                 // Attempt editing the message if it hasn't been deleted by the user yet. If it has, catch the exception, send an error message, and return.
@@ -310,46 +272,35 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             menuSession.CurrentMenu = "Status_Decor_Main";
 
-            var component = new ComponentBuilder();
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu);
 
-            component.WithButton("↩️", customId: "return", ButtonStyle.Secondary);
+            component.WithButton("↩️ Profile Settings", customId: "return", ButtonStyle.Secondary);
 
             // Check if the starting item index is greater than or equal to max_items_displayed.
             if (itemSession.ItemIndexBase >= itemSession.MaxItemsDisplayed)
             {
                 // If so, there will be a "Previous Page" button added as a reaction.
-                component.WithButton("◀️", customId: "previous-page", ButtonStyle.Secondary);
+                component.WithButton("◀️ Previous Page", customId: "previous-page", ButtonStyle.Secondary);
             }
 
             // Check if the number of items in the list minus the starting item index is more than max_items_displayed.
             if (remaining_list_length > itemSession.MaxItemsDisplayed)
             {
                 // If so, there will be a "Next Page" button added as a reaction.
-                component.WithButton("▶️", customId: "next-page", ButtonStyle.Secondary);
-            }
-
-            // Reset the displayed_list_counter to zero.
-            displayed_list_counter = 0;
-
-            for (int i = 0; i < sublist_length; i++)
-            {
-                // Increase the displayed_list_counter by one.
-                displayed_list_counter += 1;
-
-                // For each loop iteration, add a keycap emote representing an item entry being displayed to the user.
-                component.WithButton($"{DecorInfoMethods.NumberToKeycapEmoji(displayed_list_counter)}", customId: $"{displayed_list_counter}", ButtonStyle.Secondary);
+                component.WithButton("▶️ Next Page", customId: "next-page", ButtonStyle.Secondary);
             }
 
             // If the user owns any décor, add a gear reaction in order to sort entries.
             if (displayed_decor_list.Length > 0)
             {
-                component.WithButton("⚙️", customId: "sort", ButtonStyle.Secondary);
+                component.WithButton("⚙️ Sort", customId: "sort", ButtonStyle.Secondary);
             }
 
             // If the user has a décor and a profile theme currently set, add a box reaction. This gives the option to remove the set décor and return to the default one.
             if (account.Decor_Setting != "" && account.Profile_Theme != "")
             {
-                component.WithButton("🔳", customId: "default", ButtonStyle.Secondary);
+                component.WithButton("🔳 Default Décor", customId: "default", ButtonStyle.Secondary);
             }
 
             await Utility.CleanMessage(menuSession, embed, component);
@@ -409,6 +360,33 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             // Ensure the stream is set to the beginning of itself.
             memoryStream.Seek(0, SeekOrigin.Begin);
+            
+            // Attempt deleting the message if it hasn't been deleted by the user yet.
+            try
+            {
+                // Delete the current message from the channel.
+                await message.DeleteAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            // If the bot lacks permission to attach files, catch the exception, send an error message, and return.
+            try
+            {
+                // Reassign the menu session's message to a new message generated from the created embed and preview image.
+                menuSession.MenuMessage = (RestUserMessage)await message.Channel.SendFileAsync(memoryStream, $"{decor_info.Decor_ID}_preview.png", "", false, embed.Build());
+            }
+            catch (Exception ex)
+            {
+                await ErrorHandling.AttachFilesError((SocketTextChannel)message.Channel);
+                Console.WriteLine(ex);
+                return;
+            }
+
+            // Set the "message" variable to the menu session's message.
+            message = menuSession.MenuMessage;
 
             menuSession.CurrentMenu = "Set_Decor_Preview";
 
@@ -451,7 +429,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             var component = new ComponentBuilder()
                 .WithButton("💠 Décor Settings", customId: "decor-settings", ButtonStyle.Secondary);
 
-            await Utility.CleanMessage(menuSession, embed, component);
+            await Utility.CleanMessage(menuSession, embed, component, true);
             Utility.NewTimer(menuSession);
         }
 
@@ -487,16 +465,23 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             menuSession.CurrentMenu = "Decor_Sort";
 
-            var component = new ComponentBuilder()
-                .WithButton("↩️ Back", customId: "return", ButtonStyle.Secondary)
-                .WithButton("1", customId: "1", ButtonStyle.Secondary)
-                .WithButton("2", customId: "2", ButtonStyle.Secondary)
-                .WithButton("3", customId: "3", ButtonStyle.Secondary)
-                .WithButton("4", customId: "4", ButtonStyle.Secondary)
-                .WithButton("5", customId: "5", ButtonStyle.Secondary)
-                .WithButton("6", customId: "6", ButtonStyle.Secondary);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select an option")
+                    .WithCustomId("shop-sort-select")
+                    .WithMinValues(1)
+                    .WithMaxValues(1)
+                    .AddOption("By Title (A - Z)", "1", null, new Emoji("1️⃣"))
+                    .AddOption("By Title (Z - A)", "2", null, new Emoji("2️⃣"))
+                    .AddOption("By Cost (Low - High)", "3", null, new Emoji("3️⃣"))
+                    .AddOption("By Cost (High - Low)", "4", null, new Emoji("4️⃣"))
+                    .AddOption("By Release Order (Old - New)", "5", null, new Emoji("5️⃣"))
+                    .AddOption("By Release Order (New - Old)", "6", null, new Emoji("6️⃣"));
 
-            await Utility.CleanMessage(menuSession, embed, component);
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary);
+
+            await Utility.CleanMessage(menuSession, embed, component, true);
             Utility.NewTimer(menuSession);
         }
 

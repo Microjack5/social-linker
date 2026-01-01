@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus.Settings.Main.Profile;
+using SocialLinker.Core.Menus.Shop.Main;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,30 +34,6 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                     _ = Status_Decor_Menu.Status_Decor_Main(menuSession);
                     break;
 
-                case "1":
-                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase);
-                    break;
-
-                case "2":
-                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 1);
-                    break;
-
-                case "3":
-                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 2);
-                    break;
-
-                case "4":
-                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 3);
-                    break;
-
-                case "5":
-                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 4);
-                    break;
-
-                case "6":
-                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 5);
-                    break;
-
                 case "sort":
                     _ = Status_Decor_Menu.Decor_Sort(menuSession);
                     break;
@@ -67,6 +44,36 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
 
                     menuSession.Account = account;
                     _ = Status_Decor_Menu.Set_Decor_Confirm(menuSession);
+                    break;
+            }
+
+            string selected = component.Data.Values.First();
+
+            switch (selected)
+            {
+                case "1":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase);
+                    break;
+                case "2":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 1];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 1);
+                    break;
+                case "3":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 2];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 2);
+                    break;
+                case "4":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 3];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 3);
+                    break;
+                case "5":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 4];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 4);
+                    break;
+                case "6":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 5];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 5);
                     break;
             }
 
@@ -85,6 +92,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                     break;
 
                 case "confirm":
+                    Console.WriteLine($"itemSession.SelectedItem: {itemSession.SelectedItem}");
                     account.Decor_Setting = itemSession.SelectedItem;
                     UserInfoClasses.UpdateAccount(account);
 
@@ -117,7 +125,12 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                 case "return":
                     _ = Status_Decor_Menu.Status_Decor_Main(menuSession);
                     break;
+            }
 
+            string selected = component.Data.Values.First();
+
+            switch (selected)
+            {
                 case "1":
                     account.Shop_Sort = "title_a_z";
                     UserInfoClasses.UpdateAccount(account);

@@ -4,7 +4,6 @@ using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.Menus.Help.Reactions;
 using SocialLinker.Core.Menus.InitialUsage.Reactions;
-using SocialLinker.Core.Menus.MakerMulti.Main;
 using SocialLinker.Core.Menus.MakerMulti.Reactions;
 using SocialLinker.Core.Menus.Settings.Reactions;
 using SocialLinker.Core.Menus.Settings.Reactions.Profile;
@@ -118,35 +117,6 @@ namespace SocialLinker.Core.Menus
 
                             case "SM_Tutorial_Cutin_Page_4":
                                 await SM_Tutorial_Cutin_Reactions.Nav_SM_Tutorial_Cutin_Page_4(reaction, menuSession);
-                                break;
-
-                            // Namespace: SocialLinker.Core.Menus.Shop
-                            case "Shop_Main_Menu":
-                                await ShopReactions.Nav_ShopMainMenu(reaction, menuSession);
-                                break;
-
-                            case "Shop_Decor_Preview":
-                                await ShopReactions.Nav_ShopDecorPreview(reaction, menuSession);
-                                break;
-
-                            case "Shop_Decor_Purchased":
-                                await ShopReactions.Nav_ShopDecorPurchased(reaction, menuSession);
-                                break;
-
-                            case "Shop_Decor_Purchase_Set":
-                                await ShopReactions.Nav_ShopDecorPurchaseSet(reaction, menuSession);
-                                break;
-
-                            case "Shop_Decor_Purchase_Not_Set":
-                                await ShopReactions.Nav_ShopDecorPurchaseNotSet(reaction, menuSession);
-                                break;
-
-                            case "Shop_Sort":
-                                await ShopReactions.Nav_ShopSort(reaction, menuSession);
-                                break;
-
-                            case "Shop_Sort_Confirm":
-                                await ShopReactions.Nav_ShopSortConfirm(reaction, menuSession);
                                 break;
 
                             // Namespace: SocialLinker.Core.Menus.Settings
@@ -634,9 +604,26 @@ namespace SocialLinker.Core.Menus
                             await SM_Tutorial_Spriteless_Reactions.Nav_SM_Tutorial_Spriteless_Main(component, menuSession);
                             break;
 
+                        // Namespace: SocialLinker.Core.Menus.Shop
+                        case "Shop_Main_Menu":
+                            await ShopReactions.Nav_ShopMainMenu(component, menuSession);
+                            break;
+
+                        case "Shop_Sort":
+                            await ShopReactions.Nav_ShopSort(component, menuSession);
+                            break;
+
                         // Namespace: SocialLinker.Core.Menus.Settings.Main.Profile 
                         case "Profile_Settings_Menu":
                             await Profile_Settings_Reactions.Nav_Profile_Settings_Main(component, menuSession);
+                            break;
+
+                        case "Status_Decor_Main":
+                            await Status_Decor_Reactions.Nav_Status_Decor_Main(component, menuSession);
+                            break;
+
+                        case "Decor_Sort":
+                            await Status_Decor_Reactions.Nav_Decor_Sort(component, menuSession);
                             break;
 
                         // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker
@@ -1224,6 +1211,35 @@ namespace SocialLinker.Core.Menus
 
                         case "Credits_Page_2":
                             await Credits_Reactions.Nav_Credits_Page_2(component, menuSession);
+                            break;
+
+                        // Namespace: SocialLinker.Core.Menus.Shop
+                        case "Shop_Main_Menu":
+                            await ShopReactions.Nav_ShopMainMenu(component, menuSession);
+                            break;
+
+                        case "Shop_Decor_Preview":
+                            await ShopReactions.Nav_ShopDecorPreview(component, menuSession);
+                            break;
+
+                        case "Shop_Decor_Purchased":
+                            await ShopReactions.Nav_ShopDecorPurchased(component, menuSession);
+                            break;
+
+                        case "Shop_Decor_Purchase_Set":
+                            await ShopReactions.Nav_ShopDecorPurchaseSet(component, menuSession);
+                            break;
+
+                        case "Shop_Decor_Purchase_Not_Set":
+                            await ShopReactions.Nav_ShopDecorPurchaseNotSet(component, menuSession);
+                            break;
+
+                        case "Shop_Sort":
+                            await ShopReactions.Nav_ShopSort(component, menuSession);
+                            break;
+
+                        case "Shop_Sort_Confirm":
+                            await ShopReactions.Nav_ShopSortConfirm(component, menuSession);
                             break;
 
                         // Settings
