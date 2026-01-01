@@ -35,7 +35,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                 case "star1":
                 case "star2":
                 case "star3":
-                    _ = Star_Level_Menu.Star_Level_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = Star_Level_Menu.Star_Level_Main(menuSession);
                     break;
                 case "return":
                     _ = Settings_Menu.Settings_Main_Menu(menuSession);

@@ -246,8 +246,6 @@ namespace SocialLinker.Core.Menus
                             //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Localized_Names_Confirm(reaction, menuSession);
                             //    break;
 
-                            
-
                             case "Calendar_Cycles_Main":
                                 await Calendar_Cycles_Reactions.Nav_Calendar_Cycles_Main(reaction, menuSession);
                                 break;
