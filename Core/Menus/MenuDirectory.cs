@@ -124,18 +124,6 @@ namespace SocialLinker.Core.Menus
                             //    await Settings_Reactions.Nav_Settings_Main_Menu(reaction, menuSession);
                             //    break;
 
-                            case "Time_Weather_Main":
-                                await Time_Weather_Reactions.Nav_Time_Weather_Main(reaction, menuSession);
-                                break;
-
-                            case "Time_Weather_Error":
-                                await Time_Weather_Reactions.Nav_Time_Weather_Error(reaction, menuSession);
-                                break;
-
-                            case "Time_Weather_Confirm":
-                                await Time_Weather_Reactions.Nav_Time_Weather_Confirm(reaction, menuSession);
-                                break;
-
                             // Namespace: SocialLinker.Core.Menus.Settings.Main.Profile 
                             case "Star_Level_Main":
                                 await Star_Level_Reactions.Nav_Star_Level_Main(reaction, menuSession);
@@ -526,10 +514,6 @@ namespace SocialLinker.Core.Menus
                     switch (menuSession.CurrentMenu)
                     {
                         // Namespace: SocialLinker.Core.Menus.Settings.Reactions.General
-                        case "Time_Weather_Main":
-                            await Time_Weather_Reactions.Nav_Time_Weather_Main_Received(message, menuSession);
-                            break;
-
                         case "Display_Names_Character_Select_Main":
                             await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Main_Received(message, menuSession);
                             break;
@@ -1275,6 +1259,18 @@ namespace SocialLinker.Core.Menus
                             await Status_Decor_Reactions.Nav_Decor_Sort_Confirm(component, menuSession);
                             break;
 
+                        case "Time_Weather_Main":
+                            await Time_Weather_Reactions.Nav_Time_Weather_Main(component, menuSession);
+                            break;
+
+                        case "Time_Weather_Error":
+                            await Time_Weather_Reactions.Nav_Time_Weather_Error(component, menuSession);
+                            break;
+
+                        case "Time_Weather_Confirm":
+                            await Time_Weather_Reactions.Nav_Time_Weather_Confirm(component, menuSession);
+                            break;
+
                         case "Level_Up_Notifications_Main":
                             await Level_Up_Notifications_Reactions.Nav_Level_Up_Notifications_Main(component, menuSession);
                             break;
@@ -1881,10 +1877,16 @@ namespace SocialLinker.Core.Menus
 
                     switch (modal.Data.CustomId)
                     {
+                        // Settings
+                        case "time-weather-modal-submit":
+                            await Time_Weather_Reactions.Nav_Time_Weather_Modal(modal, menuSession);
+                            break;
+
                         case "color-code-modal-submit":
                             await Backgrounds_Reactions.Nav_Backgrounds_Default_Color_Modal(modal, menuSession);
                             break;
 
+                        // MakerMulti
                         case "makermulti-1char-details-modal-submit":
                             await MakerMulti_Char_Details_Pt1_Reactions.Nav_MakerMulti_1Char_Details_Modal(modal, menuSession);
                             break;

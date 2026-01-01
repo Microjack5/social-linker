@@ -21,7 +21,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
                     _ = Status_Decor_Menu.Status_Decor_Start(menuSession);
                     break;
                 case "3":
-                    _ = Time_Weather_Menu.Time_Weather_Main(menuSession.User, menuSession.MenuMessage);
+                    _ = Time_Weather_Menu.Time_Weather_Main(menuSession);
                     break;
                 case "4":
                     _ = Level_Up_Notifications_Menu.Level_Up_Notifications_Main(menuSession);
