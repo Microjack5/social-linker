@@ -125,17 +125,7 @@ namespace SocialLinker.Core.Menus
                             //    break;
 
                             // Namespace: SocialLinker.Core.Menus.Settings.Main.Profile 
-                            case "Star_Level_Main":
-                                await Star_Level_Reactions.Nav_Star_Level_Main(reaction, menuSession);
-                                break;
-
-                            case "Star_Level_Check":
-                                await Star_Level_Reactions.Nav_Star_Level_Check(reaction, menuSession);
-                                break;
-
-                            case "Star_Level_Confirm":
-                                await Star_Level_Reactions.Nav_Star_Level_Confirm(reaction, menuSession);
-                                break;
+                            
 
                             // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker
                             //case "SM_Settings_Menu":
@@ -1317,6 +1307,18 @@ namespace SocialLinker.Core.Menus
 
                         case "Content_Filter_Confirm":
                             await Content_Filter_Reactions.Nav_Content_Filter_Confirm(component, menuSession);
+                            break;
+
+                        case "Star_Level_Main":
+                            await Star_Level_Reactions.Nav_Star_Level_Main(component, menuSession);
+                            break;
+
+                        case "Star_Level_Check":
+                            await Star_Level_Reactions.Nav_Star_Level_Check(component, menuSession);
+                            break;
+
+                        case "Star_Level_Confirm":
+                            await Star_Level_Reactions.Nav_Star_Level_Confirm(component, menuSession);
                             break;
 
                         // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker
