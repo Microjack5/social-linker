@@ -93,15 +93,6 @@ namespace SocialLinker.Core.Menus
                         // Ensure that the current menu matches a certain state before proceeding.
                         switch (menuSession.CurrentMenu)
                         {
-                            // Namespace: SocialLinker.Core.Menus.InitialUsage
-                            case "Set_First_Theme_Main":
-                                await SetFirstTheme_Reactions.Nav_SetFirstThemeMain(reaction, menuSession);
-                                break;
-
-                            case "Set_First_Theme_Confirm":
-                                await SetFirstTheme_Reactions.Nav_SetFirstThemeConfirm(reaction, menuSession);
-                                break;
-
                             // Namespace: SocialLinker.Core.Menus.Help
                             case "SM_Tutorial_Cutin_Page_1":
                                 await SM_Tutorial_Cutin_Reactions.Nav_SM_Tutorial_Cutin_Page_1(reaction, menuSession);
@@ -118,133 +109,6 @@ namespace SocialLinker.Core.Menus
                             case "SM_Tutorial_Cutin_Page_4":
                                 await SM_Tutorial_Cutin_Reactions.Nav_SM_Tutorial_Cutin_Page_4(reaction, menuSession);
                                 break;
-
-                            // Namespace: SocialLinker.Core.Menus.Settings
-                            //case "Settings_Main_Menu":
-                            //    await Settings_Reactions.Nav_Settings_Main_Menu(reaction, menuSession);
-                            //    break;
-
-                            // Namespace: SocialLinker.Core.Menus.Settings.Main.Profile 
-                            
-
-                            // Namespace: SocialLinker.Core.Menus.Settings.Main.SceneMaker
-                            //case "SM_Settings_Menu":
-                            //    await SM_Settings_Reactions.Nav_SM_Settings_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_Main":
-                            //    await Version_Control_Reactions.Nav_Version_Control_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P1":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P1(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P2IS":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P2IS(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P2EP":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P2EP(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P3":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P3(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P4":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P4(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P5":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P5(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P1_Confirm":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P1_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P2IS_Confirm":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P2IS_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P2EP_Confirm":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P2EP_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P3_Confirm":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P3_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P4_Confirm":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P4_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Version_Control_P5_Confirm":
-                            //    await Version_Control_Reactions.Nav_Version_Control_P5_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_Main":
-                            //    await Template_Layout_Reactions.Nav_Template_Layout_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_VC_P1_Main":
-                            //    await Template_Layout_VC_Reactions.Nav_Template_Layout_VC_P1_Main(reaction, menuSession);
-                            //    break;
-
-                            
-
-                            //case "Template_Layout_P1_PS1_Main":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Main(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Wallpaper":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Wallpaper(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Moon_Phases":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Moon_Phases(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Placement":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Placement(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_BG_Darken":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_BG_Darken(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Consistent_Names":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Consistent_Names(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Localized_Names":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Localized_Names(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Wallpaper_Confirm":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Wallpaper_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Moon_Phases_Confirm":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Moon_Phases_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Placement_Confirm":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Placement_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_BG_Darken_Confirm":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_BG_Darken_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Consistent_Names_Confirm":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Consistent_Names_Confirm(reaction, menuSession);
-                            //    break;
-
-                            //case "Template_Layout_P1_PS1_Localized_Names_Confirm":
-                            //    await Template_Layout_P1_PS1_Reactions.Nav_Template_Layout_P1_PS1_Localized_Names_Confirm(reaction, menuSession);
-                            //    break;
 
                             case "Calendar_Cycles_Main":
                                 await Calendar_Cycles_Reactions.Nav_Calendar_Cycles_Main(reaction, menuSession);
@@ -999,12 +863,21 @@ namespace SocialLinker.Core.Menus
                 {
                     switch (menuSession.CurrentMenu)
                     {
+                        // Namespace: SocialLinker.Core.Menus.InitialUsage
                         case "First_Use_Intro_Main":
                             await First_Use_Content_Filter_Reactions.Nav_First_Use_Intro_Main(component, menuSession);
                             break;
 
                         case "First_Use_Intro_Confirm":
                             await First_Use_Content_Filter_Reactions.Nav_First_Use_Intro_Confirm(component, menuSession);
+                            break;
+
+                        case "Set_First_Theme_Main":
+                            await SetFirstTheme_Reactions.Nav_SetFirstThemeMain(component, menuSession);
+                            break;
+
+                        case "Set_First_Theme_Confirm":
+                            await SetFirstTheme_Reactions.Nav_SetFirstThemeConfirm(component, menuSession);
                             break;
 
                         // Namespace: SocialLinker.Core.Menus.Help
