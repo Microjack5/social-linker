@@ -26,7 +26,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
                     _ = Template_Layout_Menu.Template_Layout_Main(menuSession);
                     break;
                 case "3":
-                    _ = Display_Names_Menu.Display_Names_Start(menuSession.User, menuSession.MenuMessage);
+                    _ = Display_Names_Menu.Display_Names_Start(menuSession);
                     break;
                 case "4":
                     _ = Sheet_Order_Menu.Sheet_Order_Main(menuSession);

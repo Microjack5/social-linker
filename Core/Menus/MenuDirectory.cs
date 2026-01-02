@@ -253,90 +253,6 @@ namespace SocialLinker.Core.Menus
                             //case "Calendar_Cycles_P5S_Main":
                             //    await Calendar_Cycles_Reactions.Nav_Calendar_Cycles_Main(reaction, menuSession);
                             //    break;
-
-                            case "Display_Names_Main":
-                                await Display_Names_Reactions.Nav_Display_Names_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Title_Select":
-                                await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Title_Select_VC_P1_Main":
-                                await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P1_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Title_Select_VC_P2IS_Main":
-                                await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P2IS_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Title_Select_VC_P2EP_Main":
-                                await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P2EP_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Title_Select_VC_P3_Main":
-                                await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P3_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Title_Select_VC_P4_Main":
-                                await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P4_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Title_Select_VC_P5_Main":
-                                await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P5_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Character_Select_Main":
-                                await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Character_Select_Error":
-                                await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Error(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Sprite_Select_Main":
-                                await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Sprite_Select_Error_1":
-                                await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Error_1(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Sprite_Select_Error_2":
-                                await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Error_2(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Sprite_Select_Error_3":
-                                await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Error_3(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Custom_Input_Main":
-                                await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Custom_Input_Error":
-                                await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Error(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Confirm_Main":
-                                await Display_Name_Confirm_Reactions.Nav_Display_Names_Confirm_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Sort":
-                                await Display_Names_Sort_Reactions.Nav_Display_Names_Sort(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Sort_Confirm":
-                                await Display_Names_Sort_Reactions.Nav_Display_Names_Sort_Confirm(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Edit_Main":
-                                await Display_Names_Edit_Reactions.Nav_Display_Names_Edit_Main(reaction, menuSession);
-                                break;
-
-                            case "Display_Names_Delete_Confirmation":
-                                await Display_Names_Edit_Reactions.Nav_Display_Names_Delete_Confirmation(reaction, menuSession);
-                                break;
                         }
                     }
                     // If the reactor is neither the bot nor the menu user, remove the reaction.
@@ -501,18 +417,9 @@ namespace SocialLinker.Core.Menus
                     // Ensure that the current menu matches a certain state before proceeding.
                     switch (menuSession.CurrentMenu)
                     {
-                        // Namespace: SocialLinker.Core.Menus.Settings.Reactions.General
-                        case "Display_Names_Character_Select_Main":
-                            await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Main_Received(message, menuSession);
-                            break;
-
-                        case "Display_Names_Sprite_Select_Main":
-                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Main_Received(message, menuSession);
-                            break;
-
-                        case "Display_Names_Custom_Input_Main":
-                            await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Main_Received(message, menuSession);
-                            break;
+                        // Nothing here for now
+                        case "":
+                        break;
                     }
                 }
             }
@@ -853,6 +760,42 @@ namespace SocialLinker.Core.Menus
 
                         case "Template_Layout_BBTAG_Sprite_Placement":
                             await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Sprite_Placement(component, menuSession);
+                            break;
+
+                        case "Display_Names_Main":
+                            await Display_Names_Reactions.Nav_Display_Names_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select(component, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P1_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P1_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P2IS_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P2IS_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P2EP_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P2EP_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P3_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P3_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P4_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P4_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Title_Select_VC_P5_Main":
+                            await Display_Names_Title_Select_Reactions.Nav_Display_Names_Title_Select_VC_P5_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Sort":
+                            await Display_Names_Sort_Reactions.Nav_Display_Names_Sort(component, menuSession);
                             break;
 
                         case "Backgrounds_Main":
@@ -1688,6 +1631,58 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_BBTAG_Reactions.Nav_Template_Layout_BBTAG_Background_Blur_Confirm(component, menuSession);
                             break;
 
+                        case "Display_Names_Main":
+                            await Display_Names_Reactions.Nav_Display_Names_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Confirm_Main":
+                            await Display_Name_Confirm_Reactions.Nav_Display_Names_Confirm_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Sort_Confirm":
+                            await Display_Names_Sort_Reactions.Nav_Display_Names_Sort_Confirm(component, menuSession);
+                            break;
+
+                        case "Display_Names_Edit_Main":
+                            await Display_Names_Edit_Reactions.Nav_Display_Names_Edit_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Delete_Confirmation":
+                            await Display_Names_Edit_Reactions.Nav_Display_Names_Delete_Confirmation(component, menuSession);
+                            break;
+
+                        case "Display_Names_Character_Select_Main":
+                            await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Character_Select_Error":
+                            await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Error(component, menuSession);
+                            break;
+
+                        case "Display_Names_Sprite_Select_Main":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Sprite_Select_Error_1":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Error_1(component, menuSession);
+                            break;
+
+                        case "Display_Names_Sprite_Select_Error_2":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Error_2(component, menuSession);
+                            break;
+
+                        case "Display_Names_Sprite_Select_Error_3":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Error_3(component, menuSession);
+                            break;
+
+                        case "Display_Names_Custom_Input_Main":
+                            await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Main(component, menuSession);
+                            break;
+
+                        case "Display_Names_Custom_Input_Error":
+                            await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Error(component, menuSession);
+                            break;
+
                         case "Sheet_Order_Main":
                             await Sheet_Order_Reactions.Nav_Sheet_Order_Main(component, menuSession);
                             break;
@@ -1880,6 +1875,18 @@ namespace SocialLinker.Core.Menus
                         // Settings
                         case "time-weather-modal-submit":
                             await Time_Weather_Reactions.Nav_Time_Weather_Modal(modal, menuSession);
+                            break;
+
+                        case "display-names-character-select-modal-submit":
+                            await Display_Names_Character_Select_Reactions.Nav_Display_Names_Character_Select_Modal(modal, menuSession);
+                            break;
+
+                        case "display-names-sprite-select-modal-submit":
+                            await Display_Names_Sprite_Select_Reactions.Nav_Display_Names_Sprite_Select_Modal(modal, menuSession);
+                            break;
+
+                        case "display-names-custom-input-modal-submit":
+                            await Display_Names_Custom_Input_Reactions.Nav_Display_Names_Custom_Input_Modal(modal, menuSession);
                             break;
 
                         case "color-code-modal-submit":
