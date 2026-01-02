@@ -14,44 +14,52 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
 {
     internal class Display_Names_Custom_Input_Reactions
     {
-        public static Task Nav_Display_Names_Custom_Input_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Display_Names_Custom_Input_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "display-names-custom-input-modal-open":
+                    _ = Display_Names_Custom_Input_Menu.Display_Names_Custom_Input_Modal(component);
+                    break;
 
-                // Go to a new menu.
-                _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "return":
+                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Display_Names_Custom_Input_Error(SocketReaction reaction, MenuIdStructure menuSession)
+        public static async Task Nav_Display_Names_Custom_Input_Modal(SocketModal modal, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+            var account = menuSession.Account;
 
-                // Go to a new menu.
-                _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_1(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+            var display_name = modal.Data.Components
+            .FirstOrDefault(x => x.CustomId == "name")?.Value;
+
+            await Nav_Display_Names_Custom_Input_Main_Received(display_name, menuSession);
+            return;
+        }
+
+        public static Task Nav_Display_Names_Custom_Input_Error(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_1(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
         // Methods that activate on the MessageReceived event.
-        public static Task Nav_Display_Names_Custom_Input_Main_Received(SocketMessage message, MenuIdStructure menuSession)
+        public static Task Nav_Display_Names_Custom_Input_Main_Received(string display_name, MenuIdStructure menuSession)
         {
             var naming_session = Global.DisplayNameTempList.SingleOrDefault(x => x.User_ID == $"{menuSession.User.Id}");
 
-            var account = UserInfoClasses.GetAccount(message.Author);
-            string input_string = message.Content;
-            input_string = Global.RemoveBotMention(input_string).Trim();
+            var account = menuSession.Account;
+            string input_string = display_name;
 
             if (input_string.Length > 32)
             {
@@ -61,7 +69,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                 naming_session.Display_Name = input_string;
 
                 // Go to a new menu.
-                _ = Display_Names_Custom_Input_Menu.Display_Names_Custom_Input_Error_1(menuSession.User, menuSession.MenuMessage);
+                _ = Display_Names_Custom_Input_Menu.Display_Names_Custom_Input_Error_1(menuSession);
                 return Task.CompletedTask;
             }
 

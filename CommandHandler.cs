@@ -347,7 +347,7 @@ namespace SocialLinker
                     break;
 
                 case "testp3r":
-                    await Commands.DevCommands.P3RE_Bustup_Test(command);
+                    Commands.DevCommands.P3RE_Bustup_Test_2(command);
                     break;
 
                 case "sortp3r":
@@ -364,7 +364,7 @@ namespace SocialLinker
                     break;
 
                 case "cropp3r":
-                    await Commands.DevCommands.Crop_Gallery_extend(command);
+                    await Commands.DevCommands.Single_Gallery_Cropper_extend(command);
                     break;
 
                 case "renamep3r":

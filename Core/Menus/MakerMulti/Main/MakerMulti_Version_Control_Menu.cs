@@ -1,9 +1,7 @@
 ﻿using Discord;
-using Discord.WebSocket;
 using SocialLinker.Config;
 using SocialLinker.Core.CloudStorageTables;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;

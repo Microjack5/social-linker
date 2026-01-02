@@ -1,22 +1,18 @@
-﻿using System.Threading.Tasks;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using SocialLinker.Core.Menus.Help.Main;
-
+using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Help.Reactions
 {
     class Legal_Notices_Reactions
     {
-        public static Task Nav_Legal_Notices_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Legal_Notices_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Help_Menu.Help_Main_Menu(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "return":
+                    _ = Help_Menu.Help_Main_Menu(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Timers;
 using System.Threading.Tasks;
 using Discord;
@@ -74,12 +73,6 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                     "\n" +
                     ":warning: No profile themes can be chosen due to your content filter. " +
                     $"You can edit your content filter at any time from the **`settings`** menu by choosing [Profile Settings] > [Content Filter].";
-
-                var footer = new EmbedFooterBuilder
-                {
-                    Text = $"❌ Close Menu"
-                };
-                embed.WithFooter(footer);
             }
             // Else, if at least one title is completely filtered out but some are still remaining, add on to the end of the default description text.
             else if (p3_filter_check == true || p4_filter_check == true || p5_filter_check == true)
@@ -108,6 +101,7 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             var menuSession = new MenuIdStructure()
             {
                 User = user,
+                Account = account,
                 MenuMessage = message,
                 CurrentMenu = "Set_First_Theme_Main",
                 MenuTimer = new Timer()
@@ -122,44 +116,38 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
             // Add the menu entry to the global list.
             Global.MenuIdList.Add(menuSession);
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
-
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder();
 
             // Depending on the user's content filter settings, add needed emote reactions to the menu.
             if (p3_filter_check == false)
             {
-                reaction_list.Add(Emote.Parse("<:P3:751133114918633483>"));
+                component.WithButton("Persona 3", customId: "p3", ButtonStyle.Secondary, Emote.Parse(Global.GetGameEmote("P3")));
             }
 
             if (p4_filter_check == false)
             {
-                reaction_list.Add(Emote.Parse("<:P4:751133120530612274>"));
+                component.WithButton("Persona 4", customId: "p4", ButtonStyle.Secondary, Emote.Parse(Global.GetGameEmote("P4")));
             }
 
             if (p5_filter_check == false)
             {
-                reaction_list.Add(Emote.Parse("<:P5:751133123861020742>"));
+                component.WithButton("Persona 5", customId: "p5", ButtonStyle.Secondary, Emote.Parse(Global.GetGameEmote("P5")));
             }
 
             if (p3_filter_check == true && p4_filter_check == true && p5_filter_check == true)
             {
-                reaction_list.Add(new Emoji("❌"));
+                component.WithButton("❌ Close", customId: "close", ButtonStyle.Secondary);
             }
 
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component, true);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task SetFirstThemeConfirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task SetFirstThemeConfirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             // Create a new embed that will be displayed in the message.
             var embed = new EmbedBuilder();
@@ -195,111 +183,13 @@ namespace SocialLinker.Core.Menus.InitialUsage.Main
                 $"Your profile theme has been set to `{game_title}`.\n\n" +
                 $"You can change your profile theme at any time from the **`settings`** menu by choosing [Profile Theme Settings].");
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "❌ Close Menu"
-            };
-
-            // Add the footer to the embed.
-            embed.WithFooter(footer);
-
-            // Attempt editing the message if it hasn't been deleted by the user yet. If it has, catch the exception, send an error message, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                await message.DeleteAsync();
-                await ErrorHandling.PermissionCheck(message);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Set_First_Theme_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("❌ Close", customId: "close", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
-        }
-
-        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure menuSession)
-        {
-            // Assign the menu session's message to another variable.
-            var message = menuSession.MenuMessage;
-
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = MenuTimedOut(menuSession.User).Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Remove the menu entry from the global list.
-            Global.MenuIdList.Remove(menuSession);
-        }
-
-        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
-        {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Inactive Menu",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color for the embeded message.
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
-
-            embed.WithDescription($"You can set your profile theme at any time from the **`settings`** menu by choosing [Profile Theme Settings].");
-            return embed;
+            await Utility.CleanMessage(menuSession, embed, component, true);
+            Utility.NewTimer(menuSession);
         }
     }
 }

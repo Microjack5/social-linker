@@ -1,29 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Timers;
-using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
-using SocialLinker.Config;
-using SocialLinker.Core.CloudStorageTables;
-using Discord.Rest;
+﻿using Discord;
 using Discord.Commands;
-using Fergun.Interactive;
-using System.Net;
+using Discord.WebSocket;
 using Newtonsoft.Json;
+using SocialLinker.Config;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Settings.Main.Profile
 {
     class Time_Weather_Menu : ModuleBase<SocketCommandContext>
     {
-        public static async Task Time_Weather_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Time_Weather_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -34,13 +26,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Profile Settings Menu"
-            };
-
-            embed.WithFooter(footer);
-
             // Determine the color and thumbnail for the embeded message
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
@@ -49,7 +34,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             var dataObject = Get_Weather_API_Info(account.City);
 
             embed.WithDescription("" +
-                "Set a city to automatically configure the date, times of day, and weather readings for your user profile.\n" +
+                "Set a city to automatically configure the date, times of day, and weather readings for your user profile and scene maker images.\n" +
                 "\n" +
                 $"⚙️ **Current Setting:**\n" +
                 $"\n" +
@@ -57,64 +42,45 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 $"Region: **`{dataObject.location.region.ToString()}`**\n" +
                 $"Country: **`{dataObject.location.country.ToString()}`**\n" +
                 $"\n" +
-                $"Type in a city or postal code you’d like to use with Social Linker, or react with ↩️ to cancel.\n" +
+                $"Type in a city or postal code you’d like to use with Social Linker.\n" +
                 $"\n" +
-                $":warning: Changing this setting in private is recommended if using local locations.\n" +
-                $"\n" +
-                $"{Global.MentionNotice}");
+                $":warning: Changing this setting in private is recommended if using local locations.");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Time_Weather_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("Enter Location", customId: "time-weather-modal-open", ButtonStyle.Primary)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Time_Weather_Error(SocketGuildUser user, RestUserMessage message)
+        public static async Task Time_Weather_Modal(SocketMessageComponent component)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
+            if (component.Data.CustomId == "time-weather-modal-open")
+            {
+                try
+                {
+                    var modal = new ModalBuilder()
+                    .WithTitle("Location Entry")
+                    .WithCustomId("time-weather-modal-submit")
+                    .AddTextInput("City or Postal Code", "location");
 
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+                    await component.RespondWithModalAsync(modal.Build());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        public static async Task Time_Weather_Error(MenuIdStructure menuSession)
+        {
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -124,13 +90,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             };
 
             embed.WithAuthor(author);
-
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Retry"
-            };
-
-            embed.WithFooter(footer);
 
             // Determine the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
@@ -166,34 +125,19 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Time_Weather_Error";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Time_Weather_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Time_Weather_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -203,13 +147,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             };
 
             embed.WithAuthor(author);
-
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 General Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
 
             // Determine the color and thumbnail for the embeded message
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
@@ -232,103 +169,13 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 $"Time: **`{local_time.ToString("HH:mm")}`**\n" +
                 $"Weather: **`{dataObject.current.condition.text.ToString()}`**\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Time_Weather_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("💠 Profile Settings", customId: "profile-settings", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
-        }
-
-        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure menuSession)
-        {
-            // Assign the menu session's message to another variable.
-            var message = menuSession.MenuMessage;
-
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = MenuTimedOut(menuSession.User).Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Remove the menu entry from the global list.
-            Global.MenuIdList.Remove(menuSession);
-        }
-
-        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
-        {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Inactive Menu",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
-
-            embed.WithDescription($"You can set your time zone & weather at any time from the **`settings`** menu by choosing [Profile Settings] > [Time Zone & Weather].");
-            return embed;
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
         // Methods that suppliment the functionality of the menus.

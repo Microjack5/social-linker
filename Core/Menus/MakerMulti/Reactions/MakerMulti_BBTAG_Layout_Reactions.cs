@@ -61,8 +61,6 @@ namespace SocialLinker.Core.Menus.MakerMulti.Reactions
                 Console.WriteLine(e.ToString());
             }
 
-            
-
             return Task.CompletedTask;
         }
     }

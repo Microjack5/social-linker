@@ -1,431 +1,202 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus.Settings.Main.Profile;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions.Profile
 {
     class Status_Decor_Reactions
     {
-        public static Task Nav_Status_Decor_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Status_Decor_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
             // Search for an item list that corresponds to the user's ID. If a menu entry was found, this should also exist alongside it.
-            var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == reaction.UserId);
+            var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+            var account = menuSession.Account;
 
-            // Perform various actions based on what type of reaction was given to the message.
-            if (reaction.Emote.Name == "↩️")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Status_Decor_Menu.Status_Decor_Exit(menuSession);
+                    break;
 
-                // Go to a new menu
-                _ = Status_Decor_Menu.Status_Decor_Exit(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Previous Page
-            else if (reaction.Emote.Name == "◀️")
-            {
-                try
-                {
-                    // Decrease the item index by the maximum number of items that should be displayed to the user at once.
+                case "previous-page":
                     itemSession.ItemIndexBase -= itemSession.MaxItemsDisplayed;
-
-                    // Decrease the page counter by one.
                     itemSession.CurrentPage--;
+                    _ = Status_Decor_Menu.Status_Decor_Main(menuSession);
+                    break;
 
-                    // Stop the timeout timer associated with the menu.
-                    menuSession.MenuTimer.Stop();
-
-                    // Go to a new menu.
-                    _ = Status_Decor_Menu.Status_Decor_Main(menuSession.User, menuSession.MenuMessage);
-                    return Task.CompletedTask;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-            }
-
-            // Next Page
-            else if (reaction.Emote.Name == "▶️")
-            {
-                try
-                {
-                    // Increase the item index by the maximum number of items that should be displayed to the user at once.
+                case "next-page":
                     itemSession.ItemIndexBase += itemSession.MaxItemsDisplayed;
-
-                    // Increase the page counter by one.
                     itemSession.CurrentPage++;
+                    _ = Status_Decor_Menu.Status_Decor_Main(menuSession);
+                    break;
 
-                    // Stop the timeout timer associated with the menu.
-                    menuSession.MenuTimer.Stop();
+                case "sort":
+                    _ = Status_Decor_Menu.Decor_Sort(menuSession);
+                    break;
 
-                    // Go to a new menu.
-                    _ = Status_Decor_Menu.Status_Decor_Main(menuSession.User, menuSession.MenuMessage);
-                    return Task.CompletedTask;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
+                case "default":
+                    account.Decor_Setting = "";
+                    UserInfoClasses.UpdateAccount(account);
 
+                    menuSession.Account = account;
+                    _ = Status_Decor_Menu.Set_Decor_Confirm(menuSession);
+                    break;
             }
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
+            string selected = component.Data.Values.First();
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Status_Decor_Menu.Set_Decor_Preview(menuSession.User, menuSession.MenuMessage, itemSession.ItemIndexBase);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Status_Decor_Menu.Set_Decor_Preview(menuSession.User, menuSession.MenuMessage, itemSession.ItemIndexBase + 1);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Status_Decor_Menu.Set_Decor_Preview(menuSession.User, menuSession.MenuMessage, itemSession.ItemIndexBase + 2);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Status_Decor_Menu.Set_Decor_Preview(menuSession.User, menuSession.MenuMessage, itemSession.ItemIndexBase + 3);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Five
-            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Status_Decor_Menu.Set_Decor_Preview(menuSession.User, menuSession.MenuMessage, itemSession.ItemIndexBase + 4);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Six
-            else if (reaction.Emote.Name == "\u0036\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Status_Decor_Menu.Set_Decor_Preview(menuSession.User, menuSession.MenuMessage, itemSession.ItemIndexBase + 5);
-                return Task.CompletedTask;
-            }
-
-            // Sort Shop
-            else if (reaction.Emote.Name == "⚙️")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Status_Decor_Menu.Decor_Sort(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // If the user reacts with the box emote, we want to remove the current décor.
-            else if (reaction.Emote.Name == "🔳")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Change the user's Decor_Setting setting to an empty string.
-                account.Decor_Setting = "";
-
-                // Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu
-                _ = Status_Decor_Menu.Set_Decor_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "1":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase);
+                    break;
+                case "2":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 1];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 1);
+                    break;
+                case "3":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 2];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 2);
+                    break;
+                case "4":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 3];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 3);
+                    break;
+                case "5":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 4];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 4);
+                    break;
+                case "6":
+                    itemSession.SelectedItem = itemSession.ItemList[itemSession.ItemIndexBase + 5];
+                    _ = Status_Decor_Menu.Set_Decor_Preview(menuSession, itemSession.ItemIndexBase + 5);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Set_Decor_Preview(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Set_Decor_Preview(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Status_Decor_Menu.Status_Decor_Main(menuSession);
+                    break;
 
-                // Go to a new menu
-                _ = Status_Decor_Menu.Status_Decor_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "confirm":
+                    Console.WriteLine($"itemSession.SelectedItem: {itemSession.SelectedItem}");
+                    account.Decor_Setting = itemSession.SelectedItem;
+                    UserInfoClasses.UpdateAccount(account);
 
-            // If the user reacts with the checkmark emote, it's time to set the décor!
-            else if (reaction.Emote.Name == "✅")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Search for an item list that corresponds to the user's ID. If a menu entry was found, this should also exist alongside it.
-                var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == reaction.UserId);
-
-                // Change the user's Decor_Setting setting to the SelectedItem.
-                account.Decor_Setting = itemSession.SelectedItem;
-
-                // Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu
-                _ = Status_Decor_Menu.Set_Decor_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Status_Decor_Menu.Set_Decor_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Set_Decor_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Set_Decor_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu
-                _ = Status_Decor_Menu.Status_Decor_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "decor-settings":
+                    _ = Status_Decor_Menu.Status_Decor_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Decor_Sort(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Decor_Sort(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
-            {
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
+            var account = menuSession.Account;
 
-                // Go to a new menu
-                _ = Status_Decor_Menu.Status_Decor_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    _ = Status_Decor_Menu.Status_Decor_Main(menuSession);
+                    break;
             }
 
-            // Keycap one
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3") 
+            string selected = component.Data.Values.First();
+
+            switch (selected)
             {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                case "1":
+                    account.Shop_Sort = "title_a_z";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Change the user's Shop_Sort setting to the chosen value.
-                account.Shop_Sort = "title_a_z";
+                    menuSession.Account = account;
+                    _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession);
+                    break;
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
+                case "2":
+                    account.Shop_Sort = "title_z_a";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
+                    menuSession.Account = account;
+                    _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession);
+                    break;
 
-                // Go to a new menu
-                _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "3":
+                    account.Shop_Sort = "cost_low_high";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3") 
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession);
+                    break;
 
-                // Change the user's Shop_Sort setting to the chosen value.
-                account.Shop_Sort = "title_z_a";
+                case "4":
+                    account.Shop_Sort = "cost_high_low";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
+                    menuSession.Account = account;
+                    _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession);
+                    break;
 
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
+                case "5":
+                    account.Shop_Sort = "release_old_new";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Go to a new menu
-                _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                    menuSession.Account = account;
+                    _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession);
+                    break;
 
-            // Keycap three
-            else if (reaction.Emote.Name == "\u0033\ufe0f\u20e3") 
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                case "6":
+                    account.Shop_Sort = "release_new_old";
+                    UserInfoClasses.UpdateAccount(account);
 
-                // Change the user's Shop_Sort setting to the chosen value.
-                account.Shop_Sort = "cost_low_high";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu
-                _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap four
-            else if (reaction.Emote.Name == "\u0034\ufe0f\u20e3") 
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Change the user's Shop_Sort setting to the chosen value.
-                account.Shop_Sort = "cost_high_low";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu
-                _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap five
-            else if (reaction.Emote.Name == "\u0035\ufe0f\u20e3") 
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Change the user's Shop_Sort setting to the chosen value.
-                account.Shop_Sort = "release_old_new";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu
-                _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap six
-            else if (reaction.Emote.Name == "\u0036\ufe0f\u20e3") 
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Change the user's Shop_Sort setting to the chosen value.
-                account.Shop_Sort = "release_new_old";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu
-                _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Status_Decor_Menu.Decor_Sort_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Decor_Sort_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Decor_Sort_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
             // Search for an item list that corresponds to the user's ID. If a menu entry was found, this should also exist alongside it.
-            var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == reaction.UserId);
+            var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == menuSession.User.Id);
 
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // If the item session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.ItemIdList.Remove(itemSession);
-                }
+                case "back-to-decor-settings":
+                    if (menuSession != null)
+                    {
+                        Global.ItemIdList.Remove(itemSession);
+                    }
 
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Status_Decor_Menu.Status_Decor_Start(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                    _ = Status_Decor_Menu.Status_Decor_Start(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;

@@ -37,6 +37,7 @@ namespace SocialLinker.Core.CloudStorageTables
             var userInfoTable = tableClient.GetTableReference(accountsTable);
 
             //Update user fields with new data
+            alteredAccount.ETag = "*"; // Overwrite regardless of current ETag with wildcard
             userInfoTable.Execute(TableOperation.Merge(alteredAccount));
         }
 

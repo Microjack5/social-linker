@@ -1,25 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Timers;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
-using Discord.WebSocket;
-using SocialLinker.Config;
-using SocialLinker.Core.CloudStorageTables;
-using Discord.Rest;
 
 namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 {
     class Template_Layout_P2IS_PS1_Menu
     {
-        public static async Task Template_Layout_P2IS_PS1_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -30,19 +20,11 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Version Select"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
-                "**Select a setting to edit.**\n" +
+                "Select a setting to edit.\n" +
                 "\n" +
                 ":one: Wallpaper\n" +
                 ":two: Inverted Filter\n" +
@@ -50,63 +32,32 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 ":four: Sprite Flip\n" +
                 ":five: Localized Display Names");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select an option")
+                    .WithCustomId(menuSession.CurrentMenu)
+                    .WithMinValues(1)
+                    .WithMaxValues(1)
+                    .AddOption("Wallpaper", "1", null, new Emoji("1️⃣"))
+                    .AddOption("Inverted Filter", "2", null, new Emoji("2️⃣"))
+                    .AddOption("Sprite Placement", "3", null, new Emoji("3️⃣"))
+                    .AddOption("Sprite Flip", "4", null, new Emoji("4️⃣"))
+                    .AddOption("Localized Display Names", "5", null, new Emoji("5️⃣"))
+                    .AddOption("Return to Version Select", "return", null, new Emoji("↩️"));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu);
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0035\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Wallpaper(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Wallpaper(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -117,19 +68,11 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to P2IS Template Settings"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
-                "**Change the background of the message window. Pick the one that suits you.**\n" +
+                "Change the background of the message window. Pick the one that suits you.\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P2IS_PSX_TS_Wallpaper}`**\n" +
                 "\n" +
@@ -146,68 +89,37 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithImageUrl("https://i.imgur.com/HhSv6zr.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Wallpaper";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select an option")
+                    .WithCustomId(menuSession.CurrentMenu)
+                    .WithMinValues(1)
+                    .WithMaxValues(1)
+                    .AddOption("Blue Tone", "1", null, new Emoji("1️⃣"))
+                    .AddOption("Sepia Tone", "2", null, new Emoji("2️⃣"))
+                    .AddOption("Purple Tone", "3", null, new Emoji("3️⃣"))
+                    .AddOption("Jack Frost", "4", null, new Emoji("4️⃣"))
+                    .AddOption("Star", "5", null, new Emoji("5️⃣"))
+                    .AddOption("Punched Metal", "6", null, new Emoji("6️⃣"))
+                    .AddOption("Seventh", "7", null, new Emoji("7️⃣"))
+                    .AddOption("Cuss High", "8", null, new Emoji("8️⃣"))
+                    .AddOption("Butterfly", "9", null, new Emoji("9️⃣"))
+                    .AddOption("Grid", "10", null, new Emoji("🔟"))
+                    .AddOption("Return to P2IS Template Settings", "return", null, new Emoji("↩️"));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu);
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0035\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0036\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0037\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0038\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0039\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("🔟"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Inverted_Filter(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Inverted_Filter(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -225,74 +137,32 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithFooter(footer);
 
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
-                "**Toggle inverted colors for character sprites on and off.**\n" +
+                "Toggle inverted colors for character sprites on and off.\n" +
                 "\n" +
-                $"⚙️ **Current setting:** **`{account.P2IS_PSX_TS_Invert}`**\n" +
-                "\n" +
-                ":one: On\n" +
-                ":two: Off\n");
+                $"⚙️ **Current setting:** **`{account.P2IS_PSX_TS_Invert}`**\n");
 
             embed.WithImageUrl("https://i.imgur.com/UswByeQ.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Inverted_Filter";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("↩️", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ On", customId: "on", ButtonStyle.Secondary)
+                .WithButton("❌ Off", customId: "off", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Placement(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Placement(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -303,84 +173,44 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to P2IS Template Settings"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
-                "**Choose the default position character sprites are rendered at.**\n" +
+                "Choose the default position character sprites are rendered at.\n" +
                 "\n" +
                 $"⚙️ **Current setting:** **`{account.P2IS_PSX_TS_Position}`**\n" +
                 "\n" +
-                ":one: Default\n" +
-                "*Use the set default positions for each sprite.*\n" +
+                ":one: Default - *Use the set default positions for each sprite.*\n" +
                 ":two: Left\n" +
                 ":three: Right\n");
 
             embed.WithImageUrl("https://i.imgur.com/RNvrNdF.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Placement";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select an option")
+                    .WithCustomId(menuSession.CurrentMenu)
+                    .WithMinValues(1)
+                    .WithMaxValues(1)
+                    .AddOption("Default", "1", null, new Emoji("1️⃣"))
+                    .AddOption("Left", "2", null, new Emoji("2️⃣"))
+                    .AddOption("Right", "3", null, new Emoji("3️⃣"))
+                    .AddOption("Return to P2IS Template Settings", "return", null, new Emoji("↩️"));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu);
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Sprite_Flip(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Sprite_Flip(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -398,74 +228,32 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithFooter(footer);
 
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
-                "**Choose to flip sprites horizontally from their default orientation.**\n" +
+                "Choose to flip sprites horizontally from their default orientation.\n" +
                 "\n" +
-                $"⚙️ **Current setting:** **`{account.P2IS_PSX_TS_Sprite_Flip}`**\n" +
-                "\n" +
-                ":one: On\n" +
-                ":two: Off\n");
+                $"⚙️ **Current setting:** **`{account.P2IS_PSX_TS_Sprite_Flip}`**\n");
 
             embed.WithImageUrl("https://i.imgur.com/ianHbiO.png");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Sprite_Flip";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("↩️", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ On", customId: "on", ButtonStyle.Secondary)
+                .WithButton("❌ Off", customId: "off", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Localized_Names(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Localized_Names(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -483,74 +271,30 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithFooter(footer);
 
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
-                "**Set returning characters from Revelations: Persona to have their localized display names on or off. This can still be overridden with custom display names.**\n" +
+                "Set returning characters from Revelations: Persona to have their localized display names on or off. This can still be overridden with custom display names.\n" +
                 "\n" +
-                $"⚙️ **Current setting:** **`{account.P2IS_PSX_TS_Localized_Revelations_Names}`**\n" +
-                "\n" +
-                ":one: On\n" +
-                ":two: Off\n");
+                $"⚙️ **Current setting:** **`{account.P2IS_PSX_TS_Localized_Revelations_Names}`**\n");
 
-            //embed.WithImageUrl("https://i.imgur.com/ianHbiO.png");
-
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Localized_Names";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("↩️", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ On", customId: "on", ButtonStyle.Secondary)
+                .WithButton("❌ Off", customId: "off", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Wallpaper_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Wallpaper_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -561,73 +305,26 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 P2IS Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 $"Your wallpaper has been set to **`{account.P2IS_PSX_TS_Wallpaper}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Wallpaper_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("💠 P2IS Template Settings", customId: "back-to-p2is-ps1-template-settings", ButtonStyle.Primary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Inverted_Filter_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Inverted_Filter_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -638,73 +335,26 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 P2IS Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 $"Inverted colors for character sprites have been set to **`{account.P2IS_PSX_TS_Invert}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Inverted_Filter_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("💠 P2IS Template Settings", customId: "back-to-p2is-ps1-template-settings", ButtonStyle.Primary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Placement_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Placement_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -715,73 +365,26 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 P2IS Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 $"Sprite placements have been set to **`{account.P2IS_PSX_TS_Position}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Placement_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("💠 P2IS Template Settings", customId: "back-to-p2is-ps1-template-settings", ButtonStyle.Primary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Sprite_Flip_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Sprite_Flip_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -792,73 +395,26 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 P2IS Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 $"Sprite flip has been set to **`{account.P2IS_PSX_TS_Sprite_Flip}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Sprite_Flip_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("💠 P2IS Template Settings", customId: "back-to-p2is-ps1-template-settings", ButtonStyle.Primary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Template_Layout_P2IS_PS1_Localized_Names_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Template_Layout_P2IS_PS1_Localized_Names_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -869,117 +425,19 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 P2IS Template Settings | ❌ Close Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color("P2IS-PS1", null));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P2IS-PS1"));
 
             embed.WithDescription("" +
                 $"Localized display names have been set to **`{account.P2IS_PSX_TS_Localized_Revelations_Names}`**.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Template_Layout_P2IS_PS1_Localized_Names_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("💠 P2IS Template Settings", customId: "back-to-p2is-ps1-template-settings", ButtonStyle.Primary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
-        }
-
-        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure menuSession)
-        {
-            // Assign the menu session's message to another variable.
-            var message = menuSession.MenuMessage;
-
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = MenuTimedOut(menuSession.User).Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Remove the menu entry from the global list.
-            Global.MenuIdList.Remove(menuSession);
-        }
-
-        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
-        {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Inactive Menu",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
-
-            embed.WithDescription($"You can adjust your template settings at any time from the **`settings`** menu by choosing [Scene Maker Settings] > [Template Layout].");
-            return embed;
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
     }
 }

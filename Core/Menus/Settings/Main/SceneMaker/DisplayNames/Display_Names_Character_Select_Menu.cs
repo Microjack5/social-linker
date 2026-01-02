@@ -1,26 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using SocialLinker.Config;
-using SocialLinker.Core.CloudStorageTables;
-using Discord.Rest;
 using SocialLinker.Core.LocalStorageTables;
 
 namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 {
     internal class Display_Names_Character_Select_Menu
     {
-        public static async Task Display_Names_Character_Select_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Display_Names_Character_Select_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
-            // Find the menu and item sessions associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var new_name_data = Global.DisplayNameTempList.SingleOrDefault(x => x.User_ID == $"{menuSession.User.Id}");
 
             var embed = new EmbedBuilder();
@@ -32,74 +26,48 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Return to Previous Menu"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Game_Color(new_name_data.Game, account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo(new_name_data.Game));
 
             embed.WithDescription("" +
-                $"Type in the name of the {AcronymToTitle(new_name_data.Game)} sprite set you'd like to change the display name of, or react with ↩️ to cancel.\n" +
-                $"\n" +
-                $"{Global.MentionNotice}");
+                $"Choose [Enter Sprite Set Name] and type in the name of the {AcronymToTitle(new_name_data.Game)} sprite set you'd like to change the display name of.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Display_Names_Character_Select_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("Enter Sprite Set Name", customId: "display-names-character-select-modal-open", ButtonStyle.Primary)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component, true);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Display_Names_Character_Select_Error(SocketGuildUser user, RestUserMessage message, string user_input)
+        public static async Task Display_Names_Character_Select_Modal(SocketMessageComponent component)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
+            if (component.Data.CustomId == "display-names-character-select-modal-open")
+            {
+                try
+                {
+                    var modal = new ModalBuilder()
+                    .WithTitle("Sprite Set Entry")
+                    .WithCustomId("display-names-character-select-modal-submit")
+                    .AddTextInput("Name of Sprite Set", "name");
 
-            // Find the menu and item sessions associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+                    await component.RespondWithModalAsync(modal.Build());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        public static async Task Display_Names_Character_Select_Error(MenuIdStructure menuSession, string user_input)
+        {
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
+
             var naming_session = Global.DisplayNameTempList.SingleOrDefault(x => x.User_ID == $"{menuSession.User.Id}");
 
             var embed = new EmbedBuilder();
@@ -111,118 +79,21 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 
             embed.WithAuthor(author);
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Retry"
-            };
-
-            embed.WithFooter(footer);
-
-            // Assign a color and thumbnail to the embeded message based on the title being edited.
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription("" +
                 $"There doesn’t seem to be a sprite set with the keyword \"{user_input}\" in {OfficialSetMethods.AcronymToFullTitle(naming_session.Game)}.\n" +
                 $"\n" +
-                $"Make sure the character’s keyword is typed correctly and react with ↩️ to try again.\n");
+                $"Make sure the character’s keyword is typed correctly and try again.\n");
 
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Display_Names_Character_Select_Error";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession);
+            var component = new ComponentBuilder()
+                .WithButton("↩️ Retry", customId: "return", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
-        }
-
-        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure menuSession)
-        {
-            // Assign the menu session's message to another variable.
-            var message = menuSession.MenuMessage;
-
-            // Attempt editing the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu entry from the global list, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = MenuTimedOut(menuSession.User).Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu entry from the global list.
-                Global.MenuIdList.Remove(menuSession);
-
-                return;
-            }
-
-            // Remove the menu entry from the global list.
-            Global.MenuIdList.Remove(menuSession);
-        }
-
-        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
-        {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Inactive Menu",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
-
-            embed.WithDescription($"You can adjust your display name settings at any time from the **`settings`** menu by choosing [Scene Maker Settings] > [Display Names].");
-            return embed;
+            await Utility.CleanMessage(menuSession, embed, component, true);
+            Utility.NewTimer(menuSession);
         }
 
         // Utility

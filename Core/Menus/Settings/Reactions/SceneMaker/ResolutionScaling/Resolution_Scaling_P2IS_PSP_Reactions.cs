@@ -1,231 +1,112 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.Menus.Settings.Main.SceneMaker.ResolutionScaling;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.ResolutionScaling
 {
     class Resolution_Scaling_P2IS_PSP_Reactions
     {
-        public static Task Nav_Resolution_Scaling_P2IS_PSP_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Resolution_Scaling_P2IS_PSP_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            string selected = component.Data.Values.First();
+
+            switch (selected)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_VC_Menu.Resolution_Scaling_VC_P2IS_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Output_Resolution(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Scaling_Method(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "1":
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Output_Resolution(menuSession);
+                    break;
+                case "2":
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Scaling_Method(menuSession);
+                    break;
+                case "return":
+                    _ = Resolution_Scaling_VC_Menu.Resolution_Scaling_VC_P2IS_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Resolution_Scaling_P2IS_PSP_Output_Resolution(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Resolution_Scaling_P2IS_PSP_Output_Resolution(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "1":
+                    account.P2IS_PSP_Resolution = "480 × 272";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P2IS_PSP_Resolution = "480 × 272";
+                case "2":
+                    account.P2IS_PSP_Resolution = "1920 × 1088";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P2IS_PSP_Resolution = "1920 × 1088";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Resolution_Scaling_P2IS_PSP_Scaling_Method(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Resolution_Scaling_P2IS_PSP_Scaling_Method(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            var account = menuSession.Account;
+
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "return":
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Main(menuSession);
+                    break;
 
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
+                case "1":
+                    account.P2IS_PSP_Scale = "Bicubic";
+                    UserInfoClasses.UpdateAccount(account);
 
-            // Keycap One
-            else if (reaction.Emote.Name == "\u0031\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
+                    menuSession.Account = account;
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm(menuSession);
+                    break;
 
-                // Assign the chosen setting to the user's account.
-                account.P2IS_PSP_Scale = "Bicubic";
+                case "2":
+                    account.P2IS_PSP_Scale = "Nearest Neighbor";
+                    UserInfoClasses.UpdateAccount(account);
 
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            // Keycap Two
-            else if (reaction.Emote.Name == "\u0032\ufe0f\u20e3")
-            {
-                // Get the account information of the user.
-                var account = UserInfoClasses.GetAccount(menuSession.User);
-
-                // Assign the chosen setting to the user's account.
-                account.P2IS_PSP_Scale = "Nearest Neighbor";
-
-                //Update the user's account.
-                UserInfoClasses.UpdateAccount(account);
-
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                    menuSession.Account = account;
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Resolution_Scaling_P2IS_PSP_Output_Resolution_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p2is-psp-resolution-scaling":
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Resolution_Scaling_P2IS_PSP_Scaling_Method_Confirm(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "💠")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "❌")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Attempt to delete the menu message from the channel if it hasn't been deleted by the user yet. If this fails, catch the exception.
-                try
-                {
-                    _ = menuSession.MenuMessage.DeleteAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                // If the menu session is not null, remove it from the global list.
-                if (menuSession != null)
-                {
-                    Global.MenuIdList.Remove(menuSession);
-                }
-                return Task.CompletedTask;
+                case "back-to-p2is-psp-resolution-scaling":
+                    _ = Resolution_Scaling_P2IS_PSP_Menu.Resolution_Scaling_P2IS_PSP_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;

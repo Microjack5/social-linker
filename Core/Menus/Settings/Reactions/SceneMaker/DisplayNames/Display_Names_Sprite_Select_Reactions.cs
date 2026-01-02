@@ -13,112 +13,103 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
 {
     internal class Display_Names_Sprite_Select_Reactions
     {
-        public static Task Nav_Display_Names_Sprite_Select_Main(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Display_Names_Sprite_Select_Main(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+                case "display-names-sprite-select-modal-open":
+                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Modal(component);
+                    break;
 
-                // Go to a new menu.
-                _ = Display_Names_Title_Select_Menu.Display_Names_Title_Select(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
-            }
-
-            else if (reaction.Emote.Name == "🔄")
-            {
-                try
-                {
-                    var account = UserInfoClasses.GetAccount((SocketUser)reaction.User);
-                    var naming_session = Global.DisplayNameTempList.SingleOrDefault(x => x.User_ID == $"{menuSession.User.Id}");
-                    List<int> int_range = Select_Entire_Sprite_Range(naming_session);
-
-                    naming_session.Sprites_Affected = Int_Range_To_String_Range(account, naming_session.Sprite_Set, int_range);
-                    naming_session.Spriteless_Included = "Yes";
-
-                    if (DisplayNameLogging.Check_If_Sprites_Overlap(naming_session) == true)
+                case "entire-set":
+                    try
                     {
-                        // Stop the timeout timer associated with the menu.
-                        menuSession.MenuTimer.Stop();
+                        var account = menuSession.Account;
+                        var naming_session = Global.DisplayNameTempList.SingleOrDefault(x => x.User_ID == $"{menuSession.User.Id}");
+                        List<int> int_range = Select_Entire_Sprite_Range(naming_session);
 
-                        // Go to a new menu.
-                        _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_3(menuSession.User, menuSession.MenuMessage);
-                        return Task.CompletedTask;
+                        naming_session.Sprites_Affected = Int_Range_To_String_Range(account, naming_session.Sprite_Set, int_range);
+                        naming_session.Spriteless_Included = "Yes";
+
+                        if (DisplayNameLogging.Check_If_Sprites_Overlap(naming_session) == true)
+                        {
+                            _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_3(menuSession);
+                            return Task.CompletedTask;
+                        }
+
+                        _ = Display_Names_Custom_Input_Menu.Display_Names_Custom_Input_Main(menuSession);
+
                     }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                    break;
 
-                    // Stop the timeout timer associated with the menu.
-                    menuSession.MenuTimer.Stop();
-
-                    // Go to a new menu.
-                    _ = Display_Names_Custom_Input_Menu.Display_Names_Custom_Input_Main(menuSession.User, menuSession.MenuMessage);
-                    return Task.CompletedTask;
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-                
+                case "return":
+                    _ = Display_Names_Title_Select_Menu.Display_Names_Title_Select(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Display_Names_Sprite_Select_Error_1(SocketReaction reaction, MenuIdStructure menuSession)
+        public static async Task Nav_Display_Names_Sprite_Select_Modal(SocketModal modal, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
-            {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
+            var account = menuSession.Account;
 
-                // Go to a new menu.
-                _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+            var sprite_range = modal.Data.Components
+            .FirstOrDefault(x => x.CustomId == "range")?.Value;
+
+            await Nav_Display_Names_Sprite_Select_Main_Received(sprite_range, menuSession);
+            return;
+        }
+
+        public static Task Nav_Display_Names_Sprite_Select_Error_1(SocketMessageComponent component, MenuIdStructure menuSession)
+        {
+            switch (component.Data.CustomId)
+            {
+                case "return":
+                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Display_Names_Sprite_Select_Error_2(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Display_Names_Sprite_Select_Error_2(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "return":
+                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        public static Task Nav_Display_Names_Sprite_Select_Error_3(SocketReaction reaction, MenuIdStructure menuSession)
+        public static Task Nav_Display_Names_Sprite_Select_Error_3(SocketMessageComponent component, MenuIdStructure menuSession)
         {
-            if (reaction.Emote.Name == "↩️")
+            switch (component.Data.CustomId)
             {
-                // Stop the timeout timer associated with the menu.
-                menuSession.MenuTimer.Stop();
-
-                // Go to a new menu.
-                _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Main(menuSession.User, menuSession.MenuMessage);
-                return Task.CompletedTask;
+                case "return":
+                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Main(menuSession);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
         // Methods that activate on the MessageReceived event.
-        public static Task Nav_Display_Names_Sprite_Select_Main_Received(SocketMessage message, MenuIdStructure menuSession)
+        public static Task Nav_Display_Names_Sprite_Select_Main_Received(string sprite_range, MenuIdStructure menuSession)
         {
             try
             {
                 var new_name_data = Global.DisplayNameTempList.SingleOrDefault(x => x.User_ID == $"{menuSession.User.Id}");
 
-                var account = UserInfoClasses.GetAccount(message.Author);
-                string input_string = message.Content;
-                input_string = Global.RemoveBotMention(input_string).Trim();
+                var account = menuSession.Account;
+                string input_string = sprite_range;
 
                 List<int> int_range = Input_Range_To_List(input_string);
 
@@ -127,7 +118,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                 {
                     // Send error message
                     menuSession.MenuTimer.Stop();
-                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_1(menuSession.User, menuSession.MenuMessage);
+                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_1(menuSession);
                     return Task.CompletedTask;
                 }
 
@@ -147,7 +138,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                     menuSession.MenuTimer.Stop();
 
                     // Go to a new menu.
-                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_2(menuSession.User, menuSession.MenuMessage);
+                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_2(menuSession);
                     return Task.CompletedTask;
                 }
 
@@ -159,7 +150,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                     menuSession.MenuTimer.Stop();
 
                     // Go to a new menu.
-                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_3(menuSession.User, menuSession.MenuMessage);
+                    _ = Display_Names_Sprite_Select_Menu.Display_Names_Sprite_Select_Error_3(menuSession);
                     return Task.CompletedTask;
                 }
 
@@ -167,7 +158,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.DisplayNames
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = Display_Names_Custom_Input_Menu.Display_Names_Custom_Input_Main(menuSession.User, menuSession.MenuMessage);
+                _ = Display_Names_Custom_Input_Menu.Display_Names_Custom_Input_Main(menuSession);
             }
             catch (Exception e)
             {

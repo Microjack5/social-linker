@@ -15,15 +15,13 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 {
     internal class Display_Names_Menu
     {
-        public static async Task Display_Names_Start(SocketGuildUser user, RestUserMessage message)
+        public static async Task Display_Names_Start(MenuIdStructure menuSession)
         {
             try
             {
-                //Get the account information of the command's target
-                var account = UserInfoClasses.GetAccount(user);
-
-                // Find the menu session associated with the current user.
-                var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+                var account = menuSession.Account;
+                var user = menuSession.User;
+                var message = menuSession.MenuMessage;
 
                 var embed = new EmbedBuilder();
                 var author = new EmbedAuthorBuilder
@@ -104,7 +102,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                 };
 
                 // Create a new menu in the current channel.
-                await Display_Names_Main(menuSession.User, menuSession.MenuMessage);
+                await Display_Names_Main(menuSession);
             }
             catch(Exception e)
             {
@@ -112,13 +110,12 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
             }
         }
 
-        public static async Task Display_Names_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Display_Names_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
-            // Find both the menu session and item session associated with the current user and store them in variables.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == user.Id);
 
             var embed = new EmbedBuilder();
@@ -176,61 +173,13 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
                     $"\n";
             }
 
-            // Create a string variable to store text for the footer. This will change depending on the state of the menu.
-            string footer_text = "";
-
             // Depending on whether or not the user owns or can set any décor, perform different actions.
             if (displayed_name_list.Length > 0)
             {
-                // Add a "Back" button to be displayed on the footer.
-                footer_text += "↩️ Scene Maker Settings | ";
-
-                // Check if the starting item index is greater than or equal to max_items_displayed.
-                if (itemSession.ItemIndexBase >= itemSession.MaxItemsDisplayed)
-                {
-                    // If so, there will be a "Previous Page" button displayed on the footer.
-                    footer_text += "◀️ Previous Page | ";
-                }
-                // Check if the number of items in the list minus the starting item index is more than max_items_displayed.
-                if (remaining_list_length > itemSession.MaxItemsDisplayed)
-                {
-                    // If so, there will be a "Next Page" button on the footer.
-                    footer_text += "▶️ Next Page | ";
-                }
-
-                footer_text += "➕ Add New Entry | ";
-
-                // Calculate the amount of pages there will be in total and store it in a variable.
-                int pageCount = (itemSession.DisplayNameItemList.Count + itemSession.MaxItemsDisplayed - 1) / itemSession.MaxItemsDisplayed;
-
-                // Add two icons to the end of footer_text regardless of the state, plus a page counter on a new line.
-                footer_text += $"⚙️ Sort\nPage {itemSession.CurrentPage} / {pageCount}";
-
-                // Create the footer object for the embed.
-                var footer = new EmbedFooterBuilder
-                {
-                    Text = footer_text
-                };
-
-                // Add the footer to the embed.
-                embed.WithFooter(footer);
-
                 embed.WithDescription($"{displayed_name_list}");
             }
             else
             {
-                // Add a "Back" button to be displayed on the footer.
-                footer_text += "↩️ Scene Maker Settings | ➕ Add New Entry";
-
-                // Create the footer object for the embed.
-                var footer = new EmbedFooterBuilder
-                {
-                    Text = footer_text
-                };
-
-                // Add the footer to the embed.
-                embed.WithFooter(footer);
-
                 embed.WithDescription("You don't have any custom display names.");
             }
 
@@ -254,109 +203,54 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.DisplayNames
 
             // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Display_Names_Main";
-            menuSession.MenuTimer = new Timer()
+
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select Display Name")
+                    .WithCustomId("display-names-main")
+                    .WithMinValues(1)
+                    .WithMaxValues(1);
+
+            displayed_list_counter = 0;
+
+            for (int i = 0; i < sublist_length; i++)
             {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
+                displayed_list_counter += 1;
+                selectMenu.AddOption($"{DecorInfoMethods.NumberToKeycapEmoji(displayed_list_counter)} {itemSession.DisplayNameItemList[i].Display_Name}", $"{displayed_list_counter}");
+            }
 
-            // If the timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession, itemSession);
+            var component = new ComponentBuilder();
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            if (sublist_length > 0)
+            {
+                component.WithSelectMenu(selectMenu);
+            }
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
+            component.WithButton("↩️ Scene Maker Settings", customId: "return", ButtonStyle.Secondary);
 
             // Check if the starting item index is greater than or equal to max_items_displayed.
             if (itemSession.ItemIndexBase >= itemSession.MaxItemsDisplayed)
             {
                 // If so, there will be a "Previous Page" button added as a reaction.
-                reaction_list.Add(new Emoji("◀️"));
+                component.WithButton("◀️ Previous Page", customId: "previous-page", ButtonStyle.Secondary);
             }
 
             // Check if the number of items in the list minus the starting item index is more than max_items_displayed.
             if (remaining_list_length > itemSession.MaxItemsDisplayed)
             {
                 // If so, there will be a "Next Page" button added as a reaction.
-                reaction_list.Add(new Emoji("▶️"));
+                component.WithButton("▶️ Next Page", customId: "next-page", ButtonStyle.Secondary);
             }
 
-            // Reset the displayed_list_counter to zero.
-            displayed_list_counter = 0;
-
-            for (int i = 0; i < sublist_length; i++)
-            {
-                // Increase the displayed_list_counter by one.
-                displayed_list_counter += 1;
-
-                // For each loop iteration, add a keycap emote representing an item entry being displayed to the user.
-                reaction_list.Add(new Emoji($"{DecorInfoMethods.NumberToKeycapEmoji(displayed_list_counter)}"));
-            }
-
-            reaction_list.Add(new Emoji("➕"));
+            component.WithButton("➕ Add New Entry", customId: "add", ButtonStyle.Secondary);
 
             // If the user owns any décor, add a gear reaction in order to sort entries.
             if (displayed_name_list.Length > 0)
             {
-                reaction_list.Add(new Emoji("⚙️"));
+                component.WithButton("⚙️ Sort", customId: "sort", ButtonStyle.Secondary);
             }
 
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
-        }
-
-        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure idTracker, ItemListIterator itemSession)
-        {
-            // Attempt deleting the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu and item entries from the global list, and return.
-            try
-            {
-                // Delete the current message from the channel.
-                await idTracker.MenuMessage.DeleteAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu and item entries from the global list.
-                Global.MenuIdList.Remove(idTracker);
-                Global.ItemIdList.Remove(itemSession);
-
-                return;
-            }
-
-            // Reassign the menu session's message to a new message generated from the created embed.
-            idTracker.MenuMessage = (RestUserMessage)await idTracker.MenuMessage.Channel.SendMessageAsync("", false, MenuTimedOut(idTracker.User).Build());
-
-            // Remove the menu and item entries from the global list
-            Global.MenuIdList.Remove(idTracker);
-            Global.ItemIdList.Remove(itemSession);
-        }
-
-        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
-        {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Inactive Menu",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
-
-            embed.WithDescription($"You can view and add new custom display names at any time from the **`settings`** menu by choosing [Scene Maker Settings] > [Display Names].");
-            return embed;
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
     }
 }

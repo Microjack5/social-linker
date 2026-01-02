@@ -14,7 +14,7 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = SM_Tutorial_Select_Menu.SM_Tutorial_Select_Advanced(menuSession.User, menuSession.MenuMessage);
+                _ = SM_Tutorial_Select_Menu.SM_Tutorial_Select_Advanced(menuSession);
                 return Task.CompletedTask;
             }
 
@@ -99,7 +99,7 @@ namespace SocialLinker.Core.Menus.Help.Reactions
                 menuSession.MenuTimer.Stop();
 
                 // Go to a new menu.
-                _ = SM_Tutorial_Select_Menu.SM_Tutorial_Select_Advanced(menuSession.User, menuSession.MenuMessage);
+                _ = SM_Tutorial_Select_Menu.SM_Tutorial_Select_Advanced(menuSession);
                 return Task.CompletedTask;
             }
 

@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Timers;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
 using SocialLinker.Config;
-using SocialLinker.Core.CloudStorageTables;
-using Discord.Rest;
 using SocialLinker.Core.LocalStorageTables;
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace SocialLinker.Core.Menus.Settings.Main.Profile
 {
     class Status_Decor_Menu
     {
-        public static async Task Status_Decor_Start(SocketGuildUser user, RestUserMessage message)
+        public static async Task Status_Decor_Start(MenuIdStructure menuSession)
         {
-            //Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -110,17 +107,22 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             };
 
             // Create a new menu in the current channel.
-            await Status_Decor_Main(menuSession.User, menuSession.MenuMessage);
+            await Status_Decor_Main(menuSession);
         }
 
-        public static async Task Status_Decor_Main(SocketGuildUser user, RestUserMessage message)
+        public static async Task Status_Decor_Main(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's user.
-            var account = UserInfoClasses.GetAccount(user);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
-            // Find both the menu session and item session associated with the current user and store them in variables.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == user.Id);
+
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select Décor")
+                    .WithCustomId("status-decor-main")
+                    .WithMinValues(1)
+                    .WithMaxValues(1);
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -170,45 +172,13 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
                 // Add the entry to the displayed_shop_list string.
                 displayed_decor_list += $":{DecorInfoMethods.NumberToWords(displayed_list_counter)}: {decor_info.Title}\n";
-            }
 
-            // Create a string variable to store text for the footer. This will change depending on the state of the menu.
-            string footer_text = "";
+                selectMenu.AddOption($"{DecorInfoMethods.NumberToKeycapEmoji(displayed_list_counter)} {decor_info.Title}", $"{displayed_list_counter}");
+            }
 
             // Depending on whether or not the user owns or can set any décor, perform different actions.
             if (displayed_decor_list.Length > 0)
             {
-                // Add a "Back" button to be displayed on the footer.
-                footer_text += "↩️ Profile Settings | ";
-
-                // Check if the starting item index is greater than or equal to max_items_displayed.
-                if (itemSession.ItemIndexBase >= itemSession.MaxItemsDisplayed)
-                {
-                    // If so, there will be a "Previous Page" button displayed on the footer.
-                    footer_text += "◀️ Previous Page | ";
-                }
-                // Check if the number of items in the list minus the starting item index is more than max_items_displayed.
-                if (remaining_list_length > itemSession.MaxItemsDisplayed)
-                {
-                    // If so, there will be a "Next Page" button on the footer.
-                    footer_text += "▶️ Next Page | ";
-                }
-
-                // Calculate the amount of pages there will be in total and store it in a variable.
-                int pageCount = (itemSession.ItemList.Count + itemSession.MaxItemsDisplayed - 1) / itemSession.MaxItemsDisplayed;
-
-                // Add two icons to the end of footer_text regardless of the state, plus a page counter on a new line.
-                footer_text += $"⚙️ Sort\nPage {itemSession.CurrentPage} / {pageCount}";
-
-                // Create the footer object for the embed.
-                var footer = new EmbedFooterBuilder
-                {
-                    Text = footer_text
-                };
-
-                // Add the footer to the embed.
-                embed.WithFooter(footer);
-
                 // Create an empty string variable. This will hold part of the embeded message's description
                 string description_text = "";
 
@@ -216,8 +186,8 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 if (account.Decor_Setting != "" && account.Profile_Theme != "")
                 {
                     description_text = "" +
-                        "**Select a décor to view.**\n" +
-                        "**To remove your current décor and set the default one for your profile theme, select :white_square_button:.**";
+                        "Select a décor to view.\n" +
+                        "To remove your current décor and set the default one for your profile theme, select :white_square_button:.";
                 }
                 // If not, create a default description text instructing to select a décor.
                 else
@@ -279,18 +249,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             }
             else
             {
-                // Add a "Back" button to be displayed on the footer.
-                footer_text += "↩️ Profile Settings";
-
-                // Create the footer object for the embed.
-                var footer = new EmbedFooterBuilder
-                {
-                    Text = footer_text
-                };
-
-                // Add the footer to the embed.
-                embed.WithFooter(footer);
-
                 embed.WithDescription($"You don't have any other décor to set. Visit the Décor Shop with the **`shop`** command to browse and buy décor for your collection.");
 
                 // Attempt editing the message if it hasn't been deleted by the user yet. If it has, catch the exception, send an error message, and return.
@@ -312,74 +270,49 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 }
             }
 
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Status_Decor_Main";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession, itemSession);
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
+            component.WithButton("↩️ Profile Settings", customId: "return", ButtonStyle.Secondary);
 
             // Check if the starting item index is greater than or equal to max_items_displayed.
             if (itemSession.ItemIndexBase >= itemSession.MaxItemsDisplayed)
             {
                 // If so, there will be a "Previous Page" button added as a reaction.
-                reaction_list.Add(new Emoji("◀️"));
+                component.WithButton("◀️ Previous Page", customId: "previous-page", ButtonStyle.Secondary);
             }
 
             // Check if the number of items in the list minus the starting item index is more than max_items_displayed.
             if (remaining_list_length > itemSession.MaxItemsDisplayed)
             {
                 // If so, there will be a "Next Page" button added as a reaction.
-                reaction_list.Add(new Emoji("▶️"));
-            }
-
-            // Reset the displayed_list_counter to zero.
-            displayed_list_counter = 0;
-
-            for (int i = 0; i < sublist_length; i++)
-            {
-                // Increase the displayed_list_counter by one.
-                displayed_list_counter += 1;
-
-                // For each loop iteration, add a keycap emote representing an item entry being displayed to the user.
-                reaction_list.Add(new Emoji($"{DecorInfoMethods.NumberToKeycapEmoji(displayed_list_counter)}"));
+                component.WithButton("▶️ Next Page", customId: "next-page", ButtonStyle.Secondary);
             }
 
             // If the user owns any décor, add a gear reaction in order to sort entries.
             if (displayed_decor_list.Length > 0)
             {
-                reaction_list.Add(new Emoji("⚙️"));
+                component.WithButton("⚙️ Sort", customId: "sort", ButtonStyle.Secondary);
             }
 
             // If the user has a décor and a profile theme currently set, add a box reaction. This gives the option to remove the set décor and return to the default one.
             if (account.Decor_Setting != "" && account.Profile_Theme != "")
             {
-                reaction_list.Add(new Emoji("🔳"));
+                component.WithButton("🔳 Default Décor", customId: "default", ButtonStyle.Secondary);
             }
 
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Set_Decor_Preview(SocketGuildUser user, RestUserMessage message, int item_index)
+        public static async Task Set_Decor_Preview(MenuIdStructure menuSession, int item_index)
         {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
-            // Find both the menu session and item session associated with the current user and store them in variables.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == user.Id);
 
             // Get the information of the chosen décor index.
@@ -413,14 +346,6 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             // Set the color of the embed by converting the décor's stored hex value to a usable format.
             embed.WithColor((Discord.Color)System.Drawing.ColorTranslator.FromHtml($"{decor_info.Embed_Color}"));
 
-            // Add a footer to the embed.
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Back | ✅ Confirm"
-            };
-
-            embed.WithFooter(footer);
-
             // Attach a locally generated image to the embed. This image hasn't been created yet, so the filename is just a placeholder for now.
             embed.WithImageUrl($"attachment://{decor_info.Decor_ID}_preview.png");
 
@@ -435,7 +360,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             // Ensure the stream is set to the beginning of itself.
             memoryStream.Seek(0, SeekOrigin.Begin);
-
+            
             // Attempt deleting the message if it hasn't been deleted by the user yet.
             try
             {
@@ -463,47 +388,29 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             // Set the "message" variable to the menu session's message.
             message = menuSession.MenuMessage;
 
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Set_Decor_Preview";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // Edit the item session to save the selected décor's ID to a variable.
-            // If the user chooses to buy it, we will be able to pass its information to other methods.
-            itemSession.SelectedItem = decor_info.Decor_ID;
+            var component = new ComponentBuilder();
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession, itemSession);
+            component
+                .WithButton("↩️ Back", customId: "return", ButtonStyle.Secondary)
+                .WithButton("✅ Confirm", customId: "confirm", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("✅"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Set_Decor_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Set_Decor_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
-            // Find both the menu session and item session associated with the current user and store them in variables.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == user.Id);
 
             // Create a string variable that will hold the title of the user's currently set décor.
             string set_decor_title = DecorInfoMethods.GetDecorTitle(user);
 
-            // Create a new embed that will be displayed in the message.
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
@@ -512,81 +419,28 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
             };
 
             embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
             embed.WithDescription($"Your décor has been set to **`{set_decor_title}`**.");
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 Décor Settings | ❌ Close Menu"
-            };
-
-            // Add the footer to the embed.
-            embed.WithFooter(footer);
-
-            // Attempt deleting the message if it hasn't been deleted by the user yet.
-            try
-            {
-                // Delete the current message from the channel.
-                await message.DeleteAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            // If the bot lacks permission to send messages, catch the exception and return.
-            try
-            {
-                // Reassign the menu session's message to a new message generated from the created embed.
-                menuSession.MenuMessage = (RestUserMessage)await message.Channel.SendMessageAsync("", false, embed.Build());
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return;
-            }
-
-            // Set the "message" variable to the menu session's message.
-            message = menuSession.MenuMessage;
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Set_Decor_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the menu timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession, itemSession);
+            var component = new ComponentBuilder()
+                .WithButton("💠 Décor Settings", customId: "decor-settings", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-            
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component, true);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Decor_Sort(SocketGuildUser user, RestUserMessage message)
+        public static async Task Decor_Sort(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
-            // Find both the menu session and item session associated with the current user and store them in variables.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == user.Id);
 
-            // Create a new embed that will be displayed in the message.
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
@@ -594,13 +448,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 IconUrl = user.GetAvatarUrl()
             };
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "↩️ Back"
-            };
-
             embed.WithAuthor(author);
-            embed.WithFooter(footer);
 
             embed.AddField("Choose a method to sort décor entries by.", $"" +
                 $"⚙️ **Current Setting:** **`{DecorInfoMethods.SortSettingToString(account.Shop_Sort)}`**\n" +
@@ -612,75 +460,39 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 $":five: By Release Order (Old - New)\n" +
                 $":six: By Release Order (New - Old)");
 
-            // Determine the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
-            // Attempt deleting the message if it hasn't been deleted by the user yet.
-            try
-            {
-                // Delete the current message from the channel.
-                await message.DeleteAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            // If the bot lacks permission to send messages, catch the exception and return.
-            try
-            {
-                // Reassign the menu session's message to a new message generated from the created embed.
-                menuSession.MenuMessage = (RestUserMessage)await message.Channel.SendMessageAsync("", false, embed.Build());
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return;
-            }
-
-            // Set the "message" variable to the menu session's message.
-            message = menuSession.MenuMessage;
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Decor_Sort";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession, itemSession);
+            var selectMenu = new SelectMenuBuilder()
+                    .WithPlaceholder("Select an option")
+                    .WithCustomId("shop-sort-select")
+                    .WithMinValues(1)
+                    .WithMaxValues(1)
+                    .AddOption("By Title (A - Z)", "1", null, new Emoji("1️⃣"))
+                    .AddOption("By Title (Z - A)", "2", null, new Emoji("2️⃣"))
+                    .AddOption("By Cost (Low - High)", "3", null, new Emoji("3️⃣"))
+                    .AddOption("By Cost (High - Low)", "4", null, new Emoji("4️⃣"))
+                    .AddOption("By Release Order (Old - New)", "5", null, new Emoji("5️⃣"))
+                    .AddOption("By Release Order (New - Old)", "6", null, new Emoji("6️⃣"));
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
+            var component = new ComponentBuilder()
+                .WithSelectMenu(selectMenu)
+                .WithButton("↩️ Return", customId: "return", ButtonStyle.Secondary);
 
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("↩️"));
-            reaction_list.Add(new Emoji("\u0031\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0032\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0033\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0034\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0035\ufe0f\u20e3"));
-            reaction_list.Add(new Emoji("\u0036\ufe0f\u20e3"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component, true);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Decor_Sort_Confirm(SocketGuildUser user, RestUserMessage message)
+        public static async Task Decor_Sort_Confirm(MenuIdStructure menuSession)
         {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
-            // Find both the menu session and item session associated with the current user and store them in variables.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
             var itemSession = Global.ItemIdList.SingleOrDefault(x => x.User.Id == user.Id);
 
-            // Create a new embed that will be displayed in the message.
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
@@ -688,69 +500,27 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
                 IconUrl = user.GetAvatarUrl()
             };
 
-            var footer = new EmbedFooterBuilder
-            {
-                Text = "💠 Décor Settings | ❌ Close Menu"
-            };
-
             embed.WithAuthor(author);
-            embed.WithFooter(footer);
 
             embed.WithDescription($"Décor will now be sorted **`{DecorInfoMethods.SortSettingToString(account.Shop_Sort)}`**.");
 
-            // Determine the color and thumbnail for the embeded message.
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Config_Thumbnail(account));
 
-            // Attempt editing the message if it hasn't been deleted by the user yet. If it has, catch the exception, send an error message, and return.
-            try
-            {
-                // Remove all reactions from the current message.
-                await message.RemoveAllReactionsAsync();
-
-                // Edit the current active message by replacing it with the recently created embed.
-                await message.ModifyAsync(x => {
-                    x.Embed = embed.Build();
-                });
-            }
-            catch (Exception ex)
-            {
-                await ErrorHandling.MissingMessageError((SocketTextChannel)message.Channel);
-                Console.WriteLine(ex);
-                return;
-            }
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Decor_Sort_Confirm";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // If the timer runs out, activate a function.
-            menuSession.MenuTimer.Elapsed += (sender, e) => MenuTimer_Elapsed(sender, e, menuSession, itemSession);
+            var component = new ComponentBuilder()
+                .WithButton("💠 Décor Settings", customId: "back-to-decor-settings", ButtonStyle.Secondary);
 
-            // Create an empty list for reactions.
-            List<IEmote> reaction_list = new List<IEmote> { };
-
-            // Add needed emote reactions for the menu.
-            reaction_list.Add(new Emoji("💠"));
-            reaction_list.Add(new Emoji("❌"));
-
-            // Add the reactions to the message.
-            _ = ReactionHandling.AddReactionsToMenu(message, reaction_list);
+            await Utility.CleanMessage(menuSession, embed, component);
+            Utility.NewTimer(menuSession);
         }
 
-        public static async Task Status_Decor_Exit(SocketGuildUser user, RestUserMessage message)
+        public static async Task Status_Decor_Exit(MenuIdStructure menuSession)
         {
-            //Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            // Find the menu session associated with the current user and store it in a variable.
-            var menuSession = Global.MenuIdList.SingleOrDefault(x => x.User.Id == user.Id);
+            var account = menuSession.Account;
+            var user = menuSession.User;
+            var message = menuSession.MenuMessage;
 
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
@@ -761,97 +531,14 @@ namespace SocialLinker.Core.Menus.Settings.Main.Profile
 
             embed.WithAuthor(author);
 
-            //Determine color for embeded message
             embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
 
-            // Attempt deleting the message if it hasn't been deleted by the user yet.
-            try
-            {
-                // Delete the current message from the channel.
-                await message.DeleteAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            // If the bot lacks permission to send messages, catch the exception and return.
-            try
-            {
-                // Reassign the menu session's message to a new message generated from the created embed.
-                menuSession.MenuMessage = (RestUserMessage)await message.Channel.SendMessageAsync("", false, embed.Build());
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return;
-            }
-
-            // Set the "message" variable to the menu session's message.
-            message = menuSession.MenuMessage;
-
-            // Edit the menu session according to the current message.
             menuSession.CurrentMenu = "Status_Decor_Exit";
-            menuSession.MenuTimer = new Timer()
-            {
-                // Create a timer that expires as a "time out" duration for the user.
-                Interval = MenuConfig.menu.timerDuration,
-                AutoReset = false,
-                Enabled = true
-            };
 
-            // Create a new menu in the current channel.
-            await Profile_Settings_Menu.Profile_Settings_Main(menuSession.User, menuSession.MenuMessage);
-        }
+            await Utility.CleanMessage(menuSession, embed, null, true);
+            Utility.NewTimer(menuSession);
 
-        private static async void MenuTimer_Elapsed(object sender, ElapsedEventArgs e, MenuIdStructure idTracker, ItemListIterator itemSession)
-        {
-            // Attempt deleting the message if it hasn't been deleted by the user yet.
-            // If it has, catch the exception, remove the menu and item entries from the global list, and return.
-            try
-            {
-                // Delete the current message from the channel.
-                await idTracker.MenuMessage.DeleteAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                // Remove the menu and item entries from the global list.
-                Global.MenuIdList.Remove(idTracker);
-                Global.ItemIdList.Remove(itemSession);
-
-                return;
-            }
-
-            // Reassign the menu session's message to a new message generated from the created embed.
-            idTracker.MenuMessage = (RestUserMessage)await idTracker.MenuMessage.Channel.SendMessageAsync("", false, MenuTimedOut(idTracker.User).Build());
-
-            // Remove the menu and item entries from the global list
-            Global.MenuIdList.Remove(idTracker);
-            Global.ItemIdList.Remove(itemSession);
-        }
-
-        public static EmbedBuilder MenuTimedOut(SocketGuildUser user)
-        {
-            // Get the account information of the command's target
-            var account = UserInfoClasses.GetAccount(user);
-
-            var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder
-            {
-                Name = "Inactive Menu",
-                IconUrl = user.GetAvatarUrl()
-            };
-
-            embed.WithAuthor(author);
-
-            // Determine the color and thumbnail for the embeded message
-            embed.WithColor(EmbedSettings.Get_Profile_Embed_Color(account));
-            embed.WithThumbnailUrl(EmbedSettings.Get_Profile_Help_Thumbnail(account));
-
-            embed.WithDescription($"You can set your status screen Décor at any time from the **`settings`** menu by choosing [Profile Settings] > [Status Screen Décor].");
-            return embed;
+            await Profile_Settings_Menu.Profile_Settings_Main(menuSession);
         }
     }
 }
