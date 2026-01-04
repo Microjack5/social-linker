@@ -29,6 +29,7 @@ namespace SocialLinker
             { "P2EP-PSP", "Persona 2: Eternal Punishment (PSP®️)" },
             { "P3F", "Persona 3 FES" },
             { "P3P", "Persona 3 Portable" },
+            { "P3R", "Persona 3 Reload" },
             { "P4-PS2", "Persona 4 (PlayStation®️ 2)" },
             { "P4G", "Persona 4 Golden" },
             { "P4AU", "Persona 4 Arena Ultimax" },
@@ -58,6 +59,7 @@ namespace SocialLinker
             { "P3", "<:P3:751133114918633483>" },
             { "P3F", "<:P3F:1096338540369039413>" },
             { "P3P", "<:P3P:1096338602046267392>" },
+            { "P3R", "<:warning:>" },
             { "P4", "<:P4:751133120530612274>" },
             { "P4-PS2", "<:P4:751133120530612274>" },
             { "P4G", "<:P4G:751133123479207956>" },
@@ -83,7 +85,7 @@ namespace SocialLinker
         internal static string[] p2ep_psp_version_keywords = { "P2EP-PSP", "P2EPPSP", "P2EP-P", "EP-PSP", "EP-P", "P2EPP", "EPPSP", "EPP" };
         internal static string[] p3f_version_keywords = { "P3F", "FES", "P3FES", "P3-PS2", "P3F-PS2", "FES-PS2", "P3FES-PS2", "P3-FES", "P3PS2", "P3FPS2", "FESPS2", "P3FESPS2" };
         internal static string[] p3p_version_keywords = { "P3P", "P3-PSP", "P3PSP" };
-        //internal static string[] p3r_version_keywords = { "P3R", "P3RE" };
+        internal static string[] p3r_version_keywords = { "P3R", "P3RE" };
         internal static string[] p4_ps2_version_keywords = { "P4-PS2", "P4PS2" };
         internal static string[] p4g_version_keywords = { "P4G" };
         internal static string[] p5_ps4_version_keywords = { "P5-PS3", "P5-PS4", "P5PS3", "P5PS4" };
