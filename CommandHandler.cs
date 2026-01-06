@@ -351,8 +351,8 @@ namespace SocialLinker
                     break;
 
                 case "sortp3r":
-                    //await Commands.DevCommands.Organize_P3RE_Params(command);
-                    await Commands.DevCommands.Organize_P3RE_Params_extend(command);
+                    await Commands.DevCommands.Organize_P3RE_Params(command);
+                    //await Commands.DevCommands.Organize_P3RE_Params_extend(command);
                     break;
 
                 case "resizep3r":

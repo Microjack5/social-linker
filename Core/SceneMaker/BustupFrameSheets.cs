@@ -12,6 +12,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace SocialLinker.Core.SceneMaker
@@ -290,6 +291,18 @@ namespace SocialLinker.Core.SceneMaker
 
             var image = new Bitmap(scrBitmap);
 
+            if (set_data.Origin == "P3R")
+            {
+                Bitmap base_template = new Bitmap(2048, 1518);
+
+                using (Graphics graphics = Graphics.FromImage(base_template))
+                {
+                    graphics.DrawImage(image, 0, -530, image.Width, image.Height);
+                }
+
+                image = base_template;
+            }
+
             float scale = Math.Min(width / image.Width, height / image.Height);
 
             var bmp = new Bitmap((int)width, (int)height);
@@ -311,6 +324,8 @@ namespace SocialLinker.Core.SceneMaker
 
             var scaleWidth = (int)(image.Width * scale);
             var scaleHeight = (int)(image.Height * scale);
+
+            
 
             graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
 
