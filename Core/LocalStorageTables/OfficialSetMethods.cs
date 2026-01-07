@@ -687,14 +687,31 @@ namespace SocialLinker.Core.LocalStorageTables
 
             if (set_data.Origin == "P3R")
             {
-                set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
+                return Base_Sprite_Validity_Check_P3R(sl_command, set_data, maker_command_data);
             }
             else
             {
                 set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
             }
 
-            set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            // Get a count of how many files are in the sprite set's directory.
+            int filecount = AttachmentCountItemDirectory(set_path);
+
+            // Now that we have a filecount for the set, let's see if the inputted sprite number is valid before we continue.
+            // If not, send an error message and cancel the request.
+            if (maker_command_data.Character_Data_1.Base_Sprite > filecount)
+            {
+                _ = ErrorHandling.Sprite_Number_Not_Found(sl_command, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool Base_Sprite_Validity_Check_P3R(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
+        {
+            // Establish the directory of the specified sprite set.
+            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = AttachmentCountItemDirectory(set_path);

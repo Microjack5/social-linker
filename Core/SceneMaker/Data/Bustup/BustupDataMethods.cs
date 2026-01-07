@@ -159,7 +159,7 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                 }
                 else
                 {
-                    bustup_filename = Get_Bustup_Filename(account, set_data, maker_character_data);
+                    //bustup_filename = Get_Bustup_Filename(account, set_data, maker_character_data);
                     bustup_filename = OfficialSetMethods.Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, false);
                 }
 
