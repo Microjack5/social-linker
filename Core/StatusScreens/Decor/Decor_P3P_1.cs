@@ -23,16 +23,17 @@ namespace SocialLinker.Core.StatusScreens.Decor
             try
             {
                 var account = UserInfoClasses.GetAccount(user);
-                string username = user.Username;
+                var guild_user = user as SocketGuildUser;
+                string display_name = guild_user?.DisplayName ?? user.Username;
 
                 // If the username is over 12 characters, replace the last parts with an ellipsis.
-                if (username.Length > 12)
+                if (display_name.Length > 12)
                 {
-                    username = $"{username.Substring(0, 12)}...";
+                    display_name = $"{display_name.Substring(0, 12)}...";
                 }
                 else
                 {
-                    username = $"{username}";
+                    display_name = $"{display_name}";
                 }
 
                 //Establish other variables of the user's data
@@ -107,7 +108,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
                     //Draw username
                     using (Font p4g_font = new Font("P4G", 34))
                     {
-                        graphics.DrawString(username, p4g_font, dark_red_brush, new Point(492, 610));
+                        graphics.DrawString(display_name, p4g_font, dark_red_brush, new Point(492, 610));
                     }
 
                     //Draw "Total EXP" & "Next EXP" text, plus total EXP value

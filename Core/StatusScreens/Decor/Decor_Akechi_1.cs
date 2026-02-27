@@ -23,16 +23,17 @@ namespace SocialLinker.Core.StatusScreens.Decor
             try
             {
                 var account = UserInfoClasses.GetAccount(user);
-                string username = user.Username;
+                var guild_user = user as SocketGuildUser;
+                string display_name = guild_user?.DisplayName ?? user.Username;
 
                 // If the username is over 20 characters, replace the last parts with an ellipsis.
-                if (username.Length > 20)
+                if (display_name.Length > 20)
                 {
-                    username = $"{username.Substring(0, 20)}...";
+                    display_name = $"{display_name.Substring(0, 20)}...";
                 }
                 else
                 {
-                    username = $"{username}";
+                    display_name = $"{display_name}";
                 }
 
                 // Establish other variables of the user's data
@@ -116,7 +117,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
                     graphics.DrawImage(game_textures, 0, 0, 1920, 1080);
 
                     // Create a new bitmap that contains the user's username
-                    Bitmap username_box = RenderUsername(username);
+                    Bitmap username_box = RenderUsername(display_name);
 
                     // Rotate the username bitmap by 3 degrees and save it to a new bitmap
                     Bitmap rotated_username_box = RotateImage(username_box, 3);
