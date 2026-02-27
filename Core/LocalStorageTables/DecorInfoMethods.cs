@@ -326,32 +326,34 @@ namespace SocialLinker.Core.LocalStorageTables
 
         public static List<string> CreateSortSettingList(string user_setting)
         {
-            // Create an empty string list to return at the end of the method.
             List<string> return_list = new List<string>();
 
-            if (user_setting == "title_a_z")
+            switch (user_setting)
             {
-                return_list = Shop_Decor_By_Title_A_Z();
-            }
-            else if (user_setting == "title_z_a")
-            {
-                return_list = Shop_Decor_By_Title_Z_A();
-            }
-            else if (user_setting == "cost_low_high")
-            {
-                return_list = Shop_Decor_By_Cost_Low_High();
-            }
-            else if (user_setting == "cost_high_low")
-            {
-                return_list = Shop_Decor_By_Cost_High_Low();
-            }
-            else if (user_setting == "release_old_new")
-            {
-                return_list = Shop_Decor_By_Order_Added_Old_New();
-            }
-            else if (user_setting == "release_new_old")
-            {
-                return_list = Shop_Decor_By_Order_Added_New_Old();
+                case "title_a_z":
+                    return_list = Shop_Decor_By_Title_A_Z();
+                    break;
+
+                case "title_z_a":
+                    return_list = Shop_Decor_By_Title_Z_A();
+                    break;
+
+                case "cost_low_high":
+                    return_list = Shop_Decor_By_Cost_Low_High();
+                    break;
+
+                case "cost_high_low":
+                    return_list = Shop_Decor_By_Cost_High_Low();
+                    break;
+
+                case "release_old_new":
+                    return_list = Shop_Decor_By_Order_Added_Old_New();
+                    break;
+
+                case "release_new_old":
+                default:
+                    return_list = Shop_Decor_By_Order_Added_New_Old();
+                    break;
             }
 
             return return_list;

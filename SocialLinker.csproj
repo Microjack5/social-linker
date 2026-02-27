@@ -482,6 +482,11 @@
     <Compile Include="Core\StatusScreens\Decor\Decor_P4AU_Yukiko_Shadow_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_P4AU_Yu_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_P4AU_Yu_Shadow_1.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_P5X_Crossroads_1.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_P5X_Crossroads_2.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_P5X_Crossroads_3.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_P5X_Crossroads_4.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Decor_P5X_Crossroads_5.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_TMS_Barry_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_TMS_Eleonora_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_TMS_GamePad_1.cs" />
@@ -494,6 +499,9 @@
     <Compile Include="Core\StatusScreens\Decor\Decor_TMS_Tsubasa_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_TMS_Tsubasa_2.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_TMS_Yashiro_1.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Shared_P4AU_Methods.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Shared_P5X_Crossroads_Methods.cs" />
+    <Compile Include="Core\StatusScreens\Decor\Shared_TMS_Methods.cs" />
     <Compile Include="Core\StatusScreens\ErrorHandling.cs" />
     <Compile Include="Core\StatusScreens\ProgressBar.cs" />
     <Compile Include="Core\StatusScreens\Default\StatusScreenP3.cs" />
