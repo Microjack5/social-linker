@@ -178,7 +178,7 @@ namespace SocialLinker.Core.StatusScreens.Decor
 
             embed.WithAuthor(author);
             embed.WithColor(213, 27, 4);
-            embed.WithThumbnailUrl("https://i.imgur.com/kWx4K6h.gif");
+            embed.WithThumbnailUrl("https://i.imgur.com/t5kBpkG.gif");
             embed.WithDescription("This may take a few seconds!");
 
             return embed;
