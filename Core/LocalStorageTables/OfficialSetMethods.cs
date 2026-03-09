@@ -2564,7 +2564,10 @@ namespace SocialLinker.Core.LocalStorageTables
             //opaque_bustup = Create_P3R_Bustup_Base_Lighting(opaque_bustup, base_light);
             //opaque_bustup = Apply_P3R_Gradient_Overlay(opaque_bustup);
 
-            //rim_light_layer = Create_P3R_Bustup_Rim_Lighting(bustup, rim_light);
+            rim_light_layer = Create_P3R_Bustup_Rim_Lighting(bustup, rim_light);
+
+            //Bitmap rim_light_eyes = new Bitmap(eye_frame_sprite.Width, eye_frame_sprite.Height);
+            //Bitmap rim_light_mouth = new Bitmap(mouth_frame_sprite.Width, mouth_frame_sprite.Height);
             //rim_light_layer = Apply_P3R_Gradient_Overlay(highlight_layer);
 
             // Draw the frames to the cropped bustup.

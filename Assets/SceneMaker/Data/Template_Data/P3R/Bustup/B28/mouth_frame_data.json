@@ -456,22 +456,22 @@
   },
   {
     "Filename": "b28_6_6p_m1.png",
-    "Scale_Width": 256,
-    "Scale_Height": 256,
+    "Scale_Width": 512,
+    "Scale_Height": 512,
     "Coord_X": 835,
     "Coord_Y": 1524
   },
   {
     "Filename": "b28_6_6p_m2.png",
-    "Scale_Width": 256,
-    "Scale_Height": 256,
+    "Scale_Width": 512,
+    "Scale_Height": 512,
     "Coord_X": 835,
     "Coord_Y": 1524
   },
   {
     "Filename": "b28_6_6p_m3.png",
-    "Scale_Width": 256,
-    "Scale_Height": 256,
+    "Scale_Width": 512,
+    "Scale_Height": 512,
     "Coord_X": 835,
     "Coord_Y": 1524
   }

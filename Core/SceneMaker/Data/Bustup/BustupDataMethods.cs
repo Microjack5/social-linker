@@ -486,11 +486,11 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             var new_bustup_data = new BustupData()
                             {
                                 Filename = $"{set_data.ID.ToLower()}_0_{outfit}{current_pose}.png",
-                                Default_Name_EN = "Mitsuru Kirijo",
+                                Default_Name_EN = "Junpei Iori",
                                 Default_Name_JPN = "---",
                                 P3R_Scale_Width = 2048,
                                 P3R_Scale_Height = 2048,
-                                P3R_Coord_X = -494,
+                                P3R_Coord_X = -434 + 0,
                                 P3R_Coord_Y = 250 + 0,
                             };
 
@@ -501,11 +501,11 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             var new_bustup_data = new BustupData()
                             {
                                 Filename = $"{set_data.ID.ToLower()}_0_{outfit}{current_pose}.png",
-                                Default_Name_EN = "Mitsuru Kirijo",
+                                Default_Name_EN = "Junpei Iori",
                                 Default_Name_JPN = "---",
                                 P3R_Scale_Width = 2048,
                                 P3R_Scale_Height = 2048,
-                                P3R_Coord_X = -486,
+                                P3R_Coord_X = -434 + -21,
                                 P3R_Coord_Y = 250 + 0,
                             };
 
@@ -516,12 +516,12 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             var new_bustup_data = new BustupData()
                             {
                                 Filename = $"{set_data.ID.ToLower()}_0_{outfit}{current_pose}.png",
-                                Default_Name_EN = "Mitsuru Kirijo",
+                                Default_Name_EN = "Junpei Iori",
                                 Default_Name_JPN = "---",
                                 P3R_Scale_Width = 2048,
                                 P3R_Scale_Height = 2048,
-                                P3R_Coord_X = -434 + -150,
-                                P3R_Coord_Y = 250 + 0,
+                                P3R_Coord_X = -434 + 63,
+                                P3R_Coord_Y = 250 + 32,
                             };
 
                             new_list.Add(new_bustup_data);
@@ -531,11 +531,11 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                             var new_bustup_data = new BustupData()
                             {
                                 Filename = $"{set_data.ID.ToLower()}_0_{outfit}{current_pose}.png",
-                                Default_Name_EN = "Mitsuru Kirijo",
+                                Default_Name_EN = "Junpei Iori",
                                 Default_Name_JPN = "---",
                                 P3R_Scale_Width = 2048,
                                 P3R_Scale_Height = 2048,
-                                P3R_Coord_X = -434 + -30,
+                                P3R_Coord_X = -434 + 0,
                                 P3R_Coord_Y = 250 + 0,
                             };
 
@@ -864,60 +864,104 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                                 // EXPERIMENT START
                                 FrameData new_frame_data = new FrameData();
 
-                                if (expression == 8 || expression == 9 || expression == 10)
-                                {
-                                    new_frame_data = new FrameData()
-                                    {
-                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
-                                        Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 843,
-                                        Coord_Y = 996
-                                    };
-                                }
-                                else if (expression == 11 || expression == 12)
-                                {
-                                    new_frame_data = new FrameData()
-                                    {
-                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
-                                        Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 840,
-                                        Coord_Y = 1059
-                                    };
-                                }
-                                else if (expression == 13 || expression == 14 || expression == 15)
-                                {
-                                    new_frame_data = new FrameData()
-                                    {
-                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
-                                        Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 826,
-                                        Coord_Y = 1088
-                                    };
-                                }
-                                else
-                                {
-                                    new_frame_data = new FrameData()
-                                    {
-                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
-                                        Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 885,
-                                        Coord_Y = 995
-                                    };
-                                }
-
-                                //if (poses[pose_index] == 'a')
+                                //if (expression == 1)
+                                //{
+                                //    new_frame_data = new FrameData()
+                                //    {
+                                //        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                //        Scale_Width = 1024,
+                                //        Scale_Height = 512,
+                                //        Coord_X = 488,
+                                //        Coord_Y = 706
+                                //    };
+                                //}
+                                //else if (expression == 11 || expression == 12)
                                 //{
                                 //    new_frame_data = new FrameData()
                                 //    {
                                 //        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
                                 //        Scale_Width = 512,
                                 //        Scale_Height = 256,
-                                //        Coord_X = 673,
-                                //        Coord_Y = 1083
+                                //        Coord_X = 840,
+                                //        Coord_Y = 1059
+                                //    };
+                                //}
+                                //else if (expression == 13 || expression == 14 || expression == 15)
+                                //{
+                                //    new_frame_data = new FrameData()
+                                //    {
+                                //        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                //        Scale_Width = 512,
+                                //        Scale_Height = 256,
+                                //        Coord_X = 826,
+                                //        Coord_Y = 1088
+                                //    };
+                                //}
+                                //else
+                                //{
+                                //    new_frame_data = new FrameData()
+                                //    {
+                                //        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                //        Scale_Width = 512,
+                                //        Scale_Height = 256,
+                                //        Coord_X = 885,
+                                //        Coord_Y = 995
+                                //    };
+                                //}
+
+                                if (poses[pose_index] == 'a')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 256,
+                                        Coord_X = 789,
+                                        Coord_Y = 1033
+                                    };
+                                }
+                                else if (poses[pose_index] == 'b')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 256,
+                                        Coord_X = 844,
+                                        Coord_Y = 1102
+                                    };
+                                }
+                                else if (poses[pose_index] == 'c')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 512,
+                                        Coord_X = 726,
+                                        Coord_Y = 690
+                                    };
+                                }
+                                else if (poses[pose_index] == 'd')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 512,
+                                        Coord_X = 792,
+                                        Coord_Y = 931
+                                    };
+                                }
+                                //else if (poses[pose_index] == 'p')
+                                //{
+                                //    new_frame_data = new FrameData()
+                                //    {
+                                //        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_e{i}.png",
+                                //        Scale_Width = 512,
+                                //        Scale_Height = 512,
+                                //        Coord_X = 0,
+                                //        Coord_Y = 0
                                 //    };
                                 //}
 
@@ -1016,62 +1060,95 @@ namespace SocialLinker.Core.SceneMaker.Data.Bustup
                                 // EXPERIMENT START
                                 FrameData new_frame_data = new FrameData();
 
-                                if (expression == 8 || expression == 9 || expression == 10)
-                                {
-                                    new_frame_data = new FrameData()
-                                    {
-                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
-                                        Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 843,
-                                        Coord_Y = 1244
-                                    };
-                                }
-                                else if (expression == 11 || expression == 12)
-                                {
-                                    new_frame_data = new FrameData()
-                                    {
-                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
-                                        Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 840,
-                                        Coord_Y = 1307
-                                    };
-                                }
-                                else if (expression == 13 || expression == 14 || expression == 15)
-                                {
-                                    new_frame_data = new FrameData()
-                                    {
-                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
-                                        Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 826,
-                                        Coord_Y = 1336
-                                    };
-                                }
-                                else
-                                {
-                                    new_frame_data = new FrameData()
-                                    {
-                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
-                                        Scale_Width = 512,
-                                        Scale_Height = 256,
-                                        Coord_X = 885,
-                                        Coord_Y = 1243
-                                    };
-                                }
-
-                                //if (poses[pose_index] == 'a')
+                                //if (expression == 1)
+                                //{
+                                //    new_frame_data = new FrameData()
+                                //    {
+                                //        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
+                                //        Scale_Width = 1024,
+                                //        Scale_Height = 512,
+                                //        Coord_X = 488,
+                                //        Coord_Y = 1206
+                                //    };
+                                //}
+                                //else if (expression == 11 || expression == 12)
                                 //{
                                 //    new_frame_data = new FrameData()
                                 //    {
                                 //        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
                                 //        Scale_Width = 512,
                                 //        Scale_Height = 256,
-                                //        Coord_X = 673,
-                                //        Coord_Y = 1320
+                                //        Coord_X = 840,
+                                //        Coord_Y = 1307
                                 //    };
                                 //}
+                                //else if (expression == 13 || expression == 14 || expression == 15)
+                                //{
+                                //    new_frame_data = new FrameData()
+                                //    {
+                                //        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
+                                //        Scale_Width = 512,
+                                //        Scale_Height = 256,
+                                //        Coord_X = 826,
+                                //        Coord_Y = 1336
+                                //    };
+                                //}
+                                //else
+                                //{
+                                //    new_frame_data = new FrameData()
+                                //    {
+                                //        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
+                                //        Scale_Width = 512,
+                                //        Scale_Height = 256,
+                                //        Coord_X = 885,
+                                //        Coord_Y = 1243
+                                //    };
+                                //}
+
+                                if (poses[pose_index] == 'a')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 256,
+                                        Coord_X = 789,
+                                        Coord_Y = 1281
+                                    };
+                                }
+                                else if (poses[pose_index] == 'b')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 256,
+                                        Coord_X = 844,
+                                        Coord_Y = 1354
+                                    };
+                                }
+                                else if (poses[pose_index] == 'c')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 512,
+                                        Coord_X = 729,
+                                        Coord_Y = 1158
+                                    };
+                                }
+                                else if (poses[pose_index] == 'd')
+                                {
+                                    new_frame_data = new FrameData()
+                                    {
+                                        Filename = $"{set_data.ID.ToLower()}_{expression}_{outfit}{poses[pose_index]}_m{i}.png",
+                                        Scale_Width = 512,
+                                        Scale_Height = 512,
+                                        Coord_X = 792,
+                                        Coord_Y = 1182
+                                    };
+                                }
 
                                 new_list.Add(new_frame_data);
                                 // EXPERIMENT END
