@@ -12,8 +12,10 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace SocialLinker.Core.LocalStorageTables
@@ -2764,7 +2766,7 @@ namespace SocialLinker.Core.LocalStorageTables
             return base_sprite_filename;
         }
 
-        public static Bitmap P3R_Bitmap_to_Opaque(Bitmap input_bitmap)
+        public static Bitmap P3R_Bitmap_to_Opaque_Old(Bitmap input_bitmap)
         {
             Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
@@ -2796,6 +2798,61 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             return output_bitmap;
+        }
+
+        public static Bitmap P3R_Bitmap_to_Opaque(Bitmap inputBitmap)
+        {
+            Bitmap output = new Bitmap(inputBitmap.Width, inputBitmap.Height, PixelFormat.Format32bppArgb);
+
+            using (Graphics g = Graphics.FromImage(output))
+            {
+                g.DrawImage(inputBitmap, 0, 0, inputBitmap.Width, inputBitmap.Height);
+            }
+
+            Rectangle rect = new Rectangle(0, 0, output.Width, output.Height);
+            BitmapData data = output.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+            try
+            {
+                int stride = data.Stride;
+                int bytes = Math.Abs(stride) * output.Height;
+                byte[] buffer = new byte[bytes];
+
+                Marshal.Copy(data.Scan0, buffer, 0, bytes);
+
+                for (int y = 0; y < output.Height; y++)
+                {
+                    int row = y * stride;
+
+                    for (int x = 0; x < output.Width; x++)
+                    {
+                        int i = row + (x * 4);
+
+                        byte a = buffer[i + 3];
+
+                        if (a >= 50)
+                        {
+                            int newAlpha = a * 2;
+                            buffer[i + 3] = (byte)(newAlpha > 240 ? 255 : newAlpha);
+                        }
+                        else
+                        {
+                            buffer[i + 0] = 0;
+                            buffer[i + 1] = 0;
+                            buffer[i + 2] = 0;
+                            buffer[i + 3] = 0;
+                        }
+                    }
+                }
+
+                Marshal.Copy(buffer, 0, data.Scan0, bytes);
+            }
+            finally
+            {
+                output.UnlockBits(data);
+            }
+
+            return output;
         }
 
         public static Bitmap Create_P3R_Bustup_Base_Lighting(Bitmap input_bitmap, System.Drawing.Color mask)
@@ -2831,7 +2888,7 @@ namespace SocialLinker.Core.LocalStorageTables
             return output_bitmap;
         }
 
-        public static Bitmap Create_P3R_Bustup_Rim_Lighting(Bitmap input_bitmap, System.Drawing.Color mask)
+        public static Bitmap Create_P3R_Bustup_Rim_Lighting_Old(Bitmap input_bitmap, System.Drawing.Color mask)
         {
             Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
@@ -2860,6 +2917,73 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             return output_bitmap;
+        }
+
+        public static Bitmap Create_P3R_Bustup_Rim_Lighting(Bitmap inputBitmap, Color mask)
+        {
+            int width = inputBitmap.Width;
+            int height = inputBitmap.Height;
+
+            Bitmap output = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            using (Graphics g = Graphics.FromImage(output))
+            {
+                g.DrawImage(inputBitmap, 0, 0, width, height);
+            }
+
+            Rectangle rect = new Rectangle(0, 0, width, height);
+            BitmapData data = output.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+            try
+            {
+                int stride = data.Stride;
+                int bytes = Math.Abs(stride) * height;
+                byte[] buffer = new byte[bytes];
+
+                Marshal.Copy(data.Scan0, buffer, 0, bytes);
+
+                for (int y = 0; y < height; y++)
+                {
+                    int row = y * stride;
+
+                    for (int x = 0; x < width; x++)
+                    {
+                        int i = row + (x * 4);
+
+                        byte b = buffer[i + 0];
+                        byte g = buffer[i + 1];
+                        byte r = buffer[i + 2];
+                        byte a = buffer[i + 3];
+
+                        if (a > 150)
+                        {
+                            int newR = r + mask.R;
+                            int newG = g + mask.G;
+                            int newB = b + mask.B;
+
+                            buffer[i + 2] = (byte)(newR > 255 ? 255 : newR);
+                            buffer[i + 1] = (byte)(newG > 255 ? 255 : newG);
+                            buffer[i + 0] = (byte)(newB > 255 ? 255 : newB);
+                            buffer[i + 3] = a;
+                        }
+                        else
+                        {
+                            buffer[i + 0] = 0;
+                            buffer[i + 1] = 0;
+                            buffer[i + 2] = 0;
+                            buffer[i + 3] = 0;
+                        }
+                    }
+                }
+
+                Marshal.Copy(buffer, 0, data.Scan0, bytes);
+            }
+            finally
+            {
+                output.UnlockBits(data);
+            }
+
+            return output;
         }
 
         public static int Burn_Equation (int mask_value, int image_value)
