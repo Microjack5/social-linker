@@ -35,6 +35,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public int max_line_length = 480;
 
+        public System.Drawing.Color nametag_color = System.Drawing.Color.FromArgb(11, 239, 239);
+
         public Rectangle calendar_area = new Rectangle(1295, 0, 625, 150);
 
         System.Drawing.Color time_of_day_dark_hour_color = System.Drawing.Color.FromArgb(53, 255, 121);
@@ -117,9 +119,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 dialogue: sl_command.MakerCommand.Dialogue,
                 bitmapWidth: 1920,
                 bitmapHeight: 1080,
-                startX: 637f,
+                startX: 637f + 192f,
                 startY: 869f,
-                letterSpacing: 0.1f,
+                letterSpacing: 12f, //0.1
                 spaceScale: 1f,
                 lineSpacing: -19f,
                 drawOutline: false,
@@ -132,21 +134,39 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int lineCount = result.LineCount;
             float longestLine = result.LongestLineWidth;
 
-            Console.WriteLine($"" +
-                $"lineCount: {lineCount}\n" +
-                $"longestLine: {longestLine}");
+            Bitmap nametag_layer = renderer.RenderName(
+                name: OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1),
+                bitmapWidth: 1920,
+                bitmapHeight: 1080,
+                x: 548f,
+                y: 803f,
+                letterSpacing: -1.5f,
+                spaceScale: 0.5f,
+                drawOutline: false,
+                fillColor: nametag_color,
+                outlineColor: System.Drawing.Color.Black,
+                outlineWidth: 2.5f
+            );
 
             Bitmap message_bg = RenderMessageWindow(result);
+            Bitmap control_panel = RenderControlPanel(account);
+
+            Bitmap bustup_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//bustup_bg.png");
 
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
+
+                graphics.DrawImage(bustup_bg, 0, 0, template_width, template_height);
+
                 graphics.DrawImage(uhd_layer, 0, 0, uhd_layer.Width, uhd_layer.Height);
-                //graphics.DrawImage(Render_Calendar_HUD_2(account), 0, 0, template_width, template_height);
-                //graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
-                //graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
+                graphics.DrawImage(Render_Calendar_HUD_2(account), 0, 0, template_width, template_height);
+                graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
+                graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
                 graphics.DrawImage(message_bg, 0, 0, message_bg.Width, message_bg.Height);
                 graphics.DrawImage(dialogue_bitmap, 0, 0, dialogue_bitmap.Width, dialogue_bitmap.Height);
+                graphics.DrawImage(nametag_layer, 0, 0, nametag_layer.Width, nametag_layer.Height);
+                graphics.DrawImage(control_panel, 0, 0, template_width, template_height);
             }
 
             // Save the entire base template to a data stream.
@@ -191,6 +211,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap nametag_layer = new Bitmap(1920, 1080);
             Bitmap advance_layer = new Bitmap(1920, 1080);
 
+            Bitmap talk_layer = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//talk.png");
+            talk_layer = Bitmap_To_Color(talk_layer, nametag_color, new Rectangle(551, 842, 58, 8));
+
             float base_box_x = 500f;
             float base_box_y = 784f;
             float base_box_width = 798f; // Med = 127f, Large = 264f
@@ -233,7 +256,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 msg_bg_x = 18;
             }
-
 
             switch (result.LineCount)
             {
@@ -282,58 +304,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 
                 graphics.DrawImage(background_tilt, msg_bg_x, msg_bg_y, background_tilt.Width, background_tilt.Height);
             }
-
-            //// メッセージ下地
-            //using (Graphics graphics = Graphics.FromImage(message_main))
-            //using (SolidBrush msgOutlineBrush = new SolidBrush(System.Drawing.Color.FromArgb(255, 22, 36, 99)))
-            //{
-            //    graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            //    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            //    graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-            //    Persona3ReloadMessageBaseResizable.FillMessageBaseBySize(
-            //        graphics,
-            //        msgOutlineBrush,
-            //        box_x,
-            //        box_y,
-            //        box_width,
-            //        box_height
-            //    );
-            //}
-
-            //// Punch out the inner area so it becomes transparent
-            //using (Graphics graphics = Graphics.FromImage(message_main))
-            //using (GraphicsPath innerPath = Persona3ReloadMessageInnerResizable.BuildScaledPath(
-            //    box_x + 5f,
-            //    box_y + 5f,
-            //    box_x + 5f + (box_width - 10f),
-            //    box_y + 5f + (box_height - 10f)))
-            //using (SolidBrush transparentBrush = new SolidBrush(System.Drawing.Color.Transparent))
-            //{
-            //    graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            //    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            //    graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-            //    graphics.CompositingMode = CompositingMode.SourceCopy;
-            //    graphics.FillPath(transparentBrush, innerPath);
-            //    graphics.CompositingMode = CompositingMode.SourceOver;
-            //}
-
-            //// メッセージ中身
-            //using (Graphics graphics = Graphics.FromImage(message_main))
-            //{
-            //    graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            //    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            //    graphics.CompositingQuality = CompositingQuality.HighQuality;
-
-            //    Persona3ReloadMessageInnerResizable.FillMessageInnerWithHorizontalGradientBySize(
-            //        graphics,
-            //        box_x + 5f,
-            //        box_y + 5f,
-            //        box_width - 10f,
-            //        box_height - 10f
-            //    );
-            //}
 
             int scale = 4;
 
@@ -433,7 +403,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Cleanup
             message_supersample.Dispose();
 
-            float nametag_y = 778f;
+            float nametag_y = 0f;
 
             switch (result.LineCount)
             {
@@ -456,16 +426,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             // 話者名下地　バストアップあり (Tail)
             using (Graphics graphics = Graphics.FromImage(nametag_layer))
-            using (SolidBrush nametagBrush = new SolidBrush(System.Drawing.Color.FromArgb(23, 0, 254)))
+            using (SolidBrush tailBrush = new SolidBrush(System.Drawing.Color.FromArgb(22, 36, 99)))
             {
-                Persona3ReloadSpeakerNameBaseBustupResizable.FillSpeakerNameBaseBustupBySize(
-                    graphics,
-                    nametagBrush,
-                    431f,   // x
-                    nametag_y,   // y
-                    236f,  // width
-                    92f    // height
-                );
+                Point tail_point_1 = new Point(452, 842);
+                Point tail_point_2 = new Point(502, 859);
+                Point tail_point_3 = new Point(505, 829);
+
+                Point[] tail_points = {
+                    tail_point_1,
+                    tail_point_2,
+                    tail_point_3
+                };
+
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                graphics.FillPolygon(tailBrush, tail_points);
             }
 
             // 話者名下地　バストアップあり
@@ -476,7 +450,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     graphics,
                     nametagBrush,
                     431f,   // x
-                    nametag_y,   // y
+                    778f,   // y
                     236f,  // width
                     92f    // height
                 );
@@ -538,19 +512,23 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 );
             }
 
-            Console.WriteLine($"" +
-                $"box_width - base_box_width = {box_width - base_box_width}\n" +
-                $"box_height - base_box_height = {box_height - base_box_height}");
-
             using (Graphics graphics = Graphics.FromImage(message_window))
             {
                 graphics.DrawImage(message_background, 0, 0, message_background.Width, message_background.Height);
                 graphics.DrawImage(message_main, 0, 0, message_main.Width, message_main.Height);
-                graphics.DrawImage(nametag_layer, 0, 0, nametag_layer.Width, nametag_layer.Height);
+                graphics.DrawImage(nametag_layer, 0, nametag_y, nametag_layer.Width, nametag_layer.Height);
+                graphics.DrawImage(talk_layer, 0, nametag_y, talk_layer.Width, talk_layer.Height);
                 graphics.DrawImage(advance_layer, 0, 0, advance_layer.Width, advance_layer.Height);
             }
 
             return message_window;
+        }
+
+        public Bitmap RenderControlPanel(UserInfoFields account)
+        {
+            Bitmap buttons_ps5_1 = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps5_1.png");
+
+            return buttons_ps5_1;
         }
 
         public Bitmap Render_Calendar_HUD(UserInfoFields account)
@@ -687,11 +665,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap limit = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Moon//Countdown//limit.png");
 
             limit = Bitmap_To_Color(limit, System.Drawing.Color.FromArgb(246, 252, 156), calendar_area);
-
-            using (Graphics graphics = Graphics.FromImage(base_template))
-            {
-                graphics.DrawImage(limit, 0, 0, template_width, template_height);
-            }
 
             // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
             // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -936,6 +909,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Now, let's use a graphics object to draw to the base template.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
+                graphics.DrawImage(limit, 0, 0, template_width, template_height);
                 graphics.DrawImage(countdown_text_special, 0, 0, template_width, template_height);
                 graphics.DrawImage(countdown_tens, 0, 0, template_width, template_height);
                 graphics.DrawImage(countdown_ones, 0, 0, template_width, template_height);
@@ -971,23 +945,23 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return new_bitmap;
         }
 
-        public static Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
-        {
-            Bitmap base_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
+        //public static Bitmap Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area)
+        //{
+        //    Bitmap base_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
-            for (int x = edit_area.X; x < edit_area.Right; x++)
-            {
-                for (int y = edit_area.Y; y < edit_area.Bottom; y++)
-                {
-                    System.Drawing.Color original_color = input_bitmap.GetPixel(x, y);
-                    System.Drawing.Color new_color = System.Drawing.Color.FromArgb(original_color.A, input_color.R, input_color.G, input_color.B);
+        //    for (int x = edit_area.X; x < edit_area.Right; x++)
+        //    {
+        //        for (int y = edit_area.Y; y < edit_area.Bottom; y++)
+        //        {
+        //            System.Drawing.Color original_color = input_bitmap.GetPixel(x, y);
+        //            System.Drawing.Color new_color = System.Drawing.Color.FromArgb(original_color.A, input_color.R, input_color.G, input_color.B);
 
-                    base_bitmap.SetPixel(x, y, new_color);
-                }
-            }
+        //            base_bitmap.SetPixel(x, y, new_color);
+        //        }
+        //    }
 
-            return base_bitmap;
-        }
+        //    return base_bitmap;
+        //}
 
         public static Bitmap Partial_Bitmap_To_Color(Bitmap input_bitmap, System.Drawing.Color input_color, Rectangle edit_area, int alpha_threshold)
         {
@@ -1218,6 +1192,66 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             countdownInt = (int)Math.Round(age);
 
             return countdownInt;
+        }
+
+        public static Bitmap Bitmap_To_Color(Bitmap inputBitmap, System.Drawing.Color inputColor, Rectangle editArea)
+        {
+            int width = inputBitmap.Width;
+            int height = inputBitmap.Height;
+
+            Rectangle bounds = new Rectangle(0, 0, width, height);
+            Rectangle clippedArea = Rectangle.Intersect(editArea, bounds);
+
+            Bitmap source = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            using (Graphics g = Graphics.FromImage(source))
+            {
+                g.DrawImage(inputBitmap, 0, 0, width, height);
+            }
+
+            Bitmap output = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            BitmapData srcData = source.LockBits(bounds, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData dstData = output.LockBits(bounds, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+            try
+            {
+                int srcStride = srcData.Stride;
+                int dstStride = dstData.Stride;
+                int bytes = Math.Abs(srcStride) * height;
+
+                byte[] srcBuffer = new byte[bytes];
+                byte[] dstBuffer = new byte[bytes];
+
+                Marshal.Copy(srcData.Scan0, srcBuffer, 0, bytes);
+
+                for (int y = clippedArea.Top; y < clippedArea.Bottom; y++)
+                {
+                    int srcRow = y * srcStride;
+                    int dstRow = y * dstStride;
+
+                    for (int x = clippedArea.Left; x < clippedArea.Right; x++)
+                    {
+                        int i = srcRow + (x * 4);
+
+                        byte a = srcBuffer[i + 3];
+
+                        dstBuffer[dstRow + (x * 4) + 0] = inputColor.B;
+                        dstBuffer[dstRow + (x * 4) + 1] = inputColor.G;
+                        dstBuffer[dstRow + (x * 4) + 2] = inputColor.R;
+                        dstBuffer[dstRow + (x * 4) + 3] = a;
+                    }
+                }
+
+                Marshal.Copy(dstBuffer, 0, dstData.Scan0, bytes);
+            }
+            finally
+            {
+                source.UnlockBits(srcData);
+                output.UnlockBits(dstData);
+                source.Dispose();
+            }
+
+            return output;
         }
 
         public static EmbedBuilder P3R_Loading_Message()
@@ -4132,7 +4166,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     public class DialogueRenderer
     {
         // Adjust these as needed.
-        private const string FontName = "FOT-スキップ Pro E";
+        private const string FontName = "FOT-スキップ Pro E"; //FOT-スキップ Pro E //FOT-スキップ Std B
         private const float FontSize = 33f;
         private const float MaxLineWidth = 900f;
         private const int MaxLines = 3;
@@ -4428,6 +4462,63 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return pieces;
         }
 
+        //private void DrawLineWithCustomSpacing(
+        //    Graphics graphics,
+        //    string text,
+        //    Font font,
+        //    Brush fillBrush,
+        //    Pen outlinePen,
+        //    float startX,
+        //    float startY,
+        //    float letterSpacing,
+        //    float customSpaceWidth,
+        //    bool drawOutline)
+        //{
+        //    float x = startX;
+
+        //    foreach (char c in text)
+        //    {
+        //        if (c == ' ')
+        //        {
+        //            x += customSpaceWidth;
+        //            continue;
+        //        }
+
+        //        string s = c.ToString();
+        //        float advance = MeasureCharacterAdvance(graphics, font, c);
+
+        //        if (drawOutline)
+        //        {
+        //            using (GraphicsPath path = new GraphicsPath())
+        //            {
+        //                float emSize = font.SizeInPoints * graphics.DpiY / 72f;
+
+        //                path.AddString(
+        //                    s,
+        //                    font.FontFamily,
+        //                    (int)font.Style,
+        //                    emSize,
+        //                    new PointF(x, startY),
+        //                    StringFormat.GenericTypographic);
+
+        //                graphics.DrawPath(outlinePen, path);
+        //                graphics.FillPath(fillBrush, path);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            graphics.DrawString(
+        //                s,
+        //                font,
+        //                fillBrush,
+        //                new PointF(x, startY),
+        //                StringFormat.GenericTypographic);
+        //        }
+
+        //        x += advance + letterSpacing;
+        //    }
+        //}
+
         private void DrawLineWithCustomSpacing(
             Graphics graphics,
             string text,
@@ -4438,7 +4529,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             float startY,
             float letterSpacing,
             float customSpaceWidth,
-            bool drawOutline)
+            bool drawOutline,
+            float widthScale = 0.85f)
         {
             float x = startX;
 
@@ -4451,34 +4543,37 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 string s = c.ToString();
-                float advance = MeasureCharacterAdvance(graphics, font, c);
+                float advance = MeasureCharacterAdvance(graphics, font, c) * widthScale;
 
-                if (drawOutline)
+                using (GraphicsPath path = new GraphicsPath())
                 {
-                    using (GraphicsPath path = new GraphicsPath())
-                    {
-                        float emSize = font.SizeInPoints * graphics.DpiY / 72f;
+                    float emSize = font.SizeInPoints * graphics.DpiY / 72f;
 
-                        path.AddString(
-                            s,
-                            font.FontFamily,
-                            (int)font.Style,
-                            emSize,
-                            new PointF(x, startY),
-                            StringFormat.GenericTypographic);
-
-                        graphics.DrawPath(outlinePen, path);
-                        graphics.FillPath(fillBrush, path);
-                    }
-                }
-                else
-                {
-                    graphics.DrawString(
+                    path.AddString(
                         s,
-                        font,
-                        fillBrush,
+                        font.FontFamily,
+                        (int)font.Style,
+                        emSize,
                         new PointF(x, startY),
                         StringFormat.GenericTypographic);
+
+                    if (Math.Abs(widthScale - 1.0f) > 0.0001f)
+                    {
+                        using (Matrix matrix = new Matrix())
+                        {
+                            matrix.Translate(-x, 0f);
+                            matrix.Scale(widthScale, 1.0f);
+                            matrix.Translate(x, 0f);
+                            path.Transform(matrix);
+                        }
+                    }
+
+                    if (drawOutline)
+                    {
+                        graphics.DrawPath(outlinePen, path);
+                    }
+
+                    graphics.FillPath(fillBrush, path);
                 }
 
                 x += advance + letterSpacing;
@@ -4555,6 +4650,52 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 StringFormat.GenericTypographic);
 
             return size.Width;
+        }
+
+        public Bitmap RenderName(
+            string name,
+            int bitmapWidth,
+            int bitmapHeight,
+            float x,
+            float y,
+            float letterSpacing = 0f,
+            float spaceScale = 0.7f,
+            bool drawOutline = false,
+            System.Drawing.Color? fillColor = null,
+            System.Drawing.Color? outlineColor = null,
+            float outlineWidth = 2f)
+        {
+            Bitmap output = new Bitmap(bitmapWidth, bitmapHeight);
+
+            using (Graphics graphics = Graphics.FromImage(output))
+            using (Font font = new Font(FontName, 24f, FontStyle.Regular, GraphicsUnit.Pixel)) // smaller font
+            using (SolidBrush fillBrush = new SolidBrush(fillColor ?? System.Drawing.Color.White))
+            using (Pen outlinePen = new Pen(outlineColor ?? System.Drawing.Color.Black, outlineWidth)
+            {
+                LineJoin = LineJoin.Round
+            })
+            {
+                graphics.Clear(System.Drawing.Color.Transparent);
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+
+                float defaultSpaceWidth = MeasureSpaceAdvance(graphics, font);
+                float customSpaceWidth = defaultSpaceWidth * spaceScale;
+
+                DrawLineWithCustomSpacing(
+                    graphics,
+                    name,
+                    font,
+                    fillBrush,
+                    outlinePen,
+                    x,
+                    y,
+                    letterSpacing,
+                    customSpaceWidth,
+                    drawOutline);
+
+                return output;
+            }
         }
     }
 
