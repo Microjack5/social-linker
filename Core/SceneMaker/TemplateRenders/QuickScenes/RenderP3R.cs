@@ -7,7 +7,6 @@ using SocialLinker.Core.CloudStorageTables;
 using SocialLinker.Core.LocalStorageTables;
 using SocialLinker.Core.Menus;
 using SocialLinker.Core.SceneMaker.Data.Bustup;
-using SocialLinker.Core.SceneMaker.GlyphParsing;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -21,7 +20,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 {
@@ -37,13 +35,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public System.Drawing.Color nametag_color = System.Drawing.Color.FromArgb(11, 239, 239);
 
-        public Rectangle calendar_area = new Rectangle(1295, 0, 625, 150);
+        public Rectangle calendar_area = new Rectangle(1295, 0, 625, 170);
 
         System.Drawing.Color time_of_day_dark_hour_color = System.Drawing.Color.FromArgb(53, 255, 121);
         System.Drawing.Color type_of_day_dark_hour_color = System.Drawing.Color.FromArgb(5, 90, 20);
 
         System.Drawing.Color time_of_day_default_color = System.Drawing.Color.FromArgb(2, 253, 255);
         System.Drawing.Color type_of_day_default_color = System.Drawing.Color.FromArgb(22, 32, 103);
+
+        Random rnd = new Random();
 
         public async Task Render_Quick_Scene_P3R(SocialLinkerCommand sl_command)
         {
@@ -113,17 +113,19 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             uhd_layer = Scale_Template(account, uhd_layer);
 
+            DateTime user_time = Get_Date(account);
+
             DialogueRenderer renderer = new DialogueRenderer();
 
             DialogueRenderResult result = renderer.RenderDialogueAdvanced(
                 dialogue: sl_command.MakerCommand.Dialogue,
                 bitmapWidth: 1920,
                 bitmapHeight: 1080,
-                startX: 637f + 192f,
-                startY: 869f,
-                letterSpacing: 12f, //0.1
-                spaceScale: 1f,
-                lineSpacing: -19f,
+                startX: 639f, //903f + 8f,
+                startY: 865f,
+                letterSpacing: 1.3f, //12f
+                spaceScale: 1.3f, //-0.1f
+                lineSpacing: -23f,
                 drawOutline: false,
                 fillColor: System.Drawing.Color.White,
                 outlineColor: System.Drawing.Color.Black,
@@ -138,18 +140,23 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 name: OfficialSetMethods.GetDisplayName(account, sl_command.MakerCommand.Character_Data_1),
                 bitmapWidth: 1920,
                 bitmapHeight: 1080,
-                x: 548f,
+                x: 610f,
                 y: 803f,
-                letterSpacing: -1.5f,
-                spaceScale: 0.5f,
+                lineCount: lineCount,
+                letterSpacing: 1f,
+                spaceScale: 0.4f,
                 drawOutline: false,
                 fillColor: nametag_color,
                 outlineColor: System.Drawing.Color.Black,
-                outlineWidth: 2.5f
+                outlineWidth: 2.5f                
             );
 
             Bitmap message_bg = RenderMessageWindow(result);
             Bitmap control_panel = RenderControlPanel(account);
+            
+            Bitmap type_of_day_hud = GetTypeOfDayHud(account, user_time);
+
+            Bitmap waves = RenderWaves(type_of_day_hud, user_time);
 
             Bitmap bustup_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//bustup_bg.png");
 
@@ -160,11 +167,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(bustup_bg, 0, 0, template_width, template_height);
 
                 graphics.DrawImage(uhd_layer, 0, 0, uhd_layer.Width, uhd_layer.Height);
-                graphics.DrawImage(Render_Calendar_HUD_2(account), 0, 0, template_width, template_height);
+                graphics.DrawImage(waves, 0, 0, template_width, template_height);
                 graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
                 graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
                 graphics.DrawImage(message_bg, 0, 0, message_bg.Width, message_bg.Height);
-                graphics.DrawImage(dialogue_bitmap, 0, 0, dialogue_bitmap.Width, dialogue_bitmap.Height);
+                graphics.DrawImage(dialogue_bitmap, 95, 0, 1632, dialogue_bitmap.Height);
                 graphics.DrawImage(nametag_layer, 0, 0, nametag_layer.Width, nametag_layer.Height);
                 graphics.DrawImage(control_panel, 0, 0, template_width, template_height);
             }
@@ -403,26 +410,9 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Cleanup
             message_supersample.Dispose();
 
-            float nametag_y = 0f;
+            DialogueRenderer dialogueRenderer = new DialogueRenderer();
 
-            switch (result.LineCount)
-            {
-                case 1:
-                    // Do nothing
-                    break;
-
-                case 2:
-                    nametag_y -= 11f;
-                    break;
-
-                case 3:
-                    nametag_y -= 23f;
-                    break;
-
-                default:
-                    nametag_y = nametag_y - ((box_height - base_box_height) / 2);
-                    break;
-            }
+            float nametag_y = dialogueRenderer.GetAdjustedHeightForText(0f, result.LineCount);
 
             // 話者名下地　バストアップあり (Tail)
             using (Graphics graphics = Graphics.FromImage(nametag_layer))
@@ -491,8 +481,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Persona3ReloadTextAdvance.VariantB.FillBySize(
                     graphics,
                     advanceBaseBrush,
-                    1205f + (box_width - base_box_width),   // x
-                    926f + ((box_height - base_box_height) / 2),   // y
+                    1205f + (box_width - base_box_width) - 5,   // x
+                    926f + ((box_height - base_box_height) / 2) - 6,   // y
                     90f,  // width
                     42f    // height
                 );
@@ -505,8 +495,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 Persona3ReloadTextAdvance.VariantA.FillBySize(
                     graphics,
                     advanceArrowBrush,
-                    1212f + (box_width - base_box_width),   // x
-                    930f + ((box_height - base_box_height) / 2),   // y
+                    1212f + (box_width - base_box_width) - 5,   // x
+                    930f + ((box_height - base_box_height) / 2) - 6,   // y
                     71f,  // width
                     34f    // height
                 );
@@ -615,34 +605,427 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return base_template;
         }
 
-        public Bitmap Render_Calendar_HUD_2(UserInfoFields account)
+        private int GetRandomWaveX(int startX, int waveWidth)
         {
+            // Random from startX through startX + waveWidth.
+            // Next max is exclusive, so add +1.
+            return rnd.Next(startX, startX + waveWidth + 1);
+        }
+
+        private void DrawLoopingWavePair(
+            Bitmap wave,
+            Bitmap waveMask,
+            Bitmap scaledWave,
+            Bitmap scaledWaveMask,
+            int x,
+            int y,
+            int width,
+            int height)
+        {
+            using (Graphics graphics = Graphics.FromImage(scaledWave))
+            {
+                graphics.DrawImage(wave, x, y, width, height);
+                graphics.DrawImage(wave, x + width, y, width, height);
+            }
+
+            using (Graphics graphics = Graphics.FromImage(scaledWaveMask))
+            {
+                graphics.DrawImage(waveMask, x, y, width, height);
+                graphics.DrawImage(waveMask, x + width, y, width, height);
+            }
+        }
+
+        public Bitmap RenderWaves(Bitmap type_of_day_hud, DateTime user_time)
+        {
+            System.Drawing.Color wave_color = System.Drawing.Color.FromArgb(3, 48, 227);
+            System.Drawing.Color distorted_hud_color = System.Drawing.Color.FromArgb(1, 143, 227);
+            string wave_directory = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Wave";
+
+            Bitmap wave_1 = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//wave_1.png");
+            Bitmap wave_2 = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//wave_2.png");
+            Bitmap wave_3 = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//wave_3.png");
+            Bitmap wave_4 = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//wave_4.png");
+
+            Bitmap wave_mask_1 = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//wave_mask_1.png");
+            Bitmap wave_mask_2 = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//wave_mask_2.png");
+            Bitmap wave_mask_3 = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//wave_mask_3.png");
+            Bitmap wave_mask_4 = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//wave_mask_4.png");
+
+            Bitmap edge_mask = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//edge_mask.png");
+
+            Bitmap wave_warp = (Bitmap)System.Drawing.Image.FromFile($@"{wave_directory}//wave_warp.png");
+
             Bitmap base_template = new Bitmap(template_width, template_height);
-            DateTime user_time = Get_Date(account);
 
-            Bitmap type_of_day = new Bitmap(template_width, template_height);
+            Bitmap scaled_wave_1 = new Bitmap(template_width, template_height);
+            Bitmap scaled_wave_2 = new Bitmap(template_width, template_height);
+            Bitmap scaled_wave_3 = new Bitmap(template_width, template_height);
+            Bitmap scaled_wave_4 = new Bitmap(template_width, template_height);
 
+            Bitmap scaled_wave_mask_1 = new Bitmap(template_width, template_height);
+            Bitmap scaled_wave_mask_2 = new Bitmap(template_width, template_height);
+            Bitmap scaled_wave_mask_3 = new Bitmap(template_width, template_height);
+            Bitmap scaled_wave_mask_4 = new Bitmap(template_width, template_height);
+
+            Bitmap scaled_edge_mask = new Bitmap(template_width, template_height);
+
+            int wave_x = 1357; //1300
+            int wave_y = 0;
+            int wave_width = 563;
+            int wave_height = 220;
+
+            int wave_1_x = GetRandomWaveX(wave_x - wave_width, wave_width);
+            int wave_2_x = GetRandomWaveX(wave_x - wave_width, wave_width);
+            int wave_3_x = GetRandomWaveX(wave_x - wave_width, wave_width);
+            int wave_4_x = GetRandomWaveX(wave_x - wave_width, wave_width);
+
+            DrawLoopingWavePair(
+                wave_1,
+                wave_mask_1,
+                scaled_wave_1,
+                scaled_wave_mask_1,
+                wave_1_x,
+                wave_y,
+                wave_width,
+                wave_height
+            );
+
+            DrawLoopingWavePair(
+                wave_2,
+                wave_mask_2,
+                scaled_wave_2,
+                scaled_wave_mask_2,
+                wave_2_x,
+                wave_y,
+                wave_width,
+                wave_height
+            );
+
+            DrawLoopingWavePair(
+                wave_3,
+                wave_mask_3,
+                scaled_wave_3,
+                scaled_wave_mask_3,
+                wave_3_x,
+                wave_y,
+                wave_width,
+                wave_height
+            );
+
+            DrawLoopingWavePair(
+                wave_4,
+                wave_mask_4,
+                scaled_wave_4,
+                scaled_wave_mask_4,
+                wave_4_x,
+                wave_y,
+                wave_width,
+                wave_height
+            );
+
+            // Edge mask
+            using (Graphics graphics = Graphics.FromImage(scaled_edge_mask))
+            {
+                graphics.DrawImage(edge_mask, wave_x, wave_y, wave_width, wave_height);
+            }
+
+            Bitmap background = ColorTypeOfDayHudBackLayer(type_of_day_hud, user_time);
+
+            int randomMaskScrollX = rnd.Next(0, wave_warp.Width);
+            int randomMaskScrollY = rnd.Next(0, wave_warp.Height);
+
+            Bitmap distorted_type_of_day = WaveEffects.ApplyWaveMaskDistortion(
+                background,
+                wave_warp,
+                maxOffsetX: 8f,
+                maxOffsetY: 4f,
+                maskScrollX: randomMaskScrollX,
+                maskScrollY: randomMaskScrollY,
+                wrapSource: false
+            );
+
+            Bitmap revealing_wave_1 = ApplyRevealMask(distorted_type_of_day, scaled_wave_1);
+            Bitmap revealing_wave_2 = ApplyRevealMask(distorted_type_of_day, scaled_wave_2);
+            Bitmap revealing_wave_3 = ApplyRevealMask(distorted_type_of_day, scaled_wave_3);
+            Bitmap revealing_wave_4 = ApplyRevealMask(distorted_type_of_day, scaled_wave_4);
+
+            revealing_wave_1 = ApplyGrayscaleAlphaMask(revealing_wave_1, scaled_edge_mask);
+            revealing_wave_2 = ApplyGrayscaleAlphaMask(revealing_wave_2, scaled_edge_mask);
+            revealing_wave_3 = ApplyGrayscaleAlphaMask(revealing_wave_3, scaled_edge_mask);
+            revealing_wave_4 = ApplyGrayscaleAlphaMask(revealing_wave_4, scaled_edge_mask);
+
+            Bitmap colored_type_of_day_hud = ColorTypeOfDayHudFrontLayer(type_of_day_hud, user_time);
+
+            Bitmap type_of_day_after_deleting_intersecting_wave_pixels =
+                ApplyGrayscaleAlphaMask(colored_type_of_day_hud, scaled_wave_mask_1);
+
+            type_of_day_after_deleting_intersecting_wave_pixels =
+                ApplyGrayscaleAlphaMask(type_of_day_after_deleting_intersecting_wave_pixels, scaled_wave_mask_2);
+
+            type_of_day_after_deleting_intersecting_wave_pixels =
+                ApplyGrayscaleAlphaMask(type_of_day_after_deleting_intersecting_wave_pixels, scaled_wave_mask_3);
+
+            type_of_day_after_deleting_intersecting_wave_pixels =
+                ApplyGrayscaleAlphaMask(type_of_day_after_deleting_intersecting_wave_pixels, scaled_wave_mask_4);
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.DrawImage(type_of_day_after_deleting_intersecting_wave_pixels, 0, 0, template_width, template_height);
+                graphics.DrawImage(revealing_wave_1, 0, 0, template_width, template_height);
+                graphics.DrawImage(revealing_wave_2, 0, 0, template_width, template_height);
+                graphics.DrawImage(revealing_wave_3, 0, 0, template_width, template_height);
+                graphics.DrawImage(revealing_wave_4, 0, 0, template_width, template_height);
+
+            }
+
+            return base_template;
+        }
+
+        public static Bitmap ApplyGrayscaleAlphaMask(Bitmap baseBitmap, Bitmap maskBitmap, bool reverseMask = false)
+        {
+            if (baseBitmap.Width != maskBitmap.Width || baseBitmap.Height != maskBitmap.Height)
+            {
+                throw new ArgumentException("Base bitmap and mask bitmap must be the same size.");
+            }
+
+            int width = baseBitmap.Width;
+            int height = baseBitmap.Height;
+
+            Rectangle rect = new Rectangle(0, 0, width, height);
+
+            Bitmap output = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            BitmapData baseData = baseBitmap.LockBits(
+                rect,
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb);
+
+            BitmapData maskData = maskBitmap.LockBits(
+                rect,
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb);
+
+            BitmapData outputData = output.LockBits(
+                rect,
+                ImageLockMode.WriteOnly,
+                PixelFormat.Format32bppArgb);
+
+            try
+            {
+                int baseStride = baseData.Stride;
+                int maskStride = maskData.Stride;
+                int outputStride = outputData.Stride;
+
+                int baseBytes = Math.Abs(baseStride) * height;
+                int maskBytes = Math.Abs(maskStride) * height;
+                int outputBytes = Math.Abs(outputStride) * height;
+
+                byte[] baseBuffer = new byte[baseBytes];
+                byte[] maskBuffer = new byte[maskBytes];
+                byte[] outputBuffer = new byte[outputBytes];
+
+                Marshal.Copy(baseData.Scan0, baseBuffer, 0, baseBytes);
+                Marshal.Copy(maskData.Scan0, maskBuffer, 0, maskBytes);
+
+                for (int y = 0; y < height; y++)
+                {
+                    int baseRow = y * baseStride;
+                    int maskRow = y * maskStride;
+                    int outputRow = y * outputStride;
+
+                    for (int x = 0; x < width; x++)
+                    {
+                        int baseIndex = baseRow + x * 4;
+                        int maskIndex = maskRow + x * 4;
+                        int outputIndex = outputRow + x * 4;
+
+                        byte baseB = baseBuffer[baseIndex + 0];
+                        byte baseG = baseBuffer[baseIndex + 1];
+                        byte baseR = baseBuffer[baseIndex + 2];
+                        byte baseA = baseBuffer[baseIndex + 3];
+
+                        // Mask is grayscale, so R/G/B should be the same.
+                        byte maskValue = maskBuffer[maskIndex + 2];
+
+                        if (reverseMask)
+                        {
+                            maskValue = (byte)(255 - maskValue);
+                        }
+
+                        byte newAlpha = (byte)((baseA * maskValue) / 255);
+
+                        outputBuffer[outputIndex + 0] = baseB;
+                        outputBuffer[outputIndex + 1] = baseG;
+                        outputBuffer[outputIndex + 2] = baseR;
+                        outputBuffer[outputIndex + 3] = newAlpha;
+                    }
+                }
+
+                Marshal.Copy(outputBuffer, 0, outputData.Scan0, outputBytes);
+            }
+            finally
+            {
+                baseBitmap.UnlockBits(baseData);
+                maskBitmap.UnlockBits(maskData);
+                output.UnlockBits(outputData);
+            }
+
+            return output;
+        }
+
+        public static Bitmap ApplyRevealMask(Bitmap baseImage, Bitmap mask)
+        {
+            if (baseImage == null)
+                throw new ArgumentNullException(nameof(baseImage));
+
+            if (mask == null)
+                throw new ArgumentNullException(nameof(mask));
+
+            if (baseImage.Width != mask.Width || baseImage.Height != mask.Height)
+                throw new ArgumentException("Base image and mask must be the same size.");
+
+            int width = baseImage.Width;
+            int height = baseImage.Height;
+
+            Bitmap output = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            Rectangle rect = new Rectangle(0, 0, width, height);
+
+            Bitmap base32 = baseImage.Clone(rect, PixelFormat.Format32bppArgb);
+            Bitmap mask32 = mask.Clone(rect, PixelFormat.Format32bppArgb);
+
+            BitmapData baseData = base32.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData maskData = mask32.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData outputData = output.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+            try
+            {
+                int bytes = Math.Abs(baseData.Stride) * height;
+
+                byte[] basePixels = new byte[bytes];
+                byte[] maskPixels = new byte[bytes];
+                byte[] outputPixels = new byte[bytes];
+
+                Marshal.Copy(baseData.Scan0, basePixels, 0, bytes);
+                Marshal.Copy(maskData.Scan0, maskPixels, 0, bytes);
+
+                for (int y = 0; y < height; y++)
+                {
+                    int row = y * baseData.Stride;
+
+                    for (int x = 0; x < width; x++)
+                    {
+                        int i = row + x * 4;
+
+                        byte baseB = basePixels[i];
+                        byte baseG = basePixels[i + 1];
+                        byte baseR = basePixels[i + 2];
+                        byte baseA = basePixels[i + 3];
+
+                        byte maskB = maskPixels[i];
+                        byte maskG = maskPixels[i + 1];
+                        byte maskR = maskPixels[i + 2];
+
+                        // Convert mask pixel to brightness.
+                        // Works for grayscale masks, but also safely handles colored masks.
+                        byte maskBrightness = (byte)((maskR + maskG + maskB) / 3);
+
+                        // Combine the base image's existing alpha with the mask brightness.
+                        byte finalA = (byte)(baseA * maskBrightness / 255);
+
+                        outputPixels[i] = baseB;
+                        outputPixels[i + 1] = baseG;
+                        outputPixels[i + 2] = baseR;
+                        outputPixels[i + 3] = finalA;
+                    }
+                }
+
+                Marshal.Copy(outputPixels, 0, outputData.Scan0, bytes);
+            }
+            finally
+            {
+                base32.UnlockBits(baseData);
+                mask32.UnlockBits(maskData);
+                output.UnlockBits(outputData);
+
+                base32.Dispose();
+                mask32.Dispose();
+            }
+
+            return output;
+        }
+
+        // Type of Day HUD
+        public Bitmap GetTypeOfDayHud(UserInfoFields account, DateTime user_time)
+        {
             string time_of_day = Get_Time_of_Day(user_time);
 
             if (time_of_day == "dark_hour")
             {
-                type_of_day = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Type_of_Day//dark_hour.png");
-                type_of_day = Bitmap_To_Color(type_of_day, System.Drawing.Color.FromArgb(5, 91, 20), calendar_area);
+                return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Type_of_Day//dark_hour.png");
             }
             else if (user_time.DayOfWeek == DayOfWeek.Saturday || user_time.DayOfWeek == DayOfWeek.Sunday) 
             {
-                type_of_day = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Type_of_Day//weekend.png");
-                type_of_day = Bitmap_To_Color(type_of_day, System.Drawing.Color.FromArgb(22, 32, 103), calendar_area);
+                return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Type_of_Day//weekend.png");
             }
             else
             {
-                type_of_day = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Type_of_Day//weekday.png");
-                type_of_day = Bitmap_To_Color(type_of_day, System.Drawing.Color.FromArgb(22, 32, 103), calendar_area);
+                return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Type_of_Day//weekday.png");
+            }
+        }
+
+        public Bitmap ColorTypeOfDayHudFrontLayer(Bitmap type_of_day_hud, DateTime user_time)
+        {
+            string time_of_day = Get_Time_of_Day(user_time);
+
+            if (time_of_day == "dark_hour")
+            {
+                return Bitmap_To_Color(type_of_day_hud, System.Drawing.Color.FromArgb(5, 91, 20), calendar_area);
+            }
+            else
+            {
+                return Bitmap_To_Color(type_of_day_hud, System.Drawing.Color.FromArgb(22, 32, 103), calendar_area);
+            }
+        }
+
+        public Bitmap ColorTypeOfDayHudBackLayer(Bitmap type_of_day_hud, DateTime user_time)
+        {
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            string time_of_day = Get_Time_of_Day(user_time);
+
+            Bitmap foreground = new Bitmap(2, 2);
+            Bitmap background = new Bitmap(2, 2);
+
+            if (time_of_day == "dark_hour")
+            {
+                background = BitmapWithFilledRectangle(calendar_area, System.Drawing.Color.FromArgb(16, 149, 13));
+                foreground = Bitmap_To_Color(type_of_day_hud, System.Drawing.Color.FromArgb(63, 255, 3), calendar_area);
+            }
+            else
+            {
+                background = BitmapWithFilledRectangle(calendar_area, System.Drawing.Color.FromArgb(5, 48, 225));
+                foreground = Bitmap_To_Color(type_of_day_hud, System.Drawing.Color.FromArgb(1, 143, 227), calendar_area);
             }
 
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                graphics.DrawImage(type_of_day, 0, 0, template_width, template_height);
+                graphics.DrawImage(background, 0, 0, template_width, template_height);
+                graphics.DrawImage(foreground, 0, 0, template_width, template_height);
+            }
+
+            return base_template;
+        }
+
+        public Bitmap BitmapWithFilledRectangle(Rectangle fill_rectangle, System.Drawing.Color fill_color)
+        {
+            Bitmap base_template = new Bitmap(template_width, template_height);
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            using (SolidBrush brush = new SolidBrush(fill_color))
+            {
+                graphics.Clear(System.Drawing.Color.Transparent);
+
+                graphics.FillRectangle(brush, fill_rectangle);
             }
 
             return base_template;
@@ -4166,10 +4549,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
     public class DialogueRenderer
     {
         // Adjust these as needed.
-        private const string FontName = "FOT-スキップ Pro E"; //FOT-スキップ Pro E //FOT-スキップ Std B
-        private const float FontSize = 33f;
+        private const string FontName = "FOT-スキップ Pro E"; //FOT-スキップ Pro E //FOT-スキップ Std E
+        private const float FontSize = 35f;
         private const float MaxLineWidth = 900f;
         private const int MaxLines = 3;
+        private float widthScale = 1f;
+        private double textCompressionAmount = 0.85;
 
         public DialogueRenderResult RenderDialogueAdvanced(
             string dialogue,
@@ -4211,7 +4596,17 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     MaxLineWidth,
                     MaxLines,
                     letterSpacing,
-                    customSpaceWidth);
+                    customSpaceWidth,
+                    widthScale);
+
+                // Re-measure the wrapped lines using the exact rendering logic.
+                layout.LineWidths = MeasureRenderedLineWidths(
+                    graphics,
+                    layout.Lines,
+                    font,
+                    letterSpacing,
+                    customSpaceWidth,
+                    widthScale);
 
                 float y = startY;
 
@@ -4242,7 +4637,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         y,
                         letterSpacing,
                         customSpaceWidth,
-                        drawOutline);
+                        drawOutline,
+                        widthScale);
 
                     y += GetLineHeight(graphics, font) + lineSpacing;
                 }
@@ -4263,7 +4659,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             float maxLineWidth,
             int maxLines,
             float letterSpacing,
-            float customSpaceWidth)
+            float customSpaceWidth,
+            float widthScale)
         {
             DialogueLayoutResult result = new DialogueLayoutResult();
 
@@ -4313,14 +4710,15 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                         ? word
                         : currentLine + " " + word;
 
-                    float testWidth = MeasureStringAdvance(
+                    float testWidth = MeasureRenderedLineWidth(
                         graphics,
-                        font,
                         testLine,
+                        font,
                         letterSpacing,
-                        customSpaceWidth);
+                        customSpaceWidth,
+                        widthScale);
 
-                    if (testWidth <= maxLineWidth)
+                    if ((testWidth * textCompressionAmount) <= maxLineWidth)
                     {
                         currentLine = testLine;
                     }
@@ -4328,12 +4726,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     {
                         if (!string.IsNullOrEmpty(currentLine))
                         {
-                            float currentWidth = MeasureStringAdvance(
+                            float currentWidth = MeasureRenderedLineWidth(
                                 graphics,
-                                font,
                                 currentLine,
+                                font,
                                 letterSpacing,
-                                customSpaceWidth);
+                                customSpaceWidth,
+                                widthScale);
 
                             result.Lines.Add(currentLine);
                             result.LineWidths.Add(currentWidth);
@@ -4353,7 +4752,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                                 word,
                                 maxLineWidth,
                                 letterSpacing,
-                                customSpaceWidth);
+                                customSpaceWidth,
+                                widthScale);
 
                             for (int i = 0; i < splitPieces.Count; i++)
                             {
@@ -4363,12 +4763,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                                 }
 
                                 string piece = splitPieces[i];
-                                float pieceWidth = MeasureStringAdvance(
+                                float pieceWidth = MeasureRenderedLineWidth(
                                     graphics,
-                                    font,
                                     piece,
+                                    font,
                                     letterSpacing,
-                                    customSpaceWidth);
+                                    customSpaceWidth,
+                                    widthScale);
 
                                 bool isLastPiece = i == splitPieces.Count - 1;
 
@@ -4393,12 +4794,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
                 if (!string.IsNullOrEmpty(currentLine))
                 {
-                    float currentWidth = MeasureStringAdvance(
+                    float currentWidth = MeasureRenderedLineWidth(
                         graphics,
-                        font,
                         currentLine,
+                        font,
                         letterSpacing,
-                        customSpaceWidth);
+                        customSpaceWidth,
+                        widthScale);
 
                     result.Lines.Add(currentLine);
                     result.LineWidths.Add(currentWidth);
@@ -4420,7 +4822,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             string word,
             float maxLineWidth,
             float letterSpacing,
-            float customSpaceWidth)
+            float customSpaceWidth,
+            float widthScale)
         {
             List<string> pieces = new List<string>();
 
@@ -4435,12 +4838,13 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             {
                 string test = current.ToString() + c;
 
-                float width = MeasureStringAdvance(
+                float width = MeasureRenderedLineWidth(
                     graphics,
-                    font,
                     test,
+                    font,
                     letterSpacing,
-                    customSpaceWidth);
+                    customSpaceWidth,
+                    widthScale);
 
                 if (width <= maxLineWidth || current.Length == 0)
                 {
@@ -4462,63 +4866,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             return pieces;
         }
 
-        //private void DrawLineWithCustomSpacing(
-        //    Graphics graphics,
-        //    string text,
-        //    Font font,
-        //    Brush fillBrush,
-        //    Pen outlinePen,
-        //    float startX,
-        //    float startY,
-        //    float letterSpacing,
-        //    float customSpaceWidth,
-        //    bool drawOutline)
-        //{
-        //    float x = startX;
-
-        //    foreach (char c in text)
-        //    {
-        //        if (c == ' ')
-        //        {
-        //            x += customSpaceWidth;
-        //            continue;
-        //        }
-
-        //        string s = c.ToString();
-        //        float advance = MeasureCharacterAdvance(graphics, font, c);
-
-        //        if (drawOutline)
-        //        {
-        //            using (GraphicsPath path = new GraphicsPath())
-        //            {
-        //                float emSize = font.SizeInPoints * graphics.DpiY / 72f;
-
-        //                path.AddString(
-        //                    s,
-        //                    font.FontFamily,
-        //                    (int)font.Style,
-        //                    emSize,
-        //                    new PointF(x, startY),
-        //                    StringFormat.GenericTypographic);
-
-        //                graphics.DrawPath(outlinePen, path);
-        //                graphics.FillPath(fillBrush, path);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            graphics.DrawString(
-        //                s,
-        //                font,
-        //                fillBrush,
-        //                new PointF(x, startY),
-        //                StringFormat.GenericTypographic);
-        //        }
-
-        //        x += advance + letterSpacing;
-        //    }
-        //}
-
         private void DrawLineWithCustomSpacing(
             Graphics graphics,
             string text,
@@ -4530,15 +4877,20 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             float letterSpacing,
             float customSpaceWidth,
             bool drawOutline,
-            float widthScale = 0.85f)
+            float widthScale)
         {
             float x = startX;
 
-            foreach (char c in text)
+            for (int i = 0; i < text.Length; i++)
             {
+                char c = text[i];
+                char next = i < text.Length - 1 ? text[i + 1] : '\0';
+
+                float extraSpacing = GetExtraSpacing(c, next);
+
                 if (c == ' ')
                 {
-                    x += customSpaceWidth;
+                    x += customSpaceWidth + letterSpacing;
                     continue;
                 }
 
@@ -4576,38 +4928,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     graphics.FillPath(fillBrush, path);
                 }
 
-                x += advance + letterSpacing;
+                x += advance + letterSpacing + extraSpacing;
             }
-        }
-
-        private float MeasureStringAdvance(
-            Graphics graphics,
-            Font font,
-            string text,
-            float letterSpacing,
-            float customSpaceWidth)
-        {
-            float width = 0f;
-
-            foreach (char c in text)
-            {
-                if (c == ' ')
-                {
-                    width += customSpaceWidth;
-                }
-                else
-                {
-                    width += MeasureCharacterAdvance(graphics, font, c) + letterSpacing;
-                }
-            }
-
-            // Remove trailing letterSpacing so the last character doesn't add extra width.
-            if (text.Length > 0 && text[text.Length - 1] != ' ')
-            {
-                width -= letterSpacing;
-            }
-
-            return width;
         }
 
         private float MeasureCharacterAdvance(Graphics graphics, Font font, char c)
@@ -4622,6 +4944,56 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 StringFormat.GenericTypographic);
 
             return size.Width;
+        }
+
+        private float GetExtraSpacing(char c, char next)
+        {
+            float extraSpacing = 0f;
+
+            //if (c == 'l' || c == 'i' || c == 'r' || c == ',')
+            //{
+            //    extraSpacing -= 4f;
+            //}
+
+            ////if (c == ' ')
+            ////{
+            ////    extraSpacing -= 10f;
+            ////}
+
+            //if (c == 'm' || next == ' ')
+            //{
+            //    extraSpacing += 4f;
+            //}
+
+            //if (next == 'n')
+            //{
+            //    extraSpacing -= 4f;
+            //}
+
+            //if (next == '.')
+            //{
+            //    extraSpacing -= 6f;
+            //}
+
+            // Tighten spacing before apostrophes.
+            if (next == '\'' || next == '’')
+            {
+                extraSpacing -= 2f;
+            }
+
+            // Tighten spacing after apostrophes.
+            //if ((c == '\'' || c == '’') && next != '\0' && next != ' ')
+            //{
+            //    extraSpacing -= 10f;
+            //}
+
+            // Increase spacing after capital letters.
+            if (char.IsUpper(c))
+            {
+                extraSpacing += 1f;
+            }
+
+            return extraSpacing;
         }
 
         private float GetLineHeight(Graphics graphics, Font font)
@@ -4658,6 +5030,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             int bitmapHeight,
             float x,
             float y,
+            int lineCount = 1,
             float letterSpacing = 0f,
             float spaceScale = 0.7f,
             bool drawOutline = false,
@@ -4667,8 +5040,12 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         {
             Bitmap output = new Bitmap(bitmapWidth, bitmapHeight);
 
+            float adjustedY = y;
+
+            adjustedY = GetAdjustedHeightForText(y, lineCount);
+
             using (Graphics graphics = Graphics.FromImage(output))
-            using (Font font = new Font(FontName, 24f, FontStyle.Regular, GraphicsUnit.Pixel)) // smaller font
+            using (Font font = new Font(FontName, 23f, FontStyle.Regular, GraphicsUnit.Pixel)) // smaller font
             using (SolidBrush fillBrush = new SolidBrush(fillColor ?? System.Drawing.Color.White))
             using (Pen outlinePen = new Pen(outlineColor ?? System.Drawing.Color.Black, outlineWidth)
             {
@@ -4689,14 +5066,143 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     fillBrush,
                     outlinePen,
                     x,
-                    y,
+                    adjustedY,
                     letterSpacing,
                     customSpaceWidth,
-                    drawOutline);
+                    drawOutline,
+                    0.95f);
 
                 return output;
             }
         }
+
+        public float GetAdjustedHeightForText(float y, int lineCount)
+        {
+            float adjustedY = y;
+
+            switch (lineCount)
+            {
+                case 1:
+                    adjustedY += 0f;
+                    break;
+
+                case 2:
+                    adjustedY -= 11f;
+                    break;
+
+                case 3:
+                    adjustedY -= 23f;
+                    break;
+            }
+
+            return adjustedY;
+        }
+
+        private float MeasureRenderedLineWidth(
+            Graphics graphics,
+            string text,
+            Font font,
+            float letterSpacing,
+            float customSpaceWidth,
+            float widthScale)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return 0f;
+            }
+
+            float x = 0f;
+
+            bool hasVisibleGlyph = false;
+            float minX = float.MaxValue;
+            float maxX = float.MinValue;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+                char next = i < text.Length - 1 ? text[i + 1] : '\0';
+
+                float extraSpacing = GetExtraSpacing(c, next);
+
+                if (c == ' ')
+                {
+                    x += customSpaceWidth + letterSpacing + extraSpacing;
+                    continue;
+                }
+
+                string s = c.ToString();
+
+                using (GraphicsPath path = new GraphicsPath())
+                {
+                    float emSize = font.SizeInPoints * graphics.DpiY / 72f;
+
+                    path.AddString(
+                        s,
+                        font.FontFamily,
+                        (int)font.Style,
+                        emSize,
+                        new PointF(x, 0f),
+                        StringFormat.GenericTypographic);
+
+                    if (Math.Abs(widthScale - 1.0f) > 0.0001f)
+                    {
+                        using (Matrix matrix = new Matrix())
+                        {
+                            matrix.Translate(-x, 0f);
+                            matrix.Scale(widthScale, 1.0f);
+                            matrix.Translate(x, 0f);
+                            path.Transform(matrix);
+                        }
+                    }
+
+                    RectangleF bounds = path.GetBounds();
+
+                    if (bounds.Width > 0f)
+                    {
+                        hasVisibleGlyph = true;
+                        minX = Math.Min(minX, bounds.Left);
+                        maxX = Math.Max(maxX, bounds.Right);
+                    }
+                }
+
+                float advance = MeasureCharacterAdvance(graphics, font, c) * widthScale;
+                x += advance + letterSpacing + extraSpacing;
+            }
+
+            if (!hasVisibleGlyph)
+            {
+                return 0f;
+            }
+
+            return maxX - minX;
+        }
+
+        private List<float> MeasureRenderedLineWidths(
+            Graphics graphics,
+            List<string> lines,
+            Font font,
+            float letterSpacing,
+            float customSpaceWidth,
+            float widthScale)
+        {
+            List<float> widths = new List<float>();
+
+            foreach (string line in lines)
+            {
+                float width = MeasureRenderedLineWidth(
+                    graphics,
+                    line,
+                    font,
+                    letterSpacing,
+                    customSpaceWidth,
+                    widthScale);
+
+                widths.Add(width);
+            }
+
+            return widths;
+        }
+
     }
 
     public class DialogueLayoutResult
@@ -4715,5 +5221,147 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         public List<float> LineWidths { get; set; } = new List<float>();
         public int LineCount => Lines.Count;
         public float LongestLineWidth => LineWidths.Count == 0 ? 0f : LineWidths.Max();
+    }
+
+    public static class WaveEffects
+    {
+        public static Bitmap ApplyWaveMaskDistortion(
+            Bitmap inputBitmap,
+            Bitmap waveMaskBitmap,
+            float maxOffsetX,
+            float maxOffsetY,
+            int maskScrollX = 0,
+            int maskScrollY = 0,
+            bool wrapSource = false)
+        {
+            Bitmap source = Ensure32bppArgb(inputBitmap);
+            Bitmap mask = Ensure32bppArgb(waveMaskBitmap);
+
+            Bitmap output = new Bitmap(source.Width, source.Height, PixelFormat.Format32bppArgb);
+
+            Rectangle sourceRect = new Rectangle(0, 0, source.Width, source.Height);
+            Rectangle maskRect = new Rectangle(0, 0, mask.Width, mask.Height);
+            Rectangle outputRect = new Rectangle(0, 0, output.Width, output.Height);
+
+            BitmapData sourceData = source.LockBits(sourceRect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData maskData = mask.LockBits(maskRect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData outputData = output.LockBits(outputRect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+            try
+            {
+                int sourceStride = sourceData.Stride;
+                int maskStride = maskData.Stride;
+                int outputStride = outputData.Stride;
+
+                int sourceBytes = Math.Abs(sourceStride) * source.Height;
+                int maskBytes = Math.Abs(maskStride) * mask.Height;
+                int outputBytes = Math.Abs(outputStride) * output.Height;
+
+                byte[] sourceBuffer = new byte[sourceBytes];
+                byte[] maskBuffer = new byte[maskBytes];
+                byte[] outputBuffer = new byte[outputBytes];
+
+                Marshal.Copy(sourceData.Scan0, sourceBuffer, 0, sourceBytes);
+                Marshal.Copy(maskData.Scan0, maskBuffer, 0, maskBytes);
+
+                int maskWidth = mask.Width;
+                int maskHeight = mask.Height;
+                int sourceWidth = source.Width;
+                int sourceHeight = source.Height;
+
+                for (int y = 0; y < sourceHeight; y++)
+                {
+                    int outputRow = y * outputStride;
+
+                    for (int x = 0; x < sourceWidth; x++)
+                    {
+                        // First mask lookup controls X distortion
+                        int maskX1 = Mod(x + maskScrollX, maskWidth);
+                        int maskY1 = Mod(y + maskScrollY, maskHeight);
+                        int maskIndex1 = maskY1 * maskStride + maskX1 * 4;
+
+                        // Second shifted lookup controls Y distortion
+                        int maskX2 = Mod(x + maskScrollX + 37, maskWidth);
+                        int maskY2 = Mod(y + maskScrollY + 53, maskHeight);
+                        int maskIndex2 = maskY2 * maskStride + maskX2 * 4;
+
+                        // Since the mask is grayscale, R/G/B should all match.
+                        byte grayX = maskBuffer[maskIndex1 + 2];
+                        byte grayY = maskBuffer[maskIndex2 + 2];
+
+                        // Convert 0..255 into -1..1
+                        float offsetFactorX = (grayX - 127.5f) / 127.5f;
+                        float offsetFactorY = (grayY - 127.5f) / 127.5f;
+
+                        int sampleX = x + (int)(offsetFactorX * maxOffsetX);
+                        int sampleY = y + (int)(offsetFactorY * maxOffsetY);
+
+                        if (wrapSource)
+                        {
+                            sampleX = Mod(sampleX, sourceWidth);
+                            sampleY = Mod(sampleY, sourceHeight);
+                        }
+                        else
+                        {
+                            sampleX = Clamp(sampleX, 0, sourceWidth - 1);
+                            sampleY = Clamp(sampleY, 0, sourceHeight - 1);
+                        }
+
+                        int sourceIndex = sampleY * sourceStride + sampleX * 4;
+                        int outputIndex = outputRow + x * 4;
+
+                        // Copy BGRA
+                        outputBuffer[outputIndex + 0] = sourceBuffer[sourceIndex + 0];
+                        outputBuffer[outputIndex + 1] = sourceBuffer[sourceIndex + 1];
+                        outputBuffer[outputIndex + 2] = sourceBuffer[sourceIndex + 2];
+                        outputBuffer[outputIndex + 3] = sourceBuffer[sourceIndex + 3];
+                    }
+                }
+
+                Marshal.Copy(outputBuffer, 0, outputData.Scan0, outputBytes);
+            }
+            finally
+            {
+                source.UnlockBits(sourceData);
+                mask.UnlockBits(maskData);
+                output.UnlockBits(outputData);
+
+                if (!ReferenceEquals(source, inputBitmap))
+                    source.Dispose();
+
+                if (!ReferenceEquals(mask, waveMaskBitmap))
+                    mask.Dispose();
+            }
+
+            return output;
+        }
+
+        private static Bitmap Ensure32bppArgb(Bitmap input)
+        {
+            if (input.PixelFormat == PixelFormat.Format32bppArgb)
+                return input;
+
+            Bitmap clone = new Bitmap(input.Width, input.Height, PixelFormat.Format32bppArgb);
+
+            using (Graphics g = Graphics.FromImage(clone))
+            {
+                g.DrawImage(input, 0, 0, input.Width, input.Height);
+            }
+
+            return clone;
+        }
+
+        private static int Clamp(int value, int min, int max)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
+        }
+
+        private static int Mod(int value, int modulus)
+        {
+            int result = value % modulus;
+            return result < 0 ? result + modulus : result;
+        }
     }
 }

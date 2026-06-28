@@ -351,8 +351,8 @@ namespace SocialLinker
                     break;
 
                 case "sortp3r":
-                    await Commands.DevCommands.Organize_P3RE_Params(command);
-                    //await Commands.DevCommands.Organize_P3RE_Params_extend(command);
+                    //await Commands.DevCommands.Organize_P3RE_Params(command);
+                    await Commands.DevCommands.Organize_P3RE_Params_extend(command);
                     break;
 
                 case "resizep3r":
@@ -364,11 +364,16 @@ namespace SocialLinker
                     break;
 
                 case "cropp3r":
-                    await Commands.DevCommands.Single_Gallery_Cropper_extend(command);
+                    //await Commands.DevCommands.Single_Gallery_Cropper_extend(command);
+                    await Commands.DevCommands.Crop_Gallery_extend(command);
                     break;
 
                 case "renamep3r":
                     await Commands.DevCommands.Rename_Bustup_Files(command);
+                    break;
+
+                case "renamep5x":
+                    await Commands.DevCommands.Rename_P5X(command);
                     break;
 
                 default:
