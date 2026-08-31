@@ -441,6 +441,7 @@
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP4G.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5R.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5S.cs" />
+    <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5X.cs" />
     <Compile Include="Core\SceneMaker\TemplateRenders\QuickScenes\RenderP5_PS4.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_Akechi_1.cs" />
     <Compile Include="Core\StatusScreens\Decor\Decor_Kasumi_1.cs" />

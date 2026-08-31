@@ -10,5 +10,6 @@
         public string Sprite_Type { get; set; }
         public string Title_Appearances { get; set; }
         public string Series { get; set; }
+        public string World { get; set; }
     }
 }

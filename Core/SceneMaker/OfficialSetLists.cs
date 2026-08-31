@@ -591,6 +591,37 @@ namespace SocialLinker.Core.SceneMaker
             await channel.SendMessageAsync("", false, embed.Build());
         }
 
+        public static async Task P5X_Set_List(SocialLinkerCommand sl_command)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Persona5: The Phantom X Conversation Portrait Sets",
+                IconUrl = user.GetAvatarUrl()
+            };
+
+            embed.WithAuthor(author);
+
+            // Assign an embed color and thumbnail based on the user's episode header setting for the BBTAG template.
+            embed.WithColor(EmbedSettings.Get_Game_Color("P5X", account));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Game_Logo("P5X"));
+
+            // Create a description with the list of sprite sets available for the title.
+            embed.WithDescription($"{OfficialSetMethods.Generate_P5X_Set_List()}");
+
+            embed.WithFooter($"P5X Version: 4.4.0 Global");
+
+            // Send the embeded message to the channel.
+            await channel.SendMessageAsync("", false, embed.Build());
+        }
+
         public static async Task BBTAG_Set_List(SocialLinkerCommand sl_command)
         {
             // Create two variables for the command user and the command channel, derived from the message object taken in.
@@ -603,7 +634,7 @@ namespace SocialLinker.Core.SceneMaker
             var embed = new EmbedBuilder();
             var author = new EmbedAuthorBuilder
             {
-                Name = "BlazBlue: Cross Tag Battle Sprite Sets",
+                Name = "BlazBlue: Cross Tag Battle Conversation Portrait Sets",
                 IconUrl = user.GetAvatarUrl()
             };
 

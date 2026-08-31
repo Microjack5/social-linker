@@ -377,6 +377,10 @@ namespace SocialLinker.Core.LocalStorageTables
             {
                 return "P5S";
             }
+            else if (Global.p5x_generic_keywords.Contains(input_template))
+            {
+                return "P5X";
+            }
             else if (Global.bbtag_generic_keywords.Contains(input_template))
             {
                 return "BBTAG";
@@ -591,6 +595,10 @@ namespace SocialLinker.Core.LocalStorageTables
 
                 case "P5S":
                     await OfficialSetLists.P5S_Set_List(sl_command);
+                    return;
+
+                case "P5X":
+                    await OfficialSetLists.P5X_Set_List(sl_command);
                     return;
 
                 case "BBTAG":
@@ -1053,6 +1061,73 @@ namespace SocialLinker.Core.LocalStorageTables
             return sorted_string;
         }
 
+        public static string Generate_P5X_Set_List()
+        {
+            // Create an empty string variable.
+            string output_string = "";
+
+            // For this list, we want to seperate the listed characters by which franchise they belong to.
+            output_string += "**__Persona5: The Phantom X__**\n";
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                if (s.Origin == "P5X" && s.World == "P5X")
+                {
+                    output_string += $"- {s.Name}\n";
+                }
+            }
+
+            // Persona 5
+            output_string += "\n";
+            output_string += "**__Persona 5__**\n";
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                if (s.Origin == "P5X" && s.World == "P5")
+                {
+                    output_string += $"- {s.Name}\n";
+                }
+            }
+
+            // Persona 5 Royal
+            output_string += "\n";
+            output_string += "**__Persona 5 Royal__**\n";
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                if (s.Origin == "P5X" && s.World == "P5R")
+                {
+                    output_string += $"- {s.Name}\n";
+                }
+            }
+
+            // Persona 3 Reload
+            output_string += "\n";
+            output_string += "**__Persona 3 Reload__**\n";
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                if (s.Origin == "P5X" && s.World == "P3R")
+                {
+                    output_string += $"- {s.Name}\n";
+                }
+            }
+
+            // Other Worlds
+            output_string += "\n";
+            output_string += "**__Other__**\n";
+
+            foreach (OfficialSetData s in sprite_set_list)
+            {
+                if (s.Origin == "P5X" && s.World == "Other")
+                {
+                    output_string += $"- {s.Name}\n";
+                }
+            }
+
+            return output_string;
+        }
+
         public static string Generate_BBTAG_Set_List()
         {
             // Create an empty string variable.
@@ -1253,6 +1328,11 @@ namespace SocialLinker.Core.LocalStorageTables
                     case "P5S":
                         RenderP5S p5s_render = new RenderP5S();
                         await p5s_render.Render_Quick_Scene_P5S(sl_command);
+                        return;
+
+                    case "P5X":
+                        RenderP5X p5x_render = new RenderP5X();
+                        await p5x_render.Render_Quick_Scene_P5X(sl_command);
                         return;
 
                     case "BBTAG":

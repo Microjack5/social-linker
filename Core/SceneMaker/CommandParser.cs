@@ -28,6 +28,7 @@ namespace SocialLinker.Core.SceneMaker
             generic_keywords.AddRange(Global.p4d_generic_keywords);
             generic_keywords.AddRange(Global.p5_generic_keywords);
             generic_keywords.AddRange(Global.p5s_generic_keywords);
+            generic_keywords.AddRange(Global.p5x_generic_keywords);
             generic_keywords.AddRange(Global.bbtag_generic_keywords);
 
             version_keywords.AddRange(Global.p1_ps1_version_keywords);

@@ -552,7 +552,8 @@ namespace SocialLinker
                     .AddChoice(Global.GetGameTitle("P5-PS4"), 14)
                     .AddChoice(Global.GetGameTitle("P5R"), 15)
                     .AddChoice(Global.GetGameTitle("P5S"), 16)
-                    .AddChoice(Global.GetGameTitle("BBTAG"), 17)
+                    .AddChoice(Global.GetGameTitle("P5X"), 17)
+                    .AddChoice(Global.GetGameTitle("BBTAG"), 18)
                     .WithType(ApplicationCommandOptionType.Integer)
                     );
 
@@ -592,7 +593,8 @@ namespace SocialLinker
                     .AddChoice(Global.GetGameTitle("P5-PS4"), 13)
                     .AddChoice(Global.GetGameTitle("P5R"), 14)
                     .AddChoice(Global.GetGameTitle("P5S"), 15)
-                    .AddChoice(Global.GetGameTitle("BBTAG"), 16)
+                    .AddChoice(Global.GetGameTitle("P5X"), 16)
+                    .AddChoice(Global.GetGameTitle("BBTAG"), 17)
                     .WithType(ApplicationCommandOptionType.Integer)
                     )
                 .AddOption("sprite_number", ApplicationCommandOptionType.Integer, "View animation frames for a character's specific sprite.", isRequired: false);

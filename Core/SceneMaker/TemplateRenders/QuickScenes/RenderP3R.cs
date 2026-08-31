@@ -4548,13 +4548,28 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
     public class DialogueRenderer
     {
-        // Adjust these as needed.
-        private const string FontName = "FOT-スキップ Pro E"; //FOT-スキップ Pro E //FOT-スキップ Std E
-        private const float FontSize = 35f;
-        private const float MaxLineWidth = 900f;
-        private const int MaxLines = 3;
-        private float widthScale = 1f;
-        private double textCompressionAmount = 0.85;
+        private readonly string fontName;
+        private readonly float fontSize;
+        private readonly float maxLineWidth;
+        private readonly int maxLines;
+        private readonly float widthScale;
+        private readonly double textCompressionAmount;
+
+        public DialogueRenderer(
+            string fontName = "FOT-スキップ Pro E",
+            float fontSize = 35f,
+            float maxLineWidth = 900f,
+            int maxLines = 3,
+            float widthScale = 1f,
+            double textCompressionAmount = 0.85)
+        {
+            this.fontName = fontName;
+            this.fontSize = fontSize;
+            this.maxLineWidth = maxLineWidth;
+            this.maxLines = maxLines;
+            this.widthScale = widthScale;
+            this.textCompressionAmount = textCompressionAmount;
+        }
 
         public DialogueRenderResult RenderDialogueAdvanced(
             string dialogue,
@@ -4573,7 +4588,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             Bitmap output = new Bitmap(bitmapWidth, bitmapHeight);
 
             using (Graphics graphics = Graphics.FromImage(output))
-            using (Font font = new Font(FontName, FontSize, FontStyle.Regular, GraphicsUnit.Pixel))
+            using (Font font = new Font(this.fontName, this.fontSize, FontStyle.Regular, GraphicsUnit.Pixel))
             using (SolidBrush fillBrush = new SolidBrush(fillColor ?? System.Drawing.Color.Red))
             using (Pen outlinePen = new Pen(outlineColor ?? System.Drawing.Color.Black, outlineWidth)
             {
@@ -4593,8 +4608,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     graphics,
                     dialogue,
                     font,
-                    MaxLineWidth,
-                    MaxLines,
+                    this.maxLineWidth,
+                    this.maxLines,
                     letterSpacing,
                     customSpaceWidth,
                     widthScale);
@@ -5045,7 +5060,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             adjustedY = GetAdjustedHeightForText(y, lineCount);
 
             using (Graphics graphics = Graphics.FromImage(output))
-            using (Font font = new Font(FontName, 23f, FontStyle.Regular, GraphicsUnit.Pixel)) // smaller font
+            using (Font font = new Font(this.fontName, 23f, FontStyle.Regular, GraphicsUnit.Pixel)) // smaller font
             using (SolidBrush fillBrush = new SolidBrush(fillColor ?? System.Drawing.Color.White))
             using (Pen outlinePen = new Pen(outlineColor ?? System.Drawing.Color.Black, outlineWidth)
             {

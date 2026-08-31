@@ -135,6 +135,9 @@ namespace SocialLinker.Core.Menus
                 case "P5S":
                     return new Color(212, 0, 12);
 
+                case "P5X":
+                    return new Color(212, 0, 12);
+
                 case "BBTAG":
                     try
                     {
@@ -219,6 +222,9 @@ namespace SocialLinker.Core.Menus
                 case "P5S":
                     return "https://i.imgur.com/PE7vGLY.png";
 
+                case "P5X":
+                    return "https://i.imgur.com/iwNMmyQ.png";
+
                 case "BBTAG":
                     return "https://i.imgur.com/orZV4eI.png";
 
@@ -286,6 +292,9 @@ namespace SocialLinker.Core.Menus
 
                 case "P5S":
                     return "https://i.imgur.com/IkrlV0c.gif";
+
+                case "P5X":
+                    return "https://i.imgur.com/t5kBpkG.gif";
 
                 case "BBTAG":
                     return "https://i.imgur.com/f6dSxc1.gif";

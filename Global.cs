@@ -37,6 +37,7 @@ namespace SocialLinker
             { "P5-PS4", "Persona 5 (PlayStation®️ 4)" },
             { "P5R", "Persona 5 Royal" },
             { "P5S", "Persona 5 Strikers" },
+            { "P5X", "Persona5: The Phantom X" },
             { "BBTAG", "BlazBlue: Cross Tag Battle" }
         };
 
@@ -100,9 +101,11 @@ namespace SocialLinker
         internal static string[] p4d_generic_keywords = { "P4D" };
         internal static string[] p5_generic_keywords = { "P5" };
         internal static string[] p5s_generic_keywords = { "P5S" };
+        internal static string[] p5x_generic_keywords = { "P5X" };
         internal static string[] bbtag_generic_keywords = { "BBTAG" };
 
         internal static char[] p3r_poses = { 'a', 'b', 'c', 'd', 'p' };
+        internal static char[] p5x_poses = { 'a', 'b', 'c', 'd' };
 
         internal static int error_duration = 60000;
         internal static int API_Timeout = 5000;
