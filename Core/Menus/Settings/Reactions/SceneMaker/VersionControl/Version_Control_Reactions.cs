@@ -148,6 +148,13 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker
                     menuSession.Account = account;
                     _ = Version_Control_Menu.Version_Control_P3_Confirm(menuSession);
                     break;
+                case "p3r":
+                    account.VC_P3 = "P3R";
+                    UserInfoClasses.UpdateAccount(account);
+
+                    menuSession.Account = account;
+                    _ = Version_Control_Menu.Version_Control_P3_Confirm(menuSession);
+                    break;
                 case "return":
                     _ = Version_Control_Menu.Version_Control_Main(menuSession);
                     break;

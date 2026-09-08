@@ -11,7 +11,7 @@ namespace SocialLinker.Core.CloudStorageTables
 {
     public static class UserInfoClasses
     {
-        private static string accountsTable = "UserInformation"; //"UserInformationDev"
+        private static string accountsTable = "UserInformationDev"; //"UserInformationDev" //"UserInformation"
 
         static UserInfoClasses()
         {
@@ -116,7 +116,7 @@ namespace SocialLinker.Core.CloudStorageTables
                 VC_P1 = "P1-PSP",
                 VC_P2IS = "P2IS-PSP",
                 VC_P2EP = "P2EP-PSP",
-                VC_P3 = "P3P",
+                VC_P3 = "P3R",
                 VC_P4 = "P4G",
                 VC_P5 = "P5R",
                 CustomSpriteSets = "",

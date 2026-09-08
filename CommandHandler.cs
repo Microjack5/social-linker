@@ -327,7 +327,7 @@ namespace SocialLinker
                     break;
 
                 case "update":
-                    await Commands.DevCommands.UpdatePreReleaseAccounts(command);
+                    await Commands.DevCommands.UpdateAccountsWithNewFields(command);
                     break;
 
                 case "calcexp":

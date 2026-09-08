@@ -99,6 +99,8 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 return;
             }
 
+            bool hasBustup = maker_command_data.Character_Data_1.Base_Sprite != 0;
+
             // Time to put it all together!
             using (Graphics graphics = Graphics.FromImage(uhd_layer))
             {
@@ -151,7 +153,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 outlineWidth: 2.5f                
             );
 
-            Bitmap message_bg = RenderMessageWindow(result);
+            Bitmap message_bg = RenderMessageWindow(result, hasBustup);
             Bitmap control_panel = RenderControlPanel(account);
             
             Bitmap type_of_day_hud = GetTypeOfDayHud(account, user_time);
@@ -164,12 +166,30 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             {
                 graphics.DrawImage(background, 0, 0, template_width, template_height);
 
-                graphics.DrawImage(bustup_bg, 0, 0, template_width, template_height);
+                if (hasBustup)
+                {
+                    graphics.DrawImage(bustup_bg, 0, 0, template_width, template_height);
+                }
 
                 graphics.DrawImage(uhd_layer, 0, 0, uhd_layer.Width, uhd_layer.Height);
                 graphics.DrawImage(waves, 0, 0, template_width, template_height);
-                graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
-                graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
+
+                switch (account.P3R_TS_HUD)
+                {
+                    case "Display All":
+                        graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
+                        graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
+                        break;
+
+                    case "Countdown Off":
+                        graphics.DrawImage(Render_Calendar_HUD(account), 70, 0, template_width, template_height);
+                        graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
+                        break;
+
+                    case "None":
+                        break;
+                }
+
                 graphics.DrawImage(message_bg, 0, 0, message_bg.Width, message_bg.Height);
                 graphics.DrawImage(dialogue_bitmap, 95, 0, 1632, dialogue_bitmap.Height);
                 graphics.DrawImage(nametag_layer, 0, 0, nametag_layer.Width, nametag_layer.Height);
@@ -209,7 +229,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public Bitmap RenderMessageWindow(DialogueRenderResult result)
+        public Bitmap RenderMessageWindow(DialogueRenderResult result, bool hasBustup)
         {
             Bitmap message_window = new Bitmap(1920, 1080);
 
@@ -414,51 +434,56 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             float nametag_y = dialogueRenderer.GetAdjustedHeightForText(0f, result.LineCount);
 
-            // 話者名下地　バストアップあり (Tail)
-            using (Graphics graphics = Graphics.FromImage(nametag_layer))
-            using (SolidBrush tailBrush = new SolidBrush(System.Drawing.Color.FromArgb(22, 36, 99)))
+            if (hasBustup)
             {
-                Point tail_point_1 = new Point(452, 842);
-                Point tail_point_2 = new Point(502, 859);
-                Point tail_point_3 = new Point(505, 829);
+                // 話者名下地　バストアップあり (Tail)
+                using (Graphics graphics = Graphics.FromImage(nametag_layer))
+                using (SolidBrush tailBrush = new SolidBrush(System.Drawing.Color.FromArgb(22, 36, 99)))
+                {
+                    Point tail_point_1 = new Point(452, 842);
+                    Point tail_point_2 = new Point(502, 859);
+                    Point tail_point_3 = new Point(505, 829);
 
-                Point[] tail_points = {
+                    Point[] tail_points = {
                     tail_point_1,
                     tail_point_2,
                     tail_point_3
                 };
 
-                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                graphics.FillPolygon(tailBrush, tail_points);
-            }
+                    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    graphics.FillPolygon(tailBrush, tail_points);
+                }
 
-            // 話者名下地　バストアップあり
-            using (Graphics graphics = Graphics.FromImage(nametag_layer))
-            using (SolidBrush nametagBrush = new SolidBrush(System.Drawing.Color.FromArgb(23, 0, 254)))
+                // 話者名下地　バストアップあり
+                using (Graphics graphics = Graphics.FromImage(nametag_layer))
+                using (SolidBrush nametagBrush = new SolidBrush(System.Drawing.Color.FromArgb(23, 0, 254)))
+                {
+                    Persona3ReloadSpeakerNameBaseBustupResizable.FillSpeakerNameBaseBustupBySize(
+                        graphics,
+                        nametagBrush,
+                        431f,   // x
+                        778f,   // y
+                        236f,  // width
+                        92f    // height
+                    );
+                }
+            }
+            else
             {
-                Persona3ReloadSpeakerNameBaseBustupResizable.FillSpeakerNameBaseBustupBySize(
-                    graphics,
-                    nametagBrush,
-                    431f,   // x
-                    778f,   // y
-                    236f,  // width
-                    92f    // height
-                );
+                // 話者名下地　バストアップなし
+                using (Graphics graphics = Graphics.FromImage(nametag_layer))
+                using (SolidBrush pinkBrush = new SolidBrush(System.Drawing.Color.FromArgb(23, 0, 254)))
+                {
+                    Persona3ReloadSpeakerNameBaseNoBustupResizable.FillSpeakerNameBaseNoBustupBySize(
+                        graphics,
+                        pinkBrush,
+                        490f,   // x
+                        770f,   // y
+                        224f,  // width
+                        113f    // height
+                    );
+                }
             }
-
-            // 話者名下地　バストアップなし
-            //using (Graphics graphics = Graphics.FromImage(nametag_layer))
-            //using (SolidBrush pinkBrush = new SolidBrush(System.Drawing.Color.Pink))
-            //{
-            //    Persona3ReloadSpeakerNameBaseNoBustupResizable.FillSpeakerNameBaseNoBustupBySize(
-            //        graphics,
-            //        pinkBrush,
-            //        431f,   // x
-            //        778f,   // y
-            //        236f,  // width
-            //        92f    // height
-            //    );
-            //}
 
             // 話者名しっぽ下地　バストアップ
             //using (Graphics graphics = Graphics.FromImage(message_bg))
@@ -516,9 +541,26 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
         public Bitmap RenderControlPanel(UserInfoFields account)
         {
-            Bitmap buttons_ps5_1 = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps5_1.png");
+            switch (account.P3R_TS_Panel)
+            {
+                case "Xbox":
+                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_xbox.png");
 
-            return buttons_ps5_1;
+                case "PS5":
+                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps5.png");
+
+                case "PS4":
+                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps4.png");
+
+                case "Switch":
+                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_switch.png");
+
+                case "PC":
+                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_pc.png");
+
+                default:
+                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_xbox.png");
+            }
         }
 
         public Bitmap Render_Calendar_HUD(UserInfoFields account)
@@ -669,10 +711,29 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             Bitmap scaled_edge_mask = new Bitmap(template_width, template_height);
 
-            int wave_x = 1357; //1300
+            int wave_x = 0;
             int wave_y = 0;
             int wave_width = 563;
             int wave_height = 220;
+
+            string time_of_day = Get_Time_of_Day(user_time);
+
+            if (time_of_day == "dark_hour")
+            {
+                wave_x = 1330;
+            }
+            else if (OfficialSetMethods.Is_Holiday(user_time))
+            {
+                wave_x = 1395;
+            }
+            //else if (user_time.DayOfWeek == DayOfWeek.Saturday || user_time.DayOfWeek == DayOfWeek.Sunday)
+            //{
+            //    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Type_of_Day//weekend.png");
+            //}
+            else
+            {
+                wave_x = 1357;
+            }
 
             int wave_1_x = GetRandomWaveX(wave_x - wave_width, wave_width);
             int wave_2_x = GetRandomWaveX(wave_x - wave_width, wave_width);
@@ -726,7 +787,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Edge mask
             using (Graphics graphics = Graphics.FromImage(scaled_edge_mask))
             {
-                graphics.DrawImage(edge_mask, wave_x, wave_y, wave_width, wave_height);
+                graphics.DrawImage(edge_mask, wave_x, wave_y, template_width - wave_x, wave_height);//wave_width
             }
 
             Bitmap background = ColorTypeOfDayHudBackLayer(type_of_day_hud, user_time);
@@ -771,10 +832,18 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
                 graphics.DrawImage(type_of_day_after_deleting_intersecting_wave_pixels, 0, 0, template_width, template_height);
+
                 graphics.DrawImage(revealing_wave_1, 0, 0, template_width, template_height);
+                //graphics.DrawImage(scaled_wave_1, wave_width, 0, template_width, template_height);
+
                 graphics.DrawImage(revealing_wave_2, 0, 0, template_width, template_height);
+                //graphics.DrawImage(scaled_wave_2, wave_width, 0, template_width, template_height);
+
                 graphics.DrawImage(revealing_wave_3, 0, 0, template_width, template_height);
+                //graphics.DrawImage(scaled_wave_3, wave_width, 0, template_width, template_height);
+
                 graphics.DrawImage(revealing_wave_4, 0, 0, template_width, template_height);
+                //graphics.DrawImage(scaled_wave_4, wave_width, 0, template_width, template_height);
 
             }
 
@@ -963,6 +1032,10 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             if (time_of_day == "dark_hour")
             {
                 return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Type_of_Day//dark_hour.png");
+            }
+            else if (OfficialSetMethods.Is_Holiday(user_time))
+            {
+                return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Calendar//Type_of_Day//holiday.png");
             }
             else if (user_time.DayOfWeek == DayOfWeek.Saturday || user_time.DayOfWeek == DayOfWeek.Sunday) 
             {
@@ -1292,11 +1365,23 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             // Now, let's use a graphics object to draw to the base template.
             using (Graphics graphics = Graphics.FromImage(base_template))
             {
-                graphics.DrawImage(limit, 0, 0, template_width, template_height);
-                graphics.DrawImage(countdown_text_special, 0, 0, template_width, template_height);
-                graphics.DrawImage(countdown_tens, 0, 0, template_width, template_height);
-                graphics.DrawImage(countdown_ones, 0, 0, template_width, template_height);
-                graphics.DrawImage(moon_phase, 0, 0, template_width, template_height);
+                switch (account.P3R_TS_HUD)
+                {
+                    case "Display All":
+                        graphics.DrawImage(limit, 0, 0, template_width, template_height);
+                        graphics.DrawImage(countdown_text_special, 0, 0, template_width, template_height);
+                        graphics.DrawImage(countdown_tens, 0, 0, template_width, template_height);
+                        graphics.DrawImage(countdown_ones, 0, 0, template_width, template_height);
+                        graphics.DrawImage(moon_phase, 0, 0, template_width, template_height);
+                        break;
+
+                    case "Countdown Off":
+                        graphics.DrawImage(moon_phase, 0, -20, template_width, template_height);
+                        break;
+
+                    case "None":
+                        break;
+                }
             }
 
             return base_template;
@@ -1648,7 +1733,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             embed.WithAuthor(author);
             embed.WithColor(EmbedSettings.Get_Game_Color("P3R", null));
-            //embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3F", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3R", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;

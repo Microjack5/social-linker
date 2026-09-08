@@ -2089,13 +2089,19 @@ namespace SocialLinker.Core.LocalStorageTables
         {
             OfficialSetData set_data = maker_character_data.Set_Data;
 
-            if (set_data.Origin == "P3R")
+            if (set_data.Origin == "P3R" && account.P3R_TS_Low_Latency == "Off")
             {
                 return P3R_Bustup_Selection(sl_command, account, maker_character_data);
             }
 
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+
+            // P3R Low Latency Mode
+            if (set_data.Origin == "P3R" && account.P3R_TS_Low_Latency == "On")
+            {
+                set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
+            }
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = AttachmentCountItemDirectory(set_path);
@@ -2329,6 +2335,12 @@ namespace SocialLinker.Core.LocalStorageTables
 
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+
+            // P3R Low Latency Mode
+            if (set_data.Origin == "P3R" && account.P3R_TS_Low_Latency == "On")
+            {
+                return Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, is_preview: true);
+            }
 
             // Create a filename for the bitmap that will be generated.
             var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
@@ -2641,7 +2653,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 graphics.DrawImage(mouth_rim_light, 0, 0, mouth_rim_light.Width, mouth_rim_light.Height);
             }
 
-            output_bitmap = Apply_P3R_Gradient_Overlay(output_bitmap);
+            //output_bitmap = Apply_P3R_Gradient_Overlay(output_bitmap);
 
             return output_bitmap;
         }
