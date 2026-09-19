@@ -1372,7 +1372,7 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Sprite_Placement_Confirm(component, menuSession);
                             break;
 
-                        case "Template_Layout_P3R_Portrait_Lighting_Custom_Error":
+                        case "Template_Layout_P3R_Custom_Lighting_Colors_Error":
                             await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Colors_Error(component, menuSession);
                             break;
 
