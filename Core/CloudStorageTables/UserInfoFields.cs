@@ -136,9 +136,10 @@ namespace SocialLinker.Core.CloudStorageTables
         public string P3P_Scale { get; set; }
         public string P3R_TS_HUD { get; set; }
         public string P3R_TS_Portrait_Lighting_Type { get; set; }
-        public string P3R_TS_Portrait_Lighting_Custom_Main { get; set; }
+        public string P3R_TS_Portrait_Lighting_Custom_Base { get; set; }
         public string P3R_TS_Portrait_Lighting_Custom_Rim { get; set; }
         public string P3R_TS_Panel { get; set; }
+        public string P3R_TS_Auto_Advance { get; set; }
         public string P3R_TS_Low_Latency { get; set; }
         public string P4_PS2_Resolution { get; set; }
         public string P4_PS2_Scale { get; set; }

@@ -153,7 +153,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 outlineWidth: 2.5f                
             );
 
-            Bitmap message_bg = RenderMessageWindow(result, hasBustup);
+            Bitmap message_bg = RenderMessageWindow(account, result, hasBustup);
             Bitmap control_panel = RenderControlPanel(account);
             
             Bitmap type_of_day_hud = GetTypeOfDayHud(account, user_time);
@@ -172,16 +172,17 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 }
 
                 graphics.DrawImage(uhd_layer, 0, 0, uhd_layer.Width, uhd_layer.Height);
-                graphics.DrawImage(waves, 0, 0, template_width, template_height);
 
                 switch (account.P3R_TS_HUD)
                 {
                     case "Display All":
+                        graphics.DrawImage(waves, 0, 0, template_width, template_height);
                         graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
                         graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
                         break;
 
                     case "Countdown Off":
+                        graphics.DrawImage(waves, 0, 0, template_width, template_height);
                         graphics.DrawImage(Render_Calendar_HUD(account), 70, 0, template_width, template_height);
                         graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
                         break;
@@ -229,7 +230,136 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
             }
         }
 
-        public Bitmap RenderMessageWindow(DialogueRenderResult result, bool hasBustup)
+        public async Task Render_System_Message(SocialLinkerCommand sl_command)
+        {
+            // Create two variables for the command user and the command channel, derived from the message object taken in.
+            SocketUser user = sl_command.User;
+            SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
+
+            OfficialSetData set_data = sl_command.MakerCommand.Character_Data_1.Set_Data;
+            MakerCommandData maker_command_data = sl_command.MakerCommand;
+
+            // Send a loading message to the channel while the sprite sheet is being made.
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P3R_Loading_Message().Build());
+
+            // Get the account information of the command's user.
+            var account = UserInfoClasses.GetAccount(user);
+
+            // Background rendering
+            Bitmap base_template = new Bitmap(template_width, template_height);
+            Bitmap uhd_layer = new Bitmap(template_width_4k, template_height_4k);
+            Bitmap colored_background_bitmap = OfficialSetMethods.Render_Colored_Background(account, template_width_4k, template_height_4k);
+            Bitmap background = new Bitmap(2, 2);
+
+            try
+            {
+                background = OfficialSetMethods.Render_Background(sl_command, template_width_4k, template_height_4k);
+            }
+            catch (System.ArgumentException e)
+            {
+                Console.WriteLine(e);
+                await loader.DeleteAsync();
+                _ = ErrorHandling.Incompatible_File_Type(sl_command);
+                return;
+            }
+
+            uhd_layer = Scale_Template(account, uhd_layer);
+
+            DateTime user_time = Get_Date(account);
+
+            DialogueRenderer renderer = new DialogueRenderer();
+
+            DialogueRenderResult result = renderer.RenderDialogueAdvanced(
+                dialogue: sl_command.MakerCommand.Dialogue,
+                bitmapWidth: 1920,
+                bitmapHeight: 1080,
+                startX: 639f, //903f + 8f,
+                startY: 865f,
+                letterSpacing: 1.3f, //12f
+                spaceScale: 1.3f, //-0.1f
+                lineSpacing: -23f,
+                drawOutline: false,
+                fillColor: System.Drawing.Color.White,
+                outlineColor: System.Drawing.Color.Black,
+                outlineWidth: 2.5f
+            );
+
+            Bitmap dialogue_bitmap = result.Bitmap;
+            int lineCount = result.LineCount;
+            float longestLine = result.LongestLineWidth;
+
+            Bitmap message_bg = RenderMessageWindow(account, result, hasBustup:false, isSystem:true);
+            Bitmap control_panel = RenderControlPanel(account);
+
+            Bitmap type_of_day_hud = GetTypeOfDayHud(account, user_time);
+
+            Bitmap waves = RenderWaves(type_of_day_hud, user_time);
+
+            Bitmap bustup_bg = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//bustup_bg.png");
+
+            using (Graphics graphics = Graphics.FromImage(base_template))
+            {
+                graphics.DrawImage(background, 0, 0, template_width, template_height);
+
+                graphics.DrawImage(uhd_layer, 0, 0, uhd_layer.Width, uhd_layer.Height);
+
+                switch (account.P3R_TS_HUD)
+                {
+                    case "Display All":
+                        graphics.DrawImage(waves, 0, 0, template_width, template_height);
+                        graphics.DrawImage(Render_Calendar_HUD(account), 0, 0, template_width, template_height);
+                        graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
+                        break;
+
+                    case "Countdown Off":
+                        graphics.DrawImage(waves, 0, 0, template_width, template_height);
+                        graphics.DrawImage(Render_Calendar_HUD(account), 70, 0, template_width, template_height);
+                        graphics.DrawImage(Render_Moon_HUD(account), 0, 0, template_width, template_height);
+                        break;
+
+                    case "None":
+                        break;
+                }
+
+                graphics.DrawImage(message_bg, 0, 0, message_bg.Width, message_bg.Height);
+                graphics.DrawImage(dialogue_bitmap, 95, 0, 1632, dialogue_bitmap.Height);
+                graphics.DrawImage(control_panel, 0, 0, template_width, template_height);
+            }
+
+            // Save the entire base template to a data stream.
+            MemoryStream memoryStream = new MemoryStream();
+            base_template.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            try
+            {
+                // Send the image.
+                await sl_command.Channel.SendFileAsync(memoryStream, $"scene_{sl_command.User.Id}_{DateTime.UtcNow}.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                // Send an error message to the user if the image upload fails.
+                _ = ErrorHandling.Image_Upload_Failed(sl_command);
+
+                // Clean up resources used by the stream, delete the loading message, and return.
+                memoryStream.Dispose();
+                await loader.DeleteAsync();
+                return;
+            }
+
+            // Delete the loading message.
+            await loader.DeleteAsync();
+
+            // If the user has auto-delete for their commands set to on, delete their command as well.
+            if (account.Auto_Delete_Commands == "On")
+            {
+                await sl_command.Message.DeleteAsync();
+            }
+        }
+
+        public Bitmap RenderMessageWindow(UserInfoFields account, DialogueRenderResult result, bool hasBustup, bool isSystem = false)
         {
             Bitmap message_window = new Bitmap(1920, 1080);
 
@@ -240,6 +370,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             Bitmap talk_layer = (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//talk.png");
             talk_layer = Bitmap_To_Color(talk_layer, nametag_color, new Rectangle(551, 842, 58, 8));
+
+            if (isSystem)
+            {
+                talk_layer = new Bitmap(2, 2);
+            }
 
             float base_box_x = 500f;
             float base_box_y = 784f;
@@ -328,7 +463,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
 
             using (Graphics graphics = Graphics.FromImage(message_background))
             {
-                
                 graphics.DrawImage(background_tilt, msg_bg_x, msg_bg_y, background_tilt.Width, background_tilt.Height);
             }
 
@@ -395,14 +529,6 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
                 graphics.CompositingQuality = CompositingQuality.HighQuality;
 
-                //Persona3ReloadMessageInnerResizable.FillMessageInnerWithHorizontalGradientBySize(
-                //    graphics,
-                //    innerX,
-                //    innerY,
-                //    innerWidth,
-                //    innerHeight
-                //);
-
                 Persona3ReloadMessageInnerResizable.FillMessageInnerWithHorizontalGradientDitheredBySize(
                     graphics,
                     innerX,
@@ -468,7 +594,7 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                     );
                 }
             }
-            else
+            else if (isSystem == false)
             {
                 // 話者名下地　バストアップなし
                 using (Graphics graphics = Graphics.FromImage(nametag_layer))
@@ -533,7 +659,11 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
                 graphics.DrawImage(message_main, 0, 0, message_main.Width, message_main.Height);
                 graphics.DrawImage(nametag_layer, 0, nametag_y, nametag_layer.Width, nametag_layer.Height);
                 graphics.DrawImage(talk_layer, 0, nametag_y, talk_layer.Width, talk_layer.Height);
-                graphics.DrawImage(advance_layer, 0, 0, advance_layer.Width, advance_layer.Height);
+
+                if (account.P3R_TS_Auto_Advance == "Off")
+                {
+                    graphics.DrawImage(advance_layer, 0, 0, advance_layer.Width, advance_layer.Height);
+                }
             }
 
             return message_window;
@@ -543,21 +673,57 @@ namespace SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes
         {
             switch (account.P3R_TS_Panel)
             {
-                case "Xbox":
-                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_xbox.png");
+                case "Xbox Series X|S":
+                    if (account.P3R_TS_Auto_Advance == "On")
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_xbox_auto.png");
+                    }
+                    else
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_xbox.png");
+                    }
 
-                case "PS5":
-                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps5.png");
+                case "PlayStation®️ 5":
+                    if (account.P3R_TS_Auto_Advance == "On")
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps5_auto.png");
+                    }
+                    else
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps5.png");
+                    }
 
-                case "PS4":
-                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps4.png");
+                case "PlayStation®️ 4":
+                    if (account.P3R_TS_Auto_Advance == "On")
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps4_auto.png");
+                    }
+                    else
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_ps4.png");
+                    }
 
-                case "Switch":
-                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_switch.png");
+                case "Nintendo Switch 2":
+                    if (account.P3R_TS_Auto_Advance == "On")
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_switch_auto.png");
+                    }
+                    else
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_switch.png");
+                    }
 
-                case "PC":
-                    return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_pc.png");
-
+                case "Keyboard":
+                    if (account.P3R_TS_Auto_Advance == "On")
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_pc_auto.png");
+                    }
+                    else
+                    {
+                        return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_pc.png");
+                    }
+                case "None":
+                    return new Bitmap(2, 2);
                 default:
                     return (Bitmap)System.Drawing.Image.FromFile($@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//P3R//Main//Control_Panel//buttons_xbox.png");
             }
