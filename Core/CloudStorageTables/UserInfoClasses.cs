@@ -11,7 +11,7 @@ namespace SocialLinker.Core.CloudStorageTables
 {
     public static class UserInfoClasses
     {
-        private static string accountsTable = "UserInformationDev"; //"UserInformationDev" //"UserInformation"
+        private static string accountsTable = "UserInformation"; //"UserInformationDev" //"UserInformation"
 
         static UserInfoClasses()
         {
@@ -152,6 +152,13 @@ namespace SocialLinker.Core.CloudStorageTables
                 P3P_TS_HUD = "Display All",
                 P3P_TS_Position = "Center",
                 P3P_TS_Dual = "Normal",
+                P3R_TS_HUD = "Display All",
+                P3R_TS_Portrait_Lighting_Type = "Background-Based",
+                P3R_TS_Portrait_Lighting_Custom_Base = "#FFFFFF",
+                P3R_TS_Portrait_Lighting_Custom_Rim = "#FFFFFF",
+                P3R_TS_Panel = "Xbox Series X|S",
+                P3R_TS_Auto_Advance = "Off",
+                P3R_TS_Low_Latency = "Off",
                 P4_PS2_TS_HUD = "Normal",
                 P4G_TS_HUD = "Normal",
                 P4AU_TS_Scene_Type = "Dialogue",
