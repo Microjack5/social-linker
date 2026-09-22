@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 
 namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
@@ -245,13 +246,17 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
             {
                 version_title = "Persona 3 Portable";
             }
+            else if (account.VC_P3 == "P3R")
+            {
+                version_title = "Persona 3 Reload";
+            }
 
             embed.WithDescription("" +
                 "Select the default version you would like to use.\n" +
                 "\n" +
                 $"⚙️ **Current Setting:** **`{version_title}`**\n");
 
-            embed.WithImageUrl("https://i.imgur.com/hZJTcx4.png");
+            embed.WithImageUrl("https://i.imgur.com/o9FQIbR.png");
 
             var selectMenu = new SelectMenuBuilder()
                     .WithPlaceholder("Select a version")
@@ -260,6 +265,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                     .WithMaxValues(1)
                     .AddOption("Persona 3 FES", "p3f", emote: Emote.Parse(Global.GetGameEmote("P3F")))
                     .AddOption("Persona 3 Portable", "p3p", emote: Emote.Parse(Global.GetGameEmote("P3P")))
+                    .AddOption("Persona 3 Reload", "p3r", emote: Emote.Parse(Global.GetGameEmote("P3R")))
                     .AddOption("Return to Version Control Settings", "return", null, new Emoji("↩️"));
 
             var component = new ComponentBuilder()
@@ -533,6 +539,12 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker
                 version_title = "Persona 3 Portable";
                 embed.WithThumbnailUrl("https://i.imgur.com/sNrtgFX.jpg");
                 embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
+            }
+            else if (account.VC_P3 == "P3R")
+            {
+                version_title = "Persona 3 Reload";
+                embed.WithThumbnailUrl("https://i.imgur.com/Np4bRsS.png");
+                embed.WithColor(EmbedSettings.Get_Game_Color("P3R", account));
             }
 
             embed.WithDescription("" +

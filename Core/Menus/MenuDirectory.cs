@@ -518,6 +518,26 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Sprite_Placement(component, menuSession);
                             break;
 
+                        case "Template_Layout_P3R_Main":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Main(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Date_Moon":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Date_Moon(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Portrait_Lighting":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Portrait_Lighting(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Custom_Lighting":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Control_Panel":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Control_Panel(component, menuSession);
+                            break;
+
                         case "Template_Layout_P4_PS2_Main":
                             await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Main(component, menuSession);
                             break;
@@ -1352,6 +1372,62 @@ namespace SocialLinker.Core.Menus
                             await Template_Layout_P3P_Reactions.Nav_Template_Layout_P3P_Sprite_Placement_Confirm(component, menuSession);
                             break;
 
+                        case "Template_Layout_P3R_Custom_Lighting_Colors_Error":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Colors_Error(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Auto_Advance":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Auto_Advance(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Low_Latency":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Low_Latency(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Date_Moon_Confirm":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Date_Moon_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Custom_Lighting_Toggle":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Toggle(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Custom_Lighting_Colors":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Colors(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Portrait_Lighting_Confirm":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Portrait_Lighting_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Custom_Lighting_Toggle_Confirm":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Toggle_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Custom_Lighting_Colors_Base_Confirm":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Colors_Base_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Custom_Lighting_Colors_Rim_Confirm":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Colors_Rim_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Custom_Lighting_Colors_Reset_Confirm":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Colors_Reset_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Control_Panel_Confirm":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Control_Panel_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Auto_Advance_Confirm":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Auto_Advance_Confirm(component, menuSession);
+                            break;
+
+                        case "Template_Layout_P3R_Low_Latency_Confirm":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Low_Latency_Confirm(component, menuSession);
+                            break;
+
                         case "Template_Layout_P4_PS2_Date_Weather_Confirm":
                             await Template_Layout_P4_PS2_Reactions.Nav_Template_Layout_P4_PS2_Date_Weather_Confirm(component, menuSession);
                             break;
@@ -1764,6 +1840,15 @@ namespace SocialLinker.Core.Menus
 
                         case "color-code-modal-submit":
                             await Backgrounds_Reactions.Nav_Backgrounds_Default_Color_Modal(modal, menuSession);
+                            break;
+
+                        // Scene Maker
+                        case "base-color-code-modal-submit":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Colors_Base_Modal(modal, menuSession);
+                            break;
+
+                        case "rim-color-code-modal-submit":
+                            await Template_Layout_P3R_Reactions.Nav_Template_Layout_P3R_Custom_Lighting_Colors_Rim_Modal(modal, menuSession);
                             break;
 
                         // MakerMulti

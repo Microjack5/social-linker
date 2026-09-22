@@ -46,7 +46,7 @@ namespace SocialLinker.Core.CloudStorageTables
 
             for (int i = 0; i < results_list.Count; i++)
             {
-                if (maker_character_data.Base_Sprite == 0 || results_list[i].Sprites_Affected.Contains(bustup_data.Filename))
+                if ((maker_character_data.Base_Sprite == 0 && results_list[i].Character_ID == set_data.ID) || results_list[i].Sprites_Affected.Contains(bustup_data.Filename))
                 {
                     return results_list[i];
                 }

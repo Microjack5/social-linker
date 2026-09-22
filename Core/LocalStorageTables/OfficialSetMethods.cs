@@ -8,12 +8,15 @@ using SocialLinker.Core.SceneMaker.Data.Calendar;
 using SocialLinker.Core.SceneMaker.GlyphParsing;
 using SocialLinker.Core.SceneMaker.TemplateRenders.QuickScenes;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace SocialLinker.Core.LocalStorageTables
@@ -315,10 +318,10 @@ namespace SocialLinker.Core.LocalStorageTables
             {
                 return "P3P";
             }
-            //else if (Global.p3r_version_keywords.Contains(input_template))
-            //{
-            //    return "P3R";
-            //}
+            else if (Global.p3r_version_keywords.Contains(input_template))
+            {
+                return "P3R";
+            }
             else if (Global.p4_ps2_version_keywords.Contains(input_template))
             {
                 return "P4-PS2";
@@ -558,9 +561,9 @@ namespace SocialLinker.Core.LocalStorageTables
                     await OfficialSetLists.P3P_Set_List(sl_command);
                     return;
 
-                //case "P3R":
-                //    await OfficialSetLists.P3R_Set_List(sl_command);
-                //    return;
+                case "P3R":
+                    await OfficialSetLists.P3R_Set_List(sl_command);
+                    return;
 
                 case "P4-PS2":
                     await OfficialSetLists.P4_PS2_Set_List(sl_command);
@@ -641,9 +644,9 @@ namespace SocialLinker.Core.LocalStorageTables
                     await OfficialSetSheets.P3P_Sprite_Sheet(sl_command, sprite_set_info);
                     return;
 
-                //case "P3R":
-                //    await OfficialSetSheets.P3R_Sprite_Sheet(sl_command, sprite_set_info);
-                //    return;
+                case "P3R":
+                    await OfficialSetSheets.P3R_Sprite_Sheet(sl_command, sprite_set_info);
+                    return;
 
                 case "P4-PS2":
                     await OfficialSetSheets.P4_PS2_Sprite_Sheet(sl_command, sprite_set_info);
@@ -685,16 +688,33 @@ namespace SocialLinker.Core.LocalStorageTables
             // Establish the directory of the specified sprite set.
             string set_path = "";
 
-            //if (set_data.Origin == "P3R")
-            //{
-            //    set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
-            //}
-            //else
-            //{
-            //    set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
-            //}
+            if (set_data.Origin == "P3R")
+            {
+                return Base_Sprite_Validity_Check_P3R(sl_command, set_data, maker_command_data);
+            }
+            else
+            {
+                set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            }
 
-            set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+            // Get a count of how many files are in the sprite set's directory.
+            int filecount = AttachmentCountItemDirectory(set_path);
+
+            // Now that we have a filecount for the set, let's see if the inputted sprite number is valid before we continue.
+            // If not, send an error message and cancel the request.
+            if (maker_command_data.Character_Data_1.Base_Sprite > filecount)
+            {
+                _ = ErrorHandling.Sprite_Number_Not_Found(sl_command, set_data.Name, AcronymToFullTitle(set_data.Origin));
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool Base_Sprite_Validity_Check_P3R(SocialLinkerCommand sl_command, OfficialSetData set_data, MakerCommandData maker_command_data)
+        {
+            // Establish the directory of the specified sprite set.
+            string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = AttachmentCountItemDirectory(set_path);
@@ -753,9 +773,9 @@ namespace SocialLinker.Core.LocalStorageTables
                     await BustupFrameSheets.P3P_Bustup_Frame_Sheet(sl_command, set_data, command_data);
                     return;
 
-                //case "P3R":
-                //    await BustupFrameSheets.P3R_Bustup_Frame_Sheet(sl_command, set_data, command_data);
-                //    return;
+                case "P3R":
+                    await BustupFrameSheets.P3R_Bustup_Frame_Sheet(sl_command, set_data, command_data);
+                    return;
 
                 case "P4-PS2":
                     await BustupFrameSheets.P4_PS2_Bustup_Frame_Sheet(sl_command, set_data, command_data);
@@ -1301,6 +1321,11 @@ namespace SocialLinker.Core.LocalStorageTables
                 case "P3P":
                     RenderP3P p3p_render = new RenderP3P();
                     await p3p_render.Render_System_Message(sl_command, maker_command_data);
+                    return;
+
+                case "P3R":
+                    RenderP3R p3r_render = new RenderP3R();
+                    await p3r_render.Render_System_Message(sl_command);
                     return;
 
                 case "P4-PS2":
@@ -2069,13 +2094,19 @@ namespace SocialLinker.Core.LocalStorageTables
         {
             OfficialSetData set_data = maker_character_data.Set_Data;
 
-            if (set_data.Origin == "P3R")
+            if (set_data.Origin == "P3R" && account.P3R_TS_Low_Latency == "Off")
             {
                 return P3R_Bustup_Selection(sl_command, account, maker_character_data);
             }
 
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+
+            // P3R Low Latency Mode
+            if (set_data.Origin == "P3R" && account.P3R_TS_Low_Latency == "On")
+            {
+                set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
+            }
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = AttachmentCountItemDirectory(set_path);
@@ -2310,6 +2341,12 @@ namespace SocialLinker.Core.LocalStorageTables
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
 
+            // P3R Low Latency Mode
+            if (set_data.Origin == "P3R" && account.P3R_TS_Low_Latency == "On")
+            {
+                return Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, is_preview: true);
+            }
+
             // Create a filename for the bitmap that will be generated.
             var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
 
@@ -2434,16 +2471,73 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-            Bitmap bustup_with_frames = Construct_P3R_Bustup_With_Frames(sl_command, maker_character_data, base_sprite);
+            Bitmap bustup_with_frames = Construct_P3R_Bustup_With_Frames(sl_command, account, maker_character_data, base_sprite);
             return bustup_with_frames;
         }
 
-        public static Bitmap Construct_P3R_Bustup_With_Frames(SocialLinkerCommand sl_command, MakerCharacterData maker_character_data, Bitmap bustup)
+        public static Bitmap Construct_P3R_Bustup_With_Frames(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data, Bitmap bustup)
         {
             Bitmap output_bitmap = new Bitmap(bustup.Width, bustup.Height);
             Bitmap opaque_bustup = new Bitmap(bustup.Width, bustup.Height);
             Bitmap base_light_layer = new Bitmap(bustup.Width, bustup.Height);
             Bitmap rim_light_layer = new Bitmap(bustup.Width, bustup.Height);
+
+            Bitmap bustup_rim_light = new Bitmap(bustup.Width, bustup.Height);
+            Bitmap eye_rim_light = new Bitmap(bustup.Width, bustup.Height);
+            Bitmap mouth_rim_light = new Bitmap(bustup.Width, bustup.Height);
+
+            // Lighting
+
+            Color primary = Color.White;
+            Color lightened = Color.White;
+
+            var attachment = sl_command.MakerCommand.Background;
+
+            switch (account.P3R_TS_Portrait_Lighting_Type)
+            {
+                case "Default":
+                    break;
+
+                case "Background-Based":
+                    if (attachment != null)
+                    {
+                        try
+                        {
+                            System.Net.HttpWebRequest webRequest =
+                                (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(attachment.Url);
+
+                            webRequest.AllowWriteStreamBuffering = true;
+                            webRequest.Timeout = 30000;
+
+                            using System.Net.WebResponse webResponse = webRequest.GetResponse();
+                            using System.IO.Stream stream = webResponse.GetResponseStream();
+                            using System.Drawing.Image downloadedImage = System.Drawing.Image.FromStream(stream);
+
+                            // Clone it so the bitmap remains valid after the response stream closes.
+                            using Bitmap background = new Bitmap(downloadedImage);
+
+                            var averageColor = GetAverageColor(background);
+
+                            primary = averageColor;
+                            lightened = LightenColor(averageColor, 0.7);
+                        }
+                        catch (System.ArgumentException e)
+                        {
+                            Console.WriteLine(e);
+                            throw;
+                        }
+                    }
+                    break;
+
+                case "Custom":
+                    primary = System.Drawing.ColorTranslator.FromHtml(account.P3R_TS_Portrait_Lighting_Custom_Rim);
+                    lightened = System.Drawing.ColorTranslator.FromHtml(account.P3R_TS_Portrait_Lighting_Custom_Base);
+
+                    lightened = LightenColor(lightened, 0.7);
+                    break;
+            }
+
+            // Lighting end
 
             System.Drawing.Color default_base_light = System.Drawing.Color.White;
             System.Drawing.Color default_rim_light = System.Drawing.Color.White;
@@ -2472,8 +2566,8 @@ namespace SocialLinker.Core.LocalStorageTables
             System.Drawing.Color voices_base_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
             System.Drawing.Color voices_rim_light = System.Drawing.Color.FromArgb(0, 0, 0); // temp
 
-            System.Drawing.Color base_light = early_morning_outdoor_glint_base_light;
-            System.Drawing.Color rim_light = default_rim_light;
+            System.Drawing.Color base_light = lightened;//default_base_light;
+            System.Drawing.Color rim_light = primary;//default_rim_light;
 
             FrameData eye_frame_data = default;
             FrameData mouth_frame_data = default;
@@ -2544,32 +2638,39 @@ namespace SocialLinker.Core.LocalStorageTables
 
             // Make the base bustup opaque
             opaque_bustup = P3R_Bitmap_to_Opaque(bustup);
-            //opaque_bustup = Create_P3R_Bustup_Base_Lighting(opaque_bustup, base_light);
-            //opaque_bustup = Apply_P3R_Gradient_Overlay(opaque_bustup);
+            opaque_bustup = Create_P3R_Bustup_Base_Lighting(opaque_bustup, base_light);
 
-            //rim_light_layer = Create_P3R_Bustup_Rim_Lighting(bustup, rim_light);
-            //rim_light_layer = Apply_P3R_Gradient_Overlay(highlight_layer);
+            rim_light_layer = Create_P3R_Bustup_Rim_Lighting(bustup, rim_light);
+
+            bustup_rim_light = Create_P3R_Bustup_Rim_Lighting(bustup, rim_light);
+            eye_rim_light = Create_P3R_Bustup_Rim_Lighting(eye_frame_sprite, rim_light);
+            mouth_rim_light = Create_P3R_Bustup_Rim_Lighting(mouth_frame_sprite, rim_light);
 
             // Draw the frames to the cropped bustup.
             using (Graphics graphics = Graphics.FromImage(output_bitmap))
             {
                 graphics.DrawImage(opaque_bustup, 0, 0, opaque_bustup.Width, opaque_bustup.Height);
-                graphics.DrawImage(rim_light_layer, 0, 0, base_light_layer.Width, base_light_layer.Height);
 
                 if (mouth_frame_sprite != default && mouth_frame_data != default)
                 {
                     mouth_frame_sprite = P3R_Bitmap_to_Opaque(mouth_frame_sprite);
-                    //mouth_frame_sprite = Create_P3R_Bustup_Base_Lighting(mouth_frame_sprite, base_light);
+                    mouth_frame_sprite = Create_P3R_Bustup_Base_Lighting(mouth_frame_sprite, base_light);
                     graphics.DrawImage(mouth_frame_sprite, mouth_frame_data.Coord_X, mouth_frame_data.Coord_Y, mouth_frame_data.Scale_Width, mouth_frame_data.Scale_Height);
                 }
 
                 if (eye_frame_sprite != default && eye_frame_data != default)
                 {
                     eye_frame_sprite = P3R_Bitmap_to_Opaque(eye_frame_sprite);
-                    //eye_frame_sprite = Create_P3R_Bustup_Base_Lighting(eye_frame_sprite, base_light);
+                    eye_frame_sprite = Create_P3R_Bustup_Base_Lighting(eye_frame_sprite, base_light);
                     graphics.DrawImage(eye_frame_sprite, eye_frame_data.Coord_X, eye_frame_data.Coord_Y, eye_frame_data.Scale_Width, eye_frame_data.Scale_Height);
                 }
+
+                graphics.DrawImage(bustup_rim_light, 0, 0, bustup_rim_light.Width, bustup_rim_light.Height);
+                graphics.DrawImage(eye_rim_light, 0, 0, eye_rim_light.Width, eye_rim_light.Height);
+                graphics.DrawImage(mouth_rim_light, 0, 0, mouth_rim_light.Width, mouth_rim_light.Height);
             }
+
+            //output_bitmap = Apply_P3R_Gradient_Overlay(output_bitmap);
 
             return output_bitmap;
         }
@@ -2744,7 +2845,7 @@ namespace SocialLinker.Core.LocalStorageTables
             return base_sprite_filename;
         }
 
-        public static Bitmap P3R_Bitmap_to_Opaque(Bitmap input_bitmap)
+        public static Bitmap P3R_Bitmap_to_Opaque_Old(Bitmap input_bitmap)
         {
             Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
@@ -2778,7 +2879,167 @@ namespace SocialLinker.Core.LocalStorageTables
             return output_bitmap;
         }
 
-        public static Bitmap Create_P3R_Bustup_Base_Lighting(Bitmap input_bitmap, System.Drawing.Color mask)
+        public static Bitmap P3R_Bitmap_to_Opaque(Bitmap inputBitmap)
+        {
+            Bitmap output = new Bitmap(inputBitmap.Width, inputBitmap.Height, PixelFormat.Format32bppArgb);
+
+            using (Graphics g = Graphics.FromImage(output))
+            {
+                g.DrawImage(inputBitmap, 0, 0, inputBitmap.Width, inputBitmap.Height);
+            }
+
+            Rectangle rect = new Rectangle(0, 0, output.Width, output.Height);
+            BitmapData data = output.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+            try
+            {
+                int stride = data.Stride;
+                int bytes = Math.Abs(stride) * output.Height;
+                byte[] buffer = new byte[bytes];
+
+                Marshal.Copy(data.Scan0, buffer, 0, bytes);
+
+                for (int y = 0; y < output.Height; y++)
+                {
+                    int row = y * stride;
+
+                    for (int x = 0; x < output.Width; x++)
+                    {
+                        int i = row + (x * 4);
+
+                        byte a = buffer[i + 3];
+
+                        if (a >= 50)
+                        {
+                            int newAlpha = a * 2;
+                            buffer[i + 3] = (byte)(newAlpha > 240 ? 255 : newAlpha);
+                        }
+                        else
+                        {
+                            buffer[i + 0] = 0;
+                            buffer[i + 1] = 0;
+                            buffer[i + 2] = 0;
+                            buffer[i + 3] = 0;
+                        }
+                    }
+                }
+
+                Marshal.Copy(buffer, 0, data.Scan0, bytes);
+            }
+            finally
+            {
+                output.UnlockBits(data);
+            }
+
+            return output;
+        }
+
+        public static Bitmap Create_P3R_Bustup_Base_Lighting(Bitmap input_bitmap, Color mask)
+        {
+            int width = input_bitmap.Width;
+            int height = input_bitmap.Height;
+
+            Bitmap source = ConvertTo32bppArgb(input_bitmap);
+            Bitmap output = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            byte[] burnR = BuildBurnLookup(mask.R);
+            byte[] burnG = BuildBurnLookup(mask.G);
+            byte[] burnB = BuildBurnLookup(mask.B);
+
+            Rectangle rect = new Rectangle(0, 0, width, height);
+
+            BitmapData sourceData = source.LockBits(
+                rect,
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb
+            );
+
+            BitmapData outputData = output.LockBits(
+                rect,
+                ImageLockMode.WriteOnly,
+                PixelFormat.Format32bppArgb
+            );
+
+            try
+            {
+                unsafe
+                {
+                    byte* sourceBase = (byte*)sourceData.Scan0;
+                    byte* outputBase = (byte*)outputData.Scan0;
+
+                    int sourceStride = sourceData.Stride;
+                    int outputStride = outputData.Stride;
+
+                    for (int y = 0; y < height; y++)
+                    {
+                        byte* sourceRow = sourceBase + y * sourceStride;
+                        byte* outputRow = outputBase + y * outputStride;
+
+                        for (int x = 0; x < width; x++)
+                        {
+                            byte* sourcePixel = sourceRow + x * 4;
+                            byte* outputPixel = outputRow + x * 4;
+
+                            // Format32bppArgb byte order is B, G, R, A.
+                            byte b = sourcePixel[0];
+                            byte g = sourcePixel[1];
+                            byte r = sourcePixel[2];
+                            byte a = sourcePixel[3];
+
+                            outputPixel[0] = burnB[b];
+                            outputPixel[1] = burnG[g];
+                            outputPixel[2] = burnR[r];
+                            outputPixel[3] = a;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                source.UnlockBits(sourceData);
+                output.UnlockBits(outputData);
+
+                if (!ReferenceEquals(source, input_bitmap))
+                    source.Dispose();
+            }
+
+            return output;
+        }
+
+        private static byte[] BuildBurnLookup(byte maskValue)
+        {
+            byte[] lookup = new byte[256];
+
+            int m = maskValue;
+            int divisor = m + 1;
+
+            for (int i = 0; i < 256; i++)
+            {
+                int value = 255 - (256 * (255 - i)) / divisor;
+
+                if (value < 0)
+                    value = 0;
+                else if (value > 255)
+                    value = 255;
+
+                lookup[i] = (byte)value;
+            }
+
+            return lookup;
+        }
+
+        public static Color LightenColor(Color color, double factor)
+        {
+            factor = Math.Max(0.0, Math.Min(1.0, factor));
+
+            int r = (int)(color.R + (255 - color.R) * factor);
+            int g = (int)(color.G + (255 - color.G) * factor);
+            int b = (int)(color.B + (255 - color.B) * factor);
+
+            return Color.FromArgb(color.A, r, g, b);
+        }
+
+        public static Bitmap Create_P3R_Bustup_Base_Lighting_old(Bitmap input_bitmap, System.Drawing.Color mask)
         {
             Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
             Bitmap highlight_layer = new Bitmap(input_bitmap.Width, input_bitmap.Height);
@@ -2811,7 +3072,7 @@ namespace SocialLinker.Core.LocalStorageTables
             return output_bitmap;
         }
 
-        public static Bitmap Create_P3R_Bustup_Rim_Lighting(Bitmap input_bitmap, System.Drawing.Color mask)
+        public static Bitmap Create_P3R_Bustup_Rim_Lighting_Old(Bitmap input_bitmap, System.Drawing.Color mask)
         {
             Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
@@ -2842,6 +3103,73 @@ namespace SocialLinker.Core.LocalStorageTables
             return output_bitmap;
         }
 
+        public static Bitmap Create_P3R_Bustup_Rim_Lighting(Bitmap inputBitmap, Color mask)
+        {
+            int width = inputBitmap.Width;
+            int height = inputBitmap.Height;
+
+            Bitmap output = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            using (Graphics g = Graphics.FromImage(output))
+            {
+                g.DrawImage(inputBitmap, 0, 0, width, height);
+            }
+
+            Rectangle rect = new Rectangle(0, 0, width, height);
+            BitmapData data = output.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+            try
+            {
+                int stride = data.Stride;
+                int bytes = Math.Abs(stride) * height;
+                byte[] buffer = new byte[bytes];
+
+                Marshal.Copy(data.Scan0, buffer, 0, bytes);
+
+                for (int y = 0; y < height; y++)
+                {
+                    int row = y * stride;
+
+                    for (int x = 0; x < width; x++)
+                    {
+                        int i = row + (x * 4);
+
+                        byte b = buffer[i + 0];
+                        byte g = buffer[i + 1];
+                        byte r = buffer[i + 2];
+                        byte a = buffer[i + 3];
+
+                        if (a > 150)
+                        {
+                            int newR = r + mask.R;
+                            int newG = g + mask.G;
+                            int newB = b + mask.B;
+
+                            buffer[i + 2] = (byte)(newR > 255 ? 255 : newR);
+                            buffer[i + 1] = (byte)(newG > 255 ? 255 : newG);
+                            buffer[i + 0] = (byte)(newB > 255 ? 255 : newB);
+                            buffer[i + 3] = a;
+                        }
+                        else
+                        {
+                            buffer[i + 0] = 0;
+                            buffer[i + 1] = 0;
+                            buffer[i + 2] = 0;
+                            buffer[i + 3] = 0;
+                        }
+                    }
+                }
+
+                Marshal.Copy(buffer, 0, data.Scan0, bytes);
+            }
+            finally
+            {
+                output.UnlockBits(data);
+            }
+
+            return output;
+        }
+
         public static int Burn_Equation (int mask_value, int image_value)
         {
             int M = mask_value;
@@ -2850,7 +3178,7 @@ namespace SocialLinker.Core.LocalStorageTables
             return 255 - (256 * (255 - I)) / (M + 1);
         }
 
-        public static Bitmap Create_P3R_Bustup_Base_Lighting_old(Bitmap input_bitmap, System.Drawing.Color light_color)
+        public static Bitmap Create_P3R_Bustup_Base_Lighting_older(Bitmap input_bitmap, System.Drawing.Color light_color)
         {
             Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
             Bitmap highlight_layer = new Bitmap(input_bitmap.Width, input_bitmap.Height);
@@ -2957,7 +3285,244 @@ namespace SocialLinker.Core.LocalStorageTables
             return output_bitmap;
         }
 
+        // START
+
+        private static readonly Lazy<Bitmap> CachedRimGradient = new Lazy<Bitmap>(() =>
+        {
+            string path = Path.Combine(
+                AssetDirectoryConfig.assetDirectory.assetFolderPath,
+                "SceneMaker",
+                "Templates",
+                "P3R",
+                "Bustup",
+                "AmbientLight",
+                "overlay.png"
+            );
+
+            using Bitmap loaded = (Bitmap)Image.FromFile(path);
+            return ConvertTo32bppArgb(loaded);
+        });
+
+        private static readonly ConcurrentDictionary<string, byte[]> CachedRimAlphaBySize = new ConcurrentDictionary<string, byte[]>();
+
         public static Bitmap Apply_P3R_Gradient_Overlay(Bitmap input_bitmap)
+        {
+            int width = input_bitmap.Width;
+            int height = input_bitmap.Height;
+
+            Bitmap output_bitmap = ConvertTo32bppArgb(input_bitmap);
+
+            byte[] rimAlpha = GetRimAlphaForSize(width, height);
+
+            Rectangle rect = new Rectangle(0, 0, width, height);
+            BitmapData outputData = output_bitmap.LockBits(
+                rect,
+                ImageLockMode.ReadWrite,
+                PixelFormat.Format32bppArgb
+            );
+
+            try
+            {
+                unsafe
+                {
+                    byte* outputBase = (byte*)outputData.Scan0;
+                    int stride = outputData.Stride;
+
+                    for (int y = 0; y < height; y++)
+                    {
+                        byte* row = outputBase + y * stride;
+                        int alphaIndex = y * width;
+
+                        for (int x = 0; x < width; x++)
+                        {
+                            byte* pixel = row + x * 4;
+
+                            byte b = pixel[0];
+                            byte g = pixel[1];
+                            byte r = pixel[2];
+                            byte a = pixel[3];
+
+                            byte gradientA = rimAlpha[alphaIndex + x];
+
+                            if (a > 0 && gradientA > 0)
+                            {
+                                int subtract = gradientA / 6;
+
+                                pixel[0] = FastSubtractClamp(b, subtract);
+                                pixel[1] = FastSubtractClamp(g, subtract);
+                                pixel[2] = FastSubtractClamp(r, subtract);
+                            }
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                output_bitmap.UnlockBits(outputData);
+            }
+
+            return output_bitmap;
+        }
+
+        private static byte[] GetRimAlphaForSize(int width, int height)
+        {
+            string key = $"{width}x{height}";
+
+            return CachedRimAlphaBySize.GetOrAdd(key, _ =>
+            {
+                using Bitmap transparentRim = CreateTransparentRimBitmap(CachedRimGradient.Value);
+                using Bitmap resizedRim = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+                using (Graphics graphics = Graphics.FromImage(resizedRim))
+                {
+                    graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                    graphics.CompositingQuality = CompositingQuality.HighSpeed;
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
+                    graphics.SmoothingMode = SmoothingMode.None;
+
+                    graphics.DrawImage(transparentRim, 0, 0, width, height);
+                }
+
+                byte[] alpha = new byte[width * height];
+
+                Rectangle rect = new Rectangle(0, 0, width, height);
+                BitmapData data = resizedRim.LockBits(
+                    rect,
+                    ImageLockMode.ReadOnly,
+                    PixelFormat.Format32bppArgb
+                );
+
+                try
+                {
+                    unsafe
+                    {
+                        byte* basePtr = (byte*)data.Scan0;
+                        int stride = data.Stride;
+
+                        for (int y = 0; y < height; y++)
+                        {
+                            byte* row = basePtr + y * stride;
+                            int alphaIndex = y * width;
+
+                            for (int x = 0; x < width; x++)
+                            {
+                                byte* pixel = row + x * 4;
+
+                                // Format32bppArgb byte order is B, G, R, A.
+                                alpha[alphaIndex + x] = pixel[3];
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    resizedRim.UnlockBits(data);
+                }
+
+                return alpha;
+            });
+        }
+
+        private static Bitmap CreateTransparentRimBitmap(Bitmap rimGradient)
+        {
+            int width = rimGradient.Width;
+            int height = rimGradient.Height;
+
+            Bitmap result = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            Rectangle rect = new Rectangle(0, 0, width, height);
+
+            BitmapData sourceData = rimGradient.LockBits(
+                rect,
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb
+            );
+
+            BitmapData resultData = result.LockBits(
+                rect,
+                ImageLockMode.WriteOnly,
+                PixelFormat.Format32bppArgb
+            );
+
+            try
+            {
+                unsafe
+                {
+                    byte* sourceBase = (byte*)sourceData.Scan0;
+                    byte* resultBase = (byte*)resultData.Scan0;
+
+                    int sourceStride = sourceData.Stride;
+                    int resultStride = resultData.Stride;
+
+                    for (int y = 0; y < height; y++)
+                    {
+                        byte* sourceRow = sourceBase + y * sourceStride;
+                        byte* resultRow = resultBase + y * resultStride;
+
+                        for (int x = 0; x < width; x++)
+                        {
+                            byte* sourcePixel = sourceRow + x * 4;
+                            byte* resultPixel = resultRow + x * 4;
+
+                            byte sourceR = sourcePixel[2];
+                            byte sourceA = sourcePixel[3];
+
+                            byte newAlpha;
+
+                            if (sourceR > 0)
+                            {
+                                newAlpha = (byte)(255 - sourceR);
+                            }
+                            else
+                            {
+                                newAlpha = sourceA;
+                            }
+
+                            resultPixel[0] = 0;        // B
+                            resultPixel[1] = 0;        // G
+                            resultPixel[2] = 0;        // R
+                            resultPixel[3] = newAlpha; // A
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                rimGradient.UnlockBits(sourceData);
+                result.UnlockBits(resultData);
+            }
+
+            return result;
+        }
+
+        private static Bitmap ConvertTo32bppArgb(Bitmap source)
+        {
+            if (source.PixelFormat == PixelFormat.Format32bppArgb)
+            {
+                return new Bitmap(source);
+            }
+
+            Bitmap result = new Bitmap(source.Width, source.Height, PixelFormat.Format32bppArgb);
+
+            using (Graphics graphics = Graphics.FromImage(result))
+            {
+                graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                graphics.DrawImage(source, 0, 0, source.Width, source.Height);
+            }
+
+            return result;
+        }
+
+        private static byte FastSubtractClamp(byte value, int subtract)
+        {
+            int result = value - subtract;
+            return result <= 0 ? (byte)0 : (byte)result;
+        }
+
+        // FINISH
+
+        public static Bitmap Apply_P3R_Gradient_Overlay_old(Bitmap input_bitmap)
         {
             Bitmap output_bitmap = new Bitmap(input_bitmap.Width, input_bitmap.Height);
 
@@ -3043,6 +3608,95 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             return output_bitmap;
+        }
+
+        public static Color GetAverageColor(
+            Bitmap inputBitmap)
+        {
+            if (inputBitmap == null)
+                throw new ArgumentNullException(nameof(inputBitmap));
+
+            Rectangle rect = new Rectangle(0, 0, inputBitmap.Width, inputBitmap.Height);
+
+            using Bitmap bitmap = new Bitmap(
+                inputBitmap.Width,
+                inputBitmap.Height,
+                PixelFormat.Format32bppArgb
+            );
+
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.DrawImage(inputBitmap, rect);
+            }
+
+            BitmapData data = bitmap.LockBits(
+                rect,
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb
+            );
+
+            try
+            {
+                long totalR = 0;
+                long totalG = 0;
+                long totalB = 0;
+                long visiblePixelCount = 0;
+
+                unsafe
+                {
+                    byte* scan0 = (byte*)data.Scan0;
+
+                    for (int y = 0; y < bitmap.Height; y++)
+                    {
+                        byte* row = scan0 + (y * data.Stride);
+
+                        for (int x = 0; x < bitmap.Width; x++)
+                        {
+                            byte b = row[x * 4 + 0];
+                            byte g = row[x * 4 + 1];
+                            byte r = row[x * 4 + 2];
+                            byte a = row[x * 4 + 3];
+
+                            // Ignore fully transparent pixels.
+                            if (a == 0)
+                                continue;
+
+                            // Weight partially transparent pixels less heavily.
+                            totalR += r * a;
+                            totalG += g * a;
+                            totalB += b * a;
+
+                            visiblePixelCount += a;
+                        }
+                    }
+                }
+
+                if (visiblePixelCount == 0)
+                    return Color.Transparent;
+
+                int averageR = ClampColorChannel(totalR / (double)visiblePixelCount);
+                int averageG = ClampColorChannel(totalG / (double)visiblePixelCount);
+                int averageB = ClampColorChannel(totalB / (double)visiblePixelCount);
+
+                Color averageColor = Color.FromArgb(averageR, averageG, averageB);
+
+                Color color_rim = Color.FromArgb(
+                    ClampColorChannel(averageR * 3),
+                    ClampColorChannel(averageG * 3),
+                    ClampColorChannel(averageB * 3)
+                );
+
+                return color_rim;
+            }
+            finally
+            {
+                bitmap.UnlockBits(data);
+            }
+        }
+
+        private static int ClampColorChannel(double value)
+        {
+            return Math.Max(0, Math.Min(255, (int)Math.Round(value)));
         }
 
         // Method from https://stackoverflow.com/questions/47695942/wrong-number-of-file-count-being-returned-from-directory
