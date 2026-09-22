@@ -2113,8 +2113,7 @@ namespace SocialLinker.Core.SceneMaker
             SocketTextChannel channel = (SocketTextChannel)sl_command.Channel;
 
             // Send a loading message to the channel while the sprite sheet is being made.
-            //RestUserMessage loader = await channel.SendMessageAsync("", false, P3F_Loading_Message().Build());
-            RestUserMessage loader = await channel.SendMessageAsync("Loading...");
+            RestUserMessage loader = await channel.SendMessageAsync("", false, P3R_Loading_Message().Build());
 
             // Get the account information of the command's user.
             var account = UserInfoClasses.GetAccount(user);
@@ -2956,6 +2955,23 @@ namespace SocialLinker.Core.SceneMaker
             // Assign a color based on the user's color setting for the P3P template.
             embed.WithColor(EmbedSettings.Get_Game_Color("P3P", account));
             embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3P", account));
+            embed.WithDescription("This may take a few seconds!");
+
+            return embed;
+        }
+
+        public static EmbedBuilder P3R_Loading_Message()
+        {
+            var embed = new EmbedBuilder();
+            var author = new EmbedAuthorBuilder
+            {
+                Name = "Generating Frame Panels...",
+                IconUrl = EmbedSettings.Get_Game_Logo("P3R")
+            };
+
+            embed.WithAuthor(author);
+            embed.WithColor(EmbedSettings.Get_Game_Color("P3R", null));
+            embed.WithThumbnailUrl(EmbedSettings.Get_Loading_Icon("P3R", null));
             embed.WithDescription("This may take a few seconds!");
 
             return embed;

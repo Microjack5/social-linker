@@ -272,6 +272,9 @@ namespace SocialLinker.Core.Menus
                             return "https://i.imgur.com/VwI3i20.gif";
                     }
 
+                case "P3R":
+                    return "https://i.imgur.com/qLX7ISQ.gif";
+
                 case "P4-PS2":
                     return "https://i.imgur.com/Nr5mEap.gif";
 

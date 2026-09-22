@@ -1403,6 +1403,11 @@ namespace SocialLinker.Core.LocalStorageTables
                     await p3p_render.Render_System_Message(sl_command, maker_command_data);
                     return;
 
+                case "P3R":
+                    RenderP3R p3r_render = new RenderP3R();
+                    await p3r_render.Render_System_Message(sl_command);
+                    return;
+
                 case "P4-PS2":
                     RenderP4_PS2 p4_ps2_render = new RenderP4_PS2();
                     await p4_ps2_render.Render_System_Message(sl_command, maker_command_data);
@@ -2169,13 +2174,19 @@ namespace SocialLinker.Core.LocalStorageTables
         {
             OfficialSetData set_data = maker_character_data.Set_Data;
 
-            if (set_data.Origin == "P3R")
+            if (set_data.Origin == "P3R" && account.P3R_TS_Low_Latency == "Off")
             {
                 return P3R_Bustup_Selection(sl_command, account, maker_character_data);
             }
 
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
+
+            // P3R Low Latency Mode
+            if (set_data.Origin == "P3R" && account.P3R_TS_Low_Latency == "On")
+            {
+                set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup_Preview//{set_data.ID}";
+            }
 
             // Get a count of how many files are in the sprite set's directory.
             int filecount = AttachmentCountItemDirectory(set_path);
@@ -2410,6 +2421,12 @@ namespace SocialLinker.Core.LocalStorageTables
             // Establish the directory of the specified sprite set.
             string set_path = $@"{AssetDirectoryConfig.assetDirectory.assetFolderPath}//SceneMaker//Templates//{set_data.Origin}//Bustup//{set_data.ID}";
 
+            // P3R Low Latency Mode
+            if (set_data.Origin == "P3R" && account.P3R_TS_Low_Latency == "On")
+            {
+                return Get_P3R_Bustup_Filename_From_Sprite_Number(sl_command, set_data, maker_character_data, is_preview: true);
+            }
+
             // Create a filename for the bitmap that will be generated.
             var fileName = $"{sl_command.User.Id}_{DateTime.UtcNow.ToString("yyyyMMdd_HH_mm_ss_fff")}.png";
 
@@ -2534,11 +2551,11 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             Bitmap base_sprite = (Bitmap)System.Drawing.Image.FromFile($@"{set_path}//{base_sprite_filename}.png");
-            Bitmap bustup_with_frames = Construct_P3R_Bustup_With_Frames(sl_command, maker_character_data, base_sprite);
+            Bitmap bustup_with_frames = Construct_P3R_Bustup_With_Frames(sl_command, account, maker_character_data, base_sprite);
             return bustup_with_frames;
         }
 
-        public static Bitmap Construct_P3R_Bustup_With_Frames(SocialLinkerCommand sl_command, MakerCharacterData maker_character_data, Bitmap bustup)
+        public static Bitmap Construct_P3R_Bustup_With_Frames(SocialLinkerCommand sl_command, UserInfoFields account, MakerCharacterData maker_character_data, Bitmap bustup)
         {
             Bitmap output_bitmap = new Bitmap(bustup.Width, bustup.Height);
             Bitmap opaque_bustup = new Bitmap(bustup.Width, bustup.Height);
@@ -2556,37 +2573,49 @@ namespace SocialLinker.Core.LocalStorageTables
 
             var attachment = sl_command.MakerCommand.Background;
 
-            if (attachment != null)
+            switch (account.P3R_TS_Portrait_Lighting_Type)
             {
-                try
-                {
-                    System.Net.HttpWebRequest webRequest =
-                        (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(attachment.Url);
+                case "Default":
+                    break;
 
-                    webRequest.AllowWriteStreamBuffering = true;
-                    webRequest.Timeout = 30000;
+                case "Background-Based":
+                    if (attachment != null)
+                    {
+                        try
+                        {
+                            System.Net.HttpWebRequest webRequest =
+                                (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(attachment.Url);
 
-                    using System.Net.WebResponse webResponse = webRequest.GetResponse();
-                    using System.IO.Stream stream = webResponse.GetResponseStream();
-                    using System.Drawing.Image downloadedImage = System.Drawing.Image.FromStream(stream);
+                            webRequest.AllowWriteStreamBuffering = true;
+                            webRequest.Timeout = 30000;
 
-                    // Clone it so the bitmap remains valid after the response stream closes.
-                    using Bitmap background = new Bitmap(downloadedImage);
+                            using System.Net.WebResponse webResponse = webRequest.GetResponse();
+                            using System.IO.Stream stream = webResponse.GetResponseStream();
+                            using System.Drawing.Image downloadedImage = System.Drawing.Image.FromStream(stream);
 
-                    var colors = GetAverageColorAndLightened(background);
+                            // Clone it so the bitmap remains valid after the response stream closes.
+                            using Bitmap background = new Bitmap(downloadedImage);
 
-                    primary = colors.AverageColor;
-                    lightened = colors.LightenedColor;
-                }
-                catch (System.ArgumentException e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                            var averageColor = GetAverageColor(background);
+
+                            primary = averageColor;
+                            lightened = LightenColor(averageColor, 0.7);
+                        }
+                        catch (System.ArgumentException e)
+                        {
+                            Console.WriteLine(e);
+                            throw;
+                        }
+                    }
+                    break;
+
+                case "Custom":
+                    primary = System.Drawing.ColorTranslator.FromHtml(account.P3R_TS_Portrait_Lighting_Custom_Rim);
+                    lightened = System.Drawing.ColorTranslator.FromHtml(account.P3R_TS_Portrait_Lighting_Custom_Base);
+
+                    lightened = LightenColor(lightened, 0.7);
+                    break;
             }
-
-            Console.WriteLine($"Primary Color:  R={primary.R}, G={primary.G}, B={primary.B}, A={primary.A}");
-            Console.WriteLine($"Lightened Color: R={lightened.R}, G={lightened.G}, B={lightened.B}, A={lightened.A}");
 
             // Lighting end
 
@@ -2721,7 +2750,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 graphics.DrawImage(mouth_rim_light, 0, 0, mouth_rim_light.Width, mouth_rim_light.Height);
             }
 
-            output_bitmap = Apply_P3R_Gradient_Overlay(output_bitmap);
+            //output_bitmap = Apply_P3R_Gradient_Overlay(output_bitmap);
 
             return output_bitmap;
         }
@@ -3077,6 +3106,17 @@ namespace SocialLinker.Core.LocalStorageTables
             }
 
             return lookup;
+        }
+
+        public static Color LightenColor(Color color, double factor)
+        {
+            factor = Math.Max(0.0, Math.Min(1.0, factor));
+
+            int r = (int)(color.R + (255 - color.R) * factor);
+            int g = (int)(color.G + (255 - color.G) * factor);
+            int b = (int)(color.B + (255 - color.B) * factor);
+
+            return Color.FromArgb(color.A, r, g, b);
         }
 
         public static Bitmap Create_P3R_Bustup_Base_Lighting_old(Bitmap input_bitmap, System.Drawing.Color mask)
@@ -3650,9 +3690,8 @@ namespace SocialLinker.Core.LocalStorageTables
             return output_bitmap;
         }
 
-        public static (Color AverageColor, Color LightenedColor) GetAverageColorAndLightened(
-            Bitmap inputBitmap,
-            double lightMultiplier = 4)
+        public static Color GetAverageColor(
+            Bitmap inputBitmap)
         {
             if (inputBitmap == null)
                 throw new ArgumentNullException(nameof(inputBitmap));
@@ -3713,7 +3752,7 @@ namespace SocialLinker.Core.LocalStorageTables
                 }
 
                 if (visiblePixelCount == 0)
-                    return (Color.Transparent, Color.Transparent);
+                    return Color.Transparent;
 
                 int averageR = ClampColorChannel(totalR / (double)visiblePixelCount);
                 int averageG = ClampColorChannel(totalG / (double)visiblePixelCount);
@@ -3727,13 +3766,7 @@ namespace SocialLinker.Core.LocalStorageTables
                     ClampColorChannel(averageB * 3)
                 );
 
-                Color color_base = Color.FromArgb(
-                    ClampColorChannel(averageR * 7.5),
-                    ClampColorChannel(averageG * 7.5),
-                    ClampColorChannel(averageB * 7.5)
-                );
-
-                return (color_rim, color_base);
+                return color_rim;
             }
             finally
             {

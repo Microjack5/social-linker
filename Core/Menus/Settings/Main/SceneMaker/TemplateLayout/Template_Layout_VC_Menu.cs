@@ -153,9 +153,10 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                 "Which version would you like to edit?\n" +
                 "\n" +
                 ":one: Persona 3 FES\n" +
-                ":two: Persona 3 Portable");
+                ":two: Persona 3 Portable\n" +
+                ":three: Persona 3 Reload");
 
-            embed.WithImageUrl("https://i.imgur.com/hZJTcx4.png");
+            embed.WithImageUrl("https://i.imgur.com/o9FQIbR.png");
 
             var selectMenu = new SelectMenuBuilder()
                     .WithPlaceholder("Select a version")
@@ -164,6 +165,7 @@ namespace SocialLinker.Core.Menus.Settings.Main.SceneMaker.TemplateLayout
                     .WithMaxValues(1)
                     .AddOption("Persona 3 FES", "P3F", emote: Emote.Parse(Global.GetGameEmote("P3F")))
                     .AddOption("Persona 3 Portable", "P3P", emote: Emote.Parse(Global.GetGameEmote("P3P")))
+                    .AddOption("Persona 3 Reload", "P3R", emote: Emote.Parse(Global.GetGameEmote("P3R")))
                     .AddOption("Return to Template Layout Menu", "return", null, new Emoji("↩️"));
 
             var component = new ComponentBuilder()

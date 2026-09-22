@@ -169,7 +169,7 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.Backgrounds
             }
 
             // Check if the input string is a valid HTML color.
-            if (CheckValidFormatHtmlColor(color_code) == true)
+            if (Utility.CheckValidFormatHtmlColor(color_code) == true)
             {
                 account.Setting_BG_Color = color_code;
                 UserInfoClasses.UpdateAccount(account);
@@ -177,24 +177,12 @@ namespace SocialLinker.Core.Menus.Settings.Reactions.SceneMaker.Backgrounds
                 menuSession.Account = account;
                 _ = Backgrounds_Menu.Backgrounds_Default_Color_Confirm(menuSession);
             }
-            else if (CheckValidFormatHtmlColor(color_code) == false)
+            else if (Utility.CheckValidFormatHtmlColor(color_code) == false)
             {
                 _ = Backgrounds_Menu.Backgrounds_Default_Color_Error(menuSession);
             }
 
             return Task.CompletedTask;
-        }
-
-        // Methods that suppliment the functionality of the menus.
-        // Method from https://stackoverflow.com/a/13035186/7138583
-        protected static bool CheckValidFormatHtmlColor(string inputColor)
-        {
-            //regex from http://stackoverflow.com/a/1636354/2343
-            if (Regex.Match(inputColor, "^#(?:[0-9a-fA-F]{3}){1,2}$").Success)
-                return true;
-
-            var result = System.Drawing.Color.FromName(inputColor);
-            return result.IsKnownColor;
         }
     }
 }

@@ -327,7 +327,7 @@ namespace SocialLinker
                     break;
 
                 case "update":
-                    await Commands.DevCommands.UpdatePreReleaseAccounts(command);
+                    await Commands.DevCommands.UpdateAccountsWithNewFields(command);
                     break;
 
                 case "calcexp":
@@ -586,6 +586,7 @@ namespace SocialLinker
                     .AddChoice(Global.GetGameTitle("P2EP-PSP"), 6)
                     .AddChoice(Global.GetGameTitle("P3F"), 7)
                     .AddChoice(Global.GetGameTitle("P3P"), 8)
+<<<<<<< HEAD
                     .AddChoice(Global.GetGameTitle("P4-PS2"), 9)
                     .AddChoice(Global.GetGameTitle("P4G"), 10)
                     .AddChoice(Global.GetGameTitle("P4AU"), 11)
@@ -594,6 +595,16 @@ namespace SocialLinker
                     .AddChoice(Global.GetGameTitle("P5R"), 14)
                     .AddChoice(Global.GetGameTitle("P5S"), 15)
                     .AddChoice(Global.GetGameTitle("P5X"), 16)
+=======
+                    .AddChoice(Global.GetGameTitle("P3R"), 9)
+                    .AddChoice(Global.GetGameTitle("P4-PS2"), 10)
+                    .AddChoice(Global.GetGameTitle("P4G"), 11)
+                    .AddChoice(Global.GetGameTitle("P4AU"), 12)
+                    .AddChoice(Global.GetGameTitle("P4D"), 13)
+                    .AddChoice(Global.GetGameTitle("P5-PS4"), 14)
+                    .AddChoice(Global.GetGameTitle("P5R"), 15)
+                    .AddChoice(Global.GetGameTitle("P5S"), 16)
+>>>>>>> ce73bd81aa8018ae260f7a3b4ed5573125db8150
                     .AddChoice(Global.GetGameTitle("BBTAG"), 17)
                     .WithType(ApplicationCommandOptionType.Integer)
                     )
@@ -630,14 +641,15 @@ namespace SocialLinker
                     .AddChoice(Global.GetGameTitle("P2EP-PSP"), 6)
                     .AddChoice(Global.GetGameTitle("P3F"), 7)
                     .AddChoice(Global.GetGameTitle("P3P"), 8)
-                    .AddChoice(Global.GetGameTitle("P4-PS2"), 9)
-                    .AddChoice(Global.GetGameTitle("P4G"), 10)
-                    .AddChoice(Global.GetGameTitle("P4AU"), 11)
-                    .AddChoice(Global.GetGameTitle("P4D"), 12)
-                    .AddChoice(Global.GetGameTitle("P5-PS4"), 13)
-                    .AddChoice(Global.GetGameTitle("P5R"), 14)
-                    .AddChoice(Global.GetGameTitle("P5S"), 15)
-                    .AddChoice(Global.GetGameTitle("BBTAG"), 16)
+                    .AddChoice(Global.GetGameTitle("P3R"), 9)
+                    .AddChoice(Global.GetGameTitle("P4-PS2"), 10)
+                    .AddChoice(Global.GetGameTitle("P4G"), 11)
+                    .AddChoice(Global.GetGameTitle("P4AU"), 12)
+                    .AddChoice(Global.GetGameTitle("P4D"), 13)
+                    .AddChoice(Global.GetGameTitle("P5-PS4"), 14)
+                    .AddChoice(Global.GetGameTitle("P5R"), 15)
+                    .AddChoice(Global.GetGameTitle("P5S"), 16)
+                    .AddChoice(Global.GetGameTitle("BBTAG"), 17)
                     .WithType(ApplicationCommandOptionType.Integer)
                     )
                 .AddOption("sprite_number", ApplicationCommandOptionType.Integer, "The specific sprite from the character's sprite sheet to use.", isRequired: true)
@@ -772,34 +784,38 @@ namespace SocialLinker
                     break;
 
                 case "9":
-                    template = "P4-PS2";
+                    template = "P3R";
                     break;
 
                 case "10":
-                    template = "P4G";
+                    template = "P4-PS2";
                     break;
 
                 case "11":
-                    template = "P4AU";
+                    template = "P4G";
                     break;
 
                 case "12":
-                    template = "P4D";
+                    template = "P4AU";
                     break;
 
                 case "13":
-                    template = "P5-PS4";
+                    template = "P4D";
                     break;
 
                 case "14":
-                    template = "P5R";
+                    template = "P5-PS4";
                     break;
 
                 case "15":
-                    template = "P5S";
+                    template = "P5R";
                     break;
 
                 case "16":
+                    template = "P5S";
+                    break;
+
+                case "17":
                     template = "BBTAG";
                     break;
             }

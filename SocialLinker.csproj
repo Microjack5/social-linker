@@ -336,6 +336,7 @@
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P2IS_PSP_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P3F_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P3P_Menu.cs" />
+    <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P3R_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P4AU_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P4D_Menu.cs" />
     <Compile Include="Core\Menus\Settings\Main\SceneMaker\TemplateLayout\Template_Layout_P4G_Menu.cs" />
@@ -389,6 +390,7 @@
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P2IS_PSP_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P3F_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P3P_Reactions.cs" />
+    <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P3R_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P4AU_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P4D_Reactions.cs" />
     <Compile Include="Core\Menus\Settings\Reactions\SceneMaker\TemplateLayout\Template_Layout_P4G_Reactions.cs" />
